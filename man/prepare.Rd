@@ -22,21 +22,35 @@ prepare(x, ...)
   ...)
 }
 \arguments{
-\item{x}{A data frame, matrix, \code{\link[recipes:recipe]{recipes::recipe()}}, or formula.}
+\item{x}{A data frame, matrix, or \code{\link[recipes:recipe]{recipes::recipe()}}. If this is a
+data.frame or matrix, it should contain the predictors.}
 
 \item{...}{Currently unused.}
 
-\item{y}{A data frame, matrix, or vector depending on \code{x}.}
+\item{y}{A data frame, matrix, or vector containing the outcome(s).}
 
-\item{intercept}{A logical specifying whether or not to include an intercept.}
+\item{intercept}{A single logical specifying whether or not to
+include an intercept in the prepared predictors.}
 
 \item{type}{A single character. One of \code{"tibble"}, \code{"data.frame"}, or
 \code{"matrix"} specifying the result type of the predictors.}
 
-\item{data}{A data frame.}
+\item{formula}{A formula specifying the terms in the format of
+\code{outcome ~ predictors}.}
+
+\item{data}{A data frame to prepare.}
 }
 \value{
-A list containing the \code{predictors}, the \code{outcome}, and the \code{preprocessor}.
+A named list containing:
+\itemize{
+\item \code{predictors}: An object of class \code{type} containing the prepared predictors
+to be used in the model.
+\item \code{outcome}: If \code{y} was supplied, it is returned unmodified here. If a
+formula was used, this is the result of \code{\link[=model.response]{model.response()}}. If a recipe
+was used, this is a data.frame that is the result of calling
+\code{\link[recipes:juice]{recipes::juice()}} with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}} specified.
+\item \code{preprocessor}: A \code{"preprocessor"} object for use when making predictions.
+}
 }
 \description{
 \code{prepare()} applies the appropriate processing steps required to get training
@@ -45,7 +59,12 @@ data ready to be fed into a model.
 \item For a formula method, this applies \code{model.frame()} and \code{model.matrix()}.
 \item For a recipe, this performs a call to both \code{\link[recipes:prep]{recipes::prep()}}
 and \code{\link[recipes:juice]{recipes::juice()}}.
-\item For a data frame or matrix, this uses the \code{default_preprocessor()} which
-converts the input to \code{type} and adds an intercept column if requested.
+\item For a data frame or matrix, this uses the \code{\link[=new_default_preprocessor]{new_default_preprocessor()}}
+which converts the input to \code{type} and adds an intercept column if requested.
 }
+}
+\examples{
+
+
+
 }

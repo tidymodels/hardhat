@@ -15,7 +15,7 @@ test_that("can have custom fields", {
   x <- new_base_model(
     "regression",
     "univariate",
-    default_preprocessor(),
+    new_default_preprocessor(),
     y = 1,
     class = "custom_class"
   )
@@ -50,7 +50,7 @@ test_that("cannot create bad mode/variateness arguments", {
 test_that("must use a valid preprocessor", {
 
   expect_error(
-    new_base_model("regression", "univariate", default_preprocessor(), class = "custom"),
+    new_base_model("regression", "univariate", new_default_preprocessor(), class = "custom"),
     NA
   )
 

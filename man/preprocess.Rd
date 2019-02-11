@@ -4,10 +4,19 @@
 \alias{preprocess}
 \title{Internal preprocessing of new data}
 \usage{
-preprocess(preprocessor, new_data, intercept = FALSE, type = "tibble")
+preprocess(preprocessor, new_data)
+}
+\arguments{
+\item{preprocessor}{A valid preprocessor. Can be a \code{\link[recipes:recipe]{recipes::recipe()}}, a
+terms object, or the result of \code{default_preprocessor()}.}
+
+\item{new_data}{A data frame to preprocess.}
+
+\item{intercept}{A logical. Should an intercept column
+be added to \code{new_data}?}
 }
 \value{
-The preprocessed data, returned as a matrix of numeric columns.
+The preprocessed data, returned as a \code{type}.
 }
 \description{
 \code{preprocess()} applies the transformations requested by the \code{preprocessor}

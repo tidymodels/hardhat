@@ -10,8 +10,8 @@
 #' * For a recipe, this performs a call to both [recipes::prep()]
 #' and [recipes::juice()].
 #'
-#' * For a data frame or matrix, this uses the [default_preprocessor()] which
-#' converts the input to `type` and adds an intercept column if requested.
+#' * For a data frame or matrix, this uses the [new_default_preprocessor()]
+#' which converts the input to `type` and adds an intercept column if requested.
 #'
 #' @param x A data frame, matrix, or [recipes::recipe()]. If this is a
 #' data.frame or matrix, it should contain the predictors.
@@ -43,8 +43,7 @@
 #'  was used, this is a data.frame that is the result of calling
 #'  [recipes::juice()] with [recipes::all_outcomes()] specified.
 #'
-#'  - `preprocessor`: One of: a `default_preprocessor`, a prepped `recipe`,
-#'  or a modified `terms` object.
+#'  - `preprocessor`: A `"preprocessor"` object for use when making predictions.
 #'
 #' @examples
 #'
@@ -60,8 +59,11 @@ prepare <- function(x, ...) {
 prepare.data.frame <- function(x, y, intercept = FALSE,
                                type = "tibble", ...) {
 
-  preprocessor <- default_preprocessor()
-  x <- preprocessor$process(x, intercept, type)
+  engine <- new_default_preprocessor_engine()
+
+  preprocessor <- new_default_preprocessor(engine, intercept, type)
+
+  x <- engine$process(x, intercept, type)
 
   prepare_list(x, y, preprocessor)
 }
@@ -71,8 +73,11 @@ prepare.data.frame <- function(x, y, intercept = FALSE,
 prepare.matrix <- function(x, y, intercept = FALSE,
                            type = "tibble", ...) {
 
-  preprocessor <- default_preprocessor()
-  x <- preprocessor$process(x, intercept, type)
+  engine <- new_default_preprocessor_engine()
+
+  preprocessor <- new_default_preprocessor(engine, intercept, type)
+
+  x <- engine$process(x, intercept, type)
 
   prepare_list(x, y, preprocessor)
 }
@@ -83,9 +88,10 @@ prepare.formula <- function(formula, data, intercept = FALSE,
                             type = "tibble", ...) {
 
   formula <- remove_formula_intercept(formula, intercept)
+  formula <- alter_formula_environment(formula)
 
   framed <- rlang::with_options(
-    model.frame(formula, data = data),
+    stats::model.frame(formula, data = data),
     na.action = "na.pass"
   )
 
@@ -100,7 +106,9 @@ prepare.formula <- function(formula, data, intercept = FALSE,
 
   terms <- extract_terms(framed, data)
 
-  prepare_list(predictors, outcome, terms)
+  preprocessor <- new_terms_preprocessor(terms, intercept, type)
+
+  prepare_list(predictors, outcome, preprocessor)
 }
 
 #' @rdname prepare
@@ -122,49 +130,13 @@ prepare.recipe <- function(x, data, intercept = FALSE,
   # un-retain training data
   prepped_recipe <- compost(prepped_recipe)
 
+  preprocessor <- new_recipes_preprocessor(prepped_recipe, intercept, type)
+
   predictors <- retype(predictors, type)
 
   predictors <- add_intercept_column(predictors, intercept)
 
-  prepare_list(predictors, outcome, prepped_recipe)
-}
-
-# ------------------------------------------------------------------------------
-
-#' Create a default preprocessor
-#'
-#' A default preprocessor is a function that takes in `new_data`,
-#' `intercept`, and `type`. It performs some basic preprocessing on `new_data`
-#' to prepare it for ingestion into a model. A default preprocessor is used
-#' in matrix and data frame methods of a model (as opposed to a recipe or
-#' formula method which performs preprocessing for you).
-#'
-#' The preprocessor function returned from `default_preprocessor()` will do two
-#' things:
-#'
-#' - Call [retype()] with `type` to coerce `new_data` to a specific type.
-#'
-#' - Call [add_intercept_column()] with `intercept` to add an intercept to
-#' `new_data` if required.
-#'
-#' The returned function that `default_preprocessor()` creates has 3 arguments:
-#'
-#' - `new_data`: The data to preprocess.
-#'
-#' - `intercept`: A logical. Passed on to `add_intercept_column()`.
-#'
-#' - `type`: A single character. Passed on to `retype()`.
-#'
-#' @export
-default_preprocessor <- function() {
-
-  process <- function(new_data, intercept, type) {
-    new_data <- retype(new_data, type)
-    new_data <- add_intercept_column(new_data, intercept)
-    new_data
-  }
-
-  structure(list(process = process), class = "default_preprocessor")
+  prepare_list(predictors, outcome, preprocessor)
 }
 
 # ------------------------------------------------------------------------------
@@ -175,5 +147,19 @@ prepare_list <- function(predictors, outcome, preprocessor) {
     predictors = predictors,
     outcome = outcome,
     preprocessor = preprocessor
+  )
+}
+
+alter_formula_environment <- function(formula) {
+
+  # formula environment is 1 step above global env to avoid
+  # global variables but maintain ability to use pkg functions
+  # (like stats::poly())
+  env_above_global_env <- rlang::env_parent(rlang::global_env())
+
+  rlang::new_formula(
+    lhs = rlang::f_lhs(formula),
+    rhs = rlang::f_rhs(formula),
+    env = env_above_global_env
   )
 }

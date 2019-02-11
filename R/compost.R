@@ -3,7 +3,7 @@
 
 compost <- function(object) {
 
-  if (!recipes::is_trained(object)) {
+  if (!recipes::fully_trained(object)) {
     return(object)
   }
 

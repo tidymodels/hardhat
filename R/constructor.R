@@ -47,7 +47,7 @@
 new_base_model <- function(mode, variateness, preprocessor = NULL, ..., class) {
 
   if (is.null(preprocessor)) {
-    preprocessor <- default_preprocessor()
+    preprocessor <- new_default_preprocessor()
   }
 
   validate_is_preprocessor(preprocessor)
@@ -71,34 +71,6 @@ new_base_model <- function(mode, variateness, preprocessor = NULL, ..., class) {
 
   structure(fields, class = class)
 
-}
-
-# ------------------------------------------------------------------------------
-
-#' Is `x` a valid preprocessor?
-#'
-#' This function checks to see if `x` is a valid preprocessor.
-#'
-#' @param x A `"recipe"`, `"terms"` or `"default_preprocessor"` object.
-#'
-#' @examples
-#'
-#' is_preprocessor(default_preprocessor())
-#'
-#' @export
-is_preprocessor <- function(x) {
-  inherits(x, c("recipe", "terms", "default_preprocessor"))
-}
-
-# ------------------------------------------------------------------------------
-
-validate_is_preprocessor <- function(preprocessor) {
-  validate_is(
-    preprocessor,
-    is_preprocessor,
-    "preprocessor",
-    .note = "recipe, terms, or default_preprocessor"
-  )
 }
 
 validate_is_mode_like <- function(mode) {
