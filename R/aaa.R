@@ -13,6 +13,7 @@ NULL
 #' @importFrom stats .MFclass
 #' @importFrom stats .getXlevels
 #' @importFrom stats lm.fit
+#' @importFrom stats get_all_vars
 NULL
 
 # Required because of zeallot %<-%
