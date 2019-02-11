@@ -22,3 +22,5 @@ Imports:
     rlang,
     tibble,
     zeallot
+URL: https://github.com/DavisVaughan/hardhat
+BugReports: https://github.com/DavisVaughan/hardhat/issues
