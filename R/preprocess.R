@@ -14,9 +14,6 @@
 #'
 #' @param new_data A data frame to preprocess.
 #'
-#' @param intercept A logical. Should an intercept column
-#' be added to `new_data`?
-#'
 #' @return
 #'
 #' The preprocessed data, returned as a `type`.

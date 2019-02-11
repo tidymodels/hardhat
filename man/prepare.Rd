@@ -59,12 +59,7 @@ data ready to be fed into a model.
 \item For a formula method, this applies \code{model.frame()} and \code{model.matrix()}.
 \item For a recipe, this performs a call to both \code{\link[recipes:prep]{recipes::prep()}}
 and \code{\link[recipes:juice]{recipes::juice()}}.
-\item For a data frame or matrix, this uses the \code{\link[=new_default_preprocessor]{new_default_preprocessor()}}
+\item For a data frame or matrix, this uses the \code{new_default_preprocessor()}s
 which converts the input to \code{type} and adds an intercept column if requested.
 }
-}
-\examples{
-
-
-
 }

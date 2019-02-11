@@ -6,11 +6,6 @@
 \usage{
 new_default_preprocessor_engine()
 }
-\arguments{
-\item{intercept}{A logical. Passed on to \code{add_intercept_column()}.}
-
-\item{type}{A single character. Passed on to \code{retype()}.}
-}
 \description{
 A default preprocessor engine is a function that performs some basic
 preprocessing on \code{new_data} to prepare it for ingestion into a model. To
@@ -22,15 +17,16 @@ preprocessing for you). This preprocessing is performed on both the training
 and testing data sets.
 }
 \details{
-The preprocessor function returned from \code{default_preprocessor()} will do two
-things:
+The preprocessor function returned from \code{new_default_preprocessor_engine()}
+will do two things:
 \itemize{
 \item Call \code{\link[=retype]{retype()}} with \code{type} to coerce \code{new_data} to a specific type.
-\item Call \code{\link[=add_intercept_column]{add_intercept_column()}} with \code{intercept} to add an intercept to
+\item Call \code{add_intercept_column()} with \code{intercept} to add an intercept to
 \code{new_data} if required.
 }
 
-The returned function that \code{default_preprocessor()} creates has 3 arguments:
+The returned function that \code{new_default_preprocessor_engine()} creates
+has 3 arguments:
 \itemize{
 \item \code{new_data}: The data to preprocess.
 \item \code{intercept}: A logical. Passed on to \code{add_intercept_column()}.

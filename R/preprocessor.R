@@ -1,3 +1,20 @@
+#' Create a new preprocessor
+#'
+#' A preprocessor holds a preprocessing engine, an indicator for whether or
+#' not to include the intercept, and a character string representing the
+#' output type of the predictors.
+#'
+#' @param engine A preprocessing engine. This can be a
+#' `"default_preprocessor_engine"`, a `"recipe"`, or a `"terms"` object.
+#'
+#' @param intercept A logical. Should an intercept be included?
+#'
+#' @param type A character. One of `"tibble"`, `"data.frame"` or `"matrix"`.
+#' The output type for the predictors.
+#'
+#' @param subclass An optional character. The subclass of the `"preprocessor"`.
+#'
+#' @export
 new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              intercept = FALSE,
                              type = "tibble",
@@ -71,15 +88,16 @@ is_preprocessor <- function(x) {
 #' preprocessing for you). This preprocessing is performed on both the training
 #' and testing data sets.
 #'
-#' The preprocessor function returned from `default_preprocessor()` will do two
-#' things:
+#' The preprocessor function returned from `new_default_preprocessor_engine()`
+#' will do two things:
 #'
 #' - Call [retype()] with `type` to coerce `new_data` to a specific type.
 #'
-#' - Call [add_intercept_column()] with `intercept` to add an intercept to
+#' - Call `add_intercept_column()` with `intercept` to add an intercept to
 #' `new_data` if required.
 #'
-#' The returned function that `default_preprocessor()` creates has 3 arguments:
+#' The returned function that `new_default_preprocessor_engine()` creates
+#' has 3 arguments:
 #'
 #' - `new_data`: The data to preprocess.
 #'
@@ -87,8 +105,6 @@ is_preprocessor <- function(x) {
 #'
 #' - `type`: A single character. Passed on to `retype()`.
 #'
-#' @param intercept A logical. Passed on to `add_intercept_column()`.
-#' @param type A single character. Passed on to `retype()`.
 #'
 #' @export
 new_default_preprocessor_engine <- function() {

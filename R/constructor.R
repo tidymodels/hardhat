@@ -38,7 +38,6 @@
 #' new_base_model(
 #'   "regression",
 #'   "univariate",
-#'   default_preprocessor(),
 #'   custom_field = "my-field",
 #'   class = "custom_model"
 #' )

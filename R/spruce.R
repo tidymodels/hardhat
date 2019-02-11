@@ -15,6 +15,7 @@
 #' be a character vector of the original levels of the outcome used in training.
 #' `.prob_matrix` should be a numeric matrix of class probabilities with as many
 #' columns as levels in `.pred_levels`, and in the same order.
+#' @param ... Not currently used.
 #'
 #' @return
 #'

@@ -26,6 +26,8 @@ spruce(type, new_data, ...)
 used to validate that the number of rows in the predictions is the same
 as the number of rows in the original \code{new_data}.}
 
+\item{...}{Not currently used.}
+
 \item{.pred}{(\code{type = "response"}) A numeric vector of predictions.}
 
 \item{.pred_class}{(\code{type = "class"}) A factor of "hard" class predictions.}

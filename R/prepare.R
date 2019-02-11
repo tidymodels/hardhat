@@ -10,7 +10,7 @@
 #' * For a recipe, this performs a call to both [recipes::prep()]
 #' and [recipes::juice()].
 #'
-#' * For a data frame or matrix, this uses the [new_default_preprocessor()]
+#' * For a data frame or matrix, this uses the `new_default_preprocessor()`s
 #' which converts the input to `type` and adds an intercept column if requested.
 #'
 #' @param x A data frame, matrix, or [recipes::recipe()]. If this is a
@@ -44,9 +44,6 @@
 #'  [recipes::juice()] with [recipes::all_outcomes()] specified.
 #'
 #'  - `preprocessor`: A `"preprocessor"` object for use when making predictions.
-#'
-#' @examples
-#'
 #'
 #'
 #' @export

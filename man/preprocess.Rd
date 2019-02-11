@@ -11,9 +11,6 @@ preprocess(preprocessor, new_data)
 terms object, or the result of \code{default_preprocessor()}.}
 
 \item{new_data}{A data frame to preprocess.}
-
-\item{intercept}{A logical. Should an intercept column
-be added to \code{new_data}?}
 }
 \value{
 The preprocessed data, returned as a \code{type}.
