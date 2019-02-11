@@ -14,10 +14,11 @@ or \code{"regression"}.}
 
 \item{preprocessor}{A preprocessor for new data. This can be
 a \code{terms} object from the formula interface, a \code{recipe} created with
-\code{\link[recipes:recipe]{recipes::recipe()}}, or the default which converts to matrix and adds
-an intercept column if requested.}
+\code{\link[recipes:recipe]{recipes::recipe()}}, or the default which converts to either a matrix or a
+data frame, and adds an intercept column if requested.}
 
-\item{...}{Named fields of subclasses of the model.}
+\item{...}{Name-value pairs for elements specific to the model defined by
+\code{class}.}
 
 \item{class}{A character vector representing the class of the model.}
 }
@@ -32,7 +33,8 @@ Because every model should have multiple interfaces, including formula
 and \code{recipes} interfaces, all models should have a \code{preprocessor} that
 can process new data when \code{predict()} is called. The default \code{preprocessor}
 used in the data frame and matrix methods is \code{default_preprocessor()}, which
-converts an object to a matrix and adds an intercept column if required.
+converts an object to a data frame or matrix, and adds an intercept column
+if required.
 
 Additionally, all models have a \code{mode}, generally: \code{"classification"} or
 \code{"regression"}, and a \code{variateness}: \code{"univariate"} or \code{"multivariate"}.
