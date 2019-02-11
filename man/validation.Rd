@@ -23,9 +23,9 @@
 \usage{
 validate_inherits(x, x_nm, cls)
 
-validate_is(x, x_nm, is_cls, cls)
+validate_is(.x, .f, .expected, .x_nm, .note = "")
 
-validate_length(x, x_nm, n = 1L)
+validate_length(.x, .x_nm, .n = 1L)
 
 validate_mode(mode)
 

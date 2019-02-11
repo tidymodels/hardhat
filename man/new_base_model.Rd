@@ -42,3 +42,14 @@ A single model can be both a classification and regression model (for
 example, random forest), but at \emph{fit time} the \code{mode} of the model is set
 for the lifetime of that model object.
 }
+\examples{
+
+new_base_model(
+  "regression",
+  "univariate",
+  default_preprocessor(),
+  custom_field = "my-field",
+  class = "custom_model"
+)
+
+}
