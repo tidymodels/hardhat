@@ -14,9 +14,29 @@ or \code{"regression"}.}
 
 \item{variateness}{A character. One of \code{"univariate"} or \code{"multivariate"}.}
 }
+\value{
+If \code{variateness == "univariate"}, a single character vector for the
+levels of \code{y}.
+
+If \code{variateness == "multivariate"}, a named list of character vectors
+for the levels of each factor column of \code{y}.
+}
 \description{
-If \code{y} is a factor, or a data frame of factors, then
-\code{extract_outcome_levels()} will return the levels of the factor
-as either a character vector, or a list of character vectors if
-\code{y} is multivariate.
+If \code{y} is a factor, then \code{extract_outcome_levels()} will return the levels of
+the factor as a character vector. If \code{y} is a data frame of factors
+a named list of character vectors will be returned.
+}
+\examples{
+
+y <- as.factor(letters[1:5])
+
+extract_outcome_levels(y, "classification", "univariate")
+
+extract_outcome_levels(as.data.frame(y), "classification", "univariate")
+
+z <- as.factor(letters[6:10])
+y_z_df <- data.frame(y = y, z = z)
+
+extract_outcome_levels(y_z_df, "classification", "multivariate")
+
 }
