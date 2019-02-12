@@ -60,7 +60,7 @@ get_all_predictors <- function(formula, data) {
 
 get_all_outcomes <- function(formula, data) {
   setdiff(
-    get_all_vars(formula, data),
+    colnames(get_all_vars(formula, data)),
     get_all_predictors(formula, data)
   )
 }
