@@ -12,7 +12,7 @@ glubort <- function(..., .sep = "", .envir = parent.frame()) {
 }
 
 #' @rdname utilities
-extract_terms <- function(x, data) {
+extract_terms <- function(x) {
 
   # This is like stats:::terms.default
   # but doesn't look at x$terms.
@@ -34,15 +34,6 @@ extract_terms <- function(x, data) {
   #   evaluated in the presence of the data so that should always suffice?
   attr(terms_value, ".Environment") <- NULL
 
-  # We also add the x_levels onto the terms object, so it can be re-used
-  # in predict() to validate that new_data has the levels we expect
-  attr(terms_value, "x_levels") <- .getXlevels(terms_value, x)
-
-  # Also add predictors/outcomes. These are the original columns
-  # required to do the preprocessing
-  attr(terms_value, "predictors") <- get_all_predictors(terms_value, data)
-  attr(terms_value, "outcomes") <- get_all_outcomes(terms_value, data)
-
   terms_value
 }
 
@@ -63,6 +54,10 @@ get_all_outcomes <- function(formula, data) {
     colnames(get_all_vars(formula, data)),
     get_all_predictors(formula, data)
   )
+}
+
+get_predictor_levels <- function(terms, frame) {
+  .getXlevels(terms, frame)
 }
 
 # similar to delete.response()
@@ -89,11 +84,6 @@ delete_response <- function(x) {
 #' @rdname utilities
 dispatchify <- function(x) {
   structure(x, class = x)
-}
-
-#' @rdname utilities
-x_levels <- function(terms) {
-  attr(terms, "x_levels")
 }
 
 guess_mode <- function(y) {

@@ -211,13 +211,13 @@ validate_new_data_classes <- function(terms, new_model_frame) {
 }
 
 #' @rdname validation
-check_new_data_factor_levels <- function(x_levels, new_data) {
+check_new_data_factor_levels <- function(predictor_levels, new_data) {
 
-  fct_cols <- names(x_levels)
+  fct_cols <- names(predictor_levels)
 
   for(col in fct_cols) {
 
-    lvls <- x_levels[[col]]
+    lvls <- predictor_levels[[col]]
     new_col <- new_data[[col]]
 
     # If the new_data column is not a factor (or doesnt exist),

@@ -48,7 +48,7 @@ test_that("can prepare formulas with special terms", {
   )
 
   expect_equal(
-    attr(x$preprocessor$engine, "predictors"),
+    x$preprocessor$predictors,
     c("Sepal.Length", "Sepal.Width")
   )
 })

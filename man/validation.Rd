@@ -50,7 +50,7 @@ validate_prediction_size(.pred, new_data)
 
 validate_new_data_classes(terms, new_model_frame)
 
-check_new_data_factor_levels(x_levels, new_data)
+check_new_data_factor_levels(predictor_levels, new_data)
 
 validate_predictor_arguments(x, x_nm = "x", intercept = FALSE)
 

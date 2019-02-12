@@ -80,7 +80,7 @@ preprocess.recipes_preprocessor <- function(preprocessor, new_data,
   new_data <- shrink(preprocessor, new_data, outcome)
 
   baked_list <- bake_recipe_engine(
-    engine = preprocessor$engine,
+    preprocessor = preprocessor,
     new_data = new_data,
     outcome = outcome
   )
@@ -144,8 +144,8 @@ bake_with_outcome <- function(preprocessor, new_data) {
   engine <- preprocessor$engine
 
   roles <- engine$term_info$role
-  predictor_nms <- engine$term_info$variable[roles == "predictor"]
-  outcome_nms <- engine$term_info$variable[roles == "outcome"]
+  processed_predictor_nms <- engine$term_info$variable[roles == "predictor"]
+  processed_outcome_nms <- engine$term_info$variable[roles == "outcome"]
 
   # optimize and don't double bake
   preprocessed_new_data <- recipes::bake(
@@ -153,8 +153,8 @@ bake_with_outcome <- function(preprocessor, new_data) {
     new_data = new_data
   )
 
-  predictors <- preprocessed_new_data[, predictor_nms, drop = FALSE]
-  outcomes <- preprocessed_new_data[, outcome_nms, drop = FALSE]
+  predictors <- preprocessed_new_data[, processed_predictor_nms, drop = FALSE]
+  outcomes <- preprocessed_new_data[, processed_outcome_nms, drop = FALSE]
 
   preprocess_list(
     predictors = predictors,
@@ -164,12 +164,10 @@ bake_with_outcome <- function(preprocessor, new_data) {
 
 bake_without_outcome <- function(preprocessor, new_data) {
 
-  engine <- preprocessor$engine
-
   all_predictors <- recipes::all_predictors
 
   predictors <- recipes::bake(
-    object = engine,
+    object = preprocessor$engine,
     new_data = new_data,
     all_predictors()
   )
@@ -201,7 +199,7 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
 
-  frame <- preprocess_model_frame(engine, new_data)
+  frame <- preprocess_model_frame(preprocessor, new_data)
 
   processed_outcome_nms <- response_name(engine)
   outcomes <- frame[, processed_outcome_nms, drop = FALSE]
@@ -211,7 +209,7 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
     outcomes <- tibble::as_tibble(outcomes[[1]])
   }
 
-  predictors <- preprocess_model_matrix(engine, frame)
+  predictors <- preprocess_model_matrix(preprocessor, frame)
 
   preprocess_list(predictors, outcomes)
 }
@@ -221,20 +219,23 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
   engine <- preprocessor$engine
 
   # Don't attempt to include Y in the model.frame()
-  x_terms <- delete_response(engine)
+  preprocessor$engine <- delete_response(preprocessor$engine)
 
-  frame <- preprocess_model_frame(x_terms, new_data)
-  predictors <- preprocess_model_matrix(x_terms, frame)
+  frame <- preprocess_model_frame(preprocessor, new_data)
+  predictors <- preprocess_model_matrix(preprocessor, frame)
 
   preprocess_list(predictors)
 }
 
-preprocess_model_frame <- function(terms_engine, new_data) {
+preprocess_model_frame <- function(preprocessor, new_data) {
+
+  engine <- preprocessor$engine
+  original_predictor_levels <- preprocessor$predictor_levels
 
   # Ensure factors have no new levels
   # (we warn if they do and remove them)
   # (this is so model.frame(xlev) doesnt error out on new levels)
-  new_data <- check_new_data_factor_levels(x_levels(terms_engine), new_data)
+  new_data <- check_new_data_factor_levels(original_predictor_levels, new_data)
 
   # This will detect any missing columns in new_data
   # that should be there, but the error message isn't fantastic.
@@ -243,19 +244,19 @@ preprocess_model_frame <- function(terms_engine, new_data) {
   # to na.pass will retain the NA values through
   # the preprocessing
   new_data <- rlang::with_options(
-    model.frame(terms_engine, data = new_data, xlev = x_levels(terms_engine)),
+    model.frame(engine, data = new_data, xlev = original_predictor_levels),
     na.action = "na.pass"
   )
 
-  validate_new_data_classes(terms_engine, new_data)
+  validate_new_data_classes(engine, new_data)
 
   new_data
 }
 
-preprocess_model_matrix <- function(terms_engine, frame) {
+preprocess_model_matrix <- function(preprocessor, frame) {
 
   predictors <- rlang::with_options(
-    model.matrix(terms_engine, data = frame),
+    model.matrix(preprocessor$engine, data = frame),
     na.action = "na.pass"
   )
 

@@ -6,18 +6,15 @@
 \alias{extract_terms}
 \alias{delete_response}
 \alias{dispatchify}
-\alias{x_levels}
 \title{Utilites}
 \usage{
 glubort(..., .sep = "", .envir = parent.frame())
 
-extract_terms(x, data)
+extract_terms(x)
 
 delete_response(x)
 
 dispatchify(x)
-
-x_levels(terms)
 }
 \description{
 Helper functions that are used internally.

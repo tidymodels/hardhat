@@ -18,11 +18,11 @@
 #'
 shrink <- function(preprocessor, new_data, outcome = FALSE) {
 
-  cols <- extract_original_predictors(preprocessor)
+  cols <- preprocessor$predictors
   validate_predictors(new_data, cols)
 
   if (outcome) {
-    outcome_cols <- extract_original_outcomes(preprocessor)
+    outcome_cols <- preprocessor$outcomes
     validate_outcomes(new_data, outcome_cols)
     cols <- c(outcome_cols, cols)
   }

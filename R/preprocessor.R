@@ -18,17 +18,29 @@
 new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              intercept = FALSE,
                              type = "tibble",
+                             predictors = character(),
+                             outcomes = character(),
+                             ...,
                              subclass = character()) {
 
   validate_is_preprocessor_engine(engine)
   validate_intercept(intercept)
   validate_type(type)
+  validate_is_character(predictors, "predictors")
+  validate_is_character(outcomes, "outcomes")
 
   elems <- list(
     engine = engine,
     intercept = intercept,
-    type = type
+    type = type,
+    predictors = predictors,
+    outcomes = outcomes
   )
+
+  new_elems <- rlang::list2(...)
+  validate_has_unique_names(new_elems, "...")
+
+  elems <- c(elems, new_elems)
 
   structure(elems, class = c(subclass, "preprocessor"))
 
@@ -36,25 +48,56 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
 new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
                                      intercept = FALSE,
-                                     type = "tibble") {
+                                     type = "tibble",
+                                     predictors = character(),
+                                     outcomes = character()) {
 
-  new_preprocessor(engine, intercept, type, subclass = "default_preprocessor")
+  new_preprocessor(
+    engine = engine,
+    intercept = intercept,
+    type = type,
+    predictors = predictors,
+    outcomes = outcomes,
+    subclass = "default_preprocessor"
+  )
 
 }
 
 new_terms_preprocessor <- function(engine,
                                    intercept = FALSE,
-                                   type = "tibble") {
+                                   type = "tibble",
+                                   predictors = character(),
+                                   outcomes = character(),
+                                   predictor_levels = list()) {
 
-  new_preprocessor(engine, intercept, type, subclass = "terms_preprocessor")
+  validate_predictor_levels(predictor_levels)
+
+  new_preprocessor(
+    engine = engine,
+    intercept = intercept,
+    type = type,
+    predictors = predictors,
+    outcomes = outcomes,
+    predictor_levels = predictor_levels,
+    subclass = "terms_preprocessor"
+  )
 
 }
 
 new_recipes_preprocessor <- function(engine,
                                      intercept = FALSE,
-                                     type = "tibble") {
+                                     type = "tibble",
+                                     predictors = character(),
+                                     outcomes = character()) {
 
-  new_preprocessor(engine, intercept, type, subclass = "recipes_preprocessor")
+  new_preprocessor(
+    engine = engine,
+    intercept = intercept,
+    type = type,
+    predictors = predictors,
+    outcomes = outcomes,
+    subclass = "recipes_preprocessor"
+  )
 
 }
 
@@ -155,4 +198,39 @@ validate_is_preprocessor <- function(preprocessor) {
     "preprocessor"
   )
   invisible(preprocessor)
+}
+
+validate_is_character <- function(.x, .x_nm) {
+  validate_is(
+    .x,
+    rlang::is_character,
+    "character",
+    .x_nm
+  )
+}
+
+validate_predictor_levels <- function(predictor_levels) {
+
+  valid_pred_levels_obj <- function(predictor_levels) {
+
+    if (!is.list(predictor_levels)) {
+      return(FALSE)
+    }
+
+    is_character_or_null <- function(x) {
+      rlang::is_character(x) || is.null(x)
+    }
+
+    ok <- vapply(predictor_levels, is_character_or_null, logical(1))
+
+    all(ok)
+  }
+
+  validate_has_unique_names(predictor_levels, "predictor_levels")
+
+  if (!valid_pred_levels_obj(predictor_levels)) {
+    glubort("`predictor_level` must be a list of character vectors, or `NULL`.")
+  }
+
+  invisible(predictor_levels)
 }

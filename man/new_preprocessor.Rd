@@ -5,7 +5,8 @@
 \title{Create a new preprocessor}
 \usage{
 new_preprocessor(engine = new_default_preprocessor_engine(),
-  intercept = FALSE, type = "tibble", subclass = character())
+  intercept = FALSE, type = "tibble", predictors = character(),
+  outcomes = character(), ..., subclass = character())
 }
 \arguments{
 \item{engine}{A preprocessing engine. This can be a

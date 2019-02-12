@@ -58,7 +58,9 @@ prepare.data.frame <- function(x, y, intercept = FALSE,
 
   engine <- new_default_preprocessor_engine()
 
-  preprocessor <- new_default_preprocessor(engine, intercept, type)
+  predictor_nms <- colnames(x)
+
+  preprocessor <- new_default_preprocessor(engine, intercept, type, predictor_nms)
 
   x <- engine$process(x, intercept, type)
 
@@ -72,7 +74,9 @@ prepare.matrix <- function(x, y, intercept = FALSE,
 
   engine <- new_default_preprocessor_engine()
 
-  preprocessor <- new_default_preprocessor(engine, intercept, type)
+  predictor_nms <- colnames(x)
+
+  preprocessor <- new_default_preprocessor(engine, intercept, type, predictor_nms)
 
   x <- engine$process(x, intercept, type)
 
@@ -101,9 +105,16 @@ prepare.formula <- function(formula, data, intercept = FALSE,
 
   outcomes <- model.response(framed)
 
-  terms <- extract_terms(framed, data)
+  terms <- extract_terms(framed)
 
-  preprocessor <- new_terms_preprocessor(terms, intercept, type)
+  preprocessor <- new_terms_preprocessor(
+    engine = terms,
+    intercept = intercept,
+    type = type,
+    predictors = get_all_predictors(formula, data),
+    outcomes = get_all_outcomes(formula, data),
+    predictor_levels = get_predictor_levels(terms, framed)
+  )
 
   prepare_list(predictors, outcomes, preprocessor)
 }
@@ -127,10 +138,18 @@ prepare.recipe <- function(x, data, intercept = FALSE,
   # un-retain training data
   prepped_recipe <- compost(prepped_recipe)
 
-  preprocessor <- new_recipes_preprocessor(prepped_recipe, intercept, type)
+  predictor_nms <- colnames(predictors)
+  outcome_nms <- colnames(outcomes)
+
+  preprocessor <- new_recipes_preprocessor(
+    engine = prepped_recipe,
+    intercept = intercept,
+    type = type,
+    predictors = predictor_nms,
+    outcomes = outcome_nms
+  )
 
   predictors <- retype(predictors, type)
-
   predictors <- add_intercept_column(predictors, intercept)
 
   prepare_list(predictors, outcomes, preprocessor)

@@ -1,3 +1,4 @@
+# ------------------------------------------------------------------------------
 context("test-preprocess-formula")
 
 test_that("simple preprocess works", {
@@ -92,6 +93,25 @@ test_that("new_data can only be a data frame / matrix", {
 
 })
 
+
+# ------------------------------------------------------------------------------
 context("test-preprocess-xy")
 
+test_that("simple preprocess works", {
+
+  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  xx <- preprocess(x$preprocessor, iris)
+
+  expect_equal(
+    colnames(xx$predictors),
+    "Sepal.Length"
+  )
+
+  expect_equal(
+    xx$outcomes,
+    NULL
+  )
+})
+
+# ------------------------------------------------------------------------------
 context("test-preprocess-recipe")
