@@ -20,7 +20,6 @@ Suggests:
 Imports: 
     glue,
     rlang,
-    tibble,
-    zeallot
+    tibble
 URL: https://github.com/DavisVaughan/hardhat
 BugReports: https://github.com/DavisVaughan/hardhat/issues
