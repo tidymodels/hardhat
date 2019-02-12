@@ -49,6 +49,7 @@ preprocess.default <- function(preprocessor, new_data, ...) {
   abort("Unknown preprocessor.")
 }
 
+#' @rdname preprocess
 #' @export
 preprocess.default_preprocessor <- function(preprocessor, new_data, ...) {
 
@@ -64,6 +65,7 @@ preprocess.default_preprocessor <- function(preprocessor, new_data, ...) {
   preprocess_list(predictors)
 }
 
+#' @rdname preprocess
 #' @export
 preprocess.recipes_preprocessor <- function(preprocessor, new_data,
                                             outcome = FALSE, ...) {
@@ -92,6 +94,7 @@ preprocess.recipes_preprocessor <- function(preprocessor, new_data,
   baked_list
 }
 
+#' @rdname preprocess
 #' @export
 preprocess.terms_preprocessor <- function(preprocessor, new_data,
                                           outcome = FALSE, ...) {

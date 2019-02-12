@@ -21,8 +21,8 @@ test_that("formula intercepts can be added", {
   expect_true("(Intercept)" %in% colnames(x$predictors))
   expect_equal(attr(x$preprocessor$engine, "intercept"), 1)
 
-  # Don't want intercept in original x_predictors
-  expect_false("(Intercept)" %in% attr(x$preprocessor$engine, "x_predictors"))
+  # Don't want intercept in original predictors
+  expect_false("(Intercept)" %in% attr(x$preprocessor$engine, "predictors"))
 })
 
 test_that("output type can be matrix", {
@@ -48,7 +48,7 @@ test_that("can prepare formulas with special terms", {
   )
 
   expect_equal(
-    attr(x$preprocessor$engine, "x_predictors"),
+    attr(x$preprocessor$engine, "predictors"),
     c("Sepal.Length", "Sepal.Width")
   )
 })

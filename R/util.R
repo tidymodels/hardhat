@@ -38,14 +38,15 @@ extract_terms <- function(x, data) {
   # in predict() to validate that new_data has the levels we expect
   attr(terms_value, "x_levels") <- .getXlevels(terms_value, x)
 
-  # Also add x_predictors. These are the original x columns
+  # Also add predictors/outcomes. These are the original columns
   # required to do the preprocessing
-  attr(terms_value, "x_predictors") <- get_all_x_predictors(terms_value, data)
+  attr(terms_value, "predictors") <- get_all_predictors(terms_value, data)
+  attr(terms_value, "outcomes") <- get_all_outcomes(terms_value, data)
 
   terms_value
 }
 
-get_all_x_predictors <- function(formula, data) {
+get_all_predictors <- function(formula, data) {
   predictor_formula <- rlang::new_formula(
     lhs = NULL,
     rhs = rlang::f_rhs(formula),
@@ -55,6 +56,13 @@ get_all_x_predictors <- function(formula, data) {
   unprocessed_predictor_df <- get_all_vars(predictor_formula, data)
 
   colnames(unprocessed_predictor_df)
+}
+
+get_all_outcomes <- function(formula, data) {
+  setdiff(
+    get_all_vars(formula, data),
+    get_all_predictors(formula, data)
+  )
 }
 
 # similar to delete.response()

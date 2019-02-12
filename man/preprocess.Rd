@@ -2,9 +2,20 @@
 % Please edit documentation in R/preprocess.R
 \name{preprocess}
 \alias{preprocess}
+\alias{preprocess.default_preprocessor}
+\alias{preprocess.recipes_preprocessor}
+\alias{preprocess.terms_preprocessor}
 \title{Internal preprocessing of new data}
 \usage{
 preprocess(preprocessor, new_data, ...)
+
+\method{preprocess}{default_preprocessor}(preprocessor, new_data, ...)
+
+\method{preprocess}{recipes_preprocessor}(preprocessor, new_data,
+  outcome = FALSE, ...)
+
+\method{preprocess}{terms_preprocessor}(preprocessor, new_data,
+  outcome = FALSE, ...)
 }
 \arguments{
 \item{preprocessor}{A valid preprocessor. Can be a \code{\link[recipes:recipe]{recipes::recipe()}}, a
