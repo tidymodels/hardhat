@@ -6,8 +6,17 @@ test_that("can prepare simple formulas", {
   x <- prepare(Species ~ Sepal.Length, iris)
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcomes, "factor")
+  expect_is(x$outcomes, "data.frame")
+  expect_equal(colnames(x$outcomes), "Species")
   expect_is(x$preprocessor, "terms_preprocessor")
+})
+
+test_that("can prepare multivariate formulas", {
+
+  x <- prepare(cbind(Sepal.Length, Sepal.Width) ~ Petal.Length, iris)
+
+  expect_is(x$outcomes, "data.frame")
+  expect_equal(colnames(x$outcomes), c("Sepal.Length", "Sepal.Width"))
 })
 
 test_that("formula intercepts can be added", {

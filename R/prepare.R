@@ -105,9 +105,9 @@ prepare.formula <- function(formula, data, intercept = FALSE,
 
   predictors <- retype(predictors, type)
 
-  outcomes <- model.response(framed)
-
   terms <- extract_terms(framed)
+
+  outcomes <- extract_outcomes_from_frame(terms, framed)
 
   preprocessor <- new_terms_preprocessor(
     engine = terms,

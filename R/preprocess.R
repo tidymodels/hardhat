@@ -3,11 +3,6 @@
 #' `preprocess()` applies the transformations requested by the `preprocessor`
 #' on a set of `new_data` to be used in predictions.
 #'
-#' The `preprocessor` can be a `recipe::recipes()` object, a `terms` object
-#' resulting from the use of a formula method, or a
-#' `new_default_preprocessor()` which converts `new_data` to a `type` class
-#' and optionally adds an intercept.
-#'
 #' If the outcome is present in `new_data`, it can optionally be processed
 #' and returned in the `outcome` slot of the returned list. This is only
 #' applicable for the formula and recipes engines, but is very useful when
@@ -16,10 +11,11 @@
 #'
 #' @inheritParams retype
 #'
-#' @param preprocessor A valid preprocessor. Can be a [recipes::recipe()], a
-#' terms object, or the result of `default_preprocessor()`.
+#' @param preprocessor A valid `"preprocessor"`. The preprocessor that should
+#' be used here is the one in the output from the corresponding call
+#' to [prepare()].
 #'
-#' @param new_data A data frame to preprocess.
+#' @param new_data A data frame or matrix to preprocess.
 #'
 #' @param outcome A logical. Should the outcome be processed and returned
 #' as well?
@@ -34,10 +30,10 @@
 #'  `new_data` predictors.
 #'
 #'  - `outcome`: If `outcome = TRUE`, the outcome is returned here, otherwise
-#'  `NULL`. If a formula engine was used, this is the result of
-#'  [model.response()] (which could be a vector or a matrix). If a recipe was
-#'  used, this is a data.frame that is the result of calling [recipes::bake()]
-#'  with [recipes::all_outcomes()] specified.
+#'  `NULL`. If a formula engine was used, this is a data frame that is the
+#'  result of extracting the outcome columns from `model.frame()`. If a recipe
+#'  was used, this is a data.frame that is the result of calling
+#'  [recipes::bake()] with [recipes::all_outcomes()] specified.
 #'
 #' @export
 preprocess <- function(preprocessor, new_data, ...) {
@@ -202,13 +198,7 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   frame <- preprocess_model_frame(preprocessor, new_data)
 
-  processed_outcome_nms <- response_name(engine)
-  outcomes <- frame[, processed_outcome_nms, drop = FALSE]
-
-  # Simplify multivariate matrix columns
-  if (is.matrix(outcomes[[1]])) {
-    outcomes <- tibble::as_tibble(outcomes[[1]])
-  }
+  outcomes <- extract_outcomes_from_frame(engine, frame)
 
   predictors <- preprocess_model_matrix(preprocessor, frame)
 
@@ -300,4 +290,20 @@ validate_no_outcome_specified <- function(dots) {
   }
 
   invisible(dots)
+}
+
+extract_outcomes_from_frame <- function(terms, frame) {
+
+  processed_outcome_nms <- response_name(terms)
+  outcomes <- frame[, processed_outcome_nms, drop = FALSE]
+
+  # Simplify multivariate matrix columns
+  if (is.matrix(outcomes[[1]])) {
+    outcomes <- tibble::as_tibble(outcomes[[1]])
+  }
+  else {
+    outcomes <- tibble::as_tibble(outcomes)
+  }
+
+  outcomes
 }
