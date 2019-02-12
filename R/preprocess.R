@@ -55,6 +55,7 @@ preprocess.default_preprocessor <- function(preprocessor, new_data, ...) {
 
   validate_is_new_data_like(new_data)
   validate_has_named_columns(new_data, "new_data")
+  validate_no_outcome_specified(list(...))
 
   new_data <- shrink(preprocessor, new_data)
 
@@ -290,3 +291,13 @@ validate_is_new_data_like <- function(new_data) {
   )
 }
 
+validate_no_outcome_specified <- function(dots) {
+
+  if (length(dots) > 0) {
+    if ("outcome" %in% names(dots)) {
+      glubort("`outcome` cannot be specified when a default preprocessor is used.")
+    }
+  }
+
+  invisible(dots)
+}
