@@ -6,7 +6,7 @@ test_that("can prepare simple formulas", {
   x <- prepare(Species ~ Sepal.Length, iris)
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcome, "factor")
+  expect_is(x$outcomes, "factor")
   expect_is(x$preprocessor, "terms_preprocessor")
 })
 
@@ -82,7 +82,7 @@ test_that("can use x-y prepare interface", {
   x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcome, "factor")
+  expect_is(x$outcomes, "factor")
   expect_is(x$preprocessor, "default_preprocessor")
 
 })
@@ -124,8 +124,8 @@ test_that("can prepare recipes", {
   )
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcome, "data.frame")
-  expect_is(x$outcome[[1]], "factor")
+  expect_is(x$outcomes, "data.frame")
+  expect_is(x$outcomes[[1]], "factor")
   expect_is(x$preprocessor, "recipes_preprocessor")
 
   # Training data should _not_ be in the recipe

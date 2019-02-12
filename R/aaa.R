@@ -19,5 +19,5 @@ NULL
 # Required because of zeallot %<-%
 
 utils::globalVariables(
-  c("predictors", "outcome", "preprocessor")
+  c("predictors", "outcomes", "preprocessor")
 )

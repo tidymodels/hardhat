@@ -99,13 +99,13 @@ prepare.formula <- function(formula, data, intercept = FALSE,
 
   predictors <- retype(predictors, type)
 
-  outcome <- model.response(framed)
+  outcomes <- model.response(framed)
 
   terms <- extract_terms(framed, data)
 
   preprocessor <- new_terms_preprocessor(terms, intercept, type)
 
-  prepare_list(predictors, outcome, preprocessor)
+  prepare_list(predictors, outcomes, preprocessor)
 }
 
 #' @rdname prepare
@@ -122,7 +122,7 @@ prepare.recipe <- function(x, data, intercept = FALSE,
   all_outcomes <- recipes::all_outcomes
 
   predictors <- recipes::juice(prepped_recipe, all_predictors())
-  outcome <- recipes::juice(prepped_recipe, all_outcomes())
+  outcomes <- recipes::juice(prepped_recipe, all_outcomes())
 
   # un-retain training data
   prepped_recipe <- compost(prepped_recipe)
@@ -133,16 +133,16 @@ prepare.recipe <- function(x, data, intercept = FALSE,
 
   predictors <- add_intercept_column(predictors, intercept)
 
-  prepare_list(predictors, outcome, preprocessor)
+  prepare_list(predictors, outcomes, preprocessor)
 }
 
 # ------------------------------------------------------------------------------
 # Preparation helpers
 
-prepare_list <- function(predictors, outcome, preprocessor) {
+prepare_list <- function(predictors, outcomes, preprocessor) {
   list(
     predictors = predictors,
-    outcome = outcome,
+    outcomes = outcomes,
     preprocessor = preprocessor
   )
 }
