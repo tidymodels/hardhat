@@ -2,3 +2,9 @@
 
 language: R
 cache: packages
+
+matrix:
+  include:
+  - r: devel
+  - r: release
+  - r: oldrel
