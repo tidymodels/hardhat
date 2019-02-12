@@ -74,6 +74,20 @@ test_that("global environment variables cannot be used", {
 
 })
 
+test_that("cannot manually remove intercept in the formula itself", {
+
+  expect_error(
+    prepare(Species ~ y + 0, iris),
+    "`formula` must not contain"
+  )
+
+  expect_error(
+    prepare(Species ~ y - 1, iris),
+    "`formula` must not contain"
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-prepare-xy")
 

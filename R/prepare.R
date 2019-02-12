@@ -88,6 +88,8 @@ prepare.matrix <- function(x, y, intercept = FALSE,
 prepare.formula <- function(formula, data, intercept = FALSE,
                             type = "tibble", ...) {
 
+  validate_formula_has_intercept(formula)
+
   formula <- remove_formula_intercept(formula, intercept)
   formula <- alter_formula_environment(formula)
 
