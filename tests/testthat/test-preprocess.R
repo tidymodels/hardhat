@@ -108,6 +108,13 @@ test_that("missing predictor columns fail appropriately", {
 
 })
 
+test_that("matrix type is used in preprocessing as well", {
+  x <- prepare(Species ~ Sepal.Length, iris, type = "matrix")
+  xx <- preprocess(x$preprocessor, iris)
+
+  expect_is(xx$predictors, "matrix")
+})
+
 # ------------------------------------------------------------------------------
 context("test-preprocess-xy")
 
@@ -179,6 +186,13 @@ test_that("missing predictor columns fail appropriately", {
     "Sepal.Length, and Sepal.Width"
   )
 
+})
+
+test_that("matrix type is used in preprocessing as well", {
+  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species, type = "matrix")
+  xx <- preprocess(x$preprocessor, iris)
+
+  expect_is(xx$predictors, "matrix")
 })
 
 # ------------------------------------------------------------------------------
@@ -273,4 +287,17 @@ test_that("missing predictor columns fail appropriately", {
     "Sepal.Length, and Sepal.Width"
   )
 
+})
+
+test_that("matrix type is used in preprocessing as well", {
+
+  x <- prepare(
+    recipe(Species ~ Sepal.Length, data = iris),
+    iris,
+    type = "matrix"
+  )
+
+  xx <- preprocess(x$preprocessor, iris)
+
+  expect_is(xx$predictors, "matrix")
 })
