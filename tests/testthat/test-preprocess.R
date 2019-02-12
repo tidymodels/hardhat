@@ -29,11 +29,10 @@ test_that("asking for the outcome when it isn't there fails", {
   x <- prepare(Species ~ Sepal.Length, iris)
   iris2 <- iris
   iris2$Species <- NULL
-  xx <- preprocess(x$preprocessor, iris2, outcome = TRUE)
 
-  expect_equal(
-    xx$outcomes,
-    data.frame(Species = iris$Species)
+  expect_error(
+    preprocess(x$preprocessor, iris2, outcome = TRUE),
+    "object 'Species'"
   )
 })
 
@@ -50,9 +49,10 @@ test_that("can use special inline functions", {
   attr(poly_df$`poly(Sepal.Length, degree = 2)1`, "assign") <- c(1, 1)
   attr(poly_df$`poly(Sepal.Length, degree = 2)2`, "assign") <- c(1, 1)
 
+  # coerce to df for tolerance..tibbles don't have good tolerance
   expect_equal(
-    xx$predictors,
-    poly_df
+    as.data.frame(xx$predictors),
+    as.data.frame(poly_df)
   )
 
   expect_equal(
@@ -71,9 +71,13 @@ test_that("new_data can be a matrix", {
     NA
   )
 
+  sep_len <- iris$Sepal.Length
+  attr(sep_len, "assign") <- 1
+  pred_tbl <- tibble::tibble(Sepal.Length = sep_len)
+
   expect_equal(
     xx$predictors,
-    tibble::tibble(Sepal.Length = iris$Sepal.Length)
+    pred_tbl
   )
 
 })
