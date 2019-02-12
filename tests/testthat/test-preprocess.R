@@ -93,6 +93,20 @@ test_that("new_data can only be a data frame / matrix", {
 
 })
 
+test_that("missing predictor columns fail appropriately", {
+  x <- prepare(Species ~ Sepal.Length + Sepal.Width, iris)
+
+  expect_error(
+    preprocess(x$preprocessor, iris[,1, drop = FALSE]),
+    "Sepal.Width"
+  )
+
+  expect_error(
+    preprocess(x$preprocessor, iris[,3, drop = FALSE]),
+    "Sepal.Length, and Sepal.Width"
+  )
+
+})
 
 # ------------------------------------------------------------------------------
 context("test-preprocess-xy")
@@ -152,9 +166,111 @@ test_that("new_data can only be a data frame / matrix", {
 
 })
 
+test_that("missing predictor columns fail appropriately", {
+  x <- prepare(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+
+  expect_error(
+    preprocess(x$preprocessor, iris[,1, drop = FALSE]),
+    "Sepal.Width"
+  )
+
+  expect_error(
+    preprocess(x$preprocessor, iris[,3, drop = FALSE]),
+    "Sepal.Length, and Sepal.Width"
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-preprocess-recipe")
 
 library(recipes)
 prepare <- hardhat::prepare
 
+test_that("simple preprocess works", {
+
+  x <- prepare(
+    recipe(Species ~ Sepal.Length, data = iris),
+    iris
+  )
+
+  xx <- preprocess(x$preprocessor, iris)
+
+  expect_equal(
+    colnames(xx$predictors),
+    "Sepal.Length"
+  )
+
+  expect_equal(
+    xx$outcomes,
+    NULL
+  )
+})
+
+test_that("asking for the outcome works", {
+
+  x <- prepare(
+    recipe(Species ~ Sepal.Length, data = iris),
+    iris
+  )
+
+  xx <- preprocess(x$preprocessor, iris, outcome = TRUE)
+
+  expect_equal(
+    xx$outcomes,
+    data.frame(Species = iris$Species)
+  )
+})
+
+test_that("asking for the outcome when it isn't there fails", {
+
+  x <- prepare(
+    recipe(Species ~ Sepal.Length, data = iris),
+    iris
+  )
+
+  iris2 <- iris
+  iris2$Species <- NULL
+
+  expect_error(
+    preprocess(x$preprocessor, iris2, outcome = TRUE),
+    "`new_data` is missing the following"
+  )
+
+})
+
+test_that("outcomes steps get processed", {
+
+  x <- prepare(
+    recipe(Sepal.Width ~ Sepal.Length, data = iris) %>%
+      step_log(Sepal.Width),
+    iris
+  )
+
+  processed <- preprocess(x$preprocessor, iris, outcome = TRUE)
+
+  expect_equal(
+    processed$outcomes$Sepal.Width,
+    log(iris$Sepal.Width)
+  )
+
+})
+
+test_that("missing predictor columns fail appropriately", {
+
+  x <- prepare(
+    recipe(Species ~ Sepal.Length + Sepal.Width, data = iris),
+    iris
+  )
+
+  expect_error(
+    preprocess(x$preprocessor, iris[,1, drop = FALSE]),
+    "Sepal.Width"
+  )
+
+  expect_error(
+    preprocess(x$preprocessor, iris[,3, drop = FALSE]),
+    "Sepal.Length, and Sepal.Width"
+  )
+
+})
