@@ -29,5 +29,5 @@ the input data, then this attribute is constructed for you.
 \code{type == "outcome"}.
 }
 
-This function is called from \code{\link[=preprocess]{preprocess()}} when \code{outcome = TRUE}.
+This function is called from \code{\link[=shrink]{shrink()}} when \code{outcome = TRUE}.
 }

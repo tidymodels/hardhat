@@ -81,7 +81,7 @@ extract_original_predictors.recipe_preprocessor <- function(preprocessor) {
 #' `variable` column of `recipe$var_info`, after filtering down to
 #' `type == "outcome"`.
 #'
-#' This function is called from [preprocess()] when `outcome = TRUE`.
+#' This function is called from [shrink()] when `outcome = TRUE`.
 #'
 #' @export
 extract_original_outcomes <- function(preprocessor) {

@@ -56,6 +56,8 @@ preprocess.default_preprocessor <- function(preprocessor, new_data, ...) {
   validate_is_new_data_like(new_data)
   validate_has_named_columns(new_data, "new_data")
 
+  new_data <- shrink(preprocessor, new_data)
+
   predictors <- preprocessor$engine$process(
     new_data,
     preprocessor$intercept,
@@ -74,6 +76,8 @@ preprocess.recipes_preprocessor <- function(preprocessor, new_data,
   validate_is_new_data_like(new_data)
   validate_has_named_columns(new_data, "new_data")
   validate_is_bool(outcome)
+
+  new_data <- shrink(preprocessor, new_data, outcome)
 
   baked_list <- bake_recipe_engine(
     engine = preprocessor$engine,
@@ -102,6 +106,8 @@ preprocess.terms_preprocessor <- function(preprocessor, new_data,
   validate_is_new_data_like(new_data)
   validate_has_named_columns(new_data, "new_data")
   validate_is_bool(outcome)
+
+  new_data <- shrink(preprocessor, new_data, outcome)
 
   baked_list <- bake_terms_engine(preprocessor, new_data, outcome)
 
@@ -136,9 +142,6 @@ bake_recipe_engine <- function(preprocessor, new_data, outcome) {
 bake_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
-
-  original_outcome_nms <- extract_original_outcomes(preprocessor)
-  validate_outcomes(new_data, original_outcome_nms)
 
   roles <- engine$term_info$role
   predictor_nms <- engine$term_info$variable[roles == "predictor"]
@@ -198,13 +201,15 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
 
-  outcome_nms <- extract_original_outcomes(preprocessor)
-  validate_outcomes(new_data, outcome_nms)
-
   frame <- preprocess_model_frame(engine, new_data)
 
   processed_outcome_nms <- response_name(engine)
   outcomes <- frame[, processed_outcome_nms, drop = FALSE]
+
+  # Simplify multivariate matrix columns
+  if (is.matrix(outcomes[[1]])) {
+    outcomes <- tibble::as_tibble(outcomes[[1]])
+  }
 
   predictors <- preprocess_model_matrix(engine, frame)
 
@@ -257,6 +262,7 @@ preprocess_model_matrix <- function(terms_engine, frame) {
   predictors
 }
 
+# To get the post processed name of the outcome column
 response_name <- function(terms_engine) {
   rlang::as_label(rlang::f_lhs(terms_engine))
 }

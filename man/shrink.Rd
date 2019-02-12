@@ -2,21 +2,24 @@
 % Please edit documentation in R/shrink.R
 \name{shrink}
 \alias{shrink}
-\title{Subset only required predictors}
+\title{Subset only required columns}
 \usage{
-shrink(object, new_data)
+shrink(preprocessor, new_data, outcome = FALSE)
 }
 \arguments{
-\item{object}{The model fit. If the default preprocessing was supplied, an
-\code{object$predictors} element should exist holding a character vector of the
-predictor names. Otherwise, as long as \code{prepare()}
-was called, then nothing else needs to be done.}
+\item{preprocessor}{A \code{"preprocessor"}.}
 
 \item{new_data}{A data frame containing the new data that will be shrunk down
 to only contain the predictors required for preprocessing and prediction.}
+
+\item{outcome}{A logical. Should the outcome be included in the shrunk
+\code{new_data} as well?}
 }
 \description{
 \code{shrink()} first validates that all \code{predictors} exist in \code{new_data}, and
-then subsets \code{new_data} to only contain those predictors.
+then subsets \code{new_data} to only contain those predictors. If \code{outcome} is
+\code{TRUE}, then the original outcome columns are retained as well.
 }
-\keyword{internal}
+\details{
+\code{shrink()} is called by \code{\link[=preprocess]{preprocess()}} before the processing is done.
+}
