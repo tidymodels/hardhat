@@ -1,73 +1,65 @@
 #' Spruce up predictions
 #'
-#' `spruce()` converts predictions into a standardized format. It is generally
-#' called from your prediction implementation function for the specific
-#' `type` of prediction to return.
+#' The family of `spruce_*()` functions convert predictions into a
+#' standardized format. They are generally called from a prediction
+#' implementation function for the specific `type` of prediction to return.
 #'
-#' @param type The return value from `dispatchify()` called on a character
-#' `type`. This is used for appropriate dispatching.
-#' @param new_data The post processed new data to make predictions for. This is
-#' used to validate that the number of rows in the predictions is the same
-#' as the number of rows in the original `new_data`.
+#' After running a `spruce_*()` function, you should _always_ use the validation
+#' function `validate_prediction_size()` to ensure that the number of rows
+#' being returned is the same as the number of rows in the input (`new_data`).
+#'
 #' @param .pred (`type = "response"`) A numeric vector of predictions.
+#'
 #' @param .pred_class (`type = "class"`) A factor of "hard" class predictions.
-#' @param .pred_levels,.prob_matrix (`type = "prob"`) `.pred_levels` should
-#' be a character vector of the original levels of the outcome used in training.
-#' `.prob_matrix` should be a numeric matrix of class probabilities with as many
-#' columns as levels in `.pred_levels`, and in the same order.
-#' @param ... Not currently used.
+#'
+#' @param .pred_levels,.prob_matrix (`type = "prob"`)
+#' - `.pred_levels` should be a character vector of the original levels of
+#' the outcome used in training.
+#' - `.prob_matrix` should be a numeric matrix of class probabilities with
+#' as many columns as levels in `.pred_levels`, and in the same order.
 #'
 #' @return
 #'
-#' A tibble with as many rows as in `new_data`. The column names and number
-#' of columns vary based on the `type`, but are standardized.
+#' A tibble, ideally with the same number of rows as the `new_data` passed
+#' to `predict()`. The column names and number of columns vary based on the
+#' function used, but are standardized.
 #'
-#' @export
-spruce <- function(type, new_data, ...) {
-  UseMethod("spruce")
-}
+#' @name spruce
+NULL
 
 #' @rdname spruce
 #' @export
-spruce.default <- function(type, new_data, ...) {
-  glubort("Unknown type: {type}.")
-}
+spruce_response <- function(.pred) {
 
-#' @rdname spruce
-#' @export
-spruce.response <- function(type, new_data, .pred, ...) {
-
-  validate_is(.pred, is.numeric, "numeric", ".pred")
+  validate_is(.pred, is.numeric, "numeric")
+  validate_not_matrix(.pred)
 
   predictions <- tibble(.pred = .pred)
 
-  validate_prediction_size(predictions, new_data)
-
   predictions
 }
 
 #' @rdname spruce
 #' @export
-spruce.class <- function(type, new_data, .pred_class, ...) {
+spruce_class <- function(.pred_class) {
 
-  validate_inherits(.pred_class, ".pred_class", "factor")
+  validate_is(.pred_class, is.factor, "factor")
 
   predictions <- tibble(.pred_class = .pred_class)
 
-  validate_prediction_size(predictions, new_data)
-
   predictions
 }
 
 #' @rdname spruce
 #' @export
-spruce.prob <- function(type, new_data, .pred_levels, .prob_matrix, ...) {
+spruce_prob <- function(.pred_levels, .prob_matrix) {
 
   # Assumes the order is correct!
   # Assumes you gave it the original levels and the class probability matrix
 
-  validate_inherits(.pred_levels, ".pred_levels", "character")
-  validate_inherits(.prob_matrix, ".prob_matrix", "matrix")
+  validate_is(.pred_levels, is.character, "character")
+  validate_is(.prob_matrix, is.matrix, "matrix")
+  validate_numeric_elements(.prob_matrix)
 
   n_levels <- length(.pred_levels)
   n_col <- ncol(.prob_matrix)
@@ -84,7 +76,29 @@ spruce.prob <- function(type, new_data, .pred_levels, .prob_matrix, ...) {
 
   predictions <- tibble::as_tibble(.prob_matrix)
 
-  validate_prediction_size(predictions, new_data)
-
   predictions
+}
+
+# ------------------------------------------------------------------------------
+
+validate_numeric_elements <- function(.prob_matrix) {
+  if (!is.numeric(.prob_matrix[[1]])) {
+    cls <- class1(.prob_matrix[[1]])
+    glubort("`.prob_matrix` should have numeric elements, not {cls}.")
+  }
+}
+
+validate_not_matrix <- function(.pred) {
+  if (dims(.pred) != 1L) {
+    glubort("`.pred` must be a numeric vector, not a numeric matrix/array.")
+  }
+}
+
+dims <- function(x) {
+  d <- dim(x)
+  if (is.null(d)) {
+    1L
+  } else {
+    length(d)
+  }
 }
