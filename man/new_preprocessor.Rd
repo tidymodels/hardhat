@@ -17,6 +17,15 @@ new_preprocessor(engine = new_default_preprocessor_engine(),
 \item{type}{A character. One of \code{"tibble"}, \code{"data.frame"} or \code{"matrix"}.
 The output type for the predictors.}
 
+\item{predictors}{A character vector. The original predictors used when
+fitting the model.}
+
+\item{outcomes}{A character vector. The original outcome columns used
+when fitting the model.}
+
+\item{...}{Name-value pairs of extra elements that should be added to
+subclassed preprocessors.}
+
 \item{subclass}{An optional character. The subclass of the \code{"preprocessor"}.}
 }
 \description{

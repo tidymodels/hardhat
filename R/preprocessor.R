@@ -12,6 +12,15 @@
 #' @param type A character. One of `"tibble"`, `"data.frame"` or `"matrix"`.
 #' The output type for the predictors.
 #'
+#' @param predictors A character vector. The original predictors used when
+#' fitting the model.
+#'
+#' @param outcomes A character vector. The original outcome columns used
+#' when fitting the model.
+#'
+#' @param ... Name-value pairs of extra elements that should be added to
+#' subclassed preprocessors.
+#'
 #' @param subclass An optional character. The subclass of the `"preprocessor"`.
 #'
 #' @export
