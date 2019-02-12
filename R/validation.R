@@ -132,7 +132,21 @@ validate_predictors <- function(new_data, predictors) {
     missing_predictors <- glue::glue_collapse(predictors[!has_predictors], ", ", last = ", and ")
     glubort(
       "`new_data` is missing the following required predictors:
-      {missing_predictors}."
+      {missing_predictors}"
+    )
+  }
+}
+
+#' @rdname validation
+validate_outcomes <- function(new_data, outcomes) {
+  new_outcomes <- colnames(new_data)
+
+  has_outcomes <- outcomes %in% new_outcomes
+  if (!all(has_outcomes)) {
+    missing_outcomes <- glue::glue_collapse(outcomes[!has_outcomes], ", ", last = ", and ")
+    glubort(
+      "`new_data` is missing the following required outcomes:
+      {missing_outcomes}"
     )
   }
 }

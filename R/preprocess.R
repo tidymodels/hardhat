@@ -103,7 +103,7 @@ preprocess.terms_preprocessor <- function(preprocessor, new_data,
   validate_has_named_columns(new_data, "new_data")
   validate_is_bool(outcome)
 
-  baked_list <- bake_terms_engine(preprocessor$engine, new_data, outcome)
+  baked_list <- bake_terms_engine(preprocessor, new_data, outcome)
 
   baked_list$predictors <- retype(
     x = baked_list$predictors,
@@ -124,16 +124,21 @@ preprocess_list <- function(predictors, outcomes = NULL) {
 
 # ------------------------------------------------------------------------------
 
-bake_recipe_engine <- function(engine, new_data, outcome) {
+bake_recipe_engine <- function(preprocessor, new_data, outcome) {
   if (outcome) {
-    bake_with_outcome(engine, new_data)
+    bake_with_outcome(preprocessor, new_data)
   }
   else {
-    bake_without_outcome(engine, new_data)
+    bake_without_outcome(preprocessor, new_data)
   }
 }
 
-bake_with_outcome <- function(engine, new_data) {
+bake_with_outcome <- function(preprocessor, new_data) {
+
+  engine <- preprocessor$engine
+
+  original_outcome_nms <- extract_original_outcomes(preprocessor)
+  validate_outcomes(new_data, original_outcome_nms)
 
   roles <- engine$term_info$role
   predictor_nms <- engine$term_info$variable[roles == "predictor"]
@@ -154,7 +159,9 @@ bake_with_outcome <- function(engine, new_data) {
   )
 }
 
-bake_without_outcome <- function(engine, new_data) {
+bake_without_outcome <- function(preprocessor, new_data) {
+
+  engine <- preprocessor$engine
 
   all_predictors <- recipes::all_predictors
 
@@ -171,35 +178,42 @@ bake_without_outcome <- function(engine, new_data) {
 
 # ------------------------------------------------------------------------------
 
-bake_terms_engine <- function(engine, new_data, outcome) {
+bake_terms_engine <- function(preprocessor, new_data, outcome) {
 
-  engine <- alter_terms_environment(engine)
+  preprocessor$engine <- alter_terms_environment(preprocessor$engine)
 
   # new_data could be a matrix, but model.frame() requires a data.frame
   new_data <- tibble::as_tibble(new_data)
 
   if (outcome) {
-    bake_terms_with_outcome(engine, new_data)
+    bake_terms_with_outcome(preprocessor, new_data)
   }
   else {
-    bake_terms_without_outcome(engine, new_data)
+    bake_terms_without_outcome(preprocessor, new_data)
   }
 
 }
 
-bake_terms_with_outcome <- function(engine, new_data) {
+bake_terms_with_outcome <- function(preprocessor, new_data) {
+
+  engine <- preprocessor$engine
+
+  outcome_nms <- extract_original_outcomes(preprocessor)
+  validate_outcomes(new_data, outcome_nms)
 
   frame <- preprocess_model_frame(engine, new_data)
 
-  outcome_nm <- response_name(engine)
-  outcome <- frame[, outcome_nm, drop = FALSE]
+  processed_outcome_nms <- response_name(engine)
+  outcomes <- frame[, processed_outcome_nms, drop = FALSE]
 
   predictors <- preprocess_model_matrix(engine, frame)
 
-  preprocess_list(predictors, outcome)
+  preprocess_list(predictors, outcomes)
 }
 
-bake_terms_without_outcome <- function(engine, new_data) {
+bake_terms_without_outcome <- function(preprocessor, new_data) {
+
+  engine <- preprocessor$engine
 
   # Don't attempt to include Y in the model.frame()
   x_terms <- delete_response(engine)
