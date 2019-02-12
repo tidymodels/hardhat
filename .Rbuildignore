@@ -1,2 +1,4 @@
+^README\.Rmd$
+^\.travis\.yml$
 ^hardhat\.Rproj$
 ^\.Rproj\.user$
