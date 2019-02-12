@@ -183,3 +183,17 @@ has_unique_names <- function(x) {
 class1 <- function(x) {
   class(x)[1]
 }
+
+is_bool <- function (x)
+{
+  rlang::is_logical(x, n = 1) && !is.na(x)
+}
+
+validate_is_bool <- function(.x, .x_nm) {
+
+  if (rlang::is_missing(.x_nm)) {
+    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  }
+
+  validate_is(.x, is_bool, "bool", .x_nm, .note = "({ui_value('TRUE')} / {ui_value('FALSE')})")
+}

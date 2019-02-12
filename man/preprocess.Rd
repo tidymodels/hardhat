@@ -4,16 +4,30 @@
 \alias{preprocess}
 \title{Internal preprocessing of new data}
 \usage{
-preprocess(preprocessor, new_data)
+preprocess(preprocessor, new_data, ...)
 }
 \arguments{
 \item{preprocessor}{A valid preprocessor. Can be a \code{\link[recipes:recipe]{recipes::recipe()}}, a
 terms object, or the result of \code{default_preprocessor()}.}
 
 \item{new_data}{A data frame to preprocess.}
+
+\item{...}{Not currently used.}
+
+\item{outcome}{A logical. Should the outcome be processed and returned
+as well?}
 }
 \value{
-The preprocessed data, returned as a \code{type}.
+A named list with elements:
+\itemize{
+\item \code{predictors}: An object of class \code{type} containing the preprocessed
+\code{new_data} predictors.
+\item \code{outcome}: If \code{outcome = TRUE}, the outcome is returned here, otherwise
+\code{NULL}. If a formula engine was used, this is the result of
+\code{\link[=model.response]{model.response()}} (which could be a vector or a matrix). If a recipe was
+used, this is a data.frame that is the result of calling \code{\link[recipes:bake]{recipes::bake()}}
+with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}} specified.
+}
 }
 \description{
 \code{preprocess()} applies the transformations requested by the \code{preprocessor}
@@ -21,6 +35,13 @@ on a set of \code{new_data} to be used in predictions.
 }
 \details{
 The \code{preprocessor} can be a \code{recipe::recipes()} object, a \code{terms} object
-resulting from the use of a formula method, or a \code{default_preprocessor()}
-which converts \code{new_data} to a matrix and optionally adds an intercept.
+resulting from the use of a formula method, or a
+\code{new_default_preprocessor()} which converts \code{new_data} to a \code{type} class
+and optionally adds an intercept.
+
+If the outcome is present in \code{new_data}, it can optionally be processed
+and returned in the \code{outcome} slot of the returned list. This is only
+applicable for the formula and recipes engines, but is very useful when
+doing cross validation where you need to preprocess the outcome of a test
+set before computing performance.
 }
