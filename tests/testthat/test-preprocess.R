@@ -113,5 +113,48 @@ test_that("simple preprocess works", {
   )
 })
 
+test_that("asking for the outcome fails for default preprocessor", {
+  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+
+  expect_error(
+    preprocess(x$preprocessor, iris, outcome = TRUE),
+    "`outcome` cannot be specified"
+  )
+})
+
+test_that("new_data can be a matrix", {
+
+  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  iris_mat <- as.matrix(iris[,"Sepal.Length", drop = FALSE])
+
+  expect_error(
+    xx <- preprocess(x$preprocessor, iris_mat),
+    NA
+  )
+
+  sep_len <- iris$Sepal.Length
+  pred_tbl <- tibble::tibble(Sepal.Length = sep_len)
+
+  expect_equal(
+    xx$predictors,
+    pred_tbl
+  )
+
+})
+
+test_that("new_data can only be a data frame / matrix", {
+  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+
+  expect_error(
+    preprocess(x$preprocessor, "hi"),
+    "new_data should be a"
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-preprocess-recipe")
+
+library(recipes)
+prepare <- hardhat::prepare
+
