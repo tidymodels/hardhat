@@ -9,6 +9,8 @@
 status](https://travis-ci.com/DavisVaughan/hardhat.svg?branch=master)](https://travis-ci.com/DavisVaughan/hardhat)
 [![Codecov test
 coverage](https://codecov.io/gh/DavisVaughan/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/hardhat?branch=master)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of hardhat is to supply a number of common modeling package
