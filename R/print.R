@@ -2,7 +2,7 @@
 format.default_preprocessor <- function(x, ...) "Default"
 
 #' @export
-format.recipes_preprocessor <- function(x) "Recipe"
+format.recipes_preprocessor <- function(x, ...) "Recipe"
 
 #' @export
-format.terms_preprocessor <- function(x) "Formula"
+format.terms_preprocessor <- function(x, ...) "Formula"
