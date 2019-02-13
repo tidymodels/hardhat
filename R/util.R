@@ -178,6 +178,20 @@ has_unique_names <- function(x) {
   !anyDuplicated(nms)
 }
 
+has_unique_column_names <- function(x) {
+  nms <- colnames(x)
+
+  if (length(nms) != NCOL(x)) {
+    return(FALSE)
+  }
+
+  if (any(is.na(nms) | nms == "")) {
+    return(FALSE)
+  }
+
+  !anyDuplicated(nms)
+}
+
 class1 <- function(x) {
   class(x)[1]
 }

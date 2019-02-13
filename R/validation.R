@@ -105,6 +105,18 @@ validate_has_unique_names <- function(x, x_nm) {
 }
 
 #' @rdname validation
+validate_has_unique_column_names <- function(x, x_nm) {
+
+  if (!has_unique_column_names(x)) {
+    glubort(
+      "All columns of `{x_nm}` must have unique names."
+    )
+  }
+
+  invisible(x)
+}
+
+#' @rdname validation
 validate_x_has_numeric_cols <- function(x) {
   all_cols_numeric <- all_numeric(x)
   if (!all_cols_numeric) {
