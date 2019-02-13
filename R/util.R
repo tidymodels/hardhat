@@ -99,15 +99,6 @@ guess_mode <- function(y) {
 
 }
 
-guess_variateness <- function(y) {
-  if (is_multivariate(y)) {
-    "multivariate"
-  }
-  else {
-    "univariate"
-  }
-}
-
 abort_unknown_fit_class <- function(x) {
   cls <- class(x)[1]
   glubort(
@@ -204,4 +195,8 @@ validate_is_bool <- function(.x, .x_nm) {
   }
 
   validate_is(.x, is_bool, "bool", .x_nm, .note = "({ui_value('TRUE')} / {ui_value('FALSE')})")
+}
+
+all_numeric <- function(x) {
+  all(vapply(x, is.numeric, logical(1)))
 }

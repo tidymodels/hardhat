@@ -206,9 +206,7 @@ validate_new_data_classes <- function(terms, new_model_frame) {
 
   if (!all(ok)) {
 
-    first_class <- function(x) class(x)[1]
-
-    all_classes <- vapply(new_model_frame, first_class, character(1))
+    all_classes <- vapply(new_model_frame, class1, character(1))
 
     wrong_class <- all_classes[!ok]
     right_class <- required_classes[!ok]
@@ -270,7 +268,7 @@ validate_predictor_arguments <- function(x, x_nm = "x", intercept = FALSE) {
 #' @rdname validation
 validate_intercept <- function(intercept) {
   if (!is.logical(intercept)) {
-    cls <- first_class(intercept)
+    cls <- class1(intercept)
     glubort("`intercept` must be a logical, not a {cls}.")
   }
 
