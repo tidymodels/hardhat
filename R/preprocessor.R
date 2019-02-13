@@ -18,6 +18,16 @@
 #' @param outcomes A character vector. The original outcome columns used
 #' when fitting the model.
 #'
+#' @param predictor_levels A named list. Each element of the list should be a
+#' character vector of levels. The names of the list should be the _predictor_
+#' factor columns in the training data. If there are no factor columns, this is
+#' `NULL`.
+#'
+#' @param outcome_levels A named list. Each element of the list should be a
+#' character vector of levels. The names of the list should be the _outcome_
+#' factor columns in the training data. If there are no factor columns, this is
+#' `NULL`.
+#'
 #' @param ... Name-value pairs of extra elements that should be added to
 #' subclassed preprocessors.
 #'
@@ -30,6 +40,7 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              predictors = character(),
                              outcomes = character(),
                              predictor_levels = NULL,
+                             outcome_levels = NULL,
                              ...,
                              subclass = character()) {
 
@@ -38,7 +49,8 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
   validate_type(type)
   validate_is_character(predictors, "predictors")
   validate_is_character(outcomes, "outcomes")
-  validate_predictor_levels(predictor_levels)
+  validate_levels_list(predictor_levels, "predictor_levels")
+  validate_levels_list(outcome_levels, "outcome_levels")
 
   elems <- list(
     engine = engine,
@@ -46,7 +58,8 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
     type = type,
     predictors = predictors,
     outcomes = outcomes,
-    predictor_levels = predictor_levels
+    predictor_levels = predictor_levels,
+    outcome_levels = outcome_levels
   )
 
   new_elems <- rlang::list2(...)
@@ -63,7 +76,8 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
                                      type = "tibble",
                                      predictors = character(),
                                      outcomes = character(),
-                                     predictor_levels = NULL) {
+                                     predictor_levels = NULL,
+                                     outcome_levels = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -72,6 +86,7 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
+    outcome_levels = outcome_levels,
     subclass = "default_preprocessor"
   )
 
@@ -82,7 +97,8 @@ new_terms_preprocessor <- function(engine,
                                    type = "tibble",
                                    predictors = character(),
                                    outcomes = character(),
-                                   predictor_levels = NULL) {
+                                   predictor_levels = NULL,
+                                   outcome_levels = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -91,6 +107,7 @@ new_terms_preprocessor <- function(engine,
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
+    outcome_levels = outcome_levels,
     subclass = "terms_preprocessor"
   )
 
@@ -101,7 +118,8 @@ new_recipes_preprocessor <- function(engine,
                                      type = "tibble",
                                      predictors = character(),
                                      outcomes = character(),
-                                     predictor_levels = NULL) {
+                                     predictor_levels = NULL,
+                                     outcome_levels = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -110,6 +128,7 @@ new_recipes_preprocessor <- function(engine,
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
+    outcome_levels = outcome_levels,
     subclass = "recipes_preprocessor"
   )
 
@@ -219,9 +238,9 @@ validate_is_character <- function(.x, .x_nm) {
   )
 }
 
-validate_predictor_levels <- function(predictor_levels) {
+validate_levels_list <- function(lst, lst_nm) {
 
-  valid_pred_levels_obj <- function(x) {
+  valid_levels_obj <- function(x) {
 
     if (is.null(x)) {
       return(TRUE)
@@ -231,16 +250,16 @@ validate_predictor_levels <- function(predictor_levels) {
       return(FALSE)
     }
 
-    ok <- vapply(predictor_levels, rlang::is_character, logical(1))
+    ok <- vapply(x, rlang::is_character, logical(1))
 
     all(ok)
   }
 
-  validate_has_unique_names(predictor_levels, "predictor_levels")
+  validate_has_unique_names(lst, lst_nm)
 
-  if (!valid_pred_levels_obj(predictor_levels)) {
-    glubort("`predictor_level` must be a list of character vectors, or `NULL`.")
+  if (!valid_levels_obj(lst)) {
+    glubort("`{lst_nm}` must be a list of character vectors, or `NULL`.")
   }
 
-  invisible(predictor_levels)
+  invisible(lst)
 }

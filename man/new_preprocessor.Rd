@@ -6,8 +6,8 @@
 \usage{
 new_preprocessor(engine = new_default_preprocessor_engine(),
   intercept = FALSE, type = "tibble", predictors = character(),
-  outcomes = character(), predictor_levels = NULL, ...,
-  subclass = character())
+  outcomes = character(), predictor_levels = NULL,
+  outcome_levels = NULL, ..., subclass = character())
 }
 \arguments{
 \item{engine}{A preprocessing engine. This can be a
@@ -23,6 +23,16 @@ fitting the model.}
 
 \item{outcomes}{A character vector. The original outcome columns used
 when fitting the model.}
+
+\item{predictor_levels}{A named list. Each element of the list should be a
+character vector of levels. The names of the list should be the \emph{predictor}
+factor columns in the training data. If there are no factor columns, this is
+\code{NULL}.}
+
+\item{outcome_levels}{A named list. Each element of the list should be a
+character vector of levels. The names of the list should be the \emph{outcome}
+factor columns in the training data. If there are no factor columns, this is
+\code{NULL}.}
 
 \item{...}{Name-value pairs of extra elements that should be added to
 subclassed preprocessors.}
