@@ -58,16 +58,17 @@ prepare.data.frame <- function(x, y, intercept = FALSE,
 
   engine <- new_default_preprocessor_engine()
 
+  x <- engine$process(x, intercept, type)
+  y <- standardize(y)
+
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
     type = type,
     predictors = colnames(x),
-    outcomes = character(),
+    outcomes = colnames(y),
     predictor_levels = get_levels(x)
   )
-
-  x <- engine$process(x, intercept, type)
 
   prepare_list(x, y, preprocessor)
 }
@@ -79,16 +80,17 @@ prepare.matrix <- function(x, y, intercept = FALSE,
 
   engine <- new_default_preprocessor_engine()
 
+  x <- engine$process(x, intercept, type)
+  y <- standardize(y)
+
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
     type = type,
     predictors = colnames(x),
-    outcomes = character(),
+    outcomes = colnames(y),
     predictor_levels = NULL
   )
-
-  x <- engine$process(x, intercept, type)
 
   prepare_list(x, y, preprocessor)
 }

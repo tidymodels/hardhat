@@ -122,7 +122,8 @@ test_that("can use x-y prepare interface", {
   x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcomes, "factor")
+  expect_is(x$outcomes, "tbl_df")
+  expect_equal(colnames(x$outcomes), ".outcome")
   expect_is(x$preprocessor, "default_preprocessor")
 
 })
