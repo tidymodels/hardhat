@@ -38,9 +38,10 @@
 #'  - `predictors`: An object of class `type` containing the prepared predictors
 #'  to be used in the model.
 #'
-#'  - `outcome`: If `y` was supplied, it is returned unmodified here. If a
-#'  formula was used, this is the result of [model.response()]. If a recipe
-#'  was used, this is a data.frame that is the result of calling
+#'  - `outcome`: A tibble. If `y` was supplied, it is returned after a call to
+#'  `standardize()` is made. If a formula engine was used, this is a data frame
+#'  that is the result of extracting the outcome columns from `model.frame()`.
+#'  If a recipe was used, this is a data.frame that is the result of calling
 #'  [recipes::juice()] with [recipes::all_outcomes()] specified.
 #'
 #'  - `preprocessor`: A `"preprocessor"` object for use when making predictions.

@@ -45,9 +45,10 @@ A named list containing:
 \itemize{
 \item \code{predictors}: An object of class \code{type} containing the prepared predictors
 to be used in the model.
-\item \code{outcome}: If \code{y} was supplied, it is returned unmodified here. If a
-formula was used, this is the result of \code{\link[=model.response]{model.response()}}. If a recipe
-was used, this is a data.frame that is the result of calling
+\item \code{outcome}: A tibble. If \code{y} was supplied, it is returned after a call to
+\code{standardize()} is made. If a formula engine was used, this is a data frame
+that is the result of extracting the outcome columns from \code{model.frame()}.
+If a recipe was used, this is a data.frame that is the result of calling
 \code{\link[recipes:juice]{recipes::juice()}} with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}} specified.
 \item \code{preprocessor}: A \code{"preprocessor"} object for use when making predictions.
 }
