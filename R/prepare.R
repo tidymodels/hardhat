@@ -58,9 +58,14 @@ prepare.data.frame <- function(x, y, intercept = FALSE,
 
   engine <- new_default_preprocessor_engine()
 
-  predictor_nms <- colnames(x)
-
-  preprocessor <- new_default_preprocessor(engine, intercept, type, predictor_nms)
+  preprocessor <- new_default_preprocessor(
+    engine = engine,
+    intercept = intercept,
+    type = type,
+    predictors = colnames(x),
+    outcomes = character(),
+    predictor_levels = get_levels(x)
+  )
 
   x <- engine$process(x, intercept, type)
 
@@ -74,9 +79,14 @@ prepare.matrix <- function(x, y, intercept = FALSE,
 
   engine <- new_default_preprocessor_engine()
 
-  predictor_nms <- colnames(x)
-
-  preprocessor <- new_default_preprocessor(engine, intercept, type, predictor_nms)
+  preprocessor <- new_default_preprocessor(
+    engine = engine,
+    intercept = intercept,
+    type = type,
+    predictors = colnames(x),
+    outcomes = character(),
+    predictor_levels = NULL
+  )
 
   x <- engine$process(x, intercept, type)
 
@@ -145,15 +155,15 @@ prepare.recipe <- function(x, data, intercept = FALSE,
   # un-retain training data
   prepped_recipe <- compost(prepped_recipe)
 
-  predictor_nms <- colnames(predictors)
-  outcome_nms <- colnames(outcomes)
+  predictor_levels <- get_original_recipe_predictor_levels(data, prepped_recipe)
 
   preprocessor <- new_recipes_preprocessor(
     engine = prepped_recipe,
     intercept = intercept,
     type = type,
-    predictors = predictor_nms,
-    outcomes = outcome_nms
+    predictors = colnames(predictors),
+    outcomes = colnames(outcomes),
+    predictor_levels = predictor_levels
   )
 
   predictors <- retype(predictors, type)
@@ -191,4 +201,12 @@ strip_model_matrix <- function(x) {
   attr(x, "assign") <- NULL
   attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
   x
+}
+
+get_original_recipe_predictor_levels <- function(x, rec) {
+
+  roles <- rec$var_info$role
+  original_predictors <- rec$var_info$variable[roles == "predictor"]
+
+  get_levels(x[, original_predictors, drop = FALSE])
 }

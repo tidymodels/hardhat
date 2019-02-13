@@ -6,6 +6,11 @@
 #'
 #' `shrink()` is called by [preprocess()] before the processing is done.
 #'
+#' `shrink()` also checks that all of the `new_data` factor columns don't have
+#' any _new_ levels when compared to the original data used in training. If
+#' there are new levels, they are replaced with `NA` values and a warning is
+#' thrown.
+#'
 #' @param preprocessor A `"preprocessor"`.
 #'
 #' @param new_data A data frame containing the new data that will be shrunk down
@@ -20,6 +25,9 @@ shrink <- function(preprocessor, new_data, outcome = FALSE) {
 
   cols <- preprocessor$predictors
   validate_predictors(new_data, cols)
+
+  original_predictor_levels <- preprocessor$predictor_levels
+  new_data <- check_new_data_factor_levels(original_predictor_levels, new_data)
 
   if (outcome) {
     outcome_cols <- preprocessor$outcomes

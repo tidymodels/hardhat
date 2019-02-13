@@ -112,6 +112,32 @@ test_that("matrix type is used in preprocessing as well", {
   expect_is(xx$predictors, "matrix")
 })
 
+test_that("novel predictor levels are caught", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  x <- prepare(y ~ f, dat)
+
+  expect_warning(
+    xx <- preprocess(x$preprocessor, new),
+    "The following factor levels"
+  )
+
+  expect_equal(
+    xx$predictors[[5,1]],
+    NA_real_
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-preprocess-xy")
 
@@ -190,6 +216,32 @@ test_that("matrix type is used in preprocessing as well", {
   xx <- preprocess(x$preprocessor, iris)
 
   expect_is(xx$predictors, "matrix")
+})
+
+test_that("novel predictor levels are caught", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  x <- prepare(dat[, "f", drop = FALSE], dat$y)
+
+  expect_warning(
+    xx <- preprocess(x$preprocessor, new),
+    "The following factor levels"
+  )
+
+  expect_equal(
+    xx$predictors[[5,1]],
+    factor(NA_real_, c("a", "b", "c", "d"))
+  )
+
 })
 
 # ------------------------------------------------------------------------------
@@ -297,4 +349,31 @@ test_that("matrix type is used in preprocessing as well", {
   xx <- preprocess(x$preprocessor, iris)
 
   expect_is(xx$predictors, "matrix")
+})
+
+test_that("novel predictor levels are caught", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  recipe(y ~ f, dat)
+  x <- prepare(recipe(y ~ f, dat), dat)
+
+  expect_warning(
+    xx <- preprocess(x$preprocessor, new),
+    "The following factor levels"
+  )
+
+  expect_equal(
+    xx$predictors[[5,1]],
+    factor(NA_real_, levels = c("a", "b", "c", "d"))
+  )
+
 })

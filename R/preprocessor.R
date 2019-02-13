@@ -29,6 +29,7 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              type = "tibble",
                              predictors = character(),
                              outcomes = character(),
+                             predictor_levels = NULL,
                              ...,
                              subclass = character()) {
 
@@ -37,13 +38,15 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
   validate_type(type)
   validate_is_character(predictors, "predictors")
   validate_is_character(outcomes, "outcomes")
+  validate_predictor_levels(predictor_levels)
 
   elems <- list(
     engine = engine,
     intercept = intercept,
     type = type,
     predictors = predictors,
-    outcomes = outcomes
+    outcomes = outcomes,
+    predictor_levels = predictor_levels
   )
 
   new_elems <- rlang::list2(...)
@@ -59,7 +62,8 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
                                      intercept = FALSE,
                                      type = "tibble",
                                      predictors = character(),
-                                     outcomes = character()) {
+                                     outcomes = character(),
+                                     predictor_levels = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -67,6 +71,7 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
     type = type,
     predictors = predictors,
     outcomes = outcomes,
+    predictor_levels = predictor_levels,
     subclass = "default_preprocessor"
   )
 
@@ -77,9 +82,7 @@ new_terms_preprocessor <- function(engine,
                                    type = "tibble",
                                    predictors = character(),
                                    outcomes = character(),
-                                   predictor_levels = list()) {
-
-  validate_predictor_levels(predictor_levels)
+                                   predictor_levels = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -97,7 +100,8 @@ new_recipes_preprocessor <- function(engine,
                                      intercept = FALSE,
                                      type = "tibble",
                                      predictors = character(),
-                                     outcomes = character()) {
+                                     outcomes = character(),
+                                     predictor_levels = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -105,6 +109,7 @@ new_recipes_preprocessor <- function(engine,
     type = type,
     predictors = predictors,
     outcomes = outcomes,
+    predictor_levels = predictor_levels,
     subclass = "recipes_preprocessor"
   )
 

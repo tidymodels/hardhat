@@ -223,14 +223,9 @@ preprocess_model_frame <- function(preprocessor, new_data) {
   engine <- preprocessor$engine
   original_predictor_levels <- preprocessor$predictor_levels
 
-  # Ensure factors have no new levels
-  # (we warn if they do and remove them)
+  # - Factors with new levels have been coerced to NA by shrink()
   # (this is so model.frame(xlev) doesnt error out on new levels)
-  new_data <- check_new_data_factor_levels(original_predictor_levels, new_data)
-
-  # This will detect any missing columns in new_data
-  # that should be there, but the error message isn't fantastic.
-  # Preprocessing should _never_ removes rows
+  # - Preprocessing should _never_ removes rows
   # with incomplete data. Setting the na.action
   # to na.pass will retain the NA values through
   # the preprocessing
