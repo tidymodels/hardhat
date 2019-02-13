@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -11,7 +13,10 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+options(rlang__backtrace_on_error = "reminder")
 ```
+
 # hardhat
 
 <!-- badges: start -->
@@ -21,7 +26,16 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
 <!-- badges: end -->
 
-The goal of hardhat is to supply a number of common modeling package development functions.
+## Introduction
+
+hardhat is designed to ease the creation of new modeling packages, while simultaneously promoting good R modeling package standards as laid out by the set of opinionated [Conventions for R Modeling Packages](https://tidymodels.github.io/model-implementation-principles/).
+
+The idea is to take as much of the burden around creating a good interface off the developer as possible, and instead let them focus on writing the core implementation of the model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of "expectations" around what any modeling function should return, and how they should interact with it.
+
+```{r}
+library(hardhat)
+```
+
 
 ## Installation
 
@@ -38,3 +52,139 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("DavisVaughan/hardhat")
 ```
+
+## Example
+
+hardhat will mainly be useful to developers, and it allows you to develop new modeling packages that implement formula, data frame, matrix, and recipes interfaces with ease.
+
+There are a number of useful functions in hardhat, but two of the most important ones are `prepare()` and `preprocess()`.
+
+### `prepare()`
+
+`prepare()` readies input data for ingestion into a modeling function. It is to be called from the interface layer of your modeling package. For instance, if you have a top level function called `linear_regression()` that accepts input from the user, you would call `prepare()` inside of `linear_regression()`, before passing on the input to the actual implementation function, which should be separated from the top level interface and might be called `linear_regression_impl()`.
+
+If your modeling function has a formula interface, `prepare()` will call `model.frame()` and `model.matrix()` for you, storing important information such as the predictor factor levels and the class of each predictor and outcome column.
+
+```{r}
+iris_train <- iris[1:100,]
+iris_test <- iris[101:150,]
+
+processed <- prepare(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
+```
+
+The return value of `prepare()` has three things. The `predictors`, the `outcomes`, and a `preprocessor` that varies based on the interface you are using. Notice that the default behavior for `prepare()` is to _not_ add an intercept column. This is completely controlled by the `intercept` argument and not by the formula itself.
+
+```{r}
+processed$predictors
+
+processed$outcomes
+```
+
+The preprocessor stores a number of things that are useful to any model when it is time to make predictions on new data.
+
+```{r}
+names(processed$preprocessor)
+```
+
+For instance, the original levels and classes of the predictors are stored automatically.
+
+```{r}
+processed$preprocessor$predictor_levels
+
+processed$preprocessor$predictor_classes
+```
+
+There is also an interface for the XY method (providing the predictors and outcome directly to `x` and `y`). The preprocessing that occurs here is minimal, but you can add an intercept to `x` with `intercept = TRUE`, and can change the output type of `x` if your model requires a matrix rather than a data frame and you only have numeric predictors. 
+
+Notice how even though `y` is a vector, the `outcomes` slot of the return value _always_ holds a tibble. Because `y` is not a data frame / matrix with existing column names, a default name of `".outcome"` is used.
+
+```{r}
+x <- iris_train[, c("Species", "Petal.Width")]
+y <- iris_train$Sepal.Length
+
+processed_xy <- prepare(x, y, intercept = TRUE)
+
+processed_xy$predictors
+
+processed_xy$outcomes
+```
+
+Finally, there is an interface for `recipes`. It calls `recipes::prep()` on the recipe for you.
+
+```{r}
+suppressPackageStartupMessages(library(recipes))
+
+# Currently there is a defunct function in recipes called prepare()
+prepare <- hardhat::prepare
+
+rec <- recipe(Sepal.Length ~ Species + Petal.Width, iris_train) %>%
+  step_log(Sepal.Length) %>%
+  step_dummy(Species)
+
+processed_rec <- prepare(rec, iris_train)
+
+processed_rec$predictors
+```
+
+### `preprocess()`
+
+`preprocess()` takes `new_data` and applies the same preprocessing steps that happened to the data used in training the model. It is to be called from `predict()`, or potentially from a cross validation function where you will use `predict()` repeatedly to measure performance of different folds or different hyperparameters.
+
+Say you fit a model and called `prepare()` from your fitting function. When you return the model object, you should attach the `preprocessor` that you get with the output of `prepare()` onto the model object (using the model constructor, `new_base_model()`, makes this easier to do). Then when you call `predict()` on that model object along with `new_data`, you should call `preprocess()` inside of the `predict()` method with the stored `preprocessor` and the `new_data`.
+
+```{r}
+processed_test <- preprocess(
+  preprocessor = processed$preprocessor, 
+  new_data = iris_test,
+  outcome = TRUE
+)
+```
+
+`preprocess()` always returns a list with two things. The first is a tibble containing the preprocessed `predictors`. The second is optionally the preprocessed `outcomes` if you are performing cross validation and used a formula or recipes interface. Because we used the formula interface to generate the `processed` object, we could set `outcome = TRUE` above to also return the processed outcome column.
+
+```{r}
+processed_test$predictors
+
+processed_test$outcomes
+```
+
+The nice thing about `preprocess()` is that the `preprocessor` remembers a lot of information about what happened at fit time, and keeps the user from shooting themselves in the foot at prediction time. 
+
+For instance, each predictor used at fit time has to have the same class at prediction time.
+
+```{r, error=TRUE}
+iris_test_bad <- iris_test
+
+# Turning Species into a character column rather than
+# a factor
+iris_test_bad$Species <- as.character(iris_test_bad$Species)
+
+preprocess(processed$preprocessor, iris_test_bad)
+```
+
+And each predictor column has to exist in `new_data`.
+
+```{r, error=TRUE}
+# Removing species alltogether
+iris_test_bad$Species <- NULL
+
+preprocess(processed$preprocessor, iris_test_bad)
+```
+
+And new levels in any of the predictors throw a warning and are coerced to `NA`.
+
+```{r, warning=TRUE}
+iris_test_bad <- iris
+iris_test_bad$Species <- as.character(iris_test_bad$Species)
+iris_test_bad$Species[1] <- "new_level"
+iris_test_bad$Species  <- factor(iris_test_bad$Species)
+
+levels(iris_test_bad$Species)
+
+processed_bad_test <- preprocess(processed$preprocessor, iris_test_bad)
+
+processed_bad_test$predictors
+```
+
+
+
