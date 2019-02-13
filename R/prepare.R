@@ -68,7 +68,8 @@ prepare.data.frame <- function(x, y, intercept = FALSE,
     type = type,
     predictors = colnames(x),
     outcomes = colnames(y),
-    predictor_levels = get_levels(x)
+    predictor_levels = get_levels(x),
+    outcome_levels = get_levels(y)
   )
 
   prepare_list(x, y, preprocessor)
@@ -90,7 +91,8 @@ prepare.matrix <- function(x, y, intercept = FALSE,
     type = type,
     predictors = colnames(x),
     outcomes = colnames(y),
-    predictor_levels = NULL
+    predictor_levels = NULL,
+    outcome_levels = get_levels(y)
   )
 
   prepare_list(x, y, preprocessor)
@@ -123,6 +125,7 @@ prepare.formula <- function(formula, data, intercept = FALSE,
   terms <- extract_terms(framed)
 
   outcomes <- extract_outcomes_from_frame(terms, framed)
+  outcome_levels <- get_levels(outcomes)
 
   framed_predictors <- extract_predictors_from_frame(terms, framed)
   predictor_levels <- get_levels(framed_predictors)
@@ -133,7 +136,8 @@ prepare.formula <- function(formula, data, intercept = FALSE,
     type = type,
     predictors = get_all_predictors(formula, data),
     outcomes = get_all_outcomes(formula, data),
-    predictor_levels = predictor_levels
+    predictor_levels = predictor_levels,
+    outcome_levels = outcome_levels
   )
 
   prepare_list(predictors, outcomes, preprocessor)
@@ -158,7 +162,7 @@ prepare.recipe <- function(x, data, intercept = FALSE,
   # un-retain training data
   prepped_recipe <- compost(prepped_recipe)
 
-  predictor_levels <- get_original_recipe_predictor_levels(data, prepped_recipe)
+  all_levels <- get_original_recipe_levels(data, prepped_recipe)
 
   preprocessor <- new_recipes_preprocessor(
     engine = prepped_recipe,
@@ -166,7 +170,8 @@ prepare.recipe <- function(x, data, intercept = FALSE,
     type = type,
     predictors = colnames(predictors),
     outcomes = colnames(outcomes),
-    predictor_levels = predictor_levels
+    predictor_levels = all_levels$predictor_levels,
+    outcome_levels = all_levels$outcome_levels
   )
 
   predictors <- retype(predictors, type)
@@ -206,10 +211,15 @@ strip_model_matrix <- function(x) {
   x
 }
 
-get_original_recipe_predictor_levels <- function(x, rec) {
+get_original_recipe_levels <- function(x, rec) {
 
   roles <- rec$var_info$role
   original_predictors <- rec$var_info$variable[roles == "predictor"]
+  original_outcomes <- rec$var_info$variable[roles == "outcome"]
 
-  get_levels(x[, original_predictors, drop = FALSE])
+  list(
+    predictor_levels = get_levels(x[, original_predictors, drop = FALSE]),
+    outcome_levels = get_levels(x[, original_outcomes, drop = FALSE])
+  )
+
 }
