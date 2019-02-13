@@ -59,7 +59,7 @@ spruce_prob <- function(.pred_levels, .prob_matrix) {
 
   validate_is(.pred_levels, is.character, "character")
   validate_is(.prob_matrix, is.matrix, "matrix")
-  validate_numeric_elements(.prob_matrix)
+  validate_numeric_elements(.prob_matrix, ".prob_matrix")
 
   n_levels <- length(.pred_levels)
   n_col <- ncol(.prob_matrix)
@@ -81,10 +81,10 @@ spruce_prob <- function(.pred_levels, .prob_matrix) {
 
 # ------------------------------------------------------------------------------
 
-validate_numeric_elements <- function(.prob_matrix) {
-  if (!is.numeric(.prob_matrix[[1]])) {
-    cls <- class1(.prob_matrix[[1]])
-    glubort("`.prob_matrix` should have numeric elements, not {cls}.")
+validate_numeric_elements <- function(.x, .x_nm) {
+  if (!is.numeric(.x[[1]])) {
+    cls <- class1(.x[[1]])
+    glubort("`{.x_nm}` should have numeric elements, not {cls}.")
   }
 }
 
