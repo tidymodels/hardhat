@@ -2,47 +2,42 @@
 % Please edit documentation in R/spruce.R
 \name{spruce}
 \alias{spruce}
-\alias{spruce.default}
-\alias{spruce.response}
-\alias{spruce.class}
-\alias{spruce.prob}
+\alias{spruce_response}
+\alias{spruce_class}
+\alias{spruce_prob}
 \title{Spruce up predictions}
 \usage{
-spruce(type, new_data, ...)
+spruce_response(.pred)
 
-\method{spruce}{default}(type, new_data, ...)
+spruce_class(.pred_class)
 
-\method{spruce}{response}(type, new_data, .pred, ...)
-
-\method{spruce}{class}(type, new_data, .pred_class, ...)
-
-\method{spruce}{prob}(type, new_data, .pred_levels, .prob_matrix, ...)
+spruce_prob(.pred_levels, .prob_matrix)
 }
 \arguments{
-\item{type}{The return value from \code{dispatchify()} called on a character
-\code{type}. This is used for appropriate dispatching.}
-
-\item{new_data}{The post processed new data to make predictions for. This is
-used to validate that the number of rows in the predictions is the same
-as the number of rows in the original \code{new_data}.}
-
-\item{...}{Not currently used.}
-
 \item{.pred}{(\code{type = "response"}) A numeric vector of predictions.}
 
 \item{.pred_class}{(\code{type = "class"}) A factor of "hard" class predictions.}
 
-\item{.pred_levels, .prob_matrix}{(\code{type = "prob"}) \code{.pred_levels} should
-be a character vector of the original levels of the outcome used in training.
-\code{.prob_matrix} should be a numeric matrix of class probabilities with as many
-columns as levels in \code{.pred_levels}, and in the same order.}
+\item{.pred_levels, .prob_matrix}{(\code{type = "prob"})
+\itemize{
+\item \code{.pred_levels} should be a character vector of the original levels of
+the outcome used in training.
+\item \code{.prob_matrix} should be a numeric matrix of class probabilities with
+as many columns as levels in \code{.pred_levels}, and in the same order.
+}}
 }
 \value{
-A tibble with as many rows as in \code{new_data}. The column names and number
-of columns vary based on the \code{type}, but are standardized.
+A tibble, ideally with the same number of rows as the \code{new_data} passed
+to \code{predict()}. The column names and number of columns vary based on the
+function used, but are standardized.
 }
 \description{
-\code{spruce()} converts predictions into a standardized format. It is generally
-called from your prediction implementation function for the specific
-\code{type} of prediction to return.
+The family of \code{spruce_*()} functions convert predictions into a
+standardized format. They are generally called from a prediction
+implementation function for the specific \code{type} of prediction to return.
+}
+\details{
+After running a \code{spruce_*()} function, you should \emph{always} use the validation
+function \code{validate_prediction_size()} to ensure that the number of rows
+being returned is the same as the number of rows in the input (\code{new_data}).
 }
