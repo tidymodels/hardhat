@@ -7,6 +7,8 @@
 
 [![Travis build
 status](https://travis-ci.com/DavisVaughan/hardhat.svg?branch=master)](https://travis-ci.com/DavisVaughan/hardhat)
+[![Codecov test
+coverage](https://codecov.io/gh/DavisVaughan/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/hardhat?branch=master)
 <!-- badges: end -->
 
 The goal of hardhat is to supply a number of common modeling package

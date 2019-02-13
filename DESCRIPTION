@@ -16,7 +16,8 @@ RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Suggests: 
     recipes,
-    testthat
+    testthat,
+    covr
 Imports: 
     glue,
     rlang,
