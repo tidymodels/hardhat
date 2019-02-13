@@ -9,6 +9,7 @@
 \alias{validate_variateness}
 \alias{validate_has_named_columns}
 \alias{validate_has_unique_names}
+\alias{validate_has_unique_column_names}
 \alias{validate_x_has_numeric_cols}
 \alias{validate_y_univariate}
 \alias{validate_predictors}
@@ -35,6 +36,8 @@ validate_variateness(variateness)
 validate_has_named_columns(x, x_nm)
 
 validate_has_unique_names(x, x_nm)
+
+validate_has_unique_column_names(x, x_nm)
 
 validate_x_has_numeric_cols(x)
 
