@@ -28,6 +28,14 @@
 #' factor columns in the training data. If there are no factor columns, this is
 #' `NULL`.
 #'
+#' @param predictor_classes A named list. Each element of the list should
+#' be a character vector of classes. The names of the list are the _predictor_
+#' names in the training data.
+#'
+#' @param outcome_classes A named list. Each element of the list should
+#' be a character vector of classes. The names of the list are the _outcome_
+#' names in the training data.
+#'
 #' @param ... Name-value pairs of extra elements that should be added to
 #' subclassed preprocessors.
 #'
@@ -41,6 +49,8 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              outcomes = character(),
                              predictor_levels = NULL,
                              outcome_levels = NULL,
+                             predictor_classes = NULL,
+                             outcome_classes = NULL,
                              ...,
                              subclass = character()) {
 
@@ -59,7 +69,9 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
-    outcome_levels = outcome_levels
+    outcome_levels = outcome_levels,
+    predictor_classes = predictor_classes,
+    outcome_classes = outcome_classes
   )
 
   new_elems <- rlang::list2(...)
@@ -77,7 +89,9 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
                                      predictors = character(),
                                      outcomes = character(),
                                      predictor_levels = NULL,
-                                     outcome_levels = NULL) {
+                                     outcome_levels = NULL,
+                                     predictor_classes = NULL,
+                                     outcome_classes = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -87,6 +101,8 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
     outcomes = outcomes,
     predictor_levels = predictor_levels,
     outcome_levels = outcome_levels,
+    predictor_classes = predictor_classes,
+    outcome_classes = outcome_classes,
     subclass = "default_preprocessor"
   )
 
@@ -98,7 +114,9 @@ new_terms_preprocessor <- function(engine,
                                    predictors = character(),
                                    outcomes = character(),
                                    predictor_levels = NULL,
-                                   outcome_levels = NULL) {
+                                   outcome_levels = NULL,
+                                   predictor_classes = NULL,
+                                   outcome_classes = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -108,6 +126,8 @@ new_terms_preprocessor <- function(engine,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
     outcome_levels = outcome_levels,
+    predictor_classes = predictor_classes,
+    outcome_classes = outcome_classes,
     subclass = "terms_preprocessor"
   )
 
@@ -119,7 +139,9 @@ new_recipes_preprocessor <- function(engine,
                                      predictors = character(),
                                      outcomes = character(),
                                      predictor_levels = NULL,
-                                     outcome_levels = NULL) {
+                                     outcome_levels = NULL,
+                                     predictor_classes = NULL,
+                                     outcome_classes = NULL) {
 
   new_preprocessor(
     engine = engine,
@@ -129,6 +151,8 @@ new_recipes_preprocessor <- function(engine,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
     outcome_levels = outcome_levels,
+    predictor_classes = predictor_classes,
+    outcome_classes = outcome_classes,
     subclass = "recipes_preprocessor"
   )
 

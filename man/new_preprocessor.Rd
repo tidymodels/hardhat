@@ -7,7 +7,8 @@
 new_preprocessor(engine = new_default_preprocessor_engine(),
   intercept = FALSE, type = "tibble", predictors = character(),
   outcomes = character(), predictor_levels = NULL,
-  outcome_levels = NULL, ..., subclass = character())
+  outcome_levels = NULL, predictor_classes = NULL,
+  outcome_classes = NULL, ..., subclass = character())
 }
 \arguments{
 \item{engine}{A preprocessing engine. This can be a
@@ -33,6 +34,14 @@ factor columns in the training data. If there are no factor columns, this is
 character vector of levels. The names of the list should be the \emph{outcome}
 factor columns in the training data. If there are no factor columns, this is
 \code{NULL}.}
+
+\item{predictor_classes}{A named list. Each element of the list should
+be a character vector of classes. The names of the list are the \emph{predictor}
+names in the training data.}
+
+\item{outcome_classes}{A named list. Each element of the list should
+be a character vector of classes. The names of the list are the \emph{outcome}
+names in the training data.}
 
 \item{...}{Name-value pairs of extra elements that should be added to
 subclassed preprocessors.}

@@ -164,6 +164,22 @@ test_that("novel outcome levels are caught", {
 
 })
 
+test_that("original predictor and outcome classes are recorded", {
+
+  x <- prepare(log(Sepal.Length) ~ log(Sepal.Width), iris)
+
+  expect_equal(
+    x$preprocessor$predictor_classes,
+    list(Sepal.Width = "numeric")
+  )
+
+  expect_equal(
+    x$preprocessor$outcome_classes,
+    list(Sepal.Length = "numeric")
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-preprocess-xy")
 
@@ -272,6 +288,22 @@ test_that("novel predictor levels are caught", {
 
 # cannot have outcome = TRUE for xy method, so no need to do a check
 # for novel outcome levels being caught here
+
+test_that("original predictor and outcome classes are recorded", {
+
+  x <- prepare(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+
+  expect_equal(
+    x$preprocessor$predictor_classes,
+    list(Sepal.Length = "numeric", Sepal.Width = "numeric")
+  )
+
+  expect_equal(
+    x$preprocessor$outcome_classes,
+    list(.outcome = "factor")
+  )
+
+})
 
 # ------------------------------------------------------------------------------
 context("test-preprocess-recipe")
@@ -428,6 +460,25 @@ test_that("novel outcome levels are caught", {
   expect_equal(
     xx$outcomes[[5,1]],
     factor(NA_real_, levels = c("a", "b", "c", "d"))
+  )
+
+})
+
+test_that("original predictor and outcome classes are recorded", {
+
+  x <- prepare(
+    recipe(Species ~ Sepal.Length, data = iris),
+    iris
+  )
+
+  expect_equal(
+    x$preprocessor$predictor_classes,
+    list(Sepal.Length = "numeric")
+  )
+
+  expect_equal(
+    x$preprocessor$outcome_classes,
+    list(Species = "factor")
   )
 
 })
