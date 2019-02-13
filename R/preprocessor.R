@@ -23,7 +23,7 @@
 #'
 #' @param subclass An optional character. The subclass of the `"preprocessor"`.
 #'
-#' @export
+#' @keywords internal
 new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              intercept = FALSE,
                              type = "tibble",
@@ -120,7 +120,8 @@ new_recipes_preprocessor <- function(engine,
 #'
 #' @examples
 #'
-#' is_preprocessor(new_preprocessor())
+#' x <- prepare(Species ~ Sepal.Width, iris)
+#' is_preprocessor(x$preprocessor)
 #'
 #' @export
 is_preprocessor <- function(x) {
@@ -157,8 +158,7 @@ is_preprocessor <- function(x) {
 #'
 #' - `type`: A single character. Passed on to `retype()`.
 #'
-#'
-#' @export
+#' @keywords internal
 new_default_preprocessor_engine <- function() {
 
   process <- function(new_data, intercept, type) {
@@ -179,11 +179,7 @@ new_default_preprocessor_engine <- function() {
 #'
 #' @param x An object.
 #'
-#' @examples
-#'
-#' is_preprocessor_engine(new_default_preprocessor_engine())
-#'
-#' @export
+#' @keywords internal
 is_preprocessor_engine <- function(x) {
   inherits(x, c("recipe", "terms", "default_preprocessor_engine"))
 }

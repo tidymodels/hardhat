@@ -14,6 +14,7 @@ This function checks to see if \code{x} is a valid \code{"preprocessor"}.
 }
 \examples{
 
-is_preprocessor(new_preprocessor())
+x <- prepare(Species ~ Sepal.Width, iris)
+is_preprocessor(x$preprocessor)
 
 }

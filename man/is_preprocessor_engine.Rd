@@ -13,8 +13,4 @@ is_preprocessor_engine(x)
 This function checks to see if \code{x} is a valid preprocessing engine. This
 can be a \code{recipe}, a \code{terms} object, or a \code{default_preprocessor_engine}.
 }
-\examples{
-
-is_preprocessor_engine(new_default_preprocessor_engine())
-
-}
+\keyword{internal}

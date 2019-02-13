@@ -33,3 +33,4 @@ A preprocessor holds a preprocessing engine, an indicator for whether or
 not to include the intercept, and a character string representing the
 output type of the predictors.
 }
+\keyword{internal}

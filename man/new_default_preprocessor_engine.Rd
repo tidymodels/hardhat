@@ -33,3 +33,4 @@ has 3 arguments:
 \item \code{type}: A single character. Passed on to \code{retype()}.
 }
 }
+\keyword{internal}
