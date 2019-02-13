@@ -50,10 +50,15 @@ get_all_predictors <- function(formula, data) {
 }
 
 get_all_outcomes <- function(formula, data) {
-  setdiff(
-    colnames(get_all_vars(formula, data)),
-    get_all_predictors(formula, data)
+  outcome_formula <- rlang::new_formula(
+    lhs = rlang::f_lhs(formula),
+    rhs = 1,
+    env = rlang::f_env(formula)
   )
+
+  unprocessed_outcome_df <- get_all_vars(outcome_formula, data)
+
+  colnames(unprocessed_outcome_df)
 }
 
 # similar to delete.response()
