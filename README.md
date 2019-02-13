@@ -11,6 +11,8 @@ status](https://travis-ci.com/DavisVaughan/hardhat.svg?branch=master)](https://t
 coverage](https://codecov.io/gh/DavisVaughan/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/hardhat?branch=master)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
 <!-- badges: end -->
 
 The goal of hardhat is to supply a number of common modeling package
