@@ -36,7 +36,7 @@
 get_levels <- function(x) {
 
   if (!is.data.frame(x)) {
-    glubort("A data frame is required to extract levels from.")
+    return(NULL)
   }
 
   lvl_lst <- lapply(x, levels)

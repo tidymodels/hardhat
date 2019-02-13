@@ -47,15 +47,15 @@ test_that("NULL returned when no factors", {
 
 })
 
-test_that("Only data frames are allowed", {
+test_that("Only data frames are allowed, others return NULL", {
 
   x <- matrix(
     1:5
   )
 
-  expect_error(
+  expect_equal(
     get_levels(x),
-    "A data frame is required"
+    NULL
   )
 
 })
