@@ -180,9 +180,6 @@ bake_terms_engine <- function(preprocessor, new_data, outcome) {
 
   preprocessor$engine <- alter_terms_environment(preprocessor$engine)
 
-  # new_data could be a matrix, but model.frame() requires a data.frame
-  new_data <- tibble::as_tibble(new_data)
-
   if (outcome) {
     bake_terms_with_outcome(preprocessor, new_data)
   }
@@ -233,8 +230,6 @@ preprocess_model_frame <- function(preprocessor, new_data) {
     model.frame(engine, data = new_data, xlev = original_predictor_levels),
     na.action = "na.pass"
   )
-
-  validate_new_data_classes(engine, new_data)
 
   new_data
 }

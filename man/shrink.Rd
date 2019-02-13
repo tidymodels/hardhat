@@ -15,16 +15,60 @@ to only contain the predictors required for preprocessing and prediction.}
 \item{outcome}{A logical. Should the outcome be included in the shrunk
 \code{new_data} as well?}
 }
+\value{
+A tibble containing the required predictors (and potentially the
+outcomes).
+}
 \description{
-\code{shrink()} first validates that all \code{predictors} exist in \code{new_data}, and
-then subsets \code{new_data} to only contain those predictors. If \code{outcome} is
-\code{TRUE}, then the original outcome columns are retained as well.
+\code{shrink()} performs a number of validation steps on \code{new_data}, and then
+subsets it to only contain the required columns. \code{shrink()} does the
+following validation:
+\itemize{
+\item Checks that all required predictor columns exist in \code{new_data}.
+\item Checks that the class of each required predictor in \code{new_data} is the same
+as the class used during training.
+\item Checks that all \code{new_data} factor columns don't have any \emph{new} levels
+when compared with the original data used in training. If there are new
+levels, they are replaced with \code{NA} values and a warning is
+thrown.
+}
 }
 \details{
-\code{shrink()} is called by \code{\link[=preprocess]{preprocess()}} before the processing is done.
+If \code{outcome = TRUE}, then the validation steps are performed on the known
+outcome column as well, and it is returned along with the predictors. If
+\code{\link[=prepare]{prepare()}} was called with the XY interface, then no preprocessing was done
+to \code{y} and \code{outcome} cannot be set to \code{TRUE} (if a vector was passed as \code{y}
+during the fit, \code{shrink()} has no way of knowing what column in \code{new_data}
+corresponds to the outcome).
 
-\code{shrink()} also checks that all of the \code{new_data} factor columns don't have
-any \emph{new} levels when compared to the original data used in training. If
-there are new levels, they are replaced with \code{NA} values and a warning is
-thrown. If \code{outcome = TRUE}, it checks the outcome levels as well.
+\code{shrink()} is called by \code{\link[=preprocess]{preprocess()}} before the actual processing is done.
+}
+\examples{
+
+train <- iris[1:100,]
+test <- iris[101:150,]
+
+# prepare() is run at model fit time
+# and a terms preprocessor is recorded
+x <- prepare(log(Sepal.Width) ~ Species, train)
+
+# Pass that preprocessor to shrink(), along with new_data
+# to get a tibble of required predictors back
+shrink(x$preprocessor, test)
+
+# outcome = TRUE also returns the outcome,
+# this can be useful if doing cross validation
+shrink(x$preprocessor, test, outcome = TRUE)
+
+# shrink() validates that the classes are the same
+# as the ones used in prepare(). The below call
+# to shrink() will fail with an informative error.
+test2 <- test
+test2$Species <- as.character(test2$Species)
+
+\dontrun{
+shrink(x$preprocessor, test2)
+}
+
+
 }

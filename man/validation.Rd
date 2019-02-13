@@ -35,7 +35,7 @@ validate_recipes_available()
 
 validate_prediction_size(.pred, new_data)
 
-validate_new_data_classes(terms, new_model_frame)
+validate_new_data_classes(new_data, original_classes)
 
 check_new_data_factor_levels(predictor_levels, new_data)
 

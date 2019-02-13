@@ -180,6 +180,53 @@ test_that("original predictor and outcome classes are recorded", {
 
 })
 
+test_that("new data classes are caught", {
+
+  iris2 <- iris
+  iris2$Species <- as.character(iris2$Species)
+
+  x <- prepare(Sepal.Length ~ Species, iris)
+
+  expect_error(
+    preprocess(x$preprocessor, iris2),
+    "`Species`: `character` should be `factor`"
+  )
+
+  xx <- prepare(Species ~ Sepal.Length, iris)
+
+  expect_error(
+    preprocess(xx$preprocessor, iris2),
+    NA
+  )
+
+  expect_error(
+    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    "`Species`: `character` should be `factor`"
+  )
+
+})
+
+test_that("new data classes can interchange integer/numeric", {
+
+  iris2 <- iris
+  iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
+
+  x <- prepare(Species ~ Sepal.Length, iris)
+
+  expect_error(
+    preprocess(x$preprocessor, iris2),
+    NA
+  )
+
+  xx <- prepare(Sepal.Length ~ Species, iris)
+
+  expect_error(
+    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    NA
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-preprocess-xy")
 
@@ -301,6 +348,43 @@ test_that("original predictor and outcome classes are recorded", {
   expect_equal(
     x$preprocessor$outcome_classes,
     list(.outcome = "factor")
+  )
+
+})
+
+test_that("new data classes are caught", {
+
+  iris2 <- iris
+  iris2$Species <- as.character(iris2$Species)
+
+  x <- prepare(iris[, "Species", drop = FALSE], iris$Sepal.Length)
+
+  expect_error(
+    preprocess(x$preprocessor, iris2),
+    "`Species`: `character` should be `factor`"
+  )
+
+  xx <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+
+  expect_error(
+    preprocess(xx$preprocessor, iris2),
+    NA
+  )
+
+  # Can't do outcome = TRUE so can't check outcome class here
+
+})
+
+test_that("new data classes can interchange integer/numeric", {
+
+  iris2 <- iris
+  iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
+
+  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+
+  expect_error(
+    preprocess(x$preprocessor, iris2),
+    NA
   )
 
 })
@@ -479,6 +563,53 @@ test_that("original predictor and outcome classes are recorded", {
   expect_equal(
     x$preprocessor$outcome_classes,
     list(Species = "factor")
+  )
+
+})
+
+test_that("new data classes are caught", {
+
+  iris2 <- iris
+  iris2$Species <- as.character(iris2$Species)
+
+  x <- prepare(recipe(Sepal.Length ~ Species, iris), iris)
+
+  expect_error(
+    preprocess(x$preprocessor, iris2),
+    "`Species`: `character` should be `factor`"
+  )
+
+  xx <- prepare(recipe(Species ~ Sepal.Length, iris), iris)
+
+  expect_error(
+    preprocess(xx$preprocessor, iris2),
+    NA
+  )
+
+  expect_error(
+    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    "`Species`: `character` should be `factor`"
+  )
+
+})
+
+test_that("new data classes can interchange integer/numeric", {
+
+  iris2 <- iris
+  iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
+
+  x <- prepare(recipe(Species ~ Sepal.Length, iris), iris)
+
+  expect_error(
+    preprocess(x$preprocessor, iris2),
+    NA
+  )
+
+  xx <- prepare(recipe(Sepal.Length ~ Species, iris), iris)
+
+  expect_error(
+    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    NA
   )
 
 })
