@@ -307,3 +307,13 @@ extract_outcomes_from_frame <- function(terms, frame) {
 
   outcomes
 }
+
+extract_predictors_from_frame <- function(terms, frame) {
+
+  processed_outcome_nm <- response_name(terms)
+
+  frame[[processed_outcome_nm]] <- NULL
+
+  tibble::as_tibble(frame)
+
+}
