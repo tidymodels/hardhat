@@ -138,6 +138,32 @@ test_that("novel predictor levels are caught", {
 
 })
 
+test_that("novel outcome levels are caught", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  x <- prepare(f ~ y, dat)
+
+  expect_warning(
+    xx <- preprocess(x$preprocessor, new, outcome = TRUE),
+    "The following factor levels"
+  )
+
+  expect_equal(
+    xx$outcomes[[5,1]],
+    factor(NA_real_, c("a", "b", "c", "d"))
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-preprocess-xy")
 
@@ -243,6 +269,9 @@ test_that("novel predictor levels are caught", {
   )
 
 })
+
+# cannot have outcome = TRUE for xy method, so no need to do a check
+# for novel outcome levels being caught here
 
 # ------------------------------------------------------------------------------
 context("test-preprocess-recipe")
@@ -363,7 +392,6 @@ test_that("novel predictor levels are caught", {
     f = factor(letters[1:5])
   )
 
-  recipe(y ~ f, dat)
   x <- prepare(recipe(y ~ f, dat), dat)
 
   expect_warning(
@@ -373,6 +401,32 @@ test_that("novel predictor levels are caught", {
 
   expect_equal(
     xx$predictors[[5,1]],
+    factor(NA_real_, levels = c("a", "b", "c", "d"))
+  )
+
+})
+
+test_that("novel outcome levels are caught", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  x <- prepare(recipe(f ~ y, dat), dat)
+
+  expect_warning(
+    xx <- preprocess(x$preprocessor, new, outcome = TRUE),
+    "The following factor levels"
+  )
+
+  expect_equal(
+    xx$outcomes[[5,1]],
     factor(NA_real_, levels = c("a", "b", "c", "d"))
   )
 

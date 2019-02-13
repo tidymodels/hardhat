@@ -26,5 +26,5 @@ then subsets \code{new_data} to only contain those predictors. If \code{outcome}
 \code{shrink()} also checks that all of the \code{new_data} factor columns don't have
 any \emph{new} levels when compared to the original data used in training. If
 there are new levels, they are replaced with \code{NA} values and a warning is
-thrown.
+thrown. If \code{outcome = TRUE}, it checks the outcome levels as well.
 }
