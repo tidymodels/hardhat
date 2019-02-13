@@ -4,14 +4,9 @@
 \alias{new_base_model}
 \title{Constructor for a base model}
 \usage{
-new_base_model(mode, variateness, preprocessor = NULL, ..., class)
+new_base_model(preprocessor = NULL, ..., class)
 }
 \arguments{
-\item{mode}{A character. Generally either \code{"classification"}
-or \code{"regression"}.}
-
-\item{variateness}{A character. One of \code{"univariate"} or \code{"multivariate"}.}
-
 \item{preprocessor}{A preprocessor for new data. This can be
 a \code{terms} object from the formula interface, a \code{recipe} created with
 \code{\link[recipes:recipe]{recipes::recipe()}}, or the default which converts to either a matrix or a
@@ -35,18 +30,10 @@ can process new data when \code{predict()} is called. The default \code{preproce
 used in the data frame and matrix methods is \code{default_preprocessor()}, which
 converts an object to a data frame or matrix, and adds an intercept column
 if required.
-
-Additionally, all models have a \code{mode}, generally: \code{"classification"} or
-\code{"regression"}, and a \code{variateness}: \code{"univariate"} or \code{"multivariate"}.
-A single model can be both a classification and regression model (for
-example, random forest), but at \emph{fit time} the \code{mode} of the model is set
-for the lifetime of that model object.
 }
 \examples{
 
 new_base_model(
-  "regression",
-  "univariate",
   custom_field = "my-field",
   class = "custom_model"
 )

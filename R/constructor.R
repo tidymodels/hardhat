@@ -12,17 +12,6 @@
 #' converts an object to a data frame or matrix, and adds an intercept column
 #' if required.
 #'
-#' Additionally, all models have a `mode`, generally: `"classification"` or
-#' `"regression"`, and a `variateness`: `"univariate"` or `"multivariate"`.
-#' A single model can be both a classification and regression model (for
-#' example, random forest), but at _fit time_ the `mode` of the model is set
-#' for the lifetime of that model object.
-#'
-#' @param mode A character. Generally either `"classification"`
-#' or `"regression"`.
-#'
-#' @param variateness A character. One of `"univariate"` or `"multivariate"`.
-#'
 #' @param preprocessor A preprocessor for new data. This can be
 #' a `terms` object from the formula interface, a `recipe` created with
 #' [recipes::recipe()], or the default which converts to either a matrix or a
@@ -36,31 +25,23 @@
 #' @examples
 #'
 #' new_base_model(
-#'   "regression",
-#'   "univariate",
 #'   custom_field = "my-field",
 #'   class = "custom_model"
 #' )
 #'
 #' @export
-new_base_model <- function(mode, variateness, preprocessor = NULL, ..., class) {
+new_base_model <- function(preprocessor = NULL, ..., class) {
 
   if (is.null(preprocessor)) {
     preprocessor <- new_default_preprocessor()
   }
 
   validate_is_preprocessor(preprocessor)
-  validate_is_variateness_like(variateness)
-  validate_is_mode_like(mode)
 
   new_fields <- rlang::list2(...)
   validate_has_unique_names(new_fields, "...")
 
-  fields <- list(
-    mode = mode,
-    variateness = variateness,
-    preprocessor = preprocessor
-  )
+  fields <- list(preprocessor = preprocessor)
 
   fields <- c(fields, new_fields)
 
@@ -69,15 +50,4 @@ new_base_model <- function(mode, variateness, preprocessor = NULL, ..., class) {
   }
 
   structure(fields, class = class)
-
-}
-
-validate_is_mode_like <- function(mode) {
-  validate_is(mode, rlang::is_character, "character")
-  validate_length(mode, .n = 1L)
-}
-
-validate_is_variateness_like <- function(variateness) {
-  validate_is(variateness, rlang::is_character, "character")
-  validate_length(variateness, .n = 1L)
 }

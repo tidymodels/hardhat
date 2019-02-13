@@ -5,8 +5,6 @@
 \alias{validate_inherits}
 \alias{validate_is}
 \alias{validate_length}
-\alias{validate_mode}
-\alias{validate_variateness}
 \alias{validate_has_named_columns}
 \alias{validate_has_unique_names}
 \alias{validate_has_unique_column_names}
@@ -28,10 +26,6 @@ validate_inherits(x, x_nm, cls)
 validate_is(.x, .f, .expected, .x_nm, .note = "")
 
 validate_length(.x, .x_nm, .n = 1L)
-
-validate_mode(mode)
-
-validate_variateness(variateness)
 
 validate_has_named_columns(x, x_nm)
 

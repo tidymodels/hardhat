@@ -64,22 +64,6 @@ validate_length <- function(.x, .x_nm, .n = 1L) {
 }
 
 #' @rdname validation
-validate_mode <- function(mode) {
-  ok <- mode %in% c("classification", "regression")
-  if (!ok) {
-    abort("`mode` must be one of: 'classification', 'regression'.")
-  }
-}
-
-#' @rdname validation
-validate_variateness <- function(variateness) {
-  ok <- variateness %in% c("univariate", "multivariate")
-  if (!ok) {
-    abort("`variateness` must be one of: 'univariate', 'multivariate'.")
-  }
-}
-
-#' @rdname validation
 validate_has_named_columns <- function(x, x_nm) {
   x_nms <- colnames(x)
 

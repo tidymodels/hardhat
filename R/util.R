@@ -82,23 +82,6 @@ dispatchify <- function(x) {
   structure(x, class = x)
 }
 
-guess_mode <- function(y) {
-
-  # In case 1 column data frame holding y
-  # Or multivariate y
-  if (is.data.frame(y)) {
-    y <- y[[1]]
-  }
-
-  if (is.null(levels(y))) {
-    "regression"
-  }
-  else {
-    "classification"
-  }
-
-}
-
 abort_unknown_fit_class <- function(x) {
   cls <- class(x)[1]
   glubort(
