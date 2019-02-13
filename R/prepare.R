@@ -103,11 +103,16 @@ prepare.formula <- function(formula, data, intercept = FALSE,
     na.action = "na.pass"
   )
 
+  predictors <- strip_model_matrix(predictors)
+
   predictors <- retype(predictors, type)
 
   terms <- extract_terms(framed)
 
   outcomes <- extract_outcomes_from_frame(terms, framed)
+
+  framed_predictors <- extract_predictors_from_frame(terms, framed)
+  predictor_levels <- get_levels(framed_predictors)
 
   preprocessor <- new_terms_preprocessor(
     engine = terms,
@@ -115,7 +120,7 @@ prepare.formula <- function(formula, data, intercept = FALSE,
     type = type,
     predictors = get_all_predictors(formula, data),
     outcomes = get_all_outcomes(formula, data),
-    predictor_levels = get_predictor_levels(terms, framed)
+    predictor_levels = predictor_levels
   )
 
   prepare_list(predictors, outcomes, preprocessor)
@@ -180,4 +185,10 @@ alter_formula_environment <- function(formula) {
     rhs = rlang::f_rhs(formula),
     env = env_above_global_env
   )
+}
+
+strip_model_matrix <- function(x) {
+  attr(x, "assign") <- NULL
+  attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
+  x
 }

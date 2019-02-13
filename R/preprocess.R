@@ -251,6 +251,8 @@ preprocess_model_matrix <- function(preprocessor, frame) {
     na.action = "na.pass"
   )
 
+  predictors <- strip_model_matrix(predictors)
+
   predictors
 }
 

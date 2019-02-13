@@ -47,8 +47,6 @@ test_that("can use special inline functions", {
     `poly(Sepal.Length, degree = 2)1` = x_poly[,1],
     `poly(Sepal.Length, degree = 2)2` = x_poly[,2]
   )
-  attr(poly_df$`poly(Sepal.Length, degree = 2)1`, "assign") <- c(1, 1)
-  attr(poly_df$`poly(Sepal.Length, degree = 2)2`, "assign") <- c(1, 1)
 
   # coerce to df for tolerance..tibbles don't have good tolerance
   expect_equal(
@@ -73,7 +71,6 @@ test_that("new_data can be a matrix", {
   )
 
   sep_len <- iris$Sepal.Length
-  attr(sep_len, "assign") <- 1
   pred_tbl <- tibble::tibble(Sepal.Length = sep_len)
 
   expect_equal(

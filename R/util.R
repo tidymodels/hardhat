@@ -56,10 +56,6 @@ get_all_outcomes <- function(formula, data) {
   )
 }
 
-get_predictor_levels <- function(terms, frame) {
-  .getXlevels(terms, frame)
-}
-
 # similar to delete.response()
 # but also removes the dataClasses element
 # corresponding to y if it exists
