@@ -220,17 +220,17 @@ validate_is_character <- function(.x, .x_nm) {
 
 validate_predictor_levels <- function(predictor_levels) {
 
-  valid_pred_levels_obj <- function(predictor_levels) {
+  valid_pred_levels_obj <- function(x) {
 
-    if (!is.list(predictor_levels)) {
+    if (is.null(x)) {
+      return(TRUE)
+    }
+
+    if (!is.list(x)) {
       return(FALSE)
     }
 
-    is_character_or_null <- function(x) {
-      rlang::is_character(x) || is.null(x)
-    }
-
-    ok <- vapply(predictor_levels, is_character_or_null, logical(1))
+    ok <- vapply(predictor_levels, rlang::is_character, logical(1))
 
     all(ok)
   }
