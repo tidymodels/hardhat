@@ -19,6 +19,23 @@ test_that("can prepare multivariate formulas", {
   expect_equal(colnames(x$outcomes), c("Sepal.Length", "Sepal.Width"))
 })
 
+test_that("factor predictors with no intercept are fully expanded", {
+
+  x <- prepare(Sepal.Length ~ Species, iris, intercept = TRUE)
+  xx <- prepare(Sepal.Length ~ Species, iris, intercept = FALSE)
+
+  expect_equal(
+    colnames(x$predictors),
+    c("(Intercept)", "Speciesversicolor", "Speciesvirginica")
+  )
+
+  expect_equal(
+    colnames(xx$predictors),
+    c("Speciessetosa", "Speciesversicolor", "Speciesvirginica")
+  )
+
+})
+
 test_that("formula intercepts can be added", {
 
   x <- prepare(
