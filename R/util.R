@@ -77,12 +77,7 @@ delete_response <- function(x) {
   delete.response(x)
 }
 
-#' @rdname utilities
-dispatchify <- function(x) {
-  structure(x, class = x)
-}
-
-abort_unknown_fit_class <- function(x) {
+abort_unknown_prepare_class <- function(x) {
   cls <- class(x)[1]
   glubort(
     "`x` is not a recognized type.
@@ -166,8 +161,7 @@ class1 <- function(x) {
   class(x)[1]
 }
 
-is_bool <- function (x)
-{
+is_bool <- function (x) {
   rlang::is_logical(x, n = 1) && !is.na(x)
 }
 

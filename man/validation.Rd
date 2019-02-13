@@ -2,10 +2,7 @@
 % Please edit documentation in R/validation.R
 \name{validation}
 \alias{validation}
-\alias{validate_inherits}
 \alias{validate_is}
-\alias{validate_length}
-\alias{validate_has_named_columns}
 \alias{validate_has_unique_names}
 \alias{validate_has_unique_column_names}
 \alias{validate_x_has_numeric_cols}
@@ -16,18 +13,11 @@
 \alias{validate_prediction_size}
 \alias{validate_new_data_classes}
 \alias{check_new_data_factor_levels}
-\alias{validate_predictor_arguments}
 \alias{validate_intercept}
 \alias{validate_formula_has_intercept}
 \title{Validation}
 \usage{
-validate_inherits(x, x_nm, cls)
-
 validate_is(.x, .f, .expected, .x_nm, .note = "")
-
-validate_length(.x, .x_nm, .n = 1L)
-
-validate_has_named_columns(x, x_nm)
 
 validate_has_unique_names(x, x_nm)
 
@@ -48,8 +38,6 @@ validate_prediction_size(.pred, new_data)
 validate_new_data_classes(terms, new_model_frame)
 
 check_new_data_factor_levels(predictor_levels, new_data)
-
-validate_predictor_arguments(x, x_nm = "x", intercept = FALSE)
 
 validate_intercept(intercept)
 

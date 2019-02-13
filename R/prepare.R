@@ -52,6 +52,11 @@ prepare <- function(x, ...) {
   UseMethod("prepare")
 }
 
+#' @export
+prepare.default <- function(x, ...) {
+  abort_unknown_prepare_class(x)
+}
+
 #' @rdname prepare
 #' @export
 prepare.data.frame <- function(x, y, intercept = FALSE,

@@ -5,7 +5,6 @@
 \alias{glubort}
 \alias{extract_terms}
 \alias{delete_response}
-\alias{dispatchify}
 \title{Utilites}
 \usage{
 glubort(..., .sep = "", .envir = parent.frame())
@@ -13,8 +12,6 @@ glubort(..., .sep = "", .envir = parent.frame())
 extract_terms(x)
 
 delete_response(x)
-
-dispatchify(x)
 }
 \description{
 Helper functions that are used internally.

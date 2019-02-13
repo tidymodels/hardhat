@@ -11,14 +11,6 @@
 NULL
 
 #' @rdname validation
-validate_inherits <- function(x, x_nm, cls) {
-  if (!inherits(x, cls)) {
-    cls <- glue::glue_collapse(cls, ", ", last = ", or ")
-    glubort("`{x_nm}` must inherit from {cls}, not {class(x)[1]}.")
-  }
-}
-
-#' @rdname validation
 validate_is <- function(.x, .f, .expected, .x_nm, .note = "") {
 
   if (rlang::is_missing(.x_nm)) {
@@ -42,38 +34,6 @@ validate_is <- function(.x, .f, .expected, .x_nm, .note = "") {
   }
 
   invisible(.x)
-}
-
-#' @rdname validation
-validate_length <- function(.x, .x_nm, .n = 1L) {
-
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
-  }
-
-  .n_x <- length(.x)
-  ok <- .n_x == .n
-
-  if (!ok) {
-
-    glubort("{.x_nm} should be length {.n}, not length {.n_x}.")
-
-  }
-
-  invisible(.x)
-}
-
-#' @rdname validation
-validate_has_named_columns <- function(x, x_nm) {
-  x_nms <- colnames(x)
-
-  if (is.null(x_nms)) {
-    glubort("All columns of `{x_nm}` must be named.")
-  }
-
-  if (length(x_nms) != length(unique(x_nms))) {
-    glubort("All columns of `{x_nm}` must have unique names.")
-  }
 }
 
 #' @rdname validation
@@ -102,56 +62,94 @@ validate_has_unique_column_names <- function(x, x_nm) {
 
 #' @rdname validation
 validate_x_has_numeric_cols <- function(x) {
+
   all_cols_numeric <- all_numeric(x)
+
   if (!all_cols_numeric) {
+
     abort(
       "All columns of `x` must be numeric for this model.
       Please use the recipe or formula interface for
       automatic creation of dummy variables."
     )
+
   }
+
+  invisible(x)
 }
 
 #' @rdname validation
 validate_y_univariate <- function(y) {
+
   if (NCOL(y) > 1L) {
     abort("`y` must be univariate for this model.")
   }
+
+  invisible(y)
 }
 
 #' @rdname validation
 validate_predictors <- function(new_data, predictors) {
-  new_predictors <- colnames(new_data)
 
-  has_predictors <- predictors %in% new_predictors
+  new_data_cols <- colnames(new_data)
+
+  has_predictors <- predictors %in% new_data_cols
+
   if (!all(has_predictors)) {
-    missing_predictors <- glue::glue_collapse(predictors[!has_predictors], ", ", last = ", and ")
+
+    missing_predictors <- glue::glue_collapse(
+      x = predictors[!has_predictors],
+      sep = ", ",
+      last = ", and "
+    )
+
     glubort(
       "`new_data` is missing the following required predictors:
       {missing_predictors}"
     )
+
   }
+
+  invisible(new_data)
 }
 
 #' @rdname validation
 validate_outcomes <- function(new_data, outcomes) {
-  new_outcomes <- colnames(new_data)
 
-  has_outcomes <- outcomes %in% new_outcomes
+  new_data_cols <- colnames(new_data)
+
+  has_outcomes <- outcomes %in% new_data_cols
+
   if (!all(has_outcomes)) {
-    missing_outcomes <- glue::glue_collapse(outcomes[!has_outcomes], ", ", last = ", and ")
+
+    missing_outcomes <- glue::glue_collapse(
+      x = outcomes[!has_outcomes],
+      sep = ", ",
+      last = ", and "
+    )
+
     glubort(
       "`new_data` is missing the following required outcomes:
       {missing_outcomes}"
     )
+
   }
+
+  invisible(new_data)
 }
 
 #' @rdname validation
 validate_recipes_available <- function() {
+
   if (!requireNamespace("recipes", quietly = TRUE)) {
-    abort("The `recipes` package must be available to use the recipe interface.")
+
+    abort(
+      "The `recipes` package must be available to use the recipe interface."
+    )
+
   }
+
+  invisible()
 }
 
 #' @rdname validation
@@ -162,9 +160,12 @@ validate_prediction_size <- function(.pred, new_data) {
 
   if(n_pred != n_new) {
     glubort(
-      "The number of rows in `new_data` ({n_new}) must match the number of rows in `.pred` ({n_pred})."
+      "The number of rows in `new_data` ({n_new}) must match the ",
+      "number of rows in `.pred` ({n_pred})."
     )
   }
+
+  invisible(.pred)
 }
 
 #' @rdname validation
@@ -201,7 +202,7 @@ validate_new_data_classes <- function(terms, new_model_frame) {
     glubort(msg)
   }
 
-  invisible(NULL)
+  invisible(terms)
 }
 
 #' @rdname validation
@@ -228,9 +229,10 @@ check_new_data_factor_levels <- function(predictor_levels, new_data) {
 
       unseen_lvls <- glue::glue_collapse(dQuote(unseen_lvls), ", ")
 
-      warning(glue(
-        "The following factor levels are new for column, `{col}`, and have been coerced to `NA`: {unseen_lvls}."
-      ), call. = FALSE)
+      rlang::warn(glue(
+        "The following factor levels are new for column, `{col}`, ",
+        "and have been coerced to `NA`: {unseen_lvls}."
+      ))
 
       seen_lvls <- intersect(new_lvls, lvls)
       new_data[[col]] <- factor(new_col, levels = seen_lvls)
@@ -242,15 +244,8 @@ check_new_data_factor_levels <- function(predictor_levels, new_data) {
 }
 
 #' @rdname validation
-validate_predictor_arguments <- function(x, x_nm = "x", intercept = FALSE) {
-
-  validate_has_named_columns(x, x_nm)
-  validate_intercept(intercept)
-
-}
-
-#' @rdname validation
 validate_intercept <- function(intercept) {
+
   if (!is.logical(intercept)) {
     cls <- class1(intercept)
     glubort("`intercept` must be a logical, not a {cls}.")
@@ -285,14 +280,18 @@ recurse_intercept_search <- function(x) {
   cll_fn <- rlang::call_fn(x)
   cll_args <- rlang::call_args(x)
 
+  # Check for `+ 0` or `0 +`
   if (identical(cll_fn, `+`)) {
     for(arg in cll_args) {
       if (arg == 0L) {
-        rlang::abort("`formula` must not contain the intercept removal term: `+ 0` or `0 +`.")
+        rlang::abort(
+          "`formula` must not contain the intercept removal term: `+ 0` or `0 +`."
+        )
       }
     }
   }
 
+  # Check for `- 1`
   if (identical(cll_fn, `-`)) {
 
     if (length(cll_args) == 2L) {
@@ -308,6 +307,7 @@ recurse_intercept_search <- function(x) {
     }
   }
 
+  # Recurse
   for(arg in cll_args) {
     recurse_intercept_search(arg)
   }

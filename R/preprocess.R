@@ -50,7 +50,7 @@ preprocess.default <- function(preprocessor, new_data, ...) {
 preprocess.default_preprocessor <- function(preprocessor, new_data, ...) {
 
   validate_is_new_data_like(new_data)
-  validate_has_named_columns(new_data, "new_data")
+  validate_has_unique_column_names(new_data, "new_data")
   validate_no_outcome_specified(list(...))
 
   new_data <- shrink(preprocessor, new_data)
@@ -71,7 +71,7 @@ preprocess.recipes_preprocessor <- function(preprocessor, new_data,
 
   validate_recipes_available()
   validate_is_new_data_like(new_data)
-  validate_has_named_columns(new_data, "new_data")
+  validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcome)
 
   new_data <- shrink(preprocessor, new_data, outcome)
@@ -101,7 +101,7 @@ preprocess.terms_preprocessor <- function(preprocessor, new_data,
                                           outcome = FALSE, ...) {
 
   validate_is_new_data_like(new_data)
-  validate_has_named_columns(new_data, "new_data")
+  validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcome)
 
   new_data <- shrink(preprocessor, new_data, outcome)
