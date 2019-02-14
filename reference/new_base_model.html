@@ -160,10 +160,10 @@ if required.</p>
 #&gt; function (new_data, intercept) 
 #&gt; {
 #&gt;     new_data &lt;- tibble::as_tibble(new_data)
-#&gt;     new_data &lt;- add_intercept_column(new_data, intercept)
+#&gt;     new_data &lt;- maybe_add_intercept_column(new_data, intercept)
 #&gt;     new_data
 #&gt; }
-#&gt; &lt;environment: 0x3c1ad50&gt;
+#&gt; &lt;environment: 0x4984f80&gt;
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "default_preprocessor_engine"

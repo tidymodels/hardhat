@@ -130,13 +130,14 @@ and testing data sets.</p>
 
     <p>The preprocessor function returned from <code>new_default_preprocessor_engine()</code>
 will only do one thing:</p><ul>
-<li><p>Call <code>add_intercept_column()</code> with <code>intercept</code> to add an intercept to
-<code>new_data</code> if required.</p></li>
+<li><p>Call <code><a href='add_intercept_column.html'>add_intercept_column()</a></code> if required to add an intercept to
+<code>new_data</code>.</p></li>
 </ul>
     <p>The returned function that <code>new_default_preprocessor_engine()</code> creates
 has 2 arguments:</p><ul>
 <li><p><code>new_data</code>: The data to preprocess.</p></li>
-<li><p><code>intercept</code>: A logical. Passed on to <code>add_intercept_column()</code>.</p></li>
+<li><p><code>intercept</code>: A logical. Determines whether or not an
+intercept will be added.</p></li>
 </ul>
     
 
