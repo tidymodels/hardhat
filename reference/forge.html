@@ -152,12 +152,12 @@ as well?</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A named list with elements:</p><ul>
-<li><p><code>predictors</code>: An object of class <code>type</code> containing the preprocessed
+<li><p><code>predictors</code>: A tibble containing the preprocessed
 <code>new_data</code> predictors.</p></li>
 <li><p><code>outcome</code>: If <code>outcome = TRUE</code>, the outcome is returned here, otherwise
 <code>NULL</code>. If a formula engine was used, this is a data frame that is the
-result of extracting the outcome columns from <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code>. If a recipe
-was used, this is a data.frame that is the result of calling
+result of extracting the outcome columns from <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code>.
+If a recipe was used, this is a data.frame that is the result of calling
 <code><a href='https://www.rdocumentation.org/packages/recipes/topics/bake'>recipes::bake()</a></code> with <code><a href='https://www.rdocumentation.org/packages/recipes/topics/has_role'>recipes::all_outcomes()</a></code> specified.</p></li>
 </ul>
 

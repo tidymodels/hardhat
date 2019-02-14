@@ -157,22 +157,19 @@ if required.</p>
 )</div><div class='output co'>#&gt; $preprocessor
 #&gt; $engine
 #&gt; $process
-#&gt; function (new_data, intercept, type) 
+#&gt; function (new_data, intercept) 
 #&gt; {
-#&gt;     new_data &lt;- retype(new_data, type)
+#&gt;     new_data &lt;- tibble::as_tibble(new_data)
 #&gt;     new_data &lt;- add_intercept_column(new_data, intercept)
 #&gt;     new_data
 #&gt; }
-#&gt; &lt;environment: 0x2227328&gt;
+#&gt; &lt;environment: 0x3fa1d10&gt;
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "default_preprocessor_engine"
 #&gt; 
 #&gt; $intercept
 #&gt; [1] FALSE
-#&gt; 
-#&gt; $type
-#&gt; [1] "tibble"
 #&gt; 
 #&gt; $predictors
 #&gt; character(0)

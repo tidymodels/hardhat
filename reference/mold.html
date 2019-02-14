@@ -38,9 +38,8 @@ For a formula, this applies stats::model.frame() and
 possibly stats::model.matrix().
 For a recipe, this performs a call to both recipes::prep()
 and recipes::juice().
-For a data frame or matrix, this uses the new_default_preprocessor()
-which converts the input to an object of class type and adds an
-intercept column if requested.
+For a data frame or matrix, this simply adds an intercept column
+if requested.
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -121,9 +120,8 @@ data ready to be fed into a model.</p><ul>
 possibly <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code>.</p></li>
 <li><p>For a recipe, this performs a call to both <code><a href='https://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep()</a></code>
 and <code><a href='https://www.rdocumentation.org/packages/recipes/topics/juice'>recipes::juice()</a></code>.</p></li>
-<li><p>For a data frame or matrix, this uses the <code>new_default_preprocessor()</code>
-which converts the input to an object of class <code>type</code> and adds an
-intercept column if requested.</p></li>
+<li><p>For a data frame or matrix, this simply adds an intercept column
+if requested.</p></li>
 </ul>
     
     </div>
@@ -131,18 +129,17 @@ intercept column if requested.</p></li>
     <pre class="usage"><span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>,
-  <span class='no'>...</span>)
+<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for matrix</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>, <span class='no'>...</span>)
+<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for formula</span>
 <span class='fu'>mold</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for recipe</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>data</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>data</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,11 +163,6 @@ data.frame or matrix, it should contain the predictors.</p></td>
 include an intercept in the molded predictors.</p></td>
     </tr>
     <tr>
-      <th>type</th>
-      <td><p>A single character. One of <code>"tibble"</code>, <code>"data.frame"</code>, or
-<code>"matrix"</code> specifying the result type of the predictors.</p></td>
-    </tr>
-    <tr>
       <th>formula</th>
       <td><p>A formula specifying the terms in the format of
 <code>outcome ~ predictors</code>.</p></td>
@@ -191,7 +183,7 @@ variables and a warning is thrown if any interactions are detected.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A named list containing:</p><ul>
-<li><p><code>predictors</code>: An object of class <code>type</code> containing the molded predictors
+<li><p><code>predictors</code>: A tibble containing the molded predictors
 to be used in the model.</p></li>
 <li><p><code>outcome</code>: A tibble.</p><ul>
 <li><p>If <code>y</code> was supplied, it is returned after a call to

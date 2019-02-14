@@ -34,8 +34,8 @@
 
 <meta property="og:description" content="A default preprocessor engine is a function that performs some basic
 preprocessing on new_data to mold it for ingestion into a model. To
-control how the engine preprocesses new_data the intercept and type
-arguments can be set, which are passed down to the created engine function.
+control how the engine preprocesses new_data the intercept argument can
+be set, which is passed down to the created engine function.
 A default preprocessor engine is used in matrix and data frame methods of a
 model (as opposed to a recipe or formula method which performs
 preprocessing for you). This preprocessing is performed on both the training
@@ -115,8 +115,8 @@ and testing data sets." />
     
     <p>A default preprocessor engine is a function that performs some basic
 preprocessing on <code>new_data</code> to mold it for ingestion into a model. To
-control how the engine preprocesses <code>new_data</code> the <code>intercept</code> and <code>type</code>
-arguments can be set, which are passed down to the created engine function.
+control how the engine preprocesses <code>new_data</code> the <code>intercept</code> argument can
+be set, which is passed down to the created engine function.
 A default preprocessor engine is used in matrix and data frame methods of a
 model (as opposed to a recipe or formula method which performs
 preprocessing for you). This preprocessing is performed on both the training
@@ -129,16 +129,14 @@ and testing data sets.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The preprocessor function returned from <code>new_default_preprocessor_engine()</code>
-will do two things:</p><ul>
-<li><p>Call <code><a href='retype.html'>retype()</a></code> with <code>type</code> to coerce <code>new_data</code> to a specific type.</p></li>
+will only do one thing:</p><ul>
 <li><p>Call <code>add_intercept_column()</code> with <code>intercept</code> to add an intercept to
 <code>new_data</code> if required.</p></li>
 </ul>
     <p>The returned function that <code>new_default_preprocessor_engine()</code> creates
-has 3 arguments:</p><ul>
+has 2 arguments:</p><ul>
 <li><p><code>new_data</code>: The data to preprocess.</p></li>
 <li><p><code>intercept</code>: A logical. Passed on to <code>add_intercept_column()</code>.</p></li>
-<li><p><code>type</code>: A single character. Passed on to <code><a href='retype.html'>retype()</a></code>.</p></li>
 </ul>
     
 
