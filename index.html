@@ -142,9 +142,10 @@
 <a class="sourceLine" id="cb5-31" data-line-number="31"><span class="co">#&gt; # … with 90 more rows</span></a></code></pre></div>
 <p>The preprocessor stores a number of things that are useful to any model when it is time to make predictions on new data.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(processed<span class="op">$</span>preprocessor)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [1] "engine"            "intercept"         "type"             </span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; [4] "predictors"        "outcomes"          "predictor_levels" </span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; [7] "outcome_levels"    "predictor_classes" "outcome_classes"</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt;  [1] "engine"            "intercept"         "type"             </span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;  [4] "predictors"        "outcomes"          "predictor_levels" </span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;  [7] "outcome_levels"    "predictor_classes" "outcome_classes"  </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; [10] "indicators"</span></a></code></pre></div>
 <p>For instance, the original levels and classes of the predictors are stored automatically.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">processed<span class="op">$</span>preprocessor<span class="op">$</span>predictor_levels</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; $Species</span></a>
