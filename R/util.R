@@ -82,7 +82,7 @@ delete_response <- function(x) {
   delete.response(x)
 }
 
-abort_unknown_prepare_class <- function(x) {
+abort_unknown_mold_class <- function(x) {
   cls <- class(x)[1]
   glubort(
     "`x` is not a recognized type.
@@ -115,7 +115,7 @@ add_intercept_column <- function(x, add) {
     return(x)
   }
 
-  # prepare() has already been run
+  # mold() has already been run
   if ("(Intercept)" %in% colnames(x)) {
     return(x)
   }

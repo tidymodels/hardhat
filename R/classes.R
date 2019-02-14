@@ -11,7 +11,7 @@
 #' a double column is used at prediction time.
 #'
 #' The classes returned by `get_data_classes()` are stored in the preprocessor
-#' objects. This function is called by [prepare()].
+#' objects. This function is called by [mold()].
 #'
 #' @param x A data frame or matrix.
 #'

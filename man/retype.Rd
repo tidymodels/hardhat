@@ -17,6 +17,6 @@ retype(x, type = "tibble")
 data.frame or a matrix.
 }
 \details{
-\code{retype()} is used from \code{\link[=prepare]{prepare()}} and \code{\link[=preprocess]{preprocess()}}.
+\code{retype()} is used from \code{\link[=mold]{mold()}} and \code{\link[=forge]{forge()}}.
 }
 \keyword{internal}

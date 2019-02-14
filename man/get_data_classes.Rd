@@ -26,7 +26,7 @@ that if an integer column is used when fitting, an error is not thrown if
 a double column is used at prediction time.
 
 The classes returned by \code{get_data_classes()} are stored in the preprocessor
-objects. This function is called by \code{\link[=prepare]{prepare()}}.
+objects. This function is called by \code{\link[=mold]{mold()}}.
 }
 \examples{
 

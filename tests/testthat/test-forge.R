@@ -1,9 +1,9 @@
 # ------------------------------------------------------------------------------
-context("test-preprocess-formula")
+context("test-forge-formula")
 
-test_that("simple preprocess works", {
-  x <- prepare(Species ~ Sepal.Length, iris)
-  xx <- preprocess(x$preprocessor, iris)
+test_that("simple forge works", {
+  x <- mold(Species ~ Sepal.Length, iris)
+  xx <- forge(x$preprocessor, iris)
 
   expect_equal(
     colnames(xx$predictors),
@@ -17,29 +17,29 @@ test_that("simple preprocess works", {
 })
 
 test_that("asking for the outcome works", {
-  x <- prepare(Species ~ Sepal.Length, iris)
-  xx <- preprocess(x$preprocessor, iris, outcome = TRUE)
+  x <- mold(Species ~ Sepal.Length, iris)
+  xx <- forge(x$preprocessor, iris, outcome = TRUE)
 
   expect_equal(
     xx$outcomes,
-    data.frame(Species = iris$Species)
+    tibble::tibble(Species = iris$Species)
   )
 })
 
 test_that("asking for the outcome when it isn't there fails", {
-  x <- prepare(Species ~ Sepal.Length, iris)
+  x <- mold(Species ~ Sepal.Length, iris)
   iris2 <- iris
   iris2$Species <- NULL
 
   expect_error(
-    preprocess(x$preprocessor, iris2, outcome = TRUE),
+    forge(x$preprocessor, iris2, outcome = TRUE),
     "`new_data` is missing the following"
   )
 })
 
 test_that("can use special inline functions", {
-  x <- prepare(log(Sepal.Length) ~ poly(Sepal.Length, degree = 2), iris)
-  xx <- preprocess(x$preprocessor, iris, outcome = TRUE)
+  x <- mold(log(Sepal.Length) ~ poly(Sepal.Length, degree = 2), iris)
+  xx <- forge(x$preprocessor, iris, outcome = TRUE)
 
   # manually create poly df
   x_poly <- stats::poly(iris$Sepal.Length, degree = 2)
@@ -56,17 +56,17 @@ test_that("can use special inline functions", {
 
   expect_equal(
     xx$outcomes,
-    data.frame(`log(Sepal.Length)` = log(iris$Sepal.Length), check.names = FALSE)
+    tibble::tibble(`log(Sepal.Length)` = log(iris$Sepal.Length))
   )
 
 })
 
 test_that("new_data can be a matrix", {
-  x <- prepare(Species ~ Sepal.Length, iris)
+  x <- mold(Species ~ Sepal.Length, iris)
   iris_mat <- as.matrix(iris[,"Sepal.Length", drop = FALSE])
 
   expect_error(
-    xx <- preprocess(x$preprocessor, iris_mat),
+    xx <- forge(x$preprocessor, iris_mat),
     NA
   )
 
@@ -81,33 +81,33 @@ test_that("new_data can be a matrix", {
 })
 
 test_that("new_data can only be a data frame / matrix", {
-  x <- prepare(Species ~ Sepal.Length, iris)
+  x <- mold(Species ~ Sepal.Length, iris)
 
   expect_error(
-    preprocess(x$preprocessor, "hi"),
+    forge(x$preprocessor, "hi"),
     "new_data should be a"
   )
 
 })
 
 test_that("missing predictor columns fail appropriately", {
-  x <- prepare(Species ~ Sepal.Length + Sepal.Width, iris)
+  x <- mold(Species ~ Sepal.Length + Sepal.Width, iris)
 
   expect_error(
-    preprocess(x$preprocessor, iris[,1, drop = FALSE]),
+    forge(x$preprocessor, iris[,1, drop = FALSE]),
     "Sepal.Width"
   )
 
   expect_error(
-    preprocess(x$preprocessor, iris[,3, drop = FALSE]),
+    forge(x$preprocessor, iris[,3, drop = FALSE]),
     "Sepal.Length, and Sepal.Width"
   )
 
 })
 
 test_that("matrix type is used in preprocessing as well", {
-  x <- prepare(Species ~ Sepal.Length, iris, type = "matrix")
-  xx <- preprocess(x$preprocessor, iris)
+  x <- mold(Species ~ Sepal.Length, iris, type = "matrix")
+  xx <- forge(x$preprocessor, iris)
 
   expect_is(xx$predictors, "matrix")
 })
@@ -124,10 +124,10 @@ test_that("novel predictor levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- prepare(y ~ f, dat)
+  x <- mold(y ~ f, dat)
 
   expect_warning(
-    xx <- preprocess(x$preprocessor, new),
+    xx <- forge(x$preprocessor, new),
     "The following factor levels"
   )
 
@@ -150,10 +150,10 @@ test_that("novel outcome levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- prepare(f ~ y, dat)
+  x <- mold(f ~ y, dat)
 
   expect_warning(
-    xx <- preprocess(x$preprocessor, new, outcome = TRUE),
+    xx <- forge(x$preprocessor, new, outcome = TRUE),
     "The following factor levels"
   )
 
@@ -166,7 +166,7 @@ test_that("novel outcome levels are caught", {
 
 test_that("original predictor and outcome classes are recorded", {
 
-  x <- prepare(log(Sepal.Length) ~ log(Sepal.Width), iris)
+  x <- mold(log(Sepal.Length) ~ log(Sepal.Width), iris)
 
   expect_equal(
     x$preprocessor$predictor_classes,
@@ -185,22 +185,22 @@ test_that("new data classes are caught", {
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
 
-  x <- prepare(Sepal.Length ~ Species, iris)
+  x <- mold(Sepal.Length ~ Species, iris)
 
   expect_error(
-    preprocess(x$preprocessor, iris2),
+    forge(x$preprocessor, iris2),
     "`Species`: `character` should be `factor`"
   )
 
-  xx <- prepare(Species ~ Sepal.Length, iris)
+  xx <- mold(Species ~ Sepal.Length, iris)
 
   expect_error(
-    preprocess(xx$preprocessor, iris2),
+    forge(xx$preprocessor, iris2),
     NA
   )
 
   expect_error(
-    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    forge(xx$preprocessor, iris2, outcome = TRUE),
     "`Species`: `character` should be `factor`"
   )
 
@@ -211,29 +211,29 @@ test_that("new data classes can interchange integer/numeric", {
   iris2 <- iris
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
 
-  x <- prepare(Species ~ Sepal.Length, iris)
+  x <- mold(Species ~ Sepal.Length, iris)
 
   expect_error(
-    preprocess(x$preprocessor, iris2),
+    forge(x$preprocessor, iris2),
     NA
   )
 
-  xx <- prepare(Sepal.Length ~ Species, iris)
+  xx <- mold(Sepal.Length ~ Species, iris)
 
   expect_error(
-    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    forge(xx$preprocessor, iris2, outcome = TRUE),
     NA
   )
 
 })
 
 # ------------------------------------------------------------------------------
-context("test-preprocess-xy")
+context("test-forge-xy")
 
-test_that("simple preprocess works", {
+test_that("simple forge works", {
 
-  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-  xx <- preprocess(x$preprocessor, iris)
+  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  xx <- forge(x$preprocessor, iris)
 
   expect_equal(
     colnames(xx$predictors),
@@ -247,21 +247,21 @@ test_that("simple preprocess works", {
 })
 
 test_that("asking for the outcome fails for default preprocessor", {
-  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_error(
-    preprocess(x$preprocessor, iris, outcome = TRUE),
+    forge(x$preprocessor, iris, outcome = TRUE),
     "`outcome` cannot be specified"
   )
 })
 
 test_that("new_data can be a matrix", {
 
-  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
   iris_mat <- as.matrix(iris[,"Sepal.Length", drop = FALSE])
 
   expect_error(
-    xx <- preprocess(x$preprocessor, iris_mat),
+    xx <- forge(x$preprocessor, iris_mat),
     NA
   )
 
@@ -276,33 +276,33 @@ test_that("new_data can be a matrix", {
 })
 
 test_that("new_data can only be a data frame / matrix", {
-  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_error(
-    preprocess(x$preprocessor, "hi"),
+    forge(x$preprocessor, "hi"),
     "new_data should be a"
   )
 
 })
 
 test_that("missing predictor columns fail appropriately", {
-  x <- prepare(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+  x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_error(
-    preprocess(x$preprocessor, iris[,1, drop = FALSE]),
+    forge(x$preprocessor, iris[,1, drop = FALSE]),
     "Sepal.Width"
   )
 
   expect_error(
-    preprocess(x$preprocessor, iris[,3, drop = FALSE]),
+    forge(x$preprocessor, iris[,3, drop = FALSE]),
     "Sepal.Length, and Sepal.Width"
   )
 
 })
 
 test_that("matrix type is used in preprocessing as well", {
-  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species, type = "matrix")
-  xx <- preprocess(x$preprocessor, iris)
+  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, type = "matrix")
+  xx <- forge(x$preprocessor, iris)
 
   expect_is(xx$predictors, "matrix")
 })
@@ -319,10 +319,10 @@ test_that("novel predictor levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- prepare(dat[, "f", drop = FALSE], dat$y)
+  x <- mold(dat[, "f", drop = FALSE], dat$y)
 
   expect_warning(
-    xx <- preprocess(x$preprocessor, new),
+    xx <- forge(x$preprocessor, new),
     "The following factor levels"
   )
 
@@ -338,7 +338,7 @@ test_that("novel predictor levels are caught", {
 
 test_that("original predictor and outcome classes are recorded", {
 
-  x <- prepare(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+  x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_equal(
     x$preprocessor$predictor_classes,
@@ -357,17 +357,17 @@ test_that("new data classes are caught", {
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
 
-  x <- prepare(iris[, "Species", drop = FALSE], iris$Sepal.Length)
+  x <- mold(iris[, "Species", drop = FALSE], iris$Sepal.Length)
 
   expect_error(
-    preprocess(x$preprocessor, iris2),
+    forge(x$preprocessor, iris2),
     "`Species`: `character` should be `factor`"
   )
 
-  xx <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  xx <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_error(
-    preprocess(xx$preprocessor, iris2),
+    forge(xx$preprocessor, iris2),
     NA
   )
 
@@ -380,29 +380,28 @@ test_that("new data classes can interchange integer/numeric", {
   iris2 <- iris
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
 
-  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_error(
-    preprocess(x$preprocessor, iris2),
+    forge(x$preprocessor, iris2),
     NA
   )
 
 })
 
 # ------------------------------------------------------------------------------
-context("test-preprocess-recipe")
+context("test-forge-recipe")
 
 library(recipes)
-prepare <- hardhat::prepare
 
-test_that("simple preprocess works", {
+test_that("simple forge works", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris
   )
 
-  xx <- preprocess(x$preprocessor, iris)
+  xx <- forge(x$preprocessor, iris)
 
   expect_equal(
     colnames(xx$predictors),
@@ -417,12 +416,12 @@ test_that("simple preprocess works", {
 
 test_that("asking for the outcome works", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris
   )
 
-  xx <- preprocess(x$preprocessor, iris, outcome = TRUE)
+  xx <- forge(x$preprocessor, iris, outcome = TRUE)
 
   expect_equal(
     xx$outcomes,
@@ -432,7 +431,7 @@ test_that("asking for the outcome works", {
 
 test_that("asking for the outcome when it isn't there fails", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris
   )
@@ -441,7 +440,7 @@ test_that("asking for the outcome when it isn't there fails", {
   iris2$Species <- NULL
 
   expect_error(
-    preprocess(x$preprocessor, iris2, outcome = TRUE),
+    forge(x$preprocessor, iris2, outcome = TRUE),
     "`new_data` is missing the following"
   )
 
@@ -449,13 +448,13 @@ test_that("asking for the outcome when it isn't there fails", {
 
 test_that("outcomes steps get processed", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Sepal.Width ~ Sepal.Length, data = iris) %>%
       step_log(Sepal.Width),
     iris
   )
 
-  processed <- preprocess(x$preprocessor, iris, outcome = TRUE)
+  processed <- forge(x$preprocessor, iris, outcome = TRUE)
 
   expect_equal(
     processed$outcomes$Sepal.Width,
@@ -466,18 +465,18 @@ test_that("outcomes steps get processed", {
 
 test_that("missing predictor columns fail appropriately", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length + Sepal.Width, data = iris),
     iris
   )
 
   expect_error(
-    preprocess(x$preprocessor, iris[,1, drop = FALSE]),
+    forge(x$preprocessor, iris[,1, drop = FALSE]),
     "Sepal.Width"
   )
 
   expect_error(
-    preprocess(x$preprocessor, iris[,3, drop = FALSE]),
+    forge(x$preprocessor, iris[,3, drop = FALSE]),
     "Sepal.Length, and Sepal.Width"
   )
 
@@ -485,13 +484,13 @@ test_that("missing predictor columns fail appropriately", {
 
 test_that("matrix type is used in preprocessing as well", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris,
     type = "matrix"
   )
 
-  xx <- preprocess(x$preprocessor, iris)
+  xx <- forge(x$preprocessor, iris)
 
   expect_is(xx$predictors, "matrix")
 })
@@ -508,10 +507,10 @@ test_that("novel predictor levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- prepare(recipe(y ~ f, dat), dat)
+  x <- mold(recipe(y ~ f, dat), dat)
 
   expect_warning(
-    xx <- preprocess(x$preprocessor, new),
+    xx <- forge(x$preprocessor, new),
     "The following factor levels"
   )
 
@@ -534,10 +533,10 @@ test_that("novel outcome levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- prepare(recipe(f ~ y, dat), dat)
+  x <- mold(recipe(f ~ y, dat), dat)
 
   expect_warning(
-    xx <- preprocess(x$preprocessor, new, outcome = TRUE),
+    xx <- forge(x$preprocessor, new, outcome = TRUE),
     "The following factor levels"
   )
 
@@ -550,7 +549,7 @@ test_that("novel outcome levels are caught", {
 
 test_that("original predictor and outcome classes are recorded", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris
   )
@@ -572,22 +571,22 @@ test_that("new data classes are caught", {
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
 
-  x <- prepare(recipe(Sepal.Length ~ Species, iris), iris)
+  x <- mold(recipe(Sepal.Length ~ Species, iris), iris)
 
   expect_error(
-    preprocess(x$preprocessor, iris2),
+    forge(x$preprocessor, iris2),
     "`Species`: `character` should be `factor`"
   )
 
-  xx <- prepare(recipe(Species ~ Sepal.Length, iris), iris)
+  xx <- mold(recipe(Species ~ Sepal.Length, iris), iris)
 
   expect_error(
-    preprocess(xx$preprocessor, iris2),
+    forge(xx$preprocessor, iris2),
     NA
   )
 
   expect_error(
-    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    forge(xx$preprocessor, iris2, outcome = TRUE),
     "`Species`: `character` should be `factor`"
   )
 
@@ -598,17 +597,17 @@ test_that("new data classes can interchange integer/numeric", {
   iris2 <- iris
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
 
-  x <- prepare(recipe(Species ~ Sepal.Length, iris), iris)
+  x <- mold(recipe(Species ~ Sepal.Length, iris), iris)
 
   expect_error(
-    preprocess(x$preprocessor, iris2),
+    forge(x$preprocessor, iris2),
     NA
   )
 
-  xx <- prepare(recipe(Sepal.Length ~ Species, iris), iris)
+  xx <- mold(recipe(Sepal.Length ~ Species, iris), iris)
 
   expect_error(
-    preprocess(xx$preprocessor, iris2, outcome = TRUE),
+    forge(xx$preprocessor, iris2, outcome = TRUE),
     NA
   )
 

@@ -3,7 +3,7 @@
 #' `retype()` is a simple function that coerces the predictors to a tibble,
 #' data.frame or a matrix.
 #'
-#' `retype()` is used from [prepare()] and [preprocess()].
+#' `retype()` is used from [mold()] and [forge()].
 #'
 #' @param x Predictors. These are a data frame or a matrix.
 #' @param type A single character. One of `"tibble"`, `"data.frame"`, or

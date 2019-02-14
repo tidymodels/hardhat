@@ -28,7 +28,7 @@ a number of different input types from the user. \code{standardize()} focuses
 on capturing the flexibility in the \emph{outcome}.
 }
 \details{
-\code{standardize()} is called from \code{\link[=prepare]{prepare()}} when using an XY interface (i.e.
+\code{standardize()} is called from \code{\link[=mold]{mold()}} when using an XY interface (i.e.
 a \code{y} argument was supplied).
 }
 \examples{

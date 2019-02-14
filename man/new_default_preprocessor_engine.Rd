@@ -8,7 +8,7 @@ new_default_preprocessor_engine()
 }
 \description{
 A default preprocessor engine is a function that performs some basic
-preprocessing on \code{new_data} to prepare it for ingestion into a model. To
+preprocessing on \code{new_data} to mold it for ingestion into a model. To
 control how the engine preprocesses \code{new_data} the \code{intercept} and \code{type}
 arguments can be set, which are passed down to the created engine function.
 A default preprocessor engine is used in matrix and data frame methods of a
