@@ -122,13 +122,6 @@ test_that("missing predictor columns fail appropriately", {
 
 })
 
-test_that("matrix type is used in preprocessing as well", {
-  x <- mold(Species ~ Sepal.Length, iris, type = "matrix")
-  xx <- forge(x$preprocessor, iris)
-
-  expect_is(xx$predictors, "matrix")
-})
-
 test_that("novel predictor levels are caught", {
 
   dat <- data.frame(
@@ -317,13 +310,6 @@ test_that("missing predictor columns fail appropriately", {
 
 })
 
-test_that("matrix type is used in preprocessing as well", {
-  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, type = "matrix")
-  xx <- forge(x$preprocessor, iris)
-
-  expect_is(xx$predictors, "matrix")
-})
-
 test_that("novel predictor levels are caught", {
 
   dat <- data.frame(
@@ -497,19 +483,6 @@ test_that("missing predictor columns fail appropriately", {
     "Sepal.Length, and Sepal.Width"
   )
 
-})
-
-test_that("matrix type is used in preprocessing as well", {
-
-  x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
-    iris,
-    type = "matrix"
-  )
-
-  xx <- forge(x$preprocessor, iris)
-
-  expect_is(xx$predictors, "matrix")
 })
 
 test_that("novel predictor levels are caught", {

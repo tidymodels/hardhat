@@ -127,9 +127,9 @@ when it is time to make predictions on new data.
 
 ``` r
 names(processed$preprocessor)
-#> [1] "engine"            "intercept"         "type"             
-#> [4] "predictors"        "outcomes"          "predictor_levels" 
-#> [7] "outcome_levels"    "predictor_classes" "outcome_classes"
+#> [1] "engine"            "intercept"         "predictors"       
+#> [4] "outcomes"          "predictor_levels"  "outcome_levels"   
+#> [7] "predictor_classes" "outcome_classes"   "indicators"
 ```
 
 For instance, the original levels and classes of the predictors are
@@ -150,9 +150,7 @@ processed$preprocessor$predictor_classes
 
 There is also an interface for the XY method (providing the predictors
 and outcome directly to `x` and `y`). The preprocessing that occurs here
-is minimal, but you can add an intercept to `x` with `intercept = TRUE`,
-and can change the output type of `x` if your model requires a matrix
-rather than a data frame and you only have numeric predictors.
+is minimal, but you can add an intercept to `x` with `intercept = TRUE`.
 
 Notice how even though `y` is a vector, the `outcomes` slot of the
 return value *always* holds a tibble. Because `y` is not a data frame /

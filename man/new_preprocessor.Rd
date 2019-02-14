@@ -5,7 +5,7 @@
 \title{Create a new preprocessor}
 \usage{
 new_preprocessor(engine = new_default_preprocessor_engine(),
-  intercept = FALSE, type = "tibble", predictors = character(),
+  intercept = FALSE, predictors = character(),
   outcomes = character(), predictor_levels = NULL,
   outcome_levels = NULL, predictor_classes = NULL,
   outcome_classes = NULL, ..., subclass = character())
@@ -15,9 +15,6 @@ new_preprocessor(engine = new_default_preprocessor_engine(),
 \code{"default_preprocessor_engine"}, a \code{"recipe"}, or a \code{"terms"} object.}
 
 \item{intercept}{A logical. Should an intercept be included?}
-
-\item{type}{A character. One of \code{"tibble"}, \code{"data.frame"} or \code{"matrix"}.
-The output type for the predictors.}
 
 \item{predictors}{A character vector. The original predictors used when
 fitting the model.}
@@ -49,8 +46,8 @@ subclassed preprocessors.}
 \item{subclass}{An optional character. The subclass of the \code{"preprocessor"}.}
 }
 \description{
-A preprocessor holds a preprocessing engine, an indicator for whether or
-not to include the intercept, and a character string representing the
-output type of the predictors.
+A preprocessor holds a preprocessing engine, and various elements that are
+useful for performing structural validation of \code{new_data} in \code{forge()} when
+it is time to make predictions using a model.
 }
 \keyword{internal}

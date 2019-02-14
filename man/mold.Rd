@@ -10,15 +10,14 @@
 \usage{
 mold(x, ...)
 
-\method{mold}{data.frame}(x, y, intercept = FALSE, type = "tibble",
-  ...)
+\method{mold}{data.frame}(x, y, intercept = FALSE, ...)
 
-\method{mold}{matrix}(x, y, intercept = FALSE, type = "tibble", ...)
+\method{mold}{matrix}(x, y, intercept = FALSE, ...)
 
 \method{mold}{formula}(formula, data, intercept = FALSE,
-  type = "tibble", indicators = TRUE, ...)
+  indicators = TRUE, ...)
 
-\method{mold}{recipe}(x, data, intercept = FALSE, type = "tibble", ...)
+\method{mold}{recipe}(x, data, intercept = FALSE, ...)
 }
 \arguments{
 \item{x}{A data frame, matrix, or \code{\link[recipes:recipe]{recipes::recipe()}}. If this is a
@@ -30,9 +29,6 @@ data.frame or matrix, it should contain the predictors.}
 
 \item{intercept}{A single logical specifying whether or not to
 include an intercept in the molded predictors.}
-
-\item{type}{A single character. One of \code{"tibble"}, \code{"data.frame"}, or
-\code{"matrix"} specifying the result type of the predictors.}
 
 \item{formula}{A formula specifying the terms in the format of
 \code{outcome ~ predictors}.}
@@ -47,7 +43,7 @@ variables and a warning is thrown if any interactions are detected.}
 \value{
 A named list containing:
 \itemize{
-\item \code{predictors}: An object of class \code{type} containing the molded predictors
+\item \code{predictors}: A tibble containing the molded predictors
 to be used in the model.
 \item \code{outcome}: A tibble.
 \itemize{
@@ -70,8 +66,7 @@ data ready to be fed into a model.
 possibly \code{\link[stats:model.matrix]{stats::model.matrix()}}.
 \item For a recipe, this performs a call to both \code{\link[recipes:prep]{recipes::prep()}}
 and \code{\link[recipes:juice]{recipes::juice()}}.
-\item For a data frame or matrix, this uses the \code{new_default_preprocessor()}
-which converts the input to an object of class \code{type} and adds an
-intercept column if requested.
+\item For a data frame or matrix, this simply adds an intercept column
+if requested.
 }
 }
