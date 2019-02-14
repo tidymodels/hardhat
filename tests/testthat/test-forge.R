@@ -16,6 +16,28 @@ test_that("simple forge works", {
   )
 })
 
+test_that("can forge multivariate formulas", {
+
+  x <- mold(Sepal.Length + Sepal.Width ~ Petal.Length, iris)
+  xx <- forge(x$preprocessor, iris, outcome = TRUE)
+
+  expect_is(xx$outcomes, "tbl_df")
+  expect_equal(colnames(xx$outcomes), c("Sepal.Length", "Sepal.Width"))
+
+  y <- mold(log(Sepal.Width) + poly(Sepal.Width, degree = 2) ~ Species, iris)
+  yy <- forge(y$preprocessor, iris, outcome = TRUE)
+
+  expect_equal(
+    colnames(yy$outcomes),
+    c(
+      "log(Sepal.Width)",
+      "poly(Sepal.Width, degree = 2).1",
+      "poly(Sepal.Width, degree = 2).2"
+    )
+  )
+
+})
+
 test_that("can forge new data without expanding factors into dummies", {
 
   x <- mold(Sepal.Length ~ Species, iris, indicators = FALSE)

@@ -70,3 +70,34 @@ and \code{\link[recipes:juice]{recipes::juice()}}.
 if requested.
 }
 }
+\details{
+Multivariate outcomes can be specified on the LHS using similar syntax as
+the RHS (i.e. \code{outcome_1 + outcome_2 ~ predictors}). \code{\link[stats:model.frame]{stats::model.frame()}}
+is run on the outcome columns (which will execute any in line formulas),
+but \code{\link[stats:model.matrix]{stats::model.matrix()}} is \emph{not} run on the outcomes as this would
+expand factor outcomes and this is likely not desired. If any complex
+calculations are done on the LHS and they return matrices
+(like \code{\link[stats:poly]{stats::poly()}}), then those matrices are flattened into multiple
+columns of the tibble after the call to \code{model.frame()}.
+}
+\examples{
+
+# ---------------------------------------------------------------------------
+# Multivariate outcomes
+
+# Multivariate formulas can be specified easily
+processed <- mold(Sepal.Width + log(Sepal.Length) ~ Species, iris)
+processed$outcomes
+
+# Inline functions on the LHS are run, but any matrix
+# output is flattened (like what happens in `model.matrix()`)
+# (essentially this means you don't wind up with columns
+# in the tibble that are matrices)
+processed <- mold(poly(Sepal.Length, degree = 2) ~ Species, iris)
+processed$outcomes
+
+# TRUE
+ncol(processed$outcomes) == 2
+
+
+}

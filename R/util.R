@@ -163,9 +163,11 @@ all_numeric <- function(x) {
 # with incomplete data. Setting the na.action
 # to na.pass will retain the NA values through
 # the preprocessing
-model_frame <- function(formula, data, predictor_levels = NULL) {
+# - Don't make this return a tibble, we need the
+# attached terms object sometimes
+model_frame <- function(formula, data, original_levels = NULL) {
   rlang::with_options(
-    stats::model.frame(formula, data = data, xlev = predictor_levels),
+    stats::model.frame(formula, data = data, xlev = original_levels),
     na.action = "na.pass"
   )
 }
