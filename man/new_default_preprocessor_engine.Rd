@@ -9,8 +9,8 @@ new_default_preprocessor_engine()
 \description{
 A default preprocessor engine is a function that performs some basic
 preprocessing on \code{new_data} to mold it for ingestion into a model. To
-control how the engine preprocesses \code{new_data} the \code{intercept} and \code{type}
-arguments can be set, which are passed down to the created engine function.
+control how the engine preprocesses \code{new_data} the \code{intercept} argument can
+be set, which is passed down to the created engine function.
 A default preprocessor engine is used in matrix and data frame methods of a
 model (as opposed to a recipe or formula method which performs
 preprocessing for you). This preprocessing is performed on both the training
@@ -18,19 +18,17 @@ and testing data sets.
 }
 \details{
 The preprocessor function returned from \code{new_default_preprocessor_engine()}
-will do two things:
+will only do one thing:
 \itemize{
-\item Call \code{\link[=retype]{retype()}} with \code{type} to coerce \code{new_data} to a specific type.
 \item Call \code{add_intercept_column()} with \code{intercept} to add an intercept to
 \code{new_data} if required.
 }
 
 The returned function that \code{new_default_preprocessor_engine()} creates
-has 3 arguments:
+has 2 arguments:
 \itemize{
 \item \code{new_data}: The data to preprocess.
 \item \code{intercept}: A logical. Passed on to \code{add_intercept_column()}.
-\item \code{type}: A single character. Passed on to \code{retype()}.
 }
 }
 \keyword{internal}

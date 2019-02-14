@@ -11,9 +11,8 @@
 #' * For a recipe, this performs a call to both [recipes::prep()]
 #' and [recipes::juice()].
 #'
-#' * For a data frame or matrix, this uses the `new_default_preprocessor()`
-#' which converts the input to an object of class `type` and adds an
-#' intercept column if requested.
+#' * For a data frame or matrix, this simply adds an intercept column
+#' if requested.
 #'
 #' @param x A data frame, matrix, or [recipes::recipe()]. If this is a
 #' data.frame or matrix, it should contain the predictors.
@@ -25,9 +24,6 @@
 #'
 #' @param intercept A single logical specifying whether or not to
 #' include an intercept in the molded predictors.
-#'
-#' @param type A single character. One of `"tibble"`, `"data.frame"`, or
-#' `"matrix"` specifying the result type of the predictors.
 #'
 #' @param data A data frame containing the predictors and the outcomes.
 #'
@@ -42,7 +38,7 @@
 #'
 #' A named list containing:
 #'
-#'  - `predictors`: An object of class `type` containing the molded predictors
+#'  - `predictors`: A tibble containing the molded predictors
 #'  to be used in the model.
 #'
 #'  - `outcome`: A tibble.
@@ -72,18 +68,16 @@ mold.default <- function(x, ...) {
 
 #' @rdname mold
 #' @export
-mold.data.frame <- function(x, y, intercept = FALSE,
-                            type = "tibble", ...) {
+mold.data.frame <- function(x, y, intercept = FALSE, ...) {
 
   engine <- new_default_preprocessor_engine()
 
-  x <- engine$process(x, intercept, type)
+  x <- engine$process(x, intercept)
   y <- standardize(y)
 
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
-    type = type,
     predictors = colnames(x),
     outcomes = colnames(y),
     predictor_levels = get_levels(x),
@@ -97,18 +91,16 @@ mold.data.frame <- function(x, y, intercept = FALSE,
 
 #' @rdname mold
 #' @export
-mold.matrix <- function(x, y, intercept = FALSE,
-                        type = "tibble", ...) {
+mold.matrix <- function(x, y, intercept = FALSE, ...) {
 
   engine <- new_default_preprocessor_engine()
 
-  x <- engine$process(x, intercept, type)
+  x <- engine$process(x, intercept)
   y <- standardize(y)
 
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
-    type = type,
     predictors = colnames(x),
     outcomes = colnames(y),
     predictor_levels = NULL,
@@ -123,7 +115,7 @@ mold.matrix <- function(x, y, intercept = FALSE,
 #' @rdname mold
 #' @export
 mold.formula <- function(formula, data, intercept = FALSE,
-                         type = "tibble", indicators = TRUE, ...) {
+                         indicators = TRUE, ...) {
 
   validate_formula_has_intercept(formula)
 
@@ -133,8 +125,6 @@ mold.formula <- function(formula, data, intercept = FALSE,
   framed <- model_frame(formula, data)
 
   predictors <- extract_predictors(formula, framed, indicators)
-
-  predictors <- retype(predictors, type)
 
   terms <- extract_terms(framed)
 
@@ -149,7 +139,6 @@ mold.formula <- function(formula, data, intercept = FALSE,
   preprocessor <- new_terms_preprocessor(
     engine = terms,
     intercept = intercept,
-    type = type,
     predictors = original_predictor_nms,
     outcomes = original_outcome_nms,
     predictor_levels = get_levels(original_predictors),
@@ -164,8 +153,7 @@ mold.formula <- function(formula, data, intercept = FALSE,
 
 #' @rdname mold
 #' @export
-mold.recipe <- function(x, data, intercept = FALSE,
-                        type = "tibble", ...) {
+mold.recipe <- function(x, data, intercept = FALSE, ...) {
 
   validate_recipes_available()
 
@@ -175,6 +163,7 @@ mold.recipe <- function(x, data, intercept = FALSE,
   all_predictors <- recipes::all_predictors
   all_outcomes <- recipes::all_outcomes
 
+  # "composition" output is always tibble
   predictors <- recipes::juice(prepped_recipe, all_predictors())
   outcomes <- recipes::juice(prepped_recipe, all_outcomes())
 
@@ -187,7 +176,6 @@ mold.recipe <- function(x, data, intercept = FALSE,
   preprocessor <- new_recipes_preprocessor(
     engine = prepped_recipe,
     intercept = intercept,
-    type = type,
     predictors = colnames(predictors),
     outcomes = colnames(outcomes),
     predictor_levels = all_levels$predictor_levels,
@@ -196,7 +184,6 @@ mold.recipe <- function(x, data, intercept = FALSE,
     outcome_classes = all_data_classes$outcome_classes
   )
 
-  predictors <- retype(predictors, type)
   predictors <- add_intercept_column(predictors, intercept)
 
   mold_list(predictors, outcomes, preprocessor)
@@ -256,13 +243,14 @@ get_original_recipe_data_classes <- function(x, rec) {
 extract_predictors <- function(formula, frame, indicators) {
 
   if (indicators) {
-    extract_predictors_with_model_matrix(formula, frame)
+    predictors <- extract_predictors_with_model_matrix(formula, frame)
   }
   else {
     check_for_interactions(formula)
-    extract_predictors_from_frame(formula, frame)
+    predictors <- extract_predictors_from_frame(formula, frame)
   }
 
+  tibble::as_tibble(predictors)
 }
 
 extract_predictors_with_model_matrix <- function(formula, frame) {

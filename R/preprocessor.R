@@ -1,16 +1,13 @@
 #' Create a new preprocessor
 #'
-#' A preprocessor holds a preprocessing engine, an indicator for whether or
-#' not to include the intercept, and a character string representing the
-#' output type of the predictors.
+#' A preprocessor holds a preprocessing engine, and various elements that are
+#' useful for performing structural validation of `new_data` in `forge()` when
+#' it is time to make predictions using a model.
 #'
 #' @param engine A preprocessing engine. This can be a
 #' `"default_preprocessor_engine"`, a `"recipe"`, or a `"terms"` object.
 #'
 #' @param intercept A logical. Should an intercept be included?
-#'
-#' @param type A character. One of `"tibble"`, `"data.frame"` or `"matrix"`.
-#' The output type for the predictors.
 #'
 #' @param predictors A character vector. The original predictors used when
 #' fitting the model.
@@ -44,7 +41,6 @@
 #' @keywords internal
 new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              intercept = FALSE,
-                             type = "tibble",
                              predictors = character(),
                              outcomes = character(),
                              predictor_levels = NULL,
@@ -56,7 +52,6 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
   validate_is_preprocessor_engine(engine)
   validate_intercept(intercept)
-  validate_type(type)
   validate_is_character(predictors, "predictors")
   validate_is_character(outcomes, "outcomes")
   validate_levels_list(predictor_levels, "predictor_levels")
@@ -65,7 +60,6 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
   elems <- list(
     engine = engine,
     intercept = intercept,
-    type = type,
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
@@ -85,7 +79,6 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
 new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
                                      intercept = FALSE,
-                                     type = "tibble",
                                      predictors = character(),
                                      outcomes = character(),
                                      predictor_levels = NULL,
@@ -96,7 +89,6 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
   new_preprocessor(
     engine = engine,
     intercept = intercept,
-    type = type,
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
@@ -110,7 +102,6 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
 new_terms_preprocessor <- function(engine,
                                    intercept = FALSE,
-                                   type = "tibble",
                                    predictors = character(),
                                    outcomes = character(),
                                    predictor_levels = NULL,
@@ -122,7 +113,6 @@ new_terms_preprocessor <- function(engine,
   new_preprocessor(
     engine = engine,
     intercept = intercept,
-    type = type,
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
@@ -137,7 +127,6 @@ new_terms_preprocessor <- function(engine,
 
 new_recipes_preprocessor <- function(engine,
                                      intercept = FALSE,
-                                     type = "tibble",
                                      predictors = character(),
                                      outcomes = character(),
                                      predictor_levels = NULL,
@@ -148,7 +137,6 @@ new_recipes_preprocessor <- function(engine,
   new_preprocessor(
     engine = engine,
     intercept = intercept,
-    type = type,
     predictors = predictors,
     outcomes = outcomes,
     predictor_levels = predictor_levels,
@@ -184,35 +172,31 @@ is_preprocessor <- function(x) {
 #'
 #' A default preprocessor engine is a function that performs some basic
 #' preprocessing on `new_data` to mold it for ingestion into a model. To
-#' control how the engine preprocesses `new_data` the `intercept` and `type`
-#' arguments can be set, which are passed down to the created engine function.
+#' control how the engine preprocesses `new_data` the `intercept` argument can
+#' be set, which is passed down to the created engine function.
 #' A default preprocessor engine is used in matrix and data frame methods of a
 #' model (as opposed to a recipe or formula method which performs
 #' preprocessing for you). This preprocessing is performed on both the training
 #' and testing data sets.
 #'
 #' The preprocessor function returned from `new_default_preprocessor_engine()`
-#' will do two things:
-#'
-#' - Call [retype()] with `type` to coerce `new_data` to a specific type.
+#' will only do one thing:
 #'
 #' - Call `add_intercept_column()` with `intercept` to add an intercept to
 #' `new_data` if required.
 #'
 #' The returned function that `new_default_preprocessor_engine()` creates
-#' has 3 arguments:
+#' has 2 arguments:
 #'
 #' - `new_data`: The data to preprocess.
 #'
 #' - `intercept`: A logical. Passed on to `add_intercept_column()`.
 #'
-#' - `type`: A single character. Passed on to `retype()`.
-#'
 #' @keywords internal
 new_default_preprocessor_engine <- function() {
 
-  process <- function(new_data, intercept, type) {
-    new_data <- retype(new_data, type)
+  process <- function(new_data, intercept) {
+    new_data <- tibble::as_tibble(new_data)
     new_data <- add_intercept_column(new_data, intercept)
     new_data
   }

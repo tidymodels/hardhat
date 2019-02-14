@@ -94,7 +94,7 @@ processed$preprocessor$predictor_levels
 processed$preprocessor$predictor_classes
 ```
 
-There is also an interface for the XY method (providing the predictors and outcome directly to `x` and `y`). The preprocessing that occurs here is minimal, but you can add an intercept to `x` with `intercept = TRUE`, and can change the output type of `x` if your model requires a matrix rather than a data frame and you only have numeric predictors. 
+There is also an interface for the XY method (providing the predictors and outcome directly to `x` and `y`). The preprocessing that occurs here is minimal, but you can add an intercept to `x` with `intercept = TRUE`. 
 
 Notice how even though `y` is a vector, the `outcomes` slot of the return value _always_ holds a tibble. Because `y` is not a data frame / matrix with existing column names, a default name of `".outcome"` is used.
 

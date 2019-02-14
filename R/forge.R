@@ -9,8 +9,6 @@
 #' doing cross validation where you need to preprocess the outcome of a test
 #' set before computing performance.
 #'
-#' @inheritParams retype
-#'
 #' @param preprocessor A valid `"preprocessor"`. The preprocessor that should
 #' be used here is the one in the output from the corresponding call
 #' to [mold()].
@@ -26,13 +24,13 @@
 #'
 #' A named list with elements:
 #'
-#'  - `predictors`: An object of class `type` containing the preprocessed
+#'  - `predictors`: A tibble containing the preprocessed
 #'  `new_data` predictors.
 #'
 #'  - `outcome`: If `outcome = TRUE`, the outcome is returned here, otherwise
 #'  `NULL`. If a formula engine was used, this is a data frame that is the
-#'  result of extracting the outcome columns from `model.frame()`. If a recipe
-#'  was used, this is a data.frame that is the result of calling
+#'  result of extracting the outcome columns from [stats::model.frame()].
+#'  If a recipe was used, this is a data.frame that is the result of calling
 #'  [recipes::bake()] with [recipes::all_outcomes()] specified.
 #'
 #' @export
@@ -57,8 +55,7 @@ forge.default_preprocessor <- function(preprocessor, new_data, ...) {
 
   predictors <- preprocessor$engine$process(
     new_data,
-    preprocessor$intercept,
-    preprocessor$type
+    preprocessor$intercept
   )
 
   forge_list(predictors)
@@ -67,7 +64,7 @@ forge.default_preprocessor <- function(preprocessor, new_data, ...) {
 #' @rdname forge
 #' @export
 forge.recipes_preprocessor <- function(preprocessor, new_data,
-                                            outcome = FALSE, ...) {
+                                       outcome = FALSE, ...) {
 
   validate_recipes_available()
   validate_is_new_data_like(new_data)
@@ -80,11 +77,6 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
     preprocessor = preprocessor,
     new_data = new_data,
     outcome = outcome
-  )
-
-  baked_list$predictors <- retype(
-    x = baked_list$predictors,
-    type = preprocessor$type
   )
 
   baked_list$predictors <- add_intercept_column(
@@ -107,11 +99,6 @@ forge.terms_preprocessor <- function(preprocessor, new_data,
   new_data <- shrink(preprocessor, new_data, outcome)
 
   baked_list <- bake_terms_engine(preprocessor, new_data, outcome)
-
-  baked_list$predictors <- retype(
-    x = baked_list$predictors,
-    type = preprocessor$type
-  )
 
   baked_list
 }
@@ -259,7 +246,9 @@ validate_no_outcome_specified <- function(dots) {
 
   if (length(dots) > 0) {
     if ("outcome" %in% names(dots)) {
-      glubort("`outcome` cannot be specified when a default preprocessor is used.")
+      glubort(
+        "`outcome` cannot be specified when a default preprocessor is used."
+      )
     }
   }
 
@@ -273,13 +262,10 @@ extract_outcomes_from_frame <- function(terms, frame) {
 
   # Simplify multivariate matrix columns
   if (is.matrix(outcomes[[1]])) {
-    outcomes <- tibble::as_tibble(outcomes[[1]])
-  }
-  else {
-    outcomes <- tibble::as_tibble(outcomes)
+    outcomes <- outcomes[[1]]
   }
 
-  outcomes
+  tibble::as_tibble(outcomes)
 }
 
 extract_predictors_from_frame <- function(terms, frame) {
@@ -288,6 +274,5 @@ extract_predictors_from_frame <- function(terms, frame) {
 
   frame[[processed_outcome_nm]] <- NULL
 
-  tibble::as_tibble(frame)
-
+  frame
 }

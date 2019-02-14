@@ -71,18 +71,6 @@ test_that("formula intercepts can be added", {
   expect_false("(Intercept)" %in% attr(x$preprocessor$engine, "predictors"))
 })
 
-test_that("output type can be matrix", {
-
-  x <- mold(
-    Species ~ Sepal.Length,
-    iris,
-    type = "matrix"
-  )
-
-  expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$predictors, "matrix")
-})
-
 test_that("can mold formulas with special terms", {
 
   x <- mold(Species ~ Sepal.Length:Sepal.Width + I(Sepal.Length^2), iris)
@@ -159,18 +147,6 @@ test_that("xy intercepts can be added", {
   expect_true("(Intercept)" %in% colnames(x$predictors))
 })
 
-test_that("output type can be matrix", {
-
-  x <- mold(
-    iris[, "Sepal.Length", drop = FALSE],
-    iris$Species,
-    type = "matrix"
-  )
-
-  expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$predictors, "matrix")
-})
-
 # ------------------------------------------------------------------------------
 context("test-mold-recipes")
 
@@ -201,15 +177,4 @@ test_that("can mold recipes with intercepts", {
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))
-})
-
-test_that("can mold recipes with matrix output", {
-
-  x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
-    iris,
-    type = "matrix"
-  )
-
-  expect_is(x$predictors, "matrix")
 })

@@ -32,12 +32,12 @@ as well?}
 \value{
 A named list with elements:
 \itemize{
-\item \code{predictors}: An object of class \code{type} containing the preprocessed
+\item \code{predictors}: A tibble containing the preprocessed
 \code{new_data} predictors.
 \item \code{outcome}: If \code{outcome = TRUE}, the outcome is returned here, otherwise
 \code{NULL}. If a formula engine was used, this is a data frame that is the
-result of extracting the outcome columns from \code{model.frame()}. If a recipe
-was used, this is a data.frame that is the result of calling
+result of extracting the outcome columns from \code{\link[stats:model.frame]{stats::model.frame()}}.
+If a recipe was used, this is a data.frame that is the result of calling
 \code{\link[recipes:bake]{recipes::bake()}} with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}} specified.
 }
 }
