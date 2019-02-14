@@ -182,3 +182,14 @@ validate_is_bool <- function(.x, .x_nm) {
 all_numeric <- function(x) {
   all(vapply(x, is.numeric, logical(1)))
 }
+
+# - Preprocessing should _never_ removes rows
+# with incomplete data. Setting the na.action
+# to na.pass will retain the NA values through
+# the preprocessing
+model_frame <- function(formula, data, predictor_levels = NULL) {
+  rlang::with_options(
+    stats::model.frame(formula, data = data, xlev = predictor_levels),
+    na.action = "na.pass"
+  )
+}

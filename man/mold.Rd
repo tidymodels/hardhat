@@ -16,7 +16,7 @@ mold(x, ...)
 \method{mold}{matrix}(x, y, intercept = FALSE, type = "tibble", ...)
 
 \method{mold}{formula}(formula, data, intercept = FALSE,
-  type = "tibble", ...)
+  type = "tibble", indicators = TRUE, ...)
 
 \method{mold}{recipe}(x, data, intercept = FALSE, type = "tibble", ...)
 }
@@ -38,6 +38,11 @@ include an intercept in the molded predictors.}
 \code{outcome ~ predictors}.}
 
 \item{data}{A data frame containing the predictors and the outcomes.}
+
+\item{indicators}{For use with the formula interface. Should factors and
+interactions be expanded (In other words, should \code{model.matrix()} be run)? If
+\code{FALSE}, factor columns are returned without being expanded into dummy
+variables and a warning is thrown if any interactions are detected.}
 }
 \value{
 A named list containing:
@@ -62,7 +67,7 @@ calling \code{\link[recipes:juice]{recipes::juice()}} with \code{\link[recipes:a
 data ready to be fed into a model.
 \itemize{
 \item For a formula, this applies \code{\link[stats:model.frame]{stats::model.frame()}} and
-\code{\link[stats:model.matrix]{stats::model.matrix()}}.
+possibly \code{\link[stats:model.matrix]{stats::model.matrix()}}.
 \item For a recipe, this performs a call to both \code{\link[recipes:prep]{recipes::prep()}}
 and \code{\link[recipes:juice]{recipes::juice()}}.
 \item For a data frame or matrix, this uses the \code{new_default_preprocessor()}
