@@ -242,25 +242,3 @@ validate_no_outcome_specified <- function(dots) {
 
   invisible(dots)
 }
-
-extract_outcomes_from_frame <- function(terms, frame) {
-
-  processed_outcome_nms <- response_name(terms)
-  outcomes <- frame[, processed_outcome_nms, drop = FALSE]
-
-  # Simplify multivariate matrix columns
-  if (is.matrix(outcomes[[1]])) {
-    outcomes <- outcomes[[1]]
-  }
-
-  tibble::as_tibble(outcomes)
-}
-
-extract_predictors_from_frame <- function(terms, frame) {
-
-  processed_outcome_nm <- response_name(terms)
-
-  frame[[processed_outcome_nm]] <- NULL
-
-  frame
-}

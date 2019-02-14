@@ -341,6 +341,15 @@ extract_predictors_with_model_matrix <- function(formula, frame) {
   predictors
 }
 
+extract_predictors_from_frame <- function(terms, frame) {
+
+  processed_outcome_nm <- response_name(terms)
+
+  frame[[processed_outcome_nm]] <- NULL
+
+  frame
+}
+
 strip_model_matrix <- function(x) {
   attr(x, "assign") <- NULL
   attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
