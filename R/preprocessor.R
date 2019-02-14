@@ -168,7 +168,7 @@ new_recipes_preprocessor <- function(engine,
 #'
 #' @examples
 #'
-#' x <- prepare(Species ~ Sepal.Width, iris)
+#' x <- mold(Species ~ Sepal.Width, iris)
 #' is_preprocessor(x$preprocessor)
 #'
 #' @export
@@ -181,7 +181,7 @@ is_preprocessor <- function(x) {
 #' Create a default preprocessor engine
 #'
 #' A default preprocessor engine is a function that performs some basic
-#' preprocessing on `new_data` to prepare it for ingestion into a model. To
+#' preprocessing on `new_data` to mold it for ingestion into a model. To
 #' control how the engine preprocesses `new_data` the `intercept` and `type`
 #' arguments can be set, which are passed down to the created engine function.
 #' A default preprocessor engine is used in matrix and data frame methods of a

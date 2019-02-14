@@ -1,8 +1,8 @@
-#' Prepare data for modeling
+#' Mold data for modeling
 #'
 #' @description
 #'
-#' `prepare()` applies the appropriate processing steps required to get training
+#' `mold()` applies the appropriate processing steps required to get training
 #' data ready to be fed into a model.
 #'
 #' * For a formula method, this applies `model.frame()` and `model.matrix()`.
@@ -22,12 +22,12 @@
 #' @param y A data frame, matrix, or vector containing the outcome(s).
 #'
 #' @param intercept A single logical specifying whether or not to
-#' include an intercept in the prepared predictors.
+#' include an intercept in the molded predictors.
 #'
 #' @param type A single character. One of `"tibble"`, `"data.frame"`, or
 #' `"matrix"` specifying the result type of the predictors.
 #'
-#' @param data A data frame to prepare.
+#' @param data A data frame to mold.
 #'
 #' @param ... Currently unused.
 #'
@@ -35,7 +35,7 @@
 #'
 #' A named list containing:
 #'
-#'  - `predictors`: An object of class `type` containing the prepared predictors
+#'  - `predictors`: An object of class `type` containing the molded predictors
 #'  to be used in the model.
 #'
 #'  - `outcome`: A tibble. If `y` was supplied, it is returned after a call to
@@ -48,18 +48,18 @@
 #'
 #'
 #' @export
-prepare <- function(x, ...) {
-  UseMethod("prepare")
+mold <- function(x, ...) {
+  UseMethod("mold")
 }
 
 #' @export
-prepare.default <- function(x, ...) {
-  abort_unknown_prepare_class(x)
+mold.default <- function(x, ...) {
+  abort_unknown_mold_class(x)
 }
 
-#' @rdname prepare
+#' @rdname mold
 #' @export
-prepare.data.frame <- function(x, y, intercept = FALSE,
+mold.data.frame <- function(x, y, intercept = FALSE,
                                type = "tibble", ...) {
 
   engine <- new_default_preprocessor_engine()
@@ -79,12 +79,12 @@ prepare.data.frame <- function(x, y, intercept = FALSE,
     outcome_classes = get_data_classes(y)
   )
 
-  prepare_list(x, y, preprocessor)
+  mold_list(x, y, preprocessor)
 }
 
-#' @rdname prepare
+#' @rdname mold
 #' @export
-prepare.matrix <- function(x, y, intercept = FALSE,
+mold.matrix <- function(x, y, intercept = FALSE,
                            type = "tibble", ...) {
 
   engine <- new_default_preprocessor_engine()
@@ -104,12 +104,12 @@ prepare.matrix <- function(x, y, intercept = FALSE,
     outcome_classes = get_data_classes(y)
   )
 
-  prepare_list(x, y, preprocessor)
+  mold_list(x, y, preprocessor)
 }
 
-#' @rdname prepare
+#' @rdname mold
 #' @export
-prepare.formula <- function(formula, data, intercept = FALSE,
+mold.formula <- function(formula, data, intercept = FALSE,
                             type = "tibble", ...) {
 
   validate_formula_has_intercept(formula)
@@ -153,12 +153,12 @@ prepare.formula <- function(formula, data, intercept = FALSE,
     outcome_classes = get_data_classes(original_outcomes)
   )
 
-  prepare_list(predictors, outcomes, preprocessor)
+  mold_list(predictors, outcomes, preprocessor)
 }
 
-#' @rdname prepare
+#' @rdname mold
 #' @export
-prepare.recipe <- function(x, data, intercept = FALSE,
+mold.recipe <- function(x, data, intercept = FALSE,
                            type = "tibble", ...) {
 
   validate_recipes_available()
@@ -193,13 +193,13 @@ prepare.recipe <- function(x, data, intercept = FALSE,
   predictors <- retype(predictors, type)
   predictors <- add_intercept_column(predictors, intercept)
 
-  prepare_list(predictors, outcomes, preprocessor)
+  mold_list(predictors, outcomes, preprocessor)
 }
 
 # ------------------------------------------------------------------------------
 # Preparation helpers
 
-prepare_list <- function(predictors, outcomes, preprocessor) {
+mold_list <- function(predictors, outcomes, preprocessor) {
   list(
     predictors = predictors,
     outcomes = outcomes,

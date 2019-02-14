@@ -1,9 +1,9 @@
 # ------------------------------------------------------------------------------
-context("test-prepare-formulas")
+context("test-mold-formulas")
 
-test_that("can prepare simple formulas", {
+test_that("can mold simple formulas", {
 
-  x <- prepare(Species ~ Sepal.Length, iris)
+  x <- mold(Species ~ Sepal.Length, iris)
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
   expect_is(x$outcomes, "data.frame")
@@ -11,9 +11,9 @@ test_that("can prepare simple formulas", {
   expect_is(x$preprocessor, "terms_preprocessor")
 })
 
-test_that("can prepare multivariate formulas", {
+test_that("can mold multivariate formulas", {
 
-  x <- prepare(cbind(Sepal.Length, Sepal.Width) ~ Petal.Length, iris)
+  x <- mold(cbind(Sepal.Length, Sepal.Width) ~ Petal.Length, iris)
 
   expect_is(x$outcomes, "data.frame")
   expect_equal(colnames(x$outcomes), c("Sepal.Length", "Sepal.Width"))
@@ -21,8 +21,8 @@ test_that("can prepare multivariate formulas", {
 
 test_that("factor predictors with no intercept are fully expanded", {
 
-  x <- prepare(Sepal.Length ~ Species, iris, intercept = TRUE)
-  xx <- prepare(Sepal.Length ~ Species, iris, intercept = FALSE)
+  x <- mold(Sepal.Length ~ Species, iris, intercept = TRUE)
+  xx <- mold(Sepal.Length ~ Species, iris, intercept = FALSE)
 
   expect_equal(
     colnames(x$predictors),
@@ -38,7 +38,7 @@ test_that("factor predictors with no intercept are fully expanded", {
 
 test_that("formula intercepts can be added", {
 
-  x <- prepare(
+  x <- mold(
     Species ~ Sepal.Length,
     iris,
     intercept = TRUE
@@ -53,7 +53,7 @@ test_that("formula intercepts can be added", {
 
 test_that("output type can be matrix", {
 
-  x <- prepare(
+  x <- mold(
     Species ~ Sepal.Length,
     iris,
     type = "matrix"
@@ -63,10 +63,10 @@ test_that("output type can be matrix", {
   expect_is(x$predictors, "matrix")
 })
 
-test_that("can prepare formulas with special terms", {
+test_that("can mold formulas with special terms", {
 
-  x <- prepare(Species ~ Sepal.Length:Sepal.Width + I(Sepal.Length^2), iris)
-  y <- prepare(Species ~ poly(Sepal.Length, degree = 2), iris)
+  x <- mold(Species ~ Sepal.Length:Sepal.Width + I(Sepal.Length^2), iris)
+  y <- mold(Species ~ poly(Sepal.Length, degree = 2), iris)
 
   expect_equal(
     colnames(x$predictors),
@@ -82,7 +82,7 @@ test_that("can prepare formulas with special terms", {
 test_that("formulas with non-existant columns are caught", {
 
   expect_error(
-    prepare(Species ~ y, iris),
+    mold(Species ~ y, iris),
     "object 'y' not found"
   )
 
@@ -93,7 +93,7 @@ test_that("global environment variables cannot be used", {
   expect_error(
     {
       y <- 1
-      prepare(Species ~ y, iris)
+      mold(Species ~ y, iris)
     },
     "object 'y' not found"
   )
@@ -103,23 +103,23 @@ test_that("global environment variables cannot be used", {
 test_that("cannot manually remove intercept in the formula itself", {
 
   expect_error(
-    prepare(Species ~ y + 0, iris),
+    mold(Species ~ y + 0, iris),
     "`formula` must not contain"
   )
 
   expect_error(
-    prepare(Species ~ y - 1, iris),
+    mold(Species ~ y - 1, iris),
     "`formula` must not contain"
   )
 
 })
 
 # ------------------------------------------------------------------------------
-context("test-prepare-xy")
+context("test-mold-xy")
 
-test_that("can use x-y prepare interface", {
+test_that("can use x-y mold interface", {
 
-  x <- prepare(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
   expect_is(x$outcomes, "tbl_df")
@@ -130,7 +130,7 @@ test_that("can use x-y prepare interface", {
 
 test_that("xy intercepts can be added", {
 
-  x <- prepare(
+  x <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris$Species,
     intercept = TRUE
@@ -141,7 +141,7 @@ test_that("xy intercepts can be added", {
 
 test_that("output type can be matrix", {
 
-  x <- prepare(
+  x <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris$Species,
     type = "matrix"
@@ -152,14 +152,13 @@ test_that("output type can be matrix", {
 })
 
 # ------------------------------------------------------------------------------
-context("test-prepare-recipes")
+context("test-mold-recipes")
 
 library(recipes)
-prepare <- hardhat::prepare
 
-test_that("can prepare recipes", {
+test_that("can mold recipes", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris
   )
@@ -173,9 +172,9 @@ test_that("can prepare recipes", {
   expect_error(recipes::juice(x$preprocessor))
 })
 
-test_that("can prepare recipes with intercepts", {
+test_that("can mold recipes with intercepts", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris,
     intercept = TRUE
@@ -184,9 +183,9 @@ test_that("can prepare recipes with intercepts", {
   expect_true("(Intercept)" %in% colnames(x$predictors))
 })
 
-test_that("can prepare recipes with matrix output", {
+test_that("can mold recipes with matrix output", {
 
-  x <- prepare(
+  x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris,
     type = "matrix"

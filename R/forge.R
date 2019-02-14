@@ -1,6 +1,6 @@
-#' Internal preprocessing of new data
+#' Forge prediction-ready data
 #'
-#' `preprocess()` applies the transformations requested by the `preprocessor`
+#' `forge()` applies the transformations requested by the `preprocessor`
 #' on a set of `new_data` to be used in predictions.
 #'
 #' If the outcome is present in `new_data`, it can optionally be processed
@@ -13,7 +13,7 @@
 #'
 #' @param preprocessor A valid `"preprocessor"`. The preprocessor that should
 #' be used here is the one in the output from the corresponding call
-#' to [prepare()].
+#' to [mold()].
 #'
 #' @param new_data A data frame or matrix to preprocess.
 #'
@@ -36,18 +36,18 @@
 #'  [recipes::bake()] with [recipes::all_outcomes()] specified.
 #'
 #' @export
-preprocess <- function(preprocessor, new_data, ...) {
-  UseMethod("preprocess")
+forge <- function(preprocessor, new_data, ...) {
+  UseMethod("forge")
 }
 
 #' @export
-preprocess.default <- function(preprocessor, new_data, ...) {
+forge.default <- function(preprocessor, new_data, ...) {
   abort("Unknown preprocessor.")
 }
 
-#' @rdname preprocess
+#' @rdname forge
 #' @export
-preprocess.default_preprocessor <- function(preprocessor, new_data, ...) {
+forge.default_preprocessor <- function(preprocessor, new_data, ...) {
 
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
@@ -64,9 +64,9 @@ preprocess.default_preprocessor <- function(preprocessor, new_data, ...) {
   preprocess_list(predictors)
 }
 
-#' @rdname preprocess
+#' @rdname forge
 #' @export
-preprocess.recipes_preprocessor <- function(preprocessor, new_data,
+forge.recipes_preprocessor <- function(preprocessor, new_data,
                                             outcome = FALSE, ...) {
 
   validate_recipes_available()
@@ -95,9 +95,9 @@ preprocess.recipes_preprocessor <- function(preprocessor, new_data,
   baked_list
 }
 
-#' @rdname preprocess
+#' @rdname forge
 #' @export
-preprocess.terms_preprocessor <- function(preprocessor, new_data,
+forge.terms_preprocessor <- function(preprocessor, new_data,
                                           outcome = FALSE, ...) {
 
   validate_is_new_data_like(new_data)
@@ -251,10 +251,10 @@ response_name <- function(terms_engine) {
   rlang::as_label(rlang::f_lhs(terms_engine))
 }
 
-# Is this a bad idea? We need it to preprocess() terms where
+# Is this a bad idea? We need it to forge() terms where
 # an inline function may have been used like poly(), but there
 # is no gurantee that the env above the global env is the same
-# as the one that was used in prepare()
+# as the one that was used in mold()
 alter_terms_environment <- function(terms_engine) {
   env_above_global_env <- rlang::env_parent(rlang::global_env())
   attr(terms_engine, ".Environment") <- env_above_global_env

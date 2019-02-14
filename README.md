@@ -58,19 +58,19 @@ develop new modeling packages that implement formula, data frame,
 matrix, and recipes interfaces with ease.
 
 There are a number of useful functions in hardhat, but two of the most
-important ones are `prepare()` and `preprocess()`.
+important ones are `mold()` and `forge()`.
 
-### `prepare()`
+### `mold()`
 
-`prepare()` readies input data for ingestion into a modeling function.
-It is to be called from the interface layer of your modeling package.
-For instance, if you have a top level function called
-`linear_regression()` that accepts input from the user, you would call
-`prepare()` inside of `linear_regression()`, before passing on the input
-to the actual implementation function, which should be separated from
-the top level interface and might be called `linear_regression_impl()`.
+`mold()` readies input data for ingestion into a modeling function. It
+is to be called from the interface layer of your modeling package. For
+instance, if you have a top level function called `linear_regression()`
+that accepts input from the user, you would call `mold()` inside of
+`linear_regression()`, before passing on the input to the actual
+implementation function, which should be separated from the top level
+interface and might be called `linear_regression_impl()`.
 
-If your modeling function has a formula interface, `prepare()` will call
+If your modeling function has a formula interface, `mold()` will call
 `model.frame()` and `model.matrix()` for you, storing important
 information such as the predictor factor levels and the class of each
 predictor and outcome column.
@@ -79,14 +79,14 @@ predictor and outcome column.
 iris_train <- iris[1:100,]
 iris_test <- iris[101:150,]
 
-processed <- prepare(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
+processed <- mold(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
 ```
 
-The return value of `prepare()` has three things. The `predictors`, the
+The return value of `mold()` has three things. The `predictors`, the
 `outcomes`, and a `preprocessor` that varies based on the interface you
-are using. Notice that the default behavior for `prepare()` is to *not*
-add an intercept column. This is completely controlled by the
-`intercept` argument and not by the formula itself.
+are using. Notice that the default behavior for `mold()` is to *not* add
+an intercept column. This is completely controlled by the `intercept`
+argument and not by the formula itself.
 
 ``` r
 processed$predictors
@@ -163,7 +163,7 @@ used.
 x <- iris_train[, c("Species", "Petal.Width")]
 y <- iris_train$Sepal.Length
 
-processed_xy <- prepare(x, y, intercept = TRUE)
+processed_xy <- mold(x, y, intercept = TRUE)
 
 processed_xy$predictors
 #> # A tibble: 100 x 3
@@ -204,14 +204,11 @@ on the recipe for you.
 ``` r
 suppressPackageStartupMessages(library(recipes))
 
-# Currently there is a defunct function in recipes called prepare()
-prepare <- hardhat::prepare
-
 rec <- recipe(Sepal.Length ~ Species + Petal.Width, iris_train) %>%
   step_log(Sepal.Length) %>%
   step_dummy(Species)
 
-processed_rec <- prepare(rec, iris_train)
+processed_rec <- mold(rec, iris_train)
 
 processed_rec$predictors
 #> # A tibble: 100 x 3
@@ -230,36 +227,36 @@ processed_rec$predictors
 #> # … with 90 more rows
 ```
 
-### `preprocess()`
+### `forge()`
 
-`preprocess()` takes `new_data` and applies the same preprocessing steps
-that happened to the data used in training the model. It is to be called
-from `predict()`, or potentially from a cross validation function where
-you will use `predict()` repeatedly to measure performance of different
+`forge()` takes `new_data` and applies the same preprocessing steps that
+happened to the data used in training the model. It is to be called from
+`predict()`, or potentially from a cross validation function where you
+will use `predict()` repeatedly to measure performance of different
 folds or different hyperparameters.
 
-Say you fit a model and called `prepare()` from your fitting function.
-When you return the model object, you should attach the `preprocessor`
-that you get with the output of `prepare()` onto the model object (using
-the model constructor, `new_base_model()`, makes this easier to do).
-Then when you call `predict()` on that model object along with
-`new_data`, you should call `preprocess()` inside of the `predict()`
-method with the stored `preprocessor` and the `new_data`.
+Say you fit a model and called `mold()` from your fitting function. When
+you return the model object, you should attach the `preprocessor` that
+you get with the output of `mold()` onto the model object (using the
+model constructor, `new_base_model()`, makes this easier to do). Then
+when you call `predict()` on that model object along with `new_data`,
+you should call `forge()` inside of the `predict()` method with the
+stored `preprocessor` and the `new_data`.
 
 ``` r
-processed_test <- preprocess(
+processed_test <- forge(
   preprocessor = processed$preprocessor, 
   new_data = iris_test,
   outcome = TRUE
 )
 ```
 
-`preprocess()` always returns a list with two things. The first is a
-tibble containing the preprocessed `predictors`. The second is
-optionally the preprocessed `outcomes` if you are performing cross
-validation and used a formula or recipes interface. Because we used the
-formula interface to generate the `processed` object, we could set
-`outcome = TRUE` above to also return the processed outcome column.
+`forge()` always returns a list with two things. The first is a tibble
+containing the preprocessed `predictors`. The second is optionally the
+preprocessed `outcomes` if you are performing cross validation and used
+a formula or recipes interface. Because we used the formula interface to
+generate the `processed` object, we could set `outcome = TRUE` above to
+also return the processed outcome column.
 
 ``` r
 processed_test$predictors
@@ -295,8 +292,8 @@ processed_test$outcomes
 #> # … with 40 more rows
 ```
 
-The nice thing about `preprocess()` is that the `preprocessor` remembers
-a lot of information about what happened at fit time, and keeps the user
+The nice thing about `forge()` is that the `preprocessor` remembers a
+lot of information about what happened at fit time, and keeps the user
 from shooting themselves in the foot at prediction time.
 
 For instance, each predictor used at fit time has to have the same class
@@ -309,7 +306,7 @@ iris_test_bad <- iris_test
 # a factor
 iris_test_bad$Species <- as.character(iris_test_bad$Species)
 
-preprocess(processed$preprocessor, iris_test_bad)
+forge(processed$preprocessor, iris_test_bad)
 #> Error: Some columns in `new_data` have an incorrect class:
 #> `Species`: `character` should be `factor`.
 ```
@@ -320,7 +317,7 @@ And each predictor column has to exist in `new_data`.
 # Removing species alltogether
 iris_test_bad$Species <- NULL
 
-preprocess(processed$preprocessor, iris_test_bad)
+forge(processed$preprocessor, iris_test_bad)
 #> Error: `new_data` is missing the following required predictors:
 #> Species
 ```
@@ -337,7 +334,7 @@ iris_test_bad$Species  <- factor(iris_test_bad$Species)
 levels(iris_test_bad$Species)
 #> [1] "new_level"  "setosa"     "versicolor" "virginica"
 
-processed_bad_test <- preprocess(processed$preprocessor, iris_test_bad)
+processed_bad_test <- forge(processed$preprocessor, iris_test_bad)
 #> Warning: The following factor levels are new for column, `Species`, and
 #> have been coerced to `NA`: "new_level".
 

@@ -4,7 +4,7 @@
 #' a number of different input types from the user. `standardize()` focuses
 #' on capturing the flexibility in the _outcome_.
 #'
-#' `standardize()` is called from [prepare()] when using an XY interface (i.e.
+#' `standardize()` is called from [mold()] when using an XY interface (i.e.
 #' a `y` argument was supplied).
 #'
 #' @param y The outcome. This can be:

@@ -20,12 +20,12 @@
 #'
 #' If `outcome = TRUE`, then the validation steps are performed on the known
 #' outcome column as well, and it is returned along with the predictors. If
-#' [prepare()] was called with the XY interface, then no preprocessing was done
+#' [mold()] was called with the XY interface, then no preprocessing was done
 #' to `y` and `outcome` cannot be set to `TRUE` (if a vector was passed as `y`
 #' during the fit, `shrink()` has no way of knowing what column in `new_data`
 #' corresponds to the outcome).
 #'
-#' `shrink()` is called by [preprocess()] before the actual processing is done.
+#' `shrink()` is called by [forge()] before the actual processing is done.
 #'
 #' @param preprocessor A `"preprocessor"`.
 #'
@@ -45,9 +45,9 @@
 #' train <- iris[1:100,]
 #' test <- iris[101:150,]
 #'
-#' # prepare() is run at model fit time
+#' # mold() is run at model fit time
 #' # and a terms preprocessor is recorded
-#' x <- prepare(log(Sepal.Width) ~ Species, train)
+#' x <- mold(log(Sepal.Width) ~ Species, train)
 #'
 #' # Pass that preprocessor to shrink(), along with new_data
 #' # to get a tibble of required predictors back
@@ -58,7 +58,7 @@
 #' shrink(x$preprocessor, test, outcome = TRUE)
 #'
 #' # shrink() validates that the classes are the same
-#' # as the ones used in prepare(). The below call
+#' # as the ones used in mold(). The below call
 #' # to shrink() will fail with an informative error.
 #' test2 <- test
 #' test2$Species <- as.character(test2$Species)
