@@ -79,9 +79,9 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
     outcome = outcome
   )
 
-  baked_list$predictors <- add_intercept_column(
+  baked_list$predictors <- maybe_add_intercept_column(
     x = baked_list$predictors,
-    add = preprocessor$intercept
+    intercept = preprocessor$intercept
   )
 
   baked_list
