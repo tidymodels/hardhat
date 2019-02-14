@@ -174,6 +174,84 @@ test_that("novel outcome levels are caught", {
 
 })
 
+test_that("missing predictor levels are added", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  # Missing "d"
+  new <- data.frame(
+    y = 1:3,
+    f = factor(letters[1:3])
+  )
+
+  # Missing "d" and "c"
+  new2 <- data.frame(
+    y = 1:2,
+    f = factor(letters[1:2])
+  )
+
+  x <- mold(y ~ f, dat)
+
+  expect_warning(
+    forge(x$preprocessor, new),
+    glue::glue(
+      "The following original factor levels are missing for column, ",
+      "'f', and have been restored: 'd'."
+    )
+  )
+
+  expect_warning(
+    forge(x$preprocessor, new2),
+    glue::glue(
+      "The following original factor levels are missing for column, ",
+      "'f', and have been restored: 'c', 'd'."
+    )
+  )
+
+})
+
+test_that("missing ordered factor levels are handled correctly", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = ordered(letters[1:4])
+  )
+
+  # Ordered - strictly wrong order
+  new <- data.frame(
+    y = 1:2,
+    f = ordered(letters[1:4], levels = rev(letters[1:4]))
+  )
+
+  # Ordered - missing levels
+  new2 <- data.frame(
+    y = 1:3,
+    f = ordered(letters[1:3], levels = rev(letters[1:3]))
+  )
+
+  x <- mold(y ~ f, dat)
+
+  expect_warning(
+    forge(x$preprocessor, new),
+    glue::glue(
+      "Column, 'f', is an ordered factor, ",
+      "but the levels in `new_data` are misordered and have been reordered."
+    )
+  )
+
+  expect_warning(
+    forge(x$preprocessor, new2),
+    glue::glue(
+      "The following original factor levels are missing for column, ",
+      "'f', and have been restored: 'd'."
+    )
+  )
+
+})
+
 test_that("original predictor and outcome classes are recorded", {
 
   x <- mold(log(Sepal.Length) ~ log(Sepal.Width), iris)

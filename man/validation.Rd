@@ -12,7 +12,6 @@
 \alias{validate_recipes_available}
 \alias{validate_prediction_size}
 \alias{validate_new_data_classes}
-\alias{check_new_data_factor_levels}
 \alias{validate_intercept}
 \alias{validate_formula_has_intercept}
 \title{Validation}
@@ -36,8 +35,6 @@ validate_recipes_available()
 validate_prediction_size(.pred, new_data)
 
 validate_new_data_classes(new_data, original_classes)
-
-check_new_data_factor_levels(predictor_levels, new_data)
 
 validate_intercept(intercept)
 

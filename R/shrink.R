@@ -80,7 +80,8 @@ shrink <- function(preprocessor, new_data, outcome = FALSE) {
   validate_new_data_classes(new_data, preprocessor$predictor_classes)
 
   original_predictor_levels <- preprocessor$predictor_levels
-  new_data <- check_new_data_factor_levels(original_predictor_levels, new_data)
+  new_data <- check_new_data_novel_levels(new_data, original_predictor_levels)
+  new_data <- check_new_data_level_recovery(new_data, original_predictor_levels)
 
   if (outcome) {
 
@@ -90,7 +91,8 @@ shrink <- function(preprocessor, new_data, outcome = FALSE) {
     validate_new_data_classes(new_data, preprocessor$outcome_classes)
 
     original_outcome_levels <- preprocessor$outcome_levels
-    new_data <- check_new_data_factor_levels(original_outcome_levels, new_data)
+    new_data <- check_new_data_novel_levels(new_data, original_outcome_levels)
+    new_data <- check_new_data_level_recovery(new_data, original_outcome_levels)
 
     cols <- c(outcome_cols, cols)
   }

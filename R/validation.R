@@ -212,44 +212,6 @@ validate_new_data_classes <- function(new_data, original_classes) {
 }
 
 #' @rdname validation
-check_new_data_factor_levels <- function(predictor_levels, new_data) {
-
-  fct_cols <- names(predictor_levels)
-
-  for(col in fct_cols) {
-
-    lvls <- predictor_levels[[col]]
-    new_col <- new_data[[col]]
-
-    # If the new_data column is not a factor (or doesnt exist),
-    # move on and let the next steps handle any appropriate
-    # erroring
-    if (!is.factor(new_col)) {
-      next
-    }
-
-    new_lvls <- levels(new_col)
-    unseen_lvls <- setdiff(new_lvls, lvls)
-
-    if (length(unseen_lvls) > 0) {
-
-      unseen_lvls <- glue::glue_collapse(dQuote(unseen_lvls), ", ")
-
-      rlang::warn(glue(
-        "The following factor levels are new for column, `{col}`, ",
-        "and have been coerced to `NA`: {unseen_lvls}."
-      ))
-
-      seen_lvls <- intersect(new_lvls, lvls)
-      new_data[[col]] <- factor(new_col, levels = seen_lvls)
-    }
-
-  }
-
-  new_data
-}
-
-#' @rdname validation
 validate_intercept <- function(intercept) {
 
   if (!is.logical(intercept)) {
