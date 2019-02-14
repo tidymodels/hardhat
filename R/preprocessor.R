@@ -182,22 +182,23 @@ is_preprocessor <- function(x) {
 #' The preprocessor function returned from `new_default_preprocessor_engine()`
 #' will only do one thing:
 #'
-#' - Call `add_intercept_column()` with `intercept` to add an intercept to
-#' `new_data` if required.
+#' - Call `add_intercept_column()` if required to add an intercept to
+#' `new_data`.
 #'
 #' The returned function that `new_default_preprocessor_engine()` creates
 #' has 2 arguments:
 #'
 #' - `new_data`: The data to preprocess.
 #'
-#' - `intercept`: A logical. Passed on to `add_intercept_column()`.
+#' - `intercept`: A logical. Determines whether or not an
+#' intercept will be added.
 #'
 #' @keywords internal
 new_default_preprocessor_engine <- function() {
 
   process <- function(new_data, intercept) {
     new_data <- tibble::as_tibble(new_data)
-    new_data <- add_intercept_column(new_data, intercept)
+    new_data <- maybe_add_intercept_column(new_data, intercept)
     new_data
   }
 

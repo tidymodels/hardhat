@@ -184,7 +184,7 @@ mold.recipe <- function(x, data, intercept = FALSE, ...) {
     outcome_classes = all_data_classes$outcome_classes
   )
 
-  predictors <- add_intercept_column(predictors, intercept)
+  predictors <- maybe_add_intercept_column(predictors, intercept)
 
   mold_list(predictors, outcomes, preprocessor)
 }

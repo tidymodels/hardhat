@@ -20,15 +20,16 @@ and testing data sets.
 The preprocessor function returned from \code{new_default_preprocessor_engine()}
 will only do one thing:
 \itemize{
-\item Call \code{add_intercept_column()} with \code{intercept} to add an intercept to
-\code{new_data} if required.
+\item Call \code{add_intercept_column()} if required to add an intercept to
+\code{new_data}.
 }
 
 The returned function that \code{new_default_preprocessor_engine()} creates
 has 2 arguments:
 \itemize{
 \item \code{new_data}: The data to preprocess.
-\item \code{intercept}: A logical. Passed on to \code{add_intercept_column()}.
+\item \code{intercept}: A logical. Determines whether or not an
+intercept will be added.
 }
 }
 \keyword{internal}

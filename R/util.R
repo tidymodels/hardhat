@@ -110,30 +110,6 @@ remove_formula_intercept <- function(formula, intercept) {
   )
 }
 
-add_intercept_column <- function(x, add) {
-  if (add == FALSE) {
-    return(x)
-  }
-
-  # mold() has already been run
-  if ("(Intercept)" %in% colnames(x)) {
-    return(x)
-  }
-
-  if (is.matrix(x)) {
-    n <- nrow(x)
-    dim_names <- list(NULL, "(Intercept)")
-    new_col <- matrix(1L, nrow = n, dimnames = dim_names)
-    x <- cbind(new_col, x)
-  }
-
-  if (is.data.frame(x)) {
-    x <- tibble::add_column(x, `(Intercept)` = 1L, .before = 1L)
-  }
-
-  x
-}
-
 has_unique_names <- function(x) {
   nms <- names(x)
 
