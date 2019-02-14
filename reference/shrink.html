@@ -41,7 +41,11 @@ as the class used during training.
 Checks that all new_data factor columns don't have any new levels
 when compared with the original data used in training. If there are new
 levels, they are replaced with NA values and a warning is
-thrown.
+issued.
+Checks that all new_data factor columns aren't missing any factor levels
+when compared with the original data used in training. If there are missing
+levels (or misordered levels for ordered factors), then they are restored
+and a warning is issued.
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -125,7 +129,11 @@ as the class used during training.</p></li>
 <li><p>Checks that all <code>new_data</code> factor columns don't have any <em>new</em> levels
 when compared with the original data used in training. If there are new
 levels, they are replaced with <code>NA</code> values and a warning is
-thrown.</p></li>
+issued.</p></li>
+<li><p>Checks that all <code>new_data</code> factor columns aren't missing any factor levels
+when compared with the original data used in training. If there are missing
+levels (or misordered levels for ordered factors), then they are restored
+and a warning is issued.</p></li>
 </ul>
     
     </div>

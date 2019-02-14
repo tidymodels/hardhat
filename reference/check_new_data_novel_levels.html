@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Validation — validation • hardhat</title>
+<title>Check for new factor levels — check_new_data_novel_levels • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="Validation — validation" />
+<meta property="og:title" content="Check for new factor levels — check_new_data_novel_levels" />
 
-<meta property="og:description" content="Various input validation helpers. These should not be exported." />
+<meta property="og:description" content="A factor column of new_data might have new factor levels when compared
+to the original levels used in training. These new levels are undefined, and
+are caught when preprocessing the new_data and are converted to NA with
+a warning." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -99,55 +102,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Validation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/validation.R'><code>R/validation.R</code></a></small>
-    <div class="hidden name"><code>validation.Rd</code></div>
+    <h1>Check for new factor levels</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/check.R'><code>R/check.R</code></a></small>
+    <div class="hidden name"><code>check_new_data_novel_levels.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Various input validation helpers. These should not be exported.</p>
+    <p>A factor column of <code>new_data</code> might have <em>new</em> factor levels when compared
+to the original levels used in training. These new levels are undefined, and
+are caught when preprocessing the <code>new_data</code> and are converted to <code>NA</code> with
+a warning.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>validate_is</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>.expected</span>, <span class='no'>.x_nm</span>, <span class='kw'>.note</span> <span class='kw'>=</span> <span class='st'>""</span>)
-
-<span class='fu'>validate_has_unique_names</span>(<span class='no'>x</span>, <span class='no'>x_nm</span>)
-
-<span class='fu'>validate_has_unique_column_names</span>(<span class='no'>x</span>, <span class='no'>x_nm</span>)
-
-<span class='fu'>validate_x_has_numeric_cols</span>(<span class='no'>x</span>)
-
-<span class='fu'>validate_y_univariate</span>(<span class='no'>y</span>)
-
-<span class='fu'>validate_predictors</span>(<span class='no'>new_data</span>, <span class='no'>predictors</span>)
-
-<span class='fu'>validate_outcomes</span>(<span class='no'>new_data</span>, <span class='no'>outcomes</span>)
-
-<span class='fu'>validate_recipes_available</span>()
-
-<span class='fu'>validate_prediction_size</span>(<span class='no'>.pred</span>, <span class='no'>new_data</span>)
-
-<span class='fu'>validate_new_data_classes</span>(<span class='no'>new_data</span>, <span class='no'>original_classes</span>)
-
-<span class='fu'>validate_intercept</span>(<span class='no'>intercept</span>)
-
-<span class='fu'>validate_formula_has_intercept</span>(<span class='no'>formula</span>)</pre>
-        
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>@keywords internal</code> is used to generate documentation even though the
-function is not exposed to the user. This is helpful for developers as it
-allows you to document your internal functions.</p>
+    <pre class="usage"><span class='fu'>check_new_data_novel_levels</span>(<span class='no'>new_data</span>, <span class='no'>original_levels</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>new_data</th>
+      <td><p>A data frame of new predictors and maybe outcomes.</p></td>
+    </tr>
+    <tr>
+      <th>original_levels</th>
+      <td><p>A named list of the original levels of either the
+outcomes or predictors. These are stored in the preprocessor slots
+<code>$predictor_levels</code> and <code>$outcome_levels</code>.</p></td>
+    </tr>
+    </table>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#details">Details</a></li>
-          </ul>
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
   </div>
 </div>
