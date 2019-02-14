@@ -27,7 +27,7 @@ check_new_data_level_recovery <- function(new_data, original_levels) {
     .ordered <- is.ordered(new_nominal)
 
     new_levels <- levels(new_nominal)
-    old_levels <- original_levels[[required_column_names]]
+    old_levels <- original_levels[[required_column_name]]
 
     # If its not an ordered factor, then the order isn't important
     # for uniqueness, so we sort before checking if identical()
@@ -96,37 +96,41 @@ check_new_data_level_recovery <- function(new_data, original_levels) {
 #' @keywords internal
 check_new_data_novel_levels <- function(new_data, original_levels) {
 
-  fct_cols <- names(original_levels)
+  required_column_names <- names(original_levels)
 
-  for(col in fct_cols) {
+  for(required_column_name in required_column_names) {
 
-    lvls <- original_levels[[col]]
-    new_col <- new_data[[col]]
+    new_nominal <- new_data[[required_column_name]]
 
-    # If the new_data column is not a factor (or doesnt exist),
-    # move on and let the next steps handle any appropriate
-    # erroring
-    if (!is.factor(new_col)) {
-      next
-    }
+    new_levels <- levels(new_nominal)
+    old_levels <- original_levels[[required_column_name]]
 
-    new_lvls <- levels(new_col)
-    unseen_lvls <- setdiff(new_lvls, lvls)
+    unseen_levels <- setdiff(new_levels, old_levels)
 
-    if (length(unseen_lvls) > 0) {
+    if (length(unseen_levels) > 0) {
 
-      unseen_lvls <- glue::glue_collapse(
-        glue::single_quote(unseen_lvls),
+      unseen_levels <- glue::glue_collapse(
+        glue::single_quote(unseen_levels),
         sep = ", "
       )
 
       rlang::warn(glue(
-        "The following factor levels are new for column, `{col}`, ",
-        "and have been coerced to `NA`: {unseen_lvls}."
+        "The following factor levels are new ",
+        "for column, `{required_column_name}`, ",
+        "and have been coerced to `NA`: {unseen_levels}."
       ))
 
-      seen_lvls <- intersect(new_lvls, lvls)
-      new_data[[col]] <- factor(new_col, levels = seen_lvls)
+      # In this order so ordered factors are correct
+      # Order is determined by `new_levels`, which is
+      # what we want in this check
+      seen_lvls <- intersect(new_levels, old_levels)
+
+      new_data[[required_column_name]] <- factor(
+        x = new_nominal,
+        levels = seen_lvls,
+        ordered = is.ordered(new_nominal)
+      )
+
     }
 
   }
