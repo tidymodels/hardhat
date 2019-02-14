@@ -14,7 +14,12 @@
 #' - Checks that all `new_data` factor columns don't have any _new_ levels
 #' when compared with the original data used in training. If there are new
 #' levels, they are replaced with `NA` values and a warning is
-#' thrown.
+#' issued.
+#'
+#' - Checks that all `new_data` factor columns aren't missing any factor levels
+#' when compared with the original data used in training. If there are missing
+#' levels (or misordered levels for ordered factors), then they are restored
+#' and a warning is issued.
 #'
 #' @details
 #'
@@ -80,7 +85,8 @@ shrink <- function(preprocessor, new_data, outcome = FALSE) {
   validate_new_data_classes(new_data, preprocessor$predictor_classes)
 
   original_predictor_levels <- preprocessor$predictor_levels
-  new_data <- check_new_data_factor_levels(original_predictor_levels, new_data)
+  new_data <- check_new_data_novel_levels(new_data, original_predictor_levels)
+  new_data <- check_new_data_level_recovery(new_data, original_predictor_levels)
 
   if (outcome) {
 
@@ -90,7 +96,8 @@ shrink <- function(preprocessor, new_data, outcome = FALSE) {
     validate_new_data_classes(new_data, preprocessor$outcome_classes)
 
     original_outcome_levels <- preprocessor$outcome_levels
-    new_data <- check_new_data_factor_levels(original_outcome_levels, new_data)
+    new_data <- check_new_data_novel_levels(new_data, original_outcome_levels)
+    new_data <- check_new_data_level_recovery(new_data, original_outcome_levels)
 
     cols <- c(outcome_cols, cols)
   }

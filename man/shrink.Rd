@@ -30,7 +30,11 @@ as the class used during training.
 \item Checks that all \code{new_data} factor columns don't have any \emph{new} levels
 when compared with the original data used in training. If there are new
 levels, they are replaced with \code{NA} values and a warning is
-thrown.
+issued.
+\item Checks that all \code{new_data} factor columns aren't missing any factor levels
+when compared with the original data used in training. If there are missing
+levels (or misordered levels for ordered factors), then they are restored
+and a warning is issued.
 }
 }
 \details{
