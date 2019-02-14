@@ -37,18 +37,23 @@ include an intercept in the molded predictors.}
 \item{formula}{A formula specifying the terms in the format of
 \code{outcome ~ predictors}.}
 
-\item{data}{A data frame to mold.}
+\item{data}{A data frame containing the predictors and the outcomes.}
 }
 \value{
 A named list containing:
 \itemize{
 \item \code{predictors}: An object of class \code{type} containing the molded predictors
 to be used in the model.
-\item \code{outcome}: A tibble. If \code{y} was supplied, it is returned after a call to
-\code{standardize()} is made. If a formula engine was used, this is a data frame
-that is the result of extracting the outcome columns from \code{model.frame()}.
-If a recipe was used, this is a data.frame that is the result of calling
-\code{\link[recipes:juice]{recipes::juice()}} with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}} specified.
+\item \code{outcome}: A tibble.
+\itemize{
+\item If \code{y} was supplied, it is returned after a call to
+\code{standardize()} is made.
+\item If a formula engine was used, this is a data frame
+that is the result of extracting the molded outcome columns from
+\code{model.frame()}.
+\item If a recipe was used, this is a data.frame that is the result of
+calling \code{\link[recipes:juice]{recipes::juice()}} with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}} specified.
+}
 \item \code{preprocessor}: A \code{"preprocessor"} object for use when making predictions.
 }
 }
@@ -56,10 +61,12 @@ If a recipe was used, this is a data.frame that is the result of calling
 \code{mold()} applies the appropriate processing steps required to get training
 data ready to be fed into a model.
 \itemize{
-\item For a formula method, this applies \code{model.frame()} and \code{model.matrix()}.
+\item For a formula, this applies \code{\link[stats:model.frame]{stats::model.frame()}} and
+\code{\link[stats:model.matrix]{stats::model.matrix()}}.
 \item For a recipe, this performs a call to both \code{\link[recipes:prep]{recipes::prep()}}
 and \code{\link[recipes:juice]{recipes::juice()}}.
-\item For a data frame or matrix, this uses the \code{new_default_preprocessor()}s
-which converts the input to \code{type} and adds an intercept column if requested.
+\item For a data frame or matrix, this uses the \code{new_default_preprocessor()}
+which converts the input to an object of class \code{type} and adds an
+intercept column if requested.
 }
 }

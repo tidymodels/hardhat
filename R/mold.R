@@ -5,13 +5,15 @@
 #' `mold()` applies the appropriate processing steps required to get training
 #' data ready to be fed into a model.
 #'
-#' * For a formula method, this applies `model.frame()` and `model.matrix()`.
+#' * For a formula, this applies [stats::model.frame()] and
+#' [stats::model.matrix()].
 #'
 #' * For a recipe, this performs a call to both [recipes::prep()]
 #' and [recipes::juice()].
 #'
-#' * For a data frame or matrix, this uses the `new_default_preprocessor()`s
-#' which converts the input to `type` and adds an intercept column if requested.
+#' * For a data frame or matrix, this uses the `new_default_preprocessor()`
+#' which converts the input to an object of class `type` and adds an
+#' intercept column if requested.
 #'
 #' @param x A data frame, matrix, or [recipes::recipe()]. If this is a
 #' data.frame or matrix, it should contain the predictors.
@@ -27,7 +29,7 @@
 #' @param type A single character. One of `"tibble"`, `"data.frame"`, or
 #' `"matrix"` specifying the result type of the predictors.
 #'
-#' @param data A data frame to mold.
+#' @param data A data frame containing the predictors and the outcomes.
 #'
 #' @param ... Currently unused.
 #'
@@ -38,11 +40,17 @@
 #'  - `predictors`: An object of class `type` containing the molded predictors
 #'  to be used in the model.
 #'
-#'  - `outcome`: A tibble. If `y` was supplied, it is returned after a call to
-#'  `standardize()` is made. If a formula engine was used, this is a data frame
-#'  that is the result of extracting the outcome columns from `model.frame()`.
-#'  If a recipe was used, this is a data.frame that is the result of calling
-#'  [recipes::juice()] with [recipes::all_outcomes()] specified.
+#'  - `outcome`: A tibble.
+#'
+#'     - If `y` was supplied, it is returned after a call to
+#'     `standardize()` is made.
+#'
+#'     - If a formula engine was used, this is a data frame
+#'     that is the result of extracting the molded outcome columns from
+#'     `model.frame()`.
+#'
+#'     - If a recipe was used, this is a data.frame that is the result of
+#'     calling [recipes::juice()] with [recipes::all_outcomes()] specified.
 #'
 #'  - `preprocessor`: A `"preprocessor"` object for use when making predictions.
 #'
