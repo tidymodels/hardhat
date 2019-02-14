@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a default preprocessor engine — new_default_preprocessor_engine • hardhat</title>
+<title>Forge prediction-ready data — forge • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,16 +30,10 @@
 
 
 
-<meta property="og:title" content="Create a default preprocessor engine — new_default_preprocessor_engine" />
+<meta property="og:title" content="Forge prediction-ready data — forge" />
 
-<meta property="og:description" content="A default preprocessor engine is a function that performs some basic
-preprocessing on new_data to mold it for ingestion into a model. To
-control how the engine preprocesses new_data the intercept and type
-arguments can be set, which are passed down to the created engine function.
-A default preprocessor engine is used in matrix and data frame methods of a
-model (as opposed to a recipe or formula method which performs
-preprocessing for you). This preprocessing is performed on both the training
-and testing data sets." />
+<meta property="og:description" content="forge() applies the transformations requested by the preprocessor
+on a set of new_data to be used in predictions." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,47 +100,85 @@ and testing data sets." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a default preprocessor engine</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/preprocessor.R'><code>R/preprocessor.R</code></a></small>
-    <div class="hidden name"><code>new_default_preprocessor_engine.Rd</code></div>
+    <h1>Forge prediction-ready data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/forge.R'><code>R/forge.R</code></a></small>
+    <div class="hidden name"><code>forge.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>A default preprocessor engine is a function that performs some basic
-preprocessing on <code>new_data</code> to mold it for ingestion into a model. To
-control how the engine preprocesses <code>new_data</code> the <code>intercept</code> and <code>type</code>
-arguments can be set, which are passed down to the created engine function.
-A default preprocessor engine is used in matrix and data frame methods of a
-model (as opposed to a recipe or formula method which performs
-preprocessing for you). This preprocessing is performed on both the training
-and testing data sets.</p>
+    <p><code>forge()</code> applies the transformations requested by the <code>preprocessor</code>
+on a set of <code>new_data</code> to be used in predictions.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>new_default_preprocessor_engine</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for default_preprocessor</span>
+<span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for recipes_preprocessor</span>
+<span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>,
+  <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for terms_preprocessor</span>
+<span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>,
+  <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>preprocessor</th>
+      <td><p>A valid <code>"preprocessor"</code>. The preprocessor that should
+be used here is the one in the output from the corresponding call
+to <code><a href='mold.html'>mold()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>new_data</th>
+      <td><p>A data frame or matrix to preprocess.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not currently used.</p></td>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <td><p>A logical. Should the outcome be processed and returned
+as well?</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A named list with elements:</p><ul>
+<li><p><code>predictors</code>: An object of class <code>type</code> containing the preprocessed
+<code>new_data</code> predictors.</p></li>
+<li><p><code>outcome</code>: If <code>outcome = TRUE</code>, the outcome is returned here, otherwise
+<code>NULL</code>. If a formula engine was used, this is a data frame that is the
+result of extracting the outcome columns from <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code>. If a recipe
+was used, this is a data.frame that is the result of calling
+<code><a href='https://www.rdocumentation.org/packages/recipes/topics/bake'>recipes::bake()</a></code> with <code><a href='https://www.rdocumentation.org/packages/recipes/topics/has_role'>recipes::all_outcomes()</a></code> specified.</p></li>
+</ul>
+
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The preprocessor function returned from <code>new_default_preprocessor_engine()</code>
-will do two things:</p><ul>
-<li><p>Call <code><a href='retype.html'>retype()</a></code> with <code>type</code> to coerce <code>new_data</code> to a specific type.</p></li>
-<li><p>Call <code>add_intercept_column()</code> with <code>intercept</code> to add an intercept to
-<code>new_data</code> if required.</p></li>
-</ul>
-    <p>The returned function that <code>new_default_preprocessor_engine()</code> creates
-has 3 arguments:</p><ul>
-<li><p><code>new_data</code>: The data to preprocess.</p></li>
-<li><p><code>intercept</code>: A logical. Passed on to <code>add_intercept_column()</code>.</p></li>
-<li><p><code>type</code>: A single character. Passed on to <code><a href='retype.html'>retype()</a></code>.</p></li>
-</ul>
+    <p>If the outcome is present in <code>new_data</code>, it can optionally be processed
+and returned in the <code>outcome</code> slot of the returned list. This is only
+applicable for the formula and recipes engines, but is very useful when
+doing cross validation where you need to preprocess the outcome of a test
+set before computing performance.</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
           </ul>
 

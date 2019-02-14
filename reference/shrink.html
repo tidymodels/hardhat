@@ -160,11 +160,11 @@ outcomes).</p>
 
     <p>If <code>outcome = TRUE</code>, then the validation steps are performed on the known
 outcome column as well, and it is returned along with the predictors. If
-<code><a href='prepare.html'>prepare()</a></code> was called with the XY interface, then no preprocessing was done
+<code><a href='mold.html'>mold()</a></code> was called with the XY interface, then no preprocessing was done
 to <code>y</code> and <code>outcome</code> cannot be set to <code>TRUE</code> (if a vector was passed as <code>y</code>
 during the fit, <code>shrink()</code> has no way of knowing what column in <code>new_data</code>
 corresponds to the outcome).</p>
-<p><code>shrink()</code> is called by <code><a href='preprocess.html'>preprocess()</a></code> before the actual processing is done.</p>
+<p><code>shrink()</code> is called by <code><a href='forge.html'>forge()</a></code> before the actual processing is done.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -172,9 +172,9 @@ corresponds to the outcome).</p>
 <span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
 <span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>101</span>:<span class='fl'>150</span>,]
 
-<span class='co'># prepare() is run at model fit time</span>
+<span class='co'># mold() is run at model fit time</span>
 <span class='co'># and a terms preprocessor is recorded</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='prepare.html'>prepare</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
 
 <span class='co'># Pass that preprocessor to shrink(), along with new_data</span>
 <span class='co'># to get a tibble of required predictors back</span>
@@ -209,7 +209,7 @@ corresponds to the outcome).</p>
 #&gt; 10         3.6 virginica
 #&gt; # … with 40 more rows</div><div class='input'>
 <span class='co'># shrink() validates that the classes are the same</span>
-<span class='co'># as the ones used in prepare(). The below call</span>
+<span class='co'># as the ones used in mold(). The below call</span>
 <span class='co'># to shrink() will fail with an informative error.</span>
 <span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>
 <span class='no'>test2</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>test2</span>$<span class='no'>Species</span>)</div><span class='co'># NOT RUN {</span>
