@@ -116,7 +116,8 @@ new_terms_preprocessor <- function(engine,
                                    predictor_levels = NULL,
                                    outcome_levels = NULL,
                                    predictor_classes = NULL,
-                                   outcome_classes = NULL) {
+                                   outcome_classes = NULL,
+                                   indicators = TRUE) {
 
   new_preprocessor(
     engine = engine,
@@ -128,6 +129,7 @@ new_terms_preprocessor <- function(engine,
     outcome_levels = outcome_levels,
     predictor_classes = predictor_classes,
     outcome_classes = outcome_classes,
+    indicators = indicators,
     subclass = "terms_preprocessor"
   )
 

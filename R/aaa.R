@@ -13,4 +13,5 @@ NULL
 #' @importFrom stats .getXlevels
 #' @importFrom stats lm.fit
 #' @importFrom stats get_all_vars
+#' @importFrom stats terms
 NULL

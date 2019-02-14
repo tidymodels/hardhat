@@ -16,6 +16,23 @@ test_that("simple forge works", {
   )
 })
 
+test_that("can forge new data without expanding factors into dummies", {
+
+  x <- mold(Sepal.Length ~ Species, iris, indicators = FALSE)
+  xx <- forge(x$preprocessor, iris)
+
+  expect_equal(
+    colnames(xx$predictors),
+    "Species"
+  )
+
+  expect_is(
+    xx$predictors$Species,
+    "factor"
+  )
+
+})
+
 test_that("asking for the outcome works", {
   x <- mold(Species ~ Sepal.Length, iris)
   xx <- forge(x$preprocessor, iris, outcome = TRUE)

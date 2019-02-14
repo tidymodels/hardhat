@@ -6,7 +6,7 @@
 #' data ready to be fed into a model.
 #'
 #' * For a formula, this applies [stats::model.frame()] and
-#' [stats::model.matrix()].
+#' possibly [stats::model.matrix()].
 #'
 #' * For a recipe, this performs a call to both [recipes::prep()]
 #' and [recipes::juice()].
@@ -30,6 +30,11 @@
 #' `"matrix"` specifying the result type of the predictors.
 #'
 #' @param data A data frame containing the predictors and the outcomes.
+#'
+#' @param indicators For use with the formula interface. Should factors and
+#' interactions be expanded (In other words, should `model.matrix()` be run)? If
+#' `FALSE`, factor columns are returned without being expanded into dummy
+#' variables and a warning is thrown if any interactions are detected.
 #'
 #' @param ... Currently unused.
 #'
@@ -68,7 +73,7 @@ mold.default <- function(x, ...) {
 #' @rdname mold
 #' @export
 mold.data.frame <- function(x, y, intercept = FALSE,
-                               type = "tibble", ...) {
+                            type = "tibble", ...) {
 
   engine <- new_default_preprocessor_engine()
 
@@ -93,7 +98,7 @@ mold.data.frame <- function(x, y, intercept = FALSE,
 #' @rdname mold
 #' @export
 mold.matrix <- function(x, y, intercept = FALSE,
-                           type = "tibble", ...) {
+                        type = "tibble", ...) {
 
   engine <- new_default_preprocessor_engine()
 
@@ -118,24 +123,16 @@ mold.matrix <- function(x, y, intercept = FALSE,
 #' @rdname mold
 #' @export
 mold.formula <- function(formula, data, intercept = FALSE,
-                            type = "tibble", ...) {
+                         type = "tibble", indicators = TRUE, ...) {
 
   validate_formula_has_intercept(formula)
 
   formula <- remove_formula_intercept(formula, intercept)
   formula <- alter_formula_environment(formula)
 
-  framed <- rlang::with_options(
-    stats::model.frame(formula, data = data),
-    na.action = "na.pass"
-  )
+  framed <- model_frame(formula, data)
 
-  predictors <- rlang::with_options(
-    model.matrix(formula, framed),
-    na.action = "na.pass"
-  )
-
-  predictors <- strip_model_matrix(predictors)
+  predictors <- extract_predictors(formula, framed, indicators)
 
   predictors <- retype(predictors, type)
 
@@ -158,7 +155,8 @@ mold.formula <- function(formula, data, intercept = FALSE,
     predictor_levels = get_levels(original_predictors),
     outcome_levels = get_levels(original_outcomes),
     predictor_classes = get_data_classes(original_predictors),
-    outcome_classes = get_data_classes(original_outcomes)
+    outcome_classes = get_data_classes(original_outcomes),
+    indicators = indicators
   )
 
   mold_list(predictors, outcomes, preprocessor)
@@ -167,7 +165,7 @@ mold.formula <- function(formula, data, intercept = FALSE,
 #' @rdname mold
 #' @export
 mold.recipe <- function(x, data, intercept = FALSE,
-                           type = "tibble", ...) {
+                        type = "tibble", ...) {
 
   validate_recipes_available()
 
@@ -229,12 +227,6 @@ alter_formula_environment <- function(formula) {
   )
 }
 
-strip_model_matrix <- function(x) {
-  attr(x, "assign") <- NULL
-  attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
-  x
-}
-
 get_original_recipe_levels <- function(x, rec) {
 
   roles <- rec$var_info$role
@@ -259,4 +251,52 @@ get_original_recipe_data_classes <- function(x, rec) {
     outcome_classes = get_data_classes(x[, original_outcomes, drop = FALSE])
   )
 
+}
+
+extract_predictors <- function(formula, frame, indicators) {
+
+  if (indicators) {
+    extract_predictors_with_model_matrix(formula, frame)
+  }
+  else {
+    check_for_interactions(formula)
+    extract_predictors_from_frame(formula, frame)
+  }
+
+}
+
+extract_predictors_with_model_matrix <- function(formula, frame) {
+
+  predictors <- rlang::with_options(
+    model.matrix(formula, frame),
+    na.action = "na.pass"
+  )
+
+  predictors <- strip_model_matrix(predictors)
+
+  predictors
+}
+
+strip_model_matrix <- function(x) {
+  attr(x, "assign") <- NULL
+  attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
+  x
+}
+
+
+check_for_interactions <- function(formula) {
+
+  formula_chr <- rlang::as_label(formula)
+
+  has_interactions <- grepl(":", formula_chr)
+
+  if (has_interactions) {
+    rlang::warn(glue::glue(
+      "Interaction terms have been detected in `formula`. ",
+      "These are not expanded when `indicators = FALSE`, but the individual ",
+      "terms will be included in the output."
+    ))
+  }
+
+  invisible(formula)
 }

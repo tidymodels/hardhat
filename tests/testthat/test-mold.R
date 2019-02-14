@@ -36,6 +36,26 @@ test_that("factor predictors with no intercept are fully expanded", {
 
 })
 
+test_that("can mold and not expand dummies", {
+
+  x <- mold(Sepal.Length ~ Species, iris, indicators = FALSE)
+
+  expect_equal(colnames(x$predictors), "Species")
+  expect_is(x$predictors$Species, "factor")
+  expect_equal(x$preprocessor$indicators, FALSE)
+})
+
+test_that("warnings are thrown if `indicator = FALSE` and interactions exist", {
+
+  expect_warning(
+    x <- mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
+    "Interaction terms have been detected"
+  )
+
+  expect_equal(colnames(x$predictors), c("Species", "Sepal.Width"))
+  expect_equal(x$preprocessor$indicators, FALSE)
+})
+
 test_that("formula intercepts can be added", {
 
   x <- mold(

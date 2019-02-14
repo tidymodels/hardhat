@@ -61,7 +61,7 @@ forge.default_preprocessor <- function(preprocessor, new_data, ...) {
     preprocessor$type
   )
 
-  preprocess_list(predictors)
+  forge_list(predictors)
 }
 
 #' @rdname forge
@@ -118,7 +118,7 @@ forge.terms_preprocessor <- function(preprocessor, new_data,
 
 # ------------------------------------------------------------------------------
 
-preprocess_list <- function(predictors, outcomes = NULL) {
+forge_list <- function(predictors, outcomes = NULL) {
   list(
     predictors = predictors,
     outcomes = outcomes
@@ -153,7 +153,7 @@ bake_with_outcome <- function(preprocessor, new_data) {
   predictors <- preprocessed_new_data[, processed_predictor_nms, drop = FALSE]
   outcomes <- preprocessed_new_data[, processed_outcome_nms, drop = FALSE]
 
-  preprocess_list(
+  forge_list(
     predictors = predictors,
     outcomes = outcomes
   )
@@ -169,7 +169,7 @@ bake_without_outcome <- function(preprocessor, new_data) {
     all_predictors()
   )
 
-  preprocess_list(
+  forge_list(
     predictors = predictors
   )
 }
@@ -193,13 +193,13 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
 
-  frame <- preprocess_model_frame(preprocessor, new_data)
+  frame <- forge_model_frame(preprocessor, new_data)
 
   outcomes <- extract_outcomes_from_frame(engine, frame)
 
-  predictors <- preprocess_model_matrix(preprocessor, frame)
+  predictors <- extract_predictors(engine, frame, preprocessor$indicators)
 
-  preprocess_list(predictors, outcomes)
+  forge_list(predictors, outcomes)
 }
 
 bake_terms_without_outcome <- function(preprocessor, new_data) {
@@ -209,41 +209,23 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
   # Don't attempt to include Y in the model.frame()
   preprocessor$engine <- delete_response(preprocessor$engine)
 
-  frame <- preprocess_model_frame(preprocessor, new_data)
-  predictors <- preprocess_model_matrix(preprocessor, frame)
+  frame <- forge_model_frame(preprocessor, new_data)
 
-  preprocess_list(predictors)
+  predictors <- extract_predictors(terms(frame), frame, preprocessor$indicators)
+
+  forge_list(predictors)
 }
 
-preprocess_model_frame <- function(preprocessor, new_data) {
+forge_model_frame <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
   original_predictor_levels <- preprocessor$predictor_levels
 
   # - Factors with new levels have been coerced to NA by shrink()
   # (this is so model.frame(xlev) doesnt error out on new levels)
-  # - Preprocessing should _never_ removes rows
-  # with incomplete data. Setting the na.action
-  # to na.pass will retain the NA values through
-  # the preprocessing
-  new_data <- rlang::with_options(
-    model.frame(engine, data = new_data, xlev = original_predictor_levels),
-    na.action = "na.pass"
-  )
+  new_data <- model_frame(engine, new_data, original_predictor_levels)
 
   new_data
-}
-
-preprocess_model_matrix <- function(preprocessor, frame) {
-
-  predictors <- rlang::with_options(
-    model.matrix(preprocessor$engine, data = frame),
-    na.action = "na.pass"
-  )
-
-  predictors <- strip_model_matrix(predictors)
-
-  predictors
 }
 
 # To get the post processed name of the outcome column
