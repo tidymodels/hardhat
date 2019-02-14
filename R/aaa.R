@@ -7,11 +7,7 @@ NULL
 
 #' @importFrom stats model.frame
 #' @importFrom stats model.matrix
-#' @importFrom stats model.response
 #' @importFrom stats delete.response
-#' @importFrom stats .MFclass
-#' @importFrom stats .getXlevels
-#' @importFrom stats lm.fit
 #' @importFrom stats get_all_vars
 #' @importFrom stats terms
 NULL
