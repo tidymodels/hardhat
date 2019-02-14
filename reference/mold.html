@@ -34,11 +34,13 @@
 
 <meta property="og:description" content="mold() applies the appropriate processing steps required to get training
 data ready to be fed into a model.
-For a formula method, this applies model.frame() and model.matrix().
+For a formula, this applies stats::model.frame() and
+stats::model.matrix().
 For a recipe, this performs a call to both recipes::prep()
 and recipes::juice().
-For a data frame or matrix, this uses the new_default_preprocessor()s
-which converts the input to type and adds an intercept column if requested.
+For a data frame or matrix, this uses the new_default_preprocessor()
+which converts the input to an object of class type and adds an
+intercept column if requested.
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -115,11 +117,13 @@ which converts the input to type and adds an intercept column if requested.
     
     <p><code>mold()</code> applies the appropriate processing steps required to get training
 data ready to be fed into a model.</p><ul>
-<li><p>For a formula method, this applies <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code> and <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix()</a></code>.</p></li>
+<li><p>For a formula, this applies <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code> and
+<code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code>.</p></li>
 <li><p>For a recipe, this performs a call to both <code><a href='https://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep()</a></code>
 and <code><a href='https://www.rdocumentation.org/packages/recipes/topics/juice'>recipes::juice()</a></code>.</p></li>
-<li><p>For a data frame or matrix, this uses the <code>new_default_preprocessor()</code>s
-which converts the input to <code>type</code> and adds an intercept column if requested.</p></li>
+<li><p>For a data frame or matrix, this uses the <code>new_default_preprocessor()</code>
+which converts the input to an object of class <code>type</code> and adds an
+intercept column if requested.</p></li>
 </ul>
     
     </div>
@@ -173,7 +177,7 @@ include an intercept in the molded predictors.</p></td>
     </tr>
     <tr>
       <th>data</th>
-      <td><p>A data frame to mold.</p></td>
+      <td><p>A data frame containing the predictors and the outcomes.</p></td>
     </tr>
     </table>
     
@@ -182,11 +186,15 @@ include an intercept in the molded predictors.</p></td>
     <p>A named list containing:</p><ul>
 <li><p><code>predictors</code>: An object of class <code>type</code> containing the molded predictors
 to be used in the model.</p></li>
-<li><p><code>outcome</code>: A tibble. If <code>y</code> was supplied, it is returned after a call to
-<code><a href='standardize.html'>standardize()</a></code> is made. If a formula engine was used, this is a data frame
-that is the result of extracting the outcome columns from <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code>.
-If a recipe was used, this is a data.frame that is the result of calling
-<code><a href='https://www.rdocumentation.org/packages/recipes/topics/juice'>recipes::juice()</a></code> with <code><a href='https://www.rdocumentation.org/packages/recipes/topics/has_role'>recipes::all_outcomes()</a></code> specified.</p></li>
+<li><p><code>outcome</code>: A tibble.</p><ul>
+<li><p>If <code>y</code> was supplied, it is returned after a call to
+<code><a href='standardize.html'>standardize()</a></code> is made.</p></li>
+<li><p>If a formula engine was used, this is a data frame
+that is the result of extracting the molded outcome columns from
+<code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code>.</p></li>
+<li><p>If a recipe was used, this is a data.frame that is the result of
+calling <code><a href='https://www.rdocumentation.org/packages/recipes/topics/juice'>recipes::juice()</a></code> with <code><a href='https://www.rdocumentation.org/packages/recipes/topics/has_role'>recipes::all_outcomes()</a></code> specified.</p></li>
+</ul></li>
 <li><p><code>preprocessor</code>: A <code>"preprocessor"</code> object for use when making predictions.</p></li>
 </ul>
 
