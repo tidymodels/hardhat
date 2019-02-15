@@ -5,86 +5,32 @@
 #' `mold()` applies the appropriate processing steps required to get training
 #' data ready to be fed into a model.
 #'
-#' * For a formula, this applies [stats::model.frame()] and
-#' possibly [stats::model.matrix()].
+#' The return values of each method are all consistent with one another, but the
+#' nuances of exactly what is being done for each method vary enough to warrant
+#' separate help files for each. Click through to each one below:
 #'
-#' * For a recipe, this performs a call to both [recipes::prep()]
-#' and [recipes::juice()].
+#' * XY Method - [mold.data.frame()] / [mold.matrix()]
 #'
-#' * For a data frame or matrix, this simply adds an intercept column
-#' if requested.
+#' * Formula Method - [mold.formula()]
 #'
-#' @param x A data frame, matrix, or [recipes::recipe()]. If this is a
+#' * Recipes Method - [mold.recipe()]
+#'
+#' @param x A data frame, matrix, formula, or [recipes::recipe()]. If this is a
 #' data.frame or matrix, it should contain the predictors.
-#'
-#' @param formula A formula specifying the terms in the format of
-#' `outcome ~ predictors`.
-#'
-#' @param y A data frame, matrix, or vector containing the outcome(s).
-#'
-#' @param intercept A single logical specifying whether or not to
-#' include an intercept in the molded predictors.
-#'
-#' @param data A data frame containing the predictors and the outcomes.
-#'
-#' @param indicators For use with the formula interface. Should factors and
-#' interactions be expanded (In other words, should `model.matrix()` be run)? If
-#' `FALSE`, factor columns are returned without being expanded into dummy
-#' variables and a warning is thrown if any interactions are detected.
 #'
 #' @param ... Currently unused.
 #'
 #' @return
 #'
-#' A named list containing:
+#' A named list containing 3 elements:
 #'
-#'  - `predictors`: A tibble containing the molded predictors
-#'  to be used in the model.
+#'  - `predictors`: A tibble containing the molded predictors to be used in the
+#'  model.
 #'
-#'  - `outcome`: A tibble.
-#'
-#'     - If `y` was supplied, it is returned after a call to
-#'     `standardize()` is made.
-#'
-#'     - If a formula engine was used, this is a data frame
-#'     that is the result of extracting the molded outcome columns from
-#'     `model.frame()`.
-#'
-#'     - If a recipe was used, this is a data.frame that is the result of
-#'     calling [recipes::juice()] with [recipes::all_outcomes()] specified.
+#'  - `outcome`: A tibble containing the molded outcomes to be used in the
+#'  model.
 #'
 #'  - `preprocessor`: A `"preprocessor"` object for use when making predictions.
-#'
-#' @details
-#'
-#' Multivariate outcomes can be specified on the LHS using similar syntax as
-#' the RHS (i.e. `outcome_1 + outcome_2 ~ predictors`). [stats::model.frame()]
-#' is run on the outcome columns (which will execute any in line formulas),
-#' but [stats::model.matrix()] is _not_ run on the outcomes as this would
-#' expand factor outcomes and this is likely not desired. If any complex
-#' calculations are done on the LHS and they return matrices
-#' (like [stats::poly()]), then those matrices are flattened into multiple
-#' columns of the tibble after the call to `model.frame()`.
-#'
-#' @examples
-#'
-#' # ---------------------------------------------------------------------------
-#' # Multivariate outcomes
-#'
-#' # Multivariate formulas can be specified easily
-#' processed <- mold(Sepal.Width + log(Sepal.Length) ~ Species, iris)
-#' processed$outcomes
-#'
-#' # Inline functions on the LHS are run, but any matrix
-#' # output is flattened (like what happens in `model.matrix()`)
-#' # (essentially this means you don't wind up with columns
-#' # in the tibble that are matrices)
-#' processed <- mold(poly(Sepal.Length, degree = 2) ~ Species, iris)
-#' processed$outcomes
-#'
-#' # TRUE
-#' ncol(processed$outcomes) == 2
-#'
 #'
 #' @export
 mold <- function(x, ...) {
@@ -96,7 +42,80 @@ mold.default <- function(x, ...) {
   abort_unknown_mold_class(x)
 }
 
-#' @rdname mold
+#' Mold - XY Method
+#'
+#' @description
+#'
+#' For a data frame / matrix, `mold()` does the following:
+#'
+#' - Converts `x` to a tibble.
+#'
+#' - Adds an intercept column to `x` if `intercept = TRUE`.
+#'
+#' - Runs [standardize()] on `y`.
+#'
+#' @details
+#'
+#' As documented in [standardize()], if `y` is a _vector_, then the returned
+#' outcomes tibble has 1 column with a standardized name of `".outcome"`.
+#'
+#' @inheritParams mold
+#'
+#' @param x A data frame or matrix containing the predictors.
+#'
+#' @param y A data frame, matrix, or vector containing the outcome(s).
+#'
+#' @param intercept A single logical specifying whether or not to
+#' include an intercept in the molded predictors.
+#'
+#' @inherit mold return
+#'
+#' @examples
+#' # ---------------------------------------------------------------------------
+#' # XY Example
+#'
+#' x <- iris[, c("Sepal.Width", "Species"), drop = FALSE]
+#' y <- iris[, "Sepal.Length", drop = FALSE]
+#'
+#' processed <- mold(x, y)
+#'
+#' # The predictors are returned as a tibble
+#' processed$predictors
+#'
+#' # So are the outcomes
+#' processed$outcomes
+#'
+#' # A default preprocessor is also returned
+#' # This contains all of the information required
+#' # to preprocess new data at prediction time.
+#' processed$preprocessor
+#'
+#' # The preprocessor should be stored in the model object
+#' # and is later used by forge()
+#' forge(processed$preprocessor, iris)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Y as a vector
+#'
+#' # Often, `y` will be supplied as a vector to a model. `mold()` handles
+#' # this by letting `standardize()` convert `y` to a tibble, adding the
+#' # default column name, `".outcome"`.
+#' y_vec <- y$Sepal.Length
+#'
+#' mold(x, y_vec)$outcomes
+#'
+#' # ---------------------------------------------------------------------------
+#' # XY Method and forge(outcomes = TRUE)
+#'
+#' # With the formula and recipes methods, you always know the name
+#' # of the outcome columns. Because of this, you can ask for the
+#' # outcome columns in `new_data` to be processed and returned.
+#' # With the XY method if Y is a vector, ...
+#' # TODO
+#'
+#'
+#' @rdname mold-xy
+#'
 #' @export
 mold.data.frame <- function(x, y, intercept = FALSE, ...) {
 
@@ -123,7 +142,7 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
   mold_list(x, y, preprocessor)
 }
 
-#' @rdname mold
+#' @rdname mold-xy
 #' @export
 mold.matrix <- function(x, y, intercept = FALSE, ...) {
 
@@ -150,7 +169,142 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
   mold_list(x, y, preprocessor)
 }
 
-#' @rdname mold
+#' Mold - Formula Method
+#'
+#' @description
+#'
+#' For a formula, `mold()` does the following:
+#'
+#' - Predictors
+#'
+#'    - The RHS of the `formula` is isolated, and converted to its own
+#'    1 sided formula: `~ RHS`.
+#'
+#'    - Runs [stats::model.frame()] on the RHS formula and uses `data`.
+#'
+#'    - If `indicators = TRUE`, it then runs [stats::model.matrix()] on the
+#'    result.
+#'
+#'    - If `indicators = FALSE`, it does not expand factors with
+#'    `model.matrix()`, which also means that interactions are not expanded.
+#'
+#'    - If `intercept = TRUE`, adds an intercept column.
+#'
+#'    - Coerces the result of the above steps to a tibble.
+#'
+#' - Outcomes
+#'
+#'    - The LHS of the `formula` is isolated, and converted to its own
+#'    1 sided formula: `~ LHS`.
+#'
+#'    - Runs [stats::model.frame()] on the LHS formula and uses `data`.
+#'
+#'    - Coerces the result of the above steps to a tibble.
+#'
+#' @inheritParams mold.data.frame
+#'
+#' @param formula A formula specifying the terms of the model, with the outcomes
+#' on the left-hand side of the formula, and the predictors on the right-hand
+#' side.
+#'
+#' @param data A data frame containing the predictors and the outcomes.
+#'
+#' @param indicators Should factors and interactions be expanded
+#' (In other words, should [stats::model.matrix()] be run)? If
+#' `FALSE`, factor columns are returned without being expanded into dummy
+#' variables and a warning is thrown if any interactions are detected.
+#'
+#' @section Differences From Base R:
+#'
+#' There are a number of differences from base R regarding how formulas are
+#' processed by `mold()` that require some explanation.
+#'
+#' Multivariate outcomes can be specified on the LHS using syntax that is
+#' similar to the RHS (i.e. `outcome_1 + outcome_2 ~ predictors`).
+#' If any complex calculations are done on the LHS and they return matrices
+#' (like [stats::poly()]), then those matrices are flattened into multiple
+#' columns of the tibble after the call to `model.frame()`. While this is
+#' possible, it is not recommended, and if a large amount of preprocessing is
+#' required on the outcomes you are better off using a [recipes::recipe()].
+#'
+#' Global variables are _not_ allowed in the formula. An error will be thrown
+#' if they are included. All terms in the formula should come from `data`.
+#'
+#' By default, intercepts are _not_ included in the predictor output from the
+#' formula. To include an intercept, set `intercept = TRUE`. Having an intercept
+#' argument is consistent with the other `mold()` methods. More importantly,
+#' there are often modeling packages where an intercept is either always or
+#' never allowed (for example, the `earth` package), and they do some fancy
+#' footwork to keep the user from providing or removing an intercept.
+#' This interface standardizes all of that flexibility in one place.
+#'
+#' @details
+#'
+#' While not different from base R, the behavior of expanding factors into
+#' dummy variables when an intercept is _not_ present should be documented.
+#'
+#' - When an intercept is present, factors are expanded into `K-1` new columns,
+#' where `K` is the number of levels in the factor.
+#'
+#' - When an intercept is _not_ present, factors are expanded into all `K`
+#' columns (one-hot encoding).
+#'
+#' @inherit mold return
+#'
+#' @examples
+#' # ---------------------------------------------------------------------------
+#' # Formula example
+#'
+#' processed <- mold(Sepal.Width ~ Species, iris, intercept = TRUE)
+#'
+#' processed$predictors
+#'
+#' processed$outcomes
+#'
+#' # ---------------------------------------------------------------------------
+#' # Factors without an intercept
+#'
+#' # No intercept is added
+#' processed <- mold(Sepal.Width ~ Species, iris)
+#'
+#' # So factor columns are completely expanded
+#' # into all `K` columns (the number of levels)
+#' processed$predictors
+#'
+#' # ---------------------------------------------------------------------------
+#' # Global variables
+#'
+#' y <- rep(1, times = nrow(iris))
+#'
+#' # In base R, global variables are allowed in a model formula
+#' frame <- model.frame(Species ~ y + Sepal.Length, iris)
+#' head(frame)
+#'
+#' # mold() does not allow them, and throws an error
+#' tryCatch(
+#'   expr = mold(Species ~ y + Sepal.Length, iris),
+#'   error = function(e) print(e$message)
+#' )
+#'
+#' # ---------------------------------------------------------------------------
+#' # Multivariate outcomes
+#'
+#' # Multivariate formulas can be specified easily
+#' processed <- mold(Sepal.Width + log(Sepal.Length) ~ Species, iris)
+#' processed$outcomes
+#'
+#' # Inline functions on the LHS are run, but any matrix
+#' # output is flattened (like what happens in `model.matrix()`)
+#' # (essentially this means you don't wind up with columns
+#' # in the tibble that are matrices)
+#' processed <- mold(poly(Sepal.Length, degree = 2) ~ Species, iris)
+#' processed$outcomes
+#'
+#' # TRUE
+#' ncol(processed$outcomes) == 2
+#'
+#' @rdname mold-formula
+#'
 #' @export
 mold.formula <- function(formula, data, intercept = FALSE,
                          indicators = TRUE, ...) {
@@ -168,7 +322,13 @@ mold.formula <- function(formula, data, intercept = FALSE,
   predictors_frame <- model_frame(predictors_formula, data)
   predictors_terms <- extract_terms(predictors_frame)
 
-  predictors <- extract_predictors(predictors_formula, predictors_frame, indicators)
+  predictors <- extract_predictors(
+    formula = predictors_formula,
+    frame = predictors_frame,
+    indicators = indicators,
+    intercept = intercept
+  )
+
   outcomes <- extract_outcomes(outcomes_frame)
 
   original_predictor_nms <- get_all_predictors(formula, data)
@@ -196,7 +356,60 @@ mold.formula <- function(formula, data, intercept = FALSE,
   mold_list(predictors, outcomes, preprocessor)
 }
 
-#' @rdname mold
+#' Mold - Recipes Method
+#'
+#' @description
+#'
+#' For a recipe, `mold()` does the following:
+#'
+#' - Calls [recipes::prep()] to prep the recipe.
+#'
+#' - Calls [recipes::juice()] to extract the outcomes and predictors. These
+#' are returned as tibbles.
+#'
+#' - If `intercept = TRUE`, adds an intercept column to the predictors.
+#'
+#' @inheritParams mold
+#' @inheritParams mold.formula
+#'
+#' @param x An unprepped recipe created from [recipes::recipe()].
+#'
+#' @inherit mold return
+#'
+#' @examples
+#' library(recipes)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Recipes example
+#'
+#' # Create a recipe that logs a predictor
+#' rec <- recipe(Species ~ Sepal.Length + Sepal.Width, iris) %>%
+#'    step_log(Sepal.Length)
+#'
+#' processed <- mold(rec, iris)
+#'
+#' # Sepal.Length has been logged
+#' processed$predictors
+#'
+#' processed$outcomes
+#'
+#' # The underlying engine is a prepped recipe
+#' processed$preprocessor$engine
+#'
+#' # ---------------------------------------------------------------------------
+#' # With an intercept
+#'
+#' # You can add a predictor with `intercept = TRUE`
+#' processed <- mold(rec, iris, intercept = TRUE)
+#'
+#' processed$predictors
+#'
+#' # But you also could have used a recipe step
+#' rec2 <- step_intercept(rec)
+#'
+#' mold(rec2, iris)$predictors
+#'
+#' @rdname mold-recipe
 #' @export
 mold.recipe <- function(x, data, intercept = FALSE, ...) {
 
@@ -289,14 +502,15 @@ get_original_recipe_data_classes <- function(x, rec) {
 
 }
 
-extract_predictors <- function(formula, frame, indicators) {
+extract_predictors <- function(formula, frame, indicators, intercept) {
 
   if (indicators) {
+    # intercept is automatically added by model.matrix() if required
     predictors <- extract_predictors_with_model_matrix(formula, frame)
   }
   else {
     check_for_interactions(formula)
-    predictors <- extract_predictors_from_frame(formula, frame)
+    predictors <- extract_predictors_from_frame(formula, frame, intercept)
   }
 
   tibble::as_tibble(predictors)
@@ -357,11 +571,13 @@ extract_predictors_with_model_matrix <- function(formula, frame) {
   predictors
 }
 
-extract_predictors_from_frame <- function(terms, frame) {
+extract_predictors_from_frame <- function(terms, frame, intercept) {
 
   processed_outcome_nm <- response_name(terms)
 
   frame[[processed_outcome_nm]] <- NULL
+
+  frame <- maybe_add_intercept_column(frame, intercept)
 
   frame
 }

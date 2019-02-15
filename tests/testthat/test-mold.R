@@ -134,6 +134,21 @@ test_that("cannot manually remove intercept in the formula itself", {
 
 })
 
+test_that("intercepts can still be added when not using indicators (i.e. model.matrix())", {
+
+  x <- mold(Sepal.Width ~ Species, iris, intercept = TRUE, indicators = FALSE)
+
+  expect_true(
+    "(Intercept)" %in% colnames(x$predictors)
+  )
+
+  expect_is(
+    x$predictors$Species,
+    "factor"
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-mold-xy")
 

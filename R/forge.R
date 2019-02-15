@@ -188,7 +188,13 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
   predictors_frame <- model_frame(engine$predictors, new_data, preprocessor$predictors$levels)
   outcomes_frame <- model_frame(engine$outcomes, new_data, preprocessor$outcomes$levels)
 
-  predictors <- extract_predictors(terms(predictors_frame), predictors_frame, preprocessor$indicators)
+  predictors <- extract_predictors(
+    formula = terms(predictors_frame),
+    frame = predictors_frame,
+    indicators = preprocessor$indicators,
+    intercept = preprocessor$intercept
+  )
+
   outcomes <- extract_outcomes(outcomes_frame)
 
   forge_list(predictors, outcomes)
@@ -201,7 +207,12 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
 
   predictors_frame <- model_frame(predictors_terms, new_data, preprocessor$predictors$levels)
 
-  predictors <- extract_predictors(terms(predictors_frame), predictors_frame, preprocessor$indicators)
+  predictors <- extract_predictors(
+    formula = terms(predictors_frame),
+    frame = predictors_frame,
+    indicators = preprocessor$indicators,
+    intercept = preprocessor$intercept
+  )
 
   forge_list(predictors)
 }

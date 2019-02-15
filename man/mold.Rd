@@ -2,102 +2,36 @@
 % Please edit documentation in R/mold.R
 \name{mold}
 \alias{mold}
-\alias{mold.data.frame}
-\alias{mold.matrix}
-\alias{mold.formula}
-\alias{mold.recipe}
 \title{Mold data for modeling}
 \usage{
 mold(x, ...)
-
-\method{mold}{data.frame}(x, y, intercept = FALSE, ...)
-
-\method{mold}{matrix}(x, y, intercept = FALSE, ...)
-
-\method{mold}{formula}(formula, data, intercept = FALSE,
-  indicators = TRUE, ...)
-
-\method{mold}{recipe}(x, data, intercept = FALSE, ...)
 }
 \arguments{
-\item{x}{A data frame, matrix, or \code{\link[recipes:recipe]{recipes::recipe()}}. If this is a
+\item{x}{A data frame, matrix, formula, or \code{\link[recipes:recipe]{recipes::recipe()}}. If this is a
 data.frame or matrix, it should contain the predictors.}
 
 \item{...}{Currently unused.}
-
-\item{y}{A data frame, matrix, or vector containing the outcome(s).}
-
-\item{intercept}{A single logical specifying whether or not to
-include an intercept in the molded predictors.}
-
-\item{formula}{A formula specifying the terms in the format of
-\code{outcome ~ predictors}.}
-
-\item{data}{A data frame containing the predictors and the outcomes.}
-
-\item{indicators}{For use with the formula interface. Should factors and
-interactions be expanded (In other words, should \code{model.matrix()} be run)? If
-\code{FALSE}, factor columns are returned without being expanded into dummy
-variables and a warning is thrown if any interactions are detected.}
 }
 \value{
-A named list containing:
+A named list containing 3 elements:
 \itemize{
-\item \code{predictors}: A tibble containing the molded predictors
-to be used in the model.
-\item \code{outcome}: A tibble.
-\itemize{
-\item If \code{y} was supplied, it is returned after a call to
-\code{standardize()} is made.
-\item If a formula engine was used, this is a data frame
-that is the result of extracting the molded outcome columns from
-\code{model.frame()}.
-\item If a recipe was used, this is a data.frame that is the result of
-calling \code{\link[recipes:juice]{recipes::juice()}} with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}} specified.
-}
+\item \code{predictors}: A tibble containing the molded predictors to be used in the
+model.
+\item \code{outcome}: A tibble containing the molded outcomes to be used in the
+model.
 \item \code{preprocessor}: A \code{"preprocessor"} object for use when making predictions.
 }
 }
 \description{
 \code{mold()} applies the appropriate processing steps required to get training
 data ready to be fed into a model.
+
+The return values of each method are all consistent with one another, but the
+nuances of exactly what is being done for each method vary enough to warrant
+separate help files for each. Click through to each one below:
 \itemize{
-\item For a formula, this applies \code{\link[stats:model.frame]{stats::model.frame()}} and
-possibly \code{\link[stats:model.matrix]{stats::model.matrix()}}.
-\item For a recipe, this performs a call to both \code{\link[recipes:prep]{recipes::prep()}}
-and \code{\link[recipes:juice]{recipes::juice()}}.
-\item For a data frame or matrix, this simply adds an intercept column
-if requested.
+\item XY Method - \code{\link[=mold.data.frame]{mold.data.frame()}} / \code{\link[=mold.matrix]{mold.matrix()}}
+\item Formula Method - \code{\link[=mold.formula]{mold.formula()}}
+\item Recipes Method - \code{\link[=mold.recipe]{mold.recipe()}}
 }
-}
-\details{
-Multivariate outcomes can be specified on the LHS using similar syntax as
-the RHS (i.e. \code{outcome_1 + outcome_2 ~ predictors}). \code{\link[stats:model.frame]{stats::model.frame()}}
-is run on the outcome columns (which will execute any in line formulas),
-but \code{\link[stats:model.matrix]{stats::model.matrix()}} is \emph{not} run on the outcomes as this would
-expand factor outcomes and this is likely not desired. If any complex
-calculations are done on the LHS and they return matrices
-(like \code{\link[stats:poly]{stats::poly()}}), then those matrices are flattened into multiple
-columns of the tibble after the call to \code{model.frame()}.
-}
-\examples{
-
-# ---------------------------------------------------------------------------
-# Multivariate outcomes
-
-# Multivariate formulas can be specified easily
-processed <- mold(Sepal.Width + log(Sepal.Length) ~ Species, iris)
-processed$outcomes
-
-# Inline functions on the LHS are run, but any matrix
-# output is flattened (like what happens in `model.matrix()`)
-# (essentially this means you don't wind up with columns
-# in the tibble that are matrices)
-processed <- mold(poly(Sepal.Length, degree = 2) ~ Species, iris)
-processed$outcomes
-
-# TRUE
-ncol(processed$outcomes) == 2
-
-
 }

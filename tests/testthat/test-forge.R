@@ -394,6 +394,22 @@ test_that("new data classes can interchange integer/numeric", {
 
 })
 
+test_that("intercepts can still be forged on when not using indicators (i.e. model.matrix())", {
+
+  x <- mold(Sepal.Width ~ Species, iris, intercept = TRUE, indicators = FALSE)
+  xx <- forge(x$preprocessor, iris)
+
+  expect_true(
+    "(Intercept)" %in% colnames(xx$predictors)
+  )
+
+  expect_is(
+    xx$predictors$Species,
+    "factor"
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-forge-xy")
 
