@@ -75,14 +75,4 @@ y_vec <- y$Sepal.Length
 
 mold(x, y_vec)$outcomes
 
-# ---------------------------------------------------------------------------
-# XY Method and forge(outcomes = TRUE)
-
-# With the formula and recipes methods, you always know the name
-# of the outcome columns. Because of this, you can ask for the
-# outcome columns in `new_data` to be processed and returned.
-# With the XY method if Y is a vector, ...
-# TODO
-
-
 }

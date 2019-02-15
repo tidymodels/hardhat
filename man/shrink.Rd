@@ -4,15 +4,15 @@
 \alias{shrink}
 \title{Subset only required columns}
 \usage{
-shrink(preprocessor, new_data, outcome = FALSE)
+shrink(preprocessor, new_data, outcomes = FALSE)
 }
 \arguments{
 \item{preprocessor}{A \code{"preprocessor"}.}
 
 \item{new_data}{A data frame at least containing the new predictors, and
-potentially the outcomes if \code{outcome = TRUE}.}
+potentially the outcomes if \code{outcomes = TRUE}.}
 
-\item{outcome}{A logical. Should the outcome be included in the shrunk
+\item{outcomes}{A logical. Should the outcomes be included in the shrunk
 \code{new_data} output as well?}
 }
 \value{
@@ -27,10 +27,10 @@ outcomes).
 }
 }
 \details{
-If \code{outcome = TRUE}, then the validation checks are performed on the known
-outcome column as well, and it is returned along with the predictors. If
+If \code{outcomes = TRUE}, then the validation checks are performed on the known
+outcome columns as well, and they are returned along with the predictors. If
 \code{\link[=mold]{mold()}} was called with the XY interface, then no preprocessing was done
-to \code{y} and \code{outcome} will have no effect (if a vector was passed as \code{y}
+to \code{y} and \code{outcomes} will have no effect (if a vector was passed as \code{y}
 during the fit, \code{shrink()} has no way of knowing what column in \code{new_data}
 corresponds to the outcome).
 
@@ -49,13 +49,13 @@ x <- mold(log(Sepal.Width) ~ Species, train)
 # to get a tibble of required predictors back
 shrink(x$preprocessor, test)
 
-# outcome = TRUE also returns the outcome,
+# outcomes = TRUE also returns the outcomes,
 # this can be useful if doing cross validation
-shrink(x$preprocessor, test, outcome = TRUE)
+shrink(x$preprocessor, test, outcomes = TRUE)
 
 # forge() actually preprocesses the new_data, after
 # a call to shrink(). Notice how now the Sepal.Width
 # column is logged
-forge(x$preprocessor, test, outcome = TRUE)$outcomes
+forge(x$preprocessor, test, outcomes = TRUE)$outcomes
 
 }

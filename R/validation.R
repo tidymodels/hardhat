@@ -128,6 +128,10 @@ validate_outcomes <- function(new_data, outcomes) {
       last = ", and "
     )
 
+    # Preemptively throw a more informative error message
+    # if a vector `y` was used in mold().
+    validate_missing_outcome_isnt_.outcome(missing_outcomes)
+
     glubort(
       "`new_data` is missing the following required outcomes:
       {missing_outcomes}"
@@ -136,6 +140,25 @@ validate_outcomes <- function(new_data, outcomes) {
   }
 
   invisible(new_data)
+}
+
+validate_missing_outcome_isnt_.outcome <- function(missing_outcomes) {
+
+  if (".outcome" %in% missing_outcomes) {
+
+    glubort(
+      "`new_data` is missing the following required outcomes:
+      {missing_outcomes}
+
+      (This indicates that `mold()` was called with a vector for `y`. ",
+      "When this is the case, and the outcome columns are requested ",
+      "in `forge()`, `new_data` must include a column with the automatically ",
+      "generated name '.outcome' containing the outcome.)"
+    )
+
+  }
+
+  invisible(missing_outcomes)
 }
 
 #' @rdname validation

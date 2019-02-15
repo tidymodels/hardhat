@@ -243,7 +243,7 @@ stored `preprocessor` and the `new_data`.
 processed_test <- forge(
   preprocessor = processed$preprocessor, 
   new_data = iris_test,
-  outcome = TRUE
+  outcomes = TRUE
 )
 ```
 
@@ -251,7 +251,7 @@ processed_test <- forge(
 containing the preprocessed `predictors`. The second is optionally the
 preprocessed `outcomes` if you are performing cross validation and used
 a formula or recipes interface. Because we used the formula interface to
-generate the `processed` object, we could set `outcome = TRUE` above to
+generate the `processed` object, we could set `outcomes = TRUE` above to
 also return the processed outcome column.
 
 ``` r

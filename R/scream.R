@@ -1,4 +1,4 @@
-#' Perform structural checks on `new_data`
+#' \if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.
 #'
 #' @description
 #'
@@ -24,9 +24,9 @@
 #' actual processing is done. Generally, you don't need to call `scream()`
 #' directly, as `forge()` will do it for you.
 #'
-#' If `outcome = TRUE`, then the validation steps are performed on the known
-#' outcome column as well. If [mold()] was called with the XY interface,
-#' then no preprocessing was done to `y` and `outcome` will have no effect
+#' If `outcomes = TRUE`, then the validation steps are performed on the known
+#' outcome columns as well. If [mold()] was called with the XY interface,
+#' then no preprocessing was done to `y` and `outcomes` will have no effect
 #' (if a vector was passed as `y` during the fit, `scream()` has no
 #' way of knowing what column in `new_data` corresponds to the outcome).
 #'
@@ -39,9 +39,9 @@
 #'
 #' @param new_data A data frame containing the new data to check the structure
 #' of. This should contain the predictors, and potentially the outcomes if
-#' `outcome = TRUE`.
+#' `outcomes = TRUE`.
 #'
-#' @param outcome A logical. Should the outcome be checked as well?
+#' @param outcomes A logical. Should the outcomes be checked as well?
 #'
 #' @return
 #'
@@ -64,10 +64,10 @@
 #' # Silence is key!
 #' scream(x$preprocessor, test_shrunk)
 #'
-#' # If `outcome = TRUE` is used with shrink(),
+#' # If `outcomes = TRUE` is used with shrink(),
 #' # it should also be used with scream()
-#' test_outcome <- shrink(x$preprocessor, test, outcome = TRUE)
-#' scream(x$preprocessor, test_outcome, outcome = TRUE)
+#' test_outcome <- shrink(x$preprocessor, test, outcomes = TRUE)
+#' scream(x$preprocessor, test_outcome, outcomes = TRUE)
 #'
 #' # scream() validates that the classes of `new_data`
 #' # are the same as the ones used in mold(). The below call
@@ -80,7 +80,7 @@
 #' }
 #'
 #' @export
-scream <- function(preprocessor, new_data, outcome = FALSE) {
+scream <- function(preprocessor, new_data, outcomes = FALSE) {
 
   new_data <- tibble::as_tibble(new_data)
 
@@ -92,7 +92,7 @@ scream <- function(preprocessor, new_data, outcome = FALSE) {
   new_data <- check_new_data_novel_levels(new_data, original_predictor_levels)
   new_data <- check_new_data_level_recovery(new_data, original_predictor_levels)
 
-  if (outcome) {
+  if (outcomes) {
 
     original_outcome_classes <- preprocessor$outcomes$classes
     original_outcome_levels <- preprocessor$outcomes$levels

@@ -9,10 +9,10 @@
 #'
 #' @details
 #'
-#' If `outcome = TRUE`, then the validation checks are performed on the known
-#' outcome column as well, and it is returned along with the predictors. If
+#' If `outcomes = TRUE`, then the validation checks are performed on the known
+#' outcome columns as well, and they are returned along with the predictors. If
 #' [mold()] was called with the XY interface, then no preprocessing was done
-#' to `y` and `outcome` will have no effect (if a vector was passed as `y`
+#' to `y` and `outcomes` will have no effect (if a vector was passed as `y`
 #' during the fit, `shrink()` has no way of knowing what column in `new_data`
 #' corresponds to the outcome).
 #'
@@ -22,9 +22,9 @@
 #' @param preprocessor A `"preprocessor"`.
 #'
 #' @param new_data A data frame at least containing the new predictors, and
-#' potentially the outcomes if `outcome = TRUE`.
+#' potentially the outcomes if `outcomes = TRUE`.
 #'
-#' @param outcome A logical. Should the outcome be included in the shrunk
+#' @param outcomes A logical. Should the outcomes be included in the shrunk
 #' `new_data` output as well?
 #'
 #' @return
@@ -44,24 +44,24 @@
 #' # to get a tibble of required predictors back
 #' shrink(x$preprocessor, test)
 #'
-#' # outcome = TRUE also returns the outcome,
+#' # outcomes = TRUE also returns the outcomes,
 #' # this can be useful if doing cross validation
-#' shrink(x$preprocessor, test, outcome = TRUE)
+#' shrink(x$preprocessor, test, outcomes = TRUE)
 #'
 #' # forge() actually preprocesses the new_data, after
 #' # a call to shrink(). Notice how now the Sepal.Width
 #' # column is logged
-#' forge(x$preprocessor, test, outcome = TRUE)$outcomes
+#' forge(x$preprocessor, test, outcomes = TRUE)$outcomes
 #'
 #' @export
-shrink <- function(preprocessor, new_data, outcome = FALSE) {
+shrink <- function(preprocessor, new_data, outcomes = FALSE) {
 
   new_data <- tibble::as_tibble(new_data)
 
   cols <- preprocessor$predictors$names
   validate_predictors(new_data, cols)
 
-  if (outcome) {
+  if (outcomes) {
 
     outcome_cols <- preprocessor$outcomes$names
     validate_outcomes(new_data, outcome_cols)
