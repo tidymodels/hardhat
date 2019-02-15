@@ -115,10 +115,8 @@ it is time to make predictions using a model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>new_preprocessor</span>(<span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='new_default_preprocessor_engine.html'>new_default_preprocessor_engine</a></span>(),
-  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>predictors</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(),
-  <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>predictor_levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>outcome_levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>predictor_classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>outcome_classes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())</pre>
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>predictors</span> <span class='kw'>=</span> <span class='fu'>predictors_lst</span>(),
+  <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fu'>outcomes_lst</span>(), <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,39 +132,21 @@ it is time to make predictions using a model.</p>
     </tr>
     <tr>
       <th>predictors</th>
-      <td><p>A character vector. The original predictors used when
-fitting the model.</p></td>
+      <td><p>A named list with the following 3 elements:</p><ul>
+<li><p><code>"names"</code>: A character vector of the original predictor column names.</p></li>
+<li><p><code>"classes"</code>: A named list of the original predictor classes, or <code>NULL</code>.</p></li>
+<li><p><code>"levels"</code>: A named list of the original predictor levels for any factor
+columns, or <code>NULL</code>.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>outcomes</th>
-      <td><p>A character vector. The original outcome columns used
-when fitting the model.</p></td>
-    </tr>
-    <tr>
-      <th>predictor_levels</th>
-      <td><p>A named list. Each element of the list should be a
-character vector of levels. The names of the list should be the <em>predictor</em>
-factor columns in the training data. If there are no factor columns, this is
-<code>NULL</code>.</p></td>
-    </tr>
-    <tr>
-      <th>outcome_levels</th>
-      <td><p>A named list. Each element of the list should be a
-character vector of levels. The names of the list should be the <em>outcome</em>
-factor columns in the training data. If there are no factor columns, this is
-<code>NULL</code>.</p></td>
-    </tr>
-    <tr>
-      <th>predictor_classes</th>
-      <td><p>A named list. Each element of the list should
-be a character vector of classes. The names of the list are the <em>predictor</em>
-names in the training data.</p></td>
-    </tr>
-    <tr>
-      <th>outcome_classes</th>
-      <td><p>A named list. Each element of the list should
-be a character vector of classes. The names of the list are the <em>outcome</em>
-names in the training data.</p></td>
+      <td><p>A named list with the following 3 elements:</p><ul>
+<li><p><code>"names"</code>: A character vector of the original outcome column names.</p></li>
+<li><p><code>"classes"</code>: A named list of the original outcome classes, or <code>NULL</code>.</p></li>
+<li><p><code>"levels"</code>: A named list of the original outcome levels for any factor
+columns, or <code>NULL</code>.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>...</th>
