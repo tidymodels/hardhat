@@ -552,8 +552,34 @@ test_that("novel predictor levels are caught", {
 
 })
 
-# cannot have outcomes = TRUE for xy method, so no need to do a check
-# for novel outcome levels being caught here
+test_that("novel outcome levels are caught", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  x <- mold(
+    x = dat[, "y", drop = FALSE],
+    y = dat[, "f", drop = FALSE]
+  )
+
+  expect_warning(
+    xx <- forge(x$preprocessor, new, outcomes = TRUE),
+    "The following factor levels"
+  )
+
+  expect_equal(
+    xx$outcomes[[5,1]],
+    factor(NA_real_, c("a", "b", "c", "d"))
+  )
+
+})
 
 test_that("original predictor and outcome classes are recorded", {
 
@@ -590,7 +616,14 @@ test_that("new data classes are caught", {
     NA
   )
 
-  # Can't do outcome = TRUE so can't check outcome class here
+  iris3 <- iris2
+  iris3$.outcome <- iris2$Species
+  iris3$Species <- NULL
+
+  expect_error(
+    forge(xx$preprocessor, iris3, outcomes = TRUE),
+    "`.outcome`: `character` should be `factor`."
+  )
 
 })
 
