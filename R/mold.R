@@ -108,12 +108,16 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
-    predictors = colnames(x),
-    outcomes = colnames(y),
-    predictor_levels = get_levels(x),
-    outcome_levels = get_levels(y),
-    predictor_classes = get_data_classes(x),
-    outcome_classes = get_data_classes(y)
+    predictors = predictors_lst(
+      names = colnames(x),
+      classes = get_data_classes(x),
+      levels = get_levels(x)
+    ),
+    outcomes = outcomes_lst(
+      names = colnames(y),
+      classes = get_data_classes(y),
+      levels = get_levels(y)
+    )
   )
 
   mold_list(x, y, preprocessor)
@@ -131,12 +135,16 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
-    predictors = colnames(x),
-    outcomes = colnames(y),
-    predictor_levels = NULL,
-    outcome_levels = get_levels(y),
-    predictor_classes = get_data_classes(x),
-    outcome_classes = get_data_classes(y)
+    predictors = predictors_lst(
+      names = colnames(x),
+      classes = get_data_classes(x),
+      levels = NULL
+    ),
+    outcomes = outcomes_lst(
+      names = colnames(y),
+      classes = get_data_classes(y),
+      levels = get_levels(y)
+    )
   )
 
   mold_list(x, y, preprocessor)
@@ -172,12 +180,16 @@ mold.formula <- function(formula, data, intercept = FALSE,
   preprocessor <- new_terms_preprocessor(
     engine = new_terms_preprocessor_engine(predictors_terms, outcomes_terms),
     intercept = intercept,
-    predictors = original_predictor_nms,
-    outcomes = original_outcome_nms,
-    predictor_levels = get_levels(original_predictors),
-    outcome_levels = get_levels(original_outcomes),
-    predictor_classes = get_data_classes(original_predictors),
-    outcome_classes = get_data_classes(original_outcomes),
+    predictors = predictors_lst(
+      names = original_predictor_nms,
+      classes = get_data_classes(original_predictors),
+      levels = get_levels(original_predictors)
+    ),
+    outcomes = outcomes_lst(
+      names = original_outcome_nms,
+      classes = get_data_classes(original_outcomes),
+      levels = get_levels(original_outcomes)
+    ),
     indicators = indicators
   )
 
@@ -209,12 +221,16 @@ mold.recipe <- function(x, data, intercept = FALSE, ...) {
   preprocessor <- new_recipes_preprocessor(
     engine = prepped_recipe,
     intercept = intercept,
-    predictors = colnames(predictors),
-    outcomes = colnames(outcomes),
-    predictor_levels = all_levels$predictor_levels,
-    outcome_levels = all_levels$outcome_levels,
-    predictor_classes = all_data_classes$predictor_classes,
-    outcome_classes = all_data_classes$outcome_classes
+    predictors = predictors_lst(
+      names = colnames(predictors),
+      classes = all_data_classes$predictors,
+      levels = all_levels$predictors
+    ),
+    outcomes = outcomes_lst(
+      names = colnames(outcomes),
+      classes = all_data_classes$outcomes,
+      levels = all_levels$outcomes
+    )
   )
 
   predictors <- maybe_add_intercept_column(predictors, intercept)
@@ -254,8 +270,8 @@ get_original_recipe_levels <- function(x, rec) {
   original_outcomes <- rec$var_info$variable[roles == "outcome"]
 
   list(
-    predictor_levels = get_levels(x[, original_predictors, drop = FALSE]),
-    outcome_levels = get_levels(x[, original_outcomes, drop = FALSE])
+    predictors = get_levels(x[, original_predictors, drop = FALSE]),
+    outcomes = get_levels(x[, original_outcomes, drop = FALSE])
   )
 
 }
@@ -267,8 +283,8 @@ get_original_recipe_data_classes <- function(x, rec) {
   original_outcomes <- rec$var_info$variable[roles == "outcome"]
 
   list(
-    predictor_classes = get_data_classes(x[, original_predictors, drop = FALSE]),
-    outcome_classes = get_data_classes(x[, original_outcomes, drop = FALSE])
+    predictors = get_data_classes(x[, original_predictors, drop = FALSE]),
+    outcomes = get_data_classes(x[, original_outcomes, drop = FALSE])
   )
 
 }

@@ -9,29 +9,23 @@
 #'
 #' @param intercept A logical. Should an intercept be included?
 #'
-#' @param predictors A character vector. The original predictors used when
-#' fitting the model.
+#' @param predictors A named list with the following 3 elements:
 #'
-#' @param outcomes A character vector. The original outcome columns used
-#' when fitting the model.
+#' - `"names"`: A character vector of the original predictor column names.
 #'
-#' @param predictor_levels A named list. Each element of the list should be a
-#' character vector of levels. The names of the list should be the _predictor_
-#' factor columns in the training data. If there are no factor columns, this is
-#' `NULL`.
+#' - `"classes"`: A named list of the original predictor classes, or `NULL`.
 #'
-#' @param outcome_levels A named list. Each element of the list should be a
-#' character vector of levels. The names of the list should be the _outcome_
-#' factor columns in the training data. If there are no factor columns, this is
-#' `NULL`.
+#' - `"levels"`: A named list of the original predictor levels for any factor
+#' columns, or `NULL`.
 #'
-#' @param predictor_classes A named list. Each element of the list should
-#' be a character vector of classes. The names of the list are the _predictor_
-#' names in the training data.
+#' @param outcomes A named list with the following 3 elements:
 #'
-#' @param outcome_classes A named list. Each element of the list should
-#' be a character vector of classes. The names of the list are the _outcome_
-#' names in the training data.
+#' - `"names"`: A character vector of the original outcome column names.
+#'
+#' - `"classes"`: A named list of the original outcome classes, or `NULL`.
+#'
+#' - `"levels"`: A named list of the original outcome levels for any factor
+#' columns, or `NULL`.
 #'
 #' @param ... Name-value pairs of extra elements that should be added to
 #' subclassed preprocessors.
@@ -41,31 +35,21 @@
 #' @keywords internal
 new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              intercept = FALSE,
-                             predictors = character(),
-                             outcomes = character(),
-                             predictor_levels = NULL,
-                             outcome_levels = NULL,
-                             predictor_classes = NULL,
-                             outcome_classes = NULL,
+                             predictors = predictors_lst(),
+                             outcomes = outcomes_lst(),
                              ...,
                              subclass = character()) {
 
   validate_is_preprocessor_engine(engine)
   validate_intercept(intercept)
-  validate_is_character(predictors, "predictors")
-  validate_is_character(outcomes, "outcomes")
-  validate_levels_list(predictor_levels, "predictor_levels")
-  validate_levels_list(outcome_levels, "outcome_levels")
+  validate_is_terms_list(predictors, "predictors")
+  validate_is_terms_list(outcomes, "outcomes")
 
   elems <- list(
     engine = engine,
     intercept = intercept,
     predictors = predictors,
-    outcomes = outcomes,
-    predictor_levels = predictor_levels,
-    outcome_levels = outcome_levels,
-    predictor_classes = predictor_classes,
-    outcome_classes = outcome_classes
+    outcomes = outcomes
   )
 
   new_elems <- rlang::list2(...)
@@ -79,22 +63,14 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
 new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
                                      intercept = FALSE,
-                                     predictors = character(),
-                                     outcomes = character(),
-                                     predictor_levels = NULL,
-                                     outcome_levels = NULL,
-                                     predictor_classes = NULL,
-                                     outcome_classes = NULL) {
+                                     predictors = predictors_lst(),
+                                     outcomes = outcomes_lst()) {
 
   new_preprocessor(
     engine = engine,
     intercept = intercept,
     predictors = predictors,
     outcomes = outcomes,
-    predictor_levels = predictor_levels,
-    outcome_levels = outcome_levels,
-    predictor_classes = predictor_classes,
-    outcome_classes = outcome_classes,
     subclass = "default_preprocessor"
   )
 
@@ -102,12 +78,8 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
 new_terms_preprocessor <- function(engine,
                                    intercept = FALSE,
-                                   predictors = character(),
-                                   outcomes = character(),
-                                   predictor_levels = NULL,
-                                   outcome_levels = NULL,
-                                   predictor_classes = NULL,
-                                   outcome_classes = NULL,
+                                   predictors = predictors_lst(),
+                                   outcomes = outcomes_lst(),
                                    indicators = TRUE) {
 
   new_preprocessor(
@@ -115,10 +87,6 @@ new_terms_preprocessor <- function(engine,
     intercept = intercept,
     predictors = predictors,
     outcomes = outcomes,
-    predictor_levels = predictor_levels,
-    outcome_levels = outcome_levels,
-    predictor_classes = predictor_classes,
-    outcome_classes = outcome_classes,
     indicators = indicators,
     subclass = "terms_preprocessor"
   )
@@ -127,22 +95,14 @@ new_terms_preprocessor <- function(engine,
 
 new_recipes_preprocessor <- function(engine,
                                      intercept = FALSE,
-                                     predictors = character(),
-                                     outcomes = character(),
-                                     predictor_levels = NULL,
-                                     outcome_levels = NULL,
-                                     predictor_classes = NULL,
-                                     outcome_classes = NULL) {
+                                     predictors = predictors_lst(),
+                                     outcomes = outcomes_lst()) {
 
   new_preprocessor(
     engine = engine,
     intercept = intercept,
     predictors = predictors,
     outcomes = outcomes,
-    predictor_levels = predictor_levels,
-    outcome_levels = outcome_levels,
-    predictor_classes = predictor_classes,
-    outcome_classes = outcome_classes,
     subclass = "recipes_preprocessor"
   )
 
@@ -250,7 +210,32 @@ new_terms_preprocessor_engine <- function(predictors, outcomes) {
 #'
 #' @keywords internal
 is_preprocessor_engine <- function(x) {
-  inherits(x, c("recipe", "terms_preprocessor_engine", "default_preprocessor_engine"))
+  inherits(
+    x,
+    c("recipe", "terms_preprocessor_engine", "default_preprocessor_engine")
+  )
+}
+
+# ------------------------------------------------------------------------------
+
+predictors_lst <- function(names = character(),
+                           classes = NULL,
+                           levels = NULL) {
+  list(
+    names = names,
+    classes = classes,
+    levels = levels
+  )
+}
+
+outcomes_lst <- function(names = character(),
+                         classes = NULL,
+                         levels = NULL) {
+  list(
+    names = names,
+    classes = classes,
+    levels = levels
+  )
 }
 
 # ------------------------------------------------------------------------------
@@ -272,6 +257,26 @@ validate_is_preprocessor <- function(preprocessor) {
     "preprocessor"
   )
   invisible(preprocessor)
+}
+
+validate_is_terms_list <- function(.x, .x_nm) {
+
+  validate_has_name(.x, .x_nm, "names")
+  validate_has_name(.x, .x_nm, "classes")
+  validate_has_name(.x, .x_nm, "levels")
+
+  validate_is_character(.x$names, glue("{.x_nm}$names"))
+  validate_classes_list(.x$classes, glue("{.x_nm}$classes"))
+  validate_levels_list(.x$levels, glue("{.x_nm}$levels"))
+
+  invisible(.x)
+}
+
+validate_has_name <- function(.x, .x_nm, .nm) {
+  if (!tibble::has_name(.x, .nm)) {
+    glubort("`{.x_nm}` must have an element named '{.nm}'.")
+  }
+  invisible(.x)
 }
 
 validate_is_character <- function(.x, .x_nm) {
@@ -308,3 +313,6 @@ validate_levels_list <- function(lst, lst_nm) {
 
   invisible(lst)
 }
+
+# Just happen to be the same structure
+validate_classes_list <- validate_levels_list

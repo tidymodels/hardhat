@@ -127,20 +127,18 @@ when it is time to make predictions on new data.
 
 ``` r
 names(processed$preprocessor)
-#> [1] "engine"            "intercept"         "predictors"       
-#> [4] "outcomes"          "predictor_levels"  "outcome_levels"   
-#> [7] "predictor_classes" "outcome_classes"   "indicators"
+#> [1] "engine"     "intercept"  "predictors" "outcomes"   "indicators"
 ```
 
 For instance, the original levels and classes of the predictors are
 stored automatically.
 
 ``` r
-processed$preprocessor$predictor_levels
+processed$preprocessor$predictors$levels
 #> $Species
 #> [1] "setosa"     "versicolor" "virginica"
 
-processed$preprocessor$predictor_classes
+processed$preprocessor$predictors$classes
 #> $Species
 #> [1] "factor"
 #> 
@@ -334,7 +332,7 @@ levels(iris_test_bad$Species)
 
 processed_bad_test <- forge(processed$preprocessor, iris_test_bad)
 #> Warning: The following factor levels are new for column, `Species`, and
-#> have been coerced to `NA`: "new_level".
+#> have been coerced to `NA`: 'new_level'.
 
 processed_bad_test$predictors
 #> # A tibble: 150 x 4

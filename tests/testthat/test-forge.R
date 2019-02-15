@@ -336,12 +336,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(log(Sepal.Length) ~ log(Sepal.Width), iris)
 
   expect_equal(
-    x$preprocessor$predictor_classes,
+    x$preprocessor$predictors$classes,
     list(Sepal.Width = "numeric")
   )
 
   expect_equal(
-    x$preprocessor$outcome_classes,
+    x$preprocessor$outcomes$classes,
     list(Sepal.Length = "numeric")
   )
 
@@ -501,12 +501,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_equal(
-    x$preprocessor$predictor_classes,
+    x$preprocessor$predictors$classes,
     list(Sepal.Length = "numeric", Sepal.Width = "numeric")
   )
 
   expect_equal(
-    x$preprocessor$outcome_classes,
+    x$preprocessor$outcomes$classes,
     list(.outcome = "factor")
   )
 
@@ -702,12 +702,12 @@ test_that("original predictor and outcome classes are recorded", {
   )
 
   expect_equal(
-    x$preprocessor$predictor_classes,
+    x$preprocessor$predictors$classes,
     list(Sepal.Length = "numeric")
   )
 
   expect_equal(
-    x$preprocessor$outcome_classes,
+    x$preprocessor$outcomes$classes,
     list(Species = "factor")
   )
 

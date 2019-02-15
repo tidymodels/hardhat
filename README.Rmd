@@ -89,9 +89,9 @@ names(processed$preprocessor)
 For instance, the original levels and classes of the predictors are stored automatically.
 
 ```{r}
-processed$preprocessor$predictor_levels
+processed$preprocessor$predictors$levels
 
-processed$preprocessor$predictor_classes
+processed$preprocessor$predictors$classes
 ```
 
 There is also an interface for the XY method (providing the predictors and outcome directly to `x` and `y`). The preprocessing that occurs here is minimal, but you can add an intercept to `x` with `intercept = TRUE`. 
