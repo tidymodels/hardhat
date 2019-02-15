@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Constructor for a base model — new_base_model • hardhat</title>
+<title>Create a terms preprocessor engine — new_terms_preprocessor_engine • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,12 +30,11 @@
 
 
 
-<meta property="og:title" content="Constructor for a base model — new_base_model" />
+<meta property="og:title" content="Create a terms preprocessor engine — new_terms_preprocessor_engine" />
 
-<meta property="og:description" content="A model is a scalar object, as classified in
-Advanced R. As such, it
-takes uniquely named fields in ... and combines them into a list with
-a class of class. This entire object represent a single model." />
+<meta property="og:description" content="A terms preprocessor engine is composed of two terms objects. One for the
+RHS of the original formula, which is used to preprocess the predictors.
+And one for the LHS of the original formula, reformulated as ~ LHS." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -102,102 +101,43 @@ a class of class. This entire object represent a single model." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Constructor for a base model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/constructor.R'><code>R/constructor.R</code></a></small>
-    <div class="hidden name"><code>new_base_model.Rd</code></div>
+    <h1>Create a terms preprocessor engine</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/preprocessor.R'><code>R/preprocessor.R</code></a></small>
+    <div class="hidden name"><code>new_terms_preprocessor_engine.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>A <strong>model</strong> is a <em>scalar object</em>, as classified in
-<a href='https://adv-r.hadley.nz/s3.html#object-styles'>Advanced R</a>. As such, it
-takes uniquely named fields in <code>...</code> and combines them into a list with
-a class of <code>class</code>. This entire object represent a single model.</p>
+    <p>A terms preprocessor engine is composed of two terms objects. One for the
+RHS of the original formula, which is used to preprocess the predictors.
+And one for the LHS of the original formula, reformulated as <code>~ LHS</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>new_base_model</span>(<span class='kw'>preprocessor</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='no'>class</span>)</pre>
+    <pre class="usage"><span class='fu'>new_terms_preprocessor_engine</span>(<span class='no'>predictors</span>, <span class='no'>outcomes</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>preprocessor</th>
-      <td><p>A preprocessor for new data. This can be
-a <code>terms</code> object from the formula interface, a <code>recipe</code> created with
-<code><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipes::recipe()</a></code>, or the default which converts to either a matrix or a
-data frame, and adds an intercept column if requested.</p></td>
+      <th>predictors</th>
+      <td><p>A terms object for the predictors. The formula should be
+for <code>~ RHS</code>.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Name-value pairs for elements specific to the model defined by
-<code>class</code>.</p></td>
-    </tr>
-    <tr>
-      <th>class</th>
-      <td><p>A character vector representing the class of the model.</p></td>
+      <th>outcomes</th>
+      <td><p>A terms object for the outcomes. The formula should be for
+<code>~ LHS</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Because every model should have multiple interfaces, including formula
-and <code>recipes</code> interfaces, all models should have a <code>preprocessor</code> that
-can process new data when <code><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict()</a></code> is called. The default <code>preprocessor</code>
-used in the data frame and matrix methods is <code>default_preprocessor()</code>, which
-converts an object to a data frame or matrix, and adds an intercept column
-if required.</p>
+    <p>This is done so that multivariate outcomes can be specified as
+<code>Sepal.Width + Sepal.Length ~ Species</code> and can be processed by
+<code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code> in a meaningful way.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>new_base_model</span>(
-  <span class='kw'>custom_field</span> <span class='kw'>=</span> <span class='st'>"my-field"</span>,
-  <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"custom_model"</span>
-)</div><div class='output co'>#&gt; $preprocessor
-#&gt; $engine
-#&gt; $process
-#&gt; function (new_data, intercept) 
-#&gt; {
-#&gt;     new_data &lt;- tibble::as_tibble(new_data)
-#&gt;     new_data &lt;- maybe_add_intercept_column(new_data, intercept)
-#&gt;     new_data
-#&gt; }
-#&gt; &lt;environment: 0x5525278&gt;
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "default_preprocessor_engine"
-#&gt; 
-#&gt; $intercept
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $predictors
-#&gt; character(0)
-#&gt; 
-#&gt; $outcomes
-#&gt; character(0)
-#&gt; 
-#&gt; $predictor_levels
-#&gt; NULL
-#&gt; 
-#&gt; $outcome_levels
-#&gt; NULL
-#&gt; 
-#&gt; $predictor_classes
-#&gt; NULL
-#&gt; 
-#&gt; $outcome_classes
-#&gt; NULL
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "default_preprocessor" "preprocessor"        
-#&gt; 
-#&gt; $custom_field
-#&gt; [1] "my-field"
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "custom_model"</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -205,9 +145,7 @@ if required.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
