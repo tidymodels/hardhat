@@ -130,6 +130,28 @@ tryCatch(
 )
 
 # ---------------------------------------------------------------------------
+# Dummy variables and interactions
+
+# By default, factor columns are expanded
+# And interactions are created, both by
+# calling model.matrix(). Some models (like
+# tree based models) can take factors directly
+# but still might want to use the formula method.
+# In those cases, set `indicators = FALSE` to not
+# run model.matrix()
+
+processed <- mold(Sepal.Width ~ Species, iris, indicators = FALSE)
+
+processed$predictors
+
+# No interactions are expanded when `indicators = FALSE`, but
+# the terms specified in the interaction show up in the predictors
+# tibble, with a warning
+\dontrun{
+mold(Sepal.Width ~ Sepal.Length:Species, iris, indicators = FALSE)
+}
+
+# ---------------------------------------------------------------------------
 # Multivariate outcomes
 
 # Multivariate formulas can be specified easily
