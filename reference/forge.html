@@ -33,7 +33,14 @@
 <meta property="og:title" content="Forge prediction-ready data — forge" />
 
 <meta property="og:description" content="forge() applies the transformations requested by the preprocessor
-on a set of new_data to be used in predictions." />
+on a set of new_data to be used in predictions.
+The return values of each method are all consistent with one another, but the
+nuances of exactly what is being done for each method vary enough to warrant
+separate help files for each. Click through to each one below:
+XY Method - forge.default_preprocessor()
+Formula Method - forge.terms_preprocessor()
+Recipes Method - forge.recipes_preprocessor()
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -109,22 +116,17 @@ on a set of new_data to be used in predictions." />
     
     <p><code>forge()</code> applies the transformations requested by the <code>preprocessor</code>
 on a set of <code>new_data</code> to be used in predictions.</p>
+<p>The return values of each method are all consistent with one another, but the
+nuances of exactly what is being done for each method vary enough to warrant
+separate help files for each. Click through to each one below:</p><ul>
+<li><p>XY Method - <code><a href='forge-xy.html'>forge.default_preprocessor()</a></code></p></li>
+<li><p>Formula Method - <code><a href='forge-formula.html'>forge.terms_preprocessor()</a></code></p></li>
+<li><p>Recipes Method - <code><a href='forge-recipe.html'>forge.recipes_preprocessor()</a></code></p></li>
+</ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default_preprocessor</span>
-<span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>,
-  <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for recipes_preprocessor</span>
-<span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>,
-  <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for terms_preprocessor</span>
-<span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>,
-  <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,130 +154,25 @@ as well?</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list with elements:</p><ul>
+    <p>A named list with 3 elements:</p><ul>
 <li><p><code>predictors</code>: A tibble containing the preprocessed
 <code>new_data</code> predictors.</p></li>
-<li><p><code>outcomes</code>: If <code>outcomes = TRUE</code>, the outcomes are returned here,
-otherwise <code>NULL</code>. If a formula engine was used, this is a data frame
-that is the result of extracting the outcome columns from
-<code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code>. If a recipe was used, this is a data.frame that
-is the result of calling <code><a href='https://www.rdocumentation.org/packages/recipes/topics/bake'>recipes::bake()</a></code> with <code><a href='https://www.rdocumentation.org/packages/recipes/topics/has_role'>recipes::all_outcomes()</a></code>
-specified.</p></li>
+<li><p><code>outcomes</code>: If <code>outcomes = TRUE</code>, a tibble containing the preprocessed
+<code>new_data</code> outcomes. Otherwise, <code>NULL</code>.</p></li>
+<li><p><code>offset</code>: If the <code>preprocessor</code> was a <code>"terms_preprocessor"</code>, and offsets
+were specified in the formula, this is a tibble containing the preprocessed
+offsets. Otherwise, <code>NULL</code>.</p></li>
 </ul>
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If the outcomes are present in <code>new_data</code>, it can optionally be processed
-and returned in the <code>outcomes</code> slot of the returned list. This is only
-applicable for the formula and recipes engines, but is very useful when
-doing cross validation where you need to preprocess the outcomes of a test
-set before computing performance.</p>
+    <p>If the outcomes are present in <code>new_data</code>, they can optionally be processed
+and returned in the <code>outcomes</code> slot of the returned list. This is very
+useful when doing cross validation where you need to preprocess the
+outcomes of a test set before computing performance.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># XY Method and forge(outcomes = TRUE)</span>
-
-<span class='co'># With the formula and recipes methods, you always know the name</span>
-<span class='co'># of the outcome columns. Because of this, you can ask for the</span>
-<span class='co'># outcome columns in `new_data` to be processed and returned.</span>
-<span class='co'># With the XY method if Y is a vector, a column name of `.outcome`</span>
-<span class='co'># is automatically generated. This name is what forge() looks for</span>
-<span class='co'># in `new_data` if `y` is a vector. If `y` is a data frame, it just</span>
-<span class='co'># looks for that original column name.</span>
-
-<span class='co'># X and Y are data frames</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[, <span class='st'>"Sepal.Width"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>]
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[, <span class='st'>"Species"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>]
-
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y</span>)
-<span class='fu'>forge</span>(<span class='no'>processed</span>$<span class='no'>preprocessor</span>, <span class='no'>iris</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 150 x 1
-#&gt;    Sepal.Width
-#&gt;          &lt;dbl&gt;
-#&gt;  1         3.5
-#&gt;  2         3  
-#&gt;  3         3.2
-#&gt;  4         3.1
-#&gt;  5         3.6
-#&gt;  6         3.9
-#&gt;  7         3.4
-#&gt;  8         3.4
-#&gt;  9         2.9
-#&gt; 10         3.1
-#&gt; # … with 140 more rows
-#&gt; 
-#&gt; $outcomes
-#&gt; # A tibble: 150 x 1
-#&gt;    Species
-#&gt;    &lt;fct&gt;  
-#&gt;  1 setosa 
-#&gt;  2 setosa 
-#&gt;  3 setosa 
-#&gt;  4 setosa 
-#&gt;  5 setosa 
-#&gt;  6 setosa 
-#&gt;  7 setosa 
-#&gt;  8 setosa 
-#&gt;  9 setosa 
-#&gt; 10 setosa 
-#&gt; # … with 140 more rows
-#&gt; 
-#&gt; $offset
-#&gt; NULL
-#&gt; </div><div class='input'>
-<span class='co'># Y is a vector</span>
-<span class='no'>y_vec</span> <span class='kw'>&lt;-</span> <span class='no'>y</span>$<span class='no'>Species</span>
-
-<span class='no'>processed_vec</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y_vec</span>)
-
-<span class='co'># This throws an informative error that tell you</span>
-<span class='co'># to include a `".outcome"` column in `new_data`.</span></div><span class='co'># NOT RUN {</span>
-<span class='fu'>forge</span>(<span class='no'>processed_vec</span>$<span class='no'>preprocessor</span>, <span class='no'>iris</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='co'># }</span><div class='input'>
-<span class='no'>iris2</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
-<span class='no'>iris2</span>$<span class='no'>.outcome</span> <span class='kw'>&lt;-</span> <span class='no'>iris2</span>$<span class='no'>Species</span>
-<span class='no'>iris2</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='kw'>NULL</span>
-
-<span class='co'># This works, and returns a tibble in the $outcomes slot</span>
-<span class='fu'>forge</span>(<span class='no'>processed_vec</span>$<span class='no'>preprocessor</span>, <span class='no'>iris2</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 150 x 1
-#&gt;    Sepal.Width
-#&gt;          &lt;dbl&gt;
-#&gt;  1         3.5
-#&gt;  2         3  
-#&gt;  3         3.2
-#&gt;  4         3.1
-#&gt;  5         3.6
-#&gt;  6         3.9
-#&gt;  7         3.4
-#&gt;  8         3.4
-#&gt;  9         2.9
-#&gt; 10         3.1
-#&gt; # … with 140 more rows
-#&gt; 
-#&gt; $outcomes
-#&gt; # A tibble: 150 x 1
-#&gt;    .outcome
-#&gt;    &lt;fct&gt;   
-#&gt;  1 setosa  
-#&gt;  2 setosa  
-#&gt;  3 setosa  
-#&gt;  4 setosa  
-#&gt;  5 setosa  
-#&gt;  6 setosa  
-#&gt;  7 setosa  
-#&gt;  8 setosa  
-#&gt;  9 setosa  
-#&gt; 10 setosa  
-#&gt; # … with 140 more rows
-#&gt; 
-#&gt; $offset
-#&gt; NULL
-#&gt; </div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -285,9 +182,7 @@ set before computing performance.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

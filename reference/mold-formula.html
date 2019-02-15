@@ -405,11 +405,14 @@ This interface standardizes all of that flexibility in one place.</p>
 #&gt; 10     4.9
 #&gt; # … with 140 more rows</div><div class='input'>
 <span class='co'># Multiple offsets can be included, and they get added together</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Petal.Width</span>), <span class='no'>iris</span>)
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
+  <span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Petal.Width</span>),
+  <span class='no'>iris</span>
+)
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
-   <span class='no'>processed</span>$<span class='no'>offset</span>$<span class='no'>.offset</span>,
-   <span class='no'>iris</span>$<span class='no'>Sepal.Length</span> + <span class='no'>iris</span>$<span class='no'>Petal.Width</span>
+  <span class='no'>processed</span>$<span class='no'>offset</span>$<span class='no'>.offset</span>,
+  <span class='no'>iris</span>$<span class='no'>Sepal.Length</span> + <span class='no'>iris</span>$<span class='no'>Petal.Width</span>
 )</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 </div></pre>
   </div>
