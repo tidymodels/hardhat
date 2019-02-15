@@ -821,21 +821,32 @@ test_that("novel outcome levels are caught", {
 
 })
 
-test_that("original predictor and outcome classes are recorded", {
+test_that("original predictor and outcome classes / names are recorded", {
 
   x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
+    recipe(Sepal.Length ~ Species, data = iris) %>%
+      step_dummy(Species),
     iris
   )
 
   expect_equal(
+    x$preprocessor$predictors$names,
+    "Species"
+  )
+
+  expect_equal(
+    x$preprocessor$outcomes$names,
+    "Sepal.Length"
+  )
+
+  expect_equal(
     x$preprocessor$predictors$classes,
-    list(Sepal.Length = "numeric")
+    list(Species = "factor")
   )
 
   expect_equal(
     x$preprocessor$outcomes$classes,
-    list(Species = "factor")
+    list(Sepal.Length = "numeric")
   )
 
 })
