@@ -149,6 +149,15 @@ test_that("intercepts can still be added when not using indicators (i.e. model.m
 
 })
 
+test_that("`data` is validated", {
+
+  expect_error(
+    mold(Species ~ Sepal.Width, 1),
+    "`data` must be a data.frame or a matrix"
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-mold-xy")
 
@@ -204,4 +213,13 @@ test_that("can mold recipes with intercepts", {
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))
+})
+
+test_that("`data` is validated", {
+
+  expect_error(
+    mold(recipe(Species ~ Sepal.Length, data = iris), 1),
+    "`data` must be a data.frame or a matrix"
+  )
+
 })

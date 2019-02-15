@@ -360,6 +360,8 @@ mold.formula <- function(formula, data, intercept = FALSE,
 
   validate_formula_has_intercept(formula)
 
+  data <- check_is_data_like(data)
+
   formula <- remove_formula_intercept(formula, intercept)
   formula <- alter_formula_environment(formula)
 
@@ -465,6 +467,8 @@ mold.formula <- function(formula, data, intercept = FALSE,
 mold.recipe <- function(x, data, intercept = FALSE, ...) {
 
   validate_recipes_available()
+
+  data <- check_is_data_like(data)
 
   prepped_recipe <- recipes::prep(x, training = data)
 
@@ -670,6 +674,17 @@ check_for_interactions <- function(formula) {
   }
 
   invisible(formula)
+}
+
+check_is_data_like <- function(data) {
+
+  if (!is_new_data_like(data)) {
+    glubort(
+      "`data` must be a data.frame or a matrix, not a {class1(data)}."
+    )
+  }
+
+  tibble::as_tibble(data)
 }
 
 get_predictors_formula <- function(formula) {
