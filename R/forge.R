@@ -1,13 +1,26 @@
 #' Forge prediction-ready data
 #'
+#' @description
+#'
 #' `forge()` applies the transformations requested by the `preprocessor`
 #' on a set of `new_data` to be used in predictions.
 #'
-#' If the outcomes are present in `new_data`, it can optionally be processed
-#' and returned in the `outcomes` slot of the returned list. This is only
-#' applicable for the formula and recipes engines, but is very useful when
-#' doing cross validation where you need to preprocess the outcomes of a test
-#' set before computing performance.
+#' The return values of each method are all consistent with one another, but the
+#' nuances of exactly what is being done for each method vary enough to warrant
+#' separate help files for each. Click through to each one below:
+#'
+#' * XY Method - [forge.default_preprocessor()]
+#'
+#' * Formula Method - [forge.terms_preprocessor()]
+#'
+#' * Recipes Method - [forge.recipes_preprocessor()]
+#'
+#' @details
+#'
+#' If the outcomes are present in `new_data`, they can optionally be processed
+#' and returned in the `outcomes` slot of the returned list. This is very
+#' useful when doing cross validation where you need to preprocess the
+#' outcomes of a test set before computing performance.
 #'
 #' @param preprocessor A valid `"preprocessor"`. The preprocessor that should
 #' be used here is the one in the output from the corresponding call
@@ -22,55 +35,17 @@
 #'
 #' @return
 #'
-#' A named list with elements:
+#' A named list with 3 elements:
 #'
 #'  - `predictors`: A tibble containing the preprocessed
 #'  `new_data` predictors.
 #'
-#'  - `outcomes`: If `outcomes = TRUE`, the outcomes are returned here,
-#'  otherwise `NULL`. If a formula engine was used, this is a data frame
-#'  that is the result of extracting the outcome columns from
-#'  [stats::model.frame()]. If a recipe was used, this is a data.frame that
-#'  is the result of calling [recipes::bake()] with [recipes::all_outcomes()]
-#'  specified.
+#'  - `outcomes`: If `outcomes = TRUE`, a tibble containing the preprocessed
+#'  `new_data` outcomes. Otherwise, `NULL`.
 #'
-#' @examples
-#'
-#' # ---------------------------------------------------------------------------
-#' # XY Method and forge(outcomes = TRUE)
-#'
-#' # With the formula and recipes methods, you always know the name
-#' # of the outcome columns. Because of this, you can ask for the
-#' # outcome columns in `new_data` to be processed and returned.
-#' # With the XY method if Y is a vector, a column name of `.outcome`
-#' # is automatically generated. This name is what forge() looks for
-#' # in `new_data` if `y` is a vector. If `y` is a data frame, it just
-#' # looks for that original column name.
-#'
-#' # X and Y are data frames
-#' x <- iris[, "Sepal.Width", drop = FALSE]
-#' y <- iris[, "Species", drop = FALSE]
-#'
-#' processed <- mold(x, y)
-#' forge(processed$preprocessor, iris, outcomes = TRUE)
-#'
-#' # Y is a vector
-#' y_vec <- y$Species
-#'
-#' processed_vec <- mold(x, y_vec)
-#'
-#' # This throws an informative error that tell you
-#' # to include a `".outcome"` column in `new_data`.
-#' \dontrun{
-#' forge(processed_vec$preprocessor, iris, outcomes = TRUE)
-#' }
-#'
-#' iris2 <- iris
-#' iris2$.outcome <- iris2$Species
-#' iris2$Species <- NULL
-#'
-#' # This works, and returns a tibble in the $outcomes slot
-#' forge(processed_vec$preprocessor, iris2, outcomes = TRUE)
+#'  - `offset`: If the `preprocessor` was a `"terms_preprocessor"`, and offsets
+#'  were specified in the formula, this is a tibble containing the preprocessed
+#'  offsets. Otherwise, `NULL`.
 #'
 #' @export
 forge <- function(preprocessor, new_data,
@@ -84,7 +59,104 @@ forge.default <- function(preprocessor, new_data,
   abort("Unknown preprocessor.")
 }
 
-#' @rdname forge
+#' Forge - XY Method
+#'
+#' @description
+#'
+#' For the default preprocessor, `forge()` does the following:
+#'
+#' - Calls [shrink()] to trim `new_data` to only the required columns and
+#' coerce `new_data` to a tibble.
+#'
+#' - Calls [scream()] to perform validation on the structure of the columns
+#' of `new_data`.
+#'
+#' - Calls on the default preprocessor engine to potentially add an intercept
+#' column onto `new_data`, if the corresponding call to [mold()] used one.
+#'
+#' @details
+#'
+#' The one special thing about the XY method of `forge()` is the behavior of
+#' `outcomes = TRUE` when a _vector_ `y` value was provided to the original
+#' call to [mold()] (which generated the preprocessor). In that case, `mold()`
+#' converted `y` into a tibble, with a default name of `.outcome`. This is the
+#' column that `forge()` will look for in `new_data` to preprocess. See the
+#' examples section for a demonstration of this.
+#'
+#' @inheritParams forge
+#'
+#' @param preprocessor A `"default_preprocessor"`.
+#'
+#' @inherit forge return
+#'
+#' @examples
+#'
+#' # ---------------------------------------------------------------------------
+#' # Setup
+#'
+#' train <- iris[1:100,]
+#' test <- iris[101:150,]
+#'
+#' train_x <- train[, "Sepal.Length", drop = FALSE]
+#' train_y <- train[, "Species", drop = FALSE]
+#'
+#' test_x <- test[, "Sepal.Length", drop = FALSE]
+#' test_y <- test[, "Species", drop = FALSE]
+#'
+#' # ---------------------------------------------------------------------------
+#' # XY Example
+#'
+#' # First, call mold() with the training data
+#' processed <- mold(train_x, train_y)
+#'
+#' # Then, call forge() with the preprocessor and the test data
+#' # to have it preprocess the test data in the same way
+#' forge(processed$preprocessor, test_x)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Intercept
+#'
+#' processed <- mold(train_x, train_y, intercept = TRUE)
+#'
+#' forge(processed$preprocessor, test_x)
+#'
+#' # ---------------------------------------------------------------------------
+#' # XY Method and forge(outcomes = TRUE)
+#'
+#' # You can request that the new outcome columns are preprocessed as well, but
+#' # they have to be present in `new_data`!
+#'
+#' processed <- mold(train_x, train_y)
+#'
+#' # Can't do this!
+#' # forge(processed$preprocessor, test_x, outcomes = TRUE)
+#'
+#' # Need to use the full test set, including `y`
+#' forge(processed$preprocessor, test, outcomes = TRUE)
+#'
+#' # With the XY method, if the Y value used in `mold()` is a vector,
+#' # then a column name of `.outcome` is automatically generated.
+#' # This name is what forge() looks for in `new_data`.
+#'
+#' # Y is a vector!
+#' y_vec <- train_y$Species
+#'
+#' processed_vec <- mold(train_x, y_vec)
+#'
+#' # This throws an informative error that tell you
+#' # to include an `".outcome"` column in `new_data`.
+#' \dontrun{
+#' forge(processed_vec$preprocessor, iris, outcomes = TRUE)
+#' }
+#'
+#' test2 <- test
+#' test2$.outcome <- test2$Species
+#' test2$Species <- NULL
+#'
+#' # This works, and returns a tibble in the $outcomes slot
+#' forge(processed_vec$preprocessor, test2, outcomes = TRUE)
+#'
+#' @rdname forge-xy
 #' @export
 forge.default_preprocessor <- function(preprocessor, new_data,
                                        outcomes = FALSE, ...) {
@@ -100,7 +172,15 @@ forge.default_preprocessor <- function(preprocessor, new_data,
   baked_list
 }
 
-#' @rdname forge
+#' Forge - Recipes Method
+#'
+#' If a recipe was used, this is a data.frame that
+#'  is the result of calling [recipes::bake()] with [recipes::all_outcomes()]
+#'  specified.
+#'
+#' @inherit forge return
+#'
+#' @rdname forge-recipe
 #' @export
 forge.recipes_preprocessor <- function(preprocessor, new_data,
                                        outcomes = FALSE, ...) {
@@ -122,7 +202,16 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
   baked_list
 }
 
-#' @rdname forge
+#' Forge - Formula Method
+#'
+#' If a formula engine was used, this is a data frame
+#'  that is the result of extracting the outcome columns from
+#'  [stats::model.frame()]
+#'
+#' @inherit forge return
+#'
+#' @rdname forge-formula
+#'
 #' @export
 forge.terms_preprocessor <- function(preprocessor, new_data,
                                      outcomes = FALSE, ...) {
