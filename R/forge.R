@@ -178,6 +178,10 @@ forge.default_preprocessor <- function(preprocessor, new_data,
 #'  is the result of calling [recipes::bake()] with [recipes::all_outcomes()]
 #'  specified.
 #'
+#' @inheritParams forge
+#'
+#' @param preprocessor A `"recipes_preprocessor"`.
+#'
 #' @inherit forge return
 #'
 #' @rdname forge-recipe
@@ -207,6 +211,10 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
 #' If a formula engine was used, this is a data frame
 #'  that is the result of extracting the outcome columns from
 #'  [stats::model.frame()]
+#'
+#' @inheritParams forge
+#'
+#' @param preprocessor A `"terms_preprocessor"`.
 #'
 #' @inherit forge return
 #'

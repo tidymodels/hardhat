@@ -7,6 +7,16 @@
 \method{forge}{terms_preprocessor}(preprocessor, new_data,
   outcomes = FALSE, ...)
 }
+\arguments{
+\item{preprocessor}{A \code{"terms_preprocessor"}.}
+
+\item{new_data}{A data frame or matrix to preprocess.}
+
+\item{outcomes}{A logical. Should the outcomes be processed and returned
+as well?}
+
+\item{...}{Not currently used.}
+}
 \value{
 A named list with 3 elements:
 \itemize{
