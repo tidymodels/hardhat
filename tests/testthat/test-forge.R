@@ -641,6 +641,41 @@ test_that("new data classes can interchange integer/numeric", {
 
 })
 
+test_that("intercept is not included as a predictor", {
+
+  x <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris[, "Species", drop = FALSE],
+    intercept = TRUE
+  )
+
+  expect_false(
+    "(Intercept)" %in% x$preprocessor$predictors$names
+  )
+
+  expect_error(
+    xx <- forge(x$preprocessor, iris),
+    NA
+  )
+
+  expect_equal(
+    colnames(xx$predictors),
+    c("(Intercept)", "Sepal.Length")
+  )
+
+  # again, with matrices
+  xx <- mold(
+    as.matrix(iris[, "Sepal.Length", drop = FALSE]),
+    iris$Sepal.Width,
+    intercept = TRUE
+  )
+
+  expect_false(
+    "(Intercept)" %in% xx$preprocessor$predictors$names
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-forge-recipe")
 

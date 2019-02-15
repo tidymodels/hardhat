@@ -114,7 +114,6 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
 
   engine <- new_default_preprocessor_engine()
 
-  x <- engine$process(x, intercept)
   y <- standardize(y)
 
   preprocessor <- new_default_preprocessor(
@@ -132,6 +131,10 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
     )
   )
 
+  # Process x _after_ extracting the "original"
+  # predictor column names and classes
+  x <- engine$process(x, intercept)
+
   mold_list(x, y, preprocessor)
 }
 
@@ -141,7 +144,6 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
 
   engine <- new_default_preprocessor_engine()
 
-  x <- engine$process(x, intercept)
   y <- standardize(y)
 
   preprocessor <- new_default_preprocessor(
@@ -158,6 +160,10 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
       levels = get_levels(y)
     )
   )
+
+  # Process x _after_ extracting the "original"
+  # predictor column names and classes
+  x <- engine$process(x, intercept)
 
   mold_list(x, y, preprocessor)
 }
