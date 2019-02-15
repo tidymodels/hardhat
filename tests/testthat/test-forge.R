@@ -641,6 +641,41 @@ test_that("new data classes can interchange integer/numeric", {
 
 })
 
+test_that("intercept is not included as a predictor", {
+
+  x <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris[, "Species", drop = FALSE],
+    intercept = TRUE
+  )
+
+  expect_false(
+    "(Intercept)" %in% x$preprocessor$predictors$names
+  )
+
+  expect_error(
+    xx <- forge(x$preprocessor, iris),
+    NA
+  )
+
+  expect_equal(
+    colnames(xx$predictors),
+    c("(Intercept)", "Sepal.Length")
+  )
+
+  # again, with matrices
+  xx <- mold(
+    as.matrix(iris[, "Sepal.Length", drop = FALSE]),
+    iris$Sepal.Width,
+    intercept = TRUE
+  )
+
+  expect_false(
+    "(Intercept)" %in% xx$preprocessor$predictors$names
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-forge-recipe")
 
@@ -786,21 +821,32 @@ test_that("novel outcome levels are caught", {
 
 })
 
-test_that("original predictor and outcome classes are recorded", {
+test_that("original predictor and outcome classes / names are recorded", {
 
   x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
+    recipe(Sepal.Length ~ Species, data = iris) %>%
+      step_dummy(Species),
     iris
   )
 
   expect_equal(
+    x$preprocessor$predictors$names,
+    "Species"
+  )
+
+  expect_equal(
+    x$preprocessor$outcomes$names,
+    "Sepal.Length"
+  )
+
+  expect_equal(
     x$preprocessor$predictors$classes,
-    list(Sepal.Length = "numeric")
+    list(Species = "factor")
   )
 
   expect_equal(
     x$preprocessor$outcomes$classes,
-    list(Species = "factor")
+    list(Sepal.Length = "numeric")
   )
 
 })

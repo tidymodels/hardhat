@@ -2,21 +2,9 @@
 % Please edit documentation in R/forge.R
 \name{forge}
 \alias{forge}
-\alias{forge.default_preprocessor}
-\alias{forge.recipes_preprocessor}
-\alias{forge.terms_preprocessor}
 \title{Forge prediction-ready data}
 \usage{
 forge(preprocessor, new_data, outcomes = FALSE, ...)
-
-\method{forge}{default_preprocessor}(preprocessor, new_data,
-  outcomes = FALSE, ...)
-
-\method{forge}{recipes_preprocessor}(preprocessor, new_data,
-  outcomes = FALSE, ...)
-
-\method{forge}{terms_preprocessor}(preprocessor, new_data,
-  outcomes = FALSE, ...)
 }
 \arguments{
 \item{preprocessor}{A valid \code{"preprocessor"}. The preprocessor that should
@@ -31,65 +19,33 @@ as well?}
 \item{...}{Not currently used.}
 }
 \value{
-A named list with elements:
+A named list with 3 elements:
 \itemize{
 \item \code{predictors}: A tibble containing the preprocessed
 \code{new_data} predictors.
-\item \code{outcomes}: If \code{outcomes = TRUE}, the outcomes are returned here,
-otherwise \code{NULL}. If a formula engine was used, this is a data frame
-that is the result of extracting the outcome columns from
-\code{\link[stats:model.frame]{stats::model.frame()}}. If a recipe was used, this is a data.frame that
-is the result of calling \code{\link[recipes:bake]{recipes::bake()}} with \code{\link[recipes:all_outcomes]{recipes::all_outcomes()}}
-specified.
+\item \code{outcomes}: If \code{outcomes = TRUE}, a tibble containing the preprocessed
+\code{new_data} outcomes. Otherwise, \code{NULL}.
+\item \code{offset}: If the \code{preprocessor} was a \code{"terms_preprocessor"}, and offsets
+were specified in the formula, this is a tibble containing the preprocessed
+offsets. Otherwise, \code{NULL}.
 }
 }
 \description{
 \code{forge()} applies the transformations requested by the \code{preprocessor}
 on a set of \code{new_data} to be used in predictions.
+
+The return values of each method are all consistent with one another, but the
+nuances of exactly what is being done for each method vary enough to warrant
+separate help files for each. Click through to each one below:
+\itemize{
+\item XY Method - \code{\link[=forge.default_preprocessor]{forge.default_preprocessor()}}
+\item Formula Method - \code{\link[=forge.terms_preprocessor]{forge.terms_preprocessor()}}
+\item Recipes Method - \code{\link[=forge.recipes_preprocessor]{forge.recipes_preprocessor()}}
+}
 }
 \details{
-If the outcomes are present in \code{new_data}, it can optionally be processed
-and returned in the \code{outcomes} slot of the returned list. This is only
-applicable for the formula and recipes engines, but is very useful when
-doing cross validation where you need to preprocess the outcomes of a test
-set before computing performance.
-}
-\examples{
-
-# ---------------------------------------------------------------------------
-# XY Method and forge(outcomes = TRUE)
-
-# With the formula and recipes methods, you always know the name
-# of the outcome columns. Because of this, you can ask for the
-# outcome columns in `new_data` to be processed and returned.
-# With the XY method if Y is a vector, a column name of `.outcome`
-# is automatically generated. This name is what forge() looks for
-# in `new_data` if `y` is a vector. If `y` is a data frame, it just
-# looks for that original column name.
-
-# X and Y are data frames
-x <- iris[, "Sepal.Width", drop = FALSE]
-y <- iris[, "Species", drop = FALSE]
-
-processed <- mold(x, y)
-forge(processed$preprocessor, iris, outcomes = TRUE)
-
-# Y is a vector
-y_vec <- y$Species
-
-processed_vec <- mold(x, y_vec)
-
-# This throws an informative error that tell you
-# to include a `".outcome"` column in `new_data`.
-\dontrun{
-forge(processed_vec$preprocessor, iris, outcomes = TRUE)
-}
-
-iris2 <- iris
-iris2$.outcome <- iris2$Species
-iris2$Species <- NULL
-
-# This works, and returns a tibble in the $outcomes slot
-forge(processed_vec$preprocessor, iris2, outcomes = TRUE)
-
+If the outcomes are present in \code{new_data}, they can optionally be processed
+and returned in the \code{outcomes} slot of the returned list. This is very
+useful when doing cross validation where you need to preprocess the
+outcomes of a test set before computing performance.
 }

@@ -114,7 +114,6 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
 
   engine <- new_default_preprocessor_engine()
 
-  x <- engine$process(x, intercept)
   y <- standardize(y)
 
   preprocessor <- new_default_preprocessor(
@@ -132,6 +131,10 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
     )
   )
 
+  # Process x _after_ extracting the "original"
+  # predictor column names and classes
+  x <- engine$process(x, intercept)
+
   mold_list(x, y, preprocessor)
 }
 
@@ -141,7 +144,6 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
 
   engine <- new_default_preprocessor_engine()
 
-  x <- engine$process(x, intercept)
   y <- standardize(y)
 
   preprocessor <- new_default_preprocessor(
@@ -158,6 +160,10 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
       levels = get_levels(y)
     )
   )
+
+  # Process x _after_ extracting the "original"
+  # predictor column names and classes
+  x <- engine$process(x, intercept)
 
   mold_list(x, y, preprocessor)
 }
@@ -336,11 +342,14 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
 #' processed$offset
 #'
 #' # Multiple offsets can be included, and they get added together
-#' processed <- mold(Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width), iris)
+#' processed <- mold(
+#'   Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width),
+#'   iris
+#' )
 #'
 #' identical(
-#'    processed$offset$.offset,
-#'    iris$Sepal.Length + iris$Petal.Width
+#'   processed$offset$.offset,
+#'   iris$Sepal.Length + iris$Petal.Width
 #' )
 #'
 #' @rdname mold-formula
@@ -470,6 +479,7 @@ mold.recipe <- function(x, data, intercept = FALSE, ...) {
   # un-retain training data
   prepped_recipe <- compost(prepped_recipe)
 
+  all_names <- get_original_recipe_names(data, prepped_recipe)
   all_levels <- get_original_recipe_levels(data, prepped_recipe)
   all_data_classes <- get_original_recipe_data_classes(data, prepped_recipe)
 
@@ -477,12 +487,12 @@ mold.recipe <- function(x, data, intercept = FALSE, ...) {
     engine = prepped_recipe,
     intercept = intercept,
     predictors = predictors_lst(
-      names = colnames(predictors),
+      names = all_names$predictors,
       classes = all_data_classes$predictors,
       levels = all_levels$predictors
     ),
     outcomes = outcomes_lst(
-      names = colnames(outcomes),
+      names = all_names$outcomes,
       classes = all_data_classes$outcomes,
       levels = all_levels$outcomes
     )
@@ -517,6 +527,19 @@ alter_formula_environment <- function(formula) {
     rhs = rlang::f_rhs(formula),
     env = env_above_global_env
   )
+}
+
+get_original_recipe_names <- function(x, rec) {
+
+  roles <- rec$var_info$role
+  original_predictors <- rec$var_info$variable[roles == "predictor"]
+  original_outcomes <- rec$var_info$variable[roles == "outcome"]
+
+  list(
+    predictors = colnames(x[, original_predictors, drop = FALSE]),
+    outcomes = colnames(x[, original_outcomes, drop = FALSE])
+  )
+
 }
 
 get_original_recipe_levels <- function(x, rec) {
