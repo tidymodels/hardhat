@@ -52,6 +52,7 @@ forge.default_preprocessor <- function(preprocessor, new_data, ...) {
   validate_no_outcome_specified(list(...))
 
   new_data <- shrink(preprocessor, new_data)
+  new_data <- scream(preprocessor, new_data)
 
   predictors <- preprocessor$engine$process(
     new_data,
@@ -72,6 +73,7 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
   validate_is_bool(outcome)
 
   new_data <- shrink(preprocessor, new_data, outcome)
+  new_data <- scream(preprocessor, new_data, outcome)
 
   baked_list <- bake_recipe_engine(
     preprocessor = preprocessor,
@@ -97,6 +99,7 @@ forge.terms_preprocessor <- function(preprocessor, new_data,
   validate_is_bool(outcome)
 
   new_data <- shrink(preprocessor, new_data, outcome)
+  new_data <- scream(preprocessor, new_data, outcome)
 
   baked_list <- bake_terms_engine(preprocessor, new_data, outcome)
 

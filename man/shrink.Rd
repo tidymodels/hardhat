@@ -9,46 +9,35 @@ shrink(preprocessor, new_data, outcome = FALSE)
 \arguments{
 \item{preprocessor}{A \code{"preprocessor"}.}
 
-\item{new_data}{A data frame containing the new data that will be shrunk down
-to only contain the predictors required for preprocessing and prediction.}
+\item{new_data}{A data frame at least containing the new predictors, and
+potentially the outcomes if \code{outcome = TRUE}.}
 
 \item{outcome}{A logical. Should the outcome be included in the shrunk
-\code{new_data} as well?}
+\code{new_data} output as well?}
 }
 \value{
 A tibble containing the required predictors (and potentially the
 outcomes).
 }
 \description{
-\code{shrink()} performs a number of validation steps on \code{new_data}, and then
-subsets it to only contain the required columns. \code{shrink()} does the
-following validation:
+\code{shrink()} subsets \code{new_data} to only contain the required columns.
+\code{shrink()} also performs the following validation checks on \code{new_data}:
 \itemize{
 \item Checks that all required predictor columns exist in \code{new_data}.
-\item Checks that the class of each required predictor in \code{new_data} is the same
-as the class used during training.
-\item Checks that all \code{new_data} factor columns don't have any \emph{new} levels
-when compared with the original data used in training. If there are new
-levels, they are replaced with \code{NA} values and a warning is
-issued.
-\item Checks that all \code{new_data} factor columns aren't missing any factor levels
-when compared with the original data used in training. If there are missing
-levels (or misordered levels for ordered factors), then they are restored
-and a warning is issued.
 }
 }
 \details{
-If \code{outcome = TRUE}, then the validation steps are performed on the known
+If \code{outcome = TRUE}, then the validation checks are performed on the known
 outcome column as well, and it is returned along with the predictors. If
 \code{\link[=mold]{mold()}} was called with the XY interface, then no preprocessing was done
-to \code{y} and \code{outcome} cannot be set to \code{TRUE} (if a vector was passed as \code{y}
+to \code{y} and \code{outcome} will have no effect (if a vector was passed as \code{y}
 during the fit, \code{shrink()} has no way of knowing what column in \code{new_data}
 corresponds to the outcome).
 
-\code{shrink()} is called by \code{\link[=forge]{forge()}} before the actual processing is done.
+\code{shrink()} is called by \code{\link[=forge]{forge()}} before \code{\link[=scream]{scream()}} and before the actual
+processing is done.
 }
 \examples{
-
 train <- iris[1:100,]
 test <- iris[101:150,]
 
@@ -64,15 +53,9 @@ shrink(x$preprocessor, test)
 # this can be useful if doing cross validation
 shrink(x$preprocessor, test, outcome = TRUE)
 
-# shrink() validates that the classes are the same
-# as the ones used in mold(). The below call
-# to shrink() will fail with an informative error.
-test2 <- test
-test2$Species <- as.character(test2$Species)
-
-\dontrun{
-shrink(x$preprocessor, test2)
-}
-
+# forge() actually preprocesses the new_data, after
+# a call to shrink(). Notice how now the Sepal.Width
+# column is logged
+forge(x$preprocessor, test, outcome = TRUE)$outcomes
 
 }
