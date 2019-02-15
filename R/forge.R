@@ -3,10 +3,10 @@
 #' `forge()` applies the transformations requested by the `preprocessor`
 #' on a set of `new_data` to be used in predictions.
 #'
-#' If the outcome is present in `new_data`, it can optionally be processed
-#' and returned in the `outcome` slot of the returned list. This is only
+#' If the outcomes are present in `new_data`, it can optionally be processed
+#' and returned in the `outcomes` slot of the returned list. This is only
 #' applicable for the formula and recipes engines, but is very useful when
-#' doing cross validation where you need to preprocess the outcome of a test
+#' doing cross validation where you need to preprocess the outcomes of a test
 #' set before computing performance.
 #'
 #' @param preprocessor A valid `"preprocessor"`. The preprocessor that should
@@ -15,7 +15,7 @@
 #'
 #' @param new_data A data frame or matrix to preprocess.
 #'
-#' @param outcome A logical. Should the outcome be processed and returned
+#' @param outcomes A logical. Should the outcomes be processed and returned
 #' as well?
 #'
 #' @param ... Not currently used.
@@ -27,63 +27,96 @@
 #'  - `predictors`: A tibble containing the preprocessed
 #'  `new_data` predictors.
 #'
-#'  - `outcome`: If `outcome = TRUE`, the outcome is returned here, otherwise
-#'  `NULL`. If a formula engine was used, this is a data frame that is the
-#'  result of extracting the outcome columns from [stats::model.frame()].
-#'  If a recipe was used, this is a data.frame that is the result of calling
-#'  [recipes::bake()] with [recipes::all_outcomes()] specified.
+#'  - `outcomes`: If `outcomes = TRUE`, the outcomes are returned here,
+#'  otherwise `NULL`. If a formula engine was used, this is a data frame
+#'  that is the result of extracting the outcome columns from
+#'  [stats::model.frame()]. If a recipe was used, this is a data.frame that
+#'  is the result of calling [recipes::bake()] with [recipes::all_outcomes()]
+#'  specified.
+#'
+#' @examples
+#'
+#' # ---------------------------------------------------------------------------
+#' # XY Method and forge(outcomes = TRUE)
+#'
+#' # With the formula and recipes methods, you always know the name
+#' # of the outcome columns. Because of this, you can ask for the
+#' # outcome columns in `new_data` to be processed and returned.
+#' # With the XY method if Y is a vector, a column name of `.outcome`
+#' # is automatically generated. This name is what forge() looks for
+#' # in `new_data` if `y` is a vector. If `y` is a data frame, it just
+#' # looks for that original column name.
+#'
+#' # X and Y are data frames
+#' x <- iris[, "Sepal.Width", drop = FALSE]
+#' y <- iris[, "Species", drop = FALSE]
+#'
+#' processed <- mold(x, y)
+#' forge(processed$preprocessor, iris, outcomes = TRUE)
+#'
+#' # Y is a vector
+#' y_vec <- y$Species
+#'
+#' processed_vec <- mold(x, y_vec)
+#'
+#' # This throws an informative error that tell you
+#' # to include a `".outcome"` column in `new_data`.
+#' \dontrun{
+#' forge(processed_vec$preprocessor, iris, outcomes = TRUE)
+#' }
+#'
+#' iris2 <- iris
+#' iris2$.outcome <- iris2$Species
+#' iris2$Species <- NULL
+#'
+#' # This works, and returns a tibble in the $outcomes slot
+#' forge(processed_vec$preprocessor, iris2, outcomes = TRUE)
 #'
 #' @export
-forge <- function(preprocessor, new_data, ...) {
+forge <- function(preprocessor, new_data,
+                  outcomes = FALSE, ...) {
   UseMethod("forge")
 }
 
 #' @export
-forge.default <- function(preprocessor, new_data, ...) {
+forge.default <- function(preprocessor, new_data,
+                          outcomes = FALSE, ...) {
   abort("Unknown preprocessor.")
 }
 
 #' @rdname forge
 #' @export
-forge.default_preprocessor <- function(preprocessor, new_data, ...) {
+forge.default_preprocessor <- function(preprocessor, new_data,
+                                       outcomes = FALSE, ...) {
 
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
-  validate_no_outcome_specified(list(...))
 
-  new_data <- shrink(preprocessor, new_data)
-  new_data <- scream(preprocessor, new_data)
+  new_data <- shrink(preprocessor, new_data, outcomes)
+  new_data <- scream(preprocessor, new_data, outcomes)
 
-  predictors <- preprocessor$engine$process(
-    new_data,
-    preprocessor$intercept
-  )
+  baked_list <- bake_default_engine(preprocessor, new_data, outcomes)
 
-  forge_list(predictors)
+  baked_list
 }
 
 #' @rdname forge
 #' @export
 forge.recipes_preprocessor <- function(preprocessor, new_data,
-                                       outcome = FALSE, ...) {
+                                       outcomes = FALSE, ...) {
 
   validate_recipes_available()
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcome)
+  validate_is_bool(outcomes)
 
-  new_data <- shrink(preprocessor, new_data, outcome)
-  new_data <- scream(preprocessor, new_data, outcome)
+  new_data <- shrink(preprocessor, new_data, outcomes)
+  new_data <- scream(preprocessor, new_data, outcomes)
 
   baked_list <- bake_recipe_engine(
     preprocessor = preprocessor,
     new_data = new_data,
-    outcome = outcome
-  )
-
-  baked_list$predictors <- maybe_add_intercept_column(
-    x = baked_list$predictors,
-    intercept = preprocessor$intercept
+    outcomes = outcomes
   )
 
   baked_list
@@ -92,16 +125,16 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
 #' @rdname forge
 #' @export
 forge.terms_preprocessor <- function(preprocessor, new_data,
-                                          outcome = FALSE, ...) {
+                                     outcomes = FALSE, ...) {
 
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcome)
+  validate_is_bool(outcomes)
 
-  new_data <- shrink(preprocessor, new_data, outcome)
-  new_data <- scream(preprocessor, new_data, outcome)
+  new_data <- shrink(preprocessor, new_data, outcomes)
+  new_data <- scream(preprocessor, new_data, outcomes)
 
-  baked_list <- bake_terms_engine(preprocessor, new_data, outcome)
+  baked_list <- bake_terms_engine(preprocessor, new_data, outcomes)
 
   baked_list
 }
@@ -117,13 +150,60 @@ forge_list <- function(predictors, outcomes = NULL) {
 
 # ------------------------------------------------------------------------------
 
-bake_recipe_engine <- function(preprocessor, new_data, outcome) {
-  if (outcome) {
-    bake_with_outcome(preprocessor, new_data)
+bake_default_engine <- function(preprocessor, new_data, outcomes) {
+
+  if (outcomes) {
+    baked_list <- bake_default_with_outcome(preprocessor, new_data)
   }
   else {
-    bake_without_outcome(preprocessor, new_data)
+    baked_list <- bake_default_without_outcome(preprocessor, new_data)
   }
+
+  baked_list$predictors <- preprocessor$engine$process(
+    new_data = baked_list$predictors,
+    intercept = preprocessor$intercept
+  )
+
+  baked_list
+}
+
+bake_default_with_outcome <- function(preprocessor, new_data) {
+
+  original_predictor_columns <- preprocessor$predictors$names
+  original_outcome_columns <- preprocessor$outcomes$names
+
+  predictors <- new_data[, original_predictor_columns, drop = FALSE]
+  outcomes <- new_data[, original_outcome_columns, drop = FALSE]
+
+  forge_list(predictors, outcomes)
+}
+
+bake_default_without_outcome <- function(preprocessor, new_data) {
+
+  original_predictor_columns <- preprocessor$predictors$names
+
+  predictors <- new_data[, original_predictor_columns, drop = FALSE]
+
+  forge_list(predictors)
+}
+
+# ------------------------------------------------------------------------------
+
+bake_recipe_engine <- function(preprocessor, new_data, outcomes) {
+
+  if (outcomes) {
+    baked_list <- bake_with_outcome(preprocessor, new_data)
+  }
+  else {
+    baked_list <- bake_without_outcome(preprocessor, new_data)
+  }
+
+  baked_list$predictors <- maybe_add_intercept_column(
+    x = baked_list$predictors,
+    intercept = preprocessor$intercept
+  )
+
+  baked_list
 }
 
 bake_with_outcome <- function(preprocessor, new_data) {
@@ -166,13 +246,13 @@ bake_without_outcome <- function(preprocessor, new_data) {
 
 # ------------------------------------------------------------------------------
 
-bake_terms_engine <- function(preprocessor, new_data, outcome) {
+bake_terms_engine <- function(preprocessor, new_data, outcomes) {
 
   # From NULL to one env above global
   preprocessor$engine$predictors <- alter_terms_environment(preprocessor$engine$predictors)
   preprocessor$engine$outcomes <- alter_terms_environment(preprocessor$engine$outcomes)
 
-  if (outcome) {
+  if (outcomes) {
     bake_terms_with_outcome(preprocessor, new_data)
   }
   else {
@@ -217,7 +297,7 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
   forge_list(predictors)
 }
 
-# To get the post processed name of the outcome column
+# To get the post processed name of the outcome columns
 response_name <- function(terms_engine) {
   rlang::as_label(rlang::f_lhs(terms_engine))
 }
@@ -242,17 +322,4 @@ validate_is_new_data_like <- function(new_data) {
     is_new_data_like,
     "data.frame or matrix"
   )
-}
-
-validate_no_outcome_specified <- function(dots) {
-
-  if (length(dots) > 0) {
-    if ("outcome" %in% names(dots)) {
-      glubort(
-        "`outcome` cannot be specified when a default preprocessor is used."
-      )
-    }
-  }
-
-  invisible(dots)
 }

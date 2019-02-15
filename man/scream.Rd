@@ -4,16 +4,16 @@
 \alias{scream}
 \title{😱 Scream.}
 \usage{
-scream(preprocessor, new_data, outcome = FALSE)
+scream(preprocessor, new_data, outcomes = FALSE)
 }
 \arguments{
 \item{preprocessor}{A \code{"preprocessor"}.}
 
 \item{new_data}{A data frame containing the new data to check the structure
 of. This should contain the predictors, and potentially the outcomes if
-\code{outcome = TRUE}.}
+\code{outcomes = TRUE}.}
 
-\item{outcome}{A logical. Should the outcome be checked as well?}
+\item{outcomes}{A logical. Should the outcomes be checked as well?}
 }
 \value{
 A tibble containing the required predictors (and potentially the
@@ -40,9 +40,9 @@ and a warning is issued.
 actual processing is done. Generally, you don't need to call \code{scream()}
 directly, as \code{forge()} will do it for you.
 
-If \code{outcome = TRUE}, then the validation steps are performed on the known
-outcome column as well. If \code{\link[=mold]{mold()}} was called with the XY interface,
-then no preprocessing was done to \code{y} and \code{outcome} will have no effect
+If \code{outcomes = TRUE}, then the validation steps are performed on the known
+outcome columns as well. If \code{\link[=mold]{mold()}} was called with the XY interface,
+then no preprocessing was done to \code{y} and \code{outcomes} will have no effect
 (if a vector was passed as \code{y} during the fit, \code{scream()} has no
 way of knowing what column in \code{new_data} corresponds to the outcome).
 
@@ -67,10 +67,10 @@ test_shrunk <- shrink(x$preprocessor, test)
 # Silence is key!
 scream(x$preprocessor, test_shrunk)
 
-# If `outcome = TRUE` is used with shrink(),
+# If `outcomes = TRUE` is used with shrink(),
 # it should also be used with scream()
-test_outcome <- shrink(x$preprocessor, test, outcome = TRUE)
-scream(x$preprocessor, test_outcome, outcome = TRUE)
+test_outcome <- shrink(x$preprocessor, test, outcomes = TRUE)
+scream(x$preprocessor, test_outcome, outcomes = TRUE)
 
 # scream() validates that the classes of `new_data`
 # are the same as the ones used in mold(). The below call
