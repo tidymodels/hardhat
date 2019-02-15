@@ -300,9 +300,9 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
 #'
 #' # Call mold() with the training data
 #' processed <- mold(
-#'    log(Sepal.Length) ~ Sepal.Length + Species,
-#'    train,
-#'    intercept = TRUE
+#'   log(Sepal.Length) ~ Sepal.Length + Species,
+#'   train,
+#'   intercept = TRUE
 #' )
 #'
 #' # Then, call forge() with the preprocessor and the test data
@@ -336,8 +336,8 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
 #' # Offsets specified in mold() are computed in forge() as well,
 #' # and are placed in the `$offset` slot of the result
 #' processed <- mold(
-#'    Sepal.Width ~ Species + offset(Sepal.Length) + offset(Petal.Width),
-#'    train
+#'   Sepal.Width ~ Species + offset(Sepal.Length) + offset(Petal.Width),
+#'   train
 #' )
 #'
 #' forge(processed$preprocessor, test)

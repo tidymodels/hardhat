@@ -187,11 +187,14 @@ processed <- mold(Sepal.Width ~ offset(Sepal.Length) + Species, iris)
 processed$offset
 
 # Multiple offsets can be included, and they get added together
-processed <- mold(Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width), iris)
+processed <- mold(
+  Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width),
+  iris
+)
 
 identical(
-   processed$offset$.offset,
-   iris$Sepal.Length + iris$Petal.Width
+  processed$offset$.offset,
+  iris$Sepal.Length + iris$Petal.Width
 )
 
 }
