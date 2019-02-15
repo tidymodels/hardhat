@@ -13,13 +13,15 @@ data.frame or matrix, it should contain the predictors.}
 \item{...}{Currently unused.}
 }
 \value{
-A named list containing 3 elements:
+A named list containing 4 elements:
 \itemize{
 \item \code{predictors}: A tibble containing the molded predictors to be used in the
 model.
 \item \code{outcome}: A tibble containing the molded outcomes to be used in the
 model.
 \item \code{preprocessor}: A \code{"preprocessor"} object for use when making predictions.
+\item \code{offset}: A tibble with a single column named \code{".offset"} if an offset
+was specified in the formula method. Otherwise, \code{NULL}.
 }
 }
 \description{

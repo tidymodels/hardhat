@@ -141,10 +141,11 @@ forge.terms_preprocessor <- function(preprocessor, new_data,
 
 # ------------------------------------------------------------------------------
 
-forge_list <- function(predictors, outcomes = NULL) {
+forge_list <- function(predictors, outcomes = NULL, offset = NULL) {
   list(
     predictors = predictors,
-    outcomes = outcomes
+    outcomes = outcomes,
+    offset = offset
   )
 }
 
@@ -277,7 +278,9 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   outcomes <- extract_outcomes(outcomes_frame)
 
-  forge_list(predictors, outcomes)
+  offset <- extract_offset(predictors_frame)
+
+  forge_list(predictors, outcomes, offset)
 }
 
 bake_terms_without_outcome <- function(preprocessor, new_data) {
@@ -294,7 +297,9 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
     intercept = preprocessor$intercept
   )
 
-  forge_list(predictors)
+  offset <- extract_offset(predictors_frame)
+
+  forge_list(predictors, offset = offset)
 }
 
 # To get the post processed name of the outcome columns

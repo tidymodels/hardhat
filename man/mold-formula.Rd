@@ -25,13 +25,15 @@ variables and a warning is thrown if any interactions are detected.}
 \item{...}{Currently unused.}
 }
 \value{
-A named list containing 3 elements:
+A named list containing 4 elements:
 \itemize{
 \item \code{predictors}: A tibble containing the molded predictors to be used in the
 model.
 \item \code{outcome}: A tibble containing the molded outcomes to be used in the
 model.
 \item \code{preprocessor}: A \code{"preprocessor"} object for use when making predictions.
+\item \code{offset}: A tibble with a single column named \code{".offset"} if an offset
+was specified in the formula method. Otherwise, \code{NULL}.
 }
 }
 \description{
@@ -46,6 +48,8 @@ For a formula, \code{mold()} does the following:
 result.
 \item If \code{indicators = FALSE}, it does not expand factors with
 \code{model.matrix()}, which also means that interactions are not expanded.
+\item If any offsets are present from using \code{offset()}, then they are
+extracted with \code{\link[=model_offset]{model_offset()}}.
 \item If \code{intercept = TRUE}, adds an intercept column.
 \item Coerces the result of the above steps to a tibble.
 }
@@ -67,6 +71,10 @@ where \code{K} is the number of levels in the factor.
 \item When an intercept is \emph{not} present, factors are expanded into all \code{K}
 columns (one-hot encoding).
 }
+
+Offsets can be included in the formula method through the use of the inline
+function \code{\link[stats:offset]{stats::offset()}}. These are returned as a tibble with 1 column
+named \code{".offset"} in the \code{$outcome} slot of the return value.
 }
 \section{Differences From Base R}{
 
@@ -167,5 +175,23 @@ processed$outcomes
 
 # TRUE
 ncol(processed$outcomes) == 2
+
+# ---------------------------------------------------------------------------
+# Offsets
+
+# Offsets are handled specially in base R, so they deserve special
+# treatment here as well. You can add offsets using the inline function
+# offset()
+processed <- mold(Sepal.Width ~ offset(Sepal.Length) + Species, iris)
+
+processed$offset
+
+# Multiple offsets can be included, and they get added together
+processed <- mold(Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width), iris)
+
+identical(
+   processed$offset$.offset,
+   iris$Sepal.Length + iris$Petal.Width
+)
 
 }

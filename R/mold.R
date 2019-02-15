@@ -22,7 +22,7 @@
 #'
 #' @return
 #'
-#' A named list containing 3 elements:
+#' A named list containing 4 elements:
 #'
 #'  - `predictors`: A tibble containing the molded predictors to be used in the
 #'  model.
@@ -31,6 +31,9 @@
 #'  model.
 #'
 #'  - `preprocessor`: A `"preprocessor"` object for use when making predictions.
+#'
+#'  - `offset`: A tibble with a single column named `".offset"` if an offset
+#'  was specified in the formula method. Otherwise, `NULL`.
 #'
 #' @export
 mold <- function(x, ...) {
@@ -178,6 +181,9 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
 #'    - If `indicators = FALSE`, it does not expand factors with
 #'    `model.matrix()`, which also means that interactions are not expanded.
 #'
+#'    - If any offsets are present from using `offset()`, then they are
+#'    extracted with [model_offset()].
+#'
 #'    - If `intercept = TRUE`, adds an intercept column.
 #'
 #'    - Coerces the result of the above steps to a tibble.
@@ -238,6 +244,10 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
 #'
 #' - When an intercept is _not_ present, factors are expanded into all `K`
 #' columns (one-hot encoding).
+#'
+#' Offsets can be included in the formula method through the use of the inline
+#' function [stats::offset()]. These are returned as a tibble with 1 column
+#' named `".offset"` in the `$outcome` slot of the return value.
 #'
 #' @inherit mold return
 #'
@@ -315,6 +325,24 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
 #' # TRUE
 #' ncol(processed$outcomes) == 2
 #'
+#' # ---------------------------------------------------------------------------
+#' # Offsets
+#'
+#' # Offsets are handled specially in base R, so they deserve special
+#' # treatment here as well. You can add offsets using the inline function
+#' # offset()
+#' processed <- mold(Sepal.Width ~ offset(Sepal.Length) + Species, iris)
+#'
+#' processed$offset
+#'
+#' # Multiple offsets can be included, and they get added together
+#' processed <- mold(Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width), iris)
+#'
+#' identical(
+#'    processed$offset$.offset,
+#'    iris$Sepal.Length + iris$Petal.Width
+#' )
+#'
 #' @rdname mold-formula
 #'
 #' @export
@@ -343,6 +371,8 @@ mold.formula <- function(formula, data, intercept = FALSE,
 
   outcomes <- extract_outcomes(outcomes_frame)
 
+  offset <- extract_offset(predictors_frame)
+
   original_predictor_nms <- get_all_predictors(formula, data)
   original_outcome_nms <- get_all_outcomes(formula, data)
 
@@ -365,7 +395,7 @@ mold.formula <- function(formula, data, intercept = FALSE,
     indicators = indicators
   )
 
-  mold_list(predictors, outcomes, preprocessor)
+  mold_list(predictors, outcomes, preprocessor, offset)
 }
 
 #' Mold - Recipes Method
@@ -466,11 +496,12 @@ mold.recipe <- function(x, data, intercept = FALSE, ...) {
 # ------------------------------------------------------------------------------
 # Preparation helpers
 
-mold_list <- function(predictors, outcomes, preprocessor) {
+mold_list <- function(predictors, outcomes, preprocessor, offset = NULL) {
   list(
     predictors = predictors,
     outcomes = outcomes,
-    preprocessor = preprocessor
+    preprocessor = preprocessor,
+    offset = offset
   )
 }
 
@@ -585,8 +616,9 @@ extract_predictors_with_model_matrix <- function(formula, frame) {
 
 extract_predictors_from_frame <- function(terms, frame, intercept) {
 
-  processed_outcome_nm <- response_name(terms)
+  frame <- remove_offsets(frame)
 
+  processed_outcome_nm <- response_name(terms)
   frame[[processed_outcome_nm]] <- NULL
 
   frame <- maybe_add_intercept_column(frame, intercept)
@@ -599,7 +631,6 @@ strip_model_matrix <- function(x) {
   attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
   x
 }
-
 
 check_for_interactions <- function(formula) {
 
