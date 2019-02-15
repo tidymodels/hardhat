@@ -301,6 +301,39 @@ This interface standardizes all of that flexibility in one place.</p>
   <span class='kw'>error</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>e</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>e</span>$<span class='no'>message</span>)
 )</div><div class='output co'>#&gt; [1] "object 'y' not found"</div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Dummy variables and interactions</span>
+
+<span class='co'># By default, factor columns are expanded</span>
+<span class='co'># And interactions are created, both by</span>
+<span class='co'># calling model.matrix(). Some models (like</span>
+<span class='co'># tree based models) can take factors directly</span>
+<span class='co'># but still might want to use the formula method.</span>
+<span class='co'># In those cases, set `indicators = FALSE` to not</span>
+<span class='co'># run model.matrix()</span>
+
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='no'>iris</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; # A tibble: 150 x 1
+#&gt;    Species
+#&gt;    &lt;fct&gt;  
+#&gt;  1 setosa 
+#&gt;  2 setosa 
+#&gt;  3 setosa 
+#&gt;  4 setosa 
+#&gt;  5 setosa 
+#&gt;  6 setosa 
+#&gt;  7 setosa 
+#&gt;  8 setosa 
+#&gt;  9 setosa 
+#&gt; 10 setosa 
+#&gt; # … with 140 more rows</div><div class='input'>
+# No interactions are expanded when `indicators = FALSE`, but
+# the terms specified in the interaction show up in the predictors
+# tibble, with a warning
+</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>iris</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'># }</span><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Multivariate outcomes</span>
 
 <span class='co'># Multivariate formulas can be specified easily</span>
