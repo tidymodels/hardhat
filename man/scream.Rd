@@ -2,7 +2,7 @@
 % Please edit documentation in R/scream.R
 \name{scream}
 \alias{scream}
-\title{😱 Scream.}
+\title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
 scream(preprocessor, new_data, outcomes = FALSE)
 }
