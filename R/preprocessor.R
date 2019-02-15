@@ -205,6 +205,40 @@ new_default_preprocessor_engine <- function() {
   structure(list(process = process), class = "default_preprocessor_engine")
 }
 
+#' Create a terms preprocessor engine
+#'
+#' A terms preprocessor engine is composed of two terms objects. One for the
+#' RHS of the original formula, which is used to preprocess the predictors.
+#' And one for the LHS of the original formula, reformulated as `~ LHS`.
+#'
+#' This is done so that multivariate outcomes can be specified as
+#' `Sepal.Width + Sepal.Length ~ Species` and can be processed by
+#' `model.frame()` in a meaningful way.
+#'
+#' @param predictors A terms object for the predictors. The formula should be
+#' for `~ RHS`.
+#' @param outcomes A terms object for the outcomes. The formula should be for
+#' `~ LHS`.
+#'
+#' @keywords internal
+new_terms_preprocessor_engine <- function(predictors, outcomes) {
+
+  if (!inherits(predictors, "terms")) {
+    abort("`predictors` must be a 'terms' object for the RHS of the formula.")
+  }
+
+  if (!inherits(outcomes, "terms")) {
+    abort("`outcomes` must be a 'terms' object for the LHS of the formula.")
+  }
+
+  elems <- list(
+    predictors = predictors,
+    outcomes = outcomes
+  )
+
+  structure(elems, class = "terms_preprocessor_engine")
+}
+
 # ------------------------------------------------------------------------------
 
 #' Is `x` a valid preprocessor engine?
@@ -216,7 +250,7 @@ new_default_preprocessor_engine <- function() {
 #'
 #' @keywords internal
 is_preprocessor_engine <- function(x) {
-  inherits(x, c("recipe", "terms", "default_preprocessor_engine"))
+  inherits(x, c("recipe", "terms_preprocessor_engine", "default_preprocessor_engine"))
 }
 
 # ------------------------------------------------------------------------------
@@ -226,7 +260,7 @@ validate_is_preprocessor_engine <- function(engine) {
     engine,
     is_preprocessor_engine,
     "preprocessor engine",
-    .note = "recipe, terms, or default_preprocessor_engine"
+    .note = "recipe, terms_preprocessor_engine, or default_preprocessor_engine"
   )
   invisible(engine)
 }

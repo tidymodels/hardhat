@@ -165,7 +165,9 @@ bake_without_outcome <- function(preprocessor, new_data) {
 
 bake_terms_engine <- function(preprocessor, new_data, outcome) {
 
-  preprocessor$engine <- alter_terms_environment(preprocessor$engine)
+  # From NULL to one env above global
+  preprocessor$engine$predictors <- alter_terms_environment(preprocessor$engine$predictors)
+  preprocessor$engine$outcomes <- alter_terms_environment(preprocessor$engine$outcomes)
 
   if (outcome) {
     bake_terms_with_outcome(preprocessor, new_data)
@@ -180,39 +182,25 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
 
-  frame <- forge_model_frame(preprocessor, new_data)
+  predictors_frame <- model_frame(engine$predictors, new_data, preprocessor$predictor_levels)
+  outcomes_frame <- model_frame(engine$outcomes, new_data, preprocessor$outcome_levels)
 
-  outcomes <- extract_outcomes_from_frame(engine, frame)
-
-  predictors <- extract_predictors(engine, frame, preprocessor$indicators)
+  predictors <- extract_predictors(terms(predictors_frame), predictors_frame, preprocessor$indicators)
+  outcomes <- extract_outcomes(outcomes_frame)
 
   forge_list(predictors, outcomes)
 }
 
 bake_terms_without_outcome <- function(preprocessor, new_data) {
 
-  engine <- preprocessor$engine
+  predictors_terms <- preprocessor$engine$predictors
+  predictors_terms <- delete_response(predictors_terms)
 
-  # Don't attempt to include Y in the model.frame()
-  preprocessor$engine <- delete_response(preprocessor$engine)
+  predictors_frame <- model_frame(predictors_terms, new_data, preprocessor$predictor_levels)
 
-  frame <- forge_model_frame(preprocessor, new_data)
-
-  predictors <- extract_predictors(terms(frame), frame, preprocessor$indicators)
+  predictors <- extract_predictors(terms(predictors_frame), predictors_frame, preprocessor$indicators)
 
   forge_list(predictors)
-}
-
-forge_model_frame <- function(preprocessor, new_data) {
-
-  engine <- preprocessor$engine
-  original_predictor_levels <- preprocessor$predictor_levels
-
-  # - Factors with new levels have been coerced to NA by shrink()
-  # (this is so model.frame(xlev) doesnt error out on new levels)
-  new_data <- model_frame(engine, new_data, original_predictor_levels)
-
-  new_data
 }
 
 # To get the post processed name of the outcome column
@@ -253,26 +241,4 @@ validate_no_outcome_specified <- function(dots) {
   }
 
   invisible(dots)
-}
-
-extract_outcomes_from_frame <- function(terms, frame) {
-
-  processed_outcome_nms <- response_name(terms)
-  outcomes <- frame[, processed_outcome_nms, drop = FALSE]
-
-  # Simplify multivariate matrix columns
-  if (is.matrix(outcomes[[1]])) {
-    outcomes <- outcomes[[1]]
-  }
-
-  tibble::as_tibble(outcomes)
-}
-
-extract_predictors_from_frame <- function(terms, frame) {
-
-  processed_outcome_nm <- response_name(terms)
-
-  frame[[processed_outcome_nm]] <- NULL
-
-  frame
 }

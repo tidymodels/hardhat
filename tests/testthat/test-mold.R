@@ -6,17 +6,29 @@ test_that("can mold simple formulas", {
   x <- mold(Species ~ Sepal.Length, iris)
 
   expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcomes, "data.frame")
+  expect_is(x$outcomes, "tbl_df")
   expect_equal(colnames(x$outcomes), "Species")
   expect_is(x$preprocessor, "terms_preprocessor")
 })
 
 test_that("can mold multivariate formulas", {
 
-  x <- mold(cbind(Sepal.Length, Sepal.Width) ~ Petal.Length, iris)
+  x <- mold(Sepal.Length + Sepal.Width ~ Petal.Length, iris)
 
-  expect_is(x$outcomes, "data.frame")
+  expect_is(x$outcomes, "tbl_df")
   expect_equal(colnames(x$outcomes), c("Sepal.Length", "Sepal.Width"))
+
+  xx <- mold(log(Sepal.Width) + poly(Sepal.Width, degree = 2) ~ Species, iris)
+
+  expect_equal(
+    colnames(xx$outcomes),
+    c(
+      "log(Sepal.Width)",
+      "poly(Sepal.Width, degree = 2).1",
+      "poly(Sepal.Width, degree = 2).2"
+    )
+  )
+
 })
 
 test_that("factor predictors with no intercept are fully expanded", {
@@ -65,10 +77,10 @@ test_that("formula intercepts can be added", {
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))
-  expect_equal(attr(x$preprocessor$engine, "intercept"), 1)
+  expect_equal(attr(x$preprocessor$engine$predictors, "intercept"), 1)
 
   # Don't want intercept in original predictors
-  expect_false("(Intercept)" %in% attr(x$preprocessor$engine, "predictors"))
+  expect_false("(Intercept)" %in% x$preprocessor$predictors)
 })
 
 test_that("can mold formulas with special terms", {
