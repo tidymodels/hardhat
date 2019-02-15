@@ -155,46 +155,11 @@ if required.</p>
   <span class='kw'>custom_field</span> <span class='kw'>=</span> <span class='st'>"my-field"</span>,
   <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"custom_model"</span>
 )</div><div class='output co'>#&gt; $preprocessor
-#&gt; $engine
-#&gt; $process
-#&gt; function (new_data, intercept) 
-#&gt; {
-#&gt;     new_data &lt;- tibble::as_tibble(new_data)
-#&gt;     new_data &lt;- maybe_add_intercept_column(new_data, intercept)
-#&gt;     new_data
-#&gt; }
-#&gt; &lt;environment: 0x4448a70&gt;
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "default_preprocessor_engine"
-#&gt; 
-#&gt; $intercept
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $predictors
-#&gt; $predictors$names
-#&gt; character(0)
-#&gt; 
-#&gt; $predictors$classes
-#&gt; NULL
-#&gt; 
-#&gt; $predictors$levels
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; $outcomes
-#&gt; $outcomes$names
-#&gt; character(0)
-#&gt; 
-#&gt; $outcomes$classes
-#&gt; NULL
-#&gt; 
-#&gt; $outcomes$levels
-#&gt; NULL
-#&gt; 
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "default_preprocessor" "preprocessor"        
+#&gt; Default Preprocessor: 
+#&gt;  
+#&gt; # Predictors: 0 
+#&gt;   # Outcomes: 0 
+#&gt;    Intercept: FALSE 
 #&gt; 
 #&gt; $custom_field
 #&gt; [1] "my-field"
