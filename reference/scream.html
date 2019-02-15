@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perform structural checks on <code>new_data</code> — scream • hardhat</title>
+<title>😱
+ Scream. — scream • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +31,8 @@
 
 
 
-<meta property="og:title" content="Perform structural checks on <code>new_data</code> — scream" />
+<meta property="og:title" content="😱
+ Scream. — scream" />
 
 <meta property="og:description" content="scream() performs a number of validation checks on new_data, and yells
 loudly if anything is wrong. scream() performs the following validation:
@@ -111,7 +113,8 @@ and a warning is issued.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Perform structural checks on <code>new_data</code></h1>
+    <h1>😱
+ Scream.</h1>
     <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/scream.R'><code>R/scream.R</code></a></small>
     <div class="hidden name"><code>scream.Rd</code></div>
     </div>
@@ -134,7 +137,7 @@ and a warning is issued.</p></li>
     
     </div>
 
-    <pre class="usage"><span class='fu'>scream</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>scream</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,11 +150,11 @@ and a warning is issued.</p></li>
       <th>new_data</th>
       <td><p>A data frame containing the new data to check the structure
 of. This should contain the predictors, and potentially the outcomes if
-<code>outcome = TRUE</code>.</p></td>
+<code>outcomes = TRUE</code>.</p></td>
     </tr>
     <tr>
-      <th>outcome</th>
-      <td><p>A logical. Should the outcome be checked as well?</p></td>
+      <th>outcomes</th>
+      <td><p>A logical. Should the outcomes be checked as well?</p></td>
     </tr>
     </table>
     
@@ -165,9 +168,9 @@ outcomes) after any required structural modifications have been made.</p>
     <p><code>scream()</code> is called by <code><a href='forge.html'>forge()</a></code> after <code><a href='shrink.html'>shrink()</a></code> but before the
 actual processing is done. Generally, you don't need to call <code>scream()</code>
 directly, as <code><a href='forge.html'>forge()</a></code> will do it for you.</p>
-<p>If <code>outcome = TRUE</code>, then the validation steps are performed on the known
-outcome column as well. If <code><a href='mold.html'>mold()</a></code> was called with the XY interface,
-then no preprocessing was done to <code>y</code> and <code>outcome</code> will have no effect
+<p>If <code>outcomes = TRUE</code>, then the validation steps are performed on the known
+outcome columns as well. If <code><a href='mold.html'>mold()</a></code> was called with the XY interface,
+then no preprocessing was done to <code>y</code> and <code>outcomes</code> will have no effect
 (if a vector was passed as <code>y</code> during the fit, <code>scream()</code> has no
 way of knowing what column in <code>new_data</code> corresponds to the outcome).</p>
 <p>If <code>scream()</code> is used as a standalone function, it is good practice to call
@@ -204,10 +207,10 @@ checks exist in <code><a href='shrink.html'>shrink()</a></code>.</p>
 #&gt;  9 virginica
 #&gt; 10 virginica
 #&gt; # … with 40 more rows</div><div class='input'>
-<span class='co'># If `outcome = TRUE` is used with shrink(),</span>
+<span class='co'># If `outcomes = TRUE` is used with shrink(),</span>
 <span class='co'># it should also be used with scream()</span>
-<span class='no'>test_outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>x</span>$<span class='no'>preprocessor</span>, <span class='no'>test</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>scream</span>(<span class='no'>x</span>$<span class='no'>preprocessor</span>, <span class='no'>test_outcome</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; # A tibble: 50 x 2
+<span class='no'>test_outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>x</span>$<span class='no'>preprocessor</span>, <span class='no'>test</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>scream</span>(<span class='no'>x</span>$<span class='no'>preprocessor</span>, <span class='no'>test_outcome</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; # A tibble: 50 x 2
 #&gt;    Sepal.Width Species  
 #&gt;          &lt;dbl&gt; &lt;fct&gt;    
 #&gt;  1         3.3 virginica

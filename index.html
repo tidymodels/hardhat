@@ -226,9 +226,9 @@
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">processed_test &lt;-<span class="st"> </span><span class="kw"><a href="reference/forge.html">forge</a></span>(</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="dt">preprocessor =</span> processed<span class="op">$</span>preprocessor, </a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="dt">new_data =</span> iris_test,</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">  <span class="dt">outcome =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">  <span class="dt">outcomes =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb10-5" data-line-number="5">)</a></code></pre></div>
-<p><code><a href="reference/forge.html">forge()</a></code> always returns a list with two things. The first is a tibble containing the preprocessed <code>predictors</code>. The second is optionally the preprocessed <code>outcomes</code> if you are performing cross validation and used a formula or recipes interface. Because we used the formula interface to generate the <code>processed</code> object, we could set <code>outcome = TRUE</code> above to also return the processed outcome column.</p>
+<p><code><a href="reference/forge.html">forge()</a></code> always returns a list with two things. The first is a tibble containing the preprocessed <code>predictors</code>. The second is optionally the preprocessed <code>outcomes</code> if you are performing cross validation and used a formula or recipes interface. Because we used the formula interface to generate the <code>processed</code> object, we could set <code>outcomes = TRUE</code> above to also return the processed outcome column.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">processed_test<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; # A tibble: 50 x 4</span></a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt;    Speciessetosa Speciesversicolor Speciesvirginica Petal.Width</span></a>
