@@ -147,12 +147,14 @@ include an intercept in the molded predictors.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list containing 3 elements:</p><ul>
+    <p>A named list containing 4 elements:</p><ul>
 <li><p><code>predictors</code>: A tibble containing the molded predictors to be used in the
 model.</p></li>
 <li><p><code>outcome</code>: A tibble containing the molded outcomes to be used in the
 model.</p></li>
 <li><p><code>preprocessor</code>: A <code>"preprocessor"</code> object for use when making predictions.</p></li>
+<li><p><code>offset</code>: A tibble with a single column named <code>".offset"</code> if an offset
+was specified in the formula method. Otherwise, <code>NULL</code>.</p></li>
 </ul>
 
     

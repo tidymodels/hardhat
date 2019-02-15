@@ -41,6 +41,8 @@ If indicators = TRUE, it then runs stats::model.matrix() on the
 result.
 If indicators = FALSE, it does not expand factors with
 model.matrix(), which also means that interactions are not expanded.
+If any offsets are present from using offset(), then they are
+extracted with model_offset().
 If intercept = TRUE, adds an intercept column.
 Coerces the result of the above steps to a tibble.
 
@@ -133,6 +135,8 @@ Coerces the result of the above steps to a tibble.
 result.</p></li>
 <li><p>If <code>indicators = FALSE</code>, it does not expand factors with
 <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix()</a></code>, which also means that interactions are not expanded.</p></li>
+<li><p>If any offsets are present from using <code><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset()</a></code>, then they are
+extracted with <code><a href='model_offset.html'>model_offset()</a></code>.</p></li>
 <li><p>If <code>intercept = TRUE</code>, adds an intercept column.</p></li>
 <li><p>Coerces the result of the above steps to a tibble.</p></li>
 </ul></li>
@@ -183,12 +187,14 @@ variables and a warning is thrown if any interactions are detected.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list containing 3 elements:</p><ul>
+    <p>A named list containing 4 elements:</p><ul>
 <li><p><code>predictors</code>: A tibble containing the molded predictors to be used in the
 model.</p></li>
 <li><p><code>outcome</code>: A tibble containing the molded outcomes to be used in the
 model.</p></li>
 <li><p><code>preprocessor</code>: A <code>"preprocessor"</code> object for use when making predictions.</p></li>
+<li><p><code>offset</code>: A tibble with a single column named <code>".offset"</code> if an offset
+was specified in the formula method. Otherwise, <code>NULL</code>.</p></li>
 </ul>
 
     
@@ -201,6 +207,9 @@ where <code>K</code> is the number of levels in the factor.</p></li>
 <li><p>When an intercept is <em>not</em> present, factors are expanded into all <code>K</code>
 columns (one-hot encoding).</p></li>
 </ul>
+    <p>Offsets can be included in the formula method through the use of the inline
+function <code><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>stats::offset()</a></code>. These are returned as a tibble with 1 column
+named <code>".offset"</code> in the <code>$outcome</code> slot of the return value.</p>
     
     <h2 class="hasAnchor" id="differences-from-base-r"><a class="anchor" href="#differences-from-base-r"></a>Differences From Base R</h2>
 
@@ -373,6 +382,35 @@ This interface standardizes all of that flexibility in one place.</p>
 #&gt; # … with 140 more rows</div><div class='input'>
 <span class='co'># TRUE</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>processed</span>$<span class='no'>outcomes</span>) <span class='kw'>==</span> <span class='fl'>2</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Offsets</span>
+
+<span class='co'># Offsets are handled specially in base R, so they deserve special</span>
+<span class='co'># treatment here as well. You can add offsets using the inline function</span>
+<span class='co'># offset()</span>
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='no'>Species</span>, <span class='no'>iris</span>)
+
+<span class='no'>processed</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; # A tibble: 150 x 1
+#&gt;    .offset
+#&gt;      &lt;dbl&gt;
+#&gt;  1     5.1
+#&gt;  2     4.9
+#&gt;  3     4.7
+#&gt;  4     4.6
+#&gt;  5     5  
+#&gt;  6     5.4
+#&gt;  7     4.6
+#&gt;  8     5  
+#&gt;  9     4.4
+#&gt; 10     4.9
+#&gt; # … with 140 more rows</div><div class='input'>
+<span class='co'># Multiple offsets can be included, and they get added together</span>
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Petal.Width</span>), <span class='no'>iris</span>)
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
+   <span class='no'>processed</span>$<span class='no'>offset</span>$<span class='no'>.offset</span>,
+   <span class='no'>iris</span>$<span class='no'>Sepal.Length</span> + <span class='no'>iris</span>$<span class='no'>Petal.Width</span>
+)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
