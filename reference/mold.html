@@ -34,12 +34,12 @@
 
 <meta property="og:description" content="mold() applies the appropriate processing steps required to get training
 data ready to be fed into a model.
-For a formula, this applies stats::model.frame() and
-possibly stats::model.matrix().
-For a recipe, this performs a call to both recipes::prep()
-and recipes::juice().
-For a data frame or matrix, this simply adds an intercept column
-if requested.
+The return values of each method are all consistent with one another, but the
+nuances of exactly what is being done for each method vary enough to warrant
+separate help files for each. Click through to each one below:
+XY Method - mold.data.frame() / mold.matrix()
+Formula Method - mold.formula()
+Recipes Method - mold.recipe()
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -115,145 +115,45 @@ if requested.
     <div class="ref-description">
     
     <p><code>mold()</code> applies the appropriate processing steps required to get training
-data ready to be fed into a model.</p><ul>
-<li><p>For a formula, this applies <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code> and
-possibly <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code>.</p></li>
-<li><p>For a recipe, this performs a call to both <code><a href='https://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep()</a></code>
-and <code><a href='https://www.rdocumentation.org/packages/recipes/topics/juice'>recipes::juice()</a></code>.</p></li>
-<li><p>For a data frame or matrix, this simply adds an intercept column
-if requested.</p></li>
+data ready to be fed into a model.</p>
+<p>The return values of each method are all consistent with one another, but the
+nuances of exactly what is being done for each method vary enough to warrant
+separate help files for each. Click through to each one below:</p><ul>
+<li><p>XY Method - <code><a href='mold-xy.html'>mold.data.frame()</a></code> / <code><a href='mold-xy.html'>mold.matrix()</a></code></p></li>
+<li><p>Formula Method - <code><a href='mold-formula.html'>mold.formula()</a></code></p></li>
+<li><p>Recipes Method - <code><a href='mold-recipe.html'>mold.recipe()</a></code></p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for matrix</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for formula</span>
-<span class='fu'>mold</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for recipe</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>data</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A data frame, matrix, or <code><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipes::recipe()</a></code>. If this is a
+      <td><p>A data frame, matrix, formula, or <code><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipes::recipe()</a></code>. If this is a
 data.frame or matrix, it should contain the predictors.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Currently unused.</p></td>
     </tr>
-    <tr>
-      <th>y</th>
-      <td><p>A data frame, matrix, or vector containing the outcome(s).</p></td>
-    </tr>
-    <tr>
-      <th>intercept</th>
-      <td><p>A single logical specifying whether or not to
-include an intercept in the molded predictors.</p></td>
-    </tr>
-    <tr>
-      <th>formula</th>
-      <td><p>A formula specifying the terms in the format of
-<code>outcome ~ predictors</code>.</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>A data frame containing the predictors and the outcomes.</p></td>
-    </tr>
-    <tr>
-      <th>indicators</th>
-      <td><p>For use with the formula interface. Should factors and
-interactions be expanded (In other words, should <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix()</a></code> be run)? If
-<code>FALSE</code>, factor columns are returned without being expanded into dummy
-variables and a warning is thrown if any interactions are detected.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list containing:</p><ul>
-<li><p><code>predictors</code>: A tibble containing the molded predictors
-to be used in the model.</p></li>
-<li><p><code>outcome</code>: A tibble.</p><ul>
-<li><p>If <code>y</code> was supplied, it is returned after a call to
-<code><a href='standardize.html'>standardize()</a></code> is made.</p></li>
-<li><p>If a formula engine was used, this is a data frame
-that is the result of extracting the molded outcome columns from
-<code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code>.</p></li>
-<li><p>If a recipe was used, this is a data.frame that is the result of
-calling <code><a href='https://www.rdocumentation.org/packages/recipes/topics/juice'>recipes::juice()</a></code> with <code><a href='https://www.rdocumentation.org/packages/recipes/topics/has_role'>recipes::all_outcomes()</a></code> specified.</p></li>
-</ul></li>
+    <p>A named list containing 3 elements:</p><ul>
+<li><p><code>predictors</code>: A tibble containing the molded predictors to be used in the
+model.</p></li>
+<li><p><code>outcome</code>: A tibble containing the molded outcomes to be used in the
+model.</p></li>
 <li><p><code>preprocessor</code>: A <code>"preprocessor"</code> object for use when making predictions.</p></li>
 </ul>
 
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Multivariate outcomes can be specified on the LHS using similar syntax as
-the RHS (i.e. <code>outcome_1 + outcome_2 ~ predictors</code>). <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code>
-is run on the outcome columns (which will execute any in line formulas),
-but <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code> is <em>not</em> run on the outcomes as this would
-expand factor outcomes and this is likely not desired. If any complex
-calculations are done on the LHS and they return matrices
-(like <code><a href='https://www.rdocumentation.org/packages/stats/topics/poly'>stats::poly()</a></code>), then those matrices are flattened into multiple
-columns of the tibble after the call to <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code>.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Multivariate outcomes</span>
-
-<span class='co'># Multivariate formulas can be specified easily</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'>mold</span>(<span class='no'>Sepal.Width</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Length</span>) ~ <span class='no'>Species</span>, <span class='no'>iris</span>)
-<span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; # A tibble: 150 x 2
-#&gt;    Sepal.Width `log(Sepal.Length)`
-#&gt;          &lt;dbl&gt;               &lt;dbl&gt;
-#&gt;  1         3.5                1.63
-#&gt;  2         3                  1.59
-#&gt;  3         3.2                1.55
-#&gt;  4         3.1                1.53
-#&gt;  5         3.6                1.61
-#&gt;  6         3.9                1.69
-#&gt;  7         3.4                1.53
-#&gt;  8         3.4                1.61
-#&gt;  9         2.9                1.48
-#&gt; 10         3.1                1.59
-#&gt; # … with 140 more rows</div><div class='input'>
-<span class='co'># Inline functions on the LHS are run, but any matrix</span>
-<span class='co'># output is flattened (like what happens in `model.matrix()`)</span>
-<span class='co'># (essentially this means you don't wind up with columns</span>
-<span class='co'># in the tibble that are matrices)</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'>mold</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/poly'>poly</a></span>(<span class='no'>Sepal.Length</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>2</span>) ~ <span class='no'>Species</span>, <span class='no'>iris</span>)
-<span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; # A tibble: 150 x 2
-#&gt;    `poly(Sepal.Length, degree = 2).1` `poly(Sepal.Length, degree = 2).2`
-#&gt;                                 &lt;dbl&gt;                              &lt;dbl&gt;
-#&gt;  1                            -0.0735                            0.00652
-#&gt;  2                            -0.0933                            0.0469 
-#&gt;  3                            -0.113                             0.0957 
-#&gt;  4                            -0.123                             0.123  
-#&gt;  5                            -0.0834                            0.0257 
-#&gt;  6                            -0.0439                           -0.0385 
-#&gt;  7                            -0.123                             0.123  
-#&gt;  8                            -0.0834                            0.0257 
-#&gt;  9                            -0.143                             0.184  
-#&gt; 10                            -0.0933                            0.0469 
-#&gt; # … with 140 more rows</div><div class='input'>
-<span class='co'># TRUE</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>processed</span>$<span class='no'>outcomes</span>) <span class='kw'>==</span> <span class='fl'>2</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -261,11 +161,7 @@ columns of the tibble after the call to <code><a href='https://www.rdocumentatio
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
