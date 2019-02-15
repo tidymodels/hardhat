@@ -1,4 +1,4 @@
-#' Perform structural checks on `new_data`
+#' &#128561; Scream.
 #'
 #' @description
 #'

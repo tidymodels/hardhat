@@ -2,7 +2,7 @@
 % Please edit documentation in R/scream.R
 \name{scream}
 \alias{scream}
-\title{Perform structural checks on \code{new_data}}
+\title{😱 Scream.}
 \usage{
 scream(preprocessor, new_data, outcome = FALSE)
 }
