@@ -84,8 +84,8 @@ scream <- function(preprocessor, new_data, outcome = FALSE) {
 
   new_data <- tibble::as_tibble(new_data)
 
-  original_predictor_classes <- preprocessor$predictor_classes
-  original_predictor_levels <- preprocessor$predictor_levels
+  original_predictor_classes <- preprocessor$predictors$classes
+  original_predictor_levels <- preprocessor$predictors$levels
 
   validate_new_data_classes(new_data, original_predictor_classes)
 
@@ -94,8 +94,8 @@ scream <- function(preprocessor, new_data, outcome = FALSE) {
 
   if (outcome) {
 
-    original_outcome_classes <- preprocessor$outcome_classes
-    original_outcome_levels <- preprocessor$outcome_levels
+    original_outcome_classes <- preprocessor$outcomes$classes
+    original_outcome_levels <- preprocessor$outcomes$levels
 
     validate_new_data_classes(new_data, original_outcome_classes)
 

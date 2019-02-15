@@ -80,7 +80,7 @@ test_that("formula intercepts can be added", {
   expect_equal(attr(x$preprocessor$engine$predictors, "intercept"), 1)
 
   # Don't want intercept in original predictors
-  expect_false("(Intercept)" %in% x$preprocessor$predictors)
+  expect_false("(Intercept)" %in% x$preprocessor$predictors$names)
 })
 
 test_that("can mold formulas with special terms", {
@@ -94,7 +94,7 @@ test_that("can mold formulas with special terms", {
   )
 
   expect_equal(
-    x$preprocessor$predictors,
+    x$preprocessor$predictors$names,
     c("Sepal.Length", "Sepal.Width")
   )
 })

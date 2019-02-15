@@ -12,7 +12,7 @@
 #' @param new_data A data frame of new predictors and maybe outcomes.
 #' @param original_levels A named list of the original levels of either the
 #' outcomes or predictors. These are stored in the preprocessor slots
-#' `$predictor_levels` and `$outcome_levels`.
+#' `$predictors$levels` and `$outcomes$levels`.
 #'
 #' @keywords internal
 check_new_data_level_recovery <- function(new_data, original_levels) {

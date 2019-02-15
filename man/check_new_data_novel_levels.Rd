@@ -11,7 +11,7 @@ check_new_data_novel_levels(new_data, original_levels)
 
 \item{original_levels}{A named list of the original levels of either the
 outcomes or predictors. These are stored in the preprocessor slots
-\code{$predictor_levels} and \code{$outcome_levels}.}
+\code{$predictors$levels} and \code{$outcomes$levels}.}
 }
 \description{
 A factor column of \code{new_data} might have \emph{new} factor levels when compared

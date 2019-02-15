@@ -185,8 +185,8 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
 
-  predictors_frame <- model_frame(engine$predictors, new_data, preprocessor$predictor_levels)
-  outcomes_frame <- model_frame(engine$outcomes, new_data, preprocessor$outcome_levels)
+  predictors_frame <- model_frame(engine$predictors, new_data, preprocessor$predictors$levels)
+  outcomes_frame <- model_frame(engine$outcomes, new_data, preprocessor$outcomes$levels)
 
   predictors <- extract_predictors(terms(predictors_frame), predictors_frame, preprocessor$indicators)
   outcomes <- extract_outcomes(outcomes_frame)
@@ -199,7 +199,7 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
   predictors_terms <- preprocessor$engine$predictors
   predictors_terms <- delete_response(predictors_terms)
 
-  predictors_frame <- model_frame(predictors_terms, new_data, preprocessor$predictor_levels)
+  predictors_frame <- model_frame(predictors_terms, new_data, preprocessor$predictors$levels)
 
   predictors <- extract_predictors(terms(predictors_frame), predictors_frame, preprocessor$indicators)
 

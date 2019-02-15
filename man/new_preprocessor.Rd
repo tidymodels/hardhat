@@ -5,10 +5,8 @@
 \title{Create a new preprocessor}
 \usage{
 new_preprocessor(engine = new_default_preprocessor_engine(),
-  intercept = FALSE, predictors = character(),
-  outcomes = character(), predictor_levels = NULL,
-  outcome_levels = NULL, predictor_classes = NULL,
-  outcome_classes = NULL, ..., subclass = character())
+  intercept = FALSE, predictors = predictors_lst(),
+  outcomes = outcomes_lst(), ..., subclass = character())
 }
 \arguments{
 \item{engine}{A preprocessing engine. This can be a
@@ -16,29 +14,21 @@ new_preprocessor(engine = new_default_preprocessor_engine(),
 
 \item{intercept}{A logical. Should an intercept be included?}
 
-\item{predictors}{A character vector. The original predictors used when
-fitting the model.}
+\item{predictors}{A named list with the following 3 elements:
+\itemize{
+\item \code{"names"}: A character vector of the original predictor column names.
+\item \code{"classes"}: A named list of the original predictor classes, or \code{NULL}.
+\item \code{"levels"}: A named list of the original predictor levels for any factor
+columns, or \code{NULL}.
+}}
 
-\item{outcomes}{A character vector. The original outcome columns used
-when fitting the model.}
-
-\item{predictor_levels}{A named list. Each element of the list should be a
-character vector of levels. The names of the list should be the \emph{predictor}
-factor columns in the training data. If there are no factor columns, this is
-\code{NULL}.}
-
-\item{outcome_levels}{A named list. Each element of the list should be a
-character vector of levels. The names of the list should be the \emph{outcome}
-factor columns in the training data. If there are no factor columns, this is
-\code{NULL}.}
-
-\item{predictor_classes}{A named list. Each element of the list should
-be a character vector of classes. The names of the list are the \emph{predictor}
-names in the training data.}
-
-\item{outcome_classes}{A named list. Each element of the list should
-be a character vector of classes. The names of the list are the \emph{outcome}
-names in the training data.}
+\item{outcomes}{A named list with the following 3 elements:
+\itemize{
+\item \code{"names"}: A character vector of the original outcome column names.
+\item \code{"classes"}: A named list of the original outcome classes, or \code{NULL}.
+\item \code{"levels"}: A named list of the original outcome levels for any factor
+columns, or \code{NULL}.
+}}
 
 \item{...}{Name-value pairs of extra elements that should be added to
 subclassed preprocessors.}
