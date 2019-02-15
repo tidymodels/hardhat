@@ -30,7 +30,84 @@ offsets. Otherwise, \code{NULL}.
 }
 }
 \description{
-If a formula engine was used, this is a data frame
-that is the result of extracting the outcome columns from
-\code{\link[stats:model.frame]{stats::model.frame()}}
+For the terms preprocessor, \code{forge()} does the following:
+\itemize{
+\item Calls \code{\link[=shrink]{shrink()}} to trim \code{new_data} to only the required columns and
+coerce \code{new_data} to a tibble.
+\item Calls \code{\link[=scream]{scream()}} to perform validation on the structure of the columns
+of \code{new_data}.
+\item Predictors
+\itemize{
+\item Runs \code{\link[stats:model.frame]{stats::model.frame()}} on \code{new_data} using the stored terms
+object corresponding to the \emph{predictors}.
+\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = TRUE} was set, it
+then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the result.
+\item If any offsets are present from using \code{offset()} in the original call
+to \code{\link[=mold]{mold()}}, then they are extracted with \code{\link[=model_offset]{model_offset()}}.
+\item If \code{intercept = TRUE} in the original call to \code{\link[=mold]{mold()}}, then an
+intecept column is added.
+\item Coerces the result of the above steps to a tibble.
+}
+\item Outcomes
+\itemize{
+\item Runs \code{\link[stats:model.frame]{stats::model.frame()}} on \code{new_data} using the stored terms object
+corresponding to the \emph{outcomes}.
+\item Coerces the result to a tibble.
+}
+}
+}
+\examples{
+# ---------------------------------------------------------------------------
+# Setup
+
+train <- iris[1:100,]
+test <- iris[101:150,]
+
+# ---------------------------------------------------------------------------
+# Formula Example
+
+# Call mold() with the training data
+processed <- mold(
+   log(Sepal.Length) ~ Sepal.Length + Species,
+   train,
+   intercept = TRUE
+)
+
+# Then, call forge() with the preprocessor and the test data
+# to have it preprocess the test data in the same way
+forge(processed$preprocessor, test)
+
+# Use `outcomes = TRUE` to also extract the preprocessed outcome
+forge(processed$preprocessor, test, outcomes = TRUE)
+
+# ---------------------------------------------------------------------------
+# Dummy variables
+
+# If factors are not expanded in mold()...
+processed <- mold(Sepal.Width ~ Species, train, indicators = FALSE)
+
+# ...then they aren't expanded in forge() either
+forge(processed$preprocessor, test)
+
+# ---------------------------------------------------------------------------
+# Multivariate outcomes
+
+# Multivariate formulas specified in mold()
+# carry over into forge()
+processed <- mold(Sepal.Width + log(Sepal.Length) ~ Species, train)
+
+forge(processed$preprocessor, test, outcomes = TRUE)
+
+# ---------------------------------------------------------------------------
+# Offsets
+
+# Offsets specified in mold() are computed in forge() as well,
+# and are placed in the `$offset` slot of the result
+processed <- mold(
+   Sepal.Width ~ Species + offset(Sepal.Length) + offset(Petal.Width),
+   train
+)
+
+forge(processed$preprocessor, test)
+
 }
