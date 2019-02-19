@@ -158,6 +158,36 @@ test_that("`data` is validated", {
 
 })
 
+test_that("full interaction syntax is supported", {
+
+  expect_equal(
+    mold(~ Species*Sepal.Width, iris)$predictors,
+    mold(~ Species + Sepal.Width + Species:Sepal.Width, iris)$predictors
+  )
+
+  expect_equal(
+    mold(~ Species*Sepal.Width - Species:Sepal.Width, iris)$predictors,
+    mold(~ Species + Sepal.Width, iris)$predictors
+  )
+
+  expect_equal(
+    mold(~ (Sepal.Width + Sepal.Length + Petal.Length) ^ 2, iris)$predictors,
+    mold(~ Sepal.Width +
+           Sepal.Length +
+           Petal.Length +
+           Sepal.Width:Sepal.Length +
+           Sepal.Width:Petal.Length +
+           Sepal.Length:Petal.Length,
+        iris)$predictors
+  )
+
+  expect_equal(
+    mold(~ Sepal.Width + Sepal.Length %in% Sepal.Width, iris)$predictors,
+    mold(~ Sepal.Width + Sepal.Width:Sepal.Length, iris)$predictors
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-mold-xy")
 
