@@ -137,3 +137,22 @@ test_that("offset columns are stored as predictors", {
   )
 
 })
+
+test_that("inline offset wrapped in a function is not recognized as an offset (same as base)", {
+
+  x <- mold(Species ~ log(offset(Sepal.Length)), iris)
+
+  mf <- model.frame(Species ~ log(offset(Sepal.Length)), iris)
+  trms <- attr(mf, "terms")
+
+  expect_equal(
+    x$offset,
+    NULL
+  )
+
+  expect_equal(
+    attr(x$preprocessor$engine$predictors, "offset"),
+    attr(trms, "offset")
+  )
+
+})
