@@ -2,10 +2,10 @@ Package: hardhat
 Title: A Toolkit for the Construction of Modeling Packages
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Max", "Kuhn", , "max@rstudio.com", c("aut", "cre")),
-    person("Davis", "Vaughan", , "davis@rstudio.com", c("aut")),
+    person("Davis", "Vaughan", , "davis@rstudio.com", c("aut", "cre")),
+    person("Max", "Kuhn", , "max@rstudio.com", c("aut")),
     person("RStudio", role = "cph"))
-Maintainer: Max Kuhn <max@rstudio.com>
+Maintainer: Davis Vaughan <davis@rstudio.com>
 Description: Provides infrastructure for building new modeling packages, 
     including functionality around preprocessing, predicting, and validating 
     input.
