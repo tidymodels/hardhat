@@ -365,37 +365,47 @@ mold.formula <- function(formula, data, intercept = FALSE,
   formula <- remove_formula_intercept(formula, intercept)
   formula <- alter_formula_environment(formula)
 
+  original_predictor_nms <- get_all_predictors(formula, data)
+  original_predictors <- data[, original_predictor_nms, drop = FALSE]
+  original_outcome_nms <- get_all_outcomes(formula, data)
+  original_outcomes <- data[, original_outcome_nms, drop = FALSE]
+
+  original_predictor_data_classes <- get_data_classes(original_predictors)
+
+  predictors_formula <- get_predictors_formula(formula)
+
+  if (!indicators) {
+    .factor_names <- extract_original_factor_names(original_predictor_data_classes)
+    validate_no_factor_interactions(predictors_formula, .factor_names)
+    predictors_formula <- remove_factors_from_formula(predictors_formula, .factor_names)
+  }
+
+  predictors_frame <- model_frame(predictors_formula, data)
+  predictors_terms <- extract_terms(predictors_frame)
+
+  predictors <- model_matrix(
+    formula = predictors_terms,
+    frame = predictors_frame
+  )
+
+  if (!indicators) {
+    predictors <- reattach_factor_columns(predictors, data, .factor_names)
+  }
+
   outcomes_formula <- get_outcomes_formula(formula)
   outcomes_frame <- model_frame(outcomes_formula, data)
   outcomes_terms <- extract_terms(outcomes_frame)
 
-  predictors_formula <- get_predictors_formula(formula)
-  predictors_frame <- model_frame(predictors_formula, data)
-  predictors_terms <- extract_terms(predictors_frame)
-
-  predictors <- extract_predictors(
-    formula = predictors_formula,
-    frame = predictors_frame,
-    indicators = indicators,
-    intercept = intercept
-  )
-
   outcomes <- extract_outcomes(outcomes_frame)
 
   offset <- extract_offset(predictors_frame)
-
-  original_predictor_nms <- get_all_predictors(formula, data)
-  original_outcome_nms <- get_all_outcomes(formula, data)
-
-  original_predictors <- data[, original_predictor_nms, drop = FALSE]
-  original_outcomes <- data[, original_outcome_nms, drop = FALSE]
 
   preprocessor <- new_terms_preprocessor(
     engine = new_terms_preprocessor_engine(predictors_terms, outcomes_terms),
     intercept = intercept,
     predictors = predictors_lst(
       names = original_predictor_nms,
-      classes = get_data_classes(original_predictors),
+      classes = original_predictor_data_classes,
       levels = get_levels(original_predictors)
     ),
     outcomes = outcomes_lst(
@@ -572,16 +582,14 @@ get_original_recipe_data_classes <- function(x, rec) {
 
 }
 
-extract_predictors <- function(formula, frame, indicators, intercept) {
+model_matrix <- function(formula, frame) {
 
-  if (indicators) {
-    # intercept is automatically added by model.matrix() if required
-    predictors <- extract_predictors_with_model_matrix(formula, frame)
-  }
-  else {
-    check_for_interactions(formula)
-    predictors <- extract_predictors_from_frame(formula, frame, intercept)
-  }
+  predictors <- rlang::with_options(
+    model.matrix(formula, frame),
+    na.action = "na.pass"
+  )
+
+  predictors <- strip_model_matrix(predictors)
 
   tibble::as_tibble(predictors)
 }
@@ -629,51 +637,121 @@ flatten_embedded_columns <- function(frame) {
   frame
 }
 
-extract_predictors_with_model_matrix <- function(formula, frame) {
-
-  predictors <- rlang::with_options(
-    model.matrix(formula, frame),
-    na.action = "na.pass"
-  )
-
-  predictors <- strip_model_matrix(predictors)
-
-  predictors
-}
-
-extract_predictors_from_frame <- function(terms, frame, intercept) {
-
-  frame <- remove_offsets(frame)
-
-  processed_outcome_nm <- response_name(terms)
-  frame[[processed_outcome_nm]] <- NULL
-
-  frame <- maybe_add_intercept_column(frame, intercept)
-
-  frame
-}
-
 strip_model_matrix <- function(x) {
   attr(x, "assign") <- NULL
   attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
   x
 }
 
-check_for_interactions <- function(formula) {
+validate_no_factor_interactions <- function(.formula, .factor_names) {
 
-  formula_chr <- rlang::as_label(formula)
+  # Call terms on a standard formula to generate the terms interaction matrix
+  .terms <- terms(.formula)
 
-  has_interactions <- grepl(":", formula_chr)
+  bad_original_cols <- detect_factor_interactions(.terms, .factor_names)
 
-  if (has_interactions) {
-    rlang::warn(glue::glue(
-      "Interaction terms have been detected in `formula`. ",
-      "These are not expanded when `indicators = FALSE`, but the individual ",
-      "terms will be included in the output."
-    ))
+  has_bad_original_cols <- length(bad_original_cols) > 0L
+
+  if (has_bad_original_cols) {
+
+    bad_original_cols <- glue::glue_collapse(
+      glue::single_quote(bad_original_cols),
+      ", "
+    )
+
+    glubort(
+      "Interaction terms involving factors have been detected on the ",
+      "RHS of `formula`. These are not allowed when `indicators = FALSE`. ",
+      "Interactions were detected for the following factor columns: ",
+      "{bad_original_cols}."
+    )
+
   }
 
-  invisible(formula)
+  invisible(.formula)
+}
+
+# Returns the _original_ column names
+# of any factor columns that are present
+# in any interaction terms (from : or * or %in% or ^)
+detect_factor_interactions <- function(.terms, .factor_names) {
+
+  terms_matrix <- attr(.terms, "factors")
+
+  only_intercept_or_offsets <- length(terms_matrix) == 0L
+  if (only_intercept_or_offsets) {
+    return(character(0))
+  }
+
+  other_cols <- setdiff(colnames(terms_matrix), .factor_names)
+
+  no_other_cols <- length(other_cols) == 0L
+  if (no_other_cols) {
+    return(character(0))
+  }
+
+  factor_rows <- terms_matrix[.factor_names, , drop = FALSE]
+  factor_rows <- factor_rows[, other_cols, drop = FALSE]
+
+  has_interactions <- rowSums(factor_rows)
+
+  where_interactions <- has_interactions > 0
+
+  none_have_interactions <- !any(where_interactions)
+
+  if (none_have_interactions) {
+    return(character(0))
+  }
+
+  bad_cols <- names(has_interactions)[where_interactions]
+
+  bad_cols
+}
+
+extract_original_factor_names <- function(.data_classes) {
+
+  no_data_classes <- length(.data_classes) == 0L
+  if (no_data_classes) {
+    return(character(0))
+  }
+
+  where_factor <- vapply(.data_classes, function(cls) any(cls %in% c("factor", "ordered")), logical(1))
+  factor_classes <- .data_classes[where_factor]
+
+  no_factor_classes <- length(factor_classes) == 0L
+  if (no_factor_classes) {
+    return(character(0))
+  }
+
+  original_factor_columns <- names(factor_classes)
+
+  original_factor_columns
+}
+
+remove_factors_from_formula <- function(.formula, .factor_names) {
+
+  if (length(.factor_names) == 0L) {
+    return(.formula)
+  }
+
+  .factor_syms <- rlang::syms(.factor_names)
+
+  .f_rhs <- rlang::f_rhs(.formula)
+
+  for (.factor_sym in .factor_syms) {
+    .f_rhs <- rlang::expr(!! .f_rhs - !! .factor_sym)
+  }
+
+  rlang::new_formula(
+    lhs = rlang::f_lhs(.formula),
+    rhs = .f_rhs,
+    env = rlang::f_env(.formula)
+  )
+}
+
+reattach_factor_columns <- function(predictors, data, .factor_names) {
+  data_factor_cols <- data[, .factor_names, drop = FALSE]
+  tibble::add_column(predictors, !!! data_factor_cols)
 }
 
 check_is_data_like <- function(data) {

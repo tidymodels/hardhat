@@ -489,12 +489,15 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
   predictors_frame <- model_frame(engine$predictors, new_data, preprocessor$predictors$levels)
   outcomes_frame <- model_frame(engine$outcomes, new_data, preprocessor$outcomes$levels)
 
-  predictors <- extract_predictors(
+  predictors <- model_matrix(
     formula = terms(predictors_frame),
-    frame = predictors_frame,
-    indicators = preprocessor$indicators,
-    intercept = preprocessor$intercept
+    frame = predictors_frame
   )
+
+  if (!preprocessor$indicators) {
+    .factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
+    predictors <- reattach_factor_columns(predictors, new_data, .factor_names)
+  }
 
   outcomes <- extract_outcomes(outcomes_frame)
 
@@ -510,12 +513,15 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
 
   predictors_frame <- model_frame(predictors_terms, new_data, preprocessor$predictors$levels)
 
-  predictors <- extract_predictors(
+  predictors <- model_matrix(
     formula = terms(predictors_frame),
-    frame = predictors_frame,
-    indicators = preprocessor$indicators,
-    intercept = preprocessor$intercept
+    frame = predictors_frame
   )
+
+  if (!preprocessor$indicators) {
+    .factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
+    predictors <- reattach_factor_columns(predictors, new_data, .factor_names)
+  }
 
   offset <- extract_offset(predictors_frame)
 
