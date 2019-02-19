@@ -57,15 +57,18 @@ test_that("can mold and not expand dummies", {
   expect_equal(x$preprocessor$indicators, FALSE)
 })
 
-test_that("warnings are thrown if `indicator = FALSE` and interactions exist", {
+test_that("errors are thrown if `indicator = FALSE` and factor interactions exist", {
 
-  expect_warning(
-    x <- mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
-    "Interaction terms have been detected"
+  expect_error(
+    mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
+    "Interaction terms involving factors"
   )
 
-  expect_equal(colnames(x$predictors), c("Species", "Sepal.Width"))
-  expect_equal(x$preprocessor$indicators, FALSE)
+  expect_error(
+    mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
+    "'Species'"
+  )
+
 })
 
 test_that("formula intercepts can be added", {
