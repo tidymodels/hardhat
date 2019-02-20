@@ -9,23 +9,25 @@
 #'
 #' @param intercept A logical. Should an intercept be included?
 #'
-#' @param predictors A named list with the following 3 elements:
+#' @param info A named list with 2 elements:
 #'
-#' - `"names"`: A character vector of the original predictor column names.
+#' - `"predictors"`: A named list with the following 3 elements:
 #'
-#' - `"classes"`: A named list of the original predictor classes, or `NULL`.
+#'    - `"names"`: A character vector of the original predictor column names.
 #'
-#' - `"levels"`: A named list of the original predictor levels for any factor
-#' columns, or `NULL`.
+#'    - `"classes"`: A named list of the original predictor classes, or `NULL`.
 #'
-#' @param outcomes A named list with the following 3 elements:
+#'    - `"levels"`: A named list of the original predictor levels for any factor
+#'    columns, or `NULL`.
 #'
-#' - `"names"`: A character vector of the original outcome column names.
+#' - `"outcomes"`: A named list with the following 3 elements:
 #'
-#' - `"classes"`: A named list of the original outcome classes, or `NULL`.
+#'    - `"names"`: A character vector of the original outcome column names.
 #'
-#' - `"levels"`: A named list of the original outcome levels for any factor
-#' columns, or `NULL`.
+#'    - `"classes"`: A named list of the original outcome classes, or `NULL`.
+#'
+#'    - `"levels"`: A named list of the original outcome levels for any factor
+#'    columns, or `NULL`.
 #'
 #' @param ... Name-value pairs of extra elements that should be added to
 #' subclassed preprocessors.
