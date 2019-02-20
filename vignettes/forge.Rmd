@@ -1,0 +1,90 @@
+---
+title: "Forging data for predictions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Forging data for predictions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hardhat)
+```
+
+```{r}
+iris_train <- iris[1:100,]
+iris_test <- iris[101:150,]
+
+processed <- mold(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
+```
+
+
+### `forge()`
+
+`forge()` takes `new_data` and applies the same preprocessing steps that happened to the data used in training the model. It is to be called from `predict()`, or potentially from a cross validation function where you will use `predict()` repeatedly to measure performance of different folds or different hyperparameters.
+
+Say you fit a model and called `mold()` from your fitting function. When you return the model object, you should attach the `preprocessor` that you get with the output of `mold()` onto the model object (using the model constructor, `new_base_model()`, makes this easier to do). Then when you call `predict()` on that model object along with `new_data`, you should call `forge()` inside of the `predict()` method with the stored `preprocessor` and the `new_data`.
+
+```{r}
+processed_test <- forge(
+  preprocessor = processed$preprocessor, 
+  new_data = iris_test,
+  outcomes = TRUE
+)
+```
+
+`forge()` always returns a list with two things. The first is a tibble containing the preprocessed `predictors`. The second is optionally the preprocessed `outcomes` if you are performing cross validation and used a formula or recipes interface. Because we used the formula interface to generate the `processed` object, we could set `outcomes = TRUE` above to also return the processed outcome column.
+
+```{r}
+processed_test$predictors
+
+processed_test$outcomes
+```
+
+The nice thing about `forge()` is that the `preprocessor` remembers a lot of information about what happened at fit time, and keeps the user from shooting themselves in the foot at prediction time. 
+
+For instance, each predictor used at fit time has to have the same class at prediction time.
+
+```{r, error=TRUE}
+iris_test_bad <- iris_test
+
+# Turning Species into a character column rather than
+# a factor
+iris_test_bad$Species <- as.character(iris_test_bad$Species)
+
+forge(processed$preprocessor, iris_test_bad)
+```
+
+And each predictor column has to exist in `new_data`.
+
+```{r, error=TRUE}
+# Removing species alltogether
+iris_test_bad$Species <- NULL
+
+forge(processed$preprocessor, iris_test_bad)
+```
+
+And new levels in any of the predictors throw a warning and are coerced to `NA`.
+
+```{r, warning=TRUE}
+iris_test_bad <- iris
+iris_test_bad$Species <- as.character(iris_test_bad$Species)
+iris_test_bad$Species[1] <- "new_level"
+iris_test_bad$Species  <- factor(iris_test_bad$Species)
+
+levels(iris_test_bad$Species)
+
+processed_bad_test <- forge(processed$preprocessor, iris_test_bad)
+
+processed_bad_test$predictors
+```
+
+
+

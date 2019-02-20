@@ -17,10 +17,13 @@ Roxygen: list(markdown = TRUE)
 Suggests: 
     recipes,
     testthat,
-    covr
+    covr,
+    knitr,
+    rmarkdown
 Imports: 
     glue,
     rlang,
     tibble
 URL: https://github.com/DavisVaughan/hardhat
 BugReports: https://github.com/DavisVaughan/hardhat/issues
+VignetteBuilder: knitr
