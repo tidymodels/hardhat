@@ -22,23 +22,29 @@
 #' The following explains the rationale for some of the difference in arguments
 #' compared to [stats::model.frame()]:
 #'
-#' - `"subset"` is not allowed because the number of rows before and after
+#' - `subset`: Not allowed because the number of rows before and after
 #' `model_frame()` has been run should always be the same.
 #'
-#' - `"na.action"` is not allowed and is forced to `"na.pass"` because the
+#' - `na.action`: Not allowed and is forced to `"na.pass"` because the
 #' number of rows before and after `model_frame()` has been run should always
 #' be the same.
 #'
-#' - `"drop.unused.levels"` is not allowed because it seems inconsistent for
+#' - `drop.unused.levels`: Not allowed because it seems inconsistent for
 #' `data` and the result of `model_frame()` to ever have the same factor column
 #' but with different levels, unless specified though `original_levels`. If
 #' this is required, it should be done through a recipe step explicitly.
 #'
-#' - `"..."` is not exposed because offsets are handled separately, and
+#' - `...`: Not exposed because offsets are handled separately, and
 #' it is not necessary to pass weights here any more because rows are never
 #' dropped (so weights don't have to be subset alongside the rest of the
 #' design matrix). If other non-predictor columns are required, use the
 #' "roles" features of recipes.
+#'
+#' It is important to always use the results of `model_frame()` with
+#' [model_matrix()] rather than [stats::model.matrix()] because the tibble
+#' in the result of `model_frame()` does _not_ have a terms object attached.
+#' If `model.matrix(<terms>, <tibble>)` is called directly, then a call to
+#' `model.frame()` will be made automatically, which can give faulty results.
 #'
 #' @return
 #'

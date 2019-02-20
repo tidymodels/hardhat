@@ -35,21 +35,27 @@ two distinct objects.
 The following explains the rationale for some of the difference in arguments
 compared to \code{\link[stats:model.frame]{stats::model.frame()}}:
 \itemize{
-\item \code{"subset"} is not allowed because the number of rows before and after
+\item \code{subset}: Not allowed because the number of rows before and after
 \code{model_frame()} has been run should always be the same.
-\item \code{"na.action"} is not allowed and is forced to \code{"na.pass"} because the
+\item \code{na.action}: Not allowed and is forced to \code{"na.pass"} because the
 number of rows before and after \code{model_frame()} has been run should always
 be the same.
-\item \code{"drop.unused.levels"} is not allowed because it seems inconsistent for
+\item \code{drop.unused.levels}: Not allowed because it seems inconsistent for
 \code{data} and the result of \code{model_frame()} to ever have the same factor column
 but with different levels, unless specified though \code{original_levels}. If
 this is required, it should be done through a recipe step explicitly.
-\item \code{"..."} is not exposed because offsets are handled separately, and
+\item \code{...}: Not exposed because offsets are handled separately, and
 it is not necessary to pass weights here any more because rows are never
 dropped (so weights don't have to be subset alongside the rest of the
 design matrix). If other non-predictor columns are required, use the
 "roles" features of recipes.
 }
+
+It is important to always use the results of \code{model_frame()} with
+\code{\link[=model_matrix]{model_matrix()}} rather than \code{\link[stats:model.matrix]{stats::model.matrix()}} because the tibble
+in the result of \code{model_frame()} does \emph{not} have a terms object attached.
+If \code{model.matrix(<terms>, <tibble>)} is called directly, then a call to
+\code{model.frame()} will be made automatically, which can give faulty results.
 }
 \examples{
 # ---------------------------------------------------------------------------
