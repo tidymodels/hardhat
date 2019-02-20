@@ -3,8 +3,10 @@ title: "Molding data for modeling"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Molding data for modeling}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -17,6 +19,64 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(hardhat)
 ```
+
+## Introduction
+
+For most modeling functions, data must be accepted from the user in some format where the _outcomes_ and _predictors_ are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used (i.e. terms are specified using `outcomes ~ predictors`), R provides some infrastructure for preprocessing the user input through the `model.frame()` and `model.matrix()` functions. 
+
+But the formula method is not the only way to specify modeling terms. There is also an XY method, where `x` and `y` are supplied directly, and, recently, a `recipe` object can be used to preprocess data using a set of sequential steps.
+
+As a developer, you likely won't want to care about the details of how each of these methods work, but (hopefully) still want to provide all three of these interfaces for your shiny new model. `mold()` makes this easy on you, and takes care of the details of preprocessing user input from any of these methods.
+
+## `mold()` By Example
+
+The intended use of `mold()` is to be called from your top level modeling function (the one that users will call). Suppose that we have such a function, `modeler()`, along with it's core implementation `modeler_impl()`, and a constructor to make a new `"modeler"` object, `new_modeler()`.
+
+```{r}
+# Create a new `modeler` object
+new_modeler <- function(y_mean) {
+  
+  if (!is.numeric(y_mean)) {
+    stop("`y_mean` must be numeric.")
+  }
+  
+  elements <- list(
+    y_mean = y_mean
+  )
+  
+  structure(elements, class = "modeler")
+}
+
+# Implementation function
+modeler_impl <- function(x, y) {
+  
+  # core modeling implementation
+  
+  list(
+    y_mean = mean(y)
+  )
+}
+
+
+modeler <- function(x, y) {
+  res <- modeler_impl(x, y)
+  new_modeler(y_mean = res$y_mean)
+}
+```
+
+You probably expect users to use `modeler()` like this:
+
+```{r}
+# X and Y
+x <- iris
+x$Petal.Width <- NULL
+y <- iris$Petal.Width
+
+modeler(x, y)
+```
+
+
+To use it with `mold()`, pass through the input
 
 ### `mold()`
 
