@@ -18,6 +18,10 @@
 #'    - If, in the original [mold()] call, `indicators = TRUE` was set, it
 #'    then runs [stats::model.matrix()] on the result.
 #'
+#'    - If, in the original [mold()] call, `indicators = FALSE` was set, it
+#'    runs [stats::model.matrix()] on the result without the factor columns,
+#'    and then adds them on afterwards.
+#'
 #'    - If any offsets are present from using `offset()` in the original call
 #'    to [mold()], then they are extracted with [model_offset()].
 #'
@@ -67,7 +71,11 @@
 #' # Dummy variables
 #'
 #' # If factors are not expanded in mold()...
-#' processed <- mold(Sepal.Width ~ Species, train, indicators = FALSE)
+#' processed <- mold(
+#'   Sepal.Width ~ Species + Petal.Length:Petal.Width,
+#'   train,
+#'   indicators = FALSE
+#' )
 #'
 #' # ...then they aren't expanded in forge() either
 #' forge(processed$preprocessor, test)

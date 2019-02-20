@@ -46,8 +46,9 @@ For a formula, \code{mold()} does the following:
 \item Runs \code{\link[stats:model.frame]{stats::model.frame()}} on the RHS formula and uses \code{data}.
 \item If \code{indicators = TRUE}, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the
 result.
-\item If \code{indicators = FALSE}, it does not expand factors with
-\code{model.matrix()}, which also means that interactions are not expanded.
+\item If \code{indicators = FALSE}, factors are removed before \code{model.matrix()}
+is run, and then added back afterwards. No interactions or inline
+functions involving factors are allowed.
 \item If any offsets are present from using \code{offset()}, then they are
 extracted with \code{\link[=model_offset]{model_offset()}}.
 \item If \code{intercept = TRUE}, adds an intercept column.
@@ -141,22 +142,27 @@ tryCatch(
 # Dummy variables and interactions
 
 # By default, factor columns are expanded
-# And interactions are created, both by
+# and interactions are created, both by
 # calling model.matrix(). Some models (like
 # tree based models) can take factors directly
 # but still might want to use the formula method.
 # In those cases, set `indicators = FALSE` to not
-# run model.matrix()
+# run model.matrix() on factor columns. Interactions
+# are still allowed and run on numeric columns.
 
-processed <- mold(Sepal.Width ~ Species, iris, indicators = FALSE)
+processed <- mold(
+  ~ Species + Sepal.Width:Sepal.Length,
+  iris,
+  indicators = FALSE
+)
 
 processed$predictors
 
-# No interactions are expanded when `indicators = FALSE`, but
-# the terms specified in the interaction show up in the predictors
-# tibble, with a warning
+# An informative error is thrown when `indicators = FALSE` and
+# factors are present in interaction terms or in inline functions
 \dontrun{
 mold(Sepal.Width ~ Sepal.Length:Species, iris, indicators = FALSE)
+mold(Sepal.Width ~ paste0(Species), iris, indicators = FALSE)
 }
 
 # ---------------------------------------------------------------------------

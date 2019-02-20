@@ -14,8 +14,9 @@
 #'    - If `indicators = TRUE`, it then runs [stats::model.matrix()] on the
 #'    result.
 #'
-#'    - If `indicators = FALSE`, it does not expand factors with
-#'    `model.matrix()`, which also means that interactions are not expanded.
+#'    - If `indicators = FALSE`, factors are removed before `model.matrix()`
+#'    is run, and then added back afterwards. No interactions or inline
+#'    functions involving factors are allowed.
 #'
 #'    - If any offsets are present from using `offset()`, then they are
 #'    extracted with [model_offset()].
@@ -126,22 +127,27 @@
 #' # Dummy variables and interactions
 #'
 #' # By default, factor columns are expanded
-#' # And interactions are created, both by
+#' # and interactions are created, both by
 #' # calling model.matrix(). Some models (like
 #' # tree based models) can take factors directly
 #' # but still might want to use the formula method.
 #' # In those cases, set `indicators = FALSE` to not
-#' # run model.matrix()
+#' # run model.matrix() on factor columns. Interactions
+#' # are still allowed and run on numeric columns.
 #'
-#' processed <- mold(Sepal.Width ~ Species, iris, indicators = FALSE)
+#' processed <- mold(
+#'   ~ Species + Sepal.Width:Sepal.Length,
+#'   iris,
+#'   indicators = FALSE
+#' )
 #'
 #' processed$predictors
 #'
-#' # No interactions are expanded when `indicators = FALSE`, but
-#' # the terms specified in the interaction show up in the predictors
-#' # tibble, with a warning
+#' # An informative error is thrown when `indicators = FALSE` and
+#' # factors are present in interaction terms or in inline functions
 #' \dontrun{
 #' mold(Sepal.Width ~ Sepal.Length:Species, iris, indicators = FALSE)
+#' mold(Sepal.Width ~ paste0(Species), iris, indicators = FALSE)
 #' }
 #'
 #' # ---------------------------------------------------------------------------
