@@ -42,6 +42,9 @@ Runs stats::model.frame() on new_data using the stored terms
 object corresponding to the predictors.
 If, in the original mold() call, indicators = TRUE was set, it
 then runs stats::model.matrix() on the result.
+If, in the original mold() call, indicators = FALSE was set, it
+runs stats::model.matrix() on the result without the factor columns,
+and then adds them on afterwards.
 If any offsets are present from using offset() in the original call
 to mold(), then they are extracted with model_offset().
 If intercept = TRUE in the original call to mold(), then an
@@ -121,7 +124,7 @@ Coerces the result to a tibble.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Forge - Formula Method</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/forge.R'><code>R/forge.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/forge-formula.R'><code>R/forge-formula.R</code></a></small>
     <div class="hidden name"><code>forge-formula.Rd</code></div>
     </div>
 
@@ -137,6 +140,9 @@ of <code>new_data</code>.</p></li>
 object corresponding to the <em>predictors</em>.</p></li>
 <li><p>If, in the original <code><a href='mold.html'>mold()</a></code> call, <code>indicators = TRUE</code> was set, it
 then runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code> on the result.</p></li>
+<li><p>If, in the original <code><a href='mold.html'>mold()</a></code> call, <code>indicators = FALSE</code> was set, it
+runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code> on the result without the factor columns,
+and then adds them on afterwards.</p></li>
 <li><p>If any offsets are present from using <code><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset()</a></code> in the original call
 to <code><a href='mold.html'>mold()</a></code>, then they are extracted with <code><a href='model_offset.html'>model_offset()</a></code>.</p></li>
 <li><p>If <code>intercept = TRUE</code> in the original call to <code><a href='mold.html'>mold()</a></code>, then an
@@ -273,23 +279,27 @@ offsets. Otherwise, <code>NULL</code>.</p></li>
 <span class='co'># Dummy variables</span>
 
 <span class='co'># If factors are not expanded in mold()...</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='no'>train</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
+  <span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + <span class='no'>Petal.Length</span>:<span class='no'>Petal.Width</span>,
+  <span class='no'>train</span>,
+  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
 <span class='co'># ...then they aren't expanded in forge() either</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>processed</span>$<span class='no'>preprocessor</span>, <span class='no'>test</span>)</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 50 x 1
-#&gt;    Species  
-#&gt;    &lt;fct&gt;    
-#&gt;  1 virginica
-#&gt;  2 virginica
-#&gt;  3 virginica
-#&gt;  4 virginica
-#&gt;  5 virginica
-#&gt;  6 virginica
-#&gt;  7 virginica
-#&gt;  8 virginica
-#&gt;  9 virginica
-#&gt; 10 virginica
+#&gt; # A tibble: 50 x 2
+#&gt;    `Petal.Length:Petal.Width` Species  
+#&gt;                         &lt;dbl&gt; &lt;fct&gt;    
+#&gt;  1                      15    virginica
+#&gt;  2                       9.69 virginica
+#&gt;  3                      12.4  virginica
+#&gt;  4                      10.1  virginica
+#&gt;  5                      12.8  virginica
+#&gt;  6                      13.9  virginica
+#&gt;  7                       7.65 virginica
+#&gt;  8                      11.3  virginica
+#&gt;  9                      10.4  virginica
+#&gt; 10                      15.2  virginica
 #&gt; # … with 40 more rows
 #&gt; 
 #&gt; $outcomes

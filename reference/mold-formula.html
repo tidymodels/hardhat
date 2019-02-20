@@ -39,8 +39,9 @@ The RHS of the formula is isolated, and converted to its own
 Runs stats::model.frame() on the RHS formula and uses data.
 If indicators = TRUE, it then runs stats::model.matrix() on the
 result.
-If indicators = FALSE, it does not expand factors with
-model.matrix(), which also means that interactions are not expanded.
+If indicators = FALSE, factors are removed before model.matrix()
+is run, and then added back afterwards. No interactions or inline
+functions involving factors are allowed.
 If any offsets are present from using offset(), then they are
 extracted with model_offset().
 If intercept = TRUE, adds an intercept column.
@@ -120,7 +121,7 @@ Coerces the result of the above steps to a tibble.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Mold - Formula Method</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/mold.R'><code>R/mold.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/mold-formula.R'><code>R/mold-formula.R</code></a></small>
     <div class="hidden name"><code>mold-formula.Rd</code></div>
     </div>
 
@@ -133,8 +134,9 @@ Coerces the result of the above steps to a tibble.
 <li><p>Runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code> on the RHS formula and uses <code>data</code>.</p></li>
 <li><p>If <code>indicators = TRUE</code>, it then runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code> on the
 result.</p></li>
-<li><p>If <code>indicators = FALSE</code>, it does not expand factors with
-<code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix()</a></code>, which also means that interactions are not expanded.</p></li>
+<li><p>If <code>indicators = FALSE</code>, factors are removed before <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix()</a></code>
+is run, and then added back afterwards. No interactions or inline
+functions involving factors are allowed.</p></li>
 <li><p>If any offsets are present from using <code><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset()</a></code>, then they are
 extracted with <code><a href='model_offset.html'>model_offset()</a></code>.</p></li>
 <li><p>If <code>intercept = TRUE</code>, adds an intercept column.</p></li>
@@ -313,34 +315,39 @@ This interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Dummy variables and interactions</span>
 
 <span class='co'># By default, factor columns are expanded</span>
-<span class='co'># And interactions are created, both by</span>
+<span class='co'># and interactions are created, both by</span>
 <span class='co'># calling model.matrix(). Some models (like</span>
 <span class='co'># tree based models) can take factors directly</span>
 <span class='co'># but still might want to use the formula method.</span>
 <span class='co'># In those cases, set `indicators = FALSE` to not</span>
-<span class='co'># run model.matrix()</span>
+<span class='co'># run model.matrix() on factor columns. Interactions</span>
+<span class='co'># are still allowed and run on numeric columns.</span>
 
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='no'>iris</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
+  ~ <span class='no'>Species</span> + <span class='no'>Sepal.Width</span>:<span class='no'>Sepal.Length</span>,
+  <span class='no'>iris</span>,
+  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
-<span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; # A tibble: 150 x 1
-#&gt;    Species
-#&gt;    &lt;fct&gt;  
-#&gt;  1 setosa 
-#&gt;  2 setosa 
-#&gt;  3 setosa 
-#&gt;  4 setosa 
-#&gt;  5 setosa 
-#&gt;  6 setosa 
-#&gt;  7 setosa 
-#&gt;  8 setosa 
-#&gt;  9 setosa 
-#&gt; 10 setosa 
+<span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; # A tibble: 150 x 2
+#&gt;    `Sepal.Width:Sepal.Length` Species
+#&gt;                         &lt;dbl&gt; &lt;fct&gt;  
+#&gt;  1                       17.8 setosa 
+#&gt;  2                       14.7 setosa 
+#&gt;  3                       15.0 setosa 
+#&gt;  4                       14.3 setosa 
+#&gt;  5                       18   setosa 
+#&gt;  6                       21.1 setosa 
+#&gt;  7                       15.6 setosa 
+#&gt;  8                       17   setosa 
+#&gt;  9                       12.8 setosa 
+#&gt; 10                       15.2 setosa 
 #&gt; # … with 140 more rows</div><div class='input'>
-# No interactions are expanded when `indicators = FALSE`, but
-# the terms specified in the interaction show up in the predictors
-# tibble, with a warning
+# An informative error is thrown when `indicators = FALSE` and
+# factors are present in interaction terms or in inline functions
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>iris</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>iris</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='co'># }</span><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Multivariate outcomes</span>

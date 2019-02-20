@@ -142,18 +142,13 @@
 <a class="sourceLine" id="cb5-31" data-line-number="31"><span class="co">#&gt; # … with 90 more rows</span></a></code></pre></div>
 <p>The preprocessor stores a number of things that are useful to any model when it is time to make predictions on new data.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(processed<span class="op">$</span>preprocessor)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [1] "engine"     "intercept"  "predictors" "outcomes"   "indicators"</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [1] "engine"     "intercept"  "info"       "indicators"</span></a></code></pre></div>
 <p>For instance, the original levels and classes of the predictors are stored automatically.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">processed<span class="op">$</span>preprocessor<span class="op">$</span>predictors<span class="op">$</span>levels</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; $Species</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; [1] "setosa"     "versicolor" "virginica"</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">processed<span class="op">$</span>preprocessor<span class="op">$</span>predictors<span class="op">$</span>classes</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; $Species</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; [1] "factor"</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; $Petal.Width</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; [1] "numeric"</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">processed<span class="op">$</span>preprocessor<span class="op">$</span>predictors<span class="op">$</span>classes</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; NULL</span></a></code></pre></div>
 <p>There is also an interface for the XY method (providing the predictors and outcome directly to <code>x</code> and <code>y</code>). The preprocessing that occurs here is minimal, but you can add an intercept to <code>x</code> with <code>intercept = TRUE</code>.</p>
 <p>Notice how even though <code>y</code> is a vector, the <code>outcomes</code> slot of the return value <em>always</em> holds a tibble. Because <code>y</code> is not a data frame / matrix with existing column names, a default name of <code>".outcome"</code> is used.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">x &lt;-<span class="st"> </span>iris_train[, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Species"</span>, <span class="st">"Petal.Width"</span>)]</a>
