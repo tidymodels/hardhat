@@ -55,6 +55,18 @@ test_that("can forge new data without expanding factors into dummies", {
 
 })
 
+test_that("forging with `indicators = FALSE` works with numeric interactions", {
+
+  x <- mold(Species ~ Sepal.Width:Sepal.Length, iris, indicators = FALSE)
+  xx <- forge(x$preprocessor, iris)
+
+  expect_equal(
+    colnames(xx$predictors),
+    "Sepal.Width:Sepal.Length"
+  )
+
+})
+
 test_that("asking for the outcome works", {
   x <- mold(Species ~ Sepal.Length, iris)
   xx <- forge(x$preprocessor, iris, outcomes = TRUE)

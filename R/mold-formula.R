@@ -230,7 +230,8 @@ mold_formula_predictors <- function(formula, data, indicators) {
 
   if (!indicators) {
     factor_names <- extract_original_factor_names(original_data_classes)
-    validate_no_factor_interactions(formula, factor_names)
+    validate_no_factors_in_functions(formula, factor_names)
+    validate_no_factors_in_interactions(formula, factor_names)
     formula <- remove_factors_from_formula(formula, factor_names)
   }
 
@@ -344,17 +345,78 @@ strip_model_matrix <- function(x) {
   x
 }
 
+validate_no_factors_in_functions <- function(.formula, .factor_names) {
 
-validate_no_factor_interactions <- function(.formula, .factor_names) {
+  .terms <- terms(.formula)
+
+  bad_original_cols <- detect_factors_in_functions(.terms, .factor_names)
+
+  ok <- length(bad_original_cols) == 0L
+
+  if (!ok) {
+
+    bad_original_cols <- glue::glue_collapse(
+      glue::single_quote(bad_original_cols),
+      ", "
+    )
+
+    glubort(
+      "Functions involving factors have been detected on the ",
+      "RHS of `formula`. These are not allowed when `indicators = FALSE`. ",
+      "Functions involving factors were detected for the following columns: ",
+      "{bad_original_cols}."
+    )
+
+  }
+
+  invisible(.formula)
+}
+
+# Returns original column names of any factor columns that
+# are present in an inline function
+# The row.names() of the factors matrix contains all of the
+# non-interaction expressions that are used in the formula
+detect_factors_in_functions <- function(.terms, .factor_names) {
+
+  terms_matrix <- attr(.terms, "factors")
+
+  only_intercept_or_offsets <- length(terms_matrix) == 0L
+  if (only_intercept_or_offsets) {
+    return(character(0))
+  }
+
+  all_terms_exprs <- row.names(terms_matrix)
+
+  # Remove bare factor names
+  exprs_no_bare_factors <- all_terms_exprs[!(all_terms_exprs %in% .factor_names)]
+
+  if (length(exprs_no_bare_factors) == 0L) {
+    return(character(0))
+  }
+
+  .factor_name_is_in_a_fn <- vapply(
+    .factor_names,
+    function(nm) {
+      any(grepl(nm, exprs_no_bare_factors))
+    },
+    logical(1)
+  )
+
+  bad_cols <- .factor_names[.factor_name_is_in_a_fn]
+
+  bad_cols
+}
+
+validate_no_factors_in_interactions <- function(.formula, .factor_names) {
 
   # Call terms on a standard formula to generate the terms interaction matrix
   .terms <- terms(.formula)
 
-  bad_original_cols <- detect_factor_interactions(.terms, .factor_names)
+  bad_original_cols <- detect_factors_in_interactions(.terms, .factor_names)
 
-  has_bad_original_cols <- length(bad_original_cols) > 0L
+  ok <- length(bad_original_cols) == 0L
 
-  if (has_bad_original_cols) {
+  if (!ok) {
 
     bad_original_cols <- glue::glue_collapse(
       glue::single_quote(bad_original_cols),
@@ -364,7 +426,7 @@ validate_no_factor_interactions <- function(.formula, .factor_names) {
     glubort(
       "Interaction terms involving factors have been detected on the ",
       "RHS of `formula`. These are not allowed when `indicators = FALSE`. ",
-      "Interactions were detected for the following factor columns: ",
+      "Interactions involving factors were detected for the following columns: ",
       "{bad_original_cols}."
     )
 
@@ -376,7 +438,7 @@ validate_no_factor_interactions <- function(.formula, .factor_names) {
 # Returns the _original_ column names
 # of any factor columns that are present
 # in any interaction terms (from : or * or %in% or ^)
-detect_factor_interactions <- function(.terms, .factor_names) {
+detect_factors_in_interactions <- function(.terms, .factor_names) {
 
   terms_matrix <- attr(.terms, "factors")
 
@@ -392,20 +454,33 @@ detect_factor_interactions <- function(.terms, .factor_names) {
     return(character(0))
   }
 
-  factor_rows <- terms_matrix[.factor_names, , drop = FALSE]
+  # Something like Species, rather than paste0(Species)
+  bare_factor_names <- .factor_names[.factor_names %in% row.names(terms_matrix)]
+
+  # Something like mold(~ paste0(Species), iris, indicators = FALSE)
+  no_bare_factors_used <- length(bare_factor_names) == 0L
+  if (no_bare_factors_used) {
+    return(character(0))
+  }
+
+  factor_rows <- terms_matrix[bare_factor_names, , drop = FALSE]
   factor_rows <- factor_rows[, other_cols, drop = FALSE]
 
-  has_interactions <- rowSums(factor_rows)
-
-  where_interactions <- has_interactions > 0
+  # In the factor matrix, only `:` is present to represent interactions,
+  # even if something like * or ^ or %in% was used to generate it
+  where_interactions <- grepl(":", colnames(factor_rows))
 
   none_have_interactions <- !any(where_interactions)
-
   if (none_have_interactions) {
     return(character(0))
   }
 
-  bad_cols <- names(has_interactions)[where_interactions]
+  interaction_cols <- factor_rows[, where_interactions, drop = FALSE]
+
+  factor_is_bad_if_gt_0 <- rowSums(interaction_cols)
+  bad_factor_vals <- factor_is_bad_if_gt_0[factor_is_bad_if_gt_0 > 0]
+
+  bad_cols <- names(bad_factor_vals)
 
   bad_cols
 }

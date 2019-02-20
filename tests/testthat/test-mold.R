@@ -60,13 +60,87 @@ test_that("can mold and not expand dummies", {
 test_that("errors are thrown if `indicator = FALSE` and factor interactions exist", {
 
   expect_error(
-    mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
-    "Interaction terms involving factors"
+    mold(~ Species, iris, indicators = FALSE),
+    NA
   )
 
   expect_error(
     mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
+    "Interaction terms involving factors"
+  )
+
+  # Checking various types of generated interactions
+
+  expect_error(
+    mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
     "'Species'"
+  )
+
+  expect_error(
+    mold(Sepal.Length ~ Species * Sepal.Width, iris, indicators = FALSE),
+    "'Species'"
+  )
+
+  expect_error(
+    mold(Sepal.Length ~ (Species + Sepal.Width) ^ 2, iris, indicators = FALSE),
+    "'Species'"
+  )
+
+  expect_error(
+    mold(Sepal.Length ~ Species %in% Sepal.Width, iris, indicators = FALSE),
+    "'Species'"
+  )
+
+  # Both factor issues are reported
+
+  iris2 <- iris
+  iris2$Species2 <- iris2$Species
+
+  expect_error(
+    mold(~ Species:Species2, iris2, indicators = FALSE),
+    "'Species', 'Species2'."
+  )
+
+})
+
+test_that("errors are thrown if `indicator = FALSE` and factors are used in inline functions", {
+
+  expect_error(
+    mold(~ paste0(Species), iris, indicators = FALSE),
+    "Functions involving factors"
+  )
+
+  expect_error(
+    mold(~ paste0(Species), iris, indicators = FALSE),
+    "'Species'"
+  )
+
+  expect_error(
+    mold(~ Species %>% paste0(), iris, indicators = FALSE)
+  )
+
+  expect_error(
+    mold(~ paste0(Species + Species), iris, indicators = FALSE),
+    "'Species'"
+  )
+
+  iris2 <- iris
+  iris2$Species2 <- iris2$Species
+
+  expect_error(
+    mold(~ paste0(Species) + paste0(Species2), iris2, indicators = FALSE),
+    "'Species', 'Species2'."
+  )
+
+})
+
+test_that("`indicators = FALSE` works fine in strange formulas", {
+
+  x <- mold(~ 1, iris, indicators = FALSE, intercept = TRUE)
+
+  expect_equal(
+    colnames(x$predictors),
+    "(Intercept)"
   )
 
 })
@@ -187,6 +261,17 @@ test_that("full interaction syntax is supported", {
   expect_equal(
     mold(~ Sepal.Width + Sepal.Length %in% Sepal.Width, iris)$predictors,
     mold(~ Sepal.Width + Sepal.Width:Sepal.Length, iris)$predictors
+  )
+
+})
+
+test_that("`indicators = FALSE` runs numeric interactions", {
+
+  x <- mold(~ Sepal.Length:Sepal.Width, iris, indicators = FALSE)
+
+  expect_equal(
+    colnames(x$predictors),
+    "Sepal.Length:Sepal.Width"
   )
 
 })
