@@ -104,5 +104,5 @@ is_terms <- function(x) {
 }
 
 validate_is_terms <- function(terms) {
-  validate_is(terms, is_terms, "terms")
+  validate_is(terms, is_terms, "terms object")
 }
