@@ -365,49 +365,22 @@ mold.formula <- function(formula, data, intercept = FALSE,
   formula <- remove_formula_intercept(formula, intercept)
   formula <- alter_formula_environment(formula)
 
-  original_predictor_nms <- get_all_predictors(formula, data)
-  original_predictors <- data[, original_predictor_nms, drop = FALSE]
+  predictors <- mold_formula_predictors(formula, data, indicators)
+  # outcomes <- mold_formula_outcomes(formula, data)
+
   original_outcome_nms <- get_all_outcomes(formula, data)
   original_outcomes <- data[, original_outcome_nms, drop = FALSE]
 
-  original_predictor_data_classes <- get_data_classes(original_predictors)
-
-  predictors_formula <- get_predictors_formula(formula)
-
-  if (!indicators) {
-    .factor_names <- extract_original_factor_names(original_predictor_data_classes)
-    validate_no_factor_interactions(predictors_formula, .factor_names)
-    predictors_formula <- remove_factors_from_formula(predictors_formula, .factor_names)
-  }
-
-  predictors_frame <- model_frame(predictors_formula, data)
-  predictors_terms <- extract_terms(predictors_frame)
-
-  predictors <- model_matrix(
-    formula = predictors_terms,
-    frame = predictors_frame
-  )
-
-  if (!indicators) {
-    predictors <- reattach_factor_columns(predictors, data, .factor_names)
-  }
-
   outcomes_formula <- get_outcomes_formula(formula)
-  outcomes_frame <- model_frame(outcomes_formula, data)
-  outcomes_terms <- extract_terms(outcomes_frame)
+  outcomes_framed <- model_frame(outcomes_formula, data)
+  outcomes_terms <- outcomes_framed$terms
 
-  outcomes <- extract_outcomes(outcomes_frame)
-
-  offset <- extract_offset(predictors_frame)
+  outcomes <- flatten_embedded_columns(outcomes_framed$data)
 
   preprocessor <- new_terms_preprocessor(
-    engine = new_terms_preprocessor_engine(predictors_terms, outcomes_terms),
+    engine = new_terms_preprocessor_engine(predictors$terms, outcomes_terms),
     intercept = intercept,
-    predictors = predictors_lst(
-      names = original_predictor_nms,
-      classes = original_predictor_data_classes,
-      levels = get_levels(original_predictors)
-    ),
+    predictors = predictors$lst,
     outcomes = outcomes_lst(
       names = original_outcome_nms,
       classes = get_data_classes(original_outcomes),
@@ -416,7 +389,7 @@ mold.formula <- function(formula, data, intercept = FALSE,
     indicators = indicators
   )
 
-  mold_list(predictors, outcomes, preprocessor, offset)
+  mold_list(predictors$data, outcomes, preprocessor, predictors$offset)
 }
 
 #' Mold - Recipes Method
@@ -520,6 +493,48 @@ mold.recipe <- function(x, data, intercept = FALSE, ...) {
 # ------------------------------------------------------------------------------
 # Preparation helpers
 
+mold_formula_predictors <- function(formula, data, indicators) {
+
+  formula <- get_predictors_formula(formula)
+
+  original_names <- get_all_predictors(formula, data)
+  original_data <- data[, original_names, drop = FALSE]
+  original_data_classes <- get_data_classes(original_data)
+  original_levels <- get_levels(original_data)
+
+  if (!indicators) {
+    factor_names <- extract_original_factor_names(original_data_classes)
+    validate_no_factor_interactions(formula, factor_names)
+    formula <- remove_factors_from_formula(formula, factor_names)
+  }
+
+  framed <- model_frame(formula, data)
+  offset <- extract_offset(framed$data, framed$terms)
+
+  predictors <- model_matrix(
+    terms = framed$terms,
+    data = framed$data
+  )
+
+  if (!indicators) {
+    predictors <- reattach_factor_columns(predictors, data, factor_names)
+  }
+
+  terms <- simplify_terms(framed$terms)
+
+  list(
+    data = predictors,
+    terms = terms,
+    offset = offset,
+    lst = predictors_lst(
+      names = original_names,
+      classes = original_data_classes,
+      levels = original_levels
+    )
+  )
+
+}
+
 mold_list <- function(predictors, outcomes, preprocessor, offset = NULL) {
   list(
     predictors = predictors,
@@ -582,10 +597,23 @@ get_original_recipe_data_classes <- function(x, rec) {
 
 }
 
-model_matrix <- function(formula, frame) {
+model_matrix <- function(terms, data) {
+
+  if (!inherits(terms, "terms")) {
+    glubort("`terms` must be a 'terms' object.")
+  }
+
+  if (!is.data.frame(data)) {
+    glubort("`data` must be a data frame.")
+  }
+
+  # otherwise model.matrix() will try and run model.frame() for us on data
+  # but we definitely don't want this, as we have already done it and it can
+  # actually error out
+  attr(data, "terms") <- terms
 
   predictors <- rlang::with_options(
-    model.matrix(formula, frame),
+    model.matrix(object = terms, data = data),
     na.action = "na.pass"
   )
 

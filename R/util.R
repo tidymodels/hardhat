@@ -12,18 +12,18 @@ glubort <- function(..., .sep = "", .envir = parent.frame()) {
 }
 
 #' @rdname utilities
-extract_terms <- function(x) {
+simplify_terms <- function(x) {
 
   # This is like stats:::terms.default
   # but doesn't look at x$terms.
 
-  terms_value <- attr(x, "terms")
+  is_terms <- inherits(x, "terms")
 
-  if (is.null(terms_value)) {
-    abort("No `terms` attribute found.")
+  if (!is_terms) {
+    abort("`x` must be a terms object")
   }
 
-  # It also removes the environment
+  # It removes the environment
   # (which could be large)
   # - it is not needed for prediction
   # - it is used in model.matrix(data = environment(object))
@@ -32,9 +32,9 @@ extract_terms <- function(x) {
   #   but don't we want to guard against that?
   # - It is used in model.frame() to evaluate the predvars, but that is also
   #   evaluated in the presence of the data so that should always suffice?
-  attr(terms_value, ".Environment") <- NULL
+  attr(x, ".Environment") <- NULL
 
-  terms_value
+  x
 }
 
 get_all_predictors <- function(formula, data) {
@@ -157,17 +157,4 @@ validate_is_bool <- function(.x, .x_nm) {
 
 all_numeric <- function(x) {
   all(vapply(x, is.numeric, logical(1)))
-}
-
-# - Preprocessing should _never_ removes rows
-# with incomplete data. Setting the na.action
-# to na.pass will retain the NA values through
-# the preprocessing
-# - Don't make this return a tibble, we need the
-# attached terms object sometimes
-model_frame <- function(formula, data, original_levels = NULL) {
-  rlang::with_options(
-    stats::model.frame(formula, data = data, xlev = original_levels),
-    na.action = "na.pass"
-  )
 }

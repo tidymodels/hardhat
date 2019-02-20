@@ -3,13 +3,13 @@
 \name{utilities}
 \alias{utilities}
 \alias{glubort}
-\alias{extract_terms}
+\alias{simplify_terms}
 \alias{delete_response}
 \title{Utilites}
 \usage{
 glubort(..., .sep = "", .envir = parent.frame())
 
-extract_terms(x)
+simplify_terms(x)
 
 delete_response(x)
 }

@@ -486,22 +486,22 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
 
-  predictors_frame <- model_frame(engine$predictors, new_data, preprocessor$predictors$levels)
-  outcomes_frame <- model_frame(engine$outcomes, new_data, preprocessor$outcomes$levels)
+  predictors_framed <- model_frame(engine$predictors, new_data, preprocessor$predictors$levels)
+  outcomes_framed <- model_frame(engine$outcomes, new_data, preprocessor$outcomes$levels)
 
   predictors <- model_matrix(
-    formula = terms(predictors_frame),
-    frame = predictors_frame
+    terms = predictors_framed$terms,
+    data = predictors_framed$data
   )
 
   if (!preprocessor$indicators) {
-    .factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
-    predictors <- reattach_factor_columns(predictors, new_data, .factor_names)
+    factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
+    predictors <- reattach_factor_columns(predictors, new_data, factor_names)
   }
 
-  outcomes <- extract_outcomes(outcomes_frame)
+  outcomes <- extract_outcomes(outcomes_framed$data)
 
-  offset <- extract_offset(predictors_frame)
+  offset <- extract_offset(predictors_framed$data, predictors_framed$terms)
 
   forge_list(predictors, outcomes, offset)
 }
@@ -511,19 +511,19 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
   predictors_terms <- preprocessor$engine$predictors
   predictors_terms <- delete_response(predictors_terms)
 
-  predictors_frame <- model_frame(predictors_terms, new_data, preprocessor$predictors$levels)
+  predictors_framed <- model_frame(predictors_terms, new_data, preprocessor$predictors$levels)
 
   predictors <- model_matrix(
-    formula = terms(predictors_frame),
-    frame = predictors_frame
+    terms = predictors_framed$terms,
+    data = predictors_framed$data
   )
 
   if (!preprocessor$indicators) {
-    .factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
-    predictors <- reattach_factor_columns(predictors, new_data, .factor_names)
+    factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
+    predictors <- reattach_factor_columns(predictors, new_data, factor_names)
   }
 
-  offset <- extract_offset(predictors_frame)
+  offset <- extract_offset(predictors_framed$data, predictors_framed$terms)
 
   forge_list(predictors, offset = offset)
 }
