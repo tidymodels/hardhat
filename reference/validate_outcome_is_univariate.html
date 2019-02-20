@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Forge prediction-ready data — forge • hardhat</title>
+<title>Ensure that the outcome is univariate — validate_outcome_is_univariate • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,16 +30,11 @@
 
 
 
-<meta property="og:title" content="Forge prediction-ready data — forge" />
+<meta property="og:title" content="Ensure that the outcome is univariate — validate_outcome_is_univariate" />
 
-<meta property="og:description" content="forge() applies the transformations requested by the preprocessor
-on a set of new_data to be used in predictions.
-The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:
-XY Method - forge.default_preprocessor()
-Formula Method - forge.terms_preprocessor()
-Recipes Method - forge.recipes_preprocessor()
+<meta property="og:description" content="The following validation checks are performed:
+outcomes must be a data frame
+outcomes must have 1 column
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -122,82 +117,53 @@ Recipes Method - forge.recipes_preprocessor()
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Forge prediction-ready data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/forge.R'><code>R/forge.R</code></a></small>
-    <div class="hidden name"><code>forge.Rd</code></div>
+    <h1>Ensure that the outcome is univariate</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/validation.R'><code>R/validation.R</code></a></small>
+    <div class="hidden name"><code>validate_outcome_is_univariate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>forge()</code> applies the transformations requested by the <code>preprocessor</code>
-on a set of <code>new_data</code> to be used in predictions.</p>
-<p>The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:</p><ul>
-<li><p>XY Method - <code><a href='forge-xy.html'>forge.default_preprocessor()</a></code></p></li>
-<li><p>Formula Method - <code><a href='forge-formula.html'>forge.terms_preprocessor()</a></code></p></li>
-<li><p>Recipes Method - <code><a href='forge-recipe.html'>forge.recipes_preprocessor()</a></code></p></li>
+    <p>The following validation checks are performed:</p><ul>
+<li><p><code>outcomes</code> must be a data frame</p></li>
+<li><p><code>outcomes</code> must have 1 column</p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>validate_outcome_is_univariate</span>(<span class='no'>outcomes</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>preprocessor</th>
-      <td><p>A valid <code>"preprocessor"</code>. The preprocessor that should
-be used here is the one in the output from the corresponding call
-to <code><a href='mold.html'>mold()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>new_data</th>
-      <td><p>A data frame or matrix to preprocess.</p></td>
-    </tr>
-    <tr>
       <th>outcomes</th>
-      <td><p>A logical. Should the outcomes be processed and returned
-as well?</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not currently used.</p></td>
+      <td><p>A data frame with 1 column.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A named list with 3 elements:</p><ul>
-<li><p><code>predictors</code>: A tibble containing the preprocessed
-<code>new_data</code> predictors.</p></li>
-<li><p><code>outcomes</code>: If <code>outcomes = TRUE</code>, a tibble containing the preprocessed
-<code>new_data</code> outcomes. Otherwise, <code>NULL</code>.</p></li>
-<li><p><code>offset</code>: If the <code>preprocessor</code> was a <code>"terms_preprocessor"</code>, and offsets
-were specified in the formula, this is a tibble containing the preprocessed
-offsets. Otherwise, <code>NULL</code>.</p></li>
-</ul>
-
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If the outcomes are present in <code>new_data</code>, they can optionally be processed
-and returned in the <code>outcomes</code> slot of the returned list. This is very
-useful when doing cross validation where you need to preprocess the
-outcomes of a test set before computing performance.</p>
+    <p>The easiest way to use this validation function is to supply it the
+<code>$outcomes</code> element of the result of <code><a href='mold.html'>mold()</a></code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'>validate_outcome_is_univariate</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>))</div><span class='co'># NOT RUN {</span>
+<span class='fu'>validate_outcome_is_univariate</span>(<span class='no'>mtcars</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
