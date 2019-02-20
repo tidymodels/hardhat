@@ -11,8 +11,8 @@ format.terms_preprocessor <- function(x, ...) "Formula"
 print.preprocessor <- function(x, ...) {
   cat_line("{format(x)} Preprocessor:")
   cat_line("\n")
-  cat_line("# Predictors: {length(x$predictors$names)}")
-  cat_line("  # Outcomes: {length(x$outcomes$names)}")
+  cat_line("# Predictors: {length(x$info$predictors$names)}")
+  cat_line("  # Outcomes: {length(x$info$outcomes$names)}")
   cat_line("   Intercept: {x$intercept}")
   invisible(x)
 }

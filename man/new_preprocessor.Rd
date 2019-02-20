@@ -5,8 +5,7 @@
 \title{Create a new preprocessor}
 \usage{
 new_preprocessor(engine = new_default_preprocessor_engine(),
-  intercept = FALSE, predictors = predictors_lst(),
-  outcomes = outcomes_lst(), ..., subclass = character())
+  intercept = FALSE, info = info_lst(), ..., subclass = character())
 }
 \arguments{
 \item{engine}{A preprocessing engine. This can be a
@@ -14,20 +13,22 @@ new_preprocessor(engine = new_default_preprocessor_engine(),
 
 \item{intercept}{A logical. Should an intercept be included?}
 
-\item{predictors}{A named list with the following 3 elements:
+\item{info}{A named list with 2 elements:
+\itemize{
+\item \code{"predictors"}: A named list with the following 3 elements:
 \itemize{
 \item \code{"names"}: A character vector of the original predictor column names.
 \item \code{"classes"}: A named list of the original predictor classes, or \code{NULL}.
 \item \code{"levels"}: A named list of the original predictor levels for any factor
 columns, or \code{NULL}.
-}}
-
-\item{outcomes}{A named list with the following 3 elements:
+}
+\item \code{"outcomes"}: A named list with the following 3 elements:
 \itemize{
 \item \code{"names"}: A character vector of the original outcome column names.
 \item \code{"classes"}: A named list of the original outcome classes, or \code{NULL}.
 \item \code{"levels"}: A named list of the original outcome levels for any factor
 columns, or \code{NULL}.
+}
 }}
 
 \item{...}{Name-value pairs of extra elements that should be added to

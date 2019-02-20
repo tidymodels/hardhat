@@ -12,18 +12,18 @@ glubort <- function(..., .sep = "", .envir = parent.frame()) {
 }
 
 #' @rdname utilities
-extract_terms <- function(x) {
+simplify_terms <- function(x) {
 
   # This is like stats:::terms.default
   # but doesn't look at x$terms.
 
-  terms_value <- attr(x, "terms")
+  is_terms <- inherits(x, "terms")
 
-  if (is.null(terms_value)) {
-    abort("No `terms` attribute found.")
+  if (!is_terms) {
+    abort("`x` must be a terms object")
   }
 
-  # It also removes the environment
+  # It removes the environment
   # (which could be large)
   # - it is not needed for prediction
   # - it is used in model.matrix(data = environment(object))
@@ -32,9 +32,9 @@ extract_terms <- function(x) {
   #   but don't we want to guard against that?
   # - It is used in model.frame() to evaluate the predvars, but that is also
   #   evaluated in the presence of the data so that should always suffice?
-  attr(terms_value, ".Environment") <- NULL
+  attr(x, ".Environment") <- NULL
 
-  terms_value
+  x
 }
 
 get_all_predictors <- function(formula, data) {
@@ -59,27 +59,6 @@ get_all_outcomes <- function(formula, data) {
   unprocessed_outcome_df <- get_all_vars(outcome_formula, data)
 
   colnames(unprocessed_outcome_df)
-}
-
-# similar to delete.response()
-# but also removes the dataClasses element
-# corresponding to y if it exists
-# http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html
-
-#' @rdname utilities
-delete_response <- function(x) {
-  resp <- attr(x, "response")
-  data_class <- attr(x, "dataClasses")
-
-  # Remove dataClass corresponding to y
-  # if it exists
-  if (!is.null(resp)) {
-    if (!is.null(data_class)) {
-      attr(x, "dataClasses") <- data_class[-resp]
-    }
-  }
-
-  delete.response(x)
 }
 
 abort_unknown_mold_class <- function(x) {
@@ -159,15 +138,29 @@ all_numeric <- function(x) {
   all(vapply(x, is.numeric, logical(1)))
 }
 
-# - Preprocessing should _never_ removes rows
-# with incomplete data. Setting the na.action
-# to na.pass will retain the NA values through
-# the preprocessing
-# - Don't make this return a tibble, we need the
-# attached terms object sometimes
-model_frame <- function(formula, data, original_levels = NULL) {
-  rlang::with_options(
-    stats::model.frame(formula, data = data, xlev = original_levels),
-    na.action = "na.pass"
+# ------------------------------------------------------------------------------
+
+is_new_data_like <- function(x) {
+  is.data.frame(x) || is.matrix(x)
+}
+
+validate_is_new_data_like <- function(new_data) {
+  validate_is(
+    new_data,
+    is_new_data_like,
+    "data.frame or matrix"
   )
 }
+
+check_is_data_like <- function(data) {
+
+  if (!is_new_data_like(data)) {
+    glubort(
+      "`data` must be a data.frame or a matrix, not a {class1(data)}."
+    )
+  }
+
+  tibble::as_tibble(data)
+}
+
+# ------------------------------------------------------------------------------

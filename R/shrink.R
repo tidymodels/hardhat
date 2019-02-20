@@ -58,12 +58,12 @@ shrink <- function(preprocessor, new_data, outcomes = FALSE) {
 
   new_data <- tibble::as_tibble(new_data)
 
-  cols <- preprocessor$predictors$names
+  cols <- preprocessor$info$predictors$names
   validate_predictors(new_data, cols)
 
   if (outcomes) {
 
-    outcome_cols <- preprocessor$outcomes$names
+    outcome_cols <- preprocessor$info$outcomes$names
     validate_outcomes(new_data, outcome_cols)
 
     cols <- c(outcome_cols, cols)

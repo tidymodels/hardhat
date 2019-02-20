@@ -55,6 +55,18 @@ test_that("can forge new data without expanding factors into dummies", {
 
 })
 
+test_that("forging with `indicators = FALSE` works with numeric interactions", {
+
+  x <- mold(Species ~ Sepal.Width:Sepal.Length, iris, indicators = FALSE)
+  xx <- forge(x$preprocessor, iris)
+
+  expect_equal(
+    colnames(xx$predictors),
+    "Sepal.Width:Sepal.Length"
+  )
+
+})
+
 test_that("asking for the outcome works", {
   x <- mold(Species ~ Sepal.Length, iris)
   xx <- forge(x$preprocessor, iris, outcomes = TRUE)
@@ -336,12 +348,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(log(Sepal.Length) ~ log(Sepal.Width), iris)
 
   expect_equal(
-    x$preprocessor$predictors$classes,
+    x$preprocessor$info$predictors$classes,
     list(Sepal.Width = "numeric")
   )
 
   expect_equal(
-    x$preprocessor$outcomes$classes,
+    x$preprocessor$info$outcomes$classes,
     list(Sepal.Length = "numeric")
   )
 
@@ -452,7 +464,7 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   )
 
   expect_equal(
-    x$preprocessor$outcomes$names,
+    x$preprocessor$info$outcomes$names,
     ".outcome"
   )
 
@@ -586,12 +598,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_equal(
-    x$preprocessor$predictors$classes,
+    x$preprocessor$info$predictors$classes,
     list(Sepal.Length = "numeric", Sepal.Width = "numeric")
   )
 
   expect_equal(
-    x$preprocessor$outcomes$classes,
+    x$preprocessor$info$outcomes$classes,
     list(.outcome = "factor")
   )
 
@@ -650,7 +662,7 @@ test_that("intercept is not included as a predictor", {
   )
 
   expect_false(
-    "(Intercept)" %in% x$preprocessor$predictors$names
+    "(Intercept)" %in% x$preprocessor$info$predictors$names
   )
 
   expect_error(
@@ -671,7 +683,7 @@ test_that("intercept is not included as a predictor", {
   )
 
   expect_false(
-    "(Intercept)" %in% xx$preprocessor$predictors$names
+    "(Intercept)" %in% xx$preprocessor$info$predictors$names
   )
 
 })
@@ -830,22 +842,22 @@ test_that("original predictor and outcome classes / names are recorded", {
   )
 
   expect_equal(
-    x$preprocessor$predictors$names,
+    x$preprocessor$info$predictors$names,
     "Species"
   )
 
   expect_equal(
-    x$preprocessor$outcomes$names,
+    x$preprocessor$info$outcomes$names,
     "Sepal.Length"
   )
 
   expect_equal(
-    x$preprocessor$predictors$classes,
+    x$preprocessor$info$predictors$classes,
     list(Species = "factor")
   )
 
   expect_equal(
-    x$preprocessor$outcomes$classes,
+    x$preprocessor$info$outcomes$classes,
     list(Sepal.Length = "numeric")
   )
 

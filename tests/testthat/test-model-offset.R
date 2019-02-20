@@ -33,7 +33,7 @@ test_that("(offset) is not recognized as an offset", {
 
   # Us
   expect_equal(
-    model_offset(mf),
+    model_offset(mf, terms(mf)),
     NULL
   )
 
@@ -124,7 +124,7 @@ test_that("offset columns are stored as predictors", {
   x <- mold(Species ~ offset(Sepal.Length), iris)
 
   expect_equal(
-    x$preprocessor$predictors$names,
+    x$preprocessor$info$predictors$names,
     "Sepal.Length"
   )
 
