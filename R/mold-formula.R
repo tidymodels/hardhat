@@ -285,6 +285,8 @@ mold_formula_outcomes <- function(formula, data) {
 
 }
 
+# ------------------------------------------------------------------------------
+
 alter_formula_environment <- function(formula) {
 
   # formula environment is 1 step above global env to avoid
