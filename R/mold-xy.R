@@ -67,60 +67,64 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
 
   engine <- new_default_preprocessor_engine()
 
-  y <- standardize(y)
+  predictors <- mold_xy_predictors(engine, x, intercept)
+  outcomes <- mold_xy_outcomes(y)
 
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
     info = info_lst(
-      predictors = predictors_info(
-        names = colnames(x),
-        classes = get_data_classes(x),
-        levels = get_levels(x)
-      ),
-      outcomes = outcomes_info(
-        names = colnames(y),
-        classes = get_data_classes(y),
-        levels = get_levels(y)
-      )
+      predictors = predictors$info,
+      outcomes = outcomes$info
     )
   )
 
-  # Process x _after_ extracting the "original"
-  # predictor column names and classes
-  x <- engine$process(x, intercept)
+  mold_list(
+    predictors = predictors$data,
+    outcomes$data,
+    preprocessor
+  )
 
-  mold_list(x, y, preprocessor)
 }
 
 #' @rdname mold-xy
 #' @export
-mold.matrix <- function(x, y, intercept = FALSE, ...) {
+mold.matrix <- mold.data.frame
 
-  engine <- new_default_preprocessor_engine()
+# ------------------------------------------------------------------------------
 
-  y <- standardize(y)
+mold_xy_predictors <- function(engine, x, intercept) {
 
-  preprocessor <- new_default_preprocessor(
-    engine = engine,
-    intercept = intercept,
-    info = info_lst(
-      predictors = predictors_info(
-        names = colnames(x),
-        classes = get_data_classes(x),
-        levels = NULL
-      ),
-      outcomes = outcomes_info(
-        names = colnames(y),
-        classes = get_data_classes(y),
-        levels = get_levels(y)
-      )
-    )
+  info <- predictors_info(
+    names = colnames(x),
+    classes = get_data_classes(x),
+    levels = get_levels(x)
   )
 
   # Process x _after_ extracting the "original"
   # predictor column names and classes
   x <- engine$process(x, intercept)
 
-  mold_list(x, y, preprocessor)
+  list(
+    data = x,
+    info = info
+  )
+
+}
+
+mold_xy_outcomes <- function(y) {
+
+  y <- standardize(y)
+
+  info = outcomes_info(
+    names = colnames(y),
+    classes = get_data_classes(y),
+    levels = get_levels(y)
+  )
+
+  list(
+    data = y,
+    info = info
+  )
+
 }
