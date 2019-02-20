@@ -499,7 +499,7 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
     predictors <- reattach_factor_columns(predictors, new_data, factor_names)
   }
 
-  outcomes <- extract_outcomes(outcomes_framed$data)
+  outcomes <- flatten_embedded_columns(outcomes_framed$data)
 
   offset <- extract_offset(predictors_framed$data, predictors_framed$terms)
 
