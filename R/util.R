@@ -61,27 +61,6 @@ get_all_outcomes <- function(formula, data) {
   colnames(unprocessed_outcome_df)
 }
 
-# similar to delete.response()
-# but also removes the dataClasses element
-# corresponding to y if it exists
-# http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html
-
-#' @rdname utilities
-delete_response <- function(x) {
-  resp <- attr(x, "response")
-  data_class <- attr(x, "dataClasses")
-
-  # Remove dataClass corresponding to y
-  # if it exists
-  if (!is.null(resp)) {
-    if (!is.null(data_class)) {
-      attr(x, "dataClasses") <- data_class[-resp]
-    }
-  }
-
-  delete.response(x)
-}
-
 abort_unknown_mold_class <- function(x) {
   cls <- class(x)[1]
   glubort(
@@ -158,3 +137,30 @@ validate_is_bool <- function(.x, .x_nm) {
 all_numeric <- function(x) {
   all(vapply(x, is.numeric, logical(1)))
 }
+
+# ------------------------------------------------------------------------------
+
+is_new_data_like <- function(x) {
+  is.data.frame(x) || is.matrix(x)
+}
+
+validate_is_new_data_like <- function(new_data) {
+  validate_is(
+    new_data,
+    is_new_data_like,
+    "data.frame or matrix"
+  )
+}
+
+check_is_data_like <- function(data) {
+
+  if (!is_new_data_like(data)) {
+    glubort(
+      "`data` must be a data.frame or a matrix, not a {class1(data)}."
+    )
+  }
+
+  tibble::as_tibble(data)
+}
+
+# ------------------------------------------------------------------------------

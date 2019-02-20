@@ -55,14 +55,3 @@ mold_list <- function(predictors, outcomes, preprocessor, offset = NULL) {
     offset = offset
   )
 }
-
-check_is_data_like <- function(data) {
-
-  if (!is_new_data_like(data)) {
-    glubort(
-      "`data` must be a data.frame or a matrix, not a {class1(data)}."
-    )
-  }
-
-  tibble::as_tibble(data)
-}
