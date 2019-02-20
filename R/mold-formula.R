@@ -276,6 +276,10 @@ mold_formula_outcomes <- function(formula, data) {
   original_levels <- get_levels(original_data)
 
   formula <- get_outcomes_formula(formula)
+
+  # used on the `~ LHS` formula
+  validate_no_interactions(formula)
+
   framed <- model_frame(formula, data)
 
   outcomes <- flatten_embedded_columns(framed$data)
@@ -489,6 +493,52 @@ detect_factors_in_interactions <- function(.terms, .factor_names) {
   bad_cols <- names(bad_factor_vals)
 
   bad_cols
+}
+
+validate_no_interactions <- function(.formula) {
+
+  bad_terms <- detect_interactions(.formula)
+
+  no_interactions <- length(bad_terms) == 0L
+  if (no_interactions) {
+    return(invisible(.formula))
+  }
+
+  bad_terms <- glue::glue_collapse(glue::single_quote(bad_terms), ", ")
+
+  glubort(
+    "Interaction terms cannot be specified on the LHS of `formula`. ",
+    "The following interaction terms were found: {bad_terms}."
+  )
+}
+
+# Returns processed names of any interaction terms
+# like 'Species:Sepal.Width', or character(0)
+detect_interactions <- function(.formula) {
+
+  .terms <- terms(.formula)
+
+  terms_matrix <- attr(.terms, "factors")
+
+  only_intercept_or_offsets <- length(terms_matrix) == 0L
+  if (only_intercept_or_offsets) {
+    return(character(0))
+  }
+
+  terms_nms <- colnames(terms_matrix)
+
+  # All interactions (*, ^, %in%) will be expanded to `:`
+  has_interactions <- grepl(":", terms_nms)
+
+  has_any_interactions <- any(has_interactions)
+
+  if (!has_any_interactions) {
+    return(character(0))
+  }
+
+  bad_terms <- terms_nms[has_interactions]
+
+  bad_terms
 }
 
 extract_original_factor_names <- function(.data_classes) {

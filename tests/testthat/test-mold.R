@@ -276,6 +276,35 @@ test_that("`indicators = FALSE` runs numeric interactions", {
 
 })
 
+test_that("LHS of the formula cannot contain interactions", {
+
+  expect_error(
+    mold(Sepal.Length:Sepal.Width ~ Sepal.Width, iris),
+    "The following interaction terms were found: 'Sepal.Length:Sepal.Width'"
+  )
+
+  expect_error(
+    mold(Sepal.Length*Sepal.Width ~ Sepal.Width, iris),
+    "The following interaction terms were found: 'Sepal.Length:Sepal.Width'"
+  )
+
+  expect_error(
+    mold(Sepal.Length %in% Sepal.Width ~ Sepal.Width, iris),
+    "The following interaction terms were found: 'Sepal.Length:Sepal.Width'"
+  )
+
+  expect_error(
+    mold((Sepal.Length + Sepal.Width)^2 ~ Sepal.Width, iris),
+    "The following interaction terms were found: 'Sepal.Length:Sepal.Width'"
+  )
+
+  expect_error(
+    mold(Sepal.Length:Sepal.Width + Species:Sepal.Length ~ Sepal.Width, iris),
+    "The following interaction terms were found: 'Sepal.Length:Sepal.Width', 'Sepal.Length:Species'"
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-mold-xy")
 
