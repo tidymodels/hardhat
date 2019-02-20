@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Utilites — utilities • hardhat</title>
+<title>Delete the response from a terms object — delete_response • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Utilites — utilities" />
+<meta property="og:title" content="Delete the response from a terms object — delete_response" />
 
-<meta property="og:description" content="Helper functions that are used internally." />
+<meta property="og:description" content="delete_response() is exactly the same as delete.response(), except
+that it fixes a long standing bug by also removing the part of the
+&quot;dataClasses&quot; attribute corresponding to the response, if it exists." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -99,27 +101,55 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Utilites</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/util.R'><code>R/util.R</code></a></small>
-    <div class="hidden name"><code>utilities.Rd</code></div>
+    <h1>Delete the response from a terms object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/delete-response.R'><code>R/delete-response.R</code></a></small>
+    <div class="hidden name"><code>delete_response.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Helper functions that are used internally.</p>
+    <p><code>delete_response()</code> is exactly the same as <code><a href='https://www.rdocumentation.org/packages/stats/topics/delete.response'>delete.response()</a></code>, except
+that it fixes a long standing bug by also removing the part of the
+<code>"dataClasses"</code> attribute corresponding to the response, if it exists.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>glubort</span>(<span class='no'>...</span>, <span class='kw'>.sep</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>.envir</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>())
+    <pre class="usage"><span class='fu'>delete_response</span>(<span class='no'>x</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A terms object.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-<span class='fu'>simplify_terms</span>(<span class='no'>x</span>)</pre>
-        
+    <p>The bug is described here:</p>
+<p><a href='http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html'>http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html</a></p>
+    
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='no'>framed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Width</span>, <span class='no'>iris</span>)
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/delete.response'>delete.response</a></span>(<span class='no'>framed</span>$<span class='no'>terms</span>), <span class='st'>"dataClasses"</span>)</div><div class='output co'>#&gt;     Species Sepal.Width 
+#&gt;    "factor"   "numeric" </div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='fu'>delete_response</span>(<span class='no'>framed</span>$<span class='no'>terms</span>), <span class='st'>"dataClasses"</span>)</div><div class='output co'>#&gt; Sepal.Width 
+#&gt;   "numeric" </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
