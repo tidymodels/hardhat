@@ -1,21 +1,39 @@
-# similar to delete.response()
-# but also removes the dataClasses element
-# corresponding to y if it exists
-# http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html
-
-# TODO - export this?
-
-#' @rdname utilities
+#' Delete the response from a terms object
+#'
+#' `delete_response()` is exactly the same as `delete.response()`, except
+#' that it fixes a long standing bug by also removing the part of the
+#' `"dataClasses"` attribute corresponding to the response, if it exists.
+#'
+#' @param x A terms object.
+#'
+#' @details
+#'
+#' The bug is described here:
+#'
+#' \url{http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html}
+#'
+#' @examples
+#'
+#' framed <- model_frame(Species ~ Sepal.Width, iris)
+#'
+#' attr(delete.response(framed$terms), "dataClasses")
+#'
+#' attr(delete_response(framed$terms), "dataClasses")
+#'
+#' @export
 delete_response <- function(x) {
+
+  validate_is_terms(x)
+
   resp <- attr(x, "response")
   data_class <- attr(x, "dataClasses")
 
-  # Remove dataClass corresponding to y
-  # if it exists
-  if (!is.null(resp)) {
-    if (!is.null(data_class)) {
+  response_exists <- ! (is.null(resp) || (resp == 0L))
+  data_class_exists <- !is.null(data_class)
+
+  # Remove dataClass corresponding to y if it exists
+  if (response_exists & data_class_exists) {
       attr(x, "dataClasses") <- data_class[-resp]
-    }
   }
 
   delete.response(x)
