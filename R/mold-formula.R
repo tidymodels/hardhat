@@ -196,30 +196,23 @@ mold.formula <- function(formula, data, intercept = FALSE,
   formula <- alter_formula_environment(formula)
 
   predictors <- mold_formula_predictors(formula, data, indicators)
-  # outcomes <- mold_formula_outcomes(formula, data)
-
-  original_outcome_nms <- get_all_outcomes(formula, data)
-  original_outcomes <- data[, original_outcome_nms, drop = FALSE]
-
-  outcomes_formula <- get_outcomes_formula(formula)
-  outcomes_framed <- model_frame(outcomes_formula, data)
-  outcomes_terms <- outcomes_framed$terms
-
-  outcomes <- flatten_embedded_columns(outcomes_framed$data)
+  outcomes <- mold_formula_outcomes(formula, data)
 
   preprocessor <- new_terms_preprocessor(
-    engine = new_terms_preprocessor_engine(predictors$terms, outcomes_terms),
+    engine = new_terms_preprocessor_engine(predictors$terms, outcomes$terms),
     intercept = intercept,
     predictors = predictors$lst,
-    outcomes = outcomes_lst(
-      names = original_outcome_nms,
-      classes = get_data_classes(original_outcomes),
-      levels = get_levels(original_outcomes)
-    ),
+    outcomes = outcomes$lst,
     indicators = indicators
   )
 
-  mold_list(predictors$data, outcomes, preprocessor, predictors$offset)
+  mold_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    preprocessor = preprocessor,
+    offset = predictors$offset
+  )
+
 }
 
 # ------------------------------------------------------------------------------
@@ -258,6 +251,32 @@ mold_formula_predictors <- function(formula, data, indicators) {
     terms = terms,
     offset = offset,
     lst = predictors_lst(
+      names = original_names,
+      classes = original_data_classes,
+      levels = original_levels
+    )
+  )
+
+}
+
+mold_formula_outcomes <- function(formula, data) {
+
+  original_names <- get_all_outcomes(formula, data)
+  original_data <- data[, original_names, drop = FALSE]
+  original_data_classes <- get_data_classes(original_data)
+  original_levels <- get_levels(original_data)
+
+  formula <- get_outcomes_formula(formula)
+  framed <- model_frame(formula, data)
+
+  outcomes <- flatten_embedded_columns(framed$data)
+
+  terms <- simplify_terms(framed$terms)
+
+  list(
+    data = outcomes,
+    terms = terms,
+    lst = outcomes_lst(
       names = original_names,
       classes = original_data_classes,
       levels = original_levels
