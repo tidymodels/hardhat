@@ -61,78 +61,85 @@ mold.recipe <- function(x, data, intercept = FALSE, ...) {
 
   prepped_recipe <- recipes::prep(x, training = data)
 
-  # recipes bug?
-  all_predictors <- recipes::all_predictors
-  all_outcomes <- recipes::all_outcomes
-
-  # "composition" output is always tibble
-  predictors <- recipes::juice(prepped_recipe, all_predictors())
-  outcomes <- recipes::juice(prepped_recipe, all_outcomes())
+  predictors <- mold_recipe_predictors(prepped_recipe, data, intercept)
+  outcomes <- mold_recipe_outcomes(prepped_recipe, data)
 
   # un-retain training data
   prepped_recipe <- compost(prepped_recipe)
 
-  all_names <- get_original_recipe_names(data, prepped_recipe)
-  all_levels <- get_original_recipe_levels(data, prepped_recipe)
-  all_data_classes <- get_original_recipe_data_classes(data, prepped_recipe)
-
   preprocessor <- new_recipes_preprocessor(
     engine = prepped_recipe,
     intercept = intercept,
-    predictors = predictors_lst(
-      names = all_names$predictors,
-      classes = all_data_classes$predictors,
-      levels = all_levels$predictors
-    ),
-    outcomes = outcomes_lst(
-      names = all_names$outcomes,
-      classes = all_data_classes$outcomes,
-      levels = all_levels$outcomes
-    )
+    predictors = predictors$lst,
+    outcomes = outcomes$lst
   )
 
-  predictors <- maybe_add_intercept_column(predictors, intercept)
+  mold_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    preprocessor = preprocessor
+  )
 
-  mold_list(predictors, outcomes, preprocessor)
 }
 
 # ------------------------------------------------------------------------------
 
-get_original_recipe_names <- function(x, rec) {
+mold_recipe_predictors <- function(rec, data, intercept) {
 
-  roles <- rec$var_info$role
-  original_predictors <- rec$var_info$variable[roles == "predictor"]
-  original_outcomes <- rec$var_info$variable[roles == "outcome"]
+  all_predictors <- recipes::all_predictors
+
+  predictors <- recipes::juice(rec, all_predictors())
+
+  predictors <- maybe_add_intercept_column(predictors, intercept)
+
+  lst <- get_original_predictor_info(rec, data)
 
   list(
-    predictors = colnames(x[, original_predictors, drop = FALSE]),
-    outcomes = colnames(x[, original_outcomes, drop = FALSE])
+    data = predictors,
+    lst = lst
   )
 
 }
 
-get_original_recipe_levels <- function(x, rec) {
+mold_recipe_outcomes <- function(rec, data) {
 
-  roles <- rec$var_info$role
-  original_predictors <- rec$var_info$variable[roles == "predictor"]
-  original_outcomes <- rec$var_info$variable[roles == "outcome"]
+  all_outcomes <- recipes::all_outcomes
+
+  outcomes <- recipes::juice(rec, all_outcomes())
+
+  lst <- get_original_outcome_info(rec, data)
 
   list(
-    predictors = get_levels(x[, original_predictors, drop = FALSE]),
-    outcomes = get_levels(x[, original_outcomes, drop = FALSE])
+    data = outcomes,
+    lst = lst
   )
 
 }
 
-get_original_recipe_data_classes <- function(x, rec) {
+# ------------------------------------------------------------------------------
+
+get_original_predictor_info <- function(rec, data) {
 
   roles <- rec$var_info$role
   original_predictors <- rec$var_info$variable[roles == "predictor"]
-  original_outcomes <- rec$var_info$variable[roles == "outcome"]
 
-  list(
-    predictors = get_data_classes(x[, original_predictors, drop = FALSE]),
-    outcomes = get_data_classes(x[, original_outcomes, drop = FALSE])
+  predictors_lst(
+    names = colnames(data[, original_predictors, drop = FALSE]),
+    classes = get_data_classes(data[, original_predictors, drop = FALSE]),
+    levels = get_levels(data[, original_predictors, drop = FALSE])
+  )
+
+}
+
+get_original_outcome_info <- function(rec, data) {
+
+  roles <- rec$var_info$role
+  original_predictors <- rec$var_info$variable[roles == "outcome"]
+
+  outcomes_lst(
+    names = colnames(data[, original_predictors, drop = FALSE]),
+    classes = get_data_classes(data[, original_predictors, drop = FALSE]),
+    levels = get_levels(data[, original_predictors, drop = FALSE])
   )
 
 }
