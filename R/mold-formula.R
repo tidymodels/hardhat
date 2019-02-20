@@ -201,8 +201,10 @@ mold.formula <- function(formula, data, intercept = FALSE,
   preprocessor <- new_terms_preprocessor(
     engine = new_terms_preprocessor_engine(predictors$terms, outcomes$terms),
     intercept = intercept,
-    predictors = predictors$lst,
-    outcomes = outcomes$lst,
+    info = info_lst(
+      predictors = predictors$info,
+      outcomes = outcomes$info
+    ),
     indicators = indicators
   )
 
@@ -250,7 +252,7 @@ mold_formula_predictors <- function(formula, data, indicators) {
     data = predictors,
     terms = terms,
     offset = offset,
-    lst = predictors_lst(
+    info = predictors_info(
       names = original_names,
       classes = original_data_classes,
       levels = original_levels
@@ -276,7 +278,7 @@ mold_formula_outcomes <- function(formula, data) {
   list(
     data = outcomes,
     terms = terms,
-    lst = outcomes_lst(
+    info = outcomes_info(
       names = original_names,
       classes = original_data_classes,
       levels = original_levels

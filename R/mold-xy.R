@@ -72,15 +72,17 @@ mold.data.frame <- function(x, y, intercept = FALSE, ...) {
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
-    predictors = predictors_lst(
-      names = colnames(x),
-      classes = get_data_classes(x),
-      levels = get_levels(x)
-    ),
-    outcomes = outcomes_lst(
-      names = colnames(y),
-      classes = get_data_classes(y),
-      levels = get_levels(y)
+    info = info_lst(
+      predictors = predictors_info(
+        names = colnames(x),
+        classes = get_data_classes(x),
+        levels = get_levels(x)
+      ),
+      outcomes = outcomes_info(
+        names = colnames(y),
+        classes = get_data_classes(y),
+        levels = get_levels(y)
+      )
     )
   )
 
@@ -102,15 +104,17 @@ mold.matrix <- function(x, y, intercept = FALSE, ...) {
   preprocessor <- new_default_preprocessor(
     engine = engine,
     intercept = intercept,
-    predictors = predictors_lst(
-      names = colnames(x),
-      classes = get_data_classes(x),
-      levels = NULL
-    ),
-    outcomes = outcomes_lst(
-      names = colnames(y),
-      classes = get_data_classes(y),
-      levels = get_levels(y)
+    info = info_lst(
+      predictors = predictors_info(
+        names = colnames(x),
+        classes = get_data_classes(x),
+        levels = NULL
+      ),
+      outcomes = outcomes_info(
+        names = colnames(y),
+        classes = get_data_classes(y),
+        levels = get_levels(y)
+      )
     )
   )
 

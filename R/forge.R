@@ -390,8 +390,8 @@ bake_default_engine <- function(preprocessor, new_data, outcomes) {
 
 bake_default_with_outcome <- function(preprocessor, new_data) {
 
-  original_predictor_columns <- preprocessor$predictors$names
-  original_outcome_columns <- preprocessor$outcomes$names
+  original_predictor_columns <- preprocessor$info$predictors$names
+  original_outcome_columns <- preprocessor$info$outcomes$names
 
   predictors <- new_data[, original_predictor_columns, drop = FALSE]
   outcomes <- new_data[, original_outcome_columns, drop = FALSE]
@@ -401,7 +401,7 @@ bake_default_with_outcome <- function(preprocessor, new_data) {
 
 bake_default_without_outcome <- function(preprocessor, new_data) {
 
-  original_predictor_columns <- preprocessor$predictors$names
+  original_predictor_columns <- preprocessor$info$predictors$names
 
   predictors <- new_data[, original_predictor_columns, drop = FALSE]
 
@@ -486,8 +486,8 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
 
   engine <- preprocessor$engine
 
-  predictors_framed <- model_frame(engine$predictors, new_data, preprocessor$predictors$levels)
-  outcomes_framed <- model_frame(engine$outcomes, new_data, preprocessor$outcomes$levels)
+  predictors_framed <- model_frame(engine$predictors, new_data, preprocessor$info$predictors$levels)
+  outcomes_framed <- model_frame(engine$outcomes, new_data, preprocessor$info$outcomes$levels)
 
   predictors <- model_matrix(
     terms = predictors_framed$terms,
@@ -495,7 +495,7 @@ bake_terms_with_outcome <- function(preprocessor, new_data) {
   )
 
   if (!preprocessor$indicators) {
-    factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
+    factor_names <- extract_original_factor_names(preprocessor$info$predictors$classes)
     predictors <- reattach_factor_columns(predictors, new_data, factor_names)
   }
 
@@ -511,7 +511,7 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
   predictors_terms <- preprocessor$engine$predictors
   predictors_terms <- delete_response(predictors_terms)
 
-  predictors_framed <- model_frame(predictors_terms, new_data, preprocessor$predictors$levels)
+  predictors_framed <- model_frame(predictors_terms, new_data, preprocessor$info$predictors$levels)
 
   predictors <- model_matrix(
     terms = predictors_framed$terms,
@@ -519,7 +519,7 @@ bake_terms_without_outcome <- function(preprocessor, new_data) {
   )
 
   if (!preprocessor$indicators) {
-    factor_names <- extract_original_factor_names(preprocessor$predictors$classes)
+    factor_names <- extract_original_factor_names(preprocessor$info$predictors$classes)
     predictors <- reattach_factor_columns(predictors, new_data, factor_names)
   }
 

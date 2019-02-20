@@ -35,21 +35,18 @@
 #' @keywords internal
 new_preprocessor <- function(engine = new_default_preprocessor_engine(),
                              intercept = FALSE,
-                             predictors = predictors_lst(),
-                             outcomes = outcomes_lst(),
+                             info = info_lst(),
                              ...,
                              subclass = character()) {
 
   validate_is_preprocessor_engine(engine)
   validate_intercept(intercept)
-  validate_is_terms_list(predictors, "predictors")
-  validate_is_terms_list(outcomes, "outcomes")
+  validate_is_info_list(info, "info")
 
   elems <- list(
     engine = engine,
     intercept = intercept,
-    predictors = predictors,
-    outcomes = outcomes
+    info = info
   )
 
   new_elems <- rlang::list2(...)
@@ -63,14 +60,12 @@ new_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
 new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
                                      intercept = FALSE,
-                                     predictors = predictors_lst(),
-                                     outcomes = outcomes_lst()) {
+                                     info = info_lst()) {
 
   new_preprocessor(
     engine = engine,
     intercept = intercept,
-    predictors = predictors,
-    outcomes = outcomes,
+    info = info,
     subclass = "default_preprocessor"
   )
 
@@ -78,15 +73,13 @@ new_default_preprocessor <- function(engine = new_default_preprocessor_engine(),
 
 new_terms_preprocessor <- function(engine,
                                    intercept = FALSE,
-                                   predictors = predictors_lst(),
-                                   outcomes = outcomes_lst(),
+                                   info = info_lst(),
                                    indicators = TRUE) {
 
   new_preprocessor(
     engine = engine,
     intercept = intercept,
-    predictors = predictors,
-    outcomes = outcomes,
+    info = info,
     indicators = indicators,
     subclass = "terms_preprocessor"
   )
@@ -95,14 +88,12 @@ new_terms_preprocessor <- function(engine,
 
 new_recipes_preprocessor <- function(engine,
                                      intercept = FALSE,
-                                     predictors = predictors_lst(),
-                                     outcomes = outcomes_lst()) {
+                                     info = info_lst()) {
 
   new_preprocessor(
     engine = engine,
     intercept = intercept,
-    predictors = predictors,
-    outcomes = outcomes,
+    info = info,
     subclass = "recipes_preprocessor"
   )
 
@@ -218,9 +209,19 @@ is_preprocessor_engine <- function(x) {
 
 # ------------------------------------------------------------------------------
 
-predictors_lst <- function(names = character(),
-                           classes = NULL,
-                           levels = NULL) {
+info_lst <- function(predictors = predictors_info(),
+                     outcomes = outcomes_info()) {
+
+  list(
+    predictors = predictors,
+    outcomes = outcomes
+  )
+
+}
+
+predictors_info <- function(names = character(),
+                            classes = NULL,
+                            levels = NULL) {
   list(
     names = names,
     classes = classes,
@@ -228,9 +229,9 @@ predictors_lst <- function(names = character(),
   )
 }
 
-outcomes_lst <- function(names = character(),
-                         classes = NULL,
-                         levels = NULL) {
+outcomes_info <- function(names = character(),
+                          classes = NULL,
+                          levels = NULL) {
   list(
     names = names,
     classes = classes,
@@ -259,7 +260,18 @@ validate_is_preprocessor <- function(preprocessor) {
   invisible(preprocessor)
 }
 
-validate_is_terms_list <- function(.x, .x_nm) {
+validate_is_info_list <- function(.x, .x_nm) {
+
+  validate_has_name(.x, .x_nm, "predictors")
+  validate_has_name(.x, .x_nm, "outcomes")
+
+  validate_is_terms_info_list(.x$predictors, glue("{.x_nm}$predictors"))
+  validate_is_terms_info_list(.x$outcomes, glue("{.x_nm}$outcomes"))
+
+  invisible(.x)
+}
+
+validate_is_terms_info_list <- function(.x, .x_nm) {
 
   validate_has_name(.x, .x_nm, "names")
   validate_has_name(.x, .x_nm, "classes")
