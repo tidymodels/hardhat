@@ -64,68 +64,50 @@ forge.recipes_preprocessor <- function(preprocessor, new_data,
   new_data <- shrink(preprocessor, new_data, outcomes)
   new_data <- scream(preprocessor, new_data, outcomes)
 
-  baked_list <- bake_recipe_engine(
-    preprocessor = preprocessor,
-    new_data = new_data,
-    outcomes = outcomes
+  # Can't move this inside forge_recipe_*(), would be double baking
+  new_data <- recipes::bake(
+    object = preprocessor$engine,
+    new_data = new_data
   )
 
-  baked_list
+  .predictors <- forge_recipes_predictors(preprocessor, new_data)
+  .outcomes <- forge_recipes_outcomes(preprocessor, new_data, outcomes)
+
+  forge_list(.predictors$data, .outcomes$data)
 }
 
 # ------------------------------------------------------------------------------
 
-bake_recipe_engine <- function(preprocessor, new_data, outcomes) {
+forge_recipes_predictors <- function(preprocessor, new_data) {
 
-  if (outcomes) {
-    baked_list <- bake_with_outcome(preprocessor, new_data)
-  }
-  else {
-    baked_list <- bake_without_outcome(preprocessor, new_data)
-  }
+  engine <- preprocessor$engine
+  roles <- engine$term_info$role
+  processed_nms <- engine$term_info$variable[roles == "predictor"]
 
-  baked_list$predictors <- maybe_add_intercept_column(
-    x = baked_list$predictors,
+  .predictors <- new_data[, processed_nms, drop = FALSE]
+
+  .predictors <- maybe_add_intercept_column(
+    x = .predictors,
     intercept = preprocessor$intercept
   )
 
-  baked_list
+  list(data = .predictors)
+
 }
 
-bake_with_outcome <- function(preprocessor, new_data) {
+forge_recipes_outcomes <- function(preprocessor, new_data, outcomes) {
+
+  if (!outcomes) {
+    .outcomes <- list(data = NULL)
+    return(.outcomes)
+  }
 
   engine <- preprocessor$engine
-
   roles <- engine$term_info$role
-  processed_predictor_nms <- engine$term_info$variable[roles == "predictor"]
-  processed_outcome_nms <- engine$term_info$variable[roles == "outcome"]
+  processed_nms <- engine$term_info$variable[roles == "outcome"]
 
-  # optimize and don't double bake
-  preprocessed_new_data <- recipes::bake(
-    object = engine,
-    new_data = new_data
-  )
+  .outcomes <- new_data[, processed_nms, drop = FALSE]
 
-  predictors <- preprocessed_new_data[, processed_predictor_nms, drop = FALSE]
-  outcomes <- preprocessed_new_data[, processed_outcome_nms, drop = FALSE]
+  list(data = .outcomes)
 
-  forge_list(
-    predictors = predictors,
-    outcomes = outcomes
-  )
-}
-
-bake_without_outcome <- function(preprocessor, new_data) {
-
-  all_predictors <- recipes::all_predictors
-
-  predictors <- recipes::bake(
-    object = preprocessor$engine,
-    new_data = new_data,
-    all_predictors()
-  )
-
-  forge_list(
-    predictors = predictors
-  )
 }

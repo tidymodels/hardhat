@@ -105,72 +105,65 @@ forge.terms_preprocessor <- function(preprocessor, new_data,
   new_data <- shrink(preprocessor, new_data, outcomes)
   new_data <- scream(preprocessor, new_data, outcomes)
 
-  baked_list <- bake_terms_engine(preprocessor, new_data, outcomes)
+  .predictors <- forge_formula_predictors(preprocessor, new_data)
+  .outcomes <- forge_formula_outcomes(preprocessor, new_data, outcomes)
 
-  baked_list
+  forge_list(
+    predictors = .predictors$data,
+    outcomes = .outcomes$data,
+    offset = .predictors$offset
+  )
+
 }
 
 # ------------------------------------------------------------------------------
 
-bake_terms_engine <- function(preprocessor, new_data, outcomes) {
+forge_formula_predictors <- function(preprocessor, new_data) {
 
-  # From NULL to one env above global
-  preprocessor$engine$predictors <- alter_terms_environment(preprocessor$engine$predictors)
-  preprocessor$engine$outcomes <- alter_terms_environment(preprocessor$engine$outcomes)
+  terms <- preprocessor$engine$predictors
+  terms <- alter_terms_environment(terms)
+  terms <- delete_response(terms)
 
-  if (outcomes) {
-    bake_terms_with_outcome(preprocessor, new_data)
-  }
-  else {
-    bake_terms_without_outcome(preprocessor, new_data)
-  }
+  framed <- model_frame(terms, new_data, preprocessor$info$predictors$levels)
 
-}
-
-bake_terms_with_outcome <- function(preprocessor, new_data) {
-
-  engine <- preprocessor$engine
-
-  predictors_framed <- model_frame(engine$predictors, new_data, preprocessor$info$predictors$levels)
-  outcomes_framed <- model_frame(engine$outcomes, new_data, preprocessor$info$outcomes$levels)
-
-  predictors <- model_matrix(
-    terms = predictors_framed$terms,
-    data = predictors_framed$data
+  .predictors <- model_matrix(
+    terms = framed$terms,
+    data = framed$data
   )
 
   if (!preprocessor$indicators) {
     factor_names <- extract_original_factor_names(preprocessor$info$predictors$classes)
-    predictors <- reattach_factor_columns(predictors, new_data, factor_names)
+    .predictors <- reattach_factor_columns(.predictors, new_data, factor_names)
   }
 
-  outcomes <- flatten_embedded_columns(outcomes_framed$data)
+  .offset <- extract_offset(framed$data, framed$terms)
 
-  offset <- extract_offset(predictors_framed$data, predictors_framed$terms)
-
-  forge_list(predictors, outcomes, offset)
-}
-
-bake_terms_without_outcome <- function(preprocessor, new_data) {
-
-  predictors_terms <- preprocessor$engine$predictors
-  predictors_terms <- delete_response(predictors_terms)
-
-  predictors_framed <- model_frame(predictors_terms, new_data, preprocessor$info$predictors$levels)
-
-  predictors <- model_matrix(
-    terms = predictors_framed$terms,
-    data = predictors_framed$data
+  list(
+    data = .predictors,
+    offset = .offset
   )
 
-  if (!preprocessor$indicators) {
-    factor_names <- extract_original_factor_names(preprocessor$info$predictors$classes)
-    predictors <- reattach_factor_columns(predictors, new_data, factor_names)
+}
+
+forge_formula_outcomes <- function(preprocessor, new_data, outcomes) {
+
+  if (!outcomes) {
+    .outcomes <- list(data = NULL)
+    return(.outcomes)
   }
 
-  offset <- extract_offset(predictors_framed$data, predictors_framed$terms)
+  terms <- preprocessor$engine$outcomes
+  terms <- alter_terms_environment(terms)
 
-  forge_list(predictors, offset = offset)
+  framed <- model_frame(terms, new_data, preprocessor$info$outcomes$levels)
+
+  # Because model.matrix() does this for the RHS and we want
+  # to be consistent even though we are only going through
+  # model.frame()
+  .outcomes <- flatten_embedded_columns(framed$data)
+
+  list(data = .outcomes)
+
 }
 
 # ------------------------------------------------------------------------------

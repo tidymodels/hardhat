@@ -106,46 +106,38 @@ forge.default_preprocessor <- function(preprocessor, new_data,
   new_data <- shrink(preprocessor, new_data, outcomes)
   new_data <- scream(preprocessor, new_data, outcomes)
 
-  baked_list <- bake_default_engine(preprocessor, new_data, outcomes)
+  .predictors <- forge_xy_predictors(preprocessor, new_data)
+  .outcomes <- forge_xy_outcomes(preprocessor, new_data, outcomes)
 
-  baked_list
+  forge_list(.predictors$data, .outcomes$data)
 }
 
 # ------------------------------------------------------------------------------
 
-bake_default_engine <- function(preprocessor, new_data, outcomes) {
+forge_xy_predictors <- function(preprocessor, new_data) {
 
-  if (outcomes) {
-    baked_list <- bake_default_with_outcome(preprocessor, new_data)
-  }
-  else {
-    baked_list <- bake_default_without_outcome(preprocessor, new_data)
-  }
+  original_cols <- preprocessor$info$predictors$names
 
-  baked_list$predictors <- preprocessor$engine$process(
-    new_data = baked_list$predictors,
+  .predictors <- new_data[, original_cols, drop = FALSE]
+
+  .predictors <- preprocessor$engine$process(
+    new_data = .predictors,
     intercept = preprocessor$intercept
   )
 
-  baked_list
+  list(data = .predictors)
 }
 
-bake_default_with_outcome <- function(preprocessor, new_data) {
+forge_xy_outcomes <- function(preprocessor, new_data, outcomes) {
 
-  original_predictor_columns <- preprocessor$info$predictors$names
-  original_outcome_columns <- preprocessor$info$outcomes$names
+  if (!outcomes) {
+    .outcomes <- list(data = NULL)
+    return(.outcomes)
+  }
 
-  predictors <- new_data[, original_predictor_columns, drop = FALSE]
-  outcomes <- new_data[, original_outcome_columns, drop = FALSE]
+  original_cols <- preprocessor$info$outcomes$names
 
-  forge_list(predictors, outcomes)
-}
+  .outcomes <- new_data[, original_cols, drop = FALSE]
 
-bake_default_without_outcome <- function(preprocessor, new_data) {
-
-  original_predictor_columns <- preprocessor$info$predictors$names
-
-  predictors <- new_data[, original_predictor_columns, drop = FALSE]
-
-  forge_list(predictors)
+  list(data = .outcomes)
 }
