@@ -89,8 +89,8 @@ scream <- function(preprocessor, new_data, outcomes = FALSE) {
 
   validate_new_data_classes(new_data, original_predictor_classes)
 
-  new_data <- check_new_data_novel_levels(new_data, original_predictor_levels)
-  new_data <- check_new_data_level_recovery(new_data, original_predictor_levels)
+  new_data <- enforce_new_data_novel_levels(new_data, original_predictor_levels)
+  new_data <- enforce_new_data_level_recovery(new_data, original_predictor_levels)
 
   if (outcomes) {
 
@@ -99,8 +99,8 @@ scream <- function(preprocessor, new_data, outcomes = FALSE) {
 
     validate_new_data_classes(new_data, original_outcome_classes)
 
-    new_data <- check_new_data_novel_levels(new_data, original_outcome_levels)
-    new_data <- check_new_data_level_recovery(new_data, original_outcome_levels)
+    new_data <- enforce_new_data_novel_levels(new_data, original_outcome_levels)
+    new_data <- enforce_new_data_level_recovery(new_data, original_outcome_levels)
 
   }
 

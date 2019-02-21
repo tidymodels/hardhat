@@ -100,8 +100,8 @@ model_frame <- function(formula, data, original_levels = NULL) {
   data <- check_is_data_like(data)
   validate_levels_list(original_levels, "original_levels")
 
-  data <- check_new_data_novel_levels(data, original_levels)
-  data <- check_new_data_level_recovery(data, original_levels)
+  data <- enforce_new_data_novel_levels(data, original_levels)
+  data <- enforce_new_data_level_recovery(data, original_levels)
 
   frame <- rlang::with_options(
     stats::model.frame(formula, data = data),

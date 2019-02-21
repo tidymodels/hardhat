@@ -15,7 +15,7 @@
 #' `$predictors$levels` and `$outcomes$levels`.
 #'
 #' @keywords internal
-check_new_data_level_recovery <- function(new_data, original_levels) {
+enforce_new_data_level_recovery <- function(new_data, original_levels) {
 
   required_column_names <- names(original_levels)
 
@@ -91,10 +91,10 @@ check_new_data_level_recovery <- function(new_data, original_levels) {
 #' are caught when preprocessing the `new_data` and are converted to `NA` with
 #' a warning.
 #'
-#' @inheritParams check_new_data_level_recovery
+#' @inheritParams enforce_new_data_level_recovery
 #'
 #' @keywords internal
-check_new_data_novel_levels <- function(new_data, original_levels) {
+enforce_new_data_novel_levels <- function(new_data, original_levels) {
 
   required_column_names <- names(original_levels)
 
