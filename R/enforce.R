@@ -97,6 +97,10 @@ enforce_new_data_level_recovery <- function(new_data, original_levels) {
     # but we don't care about order in this check
     new_nominal <- new_data[[required_column_name]]
 
+    if (!is.factor(new_nominal)) {
+      next()
+    }
+
     new_levels <- levels(new_nominal)
     old_levels <- original_levels[[required_column_name]]
 
@@ -224,6 +228,11 @@ enforce_new_data_novel_levels <- function(new_data, original_levels,
 
     new_nominal <- new_data[[required_column_name]]
 
+    # Missing or non-factor
+    if (!is.factor(new_nominal)) {
+      next()
+    }
+
     new_levels <- levels(new_nominal)
     old_levels <- original_levels[[required_column_name]]
 
@@ -261,6 +270,206 @@ enforce_new_data_novel_levels <- function(new_data, original_levels,
         na_coerce,
         ": {unseen_levels}."
       ))
+
+    }
+
+  }
+
+  new_data
+}
+
+# ------------------------------------------------------------------------------
+
+#' Check the level order of ordered factors
+#'
+#' An ordered factor in `new_data` might have levels in the incorrect order,
+#' when compared with the original levels. This function checks for that, and
+#' corrects the order, with a warning.
+#'
+#' Ideally, this function is called after the following other validation
+#' checks:
+#'
+#' - [validate_new_data_column_names()]
+#' - [enforce_new_data_novel_levels()]
+#' - [enforce_new_data_level_recovery()]
+#'
+#' If these are run first, then missing columns, novel levels, and missing
+#' levels are all taken care of.
+#'
+#' If these are not run first, `enforce_new_data_level_order()` can still be
+#' used, and the following happens:
+#'
+#' - If an ordered factor specified in `original_classes` is not present
+#' in `new_data`, then it is skipped silently.
+#'
+#' - If novel levels are detected compared to those in `original_levels`,
+#' they are moved to the end of the ordered factor, and the order of the
+#' `original_levels` is restored up until the first novel level, with a
+#' warning.
+#'
+#' - If missing levels are detected compared to those in `original_levels`,
+#' they are added back, and the order of `original_levels` is restored, with
+#' a warning.
+#'
+#' @examples
+#'
+#' # ---------------------------------------------------------------------------
+#' # Setup
+#'
+#' df <- data.frame(
+#'   x = ordered(c("a", "b", "c"))
+#' )
+#'
+#' df_cls <- get_data_classes(df)
+#' df_lvl <- get_levels(df)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Bad level order
+#'
+#' bad_order <- data.frame(
+#'   x = ordered(c("a", "b", "c"), c("c", "b", "a"))
+#' )
+#'
+#' # The original order is restored
+#' enforce_new_data_level_order(bad_order, df_cls, df_lvl)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Too many levels, and bad order
+#'
+#' too_many_and_wrong_order <- data.frame(
+#'   x = ordered(c("a", "b", "d", "c"), levels = c("b", "a", "d", "c"))
+#' )
+#'
+#' # Novel levels are moved to the end
+#' # and the original order is restored
+#' too_many_fixed <- enforce_new_data_level_order(
+#'   too_many_and_wrong_order,
+#'   df_cls,
+#'   df_lvl
+#' )
+#'
+#' levels(too_many_fixed$x)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Not enough levels, and bad order
+#'
+#' not_enough_and_wrong_order <- data.frame(
+#'   x = ordered(c("a", "b"), levels = c("b", "a"))
+#' )
+#'
+#' # The missing level is added
+#' # and the original order is restored
+#' not_enough_fixed <- enforce_new_data_level_order(
+#'   not_enough_and_wrong_order,
+#'   df_cls,
+#'   df_lvl
+#' )
+#'
+#' levels(not_enough_fixed$x)
+#'
+#' @export
+enforce_new_data_level_order <- function(new_data,
+                                         original_classes,
+                                         original_levels) {
+
+  new_data <- check_is_data_like(new_data)
+  validate_levels_list(original_classes, "original_classes")
+  validate_levels_list(original_levels, "original_levels")
+
+  where_ordered <- vapply(original_classes, function(cls) "ordered" %in% cls, logical(1))
+
+  no_ordered <- length(where_ordered) == 0L
+
+  if (no_ordered) {
+    return(new_data)
+  }
+
+  ordered_factor_column_names <- names(original_classes[where_ordered])
+
+  for(ordered_column in ordered_factor_column_names) {
+
+    ok <- TRUE
+
+    new_nominal <- new_data[[ordered_column]]
+
+    # column isn't ordered factor (or is NULL)
+    if (!is.ordered(new_nominal)) {
+      next()
+    }
+
+    new_levels <- levels(new_nominal)
+    old_levels <- original_levels[[ordered_column]]
+
+    # 1. Check for novel levels
+    novel_levels <- setdiff(new_levels, old_levels)
+    any_novel_levels <- length(novel_levels) > 0
+
+    if (any_novel_levels) {
+      ok <- FALSE
+
+      old_levels <- c(old_levels, novel_levels)
+
+      novel_levels <- glue_quote_collapse(novel_levels)
+
+      rlang::warn(glue::glue(
+        "The following novel levels were detected in ",
+        "'{ordered_column}': {novel_levels}. ",
+        "The novel levels have been moved to the end and ",
+        "the order of `original_order` has been restored."
+      ))
+
+    }
+
+    # 2. Check for missing levels
+    missing_levels <- setdiff(old_levels, new_levels)
+    any_missing_levels <- length(missing_levels) > 0
+
+    if (any_missing_levels) {
+
+      ok <- FALSE
+
+      missing_levels <- glue_quote_collapse(missing_levels)
+
+      rlang::warn(glue::glue(
+        "The following levels are missing for ",
+        "'{ordered_column}': {missing_levels}. ",
+        "The order of `original_levels` has been restored ",
+        "and the missing levels have been restored."
+      ))
+
+    }
+
+    # 3. If we got here and had a problem, there is no way the
+    # order is correct so go ahead and fix and continue
+    if (!ok) {
+
+      new_data[[ordered_column]] <- factor(
+        x = new_nominal,
+        levels = old_levels,
+        ordered = is.ordered(new_nominal)
+      )
+
+      next()
+    }
+
+    # 4. Check order
+    # at this point, the only thing to check
+    # is the order!
+    order_is_correct <- identical(old_levels, new_levels)
+
+    if (!order_is_correct) {
+
+      rlang::warn(glue::glue(
+        "The column, '{ordered_column}', is an ordered factor containing the ",
+        "correct levels, but the order of the levels does not match the order ",
+        "in `original_levels`. The original order has been restored."
+      ))
+
+      new_data[[ordered_column]] <- factor(
+        x = new_nominal,
+        levels = old_levels,
+        ordered = is.ordered(new_nominal)
+      )
 
     }
 
