@@ -71,6 +71,8 @@ validate_new_data_column_names <- function(new_data, original_names) {
 
   if (!check$ok) {
 
+    validate_missing_name_isnt_.outcome(check$missing_names)
+
     missing_names <- glue_quote_collapse(check$missing_names)
 
     glubort(
@@ -105,6 +107,29 @@ check_new_data_column_names <- function(new_data, original_names) {
   }
 
   check_list(ok = ok, missing_names = missing_names)
+}
+
+validate_missing_name_isnt_.outcome <- function(missing_names) {
+
+  not_ok <- ".outcome" %in% missing_names
+
+  if (not_ok) {
+
+    missing_names <- glue_quote_collapse(missing_names)
+
+    glubort(
+      "`new_data` is missing the following required columns:
+      {missing_names}
+
+      (This indicates that `mold()` was called with a vector for `y`. ",
+      "When this is the case, and the outcome columns are requested ",
+      "in `forge()`, `new_data` must include a column with the automatically ",
+      "generated name '.outcome' containing the outcome.)"
+    )
+
+  }
+
+  invisible(missing_names)
 }
 
 # ------------------------------------------------------------------------------

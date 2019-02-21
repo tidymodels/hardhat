@@ -482,7 +482,7 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   # standard message
   expect_error(
     forge(x$preprocessor, iris, outcomes = TRUE),
-    "`new_data` is missing the following required outcomes"
+    "`new_data` is missing the following required columns"
   )
 
   # but also more detail

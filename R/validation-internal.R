@@ -89,54 +89,6 @@ validate_y_univariate <- function(y) {
 }
 
 #' @rdname validation
-validate_outcomes <- function(new_data, outcomes) {
-
-  new_data_cols <- colnames(new_data)
-
-  has_outcomes <- outcomes %in% new_data_cols
-
-  if (!all(has_outcomes)) {
-
-    missing_outcomes <- glue::glue_collapse(
-      x = outcomes[!has_outcomes],
-      sep = ", ",
-      last = ", and "
-    )
-
-    # Preemptively throw a more informative error message
-    # if a vector `y` was used in mold().
-    validate_missing_outcome_isnt_.outcome(missing_outcomes)
-
-    glubort(
-      "`new_data` is missing the following required outcomes:
-      {missing_outcomes}"
-    )
-
-  }
-
-  invisible(new_data)
-}
-
-validate_missing_outcome_isnt_.outcome <- function(missing_outcomes) {
-
-  if (".outcome" %in% missing_outcomes) {
-
-    glubort(
-      "`new_data` is missing the following required outcomes:
-      {missing_outcomes}
-
-      (This indicates that `mold()` was called with a vector for `y`. ",
-      "When this is the case, and the outcome columns are requested ",
-      "in `forge()`, `new_data` must include a column with the automatically ",
-      "generated name '.outcome' containing the outcome.)"
-    )
-
-  }
-
-  invisible(missing_outcomes)
-}
-
-#' @rdname validation
 validate_recipes_available <- function() {
 
   if (!requireNamespace("recipes", quietly = TRUE)) {

@@ -64,7 +64,7 @@ shrink <- function(preprocessor, new_data, outcomes = FALSE) {
   if (outcomes) {
 
     outcome_cols <- preprocessor$info$outcomes$names
-    validate_outcomes(new_data, outcome_cols)
+    validate_new_data_column_names(new_data, outcome_cols)
 
     cols <- c(outcome_cols, cols)
 

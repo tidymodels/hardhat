@@ -7,7 +7,6 @@
 \alias{validate_has_unique_column_names}
 \alias{validate_x_has_numeric_cols}
 \alias{validate_y_univariate}
-\alias{validate_outcomes}
 \alias{validate_recipes_available}
 \alias{validate_prediction_size}
 \alias{validate_new_data_classes}
@@ -24,8 +23,6 @@ validate_has_unique_column_names(x, x_nm)
 validate_x_has_numeric_cols(x)
 
 validate_y_univariate(y)
-
-validate_outcomes(new_data, outcomes)
 
 validate_recipes_available()
 
