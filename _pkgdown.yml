@@ -1,1 +1,32 @@
 destination: docs
+
+reference:
+  - title: Preprocessing
+    contents:
+    - contains("mold")
+    - contains("forge")
+
+  - title: Prediction
+    contents:
+    - contains("spruce")
+
+  - title: Utility
+    contents:
+    - contains("model_")
+    - standardize
+    - new_base_model
+    - is_preprocessor
+    - add_intercept_column
+    - delete_response
+
+  - title: Validation
+    contents:
+    - scream
+    - shrink
+    - contains("validate")
+    - contains("check")
+    - contains("enforce")
+
+  - title: Information
+    contents:
+    - contains("get_")
