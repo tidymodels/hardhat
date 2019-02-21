@@ -5,7 +5,8 @@
 #' `shrink()` subsets `new_data` to only contain the required columns.
 #' `shrink()` also performs the following validation checks on `new_data`:
 #'
-#' - Checks that all required predictor columns exist in `new_data`.
+#' - [validate_new_data_column_names()] - Checks that all required columns
+#' exist in `new_data`.
 #'
 #' @details
 #'

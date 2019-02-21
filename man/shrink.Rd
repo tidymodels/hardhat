@@ -23,7 +23,8 @@ outcomes).
 \code{shrink()} subsets \code{new_data} to only contain the required columns.
 \code{shrink()} also performs the following validation checks on \code{new_data}:
 \itemize{
-\item Checks that all required predictor columns exist in \code{new_data}.
+\item \code{\link[=validate_new_data_column_names]{validate_new_data_column_names()}} - Checks that all required columns
+exist in \code{new_data}.
 }
 }
 \details{
