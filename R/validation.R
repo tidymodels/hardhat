@@ -65,6 +65,50 @@ check_outcomes_is_univariate <- function(outcomes) {
 
 # ------------------------------------------------------------------------------
 
+validate_new_data_column_names <- function(new_data, original_names) {
+
+  check <- check_new_data_column_names(new_data, original_names)
+
+  if (!check$ok) {
+
+    missing_names <- glue_quote_collapse(check$missing_names)
+
+    glubort(
+      "`new_data` is missing the following required columns:
+      {missing_names}."
+    )
+
+  }
+
+  invisible(new_data)
+}
+
+check_new_data_column_names <- function(new_data, original_names) {
+
+  new_data <- check_is_data_like(new_data)
+
+  if (!is.character(original_names)) {
+    glubort("`original_names` must be a character vector.")
+  }
+
+  new_names <- colnames(new_data)
+
+  has_names <- original_names %in% new_names
+
+  ok <- all(has_names)
+
+  if (!ok) {
+    missing_names <- original_names[!has_names]
+  }
+  else {
+    missing_names <- character()
+  }
+
+  check_list(ok = ok, missing_names = missing_names)
+}
+
+# ------------------------------------------------------------------------------
+
 # ok = bool
 # ... = extra info when not ok
 check_list <- function(ok = TRUE, ...) {

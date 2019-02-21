@@ -59,7 +59,7 @@ shrink <- function(preprocessor, new_data, outcomes = FALSE) {
   new_data <- check_is_data_like(new_data)
 
   cols <- preprocessor$info$predictors$names
-  validate_predictors(new_data, cols)
+  validate_new_data_column_names(new_data, cols)
 
   if (outcomes) {
 

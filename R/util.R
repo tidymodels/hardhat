@@ -11,6 +11,10 @@ glubort <- function(..., .sep = "", .envir = parent.frame()) {
   abort(glue(..., .sep = .sep, .envir = .envir))
 }
 
+glue_quote_collapse <- function(x) {
+  glue::glue_collapse(glue::single_quote(x), sep = ", ")
+}
+
 #' @rdname utilities
 simplify_terms <- function(x) {
 
@@ -152,15 +156,19 @@ validate_is_new_data_like <- function(new_data) {
   )
 }
 
-check_is_data_like <- function(data) {
+check_is_data_like <- function(.x, .x_nm) {
 
-  if (!is_new_data_like(data)) {
+  if (rlang::is_missing(.x_nm)) {
+    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  }
+
+  if (!is_new_data_like(.x)) {
     glubort(
-      "`data` must be a data.frame or a matrix, not a {class1(data)}."
+      "`{.x_nm}` must be a data.frame or a matrix, not a {class1(.x)}."
     )
   }
 
-  tibble::as_tibble(data)
+  tibble::as_tibble(.x)
 }
 
 # ------------------------------------------------------------------------------

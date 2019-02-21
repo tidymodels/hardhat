@@ -151,7 +151,7 @@ test_that("missing predictor columns fail appropriately", {
 
   expect_error(
     forge(x$preprocessor, iris[,3, drop = FALSE]),
-    "Sepal.Length, and Sepal.Width"
+    "'Sepal.Length', 'Sepal.Width'"
   )
 
 })
@@ -533,7 +533,7 @@ test_that("missing predictor columns fail appropriately", {
 
   expect_error(
     forge(x$preprocessor, iris[,3, drop = FALSE]),
-    "Sepal.Length, and Sepal.Width"
+    "'Sepal.Length', 'Sepal.Width'"
   )
 
 })
@@ -776,7 +776,7 @@ test_that("missing predictor columns fail appropriately", {
 
   expect_error(
     forge(x$preprocessor, iris[,3, drop = FALSE]),
-    "Sepal.Length, and Sepal.Width"
+    "'Sepal.Length', 'Sepal.Width'"
   )
 
 })

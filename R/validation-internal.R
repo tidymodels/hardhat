@@ -89,31 +89,6 @@ validate_y_univariate <- function(y) {
 }
 
 #' @rdname validation
-validate_predictors <- function(new_data, predictors) {
-
-  new_data_cols <- colnames(new_data)
-
-  has_predictors <- predictors %in% new_data_cols
-
-  if (!all(has_predictors)) {
-
-    missing_predictors <- glue::glue_collapse(
-      x = predictors[!has_predictors],
-      sep = ", ",
-      last = ", and "
-    )
-
-    glubort(
-      "`new_data` is missing the following required predictors:
-      {missing_predictors}"
-    )
-
-  }
-
-  invisible(new_data)
-}
-
-#' @rdname validation
 validate_outcomes <- function(new_data, outcomes) {
 
   new_data_cols <- colnames(new_data)
