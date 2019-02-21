@@ -36,11 +36,17 @@ This validation check is inspired by the base R functions
 \code{\link[stats:.MFclass]{stats::.MFclass()}} and \code{\link[stats:checkMFClasses]{stats::checkMFClasses()}}, but is more strict. See
 \code{\link[=get_data_classes]{get_data_classes()}} for more details.
 
-\code{validate_new_data_classes()} assumes that all of the columns in
-\code{original_classes} actually exist in \code{new_data}. Because of this,
-if you use this function by itself you should call
-\code{\link[=validate_new_data_column_names]{validate_new_data_column_names()}} first to safely validate that the
-required columns actually exist.
+Ideally, this function is called after the following other validation
+checks:
+\itemize{
+\item \code{\link[=validate_new_data_column_names]{validate_new_data_column_names()}}
+}
+
+If this is run first, then missing columns are taken care of.
+
+If this is not run first, then \code{validate_new_data_classes()} can still
+be used, but any columns that exist in \code{original_classes} but not
+in \code{new_data} will be silently skipped over.
 }
 \section{Validation}{
 

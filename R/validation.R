@@ -242,11 +242,16 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #' [stats::.MFclass()] and [stats::checkMFClasses()], but is more strict. See
 #' [get_data_classes()] for more details.
 #'
-#' `validate_new_data_classes()` assumes that all of the columns in
-#' `original_classes` actually exist in `new_data`. Because of this,
-#' if you use this function by itself you should call
-#' [validate_new_data_column_names()] first to safely validate that the
-#' required columns actually exist.
+#' Ideally, this function is called after the following other validation
+#' checks:
+#'
+#' - [validate_new_data_column_names()]
+#'
+#' If this is run first, then missing columns are taken care of.
+#'
+#' If this is not run first, then `validate_new_data_classes()` can still
+#' be used, but any columns that exist in `original_classes` but not
+#' in `new_data` will be silently skipped over.
 #'
 #' @param new_data A data frame of new predictors and possibly outcomes.
 #'
@@ -326,12 +331,20 @@ check_new_data_classes <- function(new_data, original_classes) {
 
   required_columns <- names(original_classes)
 
-  # Requires that all columns exist
-  # i.e. validate_new_data_column_names()
-  # should have been called by now
   check_class <- function(nm) {
+
+    new_data_col <- new_data[[nm]]
+
+    # Be robust against `original_classes` columns
+    # that don't exist in `new_data`. It is not
+    # check_new_data_classes() job to check for
+    # that. It is the job of check_new_data_column_names()
+    if (is.null(new_data_col)) {
+      return(TRUE)
+    }
+
     identical(
-      get_data_class(new_data[[nm]]),
+      get_data_class(new_data_col),
       original_classes[[nm]]
     )
   }
