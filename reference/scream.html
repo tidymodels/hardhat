@@ -243,9 +243,8 @@ checks exist in <code><a href='shrink.html'>shrink()</a></code>.</p>
 <span class='co'># are the same as the ones used in mold(). The below call</span>
 <span class='co'># to scream() will fail with an informative error.</span>
 <span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>
-<span class='no'>test2</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>test2</span>$<span class='no'>Species</span>)</div><span class='co'># NOT RUN {</span>
-<span class='fu'>scream</span>(<span class='no'>x</span>$<span class='no'>preprocessor</span>, <span class='no'>test2</span>)
-<span class='co'># }</span><div class='input'>
+<span class='no'>test2</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>test2</span>$<span class='no'>Species</span>)</div><div class='input'><span class='fu'>scream</span>(<span class='no'>x</span>$<span class='no'>preprocessor</span>, <span class='no'>test2</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Some columns in `new_data` have an incorrect class:</span>
+#&gt; <span class='error'>`Species`: `character` should be `factor`.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

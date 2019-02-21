@@ -154,8 +154,8 @@
 <a class="sourceLine" id="cb6-2" data-line-number="2">iris_test_bad<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="../reference/forge.html">forge</a></span>(processed<span class="op">$</span>preprocessor, iris_test_bad)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Error: `new_data` is missing the following required predictors:</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Species</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Error: `new_data` is missing the following required columns:</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 'Species'.</span></a></code></pre></div>
 <p>And new levels in any of the predictors throw a warning and are coerced to <code>NA</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">iris_test_bad &lt;-<span class="st"> </span>iris</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">iris_test_bad<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(iris_test_bad<span class="op">$</span>Species)</a>

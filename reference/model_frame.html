@@ -225,7 +225,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; attr(,"response")
 #&gt; [1] 1
 #&gt; attr(,".Environment")
-#&gt; &lt;environment: 0xe625f58&gt;
+#&gt; &lt;environment: 0x10ef8468&gt;
 #&gt; attr(,"predvars")
 #&gt; list(Species, Sepal.Width)
 #&gt; attr(,"dataClasses")
@@ -252,18 +252,73 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 # ---------------------------------------------------------------------------
 # Novel and missing levels
 
-</div><span class='co'># NOT RUN {</span>
-<span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)))
+</div><div class='input'><span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)))
 <span class='no'>test_not_enough</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='st'>"a"</span>))
 <span class='no'>test_too_many</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>)))
 <span class='no'>original_levels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_levels.html'>get_levels</a></span>(<span class='no'>train</span>)
 
 <span class='co'># Missing levels are recovered with a warning</span>
-<span class='fu'>model_frame</span>(~<span class='no'>y</span>, <span class='no'>test_not_enough</span>, <span class='no'>original_levels</span>)
-
+<span class='fu'>model_frame</span>(~<span class='no'>y</span>, <span class='no'>test_not_enough</span>, <span class='no'>original_levels</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The following original factor levels are missing for column, 'y', and have been restored: 'b'.</span></div><div class='output co'>#&gt; $data
+#&gt; # A tibble: 1 x 1
+#&gt;   y    
+#&gt;   &lt;fct&gt;
+#&gt; 1 a    
+#&gt; 
+#&gt; $terms
+#&gt; ~y
+#&gt; attr(,"variables")
+#&gt; list(y)
+#&gt; attr(,"factors")
+#&gt;   y
+#&gt; y 1
+#&gt; attr(,"term.labels")
+#&gt; [1] "y"
+#&gt; attr(,"order")
+#&gt; [1] 1
+#&gt; attr(,"intercept")
+#&gt; [1] 1
+#&gt; attr(,"response")
+#&gt; [1] 0
+#&gt; attr(,".Environment")
+#&gt; &lt;environment: 0x10ef8468&gt;
+#&gt; attr(,"predvars")
+#&gt; list(y)
+#&gt; attr(,"dataClasses")
+#&gt;        y 
+#&gt; "factor" 
+#&gt; </div><div class='input'>
 <span class='co'># Novel levels are forced to NA with a warning</span>
-<span class='fu'>model_frame</span>(~<span class='no'>y</span>, <span class='no'>test_too_many</span>, <span class='no'>original_levels</span>)
-<span class='co'># }</span><div class='input'>
+<span class='fu'>model_frame</span>(~<span class='no'>y</span>, <span class='no'>test_too_many</span>, <span class='no'>original_levels</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The following factor levels are new for column, `y`, and have been coerced to `NA`: 'c'.</span></div><div class='output co'>#&gt; $data
+#&gt; # A tibble: 3 x 1
+#&gt;   y    
+#&gt;   &lt;fct&gt;
+#&gt; 1 a    
+#&gt; 2 b    
+#&gt; 3 &lt;NA&gt; 
+#&gt; 
+#&gt; $terms
+#&gt; ~y
+#&gt; attr(,"variables")
+#&gt; list(y)
+#&gt; attr(,"factors")
+#&gt;   y
+#&gt; y 1
+#&gt; attr(,"term.labels")
+#&gt; [1] "y"
+#&gt; attr(,"order")
+#&gt; [1] 1
+#&gt; attr(,"intercept")
+#&gt; [1] 1
+#&gt; attr(,"response")
+#&gt; [1] 0
+#&gt; attr(,".Environment")
+#&gt; &lt;environment: 0x10ef8468&gt;
+#&gt; attr(,"predvars")
+#&gt; list(y)
+#&gt; attr(,"dataClasses")
+#&gt;        y 
+#&gt; "factor" 
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
