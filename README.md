@@ -22,7 +22,7 @@ simultaneously promoting good R modeling package standards as laid out
 by the set of opinionated [Conventions for R Modeling
 Packages](https://tidymodels.github.io/model-implementation-principles/).
 
-hardhat has three main goals:
+hardhat has four main goals:
 
   - Easily, consistently, and robustly preprocess data at fit time and
     prediction time with `mold()` and `forge()`.
@@ -35,6 +35,10 @@ hardhat has three main goals:
     adding intercept columns, standardizing `predict()` output, and
     extracting valuable class and factor level information from the
     predictors.
+
+  - Reimagine the base R preprocessing infrastructure of
+    `stats::model.matrix()` and `stats::model.frame()` using the
+    stricter approaches found in `model_matrix()` and `model_frame()`.
 
 The idea is to reduce the burden of creating a good modeling interface
 as much as possible, and instead let the package developer focus on
