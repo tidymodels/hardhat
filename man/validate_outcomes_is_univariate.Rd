@@ -58,4 +58,7 @@ validate_outcomes_is_univariate(mtcars)
 }
 
 }
+\seealso{
+Other validation functions: \code{\link{validate_new_data_column_names}}
+}
 \concept{validation functions}

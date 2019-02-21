@@ -65,6 +65,90 @@ check_outcomes_is_univariate <- function(outcomes) {
 
 # ------------------------------------------------------------------------------
 
+#' Ensure that `new_data` contains required column names
+#'
+#' @description
+#'
+#' validate - asserts the following:
+#'
+#' - The column names of `new_data` must contain all `original_names`.
+#'
+#' check - returns the following:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `missing_names` A character vector. The missing column names.
+#'
+#' @details
+#'
+#' A special error is thrown if the missing column is named `".outcome"`. This
+#' only happens in the case where [mold()] is called using the xy-method, and
+#' a _vector_ `y` value is supplied rather than a data frame or matrix. In that
+#' case, `y` is coerced to a data frame, and the automatic name `".outcome"` is
+#' added, and this is what is looked for in [forge()]. If this happens and the
+#' user tries to request outcomes using `forge(..., outcomes = TRUE)` but
+#' their `new_data` does not contain the required `".outcome"` column, a special
+#' error is thrown telling them what to do. See the examples!
+#'
+#' @param new_data A data frame of new predictors and possibly outcomes.
+#'
+#' @param original_names A character vector. The original column names used
+#' in training.
+#'
+#' @template section-validation
+#'
+#' @examples
+#'
+#' # ---------------------------------------------------------------------------
+#'
+#' original_names <- colnames(mtcars)
+#'
+#' test <- mtcars
+#' bad_test <- test[, -c(3, 4)]
+#'
+#' # All good
+#' check_new_data_column_names(test, original_names)
+#'
+#' # Missing 2 columns
+#' check_new_data_column_names(bad_test, original_names)
+#'
+#' \dontrun{
+#' # Will error
+#' validate_new_data_column_names(bad_test, original_names)
+#' }
+#'
+#' # ---------------------------------------------------------------------------
+#' # Special error when `.outcome` is missing
+#'
+#' train <- iris[1:100,]
+#' test <- iris[101:150,]
+#'
+#' train_x <- subset(train, select = -Species)
+#' train_y <- train$Species
+#'
+#' # Here, y is a vector
+#' processed <- mold(train_x, train_y)
+#'
+#' # So the default column name is `".outcome"`
+#' processed$outcomes
+#'
+#' # It doesn't affect forge() normally
+#' forge(processed$preprocessor, test)
+#'
+#' # But if the outcome is requested, and `".outcome"`
+#' # is not present in `new_data`, an error is thrown
+#' # with very specific instructions
+#' \dontrun{
+#' forge(processed$preprocessor, test, outcomes = TRUE)
+#' }
+#'
+#' # To get this to work, just create an .outcome column in new_data
+#' test$.outcome <- test$Species
+#'
+#' forge(processed$preprocessor, test, outcomes = TRUE)
+#'
+#' @family validation functions
+#' @export
 validate_new_data_column_names <- function(new_data, original_names) {
 
   check <- check_new_data_column_names(new_data, original_names)
@@ -85,6 +169,8 @@ validate_new_data_column_names <- function(new_data, original_names) {
   invisible(new_data)
 }
 
+#' @rdname validate_new_data_column_names
+#' @export
 check_new_data_column_names <- function(new_data, original_names) {
 
   new_data <- check_is_data_like(new_data)
