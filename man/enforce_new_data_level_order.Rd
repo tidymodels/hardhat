@@ -6,6 +6,18 @@
 \usage{
 enforce_new_data_level_order(new_data, original_classes, original_levels)
 }
+\arguments{
+\item{new_data}{A data frame of new predictors and possibly outcomes.}
+
+\item{original_classes}{A named list of the original classes of either the
+outcomes or predictors. The names should match the column names in
+\code{new_data}, and the values are character vectors of the original class
+for that column.}
+
+\item{original_levels}{A named list of the original levels of either the
+outcomes or predictors. The names match the factor column names in
+\code{new_data}, and the values are character vectors of the required levels.}
+}
 \description{
 An ordered factor in \code{new_data} might have levels in the incorrect order,
 when compared with the original levels. This function checks for that, and
@@ -16,12 +28,13 @@ Ideally, this function is called after the following other validation
 checks:
 \itemize{
 \item \code{\link[=validate_new_data_column_names]{validate_new_data_column_names()}}
+\item \code{\link[=validate_new_data_classes]{validate_new_data_classes()}}
 \item \code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}}
 \item \code{\link[=enforce_new_data_level_recovery]{enforce_new_data_level_recovery()}}
 }
 
-If these are run first, then missing columns, novel levels, and missing
-levels are all taken care of.
+If these are run first, then missing columns, incorrect classes,
+novel levels, and missing levels are all taken care of.
 
 If these are not run first, \code{enforce_new_data_level_order()} can still be
 used, and the following happens:

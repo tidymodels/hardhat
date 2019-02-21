@@ -290,11 +290,12 @@ enforce_new_data_novel_levels <- function(new_data, original_levels,
 #' checks:
 #'
 #' - [validate_new_data_column_names()]
+#' - [validate_new_data_classes()]
 #' - [enforce_new_data_novel_levels()]
 #' - [enforce_new_data_level_recovery()]
 #'
-#' If these are run first, then missing columns, novel levels, and missing
-#' levels are all taken care of.
+#' If these are run first, then missing columns, incorrect classes,
+#' novel levels, and missing levels are all taken care of.
 #'
 #' If these are not run first, `enforce_new_data_level_order()` can still be
 #' used, and the following happens:
@@ -310,6 +311,9 @@ enforce_new_data_novel_levels <- function(new_data, original_levels,
 #' - If missing levels are detected compared to those in `original_levels`,
 #' they are added back, and the order of `original_levels` is restored, with
 #' a warning.
+#'
+#' @inheritParams enforce_new_data_novel_levels
+#' @inheritParams validate_new_data_classes
 #'
 #' @examples
 #'
