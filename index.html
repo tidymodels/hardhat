@@ -95,11 +95,12 @@
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>hardhat is designed to ease the creation of new modeling packages, while simultaneously promoting good R modeling package standards as laid out by the set of opinionated <a href="https://tidymodels.github.io/model-implementation-principles/">Conventions for R Modeling Packages</a>.</p>
-<p>hardhat has three main goals:</p>
+<p>hardhat has four main goals:</p>
 <ul>
 <li><p>Easily, consistently, and robustly preprocess data at fit time and prediction time with <code><a href="reference/mold.html">mold()</a></code> and <code><a href="reference/forge.html">forge()</a></code>.</p></li>
 <li><p>Provide one source of truth for common input validation functions, such as checking if new data at prediction time contains the same required columns used at fit time.</p></li>
 <li><p>Provide extra utility functions for additional common tasks, such as adding intercept columns, standardizing <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> output, and extracting valuable class and factor level information from the predictors.</p></li>
+<li><p>Reimagine the base R preprocessing infrastructure of <code><a href="https://www.rdocumentation.org/packages/stats/topics/model.matrix">stats::model.matrix()</a></code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/model.frame">stats::model.frame()</a></code> using the stricter approaches found in <code><a href="reference/model_matrix.html">model_matrix()</a></code> and <code><a href="reference/model_frame.html">model_frame()</a></code>.</p></li>
 </ul>
 <p>The idea is to reduce the burden of creating a good modeling interface as much as possible, and instead let the package developer focus on writing the core implementation of their new model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of “expectations” around what any modeling function should return, and how they should interact with it.</p>
 </div>

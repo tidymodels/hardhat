@@ -207,6 +207,14 @@ objects. This function is called by <code><a href='mold.html'>mold()</a></code>.
 #&gt; $carb
 #&gt; [1] "numeric"
 #&gt; </div><div class='input'>
+<span class='co'># Unlike .MFclass(), the full class</span>
+<span class='co'># vector is returned</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>ordered</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)))
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/checkMFClasses'>.MFclass</a></span>(<span class='no'>x</span>$<span class='no'>col</span>)</div><div class='output co'>#&gt; [1] "ordered"</div><div class='input'>
+<span class='fu'>get_data_classes</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; $col
+#&gt; [1] "ordered" "factor" 
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
