@@ -220,6 +220,138 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 
 # ------------------------------------------------------------------------------
 
+#' Ensure that `new_data` contains columns of the correct class
+#'
+#' @description
+#'
+#' validate - asserts the following:
+#'
+#' - The classes of the columns of `new_data` must be exactly the same
+#' as the classes defined by `original_classes`.
+#'
+#' check - returns the following:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `incorrect_columns` A character vector. The columns that contain the
+#' wrong class.
+#'
+#' @details
+#'
+#' This validation check is inspired by the base R functions
+#' [stats::.MFclass()] and [stats::checkMFClasses()], but is more strict. See
+#' [get_data_classes()] for more details.
+#'
+#' `validate_new_data_classes()` assumes that all of the columns in
+#' `original_classes` actually exist in `new_data`. Because of this,
+#' if you use this function by itself you should call
+#' [validate_new_data_column_names()] first to safely validate that the
+#' required columns actually exist.
+#'
+#' @param new_data A data frame of new predictors and possibly outcomes.
+#'
+#' @param original_classes A named list of the original classes of either the
+#' outcomes or predictors. The names should match the column names in
+#' `new_data`, and the values are character vectors of the original class
+#' for that column.
+#'
+#' @template section-validation
+#'
+#' @examples
+#'
+#' # ---------------------------------------------------------------------------
+#' # Setup
+#'
+#' train <- iris[1:100,]
+#' test <- iris[101:150,]
+#'
+#' # ---------------------------------------------------------------------------
+#' # Example usage
+#'
+#' original_classes <- get_data_classes(train)
+#'
+#' # All good!
+#' check_new_data_classes(test, original_classes)
+#'
+#' bad_test <- test
+#' bad_test$Species <- as.character(bad_test$Species)
+#'
+#' # Species is incorrect!
+#' check_new_data_classes(bad_test, original_classes)
+#'
+#' # The error also tells you what the class is, and what it should be
+#' \dontrun{
+#' validate_new_data_classes(bad_test, original_classes)
+#' }
+#'
+#' @family validation functions
+#' @export
+validate_new_data_classes <- function(new_data, original_classes) {
+
+  check <- check_new_data_classes(new_data, original_classes)
+
+  if (!check$ok) {
+
+    incorrect_columns <- check$incorrect_columns
+
+    # Extract only the first class of everything for printing purposes
+    new_data_classes <- vapply(new_data, class1, character(1))
+    original_classes <- vapply(original_classes, function(x) x[1], character(1))
+
+    wrong_class <- new_data_classes[incorrect_columns]
+    right_class <- original_classes[incorrect_columns]
+
+    errors <- glue::glue(
+      "`{incorrect_columns}`: `{wrong_class}` should be `{right_class}`."
+    )
+
+    msg <- glue::glue_collapse(
+      c("Some columns in `new_data` have an incorrect class:", errors),
+      sep = "\n"
+    )
+
+    glubort(msg)
+
+  }
+
+  invisible(new_data)
+}
+
+#' @rdname validate_new_data_classes
+#' @export
+check_new_data_classes <- function(new_data, original_classes) {
+
+  new_data <- check_is_data_like(new_data)
+  validate_classes_list(original_classes, "original_classes")
+
+  required_columns <- names(original_classes)
+
+  # Requires that all columns exist
+  # i.e. validate_new_data_column_names()
+  # should have been called by now
+  check_class <- function(nm) {
+    identical(
+      get_data_class(new_data[[nm]]),
+      original_classes[[nm]]
+    )
+  }
+
+  ok_vec <- vapply(required_columns, check_class, logical(1))
+
+  ok <- all(ok_vec)
+
+  if (!ok) {
+    incorrect_columns <- required_columns[!ok_vec]
+  }
+  else {
+    incorrect_columns <- character()
+  }
+
+  check_list(ok = ok, incorrect_columns = incorrect_columns)
+}
+
+# ------------------------------------------------------------------------------
+
 # ok = bool
 # ... = extra info when not ok
 check_list <- function(ok = TRUE, ...) {

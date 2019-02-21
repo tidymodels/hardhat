@@ -5,10 +5,12 @@
 #' `get_data_classes()` extracts the classes from the original training data.
 #'
 #' `get_data_classes()` is inspired by [stats::.MFclass()]. It returns the
-#' classes of the data frame columns with the one exception that integer
+#' exact classes of the data frame columns with the one exception that integer
 #' and double columns are both returned as `"numeric"`. This is to ensure
 #' that if an integer column is used when fitting, an error is not thrown if
-#' a double column is used at prediction time.
+#' a double column is used at prediction time. It also does not allow for
+#' any columns of `x` to be multivariate themselves (no data frame columns,
+#' or matrix columns).
 #'
 #' The classes returned by `get_data_classes()` are stored in the preprocessor
 #' objects. This function is called by [mold()].
@@ -21,13 +23,11 @@
 #' character vectors containing the class of that column.
 #'
 #' @examples
+#' get_data_classes(iris)
 #'
-#' hardhat:::get_data_classes(iris)
+#' get_data_classes(as.matrix(mtcars))
 #'
-#' hardhat:::get_data_classes(as.matrix(mtcars))
-#'
-#' @keywords internal
-#'
+#' @export
 get_data_classes <- function(x) {
 
   validate_has_unique_column_names(x, "x")

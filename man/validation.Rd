@@ -9,7 +9,6 @@
 \alias{validate_y_univariate}
 \alias{validate_recipes_available}
 \alias{validate_prediction_size}
-\alias{validate_new_data_classes}
 \alias{validate_intercept}
 \alias{validate_formula_has_intercept}
 \title{Validation}
@@ -27,8 +26,6 @@ validate_y_univariate(y)
 validate_recipes_available()
 
 validate_prediction_size(.pred, new_data)
-
-validate_new_data_classes(new_data, original_classes)
 
 validate_intercept(intercept)
 

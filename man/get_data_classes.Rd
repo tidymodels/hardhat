@@ -20,19 +20,19 @@ have the same classes as the original data used to fit the model.
 }
 \details{
 \code{get_data_classes()} is inspired by \code{\link[stats:.MFclass]{stats::.MFclass()}}. It returns the
-classes of the data frame columns with the one exception that integer
+exact classes of the data frame columns with the one exception that integer
 and double columns are both returned as \code{"numeric"}. This is to ensure
 that if an integer column is used when fitting, an error is not thrown if
-a double column is used at prediction time.
+a double column is used at prediction time. It also does not allow for
+any columns of \code{x} to be multivariate themselves (no data frame columns,
+or matrix columns).
 
 The classes returned by \code{get_data_classes()} are stored in the preprocessor
 objects. This function is called by \code{\link[=mold]{mold()}}.
 }
 \examples{
+get_data_classes(iris)
 
-hardhat:::get_data_classes(iris)
-
-hardhat:::get_data_classes(as.matrix(mtcars))
+get_data_classes(as.matrix(mtcars))
 
 }
-\keyword{internal}

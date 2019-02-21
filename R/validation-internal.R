@@ -119,49 +119,6 @@ validate_prediction_size <- function(.pred, new_data) {
 }
 
 #' @rdname validation
-validate_new_data_classes <- function(new_data, original_classes) {
-
-  # new_data is a tibble at this point
-
-  required_columns <- names(original_classes)
-
-  check_class <- function(nm) {
-    identical(
-      get_data_class(new_data[[nm]]),
-      original_classes[[nm]]
-    )
-  }
-
-  ok <- vapply(required_columns, check_class, logical(1))
-
-  if (!all(ok)) {
-
-    bad_columns <- required_columns[!ok]
-
-    # Extract only the first class of everything for printing purposes
-    new_data_classes <- vapply(new_data, class1, character(1))
-    original_classes <- vapply(original_classes, function(x) x[1], character(1))
-
-    wrong_class <- new_data_classes[bad_columns]
-    right_class <- original_classes[bad_columns]
-
-    errors <- glue::glue(
-      "`{bad_columns}`: `{wrong_class}` should be `{right_class}`."
-    )
-
-    msg <- glue::glue_collapse(
-      c("Some columns in `new_data` have an incorrect class:", errors),
-      sep = "\n"
-    )
-
-    glubort(msg)
-
-  }
-
-  invisible(new_data)
-}
-
-#' @rdname validation
 validate_intercept <- function(intercept) {
 
   if (!is.logical(intercept)) {
