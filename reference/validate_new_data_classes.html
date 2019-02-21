@@ -168,11 +168,14 @@ for that column.</p></td>
     <p>This validation check is inspired by the base R functions
 <code><a href='https://www.rdocumentation.org/packages/stats/topics/checkMFClasses'>stats::.MFclass()</a></code> and <code>stats::checkMFClasses()</code>, but is more strict. See
 <code><a href='get_data_classes.html'>get_data_classes()</a></code> for more details.</p>
-<p><code>validate_new_data_classes()</code> assumes that all of the columns in
-<code>original_classes</code> actually exist in <code>new_data</code>. Because of this,
-if you use this function by itself you should call
-<code><a href='validate_new_data_column_names.html'>validate_new_data_column_names()</a></code> first to safely validate that the
-required columns actually exist.</p>
+<p>Ideally, this function is called after the following other validation
+checks:</p><ul>
+<li><p><code><a href='validate_new_data_column_names.html'>validate_new_data_column_names()</a></code></p></li>
+</ul>
+    <p>If this is run first, then missing columns are taken care of.</p>
+<p>If this is not run first, then <code>validate_new_data_classes()</code> can still
+be used, but any columns that exist in <code>original_classes</code> but not
+in <code>new_data</code> will be silently skipped over.</p>
     
     <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
 
