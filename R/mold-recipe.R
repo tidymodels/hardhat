@@ -123,12 +123,14 @@ mold_recipe_outcomes <- function(rec, data) {
 get_original_predictor_info <- function(rec, data) {
 
   roles <- rec$var_info$role
-  original_predictors <- rec$var_info$variable[roles == "predictor"]
+  original_names <- rec$var_info$variable[roles == "predictor"]
+
+  original_data <- data[, original_names, drop = FALSE]
 
   predictors_info(
-    names = colnames(data[, original_predictors, drop = FALSE]),
-    classes = get_data_classes(data[, original_predictors, drop = FALSE]),
-    levels = get_levels(data[, original_predictors, drop = FALSE])
+    names = original_names,
+    classes = get_data_classes(original_data),
+    levels = get_levels(original_data)
   )
 
 }
@@ -136,12 +138,14 @@ get_original_predictor_info <- function(rec, data) {
 get_original_outcome_info <- function(rec, data) {
 
   roles <- rec$var_info$role
-  original_predictors <- rec$var_info$variable[roles == "outcome"]
+  original_names <- rec$var_info$variable[roles == "outcome"]
+
+  original_data <- data[, original_names, drop = FALSE]
 
   outcomes_info(
-    names = colnames(data[, original_predictors, drop = FALSE]),
-    classes = get_data_classes(data[, original_predictors, drop = FALSE]),
-    levels = get_levels(data[, original_predictors, drop = FALSE])
+    names = original_names,
+    classes = get_data_classes(original_data),
+    levels = get_levels(original_data)
   )
 
 }
