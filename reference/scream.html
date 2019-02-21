@@ -36,15 +36,16 @@
 
 <meta property="og:description" content="scream() performs a number of validation checks on new_data, and yells
 loudly if anything is wrong. scream() performs the following validation:
-Checks that the class of each required predictor in new_data is the same
-as the class used during training.
-Checks that all new_data factor columns don't have any new levels
-when compared with the original data used in training. If there are new
-levels, they are replaced with NA values and a warning is
-issued.
-Checks that all new_data factor columns aren't missing any factor levels
-when compared with the original data used in training. If there are missing
-levels (or misordered levels for ordered factors), then they are restored
+validate_new_data_classes() - Checks that the class of each
+required predictor in new_data is the same as the class used
+during training.
+enforce_new_data_novel_levels() - Checks that all new_data factor
+columns don't have any new levels when compared with the original data
+used in training. If there are new levels, a warning is issued and
+if drop_novel = TRUE then they are coerced to NA.
+enforce_new_data_level_recovery() -  Checks that all new_data factor
+columns aren't missing any factor levels when compared with the original data
+used in training. If there are missing levels, then they are restored
 and a warning is issued.
 " />
 <meta name="twitter:card" content="summary" />
@@ -138,21 +139,22 @@ and a warning is issued.
     
     <p><code>scream()</code> performs a number of validation checks on <code>new_data</code>, and yells
 loudly if anything is wrong. <code>scream()</code> performs the following validation:</p><ul>
-<li><p>Checks that the class of each required predictor in <code>new_data</code> is the same
-as the class used during training.</p></li>
-<li><p>Checks that all <code>new_data</code> factor columns don't have any <em>new</em> levels
-when compared with the original data used in training. If there are new
-levels, they are replaced with <code>NA</code> values and a warning is
-issued.</p></li>
-<li><p>Checks that all <code>new_data</code> factor columns aren't missing any factor levels
-when compared with the original data used in training. If there are missing
-levels (or misordered levels for ordered factors), then they are restored
+<li><p><code><a href='validate_new_data_classes.html'>validate_new_data_classes()</a></code> - Checks that the class of each
+required predictor in <code>new_data</code> is the same as the class used
+during training.</p></li>
+<li><p><code><a href='enforce_new_data_novel_levels.html'>enforce_new_data_novel_levels()</a></code> - Checks that all <code>new_data</code> factor
+columns don't have any <em>new</em> levels when compared with the original data
+used in training. If there are new levels, a warning is issued and
+if <code>drop_novel = TRUE</code> then they are coerced to <code>NA</code>.</p></li>
+<li><p><code><a href='enforce_new_data_level_recovery.html'>enforce_new_data_level_recovery()</a></code> -  Checks that all <code>new_data</code> factor
+columns aren't missing any factor levels when compared with the original data
+used in training. If there are missing levels, then they are restored
 and a warning is issued.</p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>scream</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>scream</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>drop_novel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,6 +172,13 @@ of. This should contain the predictors, and potentially the outcomes if
     <tr>
       <th>outcomes</th>
       <td><p>A logical. Should the outcomes be checked as well?</p></td>
+    </tr>
+    <tr>
+      <th>drop_novel</th>
+      <td><p>A logical. Should novel levels be dropped? If <code>TRUE</code>, a
+warning is thrown if novel levels are detected and they are coerced to <code>NA</code>.
+If <code>FALSE</code>, a warning is still thrown for new levels, but they are
+left unchanged.</p></td>
     </tr>
     </table>
     

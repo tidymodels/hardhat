@@ -131,7 +131,7 @@ two distinct objects.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_frame</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>original_levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>model_frame</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>original_levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drop_novel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,6 +152,14 @@ These represent the assumed factor levels for factor columns in <code>data</code
 If any levels are missing for a factor, then the levels are restored with a
 warning. If there are novel levels for a factor, then they are coerced to
 <code>NA</code> with a warning.</p></td>
+    </tr>
+    <tr>
+      <th>drop_novel</th>
+      <td><p>Optional. A logical. Passed on to
+<code><a href='enforce_new_data_novel_levels.html'>enforce_new_data_novel_levels()</a></code>, and only applicable if <code>original_levels</code>
+is not <code>NULL</code>. Should novel levels found in <code>new_data</code> but not in
+<code>original_levels</code> be coerced to <code>NA</code>? No matter the value of <code>drop_novel</code>,
+a warning will be thrown if any novel levels are detected.</p></td>
     </tr>
     </table>
     
@@ -225,7 +233,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; attr(,"response")
 #&gt; [1] 1
 #&gt; attr(,".Environment")
-#&gt; &lt;environment: 0x1056df98&gt;
+#&gt; &lt;environment: 0xad9e4e8&gt;
 #&gt; attr(,"predvars")
 #&gt; list(Species, Sepal.Width)
 #&gt; attr(,"dataClasses")
@@ -249,10 +257,10 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; 5 setosa          3.6
 #&gt; 6 setosa          3.9</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>framed2</span>$<span class='no'>data</span>) <span class='kw'>==</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>iris2</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-# ---------------------------------------------------------------------------
-# Novel and missing levels
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Novel and missing levels</span>
 
-</div><div class='input'><span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)))
+<span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)))
 <span class='no'>test_not_enough</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='st'>"a"</span>))
 <span class='no'>test_too_many</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>)))
 <span class='no'>original_levels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_levels.html'>get_levels</a></span>(<span class='no'>train</span>)
@@ -280,7 +288,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; attr(,"response")
 #&gt; [1] 0
 #&gt; attr(,".Environment")
-#&gt; &lt;environment: 0x1056df98&gt;
+#&gt; &lt;environment: 0xad9e4e8&gt;
 #&gt; attr(,"predvars")
 #&gt; list(y)
 #&gt; attr(,"dataClasses")
@@ -288,7 +296,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; "factor" 
 #&gt; </div><div class='input'>
 <span class='co'># Novel levels are forced to NA with a warning</span>
-<span class='fu'>model_frame</span>(~<span class='no'>y</span>, <span class='no'>test_too_many</span>, <span class='no'>original_levels</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The following factor levels are new for column, `y`, and have been coerced to `NA`: 'c'.</span></div><div class='output co'>#&gt; $data
+<span class='fu'>model_frame</span>(~<span class='no'>y</span>, <span class='no'>test_too_many</span>, <span class='no'>original_levels</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The following factor levels are new for column, `y`, and have been coerced to `NA` : 'c'.</span></div><div class='output co'>#&gt; $data
 #&gt; # A tibble: 3 x 1
 #&gt;   y    
 #&gt;   &lt;fct&gt;
@@ -312,7 +320,38 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; attr(,"response")
 #&gt; [1] 0
 #&gt; attr(,".Environment")
-#&gt; &lt;environment: 0x1056df98&gt;
+#&gt; &lt;environment: 0xad9e4e8&gt;
+#&gt; attr(,"predvars")
+#&gt; list(y)
+#&gt; attr(,"dataClasses")
+#&gt;        y 
+#&gt; "factor" 
+#&gt; </div><div class='input'>
+<span class='fu'>model_frame</span>(~<span class='no'>y</span>, <span class='no'>test_too_many</span>, <span class='no'>original_levels</span>, <span class='kw'>drop_novel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The following factor levels are new for column, `y`: 'c'.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following novel levels were detected in 'y': 'c'. The order of the `original_levels` has been restored, and the novel levels have been moved to the end.</span></div><div class='output co'>#&gt; $data
+#&gt; # A tibble: 3 x 1
+#&gt;   y    
+#&gt;   &lt;fct&gt;
+#&gt; 1 a    
+#&gt; 2 b    
+#&gt; 3 c    
+#&gt; 
+#&gt; $terms
+#&gt; ~y
+#&gt; attr(,"variables")
+#&gt; list(y)
+#&gt; attr(,"factors")
+#&gt;   y
+#&gt; y 1
+#&gt; attr(,"term.labels")
+#&gt; [1] "y"
+#&gt; attr(,"order")
+#&gt; [1] 1
+#&gt; attr(,"intercept")
+#&gt; [1] 1
+#&gt; attr(,"response")
+#&gt; [1] 0
+#&gt; attr(,".Environment")
+#&gt; &lt;environment: 0xad9e4e8&gt;
 #&gt; attr(,"predvars")
 #&gt; list(y)
 #&gt; attr(,"dataClasses")

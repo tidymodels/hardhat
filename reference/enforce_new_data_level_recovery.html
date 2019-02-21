@@ -150,8 +150,15 @@ outcomes or predictors. The names match the factor column names in
 
     <p>If this function is used in your package, it is a good idea to call
 <code><a href='enforce_new_data_novel_levels.html'>enforce_new_data_novel_levels()</a></code> first, as that will take care of any <em>new</em>
-levels. This will ensure that <code>new_data</code> factor columns can only have
-either exactly the right levels, or a subset of the correct levels.</p>
+levels if <code>drop_novel = TRUE</code>. This will ensure that <code>new_data</code> factor
+columns can only have either exactly the right levels, or a subset of
+the correct levels.</p>
+<p>If <code><a href='enforce_new_data_novel_levels.html'>enforce_new_data_novel_levels()</a></code> was not run, or <code>drop_novel = FALSE</code>,
+then <code>enforce_new_data_level_recovery()</code> follows the following heuristic:
+if any novel levels are detected, then the novel levels are moved to the
+end, and the remaining levels are reordered to match the order in
+<code>original_levels</code>. This only has an affect for ordered factors, but is a
+warning worth throwing.</p>
     
     <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
 
@@ -246,6 +253,27 @@ correct it automatically, with a warning.</p></li>
 #&gt;  9          6.7         2.5          5.8         1.8 virginica
 #&gt; 10          7.2         3.6          6.1         2.5 virginica
 #&gt; # … with 40 more rows</div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Novel levels and ordered factors</span>
+
+<span class='co'># Ideally, one would run enforce_new_data_novel_levels() before</span>
+<span class='co'># running the level recovery function to catch novel levels. If</span>
+<span class='co'># this is not the case, then the original levels take priority</span>
+<span class='co'># and then any "novel" levels are appended to the end in the order</span>
+<span class='co'># they appear</span>
+
+<span class='co'># df2 is:</span>
+<span class='co'># - missing level 'b'</span>
+<span class='co'># - has an additional level, 'd'</span>
+<span class='no'>df1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>ordered</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>)))
+<span class='no'>df2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>ordered</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"d"</span>, <span class='st'>"c"</span>, <span class='st'>"a"</span>), <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"d"</span>, <span class='st'>"c"</span>, <span class='st'>"a"</span>)))
+
+<span class='co'># 'b' is recovered with a warning</span>
+<span class='no'>df2_recovered</span> <span class='kw'>&lt;-</span> <span class='fu'>enforce_new_data_level_recovery</span>(<span class='no'>df2</span>, <span class='fu'><a href='get_levels.html'>get_levels</a></span>(<span class='no'>df1</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: The following original factor levels are missing for column, 'x', and have been restored: 'b'.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following novel levels were detected in 'x': 'd'. The order of the `original_levels` has been restored, and the novel levels have been moved to the end.</span></div><div class='input'>
+<span class='co'># 'd' is kept around, but is shifted to the end as the</span>
+<span class='co'># order of the original levels takes priority</span>
+<span class='no'>df2_recovered</span>$<span class='no'>x</span></div><div class='output co'>#&gt; [1] d c a
+#&gt; Levels: a &lt; b &lt; c &lt; d</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
