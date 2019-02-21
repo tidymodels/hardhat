@@ -79,16 +79,6 @@ validate_x_has_numeric_cols <- function(x) {
 }
 
 #' @rdname validation
-validate_y_univariate <- function(y) {
-
-  if (NCOL(y) > 1L) {
-    abort("`y` must be univariate for this model.")
-  }
-
-  invisible(y)
-}
-
-#' @rdname validation
 validate_recipes_available <- function() {
 
   if (!requireNamespace("recipes", quietly = TRUE)) {
