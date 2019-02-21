@@ -34,11 +34,11 @@ hardhat has three main goals:
 
 - Easily, consistently, and robustly preprocess data at fit time and prediction time with `mold()` and `forge()`.
 
-- Allow developers to create their own preprocessors by exporting much of the underlying infrastructure of `mold()` and `forge()`.
+- Provide one source of truth for common input validation functions, such as checking if new data at prediction time contains the same required columns used at fit time.
 
-- Provide extra utility functions for additional common tasks such as validating user input, adding intercept columns, and standardizing `predict()` output.
+- Provide extra utility functions for additional common tasks, such as adding intercept columns, standardizing `predict()` output, and extracting valuable class and factor level information from the predictors.
 
-The idea is to take as much of the burden around creating a good interface off the developer as possible, and instead let them focus on writing the core implementation of the model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of "expectations" around what any modeling function should return, and how they should interact with it.
+The idea is to reduce the burden of creating a good modeling interface as much as possible, and instead let the package developer focus on writing the core implementation of their new model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of "expectations" around what any modeling function should return, and how they should interact with it.
 
 ## Installation
 
