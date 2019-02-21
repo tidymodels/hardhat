@@ -56,7 +56,7 @@
 #' @export
 shrink <- function(preprocessor, new_data, outcomes = FALSE) {
 
-  new_data <- tibble::as_tibble(new_data)
+  new_data <- check_is_data_like(new_data)
 
   cols <- preprocessor$info$predictors$names
   validate_predictors(new_data, cols)
