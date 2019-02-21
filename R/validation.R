@@ -14,6 +14,8 @@
 #'
 #' @param outcomes Ideally, a data frame with 1 column.
 #'
+#' @template section-validation
+#'
 #' @details
 #'
 #' The easiest way to use this validation function is to supply it the

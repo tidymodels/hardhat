@@ -28,6 +28,27 @@ check - returns the following:
 The easiest way to use this validation function is to supply it the
 \code{$outcomes} element of the result of \code{\link[=mold]{mold()}}.
 }
+\section{Validation}{
+
+
+hardhat provides validation functions at three levels.
+\itemize{
+\item \code{check_*()}:  \emph{check a condition, and return a list}. The list
+always contains at least one element, \code{ok}, a logical that specifies if the
+check passed. Each check also has check specific elements in the returned
+list that can be used to construct meaningful error messages.
+\item \code{validate_*()}: \emph{check a condition, and error if it does not pass}. These
+functions call their corresponding check function, and
+then provide a default error message. If you, as a developer, want a
+different error message, then call the \code{check_*()} function yourself,
+and provide your own validation function.
+\item \code{enforce_*()}: \emph{check a condition, modify the input with a warning
+if the check fails, and return the modified input}. These functions are
+used when user input is incorrect in some non-critical way, and you can
+correct it automatically, with a warning.
+}
+}
+
 \examples{
 
 validate_outcomes_is_univariate(data.frame(x = 1))
