@@ -2,13 +2,17 @@
 #'
 #' @description
 #'
-#' The following validation checks are performed:
+#' validate - asserts the following:
 #'
-#' - `outcomes` must be a data frame
+#' - `outcomes` must have 1 column.
 #'
-#' - `outcomes` must have 1 column
+#' check - returns the following:
 #'
-#' @param outcomes A data frame with 1 column.
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `n_cols` A single numeric. The number of columns.
+#'
+#' @param outcomes Ideally, a data frame with 1 column.
 #'
 #' @details
 #'
@@ -17,24 +21,22 @@
 #'
 #' @examples
 #'
-#' validate_outcome_is_univariate(data.frame(x = 1))
+#' validate_outcomes_is_univariate(data.frame(x = 1))
 #'
 #' \dontrun{
-#' validate_outcome_is_univariate(mtcars)
+#' validate_outcomes_is_univariate(mtcars)
 #' }
 #'
 #' @family validation functions
 #' @export
-validate_outcome_is_univariate <- function(outcomes) {
+validate_outcomes_is_univariate <- function(outcomes) {
 
-  validate_outcome_is_data_frame(outcomes)
+  check <- check_outcomes_is_univariate(outcomes)
 
-  n_cols <- ncol(outcomes)
-
-  if (n_cols != 1L) {
+  if (!check$ok) {
 
     glubort(
-      "There must only be 1 outcome, not {n_cols}."
+      "There must only be 1 outcome, not {check$n_cols}."
     )
 
   }
@@ -42,13 +44,32 @@ validate_outcome_is_univariate <- function(outcomes) {
   invisible(outcomes)
 }
 
-validate_outcome_is_data_frame <- function(outcomes) {
+#' @rdname validate_outcomes_is_univariate
+#' @export
+check_outcomes_is_univariate <- function(outcomes) {
 
-  if (!is.data.frame(outcomes)) {
-    glubort(
-      "The outcome must be a data.frame, not a {class1(outcomes)}."
-    )
+  if (!rlang::is_vector(outcomes)) {
+    glubort("`outcomes` must be a vector, not a {class1(outcomes)}.")
   }
 
-  invisible(outcomes)
+  n_cols <- NCOL(outcomes)
+
+  ok <- (n_cols == 1L)
+
+  check <- check_list(ok = ok, n_cols = n_cols)
+
+  check
 }
+
+# ------------------------------------------------------------------------------
+
+# ok = bool
+# ... = extra info when not ok
+check_list <- function(ok = TRUE, ...) {
+
+  validate_is_bool(ok, "ok")
+  elems <- rlang::list2(...)
+
+  c(list(ok = ok), elems)
+}
+
