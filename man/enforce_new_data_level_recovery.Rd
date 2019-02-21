@@ -7,11 +7,11 @@
 enforce_new_data_level_recovery(new_data, original_levels)
 }
 \arguments{
-\item{new_data}{A data frame of new predictors and maybe outcomes.}
+\item{new_data}{A data frame of new predictors and possibly outcomes.}
 
 \item{original_levels}{A named list of the original levels of either the
-outcomes or predictors. These are stored in the preprocessor slots
-\code{$predictors$levels} and \code{$outcomes$levels}.}
+outcomes or predictors. The names match the factor column names in
+\code{new_data}, and the values are character vectors of the required levels.}
 }
 \description{
 A factor column of \code{new_data} might have a subset of the original factor
@@ -19,8 +19,63 @@ levels for some reason. This function checks for that, and recodes the
 new factor to have the original levels, with a warning.
 }
 \details{
-Note that \emph{new} factor levels have already been taken care of by now, so
-\code{new_data} factor columns can only have either exactly the right levels, or
-a subset of the correct levels.
+If this function is used in your package, it is a good idea to call
+\code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}} first, as that will take care of any \emph{new}
+levels. This will ensure that \code{new_data} factor columns can only have
+either exactly the right levels, or a subset of the correct levels.
 }
-\keyword{internal}
+\section{Validation}{
+
+
+hardhat provides validation functions at three levels.
+\itemize{
+\item \code{check_*()}:  \emph{check a condition, and return a list}. The list
+always contains at least one element, \code{ok}, a logical that specifies if the
+check passed. Each check also has check specific elements in the returned
+list that can be used to construct meaningful error messages.
+\item \code{validate_*()}: \emph{check a condition, and error if it does not pass}. These
+functions call their corresponding check function, and
+then provide a default error message. If you, as a developer, want a
+different error message, then call the \code{check_*()} function yourself,
+and provide your own validation function.
+\item \code{enforce_*()}: \emph{check a condition, modify the input with a warning
+if the check fails, and return the modified input}. These functions are
+used when user input is incorrect in some non-critical way, and you can
+correct it automatically, with a warning.
+}
+}
+
+\examples{
+
+# ---------------------------------------------------------------------------
+# Setup
+
+iris <- tibble::as_tibble(iris)
+train <- iris[1:100,]
+test <- iris[101:150,]
+
+# ---------------------------------------------------------------------------
+# Use with get_levels()
+
+# If rolling your package, get_levels() can be useful alongside this check
+original_levels <- get_levels(train)
+
+# All good!
+enforce_new_data_level_recovery(test, original_levels)
+
+# ---------------------------------------------------------------------------
+# Internally, forge() uses this check like so:
+
+x <- mold(Sepal.Length ~ Species, train)
+
+# No problems here!
+enforce_new_data_level_recovery(test, x$preprocessor$info$predictors$levels)
+
+# Missing 2 levels
+bad_test <- test
+bad_test$Species <- droplevels(bad_test$Species)
+
+# Restores the levels with a warning
+enforce_new_data_level_recovery(bad_test, x$preprocessor$info$predictors$levels)
+
+}

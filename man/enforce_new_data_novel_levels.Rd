@@ -7,16 +7,68 @@
 enforce_new_data_novel_levels(new_data, original_levels)
 }
 \arguments{
-\item{new_data}{A data frame of new predictors and maybe outcomes.}
+\item{new_data}{A data frame of new predictors and possibly outcomes.}
 
 \item{original_levels}{A named list of the original levels of either the
-outcomes or predictors. These are stored in the preprocessor slots
-\code{$predictors$levels} and \code{$outcomes$levels}.}
+outcomes or predictors. The names match the factor column names in
+\code{new_data}, and the values are character vectors of the required levels.}
 }
 \description{
 A factor column of \code{new_data} might have \emph{new} factor levels when compared
 to the original levels used in training. These new levels are undefined, and
-are caught when preprocessing the \code{new_data} and are converted to \code{NA} with
+are caught when preprocessing the \code{new_data} and converted to \code{NA} with
 a warning.
 }
-\keyword{internal}
+\section{Validation}{
+
+
+hardhat provides validation functions at three levels.
+\itemize{
+\item \code{check_*()}:  \emph{check a condition, and return a list}. The list
+always contains at least one element, \code{ok}, a logical that specifies if the
+check passed. Each check also has check specific elements in the returned
+list that can be used to construct meaningful error messages.
+\item \code{validate_*()}: \emph{check a condition, and error if it does not pass}. These
+functions call their corresponding check function, and
+then provide a default error message. If you, as a developer, want a
+different error message, then call the \code{check_*()} function yourself,
+and provide your own validation function.
+\item \code{enforce_*()}: \emph{check a condition, modify the input with a warning
+if the check fails, and return the modified input}. These functions are
+used when user input is incorrect in some non-critical way, and you can
+correct it automatically, with a warning.
+}
+}
+
+\examples{
+
+# ---------------------------------------------------------------------------
+# Setup
+
+iris <- tibble::as_tibble(iris)
+train <- iris[1:75,]
+test <- iris[76:150,]
+
+# ---------------------------------------------------------------------------
+# Use with get_levels()
+
+# If rolling your package, get_levels() can be useful alongside this check
+original_levels <- get_levels(train)
+
+# All good!
+enforce_new_data_novel_levels(test, original_levels)
+
+# New level! Coerced to NA
+bad_test <- test
+
+bad_test$Species <- factor(
+  gsub("versicolor", "new_level", bad_test$Species),
+  levels = c("new_level", levels(test$Species))
+)
+
+levels(bad_test$Species)
+
+# 'new_level' is forced to NA
+enforce_new_data_novel_levels(bad_test, original_levels)
+
+}

@@ -1,21 +1,60 @@
-
 #' Recover original factor levels
 #'
 #' A factor column of `new_data` might have a subset of the original factor
 #' levels for some reason. This function checks for that, and recodes the
 #' new factor to have the original levels, with a warning.
 #'
-#' Note that _new_ factor levels have already been taken care of by now, so
-#' `new_data` factor columns can only have either exactly the right levels, or
-#' a subset of the correct levels.
+#' If this function is used in your package, it is a good idea to call
+#' [enforce_new_data_novel_levels()] first, as that will take care of any _new_
+#' levels. This will ensure that `new_data` factor columns can only have
+#' either exactly the right levels, or a subset of the correct levels.
 #'
-#' @param new_data A data frame of new predictors and maybe outcomes.
+#' @param new_data A data frame of new predictors and possibly outcomes.
+#'
 #' @param original_levels A named list of the original levels of either the
-#' outcomes or predictors. These are stored in the preprocessor slots
-#' `$predictors$levels` and `$outcomes$levels`.
+#' outcomes or predictors. The names match the factor column names in
+#' `new_data`, and the values are character vectors of the required levels.
 #'
-#' @keywords internal
+#' @template section-validation
+#'
+#' @examples
+#'
+#' # ---------------------------------------------------------------------------
+#' # Setup
+#'
+#' iris <- tibble::as_tibble(iris)
+#' train <- iris[1:100,]
+#' test <- iris[101:150,]
+#'
+#' # ---------------------------------------------------------------------------
+#' # Use with get_levels()
+#'
+#' # If rolling your package, get_levels() can be useful alongside this check
+#' original_levels <- get_levels(train)
+#'
+#' # All good!
+#' enforce_new_data_level_recovery(test, original_levels)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Internally, forge() uses this check like so:
+#'
+#' x <- mold(Sepal.Length ~ Species, train)
+#'
+#' # No problems here!
+#' enforce_new_data_level_recovery(test, x$preprocessor$info$predictors$levels)
+#'
+#' # Missing 2 levels
+#' bad_test <- test
+#' bad_test$Species <- droplevels(bad_test$Species)
+#'
+#' # Restores the levels with a warning
+#' enforce_new_data_level_recovery(bad_test, x$preprocessor$info$predictors$levels)
+#'
+#' @export
 enforce_new_data_level_recovery <- function(new_data, original_levels) {
+
+  new_data <- check_is_data_like(new_data)
+  validate_levels_list(original_levels, "original_levels")
 
   required_column_names <- names(original_levels)
 
@@ -84,17 +123,55 @@ enforce_new_data_level_recovery <- function(new_data, original_levels) {
   new_data
 }
 
+# ------------------------------------------------------------------------------
+
 #' Check for new factor levels
 #'
 #' A factor column of `new_data` might have _new_ factor levels when compared
 #' to the original levels used in training. These new levels are undefined, and
-#' are caught when preprocessing the `new_data` and are converted to `NA` with
+#' are caught when preprocessing the `new_data` and converted to `NA` with
 #' a warning.
 #'
 #' @inheritParams enforce_new_data_level_recovery
 #'
-#' @keywords internal
+#' @template section-validation
+#'
+#' @examples
+#'
+#' # ---------------------------------------------------------------------------
+#' # Setup
+#'
+#' iris <- tibble::as_tibble(iris)
+#' train <- iris[1:75,]
+#' test <- iris[76:150,]
+#'
+#' # ---------------------------------------------------------------------------
+#' # Use with get_levels()
+#'
+#' # If rolling your package, get_levels() can be useful alongside this check
+#' original_levels <- get_levels(train)
+#'
+#' # All good!
+#' enforce_new_data_novel_levels(test, original_levels)
+#'
+#' # New level! Coerced to NA
+#' bad_test <- test
+#'
+#' bad_test$Species <- factor(
+#'   gsub("versicolor", "new_level", bad_test$Species),
+#'   levels = c("new_level", levels(test$Species))
+#' )
+#'
+#' levels(bad_test$Species)
+#'
+#' # 'new_level' is forced to NA
+#' enforce_new_data_novel_levels(bad_test, original_levels)
+#'
+#' @export
 enforce_new_data_novel_levels <- function(new_data, original_levels) {
+
+  new_data <- check_is_data_like(new_data)
+  validate_levels_list(original_levels, "original_levels")
 
   required_column_names <- names(original_levels)
 
