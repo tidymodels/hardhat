@@ -285,26 +285,32 @@ test_that("missing ordered factor levels are handled correctly", {
     f = ordered(letters[1:4])
   )
 
+  x <- mold(y ~ f, dat, indicators = FALSE)
+
   # Ordered - strictly wrong order
+  # Nothing happens!
   new <- data.frame(
     y = 1:2,
     f = ordered(letters[1:4], levels = rev(letters[1:4]))
+  )
+
+  expect_warning(
+    xx <- forge(x$preprocessor, new),
+    NA
+  )
+
+  # Currently expected that
+  # enforce_new_data_level_recovery()
+  # only checks for missing or new levels, not wrong order
+  expect_equal(
+    levels(xx$predictors$f),
+    rev(letters[1:4])
   )
 
   # Ordered - missing levels
   new2 <- data.frame(
     y = 1:3,
     f = ordered(letters[1:3], levels = rev(letters[1:3]))
-  )
-
-  x <- mold(y ~ f, dat)
-
-  expect_warning(
-    forge(x$preprocessor, new),
-    glue::glue(
-      "Column, 'f', is an ordered factor, ",
-      "but the levels in `new_data` are misordered and have been reordered."
-    )
   )
 
   expect_warning(

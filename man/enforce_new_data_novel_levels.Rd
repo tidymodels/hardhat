@@ -4,7 +4,8 @@
 \alias{enforce_new_data_novel_levels}
 \title{Check for new factor levels}
 \usage{
-enforce_new_data_novel_levels(new_data, original_levels)
+enforce_new_data_novel_levels(new_data, original_levels,
+  drop_novel = TRUE)
 }
 \arguments{
 \item{new_data}{A data frame of new predictors and possibly outcomes.}
@@ -12,6 +13,11 @@ enforce_new_data_novel_levels(new_data, original_levels)
 \item{original_levels}{A named list of the original levels of either the
 outcomes or predictors. The names match the factor column names in
 \code{new_data}, and the values are character vectors of the required levels.}
+
+\item{drop_novel}{A logical. Should novel levels be dropped? If \code{TRUE}, a
+warning is thrown if novel levels are detected and they are coerced to \code{NA}.
+If \code{FALSE}, a warning is still thrown for new levels, but they are
+left unchanged.}
 }
 \description{
 A factor column of \code{new_data} might have \emph{new} factor levels when compared
@@ -70,6 +76,9 @@ levels(bad_test$Species)
 
 # 'new_level' is forced to NA
 enforce_new_data_novel_levels(bad_test, original_levels)
+
+# Warn about 'new_level' but don't force it to NA
+enforce_new_data_novel_levels(bad_test, original_levels, drop_novel = FALSE)
 
 }
 \seealso{

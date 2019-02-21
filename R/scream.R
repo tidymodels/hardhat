@@ -5,17 +5,18 @@
 #' `scream()` performs a number of validation checks on `new_data`, and yells
 #' loudly if anything is wrong. `scream()` performs the following validation:
 #'
-#' - Checks that the class of each required predictor in `new_data` is the same
-#' as the class used during training.
+#' - [validate_new_data_classes()] - Checks that the class of each
+#' required predictor in `new_data` is the same as the class used
+#' during training.
 #'
-#' - Checks that all `new_data` factor columns don't have any _new_ levels
-#' when compared with the original data used in training. If there are new
-#' levels, they are replaced with `NA` values and a warning is
-#' issued.
+#' - [enforce_new_data_novel_levels()] - Checks that all `new_data` factor
+#' columns don't have any _new_ levels when compared with the original data
+#' used in training. If there are new levels, a warning is issued and
+#' if `drop_novel = TRUE` then they are coerced to `NA`.
 #'
-#' - Checks that all `new_data` factor columns aren't missing any factor levels
-#' when compared with the original data used in training. If there are missing
-#' levels (or misordered levels for ordered factors), then they are restored
+#' - [enforce_new_data_level_recovery()] -  Checks that all `new_data` factor
+#' columns aren't missing any factor levels when compared with the original data
+#' used in training. If there are missing levels, then they are restored
 #' and a warning is issued.
 #'
 #' @details
@@ -34,6 +35,8 @@
 #' [shrink()] right before it as there are no checks in `scream()` that ensure
 #' that all of the required column names actually exist in `new_data`. Those
 #' checks exist in `shrink()`.
+#'
+#' @inheritParams enforce_new_data_novel_levels
 #'
 #' @param preprocessor A `"preprocessor"`.
 #'
@@ -80,7 +83,7 @@
 #' }
 #'
 #' @export
-scream <- function(preprocessor, new_data, outcomes = FALSE) {
+scream <- function(preprocessor, new_data, outcomes = FALSE, drop_novel = TRUE) {
 
   new_data <- tibble::as_tibble(new_data)
 
@@ -89,7 +92,7 @@ scream <- function(preprocessor, new_data, outcomes = FALSE) {
 
   validate_new_data_classes(new_data, original_predictor_classes)
 
-  new_data <- enforce_new_data_novel_levels(new_data, original_predictor_levels)
+  new_data <- enforce_new_data_novel_levels(new_data, original_predictor_levels, drop_novel)
   new_data <- enforce_new_data_level_recovery(new_data, original_predictor_levels)
 
   if (outcomes) {
@@ -99,7 +102,7 @@ scream <- function(preprocessor, new_data, outcomes = FALSE) {
 
     validate_new_data_classes(new_data, original_outcome_classes)
 
-    new_data <- enforce_new_data_novel_levels(new_data, original_outcome_levels)
+    new_data <- enforce_new_data_novel_levels(new_data, original_outcome_levels, drop_novel)
     new_data <- enforce_new_data_level_recovery(new_data, original_outcome_levels)
 
   }

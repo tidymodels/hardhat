@@ -4,7 +4,7 @@
 \alias{scream}
 \title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
-scream(preprocessor, new_data, outcomes = FALSE)
+scream(preprocessor, new_data, outcomes = FALSE, drop_novel = TRUE)
 }
 \arguments{
 \item{preprocessor}{A \code{"preprocessor"}.}
@@ -14,6 +14,11 @@ of. This should contain the predictors, and potentially the outcomes if
 \code{outcomes = TRUE}.}
 
 \item{outcomes}{A logical. Should the outcomes be checked as well?}
+
+\item{drop_novel}{A logical. Should novel levels be dropped? If \code{TRUE}, a
+warning is thrown if novel levels are detected and they are coerced to \code{NA}.
+If \code{FALSE}, a warning is still thrown for new levels, but they are
+left unchanged.}
 }
 \value{
 A tibble containing the required predictors (and potentially the
@@ -23,15 +28,16 @@ outcomes) after any required structural modifications have been made.
 \code{scream()} performs a number of validation checks on \code{new_data}, and yells
 loudly if anything is wrong. \code{scream()} performs the following validation:
 \itemize{
-\item Checks that the class of each required predictor in \code{new_data} is the same
-as the class used during training.
-\item Checks that all \code{new_data} factor columns don't have any \emph{new} levels
-when compared with the original data used in training. If there are new
-levels, they are replaced with \code{NA} values and a warning is
-issued.
-\item Checks that all \code{new_data} factor columns aren't missing any factor levels
-when compared with the original data used in training. If there are missing
-levels (or misordered levels for ordered factors), then they are restored
+\item \code{\link[=validate_new_data_classes]{validate_new_data_classes()}} - Checks that the class of each
+required predictor in \code{new_data} is the same as the class used
+during training.
+\item \code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}} - Checks that all \code{new_data} factor
+columns don't have any \emph{new} levels when compared with the original data
+used in training. If there are new levels, a warning is issued and
+if \code{drop_novel = TRUE} then they are coerced to \code{NA}.
+\item \code{\link[=enforce_new_data_level_recovery]{enforce_new_data_level_recovery()}} -  Checks that all \code{new_data} factor
+columns aren't missing any factor levels when compared with the original data
+used in training. If there are missing levels, then they are restored
 and a warning is issued.
 }
 }

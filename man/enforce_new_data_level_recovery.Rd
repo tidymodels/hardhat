@@ -21,8 +21,16 @@ new factor to have the original levels, with a warning.
 \details{
 If this function is used in your package, it is a good idea to call
 \code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}} first, as that will take care of any \emph{new}
-levels. This will ensure that \code{new_data} factor columns can only have
-either exactly the right levels, or a subset of the correct levels.
+levels if \code{drop_novel = TRUE}. This will ensure that \code{new_data} factor
+columns can only have either exactly the right levels, or a subset of
+the correct levels.
+
+If \code{enforce_new_data_novel_levels()} was not run, or \code{drop_novel = FALSE},
+then \code{enforce_new_data_level_recovery()} follows the following heuristic:
+if any novel levels are detected, then the novel levels are moved to the
+end, and the remaining levels are reordered to match the order in
+\code{original_levels}. This only has an affect for ordered factors, but is a
+warning worth throwing.
 }
 \section{Validation}{
 
@@ -77,6 +85,28 @@ bad_test$Species <- droplevels(bad_test$Species)
 
 # Restores the levels with a warning
 enforce_new_data_level_recovery(bad_test, x$preprocessor$info$predictors$levels)
+
+# ---------------------------------------------------------------------------
+# Novel levels and ordered factors
+
+# Ideally, one would run enforce_new_data_novel_levels() before
+# running the level recovery function to catch novel levels. If
+# this is not the case, then the original levels take priority
+# and then any "novel" levels are appended to the end in the order
+# they appear
+
+# df2 is:
+# - missing level 'b'
+# - has an additional level, 'd'
+df1 <- data.frame(x = ordered(c("a", "b", "c")))
+df2 <- data.frame(x = ordered(c("d", "c", "a"), levels = c("d", "c", "a")))
+
+# 'b' is recovered with a warning
+df2_recovered <- enforce_new_data_level_recovery(df2, get_levels(df1))
+
+# 'd' is kept around, but is shifted to the end as the
+# order of the original levels takes priority
+df2_recovered$x
 
 }
 \seealso{
