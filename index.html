@@ -98,10 +98,10 @@
 <p>hardhat has three main goals:</p>
 <ul>
 <li><p>Easily, consistently, and robustly preprocess data at fit time and prediction time with <code><a href="reference/mold.html">mold()</a></code> and <code><a href="reference/forge.html">forge()</a></code>.</p></li>
-<li><p>Allow developers to create their own preprocessors by exporting much of the underlying infrastructure of <code><a href="reference/mold.html">mold()</a></code> and <code><a href="reference/forge.html">forge()</a></code>.</p></li>
-<li><p>Provide extra utility functions for additional common tasks such as validating user input, adding intercept columns, and standardizing <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> output.</p></li>
+<li><p>Provide one source of truth for common input validation functions, such as checking if new data at prediction time contains the same required columns used at fit time.</p></li>
+<li><p>Provide extra utility functions for additional common tasks, such as adding intercept columns, standardizing <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> output, and extracting valuable class and factor level information from the predictors.</p></li>
 </ul>
-<p>The idea is to take as much of the burden around creating a good interface off the developer as possible, and instead let them focus on writing the core implementation of the model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of “expectations” around what any modeling function should return, and how they should interact with it.</p>
+<p>The idea is to reduce the burden of creating a good modeling interface as much as possible, and instead let the package developer focus on writing the core implementation of their new model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of “expectations” around what any modeling function should return, and how they should interact with it.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
