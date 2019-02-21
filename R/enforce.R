@@ -98,10 +98,7 @@ enforce_new_data_level_recovery <- function(new_data, original_levels) {
 
       if (!strictly_misordered) {
 
-        missing_levels <- glue::glue_collapse(
-          glue::single_quote(missing_levels),
-          sep = ", "
-        )
+        missing_levels <- glue_quote_collapse(missing_levels)
 
         rlang::warn(glue::glue(
           "The following original factor levels are missing ",
@@ -188,10 +185,7 @@ enforce_new_data_novel_levels <- function(new_data, original_levels) {
 
     if (length(unseen_levels) > 0) {
 
-      unseen_levels <- glue::glue_collapse(
-        glue::single_quote(unseen_levels),
-        sep = ", "
-      )
+      unseen_levels <- glue_quote_collapse(unseen_levels)
 
       rlang::warn(glue(
         "The following factor levels are new ",

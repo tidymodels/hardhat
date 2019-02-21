@@ -365,10 +365,7 @@ validate_no_factors_in_functions <- function(.formula, .factor_names) {
 
   if (!ok) {
 
-    bad_original_cols <- glue::glue_collapse(
-      glue::single_quote(bad_original_cols),
-      ", "
-    )
+    bad_original_cols <- glue_quote_collapse(bad_original_cols)
 
     glubort(
       "Functions involving factors have been detected on the ",
@@ -428,10 +425,7 @@ validate_no_factors_in_interactions <- function(.formula, .factor_names) {
 
   if (!ok) {
 
-    bad_original_cols <- glue::glue_collapse(
-      glue::single_quote(bad_original_cols),
-      ", "
-    )
+    bad_original_cols <- glue_quote_collapse(bad_original_cols)
 
     glubort(
       "Interaction terms involving factors have been detected on the ",
@@ -504,7 +498,7 @@ validate_no_interactions <- function(.formula) {
     return(invisible(.formula))
   }
 
-  bad_terms <- glue::glue_collapse(glue::single_quote(bad_terms), ", ")
+  bad_terms <- glue_quote_collapse(bad_terms)
 
   glubort(
     "Interaction terms cannot be specified on the LHS of `formula`. ",

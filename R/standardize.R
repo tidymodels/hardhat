@@ -102,7 +102,7 @@ validate_has_known_outcome_types <- function(y) {
 
     not_known <- which(!known)
     not_known <- colnames(y)[not_known]
-    not_known <- glue::glue_collapse(glue::single_quote(not_known), ", ")
+    not_known <- glue_quote_collapse(not_known)
 
     glubort(
       "Not all columns of `y` are known outcome types. ",
