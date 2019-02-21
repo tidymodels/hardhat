@@ -352,6 +352,103 @@ check_new_data_classes <- function(new_data, original_classes) {
 
 # ------------------------------------------------------------------------------
 
+#' Ensure that predictions have the correct number of rows
+#'
+#' @description
+#'
+#' validate - asserts the following:
+#'
+#' - The number of rows in `.pred` must be the same as the number
+#' of rows in `new_data`.
+#'
+#' - `.pred` must be a data frame.
+#'
+#' check - returns the following:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `n_new_data` A single numeric. The number of rows in `new_data`.
+#'
+#' - `n_pred` A single numeric. The number of rows in `.pred`.
+#'
+#' @param .pred A tibble. The predictions to return from any prediction
+#' `type`. This is often created using one of the spruce functions, like
+#' [spruce_response()].
+#'
+#' @param new_data A data frame of new predictors and possibly outcomes.
+#'
+#' @details
+#'
+#' This validation function is one that is more developer focused rather than
+#' user focused. It is a final check to be used right before a value is
+#' returned from your specific `predict()` method, and is mainly a "good
+#' practice" sanity check to ensure that your prediction engine always returns
+#' the same number of rows as `new_data`, which is one of the modeling
+#' conventions this package tries to promote.
+#'
+#' @template section-validation
+#'
+#' @examples
+#' # Say new_data has 5 rows
+#' new_data <- mtcars[1:5,]
+#'
+#' # And somehow you generate predictions
+#' # for those 5 rows
+#' .pred_vec <- 1:5
+#'
+#' # Then you use `spruce_response()` to clean
+#' # up these numeric predictions
+#' .pred <- spruce_response(.pred_vec)
+#'
+#' .pred
+#'
+#' # Use this check to ensure that
+#' # the number of rows or .pred match new_data
+#' check_prediction_size(.pred, new_data)
+#'
+#' # An informative error message is thrown
+#' # if the rows are different
+#' \dontrun{
+#' validate_prediction_size(spruce_response(1:4), new_data)
+#' }
+#'
+#' @family validation functions
+#' @export
+validate_prediction_size <- function(.pred, new_data) {
+
+  check <- check_prediction_size(.pred, new_data)
+
+  if(!check$ok) {
+    glubort(
+      "The number of rows in `new_data` ({check$n_new_data}) must match the ",
+      "number of rows in `.pred` ({check$n_pred})."
+    )
+  }
+
+  invisible(.pred)
+}
+
+#' @rdname validate_prediction_size
+#' @export
+check_prediction_size <- function(.pred, new_data) {
+
+  new_data <- check_is_data_like(new_data)
+
+  if (!is.data.frame(.pred)) {
+    glubort("`.pred` must be a data.frame.")
+  }
+
+  n_new_data <- nrow(new_data)
+  n_pred <- nrow(.pred)
+
+  ok <- n_pred == n_new_data
+
+  check_list(ok = ok, n_new_data = n_new_data, n_pred = n_pred)
+
+}
+
+# ------------------------------------------------------------------------------
+
 # ok = bool
 # ... = extra info when not ok
 check_list <- function(ok = TRUE, ...) {

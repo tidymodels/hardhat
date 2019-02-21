@@ -7,7 +7,6 @@
 \alias{validate_has_unique_column_names}
 \alias{validate_x_has_numeric_cols}
 \alias{validate_recipes_available}
-\alias{validate_prediction_size}
 \alias{validate_intercept}
 \alias{validate_formula_has_intercept}
 \title{Validation}
@@ -21,8 +20,6 @@ validate_has_unique_column_names(x, x_nm)
 validate_x_has_numeric_cols(x)
 
 validate_recipes_available()
-
-validate_prediction_size(.pred, new_data)
 
 validate_intercept(intercept)
 

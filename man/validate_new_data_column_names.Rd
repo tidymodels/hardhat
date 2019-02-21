@@ -111,6 +111,7 @@ forge(processed$preprocessor, test, outcomes = TRUE)
 }
 \seealso{
 Other validation functions: \code{\link{validate_new_data_classes}},
-  \code{\link{validate_outcomes_is_univariate}}
+  \code{\link{validate_outcomes_is_univariate}},
+  \code{\link{validate_prediction_size}}
 }
 \concept{validation functions}

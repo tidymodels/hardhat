@@ -93,22 +93,6 @@ validate_recipes_available <- function() {
 }
 
 #' @rdname validation
-validate_prediction_size <- function(.pred, new_data) {
-
-  n_new <- nrow(new_data)
-  n_pred <- nrow(.pred)
-
-  if(n_pred != n_new) {
-    glubort(
-      "The number of rows in `new_data` ({n_new}) must match the ",
-      "number of rows in `.pred` ({n_pred})."
-    )
-  }
-
-  invisible(.pred)
-}
-
-#' @rdname validation
 validate_intercept <- function(intercept) {
 
   if (!is.logical(intercept)) {

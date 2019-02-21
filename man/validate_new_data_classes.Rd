@@ -93,6 +93,7 @@ validate_new_data_classes(bad_test, original_classes)
 }
 \seealso{
 Other validation functions: \code{\link{validate_new_data_column_names}},
-  \code{\link{validate_outcomes_is_univariate}}
+  \code{\link{validate_outcomes_is_univariate}},
+  \code{\link{validate_prediction_size}}
 }
 \concept{validation functions}
