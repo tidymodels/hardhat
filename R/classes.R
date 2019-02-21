@@ -27,6 +27,14 @@
 #'
 #' get_data_classes(as.matrix(mtcars))
 #'
+#' # Unlike .MFclass(), the full class
+#' # vector is returned
+#' x <- data.frame(col = ordered(c("a", "b")))
+#'
+#' .MFclass(x$col)
+#'
+#' get_data_classes(x)
+#'
 #' @export
 get_data_classes <- function(x) {
 
