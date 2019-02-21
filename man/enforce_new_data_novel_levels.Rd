@@ -72,3 +72,7 @@ levels(bad_test$Species)
 enforce_new_data_novel_levels(bad_test, original_levels)
 
 }
+\seealso{
+Other enforce functions: \code{\link{enforce_new_data_level_recovery}}
+}
+\concept{enforce functions}

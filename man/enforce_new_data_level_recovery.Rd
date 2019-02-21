@@ -79,3 +79,7 @@ bad_test$Species <- droplevels(bad_test$Species)
 enforce_new_data_level_recovery(bad_test, x$preprocessor$info$predictors$levels)
 
 }
+\seealso{
+Other enforce functions: \code{\link{enforce_new_data_novel_levels}}
+}
+\concept{enforce functions}

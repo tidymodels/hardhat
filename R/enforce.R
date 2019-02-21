@@ -50,6 +50,7 @@
 #' # Restores the levels with a warning
 #' enforce_new_data_level_recovery(bad_test, x$preprocessor$info$predictors$levels)
 #'
+#' @family enforce functions
 #' @export
 enforce_new_data_level_recovery <- function(new_data, original_levels) {
 
@@ -167,6 +168,7 @@ enforce_new_data_level_recovery <- function(new_data, original_levels) {
 #' # 'new_level' is forced to NA
 #' enforce_new_data_novel_levels(bad_test, original_levels)
 #'
+#' @family enforce functions
 #' @export
 enforce_new_data_novel_levels <- function(new_data, original_levels) {
 
