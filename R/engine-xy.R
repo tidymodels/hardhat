@@ -6,23 +6,22 @@ new_xy_engine <- function(mold,
                           subclass = character()) {
 
   if (rlang::is_missing(mold)) {
-    glubort(
-      "`mold` must be supplied in the form: ",
-      "list(clean = <function>, process = <function>)."
-    )
+    abort_no_mold()
   }
 
   if (rlang::is_missing(forge)) {
-    glubort(
-      "`forge` must be supplied in the form: ",
-      "list(clean = <function>, process = <function>)."
-    )
+    abort_no_forge()
   }
 
   mold <- check_mold_xy(mold)
   forge <- check_forge(forge)
 
-  validate_mold_xy_args(mold)
+  validate_mold_args(
+    mold = mold,
+    required_clean_args = c("engine", "x", "y"),
+    required_process_args = c("engine", "x", "y")
+  )
+
   validate_forge_args(forge)
 
   new_engine(
@@ -156,6 +155,7 @@ forge_xy_default_clean <- function(engine, new_data, outcomes) {
 
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
+  validate_is_bool(outcomes)
 
   new_data <- shrink2(engine, new_data, outcomes)
   new_data <- scream2(engine, new_data, outcomes)
@@ -249,9 +249,8 @@ get_default_mold_xy_clean <- function() {
 
 }
 
-validate_mold_xy_args <- function(mold) {
+validate_mold_args <- function(mold, required_clean_args, required_process_args) {
 
-  required_clean_args <- c("engine", "x", "y")
   actual_clean_args <- rlang::fn_fmls_names(mold$clean)
 
   if (!identical(actual_clean_args, required_clean_args)) {
@@ -262,7 +261,6 @@ validate_mold_xy_args <- function(mold) {
     )
   }
 
-  required_process_args <- c("engine", "x", "y")
   actual_process_args <- rlang::fn_fmls_names(mold$process)
 
   if (!identical(required_process_args, actual_process_args)) {
@@ -274,7 +272,9 @@ validate_mold_xy_args <- function(mold) {
   }
 
   invisible(mold)
+
 }
+
 
 # ------------------------------------------------------------------------------
 
@@ -325,4 +325,18 @@ validate_forge_args <- function(forge) {
   }
 
   invisible(forge)
+}
+
+abort_no_mold <- function() {
+  glubort(
+    "`mold` must be supplied in the form: ",
+    "list(clean = <function>, process = <function>)."
+  )
+}
+
+abort_no_forge <- function() {
+  glubort(
+    "`forge` must be supplied in the form: ",
+    "list(clean = <function>, process = <function>)."
+  )
 }
