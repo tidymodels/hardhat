@@ -35,6 +35,16 @@ new_engine <- function(mold,
 
 # ------------------------------------------------------------------------------
 
+refresh_engine <- function(engine) {
+  UseMethod("refresh_engine")
+}
+
+refresh_engine.hardhat_engine <- function(engine) {
+  do.call(new_engine, as.list(engine))
+}
+
+# ------------------------------------------------------------------------------
+
 update_engine <- function(engine, ...) {
 
   changes <- rlang::list2(...)
@@ -58,7 +68,7 @@ update_engine <- function(engine, ...) {
     engine[[nm]] <- changes[[nm]]
   }
 
-  engine
+  refresh_engine(engine)
 }
 
 # ------------------------------------------------------------------------------

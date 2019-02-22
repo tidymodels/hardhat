@@ -38,6 +38,131 @@ new_xy_engine <- function(mold,
 
 }
 
+refresh_engine.xy_engine <- function(engine) {
+  do.call(new_xy_engine, as.list(engine))
+}
+
+# ------------------------------------------------------------------------------
+
+new_default_xy_engine <- function(intercept = FALSE,
+                                  info = NULL,
+                                  outcomes = NULL) {
+
+  mold <- get_mold_xy_default_function_set()
+  forge <- get_forge_xy_default_function_set()
+
+  new_xy_engine(
+    mold = mold,
+    forge = forge,
+    intercept = intercept,
+    info = info,
+    outcomes = outcomes,
+    subclass = "default_xy_engine"
+  )
+
+}
+
+refresh_engine.default_xy_engine <- function(engine) {
+  new_default_xy_engine(
+    intercept = engine$intercept,
+    info = engine$info,
+    outcomes = engine$outcomes
+  )
+}
+
+# ------------------------------------------------------------------------------
+
+get_mold_xy_default_function_set <- function() {
+  engine_function_set(mold_xy_default_clean, mold_xy_default_process)
+}
+
+# mold - xy - clean
+mold_xy_default_clean <- function(engine, x, y) {
+
+  c(engine, x) %<-% mold_xy_default_clean_predictors(engine, x)
+  c(engine, y) %<-% mold_xy_default_clean_outcomes(engine, y)
+
+  list(
+    engine = engine,
+    x = x,
+    y = y
+  )
+}
+
+mold_xy_default_clean_predictors <- function(engine, x) {
+  x <- tibble::as_tibble(x)
+  list(engine = engine, x = x)
+}
+
+mold_xy_default_clean_outcomes <- function(engine, y) {
+  y <- standardize(y)
+  list(engine = engine, y = y)
+}
+
+# mold - xy - process
+mold_xy_default_process <- function(engine, x, y) {
+
+  c(engine, predictors) %<-% mold_xy_default_process_predictors(engine, x)
+  c(engine, outcomes) %<-% mold_xy_default_process_outcomes(engine, y)
+
+  list(
+    engine = engine,
+    predictors = predictors,
+    outcomes = outcomes
+  )
+}
+
+mold_xy_default_process_predictors <- function(engine, x) {
+
+  x <- maybe_add_intercept_column(x, engine$intercept)
+
+  info <- predictors_info(
+    names = colnames(x),
+    classes = get_data_classes(x),
+    levels = get_levels(x)
+  )
+
+  list(
+    engine = engine,
+    predictors = list(
+      data = x,
+      info = info
+    )
+  )
+
+}
+
+mold_xy_default_process_outcomes <- function(engine, y) {
+
+  info <- outcomes_info(
+    names = colnames(y),
+    classes = get_data_classes(y),
+    levels = get_levels(y)
+  )
+
+  list(
+    engine = engine,
+    outcomes = list(
+      data = y,
+      info = info
+    )
+  )
+
+}
+
+# ------------------------------------------------------------------------------
+
+get_forge_xy_default_function_set <- function() {
+  engine_function_set(forge_xy_default_clean, forge_xy_default_process)
+}
+
+forge_xy_default_clean <- function(engine, new_data) {
+
+}
+
+forge_xy_default_process <- function(engine, new_data) {
+
+}
 
 # ------------------------------------------------------------------------------
 
