@@ -5,7 +5,6 @@ new_engine <- function(mold,
                        forge,
                        intercept = FALSE,
                        info = NULL,
-                       outcomes = NULL,
                        ...,
                        subclass = character()) {
 
@@ -13,14 +12,12 @@ new_engine <- function(mold,
   validate_is_function_set(forge)
   validate_is_bool(intercept)
   validate_is_info_list_or_null(info)
-  validate_is_bool_or_null(outcomes)
 
   elems <- list(
     mold = mold,
     forge = forge,
     intercept = intercept,
-    info = info,
-    outcomes = outcomes
+    info = info
   )
 
   new_elems <- list(...)

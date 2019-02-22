@@ -2,7 +2,6 @@ new_xy_engine <- function(mold,
                           forge,
                           intercept = FALSE,
                           info = NULL,
-                          outcomes = NULL,
                           ...,
                           subclass = character()) {
 
@@ -31,7 +30,6 @@ new_xy_engine <- function(mold,
     forge = forge,
     intercept = intercept,
     info = info,
-    outcomes = outcomes,
     ...,
     subclass = c(subclass, "xy_engine")
   )
@@ -45,8 +43,7 @@ refresh_engine.xy_engine <- function(engine) {
 # ------------------------------------------------------------------------------
 
 new_default_xy_engine <- function(intercept = FALSE,
-                                  info = NULL,
-                                  outcomes = NULL) {
+                                  info = NULL) {
 
   mold <- get_mold_xy_default_function_set()
   forge <- get_forge_xy_default_function_set()
@@ -56,7 +53,6 @@ new_default_xy_engine <- function(intercept = FALSE,
     forge = forge,
     intercept = intercept,
     info = info,
-    outcomes = outcomes,
     subclass = "default_xy_engine"
   )
 
@@ -65,8 +61,7 @@ new_default_xy_engine <- function(intercept = FALSE,
 refresh_engine.default_xy_engine <- function(engine) {
   new_default_xy_engine(
     intercept = engine$intercept,
-    info = engine$info,
-    outcomes = engine$outcomes
+    info = engine$info
   )
 }
 
@@ -126,7 +121,8 @@ mold_xy_default_process_predictors <- function(engine, x) {
     engine = engine,
     predictors = list(
       data = x,
-      info = info
+      info = info,
+      offset = NULL
     )
   )
 
@@ -156,11 +152,75 @@ get_forge_xy_default_function_set <- function() {
   engine_function_set(forge_xy_default_clean, forge_xy_default_process)
 }
 
-forge_xy_default_clean <- function(engine, new_data) {
+forge_xy_default_clean <- function(engine, new_data, outcomes) {
+
+  validate_is_new_data_like(new_data)
+  validate_has_unique_column_names(new_data, "new_data")
+
+  new_data <- shrink2(engine, new_data, outcomes)
+  new_data <- scream2(engine, new_data, outcomes)
+
+  list(
+    engine = engine,
+    new_data = new_data
+  )
 
 }
 
-forge_xy_default_process <- function(engine, new_data) {
+forge_xy_default_process <- function(engine, new_data, outcomes) {
+
+  c(engine, .predictors) %<-% forge_xy_default_process_predictors(engine, new_data)
+  c(engine, .outcomes) %<-% forge_xy_default_process_outcomes(engine, new_data, outcomes)
+
+  list(
+    engine = engine,
+    predictors = .predictors,
+    outcomes = .outcomes
+  )
+}
+
+forge_xy_default_process_predictors <- function(engine, new_data) {
+
+  original_names <- engine$info$predictors$names
+
+  .predictors <- new_data[, original_names, drop = FALSE]
+
+  .predictors <- maybe_add_intercept_column(.predictors, engine$intercept)
+
+  list(
+    engine = engine,
+    predictors = list(
+      data = .predictors,
+      offset = NULL
+    )
+  )
+
+}
+
+forge_xy_default_process_outcomes <- function(engine, new_data, outcomes) {
+
+  if (!outcomes) {
+
+    out <- list(
+      engine = engine,
+      outcomes = list(
+        data = NULL
+      )
+    )
+
+    return(out)
+  }
+
+  original_names <- engine$info$outcomes$names
+
+  .outcomes <- new_data[, original_names, drop = FALSE]
+
+  list(
+    engine = engine,
+    outcomes = list(
+      data = .outcomes
+    )
+  )
 
 }
 
@@ -242,7 +302,7 @@ get_default_forge_clean <- function() {
 
 validate_forge_args <- function(forge) {
 
-  required_args <- c("engine", "new_data")
+  required_args <- c("engine", "new_data", "outcomes")
 
   actual_clean_args <- rlang::fn_fmls_names(forge$clean)
 
