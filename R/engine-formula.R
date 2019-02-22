@@ -1,9 +1,9 @@
 new_formula_engine <- function(mold,
                                forge,
                                intercept = FALSE,
-                               indicators = TRUE,
                                info = NULL,
                                formula = NULL,
+                               indicators = TRUE,
                                ...,
                                subclass = character()) {
 
@@ -227,9 +227,6 @@ nuke_formula_environment <- function(formula) {
     env = rlang::empty_env()
   )
 }
-
-# ------------------------------------------------------------------------------
-
 
 # ------------------------------------------------------------------------------
 
