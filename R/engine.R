@@ -97,6 +97,38 @@ mold_outcomes_set <- function(data) {
 
 # ------------------------------------------------------------------------------
 
+info_lst <- function(predictors = predictors_info(),
+                     outcomes = outcomes_info()) {
+
+  list(
+    predictors = predictors,
+    outcomes = outcomes
+  )
+
+}
+
+predictors_info <- function(names = character(),
+                            classes = NULL,
+                            levels = NULL) {
+  list(
+    names = names,
+    classes = classes,
+    levels = levels
+  )
+}
+
+outcomes_info <- function(names = character(),
+                          classes = NULL,
+                          levels = NULL) {
+  list(
+    names = names,
+    classes = classes,
+    levels = levels
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
 
   # capture name first
@@ -166,3 +198,62 @@ validate_is_info_list_or_null <- function(.x, .x_nm) {
 
   invisible(.x)
 }
+
+
+validate_is_terms_info_list <- function(.x, .x_nm) {
+
+  validate_has_name(.x, .x_nm, "names")
+  validate_has_name(.x, .x_nm, "classes")
+  validate_has_name(.x, .x_nm, "levels")
+
+  validate_is_character(.x$names, glue("{.x_nm}$names"))
+  validate_classes_list(.x$classes, glue("{.x_nm}$classes"))
+  validate_levels_list(.x$levels, glue("{.x_nm}$levels"))
+
+  invisible(.x)
+}
+
+validate_has_name <- function(.x, .x_nm, .nm) {
+  if (!tibble::has_name(.x, .nm)) {
+    glubort("`{.x_nm}` must have an element named '{.nm}'.")
+  }
+  invisible(.x)
+}
+
+validate_is_character <- function(.x, .x_nm) {
+  validate_is(
+    .x,
+    rlang::is_character,
+    "character",
+    .x_nm
+  )
+}
+
+validate_levels_list <- function(lst, lst_nm) {
+
+  valid_levels_obj <- function(x) {
+
+    if (is.null(x)) {
+      return(TRUE)
+    }
+
+    if (!is.list(x)) {
+      return(FALSE)
+    }
+
+    ok <- vapply(x, rlang::is_character, logical(1))
+
+    all(ok)
+  }
+
+  validate_has_unique_names(lst, lst_nm)
+
+  if (!valid_levels_obj(lst)) {
+    glubort("`{lst_nm}` must be a list of character vectors, or `NULL`.")
+  }
+
+  invisible(lst)
+}
+
+# Just happen to be the same structure
+validate_classes_list <- validate_levels_list
