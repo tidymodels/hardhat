@@ -102,76 +102,21 @@
 #' forge(processed$preprocessor, test)
 #'
 #' @rdname forge-formula
-#' @export
-forge.terms_preprocessor <- function(preprocessor, new_data,
-                                     outcomes = FALSE, ...) {
+NULL
 
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
+# TODO fix this documentation
 
-  new_data <- shrink(preprocessor, new_data, outcomes)
-  new_data <- scream(preprocessor, new_data, outcomes)
+forge_impl.formula_engine <- function(engine, new_data, outcomes) {
 
-  .predictors <- forge_formula_predictors(preprocessor, new_data)
-  .outcomes <- forge_formula_outcomes(preprocessor, new_data, outcomes)
+  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
+  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
 
   forge_list(
-    predictors = .predictors$data,
-    outcomes = .outcomes$data,
-    offset = .predictors$offset
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    offset = predictors$offset
+    # extras = extras # maybe this would be useful?
   )
-
-}
-
-# ------------------------------------------------------------------------------
-
-forge_formula_predictors <- function(preprocessor, new_data) {
-
-  terms <- preprocessor$engine$predictors
-  terms <- alter_terms_environment(terms)
-  terms <- delete_response(terms)
-
-  framed <- model_frame(terms, new_data, preprocessor$info$predictors$levels)
-
-  .predictors <- model_matrix(
-    terms = framed$terms,
-    data = framed$data
-  )
-
-  if (!preprocessor$indicators) {
-    factor_names <- extract_original_factor_names(preprocessor$info$predictors$classes)
-    .predictors <- reattach_factor_columns(.predictors, new_data, factor_names)
-  }
-
-  .offset <- extract_offset(framed$data, framed$terms)
-
-  list(
-    data = .predictors,
-    offset = .offset
-  )
-
-}
-
-forge_formula_outcomes <- function(preprocessor, new_data, outcomes) {
-
-  if (!outcomes) {
-    .outcomes <- list(data = NULL)
-    return(.outcomes)
-  }
-
-  terms <- preprocessor$engine$outcomes
-  terms <- alter_terms_environment(terms)
-
-  framed <- model_frame(terms, new_data, preprocessor$info$outcomes$levels)
-
-  # Because model.matrix() does this for the RHS and we want
-  # to be consistent even though we are only going through
-  # model.frame()
-  .outcomes <- flatten_embedded_columns(framed$data)
-
-  list(data = .outcomes)
-
 }
 
 # ------------------------------------------------------------------------------

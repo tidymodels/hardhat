@@ -4,16 +4,16 @@
 \alias{shrink}
 \title{Subset only required columns}
 \usage{
-shrink(preprocessor, new_data, outcomes = FALSE)
+shrink(engine, new_data, outcomes = FALSE)
 }
 \arguments{
-\item{preprocessor}{A \code{"preprocessor"}.}
-
 \item{new_data}{A data frame at least containing the new predictors, and
 potentially the outcomes if \code{outcomes = TRUE}.}
 
 \item{outcomes}{A logical. Should the outcomes be included in the shrunk
 \code{new_data} output as well?}
+
+\item{preprocessor}{A \code{"preprocessor"}.}
 }
 \value{
 A tibble containing the required predictors (and potentially the

@@ -4,19 +4,19 @@
 \alias{forge}
 \title{Forge prediction-ready data}
 \usage{
-forge(preprocessor, new_data, outcomes = FALSE, ...)
+forge(new_data, engine, outcomes = FALSE, ...)
 }
 \arguments{
-\item{preprocessor}{A valid \code{"preprocessor"}. The preprocessor that should
-be used here is the one in the output from the corresponding call
-to \code{\link[=mold]{mold()}}.}
-
 \item{new_data}{A data frame or matrix to preprocess.}
 
 \item{outcomes}{A logical. Should the outcomes be processed and returned
 as well?}
 
 \item{...}{Not currently used.}
+
+\item{preprocessor}{A valid \code{"preprocessor"}. The preprocessor that should
+be used here is the one in the output from the corresponding call
+to \code{\link[=mold]{mold()}}.}
 }
 \value{
 A named list with 3 elements:

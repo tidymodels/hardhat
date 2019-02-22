@@ -47,11 +47,16 @@ mold.default <- function(x, ...) {
 
 # ------------------------------------------------------------------------------
 
-mold_list <- function(predictors, outcomes, preprocessor, offset = NULL) {
+mold_impl <- function(engine, ...) {
+  UseMethod("mold_impl")
+}
+
+mold_list <- function(predictors, outcomes, engine, offset = NULL) {
   list(
     predictors = predictors,
     outcomes = outcomes,
-    preprocessor = preprocessor,
+    engine = engine,
     offset = offset
   )
 }
+

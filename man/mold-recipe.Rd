@@ -4,7 +4,7 @@
 \alias{mold.recipe}
 \title{Mold - Recipes Method}
 \usage{
-\method{mold}{recipe}(x, data, intercept = FALSE, ...)
+\method{mold}{recipe}(x, data, intercept = FALSE, engine = NULL, ...)
 }
 \arguments{
 \item{x}{An unprepped recipe created from \code{\link[recipes:recipe]{recipes::recipe()}}.}

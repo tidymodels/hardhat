@@ -53,61 +53,19 @@
 #'
 #' @rdname forge-recipe
 #' @export
-forge.recipes_preprocessor <- function(preprocessor, new_data,
-                                       outcomes = FALSE, ...) {
+NULL
+
+forge_impl.recipe_engine <- function(engine, new_data, outcomes) {
 
   validate_recipes_available()
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
 
-  new_data <- shrink(preprocessor, new_data, outcomes)
-  new_data <- scream(preprocessor, new_data, outcomes)
+  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
+  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
 
-  # Can't move this inside forge_recipe_*(), would be double baking
-  new_data <- recipes::bake(
-    object = preprocessor$engine,
-    new_data = new_data
+  forge_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    offset = predictors$offset
+    # extras = extras # maybe this would be useful?
   )
-
-  .predictors <- forge_recipes_predictors(preprocessor, new_data)
-  .outcomes <- forge_recipes_outcomes(preprocessor, new_data, outcomes)
-
-  forge_list(.predictors$data, .outcomes$data)
-}
-
-# ------------------------------------------------------------------------------
-
-forge_recipes_predictors <- function(preprocessor, new_data) {
-
-  engine <- preprocessor$engine
-  roles <- engine$term_info$role
-  processed_nms <- engine$term_info$variable[roles == "predictor"]
-
-  .predictors <- new_data[, processed_nms, drop = FALSE]
-
-  .predictors <- maybe_add_intercept_column(
-    x = .predictors,
-    intercept = preprocessor$intercept
-  )
-
-  list(data = .predictors)
-
-}
-
-forge_recipes_outcomes <- function(preprocessor, new_data, outcomes) {
-
-  if (!outcomes) {
-    .outcomes <- list(data = NULL)
-    return(.outcomes)
-  }
-
-  engine <- preprocessor$engine
-  roles <- engine$term_info$role
-  processed_nms <- engine$term_info$variable[roles == "outcome"]
-
-  .outcomes <- new_data[, processed_nms, drop = FALSE]
-
-  list(data = .outcomes)
-
 }

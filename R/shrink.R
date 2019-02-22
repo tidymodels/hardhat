@@ -55,16 +55,16 @@
 #' forge(x$preprocessor, test, outcomes = TRUE)$outcomes
 #'
 #' @export
-shrink <- function(preprocessor, new_data, outcomes = FALSE) {
+shrink <- function(engine, new_data, outcomes = FALSE) {
 
   new_data <- check_is_data_like(new_data)
 
-  cols <- preprocessor$info$predictors$names
+  cols <- engine$info$predictors$names
   validate_new_data_column_names(new_data, cols)
 
   if (outcomes) {
 
-    outcome_cols <- preprocessor$info$outcomes$names
+    outcome_cols <- engine$info$outcomes$names
     validate_new_data_column_names(new_data, outcome_cols)
 
     cols <- c(outcome_cols, cols)

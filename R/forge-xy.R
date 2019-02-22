@@ -97,47 +97,17 @@
 #'
 #' @rdname forge-xy
 #' @export
-forge.default_preprocessor <- function(preprocessor, new_data,
-                                       outcomes = FALSE, ...) {
+NULL
 
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
+forge_impl.xy_engine <- function(engine, new_data, outcomes) {
 
-  new_data <- shrink(preprocessor, new_data, outcomes)
-  new_data <- scream(preprocessor, new_data, outcomes)
+  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
+  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
 
-  .predictors <- forge_xy_predictors(preprocessor, new_data)
-  .outcomes <- forge_xy_outcomes(preprocessor, new_data, outcomes)
-
-  forge_list(.predictors$data, .outcomes$data)
-}
-
-# ------------------------------------------------------------------------------
-
-forge_xy_predictors <- function(preprocessor, new_data) {
-
-  original_cols <- preprocessor$info$predictors$names
-
-  .predictors <- new_data[, original_cols, drop = FALSE]
-
-  .predictors <- preprocessor$engine$process(
-    new_data = .predictors,
-    intercept = preprocessor$intercept
+  forge_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    offset = predictors$offset
+    # extras = extras # maybe this would be useful?
   )
-
-  list(data = .predictors)
-}
-
-forge_xy_outcomes <- function(preprocessor, new_data, outcomes) {
-
-  if (!outcomes) {
-    .outcomes <- list(data = NULL)
-    return(.outcomes)
-  }
-
-  original_cols <- preprocessor$info$outcomes$names
-
-  .outcomes <- new_data[, original_cols, drop = FALSE]
-
-  list(data = .outcomes)
 }

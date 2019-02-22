@@ -192,108 +192,41 @@
 #'
 #' @export
 mold.formula <- function(formula, data, intercept = FALSE,
-                         indicators = TRUE, ...) {
+                         indicators = TRUE, engine = NULL, ...) {
 
-  validate_formula_has_intercept(formula)
+  if (is.null(engine)) {
+    engine <- new_default_formula_engine()
+  }
 
-  data <- check_is_data_like(data)
-
-  formula <- remove_formula_intercept(formula, intercept)
-  formula <- alter_formula_environment(formula)
-
-  predictors <- mold_formula_predictors(formula, data, indicators)
-  outcomes <- mold_formula_outcomes(formula, data)
-
-  preprocessor <- new_terms_preprocessor(
-    engine = new_terms_preprocessor_engine(predictors$terms, outcomes$terms),
+  # validate_engine(engine)
+  engine <- update_engine(
+    engine = engine,
+    formula = formula,
     intercept = intercept,
-    info = info_lst(
-      predictors = predictors$info,
-      outcomes = outcomes$info
-    ),
-    indicators = indicators
+    indicators = indicators,
+    ...
   )
 
-  mold_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
-    preprocessor = preprocessor,
-    offset = predictors$offset
-  )
-
+  mold_impl(engine, data)
 }
 
 # ------------------------------------------------------------------------------
 
-mold_formula_predictors <- function(formula, data, indicators) {
+mold_impl.formula_engine <- function(engine, data, ...) {
 
-  formula <- get_predictors_formula(formula)
+  c(engine, data) %<-% engine$mold$clean(engine, data)
+  c(engine, predictors, outcomes) %<-% engine$mold$process(engine, data)
 
-  original_names <- get_all_predictors(formula, data)
-  original_data <- data[, original_names, drop = FALSE]
-  original_data_classes <- get_data_classes(original_data)
-  original_levels <- get_levels(original_data)
+  info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
 
-  if (!indicators) {
-    factor_names <- extract_original_factor_names(original_data_classes)
-    validate_no_factors_in_functions(formula, factor_names)
-    validate_no_factors_in_interactions(formula, factor_names)
-    formula <- remove_factors_from_formula(formula, factor_names)
-  }
+  engine <- update_engine(engine, info = info)
 
-  framed <- model_frame(formula, data)
-  offset <- extract_offset(framed$data, framed$terms)
-
-  predictors <- model_matrix(
-    terms = framed$terms,
-    data = framed$data
-  )
-
-  if (!indicators) {
-    predictors <- reattach_factor_columns(predictors, data, factor_names)
-  }
-
-  terms <- simplify_terms(framed$terms)
-
-  list(
-    data = predictors,
-    terms = terms,
-    offset = offset,
-    info = predictors_info(
-      names = original_names,
-      classes = original_data_classes,
-      levels = original_levels
-    )
-  )
-
-}
-
-mold_formula_outcomes <- function(formula, data) {
-
-  original_names <- get_all_outcomes(formula, data)
-  original_data <- data[, original_names, drop = FALSE]
-  original_data_classes <- get_data_classes(original_data)
-  original_levels <- get_levels(original_data)
-
-  formula <- get_outcomes_formula(formula)
-
-  # used on the `~ LHS` formula
-  validate_no_interactions(formula)
-
-  framed <- model_frame(formula, data)
-
-  outcomes <- flatten_embedded_columns(framed$data)
-
-  terms <- simplify_terms(framed$terms)
-
-  list(
-    data = outcomes,
-    terms = terms,
-    info = outcomes_info(
-      names = original_names,
-      classes = original_data_classes,
-      levels = original_levels
-    )
+  mold_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    engine = engine,
+    offset = predictors$offset
+    # extras = extras
   )
 
 }

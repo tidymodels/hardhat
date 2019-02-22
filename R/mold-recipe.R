@@ -53,67 +53,42 @@
 #'
 #' @rdname mold-recipe
 #' @export
-mold.recipe <- function(x, data, intercept = FALSE, ...) {
+mold.recipe <- function(x, data, intercept = FALSE, engine = NULL, ...) {
 
   validate_recipes_available()
 
-  data <- check_is_data_like(data)
+  if (is.null(engine)) {
+    engine <- new_default_recipe_engine()
+  }
 
-  prepped_recipe <- recipes::prep(x, training = data)
-
-  predictors <- mold_recipe_predictors(prepped_recipe, data, intercept)
-  outcomes <- mold_recipe_outcomes(prepped_recipe, data)
-
-  # un-retain training data
-  prepped_recipe <- compost(prepped_recipe)
-
-  preprocessor <- new_recipes_preprocessor(
-    engine = prepped_recipe,
+  # validate_engine(engine)
+  engine <- update_engine(
+    engine = engine,
+    recipe = x,
     intercept = intercept,
-    info = info_lst(
-      predictors = predictors$info,
-      outcomes = outcomes$info
-    )
+    ...
   )
 
-  mold_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
-    preprocessor = preprocessor
-  )
-
+  mold_impl(engine, data)
 }
 
 # ------------------------------------------------------------------------------
 
-mold_recipe_predictors <- function(rec, data, intercept) {
+mold_impl.recipe_engine <- function(engine, data, ...) {
 
-  all_predictors <- recipes::all_predictors
+  c(engine, data) %<-% engine$mold$clean(engine, data)
+  c(engine, predictors, outcomes) %<-% engine$mold$process(engine, data)
 
-  predictors <- recipes::juice(rec, all_predictors())
+  info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
 
-  predictors <- maybe_add_intercept_column(predictors, intercept)
+  engine <- update_engine(engine, info = info)
 
-  info <- get_original_predictor_info(rec, data)
-
-  list(
-    data = predictors,
-    info = info
-  )
-
-}
-
-mold_recipe_outcomes <- function(rec, data) {
-
-  all_outcomes <- recipes::all_outcomes
-
-  outcomes <- recipes::juice(rec, all_outcomes())
-
-  info <- get_original_outcome_info(rec, data)
-
-  list(
-    data = outcomes,
-    info = info
+  mold_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    engine = engine,
+    offset = predictors$offset
+    # extras = extras
   )
 
 }

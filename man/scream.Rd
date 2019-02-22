@@ -4,11 +4,9 @@
 \alias{scream}
 \title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
-scream(preprocessor, new_data, outcomes = FALSE, drop_novel = TRUE)
+scream(engine, new_data, outcomes = FALSE, drop_novel = TRUE)
 }
 \arguments{
-\item{preprocessor}{A \code{"preprocessor"}.}
-
 \item{new_data}{A data frame containing the new data to check the structure
 of. This should contain the predictors, and potentially the outcomes if
 \code{outcomes = TRUE}.}
@@ -19,6 +17,8 @@ of. This should contain the predictors, and potentially the outcomes if
 warning is thrown if novel levels are detected and they are coerced to \code{NA}.
 If \code{FALSE}, a warning is still thrown for new levels, but they are
 left unchanged.}
+
+\item{preprocessor}{A \code{"preprocessor"}.}
 }
 \value{
 A tibble containing the required predictors (and potentially the

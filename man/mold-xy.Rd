@@ -5,9 +5,9 @@
 \alias{mold.matrix}
 \title{Mold - XY Method}
 \usage{
-\method{mold}{data.frame}(x, y, intercept = FALSE, ...)
+\method{mold}{data.frame}(x, y, intercept = FALSE, engine = NULL, ...)
 
-\method{mold}{matrix}(x, y, intercept = FALSE, ...)
+\method{mold}{matrix}(x, y, intercept = FALSE, engine = NULL, ...)
 }
 \arguments{
 \item{x}{A data frame or matrix containing the predictors.}

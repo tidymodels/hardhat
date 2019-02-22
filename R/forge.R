@@ -48,18 +48,31 @@
 #'  offsets. Otherwise, `NULL`.
 #'
 #' @export
-forge <- function(preprocessor, new_data,
-                  outcomes = FALSE, ...) {
+forge <- function(new_data, engine, outcomes = FALSE, ...) {
   UseMethod("forge")
 }
 
 #' @export
-forge.default <- function(preprocessor, new_data,
-                          outcomes = FALSE, ...) {
-  abort("Unknown preprocessor.")
+forge.default <- function(new_data, engine, outcomes = FALSE, ...) {
+  abort("Unknown class for `new_data`.")
 }
 
+#' @export
+forge.data.frame <- function(new_data, engine, outcomes = FALSE, ...) {
+
+  engine <- update_engine(engine, ...)
+
+  forge_impl(engine, new_data, outcomes)
+}
+
+#' @export
+forge.matrix <- forge.data.frame
+
 # ------------------------------------------------------------------------------
+
+forge_impl <- function(engine, ...) {
+  UseMethod("forge_impl")
+}
 
 forge_list <- function(predictors, outcomes = NULL, offset = NULL) {
   list(

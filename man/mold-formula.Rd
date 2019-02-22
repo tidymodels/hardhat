@@ -5,7 +5,7 @@
 \title{Mold - Formula Method}
 \usage{
 \method{mold}{formula}(formula, data, intercept = FALSE,
-  indicators = TRUE, ...)
+  indicators = TRUE, engine = NULL, ...)
 }
 \arguments{
 \item{formula}{A formula specifying the terms of the model, with the outcomes

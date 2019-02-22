@@ -63,28 +63,16 @@
 #' @rdname mold-xy
 #'
 #' @export
-mold.data.frame <- function(x, y, intercept = FALSE, ...) {
+mold.data.frame <- function(x, y, intercept = FALSE, engine = NULL, ...) {
 
-  engine <- new_default_preprocessor_engine()
+  if (is.null(engine)) {
+    engine <- new_default_xy_engine()
+  }
 
-  predictors <- mold_xy_predictors(engine, x, intercept)
-  outcomes <- mold_xy_outcomes(y)
+  # validate_engine(engine)
+  engine <- update_engine(engine, intercept = intercept, ...)
 
-  preprocessor <- new_default_preprocessor(
-    engine = engine,
-    intercept = intercept,
-    info = info_lst(
-      predictors = predictors$info,
-      outcomes = outcomes$info
-    )
-  )
-
-  mold_list(
-    predictors = predictors$data,
-    outcomes$data,
-    preprocessor
-  )
-
+  mold_impl(engine, x, y)
 }
 
 #' @rdname mold-xy
@@ -93,38 +81,22 @@ mold.matrix <- mold.data.frame
 
 # ------------------------------------------------------------------------------
 
-mold_xy_predictors <- function(engine, x, intercept) {
+# not exposed
+mold_impl.xy_engine <- function(engine, x, y, ...) {
 
-  info <- predictors_info(
-    names = colnames(x),
-    classes = get_data_classes(x),
-    levels = get_levels(x)
-  )
+  c(engine, x, y) %<-% engine$mold$clean(engine, x, y)
+  c(engine, predictors, outcomes) %<-% engine$mold$process(engine, x, y)
 
-  # Process x _after_ extracting the "original"
-  # predictor column names and classes
-  x <- engine$process(x, intercept)
+  info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
 
-  list(
-    data = x,
-    info = info
-  )
+  engine <- update_engine(engine, info = info)
 
-}
-
-mold_xy_outcomes <- function(y) {
-
-  y <- standardize(y)
-
-  info = outcomes_info(
-    names = colnames(y),
-    classes = get_data_classes(y),
-    levels = get_levels(y)
-  )
-
-  list(
-    data = y,
-    info = info
+  mold_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    engine = engine,
+    offset = predictors$offset
+    # extras = extras
   )
 
 }
