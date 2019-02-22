@@ -135,7 +135,7 @@ validate_is_bool <- function(.x, .x_nm) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))
   }
 
-  validate_is(.x, is_bool, "bool", .x_nm, .note = "({ui_value('TRUE')} / {ui_value('FALSE')})")
+  validate_is(.x, is_bool, "bool", .x_nm, .note = "'TRUE' / 'FALSE'")
 }
 
 all_numeric <- function(x) {
