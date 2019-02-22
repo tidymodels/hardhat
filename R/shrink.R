@@ -20,10 +20,7 @@
 #' `shrink()` is called by [forge()] before [scream()] and before the actual
 #' processing is done.
 #'
-#' @param preprocessor A `"preprocessor"`.
-#'
-#' @param new_data A data frame at least containing the new predictors, and
-#' potentially the outcomes if `outcomes = TRUE`.
+#' @inheritParams scream
 #'
 #' @param outcomes A logical. Should the outcomes be included in the shrunk
 #' `new_data` output as well?
@@ -38,24 +35,24 @@
 #' test <- iris[101:150,]
 #'
 #' # mold() is run at model fit time
-#' # and a terms preprocessor is recorded
+#' # and a formula preprocessing engine is recorded
 #' x <- mold(log(Sepal.Width) ~ Species, train)
 #'
-#' # Pass that preprocessor to shrink(), along with new_data
+#' # Pass that engine to shrink(), along with new_data
 #' # to get a tibble of required predictors back
-#' shrink(x$preprocessor, test)
+#' shrink(test, x$engine)
 #'
 #' # outcomes = TRUE also returns the outcomes,
 #' # this can be useful if doing cross validation
-#' shrink(x$preprocessor, test, outcomes = TRUE)
+#' shrink(test, x$engine, outcomes = TRUE)
 #'
 #' # forge() actually preprocesses the new_data, after
 #' # a call to shrink(). Notice how now the Sepal.Width
 #' # column is logged
-#' forge(x$preprocessor, test, outcomes = TRUE)$outcomes
+#' forge(test, x$engine, outcomes = TRUE)$outcomes
 #'
 #' @export
-shrink <- function(engine, new_data, outcomes = FALSE) {
+shrink <- function(new_data, engine, outcomes = FALSE) {
 
   new_data <- check_is_data_like(new_data)
 

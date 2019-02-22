@@ -4,16 +4,17 @@
 \alias{shrink}
 \title{Subset only required columns}
 \usage{
-shrink(engine, new_data, outcomes = FALSE)
+shrink(new_data, engine, outcomes = FALSE)
 }
 \arguments{
-\item{new_data}{A data frame at least containing the new predictors, and
-potentially the outcomes if \code{outcomes = TRUE}.}
+\item{new_data}{A data frame containing the new data to check the structure
+of. This should contain the predictors, and potentially the outcomes if
+\code{outcomes = TRUE}.}
+
+\item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
 
 \item{outcomes}{A logical. Should the outcomes be included in the shrunk
 \code{new_data} output as well?}
-
-\item{preprocessor}{A \code{"preprocessor"}.}
 }
 \value{
 A tibble containing the required predictors (and potentially the
@@ -43,20 +44,20 @@ train <- iris[1:100,]
 test <- iris[101:150,]
 
 # mold() is run at model fit time
-# and a terms preprocessor is recorded
+# and a formula preprocessing engine is recorded
 x <- mold(log(Sepal.Width) ~ Species, train)
 
-# Pass that preprocessor to shrink(), along with new_data
+# Pass that engine to shrink(), along with new_data
 # to get a tibble of required predictors back
-shrink(x$preprocessor, test)
+shrink(test, x$engine)
 
 # outcomes = TRUE also returns the outcomes,
 # this can be useful if doing cross validation
-shrink(x$preprocessor, test, outcomes = TRUE)
+shrink(test, x$engine, outcomes = TRUE)
 
 # forge() actually preprocesses the new_data, after
 # a call to shrink(). Notice how now the Sepal.Width
 # column is logged
-forge(x$preprocessor, test, outcomes = TRUE)$outcomes
+forge(test, x$engine, outcomes = TRUE)$outcomes
 
 }

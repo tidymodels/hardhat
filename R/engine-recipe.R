@@ -168,8 +168,8 @@ forge_recipe_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  new_data <- shrink(engine, new_data, outcomes)
-  new_data <- scream(engine, new_data, outcomes)
+  new_data <- shrink(new_data, engine, outcomes)
+  new_data <- scream(new_data, engine, outcomes)
 
   list(
     engine = engine,
