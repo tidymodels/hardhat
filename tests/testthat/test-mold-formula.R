@@ -1,4 +1,3 @@
-# ------------------------------------------------------------------------------
 context("test-mold-formulas")
 
 test_that("can mold simple formulas", {
@@ -8,7 +7,7 @@ test_that("can mold simple formulas", {
   expect_equal(colnames(x$predictors), "Sepal.Length")
   expect_is(x$outcomes, "tbl_df")
   expect_equal(colnames(x$outcomes), "Species")
-  expect_is(x$preprocessor, "terms_preprocessor")
+  expect_is(x$engine, "default_formula_engine")
 })
 
 test_that("can mold multivariate formulas", {
@@ -54,7 +53,7 @@ test_that("can mold and not expand dummies", {
 
   expect_equal(colnames(x$predictors), "Species")
   expect_is(x$predictors$Species, "factor")
-  expect_equal(x$preprocessor$indicators, FALSE)
+  expect_equal(x$engine$indicators, FALSE)
 })
 
 test_that("errors are thrown if `indicator = FALSE` and factor interactions exist", {
@@ -154,10 +153,10 @@ test_that("formula intercepts can be added", {
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))
-  expect_equal(attr(x$preprocessor$engine$predictors, "intercept"), 1)
+  expect_equal(attr(x$engine$terms$predictors, "intercept"), 1)
 
   # Don't want intercept in original predictors
-  expect_false("(Intercept)" %in% x$preprocessor$info$predictors$names)
+  expect_false("(Intercept)" %in% x$engine$info$predictors$names)
 })
 
 test_that("can mold formulas with special terms", {
@@ -171,7 +170,7 @@ test_that("can mold formulas with special terms", {
   )
 
   expect_equal(
-    x$preprocessor$info$predictors$names,
+    x$engine$info$predictors$names,
     c("Sepal.Length", "Sepal.Width")
   )
 })
@@ -255,7 +254,7 @@ test_that("full interaction syntax is supported", {
            Sepal.Width:Sepal.Length +
            Sepal.Width:Petal.Length +
            Sepal.Length:Petal.Length,
-        iris)$predictors
+         iris)$predictors
   )
 
   expect_equal(
@@ -317,72 +316,6 @@ test_that("original predictor and outcome classes are recorded", {
   expect_equal(
     x$engine$info$outcomes$classes,
     list(Sepal.Length = "numeric")
-  )
-
-})
-
-# ------------------------------------------------------------------------------
-context("test-mold-xy")
-
-test_that("can use x-y mold interface", {
-
-  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-
-  expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcomes, "tbl_df")
-  expect_equal(colnames(x$outcomes), ".outcome")
-  expect_is(x$preprocessor, "default_preprocessor")
-
-})
-
-test_that("xy intercepts can be added", {
-
-  x <- mold(
-    iris[, "Sepal.Length", drop = FALSE],
-    iris$Species,
-    intercept = TRUE
-  )
-
-  expect_true("(Intercept)" %in% colnames(x$predictors))
-})
-
-# ------------------------------------------------------------------------------
-context("test-mold-recipes")
-
-library(recipes)
-
-test_that("can mold recipes", {
-
-  x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
-    iris
-  )
-
-  expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcomes, "data.frame")
-  expect_is(x$outcomes[[1]], "factor")
-  expect_is(x$preprocessor, "recipes_preprocessor")
-
-  # Training data should _not_ be in the recipe
-  expect_error(recipes::juice(x$preprocessor))
-})
-
-test_that("can mold recipes with intercepts", {
-
-  x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
-    iris,
-    intercept = TRUE
-  )
-
-  expect_true("(Intercept)" %in% colnames(x$predictors))
-})
-
-test_that("`data` is validated", {
-
-  expect_error(
-    mold(recipe(Species ~ Sepal.Length, data = iris), 1),
-    "`data` must be a data.frame or a matrix"
   )
 
 })
