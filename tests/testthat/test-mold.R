@@ -305,6 +305,22 @@ test_that("LHS of the formula cannot contain interactions", {
 
 })
 
+test_that("original predictor and outcome classes are recorded", {
+
+  x <- mold(log(Sepal.Length) ~ log(Sepal.Width), iris)
+
+  expect_equal(
+    x$engine$info$predictors$classes,
+    list(Sepal.Width = "numeric")
+  )
+
+  expect_equal(
+    x$engine$info$outcomes$classes,
+    list(Sepal.Length = "numeric")
+  )
+
+})
+
 # ------------------------------------------------------------------------------
 context("test-mold-xy")
 
