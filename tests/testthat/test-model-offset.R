@@ -98,7 +98,7 @@ test_that("offsets columns are removed from predictors with `indicators = FALSE`
 test_that("offsets are NULL in forge() result if not used", {
 
   x <- mold(Species ~ Sepal.Length, iris)
-  xx <- forge(x$engine, iris)
+  xx <- forge(iris, x$engine)
 
   expect_equal(
     xx$offset,
@@ -110,7 +110,7 @@ test_that("offsets are NULL in forge() result if not used", {
 test_that("offsets show up in forged results", {
 
   x <- mold(Species ~ offset(Sepal.Length), iris)
-  xx <- forge(x$engine, iris)
+  xx <- forge(iris, x$engine)
 
   expect_equal(
     xx$offset,
@@ -132,7 +132,7 @@ test_that("offset columns are stored as predictors", {
   iris2$Sepal.Length <- NULL
 
   expect_error(
-    forge(x$engine, iris2),
+    forge(iris2, x$engine),
     "Sepal.Length"
   )
 
