@@ -54,7 +54,7 @@ forge <- function(new_data, engine, outcomes = FALSE, ...) {
 
 #' @export
 forge.default <- function(new_data, engine, outcomes = FALSE, ...) {
-  abort("Unknown class for `new_data`.")
+  glubort("The class of `new_data`, '{class1(new_data)}', is not recognized.")
 }
 
 #' @export
