@@ -4,13 +4,10 @@
 \alias{new_base_model}
 \title{Constructor for a base model}
 \usage{
-new_base_model(preprocessor = NULL, ..., class)
+new_base_model(engine, ..., class)
 }
 \arguments{
-\item{preprocessor}{A preprocessor for new data. This can be
-a \code{terms} object from the formula interface, a \code{recipe} created with
-\code{\link[recipes:recipe]{recipes::recipe()}}, or the default which converts to either a matrix or a
-data frame, and adds an intercept column if requested.}
+\item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
 
 \item{...}{Name-value pairs for elements specific to the model defined by
 \code{class}.}
@@ -25,15 +22,15 @@ a class of \code{class}. This entire object represent a single model.
 }
 \details{
 Because every model should have multiple interfaces, including formula
-and \code{recipes} interfaces, all models should have a \code{preprocessor} that
-can process new data when \code{predict()} is called. The default \code{preprocessor}
-used in the data frame and matrix methods is \code{default_preprocessor()}, which
-converts an object to a data frame or matrix, and adds an intercept column
-if required.
+and \code{recipes} interfaces, all models should have an \code{engine} that
+can process new data when \code{predict()} is called. The easiest way to generate
+an engine with all of the information required at prediction time is to
+use the one that is returned from a call to \code{\link[=mold]{mold()}}.
 }
 \examples{
 
 new_base_model(
+  engine = new_default_xy_engine(),
   custom_field = "my-field",
   class = "custom_model"
 )

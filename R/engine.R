@@ -70,6 +70,12 @@ update_engine <- function(engine, ...) {
 
 # ------------------------------------------------------------------------------
 
+is_engine <- function(x) {
+  inherits(x, "hardhat_engine")
+}
+
+# ------------------------------------------------------------------------------
+
 # helper for new_engine()$mold and $forge elements
 engine_function_set <- function(clean, process) {
 
