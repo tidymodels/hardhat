@@ -61,7 +61,7 @@ forge.data.frame <- function(new_data, engine, outcomes = FALSE, ...) {
 
   validate_is_engine(engine)
 
-  engine <- update_engine(engine, ...)
+  validate_empty_dots(...)
 
   forge_impl(engine, new_data, outcomes)
 
