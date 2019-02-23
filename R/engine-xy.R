@@ -53,6 +53,14 @@ refresh_engine.xy_engine <- function(engine) {
   do.call(new_xy_engine, as.list(engine))
 }
 
+is_xy_engine <- function(x) {
+  inherits(x, "xy_engine")
+}
+
+validate_is_xy_engine <- function(engine) {
+  validate_is(engine, is_xy_engine, "xy_engine")
+}
+
 # ------------------------------------------------------------------------------
 
 check_mold_xy <- function(mold) {

@@ -65,6 +65,14 @@ refresh_engine.formula_engine <- function(engine) {
   do.call(new_formula_engine, as.list(engine))
 }
 
+is_formula_engine <- function(x) {
+  inherits(x, "formula_engine")
+}
+
+validate_is_formula_engine <- function(engine) {
+  validate_is(engine, is_formula_engine, "formula_engine")
+}
+
 # ------------------------------------------------------------------------------
 
 check_mold_formula <- function(mold) {

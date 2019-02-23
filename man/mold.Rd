@@ -2,15 +2,33 @@
 % Please edit documentation in R/mold.R
 \name{mold}
 \alias{mold}
+\alias{mold.data.frame}
+\alias{mold.matrix}
+\alias{mold.formula}
+\alias{mold.recipe}
 \title{Mold data for modeling}
 \usage{
 mold(x, ...)
+
+\method{mold}{data.frame}(x, y, engine = NULL, ...)
+
+\method{mold}{matrix}(x, y, engine = NULL, ...)
+
+\method{mold}{formula}(formula, data, engine = NULL, ...)
+
+\method{mold}{recipe}(x, data, engine = NULL, ...)
 }
 \arguments{
 \item{x}{A data frame, matrix, formula, or \code{\link[recipes:recipe]{recipes::recipe()}}. If this is a
 data.frame or matrix, it should contain the predictors.}
 
 \item{...}{Currently unused.}
+
+\item{y}{A data frame, matrix, or vector. This should contain the outcomes.}
+
+\item{engine}{A preprocessing \code{engine}.}
+
+\item{formula}{A formula specifying the terms of the model.}
 }
 \value{
 A named list containing 4 elements:

@@ -19,6 +19,12 @@
 #' @param x A data frame, matrix, formula, or [recipes::recipe()]. If this is a
 #' data.frame or matrix, it should contain the predictors.
 #'
+#' @param y A data frame, matrix, or vector. This should contain the outcomes.
+#'
+#' @param engine A preprocessing `engine`.
+#'
+#' @param formula A formula specifying the terms of the model.
+#'
 #' @param ... Currently unused.
 #'
 #' @return
@@ -46,44 +52,44 @@ mold.default <- function(x, ...) {
   abort_unknown_mold_class(x)
 }
 
+#' @rdname mold
 #' @export
-mold.data.frame <- function(x, y, intercept = FALSE, engine = NULL, ...) {
+mold.data.frame <- function(x, y, engine = NULL, ...) {
 
   if (is.null(engine)) {
     engine <- default_xy_engine()
   }
 
-  # validate_engine(engine)
-  engine <- update_engine(engine, intercept = intercept, ...)
+  validate_is_xy_engine(engine)
 
   mold_impl(engine, x, y)
 }
 
+#' @rdname mold
 #' @export
 mold.matrix <- mold.data.frame
 
+#' @rdname mold
 #' @export
-mold.formula <- function(formula, data, intercept = FALSE,
-                         indicators = TRUE, engine = NULL, ...) {
+mold.formula <- function(formula, data, engine = NULL, ...) {
 
   if (is.null(engine)) {
     engine <- default_formula_engine()
   }
 
-  # validate_engine(engine)
+  validate_is_formula_engine(engine)
+
   engine <- update_engine(
     engine = engine,
-    formula = formula,
-    intercept = intercept,
-    indicators = indicators,
-    ...
+    formula = formula
   )
 
   mold_impl(engine, data)
 }
 
+#' @rdname mold
 #' @export
-mold.recipe <- function(x, data, intercept = FALSE, engine = NULL, ...) {
+mold.recipe <- function(x, data, engine = NULL, ...) {
 
   validate_recipes_available()
 
@@ -91,12 +97,11 @@ mold.recipe <- function(x, data, intercept = FALSE, engine = NULL, ...) {
     engine <- default_recipe_engine()
   }
 
-  # validate_engine(engine)
+  validate_is_recipe_engine(engine)
+
   engine <- update_engine(
     engine = engine,
-    recipe = x,
-    intercept = intercept,
-    ...
+    recipe = x
   )
 
   mold_impl(engine, data)

@@ -62,6 +62,14 @@ refresh_engine.recipe_engine <- function(engine) {
   do.call(new_recipe_engine, as.list(engine))
 }
 
+is_recipe_engine <- function(x) {
+  inherits(x, "recipe_engine")
+}
+
+validate_is_recipe_engine <- function(engine) {
+  validate_is(engine, is_recipe_engine, "recipe_engine")
+}
+
 # ------------------------------------------------------------------------------
 
 is_recipe <- function(x) {
