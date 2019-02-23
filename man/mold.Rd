@@ -26,7 +26,8 @@ data.frame or matrix, it should contain the predictors.}
 
 \item{y}{A data frame, matrix, or vector. This should contain the outcomes.}
 
-\item{engine}{A preprocessing \code{engine}.}
+\item{engine}{A preprocessing \code{engine}. If left as \code{NULL}, then a default
+engine is chosen based on the type of \code{x}.}
 
 \item{formula}{A formula specifying the terms of the model.}
 

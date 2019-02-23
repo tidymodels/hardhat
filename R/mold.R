@@ -21,7 +21,8 @@
 #'
 #' @param y A data frame, matrix, or vector. This should contain the outcomes.
 #'
-#' @param engine A preprocessing `engine`.
+#' @param engine A preprocessing `engine`. If left as `NULL`, then a default
+#' engine is chosen based on the type of `x`.
 #'
 #' @param formula A formula specifying the terms of the model.
 #'
