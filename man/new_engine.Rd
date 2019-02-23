@@ -8,27 +8,11 @@ new_engine(mold, forge, intercept = FALSE, info = NULL, ...,
   subclass = character())
 }
 \arguments{
-\item{mold}{A named list with two elements:
-\itemize{
-\item \code{clean}: A function that performs initial cleaning of the user's input
-data to be used in the model.
-\item \code{process}: A function that performs the actual preprocessing of the data.
-}
+\item{mold}{A named list with two elements, \code{clean} and \code{process}, see
+the section Mold Functions for details.}
 
-Both \code{engine$mold$clean()} and \code{engine$mold$process()} will be called,
-in order, from \code{\link[=mold]{mold()}} and will be passed the \code{engine} itself, and the
-data (\code{x} and \code{y} for the xy method, but otherwise \code{data}).}
-
-\item{forge}{A named list with two elements:
-\itemize{
-\item \code{clean}: A function that performs initial cleaning of the \code{new_data} that
-is typically used in generating predictions.
-\item \code{process}: A function that performs the preprocessing of the \code{new_data}.
-}
-
-Both \code{engine$forge$clean()} and \code{engine$forge$process()} will be called,
-in order, from \code{\link[=mold]{mold()}} and will be passed the \code{engine} itself,
-and the \code{new_data}.}
+\item{forge}{A named list with two elements, \code{clean} and \code{process}, see
+the section Forge Functions for details.}
 
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
@@ -52,7 +36,8 @@ columns, or \code{NULL}.
 }
 }
 
-\code{info} is set at \code{\link[=mold]{mold()}} time, and is used in \code{\link[=forge]{forge()}} to validate
+\code{info} is set at \code{\link[=mold]{mold()}} time using the combined predictor and outcome
+info from \code{engine$mold$process()}, and is used in \code{\link[=forge]{forge()}} to validate
 \code{new_data}.}
 
 \item{...}{Name-value pairs for additional elements of engines that
@@ -68,3 +53,123 @@ named arguments.
 This is the base class for a preprocessing engine. All other engines
 subclass this one.
 }
+\section{Mold Functions}{
+
+
+\code{engine$mold} should be a named list with two elements, both of which
+are functions:
+\itemize{
+\item \code{clean}: A function that performs initial cleaning of the user's input
+data to be used in the model.
+\itemize{
+\item \emph{Arguments}:
+\itemize{
+\item If this is an xy engine, \code{engine}, \code{x} and \code{y}.
+\item Otherwise, \code{engine} and \code{data}.
+}
+\item \emph{Output}: A named list of three elements:
+\itemize{
+\item \code{engine}: The engine, returned and potentially updated.
+\item If using an xy engine:
+\itemize{
+\item \code{x}: The cleaned predictor data.
+\item \code{y}: The cleaned outcome data.
+}
+\item If not using an xy engine:
+\itemize{
+\item \code{data}: The cleaned input data.
+}
+}
+}
+\item \code{process}: A function that performs the actual preprocessing of the data.
+\itemize{
+\item \emph{Arguments}:
+\itemize{
+\item If this is an xy engine, \code{engine}, \code{x} and \code{y}.
+\item Otherwise, \code{engine} and \code{data}.
+}
+\item \emph{Output}: A named list of three elements:
+\itemize{
+\item \code{engine}: The engine, returned and potentially updated.
+\item \code{predictors}: A named list of 3 elements:
+\itemize{
+\item \code{data}: The processed predictors.
+\item \code{info}: A named list of 3 elements:
+\itemize{
+\item \code{names}: A character vector of names of the original
+predictors.
+\item \code{classes}: A named list where the names are the original
+predictors, and the values are the classes of that predictor.
+\item \code{levels}: A named list where the names are the original
+factor predictors, and the values are the levels of that
+factor predictor.
+}
+\item \code{offset}: An offset, or \code{NULL}.
+}
+\item \code{outcomes}: A named list of 2 elements:
+\itemize{
+\item \code{data}: The processed outcomes.
+\item \code{info}: A named list of 3 elements:
+\itemize{
+\item \code{names}: A character vector of names of the original
+outcomes.
+\item \code{classes}: A named list where the names are the original
+outcomes, and the values are the classes of that outcome.
+\item \code{levels}: A named list where the names are the original
+factor outcomes, and the values are the levels of that
+factor outcome.
+}
+}
+}
+}
+}
+
+Both \code{engine$mold$clean()} and \code{engine$mold$process()} will be called,
+in order, from \code{\link[=mold]{mold()}}.
+}
+
+\section{Forge Functions}{
+
+
+\code{engine$forge} should be a named list with two elements, both of which
+are functions:
+\itemize{
+\item \code{clean}: A function that performs initial cleaning of \code{new_data}:
+\itemize{
+\item \emph{Arguments}:
+\itemize{
+\item \code{engine} and \code{new_data}.
+}
+\item \emph{Output}: A named list of two elements:
+\itemize{
+\item \code{engine}: The engine, returned and potentially updated.
+\item \code{new_data}: The \code{new_data}, cleaned.
+}
+}
+\item \code{process}: A function that performs the actual preprocessing of the data
+using the known information in the \code{engine}.
+\itemize{
+\item \emph{Arguments}:
+\itemize{
+\item \code{engine} and \code{new_data}.
+}
+\item \emph{Output}: A named list of three elements:
+\itemize{
+\item \code{engine}: The engine, returned and potentially updated.
+\item \code{predictors}: A named list of 2 elements:
+\itemize{
+\item \code{data}: The processed predictors.
+\item \code{offset}: An offset, or \code{NULL}.
+}
+\item \code{outcomes}: A named list of 1 element:
+\itemize{
+\item \code{data}: The processed outcomes.
+}
+}
+}
+}
+
+Both \code{engine$forge$clean()} and \code{engine$forge$process()} will be called,
+in order, from \code{\link[=forge]{forge()}}.
+}
+
