@@ -10,11 +10,11 @@
 #' separate help files for each. Click through to each one below to learn
 #' about each engine and see a large amount of engine specific examples:
 #'
-#' * XY Method - [new_default_xy_engine()]
+#' * XY Method - [default_xy_engine()]
 #'
-#' * Formula Method - [new_default_formula_engine()]
+#' * Formula Method - [default_formula_engine()]
 #'
-#' * Recipes Method - [new_default_recipe_engine()]
+#' * Recipes Method - [default_recipe_engine()]
 #'
 #' @details
 #'

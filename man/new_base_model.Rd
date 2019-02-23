@@ -30,7 +30,7 @@ use the one that is returned from a call to \code{\link[=mold]{mold()}}.
 \examples{
 
 new_base_model(
-  engine = new_default_xy_engine(),
+  engine = default_xy_engine(),
   custom_field = "my-field",
   class = "custom_model"
 )

@@ -251,17 +251,35 @@
 #' forge(test, processed$engine)
 #'
 #' @export
-new_default_formula_engine <- function(intercept = FALSE,
+default_formula_engine <- function(intercept = FALSE,
+                                   indicators = TRUE) {
+
+  mold <- get_mold_formula_default_function_set()
+  forge <- get_forge_formula_default_function_set()
+
+  new_default_formula_engine(
+    mold = mold,
+    forge = forge,
+    intercept = intercept,
+    indicators = indicators
+  )
+
+}
+
+#' @rdname default_formula_engine
+#' @export
+new_default_formula_engine <- function(mold,
+                                       forge,
+                                       intercept = FALSE,
                                        info = NULL,
                                        formula = NULL,
                                        indicators = TRUE,
                                        terms = list(
                                          predictors = NULL,
                                          outcomes = NULL
-                                       )) {
-
-  mold <- get_mold_formula_default_function_set()
-  forge <- get_forge_formula_default_function_set()
+                                       ),
+                                       ...,
+                                       subclass = character()) {
 
   validate_is_terms_list_or_null(terms)
 
@@ -273,20 +291,15 @@ new_default_formula_engine <- function(intercept = FALSE,
     formula = formula,
     indicators = indicators,
     terms = terms,
-    subclass = "default_formula_engine"
+    ...,
+    subclass = c(subclass, "default_formula_engine")
   )
 
 }
 
 #' @export
 refresh_engine.default_formula_engine <- function(engine) {
-  new_default_formula_engine(
-    intercept = engine$intercept,
-    info = engine$info,
-    formula = engine$formula,
-    indicators = engine$indicators,
-    terms = engine$terms
-  )
+  do.call(new_default_formula_engine, as.list(engine))
 }
 
 # ------------------------------------------------------------------------------

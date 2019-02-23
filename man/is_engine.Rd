@@ -13,6 +13,6 @@ is_engine(x)
 \code{is_engine()} checks if \code{x} inherits from \code{"hardhat_engine"}.
 }
 \examples{
-is_engine(new_default_xy_engine())
+is_engine(default_xy_engine())
 
 }

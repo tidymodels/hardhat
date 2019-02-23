@@ -21,7 +21,7 @@
 #' @examples
 #'
 #' new_base_model(
-#'   engine = new_default_xy_engine(),
+#'   engine = default_xy_engine(),
 #'   custom_field = "my-field",
 #'   class = "custom_model"
 #' )

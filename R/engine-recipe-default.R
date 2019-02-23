@@ -88,12 +88,28 @@
 #' mold(rec2, iris)$predictors
 #'
 #' @export
-new_default_recipe_engine <- function(intercept = FALSE,
-                                      info = NULL,
-                                      recipe = NULL) {
+default_recipe_engine <- function(intercept = FALSE) {
 
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
+
+  new_default_recipe_engine(
+    mold = mold,
+    forge = forge,
+    intercept = intercept
+  )
+
+}
+
+#' @rdname default_recipe_engine
+#' @export
+new_default_recipe_engine <- function(mold,
+                                      forge,
+                                      intercept = FALSE,
+                                      info = NULL,
+                                      recipe = NULL,
+                                      ...,
+                                      subclass = character()) {
 
   new_recipe_engine(
     mold = mold,
@@ -101,18 +117,15 @@ new_default_recipe_engine <- function(intercept = FALSE,
     intercept = intercept,
     info = info,
     recipe = recipe,
-    subclass = "default_recipe_engine"
+    ...,
+    subclass = c(subclass, "default_recipe_engine")
   )
 
 }
 
 #' @export
 refresh_engine.default_recipe_engine <- function(engine) {
-  new_default_recipe_engine(
-    intercept = engine$intercept,
-    info = engine$info,
-    recipe = engine$recipe
-  )
+  do.call(new_default_recipe_engine, as.list(engine))
 }
 
 # ------------------------------------------------------------------------------

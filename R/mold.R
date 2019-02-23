@@ -10,11 +10,11 @@
 #' separate help files for each. Click through to each one below to learn
 #' about each engine and see a large amount of engine specific examples:
 #'
-#' * XY Method - [new_default_xy_engine()]
+#' * XY Method - [default_xy_engine()]
 #'
-#' * Formula Method - [new_default_formula_engine()]
+#' * Formula Method - [default_formula_engine()]
 #'
-#' * Recipes Method - [new_default_recipe_engine()]
+#' * Recipes Method - [default_recipe_engine()]
 #'
 #' @param x A data frame, matrix, formula, or [recipes::recipe()]. If this is a
 #' data.frame or matrix, it should contain the predictors.
@@ -50,7 +50,7 @@ mold.default <- function(x, ...) {
 mold.data.frame <- function(x, y, intercept = FALSE, engine = NULL, ...) {
 
   if (is.null(engine)) {
-    engine <- new_default_xy_engine()
+    engine <- default_xy_engine()
   }
 
   # validate_engine(engine)
@@ -67,7 +67,7 @@ mold.formula <- function(formula, data, intercept = FALSE,
                          indicators = TRUE, engine = NULL, ...) {
 
   if (is.null(engine)) {
-    engine <- new_default_formula_engine()
+    engine <- default_formula_engine()
   }
 
   # validate_engine(engine)
@@ -88,7 +88,7 @@ mold.recipe <- function(x, data, intercept = FALSE, engine = NULL, ...) {
   validate_recipes_available()
 
   if (is.null(engine)) {
-    engine <- new_default_recipe_engine()
+    engine <- default_recipe_engine()
   }
 
   # validate_engine(engine)

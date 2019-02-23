@@ -51,7 +51,7 @@
 #' @examples
 #'
 #' # In all of the examples below, X and Y are supplied to mold(),
-#' # which means that the new_default_xy_engine() is being used.
+#' # which means that the default_xy_engine() is being used.
 #'
 #' # ---------------------------------------------------------------------------
 #' # Setup
@@ -121,28 +121,42 @@
 #' forge(test2, processed_vec$engine, outcomes = TRUE)
 #'
 #' @export
-new_default_xy_engine <- function(intercept = FALSE,
-                                  info = NULL) {
+default_xy_engine <- function(intercept = FALSE) {
 
   mold <- get_mold_xy_default_function_set()
   forge <- get_forge_xy_default_function_set()
+
+  new_default_xy_engine(
+    mold = mold,
+    forge = forge,
+    intercept = intercept
+  )
+
+}
+
+#' @rdname default_xy_engine
+#' @export
+new_default_xy_engine <- function(mold,
+                                  forge,
+                                  intercept = FALSE,
+                                  info = NULL,
+                                  ...,
+                                  subclass = character()) {
 
   new_xy_engine(
     mold = mold,
     forge = forge,
     intercept = intercept,
     info = info,
-    subclass = "default_xy_engine"
+    ...,
+    subclass = c(subclass, "default_xy_engine")
   )
 
 }
 
 #' @export
 refresh_engine.default_xy_engine <- function(engine) {
-  new_default_xy_engine(
-    intercept = engine$intercept,
-    info = engine$info
-  )
+  do.call(new_default_xy_engine, as.list(engine))
 }
 
 # ------------------------------------------------------------------------------

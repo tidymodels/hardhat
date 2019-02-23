@@ -33,8 +33,8 @@ nuances of exactly what is being done for each engine vary enough to warrant
 separate help files for each. Click through to each one below to learn
 about each engine and see a large amount of engine specific examples:
 \itemize{
-\item XY Method - \code{\link[=new_default_xy_engine]{new_default_xy_engine()}}
-\item Formula Method - \code{\link[=new_default_formula_engine]{new_default_formula_engine()}}
-\item Recipes Method - \code{\link[=new_default_recipe_engine]{new_default_recipe_engine()}}
+\item XY Method - \code{\link[=default_xy_engine]{default_xy_engine()}}
+\item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
+\item Recipes Method - \code{\link[=default_recipe_engine]{default_recipe_engine()}}
 }
 }

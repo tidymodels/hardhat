@@ -26,7 +26,7 @@ and passes through all of the elements of the engine to the constructor.
 }
 \examples{
 
-engine <- new_default_xy_engine()
+engine <- default_xy_engine()
 
 # This should never be done manually, but is essentially
 # what `update_engine(engine, intercept = TRUE)` does for you

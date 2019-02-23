@@ -86,7 +86,7 @@ new_engine <- function(mold,
 #'
 #' @examples
 #'
-#' engine <- new_default_xy_engine()
+#' engine <- default_xy_engine()
 #'
 #' # This should never be done manually, but is essentially
 #' # what `update_engine(engine, intercept = TRUE)` does for you
@@ -143,7 +143,7 @@ refresh_engine.hardhat_engine <- function(engine) {
 #'
 #' @examples
 #'
-#' engine <- new_default_xy_engine()
+#' engine <- default_xy_engine()
 #'
 #' # `intercept` defaults to FALSE
 #' engine
@@ -198,7 +198,7 @@ update_engine <- function(engine, ...) {
 #' @param x An object.
 #'
 #' @examples
-#' is_engine(new_default_xy_engine())
+#' is_engine(default_xy_engine())
 #'
 #' @export
 is_engine <- function(x) {

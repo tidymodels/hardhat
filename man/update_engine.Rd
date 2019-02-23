@@ -25,7 +25,7 @@ you from accidentally updating non-existant elements.
 }
 \examples{
 
-engine <- new_default_xy_engine()
+engine <- default_xy_engine()
 
 # `intercept` defaults to FALSE
 engine

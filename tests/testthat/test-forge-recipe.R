@@ -218,3 +218,4 @@ test_that("new data classes can interchange integer/numeric", {
   )
 
 })
+
