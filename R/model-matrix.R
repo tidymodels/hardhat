@@ -99,10 +99,21 @@ model_matrix <- function(terms, data) {
   tibble::as_tibble(predictors)
 }
 
+strip_model_matrix <- function(x) {
+  attr(x, "assign") <- NULL
+  attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
+  x
+}
+
 is_terms <- function(x) {
   inherits(x, "terms")
 }
 
-validate_is_terms <- function(terms) {
-  validate_is(terms, is_terms, "terms object")
+validate_is_terms <- function(.x, .x_nm) {
+
+  if (rlang::is_missing(.x_nm)) {
+    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  }
+
+  validate_is(.x, is_terms, "terms object", .x_nm)
 }

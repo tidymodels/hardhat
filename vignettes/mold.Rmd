@@ -91,7 +91,7 @@ iris_test <- iris[101:150,]
 processed <- mold(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
 ```
 
-The return value of `mold()` has three things. The `predictors`, the `outcomes`, and a `preprocessor` that varies based on the interface you are using. Notice that the default behavior for `mold()` is to _not_ add an intercept column. This is completely controlled by the `intercept` argument and not by the formula itself.
+The return value of `mold()` has three things. The `predictors`, the `outcomes`, and a `engine` that varies based on the interface you are using. Notice that the default behavior for `mold()` is to _not_ add an intercept column. This is completely controlled by the `intercept` argument and not by the formula itself.
 
 ```{r}
 processed$predictors
@@ -99,18 +99,18 @@ processed$predictors
 processed$outcomes
 ```
 
-The preprocessor stores a number of things that are useful to any model when it is time to make predictions on new data.
+The engine stores a number of things that are useful to any model when it is time to make predictions on new data.
 
 ```{r}
-names(processed$preprocessor)
+names(processed$engine)
 ```
 
 For instance, the original levels and classes of the predictors are stored automatically.
 
 ```{r}
-processed$preprocessor$predictors$levels
+processed$engine$info$predictors$levels
 
-processed$preprocessor$predictors$classes
+processed$engine$info$predictors$classes
 ```
 
 There is also an interface for the XY method (providing the predictors and outcome directly to `x` and `y`). The preprocessing that occurs here is minimal, but you can add an intercept to `x` with `intercept = TRUE`. 
@@ -121,7 +121,7 @@ Notice how even though `y` is a vector, the `outcomes` slot of the return value 
 x <- iris_train[, c("Species", "Petal.Width")]
 y <- iris_train$Sepal.Length
 
-processed_xy <- mold(x, y, intercept = TRUE)
+processed_xy <- mold(x, y, default_xy_engine(intercept = TRUE))
 
 processed_xy$predictors
 

@@ -2,15 +2,36 @@
 % Please edit documentation in R/mold.R
 \name{mold}
 \alias{mold}
+\alias{mold.data.frame}
+\alias{mold.matrix}
+\alias{mold.formula}
+\alias{mold.recipe}
 \title{Mold data for modeling}
 \usage{
 mold(x, ...)
+
+\method{mold}{data.frame}(x, y, engine = NULL, ...)
+
+\method{mold}{matrix}(x, y, engine = NULL, ...)
+
+\method{mold}{formula}(formula, data, engine = NULL, ...)
+
+\method{mold}{recipe}(x, data, engine = NULL, ...)
 }
 \arguments{
 \item{x}{A data frame, matrix, formula, or \code{\link[recipes:recipe]{recipes::recipe()}}. If this is a
 data.frame or matrix, it should contain the predictors.}
 
 \item{...}{Currently unused.}
+
+\item{y}{A data frame, matrix, or vector. This should contain the outcomes.}
+
+\item{engine}{A preprocessing \code{engine}. If left as \code{NULL}, then a default
+engine is chosen based on the type of \code{x}.}
+
+\item{formula}{A formula specifying the terms of the model.}
+
+\item{data}{A data frame or matrix containing the predictors and the outcomes.}
 }
 \value{
 A named list containing 4 elements:
@@ -19,7 +40,7 @@ A named list containing 4 elements:
 model.
 \item \code{outcome}: A tibble containing the molded outcomes to be used in the
 model.
-\item \code{preprocessor}: A \code{"preprocessor"} object for use when making predictions.
+\item \code{engine}: A \code{"hardhat_engine"} object for use when making predictions.
 \item \code{offset}: A tibble with a single column named \code{".offset"} if an offset
 was specified in the formula method. Otherwise, \code{NULL}.
 }
@@ -28,12 +49,13 @@ was specified in the formula method. Otherwise, \code{NULL}.
 \code{mold()} applies the appropriate processing steps required to get training
 data ready to be fed into a model.
 
-The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:
+The return values of each engine are all consistent with one another, but the
+nuances of exactly what is being done for each engine vary enough to warrant
+separate help files for each. Click through to each one below to learn
+about each engine and see a large amount of engine specific examples:
 \itemize{
-\item XY Method - \code{\link[=mold.data.frame]{mold.data.frame()}} / \code{\link[=mold.matrix]{mold.matrix()}}
-\item Formula Method - \code{\link[=mold.formula]{mold.formula()}}
-\item Recipes Method - \code{\link[=mold.recipe]{mold.recipe()}}
+\item XY Method - \code{\link[=default_xy_engine]{default_xy_engine()}}
+\item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
+\item Recipes Method - \code{\link[=default_recipe_engine]{default_recipe_engine()}}
 }
 }

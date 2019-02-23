@@ -27,7 +27,7 @@ a double column is used at prediction time. It also does not allow for
 any columns of \code{x} to be multivariate themselves (no data frame columns,
 or matrix columns).
 
-The classes returned by \code{get_data_classes()} are stored in the preprocessor
+The classes returned by \code{get_data_classes()} are stored in the \code{engine}
 objects. This function is called by \code{\link[=mold]{mold()}}.
 }
 \examples{

@@ -38,11 +38,11 @@
 #'
 #' @inheritParams enforce_new_data_novel_levels
 #'
-#' @param preprocessor A `"preprocessor"`.
-#'
 #' @param new_data A data frame containing the new data to check the structure
 #' of. This should contain the predictors, and potentially the outcomes if
 #' `outcomes = TRUE`.
+#'
+#' @param engine A preprocessing `engine` returned from a call to [mold()].
 #'
 #' @param outcomes A logical. Should the outcomes be checked as well?
 #'
@@ -56,21 +56,21 @@
 #' test <- iris[101:150,]
 #'
 #' # mold() is run at model fit time
-#' # and a terms preprocessor is recorded
+#' # and a formula preprocessing engine is recorded
 #' x <- mold(log(Sepal.Width) ~ Species, train)
 #'
-#' # Pass that preprocessor to shrink(), along with new_data
+#' # Pass that engine to shrink(), along with new_data
 #' # to get a tibble of required predictors back
-#' test_shrunk <- shrink(x$preprocessor, test)
+#' test_shrunk <- shrink(test, x$engine)
 #'
 #' # Now pass that to scream() to perform validation checks
 #' # Silence is key!
-#' scream(x$preprocessor, test_shrunk)
+#' scream(test_shrunk, x$engine)
 #'
 #' # If `outcomes = TRUE` is used with shrink(),
 #' # it should also be used with scream()
-#' test_outcome <- shrink(x$preprocessor, test, outcomes = TRUE)
-#' scream(x$preprocessor, test_outcome, outcomes = TRUE)
+#' test_outcome <- shrink(test, x$engine, outcomes = TRUE)
+#' scream(test_outcome, x$engine, outcomes = TRUE)
 #'
 #' # scream() validates that the classes of `new_data`
 #' # are the same as the ones used in mold(). The below call
@@ -79,31 +79,47 @@
 #' test2$Species <- as.character(test2$Species)
 #'
 #' \dontrun{
-#' scream(x$preprocessor, test2)
+#' scream(test2, x$engine)
 #' }
 #'
 #' @export
-scream <- function(preprocessor, new_data, outcomes = FALSE, drop_novel = TRUE) {
+scream <- function(new_data, engine, outcomes = FALSE, drop_novel = TRUE) {
 
   new_data <- tibble::as_tibble(new_data)
 
-  original_predictor_classes <- preprocessor$info$predictors$classes
-  original_predictor_levels <- preprocessor$info$predictors$levels
+  original_predictor_classes <- engine$info$predictors$classes
+  original_predictor_levels <- engine$info$predictors$levels
 
   validate_new_data_classes(new_data, original_predictor_classes)
 
-  new_data <- enforce_new_data_novel_levels(new_data, original_predictor_levels, drop_novel)
-  new_data <- enforce_new_data_level_recovery(new_data, original_predictor_levels)
+  new_data <- enforce_new_data_novel_levels(
+    new_data = new_data,
+    original_levels = original_predictor_levels,
+    drop_novel = drop_novel
+  )
+
+  new_data <- enforce_new_data_level_recovery(
+    new_data = new_data,
+    original_levels = original_predictor_levels
+  )
 
   if (outcomes) {
 
-    original_outcome_classes <- preprocessor$info$outcomes$classes
-    original_outcome_levels <- preprocessor$info$outcomes$levels
+    original_outcome_classes <- engine$info$outcomes$classes
+    original_outcome_levels <- engine$info$outcomes$levels
 
     validate_new_data_classes(new_data, original_outcome_classes)
 
-    new_data <- enforce_new_data_novel_levels(new_data, original_outcome_levels, drop_novel)
-    new_data <- enforce_new_data_level_recovery(new_data, original_outcome_levels)
+    new_data <- enforce_new_data_novel_levels(
+      new_data = new_data,
+      original_levels = original_outcome_levels,
+      drop_novel = drop_novel
+    )
+
+    new_data <- enforce_new_data_level_recovery(
+      new_data = new_data,
+      original_levels = original_outcome_levels
+    )
 
   }
 

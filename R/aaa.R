@@ -1,6 +1,7 @@
 #' @importFrom rlang abort is_missing arg_match :=
 #' @importFrom glue glue
 #' @importFrom tibble tibble
+#' @importFrom zeallot %<-%
 NULL
 
 # stats related imports
@@ -11,3 +12,13 @@ NULL
 #' @importFrom stats get_all_vars
 #' @importFrom stats terms
 NULL
+
+# for zeallot
+utils::globalVariables(
+  c(
+    ".predictors",
+    ".outcomes",
+    "predictors",
+    "outcomes"
+  )
+)

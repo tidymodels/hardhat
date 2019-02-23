@@ -4,7 +4,7 @@ test_that("an outcome can also be a predictor and is only returned once", {
   x <- mold(Sepal.Length ~ Sepal.Length, iris)
 
   expect_equal(
-    colnames(shrink(x$preprocessor, iris, outcomes = TRUE)),
+    colnames(shrink(iris, x$engine, outcomes = TRUE)),
     "Sepal.Length"
   )
 })

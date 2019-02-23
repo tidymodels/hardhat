@@ -12,6 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+options(rlang__backtrace_on_error = "reminder")
 ```
 
 ```{r setup}
@@ -30,12 +32,12 @@ processed <- mold(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
 
 `forge()` takes `new_data` and applies the same preprocessing steps that happened to the data used in training the model. It is to be called from `predict()`, or potentially from a cross validation function where you will use `predict()` repeatedly to measure performance of different folds or different hyperparameters.
 
-Say you fit a model and called `mold()` from your fitting function. When you return the model object, you should attach the `preprocessor` that you get with the output of `mold()` onto the model object (using the model constructor, `new_base_model()`, makes this easier to do). Then when you call `predict()` on that model object along with `new_data`, you should call `forge()` inside of the `predict()` method with the stored `preprocessor` and the `new_data`.
+Say you fit a model and called `mold()` from your fitting function. When you return the model object, you should attach the `engine` that you get with the output of `mold()` onto the model object (using the model constructor, `new_base_model()`, makes this easier to do). Then when you call `predict()` on that model object along with `new_data`, you should call `forge()` inside of the `predict()` method with the stored `engine` and the `new_data`.
 
 ```{r}
 processed_test <- forge(
-  preprocessor = processed$preprocessor, 
   new_data = iris_test,
+  engine = processed$engine, 
   outcomes = TRUE
 )
 ```
@@ -48,7 +50,7 @@ processed_test$predictors
 processed_test$outcomes
 ```
 
-The nice thing about `forge()` is that the `preprocessor` remembers a lot of information about what happened at fit time, and keeps the user from shooting themselves in the foot at prediction time. 
+The nice thing about `forge()` is that the `engine` remembers a lot of information about what happened at fit time, and keeps the user from shooting themselves in the foot at prediction time. 
 
 For instance, each predictor used at fit time has to have the same class at prediction time.
 
@@ -59,7 +61,7 @@ iris_test_bad <- iris_test
 # a factor
 iris_test_bad$Species <- as.character(iris_test_bad$Species)
 
-forge(processed$preprocessor, iris_test_bad)
+forge(iris_test_bad, processed$engine)
 ```
 
 And each predictor column has to exist in `new_data`.
@@ -68,7 +70,7 @@ And each predictor column has to exist in `new_data`.
 # Removing species alltogether
 iris_test_bad$Species <- NULL
 
-forge(processed$preprocessor, iris_test_bad)
+forge(iris_test_bad, processed$engine)
 ```
 
 And new levels in any of the predictors throw a warning and are coerced to `NA`.
@@ -81,7 +83,7 @@ iris_test_bad$Species  <- factor(iris_test_bad$Species)
 
 levels(iris_test_bad$Species)
 
-processed_bad_test <- forge(processed$preprocessor, iris_test_bad)
+processed_bad_test <- forge(iris_test_bad, processed$engine)
 
 processed_bad_test$predictors
 ```

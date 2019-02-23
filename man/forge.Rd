@@ -4,14 +4,12 @@
 \alias{forge}
 \title{Forge prediction-ready data}
 \usage{
-forge(preprocessor, new_data, outcomes = FALSE, ...)
+forge(new_data, engine, outcomes = FALSE, ...)
 }
 \arguments{
-\item{preprocessor}{A valid \code{"preprocessor"}. The preprocessor that should
-be used here is the one in the output from the corresponding call
-to \code{\link[=mold]{mold()}}.}
-
 \item{new_data}{A data frame or matrix to preprocess.}
+
+\item{engine}{A preprocessing \code{engine}.}
 
 \item{outcomes}{A logical. Should the outcomes be processed and returned
 as well?}
@@ -25,22 +23,23 @@ A named list with 3 elements:
 \code{new_data} predictors.
 \item \code{outcomes}: If \code{outcomes = TRUE}, a tibble containing the preprocessed
 \code{new_data} outcomes. Otherwise, \code{NULL}.
-\item \code{offset}: If the \code{preprocessor} was a \code{"terms_preprocessor"}, and offsets
+\item \code{offset}: If the \code{preprocessor} was a \code{"formula_engine"}, and offsets
 were specified in the formula, this is a tibble containing the preprocessed
 offsets. Otherwise, \code{NULL}.
 }
 }
 \description{
-\code{forge()} applies the transformations requested by the \code{preprocessor}
+\code{forge()} applies the transformations requested by the \code{engine}
 on a set of \code{new_data} to be used in predictions.
 
-The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:
+The return values of each engine are all consistent with one another, but the
+nuances of exactly what is being done for each engine vary enough to warrant
+separate help files for each. Click through to each one below to learn
+about each engine and see a large amount of engine specific examples:
 \itemize{
-\item XY Method - \code{\link[=forge.default_preprocessor]{forge.default_preprocessor()}}
-\item Formula Method - \code{\link[=forge.terms_preprocessor]{forge.terms_preprocessor()}}
-\item Recipes Method - \code{\link[=forge.recipes_preprocessor]{forge.recipes_preprocessor()}}
+\item XY Method - \code{\link[=default_xy_engine]{default_xy_engine()}}
+\item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
+\item Recipes Method - \code{\link[=default_recipe_engine]{default_recipe_engine()}}
 }
 }
 \details{

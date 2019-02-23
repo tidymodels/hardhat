@@ -1,15 +1,15 @@
 #' @export
-format.default_preprocessor <- function(x, ...) "Default"
+format.xy_engine <- function(x, ...) "XY"
 
 #' @export
-format.recipes_preprocessor <- function(x, ...) "Recipe"
+format.recipe_engine <- function(x, ...) "Recipe"
 
 #' @export
-format.terms_preprocessor <- function(x, ...) "Formula"
+format.formula_engine <- function(x, ...) "Formula"
 
 #' @export
-print.preprocessor <- function(x, ...) {
-  cat_line("{format(x)} Preprocessor:")
+print.hardhat_engine <- function(x, ...) {
+  cat_line("{format(x)} Engine:")
   cat_line("\n")
   cat_line("# Predictors: {length(x$info$predictors$names)}")
   cat_line("  # Outcomes: {length(x$info$outcomes$names)}")
@@ -18,7 +18,7 @@ print.preprocessor <- function(x, ...) {
 }
 
 #' @export
-print.terms_preprocessor <- function(x, ...) {
+print.formula_engine <- function(x, ...) {
   NextMethod()
   cat_line("  Indicators: {x$indicators}")
   invisible(x)

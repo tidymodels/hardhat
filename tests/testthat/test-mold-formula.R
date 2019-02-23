@@ -1,4 +1,3 @@
-# ------------------------------------------------------------------------------
 context("test-mold-formulas")
 
 test_that("can mold simple formulas", {
@@ -8,7 +7,7 @@ test_that("can mold simple formulas", {
   expect_equal(colnames(x$predictors), "Sepal.Length")
   expect_is(x$outcomes, "tbl_df")
   expect_equal(colnames(x$outcomes), "Species")
-  expect_is(x$preprocessor, "terms_preprocessor")
+  expect_is(x$engine, "default_formula_engine")
 })
 
 test_that("can mold multivariate formulas", {
@@ -33,8 +32,8 @@ test_that("can mold multivariate formulas", {
 
 test_that("factor predictors with no intercept are fully expanded", {
 
-  x <- mold(Sepal.Length ~ Species, iris, intercept = TRUE)
-  xx <- mold(Sepal.Length ~ Species, iris, intercept = FALSE)
+  x <- mold(Sepal.Length ~ Species, iris, default_formula_engine(intercept = TRUE))
+  xx <- mold(Sepal.Length ~ Species, iris, default_formula_engine(intercept = FALSE))
 
   expect_equal(
     colnames(x$predictors),
@@ -50,44 +49,44 @@ test_that("factor predictors with no intercept are fully expanded", {
 
 test_that("can mold and not expand dummies", {
 
-  x <- mold(Sepal.Length ~ Species, iris, indicators = FALSE)
+  x <- mold(Sepal.Length ~ Species, iris, default_formula_engine(indicators = FALSE))
 
   expect_equal(colnames(x$predictors), "Species")
   expect_is(x$predictors$Species, "factor")
-  expect_equal(x$preprocessor$indicators, FALSE)
+  expect_equal(x$engine$indicators, FALSE)
 })
 
 test_that("errors are thrown if `indicator = FALSE` and factor interactions exist", {
 
   expect_error(
-    mold(~ Species, iris, indicators = FALSE),
+    mold(~ Species, iris, default_formula_engine(indicators = FALSE)),
     NA
   )
 
   expect_error(
-    mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
+    mold(Sepal.Length ~ Species:Sepal.Width, iris, default_formula_engine(indicators = FALSE)),
     "Interaction terms involving factors"
   )
 
   # Checking various types of generated interactions
 
   expect_error(
-    mold(Sepal.Length ~ Species:Sepal.Width, iris, indicators = FALSE),
+    mold(Sepal.Length ~ Species:Sepal.Width, iris, default_formula_engine(indicators = FALSE)),
     "'Species'"
   )
 
   expect_error(
-    mold(Sepal.Length ~ Species * Sepal.Width, iris, indicators = FALSE),
+    mold(Sepal.Length ~ Species * Sepal.Width, iris, default_formula_engine(indicators = FALSE)),
     "'Species'"
   )
 
   expect_error(
-    mold(Sepal.Length ~ (Species + Sepal.Width) ^ 2, iris, indicators = FALSE),
+    mold(Sepal.Length ~ (Species + Sepal.Width) ^ 2, iris, default_formula_engine(indicators = FALSE)),
     "'Species'"
   )
 
   expect_error(
-    mold(Sepal.Length ~ Species %in% Sepal.Width, iris, indicators = FALSE),
+    mold(Sepal.Length ~ Species %in% Sepal.Width, iris, default_formula_engine(indicators = FALSE)),
     "'Species'"
   )
 
@@ -97,7 +96,7 @@ test_that("errors are thrown if `indicator = FALSE` and factor interactions exis
   iris2$Species2 <- iris2$Species
 
   expect_error(
-    mold(~ Species:Species2, iris2, indicators = FALSE),
+    mold(~ Species:Species2, iris2, default_formula_engine(indicators = FALSE)),
     "'Species', 'Species2'."
   )
 
@@ -105,22 +104,24 @@ test_that("errors are thrown if `indicator = FALSE` and factor interactions exis
 
 test_that("errors are thrown if `indicator = FALSE` and factors are used in inline functions", {
 
+  engine_no_indicators <- default_formula_engine(indicators = FALSE)
+
   expect_error(
-    mold(~ paste0(Species), iris, indicators = FALSE),
+    mold(~ paste0(Species), iris, engine_no_indicators),
     "Functions involving factors"
   )
 
   expect_error(
-    mold(~ paste0(Species), iris, indicators = FALSE),
+    mold(~ paste0(Species), iris, engine_no_indicators),
     "'Species'"
   )
 
   expect_error(
-    mold(~ Species %>% paste0(), iris, indicators = FALSE)
+    mold(~ Species %>% paste0(), iris, engine_no_indicators)
   )
 
   expect_error(
-    mold(~ paste0(Species + Species), iris, indicators = FALSE),
+    mold(~ paste0(Species + Species), iris, engine_no_indicators),
     "'Species'"
   )
 
@@ -128,7 +129,7 @@ test_that("errors are thrown if `indicator = FALSE` and factors are used in inli
   iris2$Species2 <- iris2$Species
 
   expect_error(
-    mold(~ paste0(Species) + paste0(Species2), iris2, indicators = FALSE),
+    mold(~ paste0(Species) + paste0(Species2), iris2, engine_no_indicators),
     "'Species', 'Species2'."
   )
 
@@ -136,7 +137,7 @@ test_that("errors are thrown if `indicator = FALSE` and factors are used in inli
 
 test_that("`indicators = FALSE` works fine in strange formulas", {
 
-  x <- mold(~ 1, iris, indicators = FALSE, intercept = TRUE)
+  x <- mold(~ 1, iris, default_formula_engine(indicators = FALSE, intercept = TRUE))
 
   expect_equal(
     colnames(x$predictors),
@@ -150,14 +151,14 @@ test_that("formula intercepts can be added", {
   x <- mold(
     Species ~ Sepal.Length,
     iris,
-    intercept = TRUE
+    default_formula_engine(intercept = TRUE)
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))
-  expect_equal(attr(x$preprocessor$engine$predictors, "intercept"), 1)
+  expect_equal(attr(x$engine$terms$predictors, "intercept"), 1)
 
   # Don't want intercept in original predictors
-  expect_false("(Intercept)" %in% x$preprocessor$info$predictors$names)
+  expect_false("(Intercept)" %in% x$engine$info$predictors$names)
 })
 
 test_that("can mold formulas with special terms", {
@@ -171,7 +172,7 @@ test_that("can mold formulas with special terms", {
   )
 
   expect_equal(
-    x$preprocessor$info$predictors$names,
+    x$engine$info$predictors$names,
     c("Sepal.Length", "Sepal.Width")
   )
 })
@@ -213,7 +214,7 @@ test_that("cannot manually remove intercept in the formula itself", {
 
 test_that("intercepts can still be added when not using indicators (i.e. model.matrix())", {
 
-  x <- mold(Sepal.Width ~ Species, iris, intercept = TRUE, indicators = FALSE)
+  x <- mold(Sepal.Width ~ Species, iris, default_formula_engine(intercept = TRUE, indicators = FALSE))
 
   expect_true(
     "(Intercept)" %in% colnames(x$predictors)
@@ -255,7 +256,7 @@ test_that("full interaction syntax is supported", {
            Sepal.Width:Sepal.Length +
            Sepal.Width:Petal.Length +
            Sepal.Length:Petal.Length,
-        iris)$predictors
+         iris)$predictors
   )
 
   expect_equal(
@@ -267,7 +268,7 @@ test_that("full interaction syntax is supported", {
 
 test_that("`indicators = FALSE` runs numeric interactions", {
 
-  x <- mold(~ Sepal.Length:Sepal.Width, iris, indicators = FALSE)
+  x <- mold(~ Sepal.Length:Sepal.Width, iris, default_formula_engine(indicators = FALSE))
 
   expect_equal(
     colnames(x$predictors),
@@ -305,68 +306,18 @@ test_that("LHS of the formula cannot contain interactions", {
 
 })
 
-# ------------------------------------------------------------------------------
-context("test-mold-xy")
+test_that("original predictor and outcome classes are recorded", {
 
-test_that("can use x-y mold interface", {
+  x <- mold(log(Sepal.Length) ~ log(Sepal.Width), iris)
 
-  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-
-  expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcomes, "tbl_df")
-  expect_equal(colnames(x$outcomes), ".outcome")
-  expect_is(x$preprocessor, "default_preprocessor")
-
-})
-
-test_that("xy intercepts can be added", {
-
-  x <- mold(
-    iris[, "Sepal.Length", drop = FALSE],
-    iris$Species,
-    intercept = TRUE
+  expect_equal(
+    x$engine$info$predictors$classes,
+    list(Sepal.Width = "numeric")
   )
 
-  expect_true("(Intercept)" %in% colnames(x$predictors))
-})
-
-# ------------------------------------------------------------------------------
-context("test-mold-recipes")
-
-library(recipes)
-
-test_that("can mold recipes", {
-
-  x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
-    iris
-  )
-
-  expect_equal(colnames(x$predictors), "Sepal.Length")
-  expect_is(x$outcomes, "data.frame")
-  expect_is(x$outcomes[[1]], "factor")
-  expect_is(x$preprocessor, "recipes_preprocessor")
-
-  # Training data should _not_ be in the recipe
-  expect_error(recipes::juice(x$preprocessor))
-})
-
-test_that("can mold recipes with intercepts", {
-
-  x <- mold(
-    recipe(Species ~ Sepal.Length, data = iris),
-    iris,
-    intercept = TRUE
-  )
-
-  expect_true("(Intercept)" %in% colnames(x$predictors))
-})
-
-test_that("`data` is validated", {
-
-  expect_error(
-    mold(recipe(Species ~ Sepal.Length, data = iris), 1),
-    "`data` must be a data.frame or a matrix"
+  expect_equal(
+    x$engine$info$outcomes$classes,
+    list(Sepal.Length = "numeric")
   )
 
 })
