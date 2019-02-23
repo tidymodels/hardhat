@@ -5,15 +5,16 @@
 #' `forge()` applies the transformations requested by the `preprocessor`
 #' on a set of `new_data` to be used in predictions.
 #'
-#' The return values of each method are all consistent with one another, but the
-#' nuances of exactly what is being done for each method vary enough to warrant
-#' separate help files for each. Click through to each one below:
+#' The return values of each engine are all consistent with one another, but the
+#' nuances of exactly what is being done for each engine vary enough to warrant
+#' separate help files for each. Click through to each one below to learn
+#' about each engine and see a large amount of engine specific examples:
 #'
-#' * XY Method - [forge.default_preprocessor()]
+#' * XY Method - [new_default_xy_engine()]
 #'
-#' * Formula Method - [forge.terms_preprocessor()]
+#' * Formula Method - [new_default_formula_engine()]
 #'
-#' * Recipes Method - [forge.recipes_preprocessor()]
+#' * Recipes Method - [new_default_recipe_engine()]
 #'
 #' @details
 #'
@@ -22,11 +23,9 @@
 #' useful when doing cross validation where you need to preprocess the
 #' outcomes of a test set before computing performance.
 #'
-#' @param preprocessor A valid `"preprocessor"`. The preprocessor that should
-#' be used here is the one in the output from the corresponding call
-#' to [mold()].
-#'
 #' @param new_data A data frame or matrix to preprocess.
+#'
+#' @param engine A preprocessing `engine`.
 #'
 #' @param outcomes A logical. Should the outcomes be processed and returned
 #' as well?

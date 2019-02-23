@@ -12,3 +12,13 @@ NULL
 #' @importFrom stats get_all_vars
 #' @importFrom stats terms
 NULL
+
+# for zeallot
+utils::globalVariables(
+  c(
+    ".predictors",
+    ".outcomes",
+    "predictors",
+    "outcomes"
+  )
+)
