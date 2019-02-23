@@ -77,14 +77,14 @@ enforce_new_data_level_recovery(test, original_levels)
 x <- mold(Sepal.Length ~ Species, train)
 
 # No problems here!
-enforce_new_data_level_recovery(test, x$preprocessor$info$predictors$levels)
+enforce_new_data_level_recovery(test, x$engine$info$predictors$levels)
 
 # Missing 2 levels
 bad_test <- test
 bad_test$Species <- droplevels(bad_test$Species)
 
 # Restores the levels with a warning
-enforce_new_data_level_recovery(bad_test, x$preprocessor$info$predictors$levels)
+enforce_new_data_level_recovery(bad_test, x$engine$info$predictors$levels)
 
 # ---------------------------------------------------------------------------
 # Novel levels and ordered factors

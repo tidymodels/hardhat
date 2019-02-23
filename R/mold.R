@@ -31,7 +31,7 @@
 #'  - `outcome`: A tibble containing the molded outcomes to be used in the
 #'  model.
 #'
-#'  - `preprocessor`: A `"preprocessor"` object for use when making predictions.
+#'  - `engine`: A `"hardhat_engine"` object for use when making predictions.
 #'
 #'  - `offset`: A tibble with a single column named `".offset"` if an offset
 #'  was specified in the formula method. Otherwise, `NULL`.

@@ -12,7 +12,7 @@
 #' any columns of `x` to be multivariate themselves (no data frame columns,
 #' or matrix columns).
 #'
-#' The classes returned by `get_data_classes()` are stored in the preprocessor
+#' The classes returned by `get_data_classes()` are stored in the `engine`
 #' objects. This function is called by [mold()].
 #'
 #' @param x A data frame or matrix.

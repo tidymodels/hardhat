@@ -2,7 +2,7 @@
 #'
 #' @description
 #'
-#' `forge()` applies the transformations requested by the `preprocessor`
+#' `forge()` applies the transformations requested by the `engine`
 #' on a set of `new_data` to be used in predictions.
 #'
 #' The return values of each engine are all consistent with one another, but the
@@ -42,7 +42,7 @@
 #'  - `outcomes`: If `outcomes = TRUE`, a tibble containing the preprocessed
 #'  `new_data` outcomes. Otherwise, `NULL`.
 #'
-#'  - `offset`: If the `preprocessor` was a `"terms_preprocessor"`, and offsets
+#'  - `offset`: If the `preprocessor` was a `"formula_engine"`, and offsets
 #'  were specified in the formula, this is a tibble containing the preprocessed
 #'  offsets. Otherwise, `NULL`.
 #'

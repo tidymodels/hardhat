@@ -23,13 +23,13 @@ A named list with 3 elements:
 \code{new_data} predictors.
 \item \code{outcomes}: If \code{outcomes = TRUE}, a tibble containing the preprocessed
 \code{new_data} outcomes. Otherwise, \code{NULL}.
-\item \code{offset}: If the \code{preprocessor} was a \code{"terms_preprocessor"}, and offsets
+\item \code{offset}: If the \code{preprocessor} was a \code{"formula_engine"}, and offsets
 were specified in the formula, this is a tibble containing the preprocessed
 offsets. Otherwise, \code{NULL}.
 }
 }
 \description{
-\code{forge()} applies the transformations requested by the \code{preprocessor}
+\code{forge()} applies the transformations requested by the \code{engine}
 on a set of \code{new_data} to be used in predictions.
 
 The return values of each engine are all consistent with one another, but the
