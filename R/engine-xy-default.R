@@ -78,7 +78,7 @@
 #' # ---------------------------------------------------------------------------
 #' # Intercept
 #'
-#' processed <- mold(train_x, train_y, intercept = TRUE)
+#' processed <- mold(train_x, train_y, default_xy_engine(intercept = TRUE))
 #'
 #' forge(test_x, processed$engine)
 #'

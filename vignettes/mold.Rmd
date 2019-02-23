@@ -121,7 +121,7 @@ Notice how even though `y` is a vector, the `outcomes` slot of the return value 
 x <- iris_train[, c("Species", "Petal.Width")]
 y <- iris_train$Sepal.Length
 
-processed_xy <- mold(x, y, intercept = TRUE)
+processed_xy <- mold(x, y, default_xy_engine(intercept = TRUE))
 
 processed_xy$predictors
 

@@ -233,7 +233,7 @@ test_that("intercept is not included as a predictor", {
   x <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris[, "Species", drop = FALSE],
-    intercept = TRUE
+    default_xy_engine(intercept = TRUE)
   )
 
   expect_false(
@@ -254,7 +254,7 @@ test_that("intercept is not included as a predictor", {
   xx <- mold(
     as.matrix(iris[, "Sepal.Length", drop = FALSE]),
     iris$Sepal.Width,
-    intercept = TRUE
+    default_xy_engine(intercept = TRUE)
   )
 
   expect_false(

@@ -144,7 +144,7 @@
 #' processed <- mold(
 #'   log(Sepal.Width) ~ Sepal.Length + Species,
 #'   train,
-#'   intercept = TRUE
+#'   engine = default_formula_engine(intercept = TRUE)
 #' )
 #'
 #' # Then, call forge() with the preengine and the test data
@@ -157,7 +157,7 @@
 #' # ---------------------------------------------------------------------------
 #' # Factors without an intercept
 #'
-#' # No intercept is added
+#' # No intercept is added by default
 #' processed <- mold(Sepal.Width ~ Species, train)
 #'
 #' # So factor columns are completely expanded
@@ -191,10 +191,12 @@
 #' # run model.matrix() on factor columns. Interactions
 #' # are still allowed and run on numeric columns.
 #'
+#' engine_no_indicators <- default_formula_engine(indicators = FALSE)
+#'
 #' processed <- mold(
 #'   ~ Species + Sepal.Width:Sepal.Length,
 #'   train,
-#'   indicators = FALSE
+#'   engine_no_indicators
 #' )
 #'
 #' processed$predictors
@@ -202,8 +204,8 @@
 #' # An informative error is thrown when `indicators = FALSE` and
 #' # factors are present in interaction terms or in inline functions
 #' \dontrun{
-#' mold(Sepal.Width ~ Sepal.Length:Species, train, indicators = FALSE)
-#' mold(Sepal.Width ~ paste0(Species), train, indicators = FALSE)
+#' mold(Sepal.Width ~ Sepal.Length:Species, train, engine_no_indicators)
+#' mold(Sepal.Width ~ paste0(Species), train, engine_no_indicators)
 #' }
 #'
 #' # ---------------------------------------------------------------------------

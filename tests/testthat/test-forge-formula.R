@@ -39,7 +39,7 @@ test_that("can forge multivariate formulas", {
 
 test_that("can forge new data without expanding factors into dummies", {
 
-  x <- mold(Sepal.Length ~ Species, iris, indicators = FALSE)
+  x <- mold(Sepal.Length ~ Species, iris, default_formula_engine(indicators = FALSE))
   xx <- forge(iris, x$engine)
 
   expect_equal(
@@ -56,7 +56,7 @@ test_that("can forge new data without expanding factors into dummies", {
 
 test_that("forging with `indicators = FALSE` works with numeric interactions", {
 
-  x <- mold(Species ~ Sepal.Width:Sepal.Length, iris, indicators = FALSE)
+  x <- mold(Species ~ Sepal.Width:Sepal.Length, iris, default_formula_engine(indicators = FALSE))
   xx <- forge(iris, x$engine)
 
   expect_equal(
@@ -193,7 +193,7 @@ test_that("novel ordered factor predictor levels have order maintained", {
     f = ordered(letters[c(1:2, 5, 3:4)], levels = letters[c(1:2, 5, 3:4)])
   )
 
-  x <- mold(y ~ f, dat, indicators = FALSE)
+  x <- mold(y ~ f, dat, default_formula_engine(indicators = FALSE))
 
   expect_warning(
     xx <- forge(new, x$engine),
@@ -284,7 +284,7 @@ test_that("missing ordered factor levels are handled correctly", {
     f = ordered(letters[1:4])
   )
 
-  x <- mold(y ~ f, dat, indicators = FALSE)
+  x <- mold(y ~ f, dat, default_formula_engine(indicators = FALSE))
 
   # Ordered - strictly wrong order
   # Nothing happens!
@@ -397,7 +397,7 @@ test_that("new data classes can interchange integer/numeric", {
 
 test_that("intercepts can still be forged on when not using indicators (i.e. model.matrix())", {
 
-  x <- mold(Sepal.Width ~ Species, iris, intercept = TRUE, indicators = FALSE)
+  x <- mold(Sepal.Width ~ Species, iris, default_formula_engine(intercept = TRUE, indicators = FALSE))
   xx <- forge(iris, x$engine)
 
   expect_true(

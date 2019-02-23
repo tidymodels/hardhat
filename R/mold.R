@@ -25,6 +25,8 @@
 #'
 #' @param formula A formula specifying the terms of the model.
 #'
+#' @param data A data frame or matrix containing the predictors and the outcomes.
+#'
 #' @param ... Currently unused.
 #'
 #' @return
@@ -56,6 +58,8 @@ mold.default <- function(x, ...) {
 #' @export
 mold.data.frame <- function(x, y, engine = NULL, ...) {
 
+  validate_empty_dots(...)
+
   if (is.null(engine)) {
     engine <- default_xy_engine()
   }
@@ -72,6 +76,8 @@ mold.matrix <- mold.data.frame
 #' @rdname mold
 #' @export
 mold.formula <- function(formula, data, engine = NULL, ...) {
+
+  validate_empty_dots(...)
 
   if (is.null(engine)) {
     engine <- default_formula_engine()
@@ -90,6 +96,8 @@ mold.formula <- function(formula, data, engine = NULL, ...) {
 #' @rdname mold
 #' @export
 mold.recipe <- function(x, data, engine = NULL, ...) {
+
+  validate_empty_dots(...)
 
   validate_recipes_available()
 

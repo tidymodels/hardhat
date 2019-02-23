@@ -29,6 +29,8 @@ data.frame or matrix, it should contain the predictors.}
 \item{engine}{A preprocessing \code{engine}.}
 
 \item{formula}{A formula specifying the terms of the model.}
+
+\item{data}{A data frame or matrix containing the predictors and the outcomes.}
 }
 \value{
 A named list containing 4 elements:
