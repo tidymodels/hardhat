@@ -35,6 +35,7 @@ new_xy_engine <- function(mold,
 
 }
 
+#' @export
 refresh_engine.xy_engine <- function(engine) {
   do.call(new_xy_engine, as.list(engine))
 }

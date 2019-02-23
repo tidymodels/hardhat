@@ -60,6 +60,10 @@ subclass this engine.}
 
 \item{subclass}{A character vector. The subclasses of this engine.}
 }
+\value{
+An object of class \code{"hardhat_engine"} containing a list of the supplied
+named arguments.
+}
 \description{
 This is the base class for a preprocessing engine. All other engines
 subclass this one.

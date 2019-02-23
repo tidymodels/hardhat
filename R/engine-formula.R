@@ -41,6 +41,7 @@ new_formula_engine <- function(mold,
 
 }
 
+#' @export
 refresh_engine.formula_engine <- function(engine) {
   do.call(new_formula_engine, as.list(engine))
 }

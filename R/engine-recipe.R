@@ -41,6 +41,7 @@ new_recipe_engine <- function(mold,
 
 }
 
+#' @export
 refresh_engine.recipe_engine <- function(engine) {
   do.call(new_recipe_engine, as.list(engine))
 }

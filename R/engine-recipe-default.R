@@ -16,6 +16,7 @@ new_default_recipe_engine <- function(intercept = FALSE,
 
 }
 
+#' @export
 refresh_engine.default_recipe_engine <- function(engine) {
   new_default_recipe_engine(
     intercept = engine$intercept,

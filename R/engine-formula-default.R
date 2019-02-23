@@ -25,6 +25,7 @@ new_default_formula_engine <- function(intercept = FALSE,
 
 }
 
+#' @export
 refresh_engine.default_formula_engine <- function(engine) {
   new_default_formula_engine(
     intercept = engine$intercept,
