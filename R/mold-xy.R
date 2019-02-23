@@ -62,41 +62,6 @@
 #'
 #' @rdname mold-xy
 #'
-#' @export
-mold.data.frame <- function(x, y, intercept = FALSE, engine = NULL, ...) {
+NULL
 
-  if (is.null(engine)) {
-    engine <- new_default_xy_engine()
-  }
-
-  # validate_engine(engine)
-  engine <- update_engine(engine, intercept = intercept, ...)
-
-  mold_impl(engine, x, y)
-}
-
-#' @rdname mold-xy
-#' @export
-mold.matrix <- mold.data.frame
-
-# ------------------------------------------------------------------------------
-
-# not exposed
-mold_impl.xy_engine <- function(engine, x, y, ...) {
-
-  c(engine, x, y) %<-% engine$mold$clean(engine, x, y)
-  c(engine, predictors, outcomes) %<-% engine$mold$process(engine, x, y)
-
-  info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
-
-  engine <- update_engine(engine, info = info)
-
-  mold_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
-    engine = engine,
-    offset = predictors$offset
-    # extras = extras
-  )
-
-}
+# TODO - this is really engine specific information

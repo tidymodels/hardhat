@@ -74,6 +74,49 @@ forge_impl <- function(engine, ...) {
   UseMethod("forge_impl")
 }
 
+forge_impl.xy_engine <- function(engine, new_data, outcomes) {
+
+  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
+  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
+
+  forge_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    offset = predictors$offset
+    # extras = extras # maybe this would be useful?
+  )
+}
+
+forge_impl.formula_engine <- function(engine, new_data, outcomes) {
+
+  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
+  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
+
+  forge_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    offset = predictors$offset
+    # extras = extras # maybe this would be useful?
+  )
+}
+
+forge_impl.recipe_engine <- function(engine, new_data, outcomes) {
+
+  validate_recipes_available()
+
+  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
+  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
+
+  forge_list(
+    predictors = predictors$data,
+    outcomes = outcomes$data,
+    offset = predictors$offset
+    # extras = extras # maybe this would be useful?
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 forge_list <- function(predictors, outcomes = NULL, offset = NULL) {
   list(
     predictors = predictors,
