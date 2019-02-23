@@ -99,6 +99,12 @@ model_matrix <- function(terms, data) {
   tibble::as_tibble(predictors)
 }
 
+strip_model_matrix <- function(x) {
+  attr(x, "assign") <- NULL
+  attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
+  x
+}
+
 is_terms <- function(x) {
   inherits(x, "terms")
 }

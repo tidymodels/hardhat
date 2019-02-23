@@ -118,15 +118,3 @@ forge_impl.formula_engine <- function(engine, new_data, outcomes) {
     # extras = extras # maybe this would be useful?
   )
 }
-
-# ------------------------------------------------------------------------------
-
-# Is this a bad idea? We need it to forge() terms where
-# an inline function may have been used like poly(), but there
-# is no gurantee that the env above the global env is the same
-# as the one that was used in mold()
-alter_terms_environment <- function(terms_engine) {
-  env_above_global_env <- rlang::env_parent(rlang::global_env())
-  attr(terms_engine, ".Environment") <- env_above_global_env
-  terms_engine
-}

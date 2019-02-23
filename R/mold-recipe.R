@@ -92,35 +92,3 @@ mold_impl.recipe_engine <- function(engine, data, ...) {
   )
 
 }
-
-# ------------------------------------------------------------------------------
-
-get_original_predictor_info <- function(rec, data) {
-
-  roles <- rec$var_info$role
-  original_names <- rec$var_info$variable[roles == "predictor"]
-
-  original_data <- data[, original_names, drop = FALSE]
-
-  predictors_info(
-    names = original_names,
-    classes = get_data_classes(original_data),
-    levels = get_levels(original_data)
-  )
-
-}
-
-get_original_outcome_info <- function(rec, data) {
-
-  roles <- rec$var_info$role
-  original_names <- rec$var_info$variable[roles == "outcome"]
-
-  original_data <- data[, original_names, drop = FALSE]
-
-  outcomes_info(
-    names = original_names,
-    classes = get_data_classes(original_data),
-    levels = get_levels(original_data)
-  )
-
-}
