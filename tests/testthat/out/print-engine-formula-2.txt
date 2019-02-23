@@ -1,6 +1,6 @@
-Formula Preprocessor: 
+Formula Engine: 
  
 # Predictors: 1 
-  # Outcomes: 1 
+  # Outcomes: 0 
    Intercept: FALSE 
   Indicators: TRUE 
