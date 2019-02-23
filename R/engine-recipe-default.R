@@ -1,3 +1,93 @@
+#' Create a new default recipe engine
+#'
+#' This is the constructor for a default recipe preprocessing engine. This
+#' is the engine used by default from `mold()` if `x` is a recipe. To learn
+#' about what the default mold and forge functionality are, see the
+#' Mold and Forge sections below.
+#'
+#' @section Mold:
+#'
+#' The recipe engine's mold function does the following:
+#'
+#' - Calls [recipes::prep()] to prep the recipe.
+#'
+#' - Calls [recipes::juice()] to extract the outcomes and predictors. These
+#' are returned as tibbles.
+#'
+#' - If `intercept = TRUE`, adds an intercept column to the predictors.
+#'
+#' @section Forge:
+#'
+#' The recipe engine's forge function does the following:
+#'
+#' - Calls [shrink()] to trim `new_data` to only the required columns and
+#' coerce `new_data` to a tibble.
+#'
+#' - Calls [scream()] to perform validation on the structure of the columns
+#' of `new_data`.
+#'
+#' - Calls [recipes::bake()] on the `new_data` using the prepped recipe
+#' used during training.
+#'
+#' - Potentially adds an intercept column onto `new_data`,
+#' if `intercept = TRUE`.
+#'
+#' @return
+#'
+#' A preprocessing engine with the class, `"default_recipe_engine"` that can
+#' be used with [mold()] and [forge()].
+#'
+#' @inheritParams new_recipe_engine
+#'
+#' @examples
+#'
+#' library(recipes)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Setup
+#'
+#' train <- iris[1:100,]
+#' test <- iris[101:150,]
+#'
+#' # ---------------------------------------------------------------------------
+#' # Recipes example
+#'
+#' # Create a recipe that logs a predictor
+#' rec <- recipe(Species ~ Sepal.Length + Sepal.Width, train) %>%
+#'    step_log(Sepal.Length)
+#'
+#' processed <- mold(rec, train)
+#'
+#' # Sepal.Length has been logged
+#' processed$predictors
+#'
+#' processed$outcomes
+#'
+#' # The underlying engine is a prepped recipe
+#' processed$engine$recipe
+#'
+#' # Call forge() with the engine and the test data
+#' # to have it preprocess the test data in the same way
+#' forge(test, processed$engine)
+#'
+#' # Use `outcomes = TRUE` to also extract the preprocessed outcome!
+#' # This logged the Sepal.Length column of `new_data`
+#' forge(test, processed$engine, outcomes = TRUE)
+#'
+#' # ---------------------------------------------------------------------------
+#' # With an intercept
+#'
+#' # You can add an intercept with `intercept = TRUE`
+#' processed <- mold(rec, train, intercept = TRUE)
+#'
+#' processed$predictors
+#'
+#' # But you also could have used a recipe step
+#' rec2 <- step_intercept(rec)
+#'
+#' mold(rec2, iris)$predictors
+#'
+#' @export
 new_default_recipe_engine <- function(intercept = FALSE,
                                       info = NULL,
                                       recipe = NULL) {

@@ -46,7 +46,7 @@
 #' A preprocessing engine with the class, `"default_xy_engine"` that can
 #' be used with [mold()] and [forge()].
 #'
-#' @inheritParams new_engine
+#' @inheritParams new_xy_engine
 #'
 #' @examples
 #'

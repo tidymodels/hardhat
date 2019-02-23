@@ -1,3 +1,19 @@
+#' Create a new recipe engine
+#'
+#' This is the base class for a recipe preprocessing engine. If you want to
+#' create a new preprocessing engine that accepts input from the
+#' user where `x` is a recipe, start here.
+#'
+#' @return
+#'
+#' A preprocessing engine with the class, `"recipe_engine"`.
+#'
+#' @inheritParams new_engine
+#'
+#' @param recipe Either `NULL`, or an unprepped recipe. This argument is set
+#' automatically at [mold()] time.
+#'
+#' @export
 new_recipe_engine <- function(mold,
                               forge,
                               intercept = FALSE,
