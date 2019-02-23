@@ -60,9 +60,12 @@ forge.default <- function(new_data, engine, outcomes = FALSE, ...) {
 #' @export
 forge.data.frame <- function(new_data, engine, outcomes = FALSE, ...) {
 
+  validate_is_engine(engine)
+
   engine <- update_engine(engine, ...)
 
   forge_impl(engine, new_data, outcomes)
+
 }
 
 #' @export
@@ -70,52 +73,48 @@ forge.matrix <- forge.data.frame
 
 # ------------------------------------------------------------------------------
 
+# We make this generic because mold_impl() has to be generic to support the
+# different ways data can come in (`x` and `y` or `data`) and we want to be
+# consistent with that.
+
+# But, for now, they all do the same thing (as they should!),
+# and we don't expose this to the user/developer.
+
 forge_impl <- function(engine, ...) {
   UseMethod("forge_impl")
 }
 
 forge_impl.xy_engine <- function(engine, new_data, outcomes) {
 
-  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
-  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
+  c(engine, new_data) %<-% engine$forge$clean(
+    engine = engine,
+    new_data = new_data,
+    outcomes = outcomes
+  )
+
+  c(engine, predictors, outcomes) %<-% engine$forge$process(
+    engine = engine,
+    new_data = new_data,
+    outcomes = outcomes
+  )
 
   forge_list(
     predictors = predictors$data,
     outcomes = outcomes$data,
     offset = predictors$offset
-    # extras = extras # maybe this would be useful?
   )
+
 }
 
-forge_impl.formula_engine <- function(engine, new_data, outcomes) {
+forge_impl.formula_engine <- forge_impl.xy_engine
 
-  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
-  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
-
-  forge_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
-    offset = predictors$offset
-    # extras = extras # maybe this would be useful?
-  )
-}
-
-forge_impl.recipe_engine <- function(engine, new_data, outcomes) {
-
-  validate_recipes_available()
-
-  c(engine, new_data) %<-% engine$forge$clean(engine, new_data, outcomes)
-  c(engine, predictors, outcomes) %<-% engine$forge$process(engine, new_data, outcomes)
-
-  forge_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
-    offset = predictors$offset
-    # extras = extras # maybe this would be useful?
-  )
-}
+forge_impl.recipe_engine <- forge_impl.xy_engine
 
 # ------------------------------------------------------------------------------
+
+# Would it also be useful to add an `extras` element here?
+# So specific implementations can return other processed
+# information as needed?
 
 forge_list <- function(predictors, outcomes = NULL, offset = NULL) {
   list(

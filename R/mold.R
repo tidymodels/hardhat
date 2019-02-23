@@ -109,46 +109,55 @@ mold_impl <- function(engine, ...) {
 
 mold_impl.xy_engine <- function(engine, x, y, ...) {
 
-  c(engine, x, y) %<-% engine$mold$clean(engine, x, y)
-  c(engine, predictors, outcomes) %<-% engine$mold$process(engine, x, y)
-
-  info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
-
-  engine <- update_engine(engine, info = info)
-
-  mold_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
+  c(engine, x, y) %<-% engine$mold$clean(
     engine = engine,
-    offset = predictors$offset
-    # extras = extras
+    x = x,
+    y = y
   )
+
+  c(engine, predictors, outcomes) %<-% engine$mold$process(
+    engine = engine,
+    x = x,
+    y = y
+  )
+
+  mold_impl_common(engine, predictors, outcomes)
 
 }
 
 mold_impl.formula_engine <- function(engine, data, ...) {
 
-  c(engine, data) %<-% engine$mold$clean(engine, data)
-  c(engine, predictors, outcomes) %<-% engine$mold$process(engine, data)
-
-  info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
-
-  engine <- update_engine(engine, info = info)
-
-  mold_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
+  c(engine, data) %<-% engine$mold$clean(
     engine = engine,
-    offset = predictors$offset
-    # extras = extras
+    data = data
   )
+
+  c(engine, predictors, outcomes) %<-% engine$mold$process(
+    engine = engine,
+    data = data
+  )
+
+  mold_impl_common(engine, predictors, outcomes)
 
 }
 
 mold_impl.recipe_engine <- function(engine, data, ...) {
 
-  c(engine, data) %<-% engine$mold$clean(engine, data)
-  c(engine, predictors, outcomes) %<-% engine$mold$process(engine, data)
+  c(engine, data) %<-% engine$mold$clean(
+    engine = engine,
+    data = data
+  )
+
+  c(engine, predictors, outcomes) %<-% engine$mold$process(
+    engine = engine,
+    data = data
+  )
+
+  mold_impl_common(engine, predictors, outcomes)
+
+}
+
+mold_impl_common <- function(engine, predictors, outcomes) {
 
   info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
 
@@ -159,12 +168,19 @@ mold_impl.recipe_engine <- function(engine, data, ...) {
     outcomes = outcomes$data,
     engine = engine,
     offset = predictors$offset
-    # extras = extras
   )
 
 }
 
 # ------------------------------------------------------------------------------
+
+# Would it also be useful to add an `extras` element here?
+# So specific implementations can return other processed
+# information as needed? For engine specific things, they
+# can just add information to the engine, but maybe there
+# are other things (like the offsets) that you might want
+# to return? (oooh, maybe offset counts as an `extra`
+# for the formula method?)
 
 mold_list <- function(predictors, outcomes, engine, offset = NULL) {
   list(
