@@ -1,6 +1,63 @@
-# elements that are set later are defaulted to NULL
-# elements that are set at creation time have real values or no value (must be supplied)
-
+#' Create a new preprocessing engine
+#'
+#' This is the base class for a preprocessing engine. All other engines
+#' subclass this one.
+#'
+#' @param mold A named list with two elements:
+#'
+#' - `clean`: A function that performs initial cleaning of the user's input
+#' data to be used in the model.
+#'
+#' - `process`: A function that performs the actual preprocessing of the data.
+#'
+#' Both `engine$mold$clean()` and `engine$mold$process()` will be called,
+#' in order, from [mold()] and will be passed the `engine` itself, and the
+#' data (`x` and `y` for the xy method, but otherwise `data`).
+#'
+#' @param forge A named list with two elements:
+#'
+#' - `clean`: A function that performs initial cleaning of the `new_data` that
+#' is typically used in generating predictions.
+#'
+#' - `process`: A function that performs the preprocessing of the `new_data`.
+#'
+#' Both `engine$forge$clean()` and `engine$forge$process()` will be called,
+#' in order, from [mold()] and will be passed the `engine` itself,
+#' and the `new_data`.
+#'
+#' @param intercept A logical. Should an intercept be included in the
+#' processed data? This information is used by the `process` function
+#' in the `mold` and `forge` function list.
+#'
+#' @param info Either `NULL`, or a named list with 2 elements:
+#'
+#' - `predictors`: A named list with the following 3 elements:
+#'
+#'    - `names`: A character vector of the original predictor column names.
+#'
+#'    - `classes`: A named list of the original predictor classes, or `NULL`.
+#'
+#'    - `levels`: A named list of the original predictor levels for any factor
+#'    columns, or `NULL`.
+#'
+#' - `outcomes`: A named list with the following 3 elements:
+#'
+#'    - `names`: A character vector of the original outcome column names.
+#'
+#'    - `classes`: A named list of the original outcome classes, or `NULL`.
+#'
+#'    - `levels`: A named list of the original outcome levels for any factor
+#'    columns, or `NULL`.
+#'
+#' `info` is set at [mold()] time, and is used in [forge()] to validate
+#' `new_data`.
+#'
+#' @param ... Name-value pairs for additional elements of engines that
+#' subclass this engine.
+#'
+#' @param subclass A character vector. The subclasses of this engine.
+#'
+#' @export
 new_engine <- function(mold,
                        forge,
                        intercept = FALSE,
@@ -12,6 +69,7 @@ new_engine <- function(mold,
   validate_is_function_set(forge)
   validate_is_bool(intercept)
   validate_is_info_list_or_null(info)
+  validate_is_character(subclass, "subclass")
 
   elems <- list(
     mold = mold,

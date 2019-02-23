@@ -114,7 +114,8 @@ forge_impl.recipe_engine <- forge_impl.xy_engine
 
 # Would it also be useful to add an `extras` element here?
 # So specific implementations can return other processed
-# information as needed?
+# information as needed? (`offset` could count as an `extra` for
+# for formula method)
 
 forge_list <- function(predictors, outcomes = NULL, offset = NULL) {
   list(
