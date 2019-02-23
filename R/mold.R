@@ -5,15 +5,16 @@
 #' `mold()` applies the appropriate processing steps required to get training
 #' data ready to be fed into a model.
 #'
-#' The return values of each method are all consistent with one another, but the
-#' nuances of exactly what is being done for each method vary enough to warrant
-#' separate help files for each. Click through to each one below:
+#' The return values of each engine are all consistent with one another, but the
+#' nuances of exactly what is being done for each engine vary enough to warrant
+#' separate help files for each. Click through to each one below to learn
+#' about each engine and see a large amount of engine specific examples:
 #'
-#' * XY Method - [mold.data.frame()] / [mold.matrix()]
+#' * XY Method - [new_default_xy_engine()]
 #'
-#' * Formula Method - [mold.formula()]
+#' * Formula Method - [new_default_formula_engine()]
 #'
-#' * Recipes Method - [mold.recipe()]
+#' * Recipes Method - [new_default_recipe_engine()]
 #'
 #' @param x A data frame, matrix, formula, or [recipes::recipe()]. If this is a
 #' data.frame or matrix, it should contain the predictors.

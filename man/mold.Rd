@@ -28,12 +28,13 @@ was specified in the formula method. Otherwise, \code{NULL}.
 \code{mold()} applies the appropriate processing steps required to get training
 data ready to be fed into a model.
 
-The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:
+The return values of each engine are all consistent with one another, but the
+nuances of exactly what is being done for each engine vary enough to warrant
+separate help files for each. Click through to each one below to learn
+about each engine and see a large amount of engine specific examples:
 \itemize{
-\item XY Method - \code{\link[=mold.data.frame]{mold.data.frame()}} / \code{\link[=mold.matrix]{mold.matrix()}}
-\item Formula Method - \code{\link[=mold.formula]{mold.formula()}}
-\item Recipes Method - \code{\link[=mold.recipe]{mold.recipe()}}
+\item XY Method - \code{\link[=new_default_xy_engine]{new_default_xy_engine()}}
+\item Formula Method - \code{\link[=new_default_formula_engine]{new_default_formula_engine()}}
+\item Recipes Method - \code{\link[=new_default_recipe_engine]{new_default_recipe_engine()}}
 }
 }

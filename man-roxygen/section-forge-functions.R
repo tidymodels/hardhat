@@ -7,7 +7,7 @@
 #'
 #'    - _Arguments_:
 #'
-#'       - `engine` and `new_data`.
+#'       - `engine`, `new_data`, and `outcomes`.
 #'
 #'    - _Output_: A named list of two elements:
 #'
@@ -20,7 +20,7 @@
 #'
 #'    - _Arguments_:
 #'
-#'       - `engine` and `new_data`.
+#'       - `engine`, `new_data`, and `outcomes`.
 #'
 #'    - _Output_: A named list of three elements:
 #'

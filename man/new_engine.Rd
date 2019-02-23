@@ -9,36 +9,21 @@ new_engine(mold, forge, intercept = FALSE, info = NULL, ...,
 }
 \arguments{
 \item{mold}{A named list with two elements, \code{clean} and \code{process}, see
-the section Mold Functions for details.}
+the \code{\link[=new_engine]{new_engine()}} section, Mold Functions, for details.}
 
 \item{forge}{A named list with two elements, \code{clean} and \code{process}, see
-the section Forge Functions for details.}
+the \code{\link[=new_engine]{new_engine()}} section, Forge Functions, for details.}
 
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
 
-\item{info}{Either \code{NULL}, or a named list with 2 elements:
-\itemize{
-\item \code{predictors}: A named list with the following 3 elements:
-\itemize{
-\item \code{names}: A character vector of the original predictor column names.
-\item \code{classes}: A named list of the original predictor classes, or \code{NULL}.
-\item \code{levels}: A named list of the original predictor levels for any factor
-columns, or \code{NULL}.
-}
-\item \code{outcomes}: A named list with the following 3 elements:
-\itemize{
-\item \code{names}: A character vector of the original outcome column names.
-\item \code{classes}: A named list of the original outcome classes, or \code{NULL}.
-\item \code{levels}: A named list of the original outcome levels for any factor
-columns, or \code{NULL}.
-}
-}
-
-\code{info} is set at \code{\link[=mold]{mold()}} time using the combined predictor and outcome
-info from \code{engine$mold$process()}, and is used in \code{\link[=forge]{forge()}} to validate
-\code{new_data}.}
+\item{info}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
+and \code{outcomes}. \code{info} is generated automatically at \code{\link[=mold]{mold()}} time and
+is used to validate \code{new_data} at prediction time. The
+information in \code{predictors} is the \code{predictors$info} element from running
+\code{engine$mold$process()} and the information is \code{outcomes} is the
+corresponding \code{outcomes$info}.}
 
 \item{...}{Name-value pairs for additional elements of engines that
 subclass this engine.}
@@ -138,7 +123,7 @@ are functions:
 \itemize{
 \item \emph{Arguments}:
 \itemize{
-\item \code{engine} and \code{new_data}.
+\item \code{engine}, \code{new_data}, and \code{outcomes}.
 }
 \item \emph{Output}: A named list of two elements:
 \itemize{
@@ -151,7 +136,7 @@ using the known information in the \code{engine}.
 \itemize{
 \item \emph{Arguments}:
 \itemize{
-\item \code{engine} and \code{new_data}.
+\item \code{engine}, \code{new_data}, and \code{outcomes}.
 }
 \item \emph{Output}: A named list of three elements:
 \itemize{

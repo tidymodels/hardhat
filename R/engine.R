@@ -4,38 +4,21 @@
 #' subclass this one.
 #'
 #' @param mold A named list with two elements, `clean` and `process`, see
-#' the section Mold Functions for details.
+#' the [new_engine()] section, Mold Functions, for details.
 #'
 #' @param forge A named list with two elements, `clean` and `process`, see
-#' the section Forge Functions for details.
+#' the [new_engine()] section, Forge Functions, for details.
 #'
 #' @param intercept A logical. Should an intercept be included in the
 #' processed data? This information is used by the `process` function
 #' in the `mold` and `forge` function list.
 #'
-#' @param info Either `NULL`, or a named list with 2 elements:
-#'
-#' - `predictors`: A named list with the following 3 elements:
-#'
-#'    - `names`: A character vector of the original predictor column names.
-#'
-#'    - `classes`: A named list of the original predictor classes, or `NULL`.
-#'
-#'    - `levels`: A named list of the original predictor levels for any factor
-#'    columns, or `NULL`.
-#'
-#' - `outcomes`: A named list with the following 3 elements:
-#'
-#'    - `names`: A character vector of the original outcome column names.
-#'
-#'    - `classes`: A named list of the original outcome classes, or `NULL`.
-#'
-#'    - `levels`: A named list of the original outcome levels for any factor
-#'    columns, or `NULL`.
-#'
-#' `info` is set at [mold()] time using the combined predictor and outcome
-#' info from `engine$mold$process()`, and is used in [forge()] to validate
-#' `new_data`.
+#' @param info Either `NULL`, or a named list with 2 elements, `predictors`
+#' and `outcomes`. `info` is generated automatically at [mold()] time and
+#' is used to validate `new_data` at prediction time. The
+#' information in `predictors` is the `predictors$info` element from running
+#' `engine$mold$process()` and the information is `outcomes` is the
+#' corresponding `outcomes$info`.
 #'
 #' @param ... Name-value pairs for additional elements of engines that
 #' subclass this engine.
