@@ -538,7 +538,20 @@ corresponding to the <em>outcomes</em>.</p></li>
 <span class='co'># offset()</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='no'>Species</span>, <span class='no'>train</span>)
 
-<span class='no'>processed</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='no'>processed</span>$<span class='no'>extras</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; # A tibble: 100 x 1
+#&gt;    .offset
+#&gt;      &lt;dbl&gt;
+#&gt;  1     5.1
+#&gt;  2     4.9
+#&gt;  3     4.7
+#&gt;  4     4.6
+#&gt;  5     5  
+#&gt;  6     5.4
+#&gt;  7     4.6
+#&gt;  8     5  
+#&gt;  9     4.4
+#&gt; 10     4.9
+#&gt; # … with 90 more rows</div><div class='input'>
 <span class='co'># Multiple offsets can be included, and they get added together</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
   <span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Petal.Width</span>),
@@ -546,9 +559,11 @@ corresponding to the <em>outcomes</em>.</p></li>
 )
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
-  <span class='no'>processed</span>$<span class='no'>offset</span>$<span class='no'>.offset</span>,
+  <span class='no'>processed</span>$<span class='no'>extras</span>$<span class='no'>offset</span>$<span class='no'>.offset</span>,
   <span class='no'>train</span>$<span class='no'>Sepal.Length</span> + <span class='no'>train</span>$<span class='no'>Petal.Width</span>
-)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'># Forging test data will also require</span>
+<span class='co'># and include the offset</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 0
 #&gt; 
