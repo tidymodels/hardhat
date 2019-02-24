@@ -100,10 +100,10 @@
 <a href="#forge" class="anchor"></a><code><a href="../reference/forge.html">forge()</a></code>
 </h3>
 <p><code><a href="../reference/forge.html">forge()</a></code> takes <code>new_data</code> and applies the same preprocessing steps that happened to the data used in training the model. It is to be called from <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>, or potentially from a cross validation function where you will use <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> repeatedly to measure performance of different folds or different hyperparameters.</p>
-<p>Say you fit a model and called <code><a href="../reference/mold.html">mold()</a></code> from your fitting function. When you return the model object, you should attach the <code>preprocessor</code> that you get with the output of <code><a href="../reference/mold.html">mold()</a></code> onto the model object (using the model constructor, <code><a href="../reference/new_base_model.html">new_base_model()</a></code>, makes this easier to do). Then when you call <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> on that model object along with <code>new_data</code>, you should call <code><a href="../reference/forge.html">forge()</a></code> inside of the <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method with the stored <code>preprocessor</code> and the <code>new_data</code>.</p>
+<p>Say you fit a model and called <code><a href="../reference/mold.html">mold()</a></code> from your fitting function. When you return the model object, you should attach the <code>engine</code> that you get with the output of <code><a href="../reference/mold.html">mold()</a></code> onto the model object (using the model constructor, <code><a href="../reference/new_base_model.html">new_base_model()</a></code>, makes this easier to do). Then when you call <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> on that model object along with <code>new_data</code>, you should call <code><a href="../reference/forge.html">forge()</a></code> inside of the <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method with the stored <code>engine</code> and the <code>new_data</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">processed_test &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="dt">preprocessor =</span> processed<span class="op">$</span>preprocessor, </a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">new_data =</span> iris_test,</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="dt">new_data =</span> iris_test,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">engine =</span> processed<span class="op">$</span>engine, </a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">outcomes =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">)</a></code></pre></div>
 <p><code><a href="../reference/forge.html">forge()</a></code> always returns a list with two things. The first is a tibble containing the preprocessed <code>predictors</code>. The second is optionally the preprocessed <code>outcomes</code> if you are performing cross validation and used a formula or recipes interface. Because we used the formula interface to generate the <code>processed</code> object, we could set <code>outcomes = TRUE</code> above to also return the processed outcome column.</p>
@@ -138,7 +138,7 @@
 <a class="sourceLine" id="cb4-29" data-line-number="29"><span class="co">#&gt;  9                1.90</span></a>
 <a class="sourceLine" id="cb4-30" data-line-number="30"><span class="co">#&gt; 10                1.97</span></a>
 <a class="sourceLine" id="cb4-31" data-line-number="31"><span class="co">#&gt; # … with 40 more rows</span></a></code></pre></div>
-<p>The nice thing about <code><a href="../reference/forge.html">forge()</a></code> is that the <code>preprocessor</code> remembers a lot of information about what happened at fit time, and keeps the user from shooting themselves in the foot at prediction time.</p>
+<p>The nice thing about <code><a href="../reference/forge.html">forge()</a></code> is that the <code>engine</code> remembers a lot of information about what happened at fit time, and keeps the user from shooting themselves in the foot at prediction time.</p>
 <p>For instance, each predictor used at fit time has to have the same class at prediction time.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">iris_test_bad &lt;-<span class="st"> </span>iris_test</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"></a>
@@ -146,14 +146,14 @@
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co"># a factor</span></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5">iris_test_bad<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(iris_test_bad<span class="op">$</span>Species)</a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw"><a href="../reference/forge.html">forge</a></span>(processed<span class="op">$</span>preprocessor, iris_test_bad)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test_bad, processed<span class="op">$</span>engine)</a>
 <a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; Error: Some columns in `new_data` have an incorrect class:</span></a>
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; `Species`: `character` should be `factor`.</span></a></code></pre></div>
 <p>And each predictor column has to exist in <code>new_data</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># Removing species alltogether</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">iris_test_bad<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="../reference/forge.html">forge</a></span>(processed<span class="op">$</span>preprocessor, iris_test_bad)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test_bad, processed<span class="op">$</span>engine)</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Error: `new_data` is missing the following required columns:</span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 'Species'.</span></a></code></pre></div>
 <p>And new levels in any of the predictors throw a warning and are coerced to <code>NA</code>.</p>
@@ -165,7 +165,7 @@
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/levels">levels</a></span>(iris_test_bad<span class="op">$</span>Species)</a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; [1] "new_level"  "setosa"     "versicolor" "virginica"</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">processed_bad_test &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(processed<span class="op">$</span>preprocessor, iris_test_bad)</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">processed_bad_test &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test_bad, processed<span class="op">$</span>engine)</a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Warning: The following factor levels are new for column, `Species`, and</span></a>
 <a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; have been coerced to `NA` : 'new_level'.</span></a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"></a>

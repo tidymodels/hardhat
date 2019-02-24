@@ -131,17 +131,14 @@ a class of <code>class</code>. This entire object represent a single model.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>new_base_model</span>(<span class='kw'>preprocessor</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='no'>class</span>)</pre>
+    <pre class="usage"><span class='fu'>new_base_model</span>(<span class='no'>engine</span>, <span class='no'>...</span>, <span class='no'>class</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>preprocessor</th>
-      <td><p>A preprocessor for new data. This can be
-a <code>terms</code> object from the formula interface, a <code>recipe</code> created with
-<code><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipes::recipe()</a></code>, or the default which converts to either a matrix or a
-data frame, and adds an intercept column if requested.</p></td>
+      <th>engine</th>
+      <td><p>A preprocessing <code>engine</code> returned from a call to <code><a href='mold.html'>mold()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -157,20 +154,20 @@ data frame, and adds an intercept column if requested.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Because every model should have multiple interfaces, including formula
-and <code>recipes</code> interfaces, all models should have a <code>preprocessor</code> that
-can process new data when <code><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict()</a></code> is called. The default <code>preprocessor</code>
-used in the data frame and matrix methods is <code>default_preprocessor()</code>, which
-converts an object to a data frame or matrix, and adds an intercept column
-if required.</p>
+and <code>recipes</code> interfaces, all models should have an <code>engine</code> that
+can process new data when <code><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict()</a></code> is called. The easiest way to generate
+an engine with all of the information required at prediction time is to
+use the one that is returned from a call to <code><a href='mold.html'>mold()</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'>new_base_model</span>(
+  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='default_xy_engine.html'>default_xy_engine</a></span>(),
   <span class='kw'>custom_field</span> <span class='kw'>=</span> <span class='st'>"my-field"</span>,
   <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"custom_model"</span>
-)</div><div class='output co'>#&gt; $preprocessor
-#&gt; Default Preprocessor: 
+)</div><div class='output co'>#&gt; $engine
+#&gt; XY Engine: 
 #&gt;  
 #&gt; # Predictors: 0 
 #&gt;   # Outcomes: 0 

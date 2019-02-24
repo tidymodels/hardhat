@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract data classes from a data frame or matrix — get_data_classes • hardhat</title>
+<title>Create a new preprocessing engine — new_engine • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,10 @@
 
 
 
-<meta property="og:title" content="Extract data classes from a data frame or matrix — get_data_classes" />
+<meta property="og:title" content="Create a new preprocessing engine — new_engine" />
 
-<meta property="og:description" content="When predicting from a model, it is often important for the new_data to
-have the same classes as the original data used to fit the model.
-get_data_classes() extracts the classes from the original training data." />
+<meta property="og:description" content="This is the base class for a preprocessing engine. All other engines
+subclass this one." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,106 +115,66 @@ get_data_classes() extracts the classes from the original training data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract data classes from a data frame or matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/classes.R'><code>R/classes.R</code></a></small>
-    <div class="hidden name"><code>get_data_classes.Rd</code></div>
+    <h1>Create a new preprocessing engine</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/engine.R'><code>R/engine.R</code></a></small>
+    <div class="hidden name"><code>new_engine.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>When predicting from a model, it is often important for the <code>new_data</code> to
-have the same classes as the original data used to fit the model.
-<code>get_data_classes()</code> extracts the classes from the original training data.</p>
+    <p>This is the base class for a preprocessing engine. All other engines
+subclass this one.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_data_classes</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>new_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A data frame or matrix.</p></td>
+      <th>mold</th>
+      <td><p>A named list with two elements, <code>clean</code> and <code>process</code>, see
+the <code>new_engine()</code> section, Mold Functions, for details.</p></td>
+    </tr>
+    <tr>
+      <th>forge</th>
+      <td><p>A named list with two elements, <code>clean</code> and <code>process</code>, see
+the <code>new_engine()</code> section, Forge Functions, for details.</p></td>
+    </tr>
+    <tr>
+      <th>intercept</th>
+      <td><p>A logical. Should an intercept be included in the
+processed data? This information is used by the <code>process</code> function
+in the <code>mold</code> and <code>forge</code> function list.</p></td>
+    </tr>
+    <tr>
+      <th>info</th>
+      <td><p>Either <code>NULL</code>, or a named list with 2 elements, <code>predictors</code>
+and <code>outcomes</code>. <code>info</code> is generated automatically at <code><a href='mold.html'>mold()</a></code> time and
+is used to validate <code>new_data</code> at prediction time. The
+information in <code>predictors</code> is the <code>predictors$info</code> element from running
+<code>engine$mold$process()</code> and the information is <code>outcomes</code> is the
+corresponding <code>outcomes$info</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Name-value pairs for additional elements of engines that
+subclass this engine.</p></td>
+    </tr>
+    <tr>
+      <th>subclass</th>
+      <td><p>A character vector. The subclasses of this engine.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list. The names are the column names of <code>x</code> and the values are
-character vectors containing the class of that column.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>get_data_classes()</code> is inspired by <code><a href='https://www.rdocumentation.org/packages/stats/topics/checkMFClasses'>stats::.MFclass()</a></code>. It returns the
-exact classes of the data frame columns with the one exception that integer
-and double columns are both returned as <code>"numeric"</code>. This is to ensure
-that if an integer column is used when fitting, an error is not thrown if
-a double column is used at prediction time. It also does not allow for
-any columns of <code>x</code> to be multivariate themselves (no data frame columns,
-or matrix columns).</p>
-<p>The classes returned by <code>get_data_classes()</code> are stored in the <code>engine</code>
-objects. This function is called by <code><a href='mold.html'>mold()</a></code>.</p>
+    <p>An object of class <code>"hardhat_engine"</code> containing a list of the supplied
+named arguments.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>get_data_classes</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $Sepal.Length
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Sepal.Width
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Petal.Length
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Petal.Width
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Species
-#&gt; [1] "factor"
-#&gt; </div><div class='input'>
-<span class='fu'>get_data_classes</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>mtcars</span>))</div><div class='output co'>#&gt; $mpg
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $cyl
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $disp
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $hp
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $drat
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $wt
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $qsec
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $vs
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $am
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $gear
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $carb
-#&gt; [1] "numeric"
-#&gt; </div><div class='input'>
-<span class='co'># Unlike .MFclass(), the full class</span>
-<span class='co'># vector is returned</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>ordered</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)))
-
-<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/checkMFClasses'>.MFclass</a></span>(<span class='no'>x</span>$<span class='no'>col</span>)</div><div class='output co'>#&gt; [1] "ordered"</div><div class='input'>
-<span class='fu'>get_data_classes</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; $col
-#&gt; [1] "ordered" "factor" 
-#&gt; </div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -223,11 +182,7 @@ objects. This function is called by <code><a href='mold.html'>mold()</a></code>.
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

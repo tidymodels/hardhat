@@ -32,14 +32,15 @@
 
 <meta property="og:title" content="Forge prediction-ready data — forge" />
 
-<meta property="og:description" content="forge() applies the transformations requested by the preprocessor
+<meta property="og:description" content="forge() applies the transformations requested by the engine
 on a set of new_data to be used in predictions.
-The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:
-XY Method - forge.default_preprocessor()
-Formula Method - forge.terms_preprocessor()
-Recipes Method - forge.recipes_preprocessor()
+The return values of each engine are all consistent with one another, but the
+nuances of exactly what is being done for each engine vary enough to warrant
+separate help files for each. Click through to each one below to learn
+about each engine and see a large amount of engine specific examples:
+XY Method - default_xy_engine()
+Formula Method - default_formula_engine()
+Recipes Method - default_recipe_engine()
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -129,32 +130,31 @@ Recipes Method - forge.recipes_preprocessor()
 
     <div class="ref-description">
     
-    <p><code>forge()</code> applies the transformations requested by the <code>preprocessor</code>
+    <p><code>forge()</code> applies the transformations requested by the <code>engine</code>
 on a set of <code>new_data</code> to be used in predictions.</p>
-<p>The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:</p><ul>
-<li><p>XY Method - <code><a href='forge-xy.html'>forge.default_preprocessor()</a></code></p></li>
-<li><p>Formula Method - <code><a href='forge-formula.html'>forge.terms_preprocessor()</a></code></p></li>
-<li><p>Recipes Method - <code><a href='forge-recipe.html'>forge.recipes_preprocessor()</a></code></p></li>
+<p>The return values of each engine are all consistent with one another, but the
+nuances of exactly what is being done for each engine vary enough to warrant
+separate help files for each. Click through to each one below to learn
+about each engine and see a large amount of engine specific examples:</p><ul>
+<li><p>XY Method - <code><a href='default_xy_engine.html'>default_xy_engine()</a></code></p></li>
+<li><p>Formula Method - <code><a href='default_formula_engine.html'>default_formula_engine()</a></code></p></li>
+<li><p>Recipes Method - <code><a href='default_recipe_engine.html'>default_recipe_engine()</a></code></p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>preprocessor</span>, <span class='no'>new_data</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>new_data</span>, <span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>preprocessor</th>
-      <td><p>A valid <code>"preprocessor"</code>. The preprocessor that should
-be used here is the one in the output from the corresponding call
-to <code><a href='mold.html'>mold()</a></code>.</p></td>
-    </tr>
-    <tr>
       <th>new_data</th>
       <td><p>A data frame or matrix to preprocess.</p></td>
+    </tr>
+    <tr>
+      <th>engine</th>
+      <td><p>A preprocessing <code>engine</code>.</p></td>
     </tr>
     <tr>
       <th>outcomes</th>
@@ -174,7 +174,7 @@ as well?</p></td>
 <code>new_data</code> predictors.</p></li>
 <li><p><code>outcomes</code>: If <code>outcomes = TRUE</code>, a tibble containing the preprocessed
 <code>new_data</code> outcomes. Otherwise, <code>NULL</code>.</p></li>
-<li><p><code>offset</code>: If the <code>preprocessor</code> was a <code>"terms_preprocessor"</code>, and offsets
+<li><p><code>offset</code>: If the <code>preprocessor</code> was a <code>"formula_engine"</code>, and offsets
 were specified in the formula, this is a tibble containing the preprocessed
 offsets. Otherwise, <code>NULL</code>.</p></li>
 </ul>

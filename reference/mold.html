@@ -34,12 +34,13 @@
 
 <meta property="og:description" content="mold() applies the appropriate processing steps required to get training
 data ready to be fed into a model.
-The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:
-XY Method - mold.data.frame() / mold.matrix()
-Formula Method - mold.formula()
-Recipes Method - mold.recipe()
+The return values of each engine are all consistent with one another, but the
+nuances of exactly what is being done for each engine vary enough to warrant
+separate help files for each. Click through to each one below to learn
+about each engine and see a large amount of engine specific examples:
+XY Method - default_xy_engine()
+Formula Method - default_formula_engine()
+Recipes Method - default_recipe_engine()
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -131,17 +132,30 @@ Recipes Method - mold.recipe()
     
     <p><code>mold()</code> applies the appropriate processing steps required to get training
 data ready to be fed into a model.</p>
-<p>The return values of each method are all consistent with one another, but the
-nuances of exactly what is being done for each method vary enough to warrant
-separate help files for each. Click through to each one below:</p><ul>
-<li><p>XY Method - <code><a href='mold-xy.html'>mold.data.frame()</a></code> / <code><a href='mold-xy.html'>mold.matrix()</a></code></p></li>
-<li><p>Formula Method - <code><a href='mold-formula.html'>mold.formula()</a></code></p></li>
-<li><p>Recipes Method - <code><a href='mold-recipe.html'>mold.recipe()</a></code></p></li>
+<p>The return values of each engine are all consistent with one another, but the
+nuances of exactly what is being done for each engine vary enough to warrant
+separate help files for each. Click through to each one below to learn
+about each engine and see a large amount of engine specific examples:</p><ul>
+<li><p>XY Method - <code><a href='default_xy_engine.html'>default_xy_engine()</a></code></p></li>
+<li><p>Formula Method - <code><a href='default_formula_engine.html'>default_formula_engine()</a></code></p></li>
+<li><p>Recipes Method - <code><a href='default_recipe_engine.html'>default_recipe_engine()</a></code></p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for matrix</span>
+<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for formula</span>
+<span class='fu'>mold</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for recipe</span>
+<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>data</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,6 +169,23 @@ data.frame or matrix, it should contain the predictors.</p></td>
       <th>...</th>
       <td><p>Currently unused.</p></td>
     </tr>
+    <tr>
+      <th>y</th>
+      <td><p>A data frame, matrix, or vector. This should contain the outcomes.</p></td>
+    </tr>
+    <tr>
+      <th>engine</th>
+      <td><p>A preprocessing <code>engine</code>. If left as <code>NULL</code>, then a default
+engine is chosen based on the type of <code>x</code>.</p></td>
+    </tr>
+    <tr>
+      <th>formula</th>
+      <td><p>A formula specifying the terms of the model.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>A data frame or matrix containing the predictors and the outcomes.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -164,7 +195,7 @@ data.frame or matrix, it should contain the predictors.</p></td>
 model.</p></li>
 <li><p><code>outcome</code>: A tibble containing the molded outcomes to be used in the
 model.</p></li>
-<li><p><code>preprocessor</code>: A <code>"preprocessor"</code> object for use when making predictions.</p></li>
+<li><p><code>engine</code>: A <code>"hardhat_engine"</code> object for use when making predictions.</p></li>
 <li><p><code>offset</code>: A tibble with a single column named <code>".offset"</code> if an offset
 was specified in the formula method. Otherwise, <code>NULL</code>.</p></li>
 </ul>

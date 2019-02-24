@@ -248,7 +248,7 @@ correct it automatically, with a warning.</p></li>
 #&gt; 10 setosa  
 #&gt; # … with 90 more rows</div><div class='input'>
 <span class='co'># It doesn't affect forge() normally</span>
-<span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>processed</span>$<span class='no'>preprocessor</span>, <span class='no'>test</span>)</div><div class='output co'>#&gt; $predictors
+<span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 4
 #&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width
 #&gt;           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
@@ -273,14 +273,14 @@ correct it automatically, with a warning.</p></li>
 # But if the outcome is requested, and `".outcome"`
 # is not present in `new_data`, an error is thrown
 # with very specific instructions
-</div><div class='input'><span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>processed</span>$<span class='no'>preprocessor</span>, <span class='no'>test</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `new_data` is missing the following required columns:</span>
+</div><div class='input'><span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `new_data` is missing the following required columns:</span>
 #&gt; <span class='error'>'.outcome'</span>
 #&gt; <span class='error'></span>
 #&gt; <span class='error'>(This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name '.outcome' containing the outcome.)</span></div><div class='input'>
 <span class='co'># To get this to work, just create an .outcome column in new_data</span>
 <span class='no'>test</span>$<span class='no'>.outcome</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>$<span class='no'>Species</span>
 
-<span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>processed</span>$<span class='no'>preprocessor</span>, <span class='no'>test</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
+<span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 4
 #&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width
 #&gt;           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;

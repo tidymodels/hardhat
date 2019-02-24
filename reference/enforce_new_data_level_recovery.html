@@ -220,7 +220,7 @@ correct it automatically, with a warning.</p></li>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Species</span>, <span class='no'>train</span>)
 
 <span class='co'># No problems here!</span>
-<span class='fu'>enforce_new_data_level_recovery</span>(<span class='no'>test</span>, <span class='no'>x</span>$<span class='no'>preprocessor</span>$<span class='no'>info</span>$<span class='no'>predictors</span>$<span class='no'>levels</span>)</div><div class='output co'>#&gt; # A tibble: 50 x 5
+<span class='fu'>enforce_new_data_level_recovery</span>(<span class='no'>test</span>, <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>info</span>$<span class='no'>predictors</span>$<span class='no'>levels</span>)</div><div class='output co'>#&gt; # A tibble: 50 x 5
 #&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species  
 #&gt;           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;    
 #&gt;  1          6.3         3.3          6           2.5 virginica
@@ -239,7 +239,7 @@ correct it automatically, with a warning.</p></li>
 <span class='no'>bad_test</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/droplevels'>droplevels</a></span>(<span class='no'>bad_test</span>$<span class='no'>Species</span>)
 
 <span class='co'># Restores the levels with a warning</span>
-<span class='fu'>enforce_new_data_level_recovery</span>(<span class='no'>bad_test</span>, <span class='no'>x</span>$<span class='no'>preprocessor</span>$<span class='no'>info</span>$<span class='no'>predictors</span>$<span class='no'>levels</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The following original factor levels are missing for column, 'Species', and have been restored: 'setosa', 'versicolor'.</span></div><div class='output co'>#&gt; # A tibble: 50 x 5
+<span class='fu'>enforce_new_data_level_recovery</span>(<span class='no'>bad_test</span>, <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>info</span>$<span class='no'>predictors</span>$<span class='no'>levels</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The following original factor levels are missing for column, 'Species', and have been restored: 'setosa', 'versicolor'.</span></div><div class='output co'>#&gt; # A tibble: 50 x 5
 #&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species  
 #&gt;           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;    
 #&gt;  1          6.3         3.3          6           2.5 virginica
