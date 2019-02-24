@@ -330,8 +330,10 @@ corresponding to the <em>outcomes</em>.</p></li>
 #&gt; $outcomes
 #&gt; NULL
 #&gt; 
-#&gt; $offset
+#&gt; $extras
+#&gt; $extras$offset
 #&gt; NULL
+#&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># Use `outcomes = TRUE` to also extract the preprocessed outcome</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
@@ -366,8 +368,10 @@ corresponding to the <em>outcomes</em>.</p></li>
 #&gt; 10              1.28 
 #&gt; # … with 40 more rows
 #&gt; 
-#&gt; $offset
+#&gt; $extras
+#&gt; $extras$offset
 #&gt; NULL
+#&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Factors without an intercept</span>
@@ -521,8 +525,10 @@ corresponding to the <em>outcomes</em>.</p></li>
 #&gt; 10                             0.271                              0.464 
 #&gt; # … with 40 more rows
 #&gt; 
-#&gt; $offset
+#&gt; $extras
+#&gt; $extras$offset
 #&gt; NULL
+#&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Offsets</span>
@@ -532,20 +538,7 @@ corresponding to the <em>outcomes</em>.</p></li>
 <span class='co'># offset()</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='no'>Species</span>, <span class='no'>train</span>)
 
-<span class='no'>processed</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; # A tibble: 100 x 1
-#&gt;    .offset
-#&gt;      &lt;dbl&gt;
-#&gt;  1     5.1
-#&gt;  2     4.9
-#&gt;  3     4.7
-#&gt;  4     4.6
-#&gt;  5     5  
-#&gt;  6     5.4
-#&gt;  7     4.6
-#&gt;  8     5  
-#&gt;  9     4.4
-#&gt; 10     4.9
-#&gt; # … with 90 more rows</div><div class='input'>
+<span class='no'>processed</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 <span class='co'># Multiple offsets can be included, and they get added together</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
   <span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Petal.Width</span>),
@@ -555,14 +548,15 @@ corresponding to the <em>outcomes</em>.</p></li>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
   <span class='no'>processed</span>$<span class='no'>offset</span>$<span class='no'>.offset</span>,
   <span class='no'>train</span>$<span class='no'>Sepal.Length</span> + <span class='no'>train</span>$<span class='no'>Petal.Width</span>
-)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 0
 #&gt; 
 #&gt; $outcomes
 #&gt; NULL
 #&gt; 
-#&gt; $offset
+#&gt; $extras
+#&gt; $extras$offset
 #&gt; # A tibble: 50 x 1
 #&gt;    .offset
 #&gt;      &lt;dbl&gt;
@@ -577,6 +571,7 @@ corresponding to the <em>outcomes</em>.</p></li>
 #&gt;  9     8.5
 #&gt; 10     9.7
 #&gt; # … with 40 more rows
+#&gt; 
 #&gt; </div><div class='input'>
 </div></pre>
   </div>
