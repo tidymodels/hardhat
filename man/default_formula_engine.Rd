@@ -268,7 +268,7 @@ forge(test, processed$engine, outcomes = TRUE)
 # offset()
 processed <- mold(Sepal.Width ~ offset(Sepal.Length) + Species, train)
 
-processed$offset
+processed$extras$offset
 
 # Multiple offsets can be included, and they get added together
 processed <- mold(
@@ -277,10 +277,12 @@ processed <- mold(
 )
 
 identical(
-  processed$offset$.offset,
+  processed$extras$offset$.offset,
   train$Sepal.Length + train$Petal.Width
 )
 
+# Forging test data will also require
+# and include the offset
 forge(test, processed$engine)
 
 }
