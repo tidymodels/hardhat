@@ -25,9 +25,6 @@
 #'
 #' @param subclass A character vector. The subclasses of this engine.
 #'
-#' @template section-mold-functions
-#' @template section-forge-functions
-#'
 #' @return
 #'
 #' An object of class `"hardhat_engine"` containing a list of the supplied
