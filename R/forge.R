@@ -97,10 +97,12 @@ forge_impl.xy_engine <- function(engine, new_data, outcomes) {
     outcomes = outcomes
   )
 
+  extras <- c(predictors$extras, outcomes$extras)
+
   forge_list(
     predictors = predictors$data,
     outcomes = outcomes$data,
-    offset = predictors$offset
+    extras = extras
   )
 
 }
@@ -116,10 +118,10 @@ forge_impl.recipe_engine <- forge_impl.xy_engine
 # information as needed? (`offset` could count as an `extra` for
 # for formula method)
 
-forge_list <- function(predictors, outcomes = NULL, offset = NULL) {
+forge_list <- function(predictors, outcomes = NULL, extras = NULL) {
   list(
     predictors = predictors,
     outcomes = outcomes,
-    offset = offset
+    extras = extras
   )
 }

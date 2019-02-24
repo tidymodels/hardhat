@@ -394,7 +394,7 @@ mold_formula_default_process_predictors <- function(engine, data) {
     predictors = list(
       data = predictors,
       info = info,
-      offset = offset
+      extras = list(offset = offset)
     )
   )
 
@@ -434,7 +434,8 @@ mold_formula_default_process_outcomes <- function(engine, data) {
     engine = engine,
     outcomes = list(
       data = outcomes,
-      info = info
+      info = info,
+      extras = NULL
     )
   )
 
@@ -498,7 +499,7 @@ forge_formula_default_process_predictors <- function(engine, new_data) {
     engine = engine,
     predictors = list(
       data = .predictors,
-      offset = .offset
+      extras = list(offset = .offset)
     )
   )
 
@@ -511,7 +512,8 @@ forge_formula_default_process_outcomes <- function(engine, new_data, outcomes) {
     out <- list(
       engine = engine,
       outcomes = list(
-        data = NULL
+        data = NULL,
+        extras = NULL
       )
     )
 
@@ -531,7 +533,8 @@ forge_formula_default_process_outcomes <- function(engine, new_data, outcomes) {
   list(
     engine = engine,
     outcomes = list(
-      data = .outcomes
+      data = .outcomes,
+      extras = NULL
     )
   )
 

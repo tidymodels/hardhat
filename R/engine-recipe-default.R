@@ -187,7 +187,7 @@ mold_recipe_default_process_predictors <- function(engine, data) {
     predictors = list(
       data = predictors,
       info = info,
-      offset = NULL
+      extras = NULL
     )
   )
 
@@ -205,7 +205,8 @@ mold_recipe_default_process_outcomes <- function(engine, data) {
     engine = engine,
     outcomes = list(
       data = outcomes,
-      info = info
+      info = info,
+      extras = NULL
     )
   )
 
@@ -265,7 +266,7 @@ forge_recipe_default_process_predictors <- function(engine, new_data) {
     engine = engine,
     predictors = list(
       data = .predictors,
-      offset = NULL
+      extras = NULL
     )
   )
 
@@ -278,7 +279,8 @@ forge_recipe_default_process_outcomes <- function(engine, new_data, outcomes) {
     out <- list(
       engine = engine,
       outcomes = list(
-        data = NULL
+        data = NULL,
+        extras = NULL
       )
     )
 
@@ -294,7 +296,8 @@ forge_recipe_default_process_outcomes <- function(engine, new_data, outcomes) {
   list(
     engine = engine,
     outcomes = list(
-      data = .outcomes
+      data = .outcomes,
+      extras = NULL
     )
   )
 

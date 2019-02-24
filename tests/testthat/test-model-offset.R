@@ -3,10 +3,17 @@ context("test-offset")
 test_that("an offset slot is NULL when there isn't one", {
 
   x <- mold(Species ~ Sepal.Width, iris)
-  xx <- mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
 
-  expect_equal(x$offset, NULL)
-  expect_equal(xx$offset, NULL)
+  expect_true(rlang::has_name(x$extras, "offset"))
+  expect_equal(x$extras$offset, NULL)
+
+})
+
+test_that("the offset slot is only present for the formula method", {
+
+  x <- mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
+
+  expect_false(rlang::has_name(x$extras, "offset"))
 
 })
 
@@ -14,9 +21,9 @@ test_that("can use offsets", {
 
   x <- mold(Species ~ offset(Sepal.Width), iris)
 
-  expect_is(x$offset, "tbl_df")
-  expect_equal(colnames(x$offset), ".offset")
-  expect_equal(x$offset$.offset, iris$Sepal.Width)
+  expect_is(x$extras$offset, "tbl_df")
+  expect_equal(colnames(x$extras$offset), ".offset")
+  expect_equal(x$extras$offset$.offset, iris$Sepal.Width)
 })
 
 test_that("(offset) is not recognized as an offset", {
@@ -53,7 +60,7 @@ test_that("multiple offsets can be used", {
   x <- mold(Species ~ offset(Sepal.Width) + offset(Sepal.Length), iris)
 
   expect_equal(
-    x$offset$.offset,
+    x$extras$offset$.offset,
     iris$Sepal.Width + iris$Sepal.Length
   )
 
@@ -100,10 +107,9 @@ test_that("offsets are NULL in forge() result if not used", {
   x <- mold(Species ~ Sepal.Length, iris)
   xx <- forge(iris, x$engine)
 
-  expect_equal(
-    xx$offset,
-    NULL
-  )
+  expect_true(rlang::has_name(xx$extras, "offset"))
+
+  expect_equal(xx$extras$offset, NULL)
 
 })
 
@@ -113,7 +119,7 @@ test_that("offsets show up in forged results", {
   xx <- forge(iris, x$engine)
 
   expect_equal(
-    xx$offset,
+    xx$extras$offset,
     tibble::tibble(.offset = iris$Sepal.Length)
   )
 
@@ -145,13 +151,10 @@ test_that("inline offset wrapped in a function is not recognized as an offset (s
   mf <- model.frame(Species ~ log(offset(Sepal.Length)), iris)
   trms <- attr(mf, "terms")
 
-  expect_equal(
-    x$offset,
-    NULL
-  )
+  expect_equal(x$extras$offset, NULL)
 
   expect_equal(
-    attr(x$engine$engine$predictors, "offset"),
+    attr(x$engine$terms$predictors, "offset"),
     attr(trms, "offset")
   )
 

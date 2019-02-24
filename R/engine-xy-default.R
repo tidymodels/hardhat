@@ -217,7 +217,7 @@ mold_xy_default_process_predictors <- function(engine, x) {
     predictors = list(
       data = x,
       info = info,
-      offset = NULL
+      extras = NULL
     )
   )
 
@@ -235,7 +235,8 @@ mold_xy_default_process_outcomes <- function(engine, y) {
     engine = engine,
     outcomes = list(
       data = y,
-      info = info
+      info = info,
+      extras = NULL
     )
   )
 
@@ -287,7 +288,7 @@ forge_xy_default_process_predictors <- function(engine, new_data) {
     engine = engine,
     predictors = list(
       data = .predictors,
-      offset = NULL
+      extras = NULL
     )
   )
 
@@ -300,7 +301,8 @@ forge_xy_default_process_outcomes <- function(engine, new_data, outcomes) {
     out <- list(
       engine = engine,
       outcomes = list(
-        data = NULL
+        data = NULL,
+        extras = NULL
       )
     )
 
@@ -314,7 +316,8 @@ forge_xy_default_process_outcomes <- function(engine, new_data, outcomes) {
   list(
     engine = engine,
     outcomes = list(
-      data = .outcomes
+      data = .outcomes,
+      extras = NULL
     )
   )
 
