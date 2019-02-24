@@ -176,13 +176,15 @@ mold_impl_common <- function(engine, predictors, outcomes) {
 
   info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
 
+  extras <- c(predictors$extras, outcomes$extras)
+
   engine <- update_engine(engine, info = info)
 
   mold_list(
     predictors = predictors$data,
     outcomes = outcomes$data,
     engine = engine,
-    offset = predictors$offset
+    extras = extras
   )
 
 }
@@ -197,12 +199,12 @@ mold_impl_common <- function(engine, predictors, outcomes) {
 # to return? (oooh, maybe offset counts as an `extra`
 # for the formula method?)
 
-mold_list <- function(predictors, outcomes, engine, offset = NULL) {
+mold_list <- function(predictors, outcomes, engine, extras = NULL) {
   list(
     predictors = predictors,
     outcomes = outcomes,
     engine = engine,
-    offset = offset
+    extras = extras
   )
 }
 
