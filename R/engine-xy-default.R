@@ -204,11 +204,7 @@ mold_xy_default_process <- function(engine, x, y) {
 mold_xy_default_process_predictors <- function(engine, x) {
 
   # Important! Collect info before adding intercept!
-  info <- predictors_info(
-    names = colnames(x),
-    classes = get_data_classes(x),
-    levels = get_levels(x)
-  )
+  info <- extract_info(x)
 
   x <- maybe_add_intercept_column(x, engine$intercept)
 
@@ -225,11 +221,7 @@ mold_xy_default_process_predictors <- function(engine, x) {
 
 mold_xy_default_process_outcomes <- function(engine, y) {
 
-  info <- outcomes_info(
-    names = colnames(y),
-    classes = get_data_classes(y),
-    levels = get_levels(y)
-  )
+  info <- extract_info(y)
 
   list(
     engine = engine,

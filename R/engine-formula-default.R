@@ -357,11 +357,11 @@ mold_formula_default_process_predictors <- function(engine, data) {
 
   original_names <- get_all_predictors(formula, data)
   original_data <- data[, original_names, drop = FALSE]
-  original_data_classes <- get_data_classes(original_data)
-  original_levels <- get_levels(original_data)
+
+  info <- extract_info(original_data)
 
   if (!engine$indicators) {
-    factor_names <- extract_original_factor_names(original_data_classes)
+    factor_names <- extract_original_factor_names(info$classes)
     validate_no_factors_in_functions(formula, factor_names)
     validate_no_factors_in_interactions(formula, factor_names)
     formula <- remove_factors_from_formula(formula, factor_names)
@@ -385,12 +385,6 @@ mold_formula_default_process_predictors <- function(engine, data) {
   engine_terms$predictors <- terms
   engine <- update_engine(engine, terms = engine_terms)
 
-  info <- predictors_info(
-    names = original_names,
-    classes = original_data_classes,
-    levels = original_levels
-  )
-
   list(
     engine = engine,
     predictors = list(
@@ -408,8 +402,8 @@ mold_formula_default_process_outcomes <- function(engine, data) {
 
   original_names <- get_all_outcomes(formula, data)
   original_data <- data[, original_names, drop = FALSE]
-  original_data_classes <- get_data_classes(original_data)
-  original_levels <- get_levels(original_data)
+
+  info <- extract_info(original_data)
 
   formula <- get_outcomes_formula(formula)
 
@@ -425,12 +419,6 @@ mold_formula_default_process_outcomes <- function(engine, data) {
   engine_terms <- engine$terms
   engine_terms$outcomes <- terms
   engine <- update_engine(engine, terms = engine_terms)
-
-  info <- outcomes_info(
-    names = original_names,
-    classes = original_data_classes,
-    levels = original_levels
-  )
 
   list(
     engine = engine,
