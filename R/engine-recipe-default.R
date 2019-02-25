@@ -312,12 +312,7 @@ get_original_predictor_info <- function(rec, data) {
 
   original_data <- data[, original_names, drop = FALSE]
 
-  predictors_info(
-    names = original_names,
-    classes = get_data_classes(original_data),
-    levels = get_levels(original_data)
-  )
-
+  extract_info(original_data)
 }
 
 get_original_outcome_info <- function(rec, data) {
@@ -327,10 +322,5 @@ get_original_outcome_info <- function(rec, data) {
 
   original_data <- data[, original_names, drop = FALSE]
 
-  outcomes_info(
-    names = original_names,
-    classes = get_data_classes(original_data),
-    levels = get_levels(original_data)
-  )
-
+  extract_info(original_data)
 }
