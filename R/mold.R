@@ -130,13 +130,15 @@ mold_impl.xy_engine <- function(engine, x, y, ...) {
     y = y
   )
 
-  c(engine, predictors, outcomes) %<-% engine$mold$process(
+  c(engine, predictors, outcomes, info, extras) %<-% engine$mold$process(
     engine = engine,
     x = x,
     y = y
   )
 
-  mold_impl_common(engine, predictors, outcomes)
+  engine <- update_engine(engine, info = info)
+
+  out$mold$final(predictors, outcomes, engine, extras)
 
 }
 
@@ -147,12 +149,14 @@ mold_impl.formula_engine <- function(engine, data, ...) {
     data = data
   )
 
-  c(engine, predictors, outcomes) %<-% engine$mold$process(
+  c(engine, predictors, outcomes, info, extras) %<-% engine$mold$process(
     engine = engine,
     data = data
   )
 
-  mold_impl_common(engine, predictors, outcomes)
+  engine <- update_engine(engine, info = info)
+
+  out$mold$final(predictors, outcomes, engine, extras)
 
 }
 
@@ -163,48 +167,14 @@ mold_impl.recipe_engine <- function(engine, data, ...) {
     data = data
   )
 
-  c(engine, predictors, outcomes) %<-% engine$mold$process(
+  c(engine, predictors, outcomes, info, extras) %<-% engine$mold$process(
     engine = engine,
     data = data
   )
 
-  mold_impl_common(engine, predictors, outcomes)
-
-}
-
-mold_impl_common <- function(engine, predictors, outcomes) {
-
-  info <- info_lst(predictors = predictors$info, outcomes = outcomes$info)
-
-  extras <- c(predictors$extras, outcomes$extras)
-
   engine <- update_engine(engine, info = info)
 
-  mold_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
-    engine = engine,
-    extras = extras
-  )
+  out$mold$final(predictors, outcomes, engine, extras)
 
-}
-
-# ------------------------------------------------------------------------------
-
-# Would it also be useful to add an `extras` element here?
-# So specific implementations can return other processed
-# information as needed? For engine specific things, they
-# can just add information to the engine, but maybe there
-# are other things (like the offsets) that you might want
-# to return? (oooh, maybe offset counts as an `extra`
-# for the formula method?)
-
-mold_list <- function(predictors, outcomes, engine, extras = NULL) {
-  list(
-    predictors = predictors,
-    outcomes = outcomes,
-    engine = engine,
-    extras = extras
-  )
 }
 

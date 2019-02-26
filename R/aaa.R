@@ -19,6 +19,10 @@ utils::globalVariables(
     ".predictors",
     ".outcomes",
     "predictors",
-    "outcomes"
+    "outcomes",
+    "info",
+    "extras",
+    "predictors_lst",
+    "outcomes_lst"
   )
 )
