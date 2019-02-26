@@ -152,17 +152,22 @@ mold_recipe_default_process <- function(engine, data) {
   recipe <- recipes::prep(engine$recipe, training = data)
   engine <- update_engine(engine, recipe = recipe)
 
-  c(engine, predictors) %<-% mold_recipe_default_process_predictors(engine, data)
-  c(engine, outcomes) %<-% mold_recipe_default_process_outcomes(engine, data)
+  c(engine, predictors_lst) %<-% mold_recipe_default_process_predictors(engine, data)
+  c(engine, outcomes_lst) %<-% mold_recipe_default_process_outcomes(engine, data)
 
   # un-retain training data
   recipe <- compost(engine$recipe)
   engine <- update_engine(engine, recipe = recipe)
 
+  info <- info_lst(predictors_lst$info, outcomes_lst$info)
+  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+
   list(
     engine = engine,
-    predictors = predictors,
-    outcomes = outcomes
+    predictors = predictors_lst$data,
+    outcomes = outcomes_lst$data,
+    info = info,
+    extras = extras
   )
 
 }
@@ -178,13 +183,8 @@ mold_recipe_default_process_predictors <- function(engine, data) {
   info <- get_original_predictor_info(engine$recipe, data)
 
   list(
-    data = predictors,
-    info = info
-  )
-
-  list(
     engine = engine,
-    predictors = list(
+    predictors_lst = list(
       data = predictors,
       info = info,
       extras = NULL
@@ -203,7 +203,7 @@ mold_recipe_default_process_outcomes <- function(engine, data) {
 
   list(
     engine = engine,
-    outcomes = list(
+    outcomes_lst = list(
       data = outcomes,
       info = info,
       extras = NULL

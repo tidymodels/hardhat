@@ -191,14 +191,20 @@ mold_xy_default_clean_outcomes <- function(engine, y) {
 # mold - xy - process
 mold_xy_default_process <- function(engine, x, y) {
 
-  c(engine, predictors) %<-% mold_xy_default_process_predictors(engine, x)
-  c(engine, outcomes) %<-% mold_xy_default_process_outcomes(engine, y)
+  c(engine, predictors_lst) %<-% mold_xy_default_process_predictors(engine, x)
+  c(engine, outcomes_lst) %<-% mold_xy_default_process_outcomes(engine, y)
+
+  info <- info_lst(predictors_lst$info, outcomes_lst$info)
+  extras <- c(predictors_lst$extras, outcomes_lst$extras)
 
   list(
     engine = engine,
-    predictors = predictors,
-    outcomes = outcomes
+    predictors = predictors_lst$data,
+    outcomes = outcomes_lst$data,
+    info = info,
+    extras = extras
   )
+
 }
 
 mold_xy_default_process_predictors <- function(engine, x) {
@@ -210,7 +216,7 @@ mold_xy_default_process_predictors <- function(engine, x) {
 
   list(
     engine = engine,
-    predictors = list(
+    predictors_lst = list(
       data = x,
       info = info,
       extras = NULL
@@ -225,7 +231,7 @@ mold_xy_default_process_outcomes <- function(engine, y) {
 
   list(
     engine = engine,
-    outcomes = list(
+    outcomes_lst = list(
       data = y,
       info = info,
       extras = NULL

@@ -336,17 +336,22 @@ mold_formula_default_clean <- function(engine, data) {
 # mold - formula - process
 mold_formula_default_process <- function(engine, data) {
 
-  c(engine, predictors) %<-% mold_formula_default_process_predictors(engine, data)
-  c(engine, outcomes) %<-% mold_formula_default_process_outcomes(engine, data)
+  c(engine, predictors_lst) %<-% mold_formula_default_process_predictors(engine, data)
+  c(engine, outcomes_lst) %<-% mold_formula_default_process_outcomes(engine, data)
 
   # nuke formula environment before returning
   formula_empty_env <- nuke_formula_environment(engine$formula)
   engine <- update_engine(engine, formula = formula_empty_env)
 
+  info <- info_lst(predictors_lst$info, outcomes_lst$info)
+  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+
   list(
     engine = engine,
-    predictors = predictors,
-    outcomes = outcomes
+    predictors = predictors_lst$data,
+    outcomes = outcomes_lst$data,
+    info = info,
+    extras = extras
   )
 
 }
@@ -387,7 +392,7 @@ mold_formula_default_process_predictors <- function(engine, data) {
 
   list(
     engine = engine,
-    predictors = list(
+    predictors_lst = list(
       data = predictors,
       info = info,
       extras = list(offset = offset)
@@ -422,7 +427,7 @@ mold_formula_default_process_outcomes <- function(engine, data) {
 
   list(
     engine = engine,
-    outcomes = list(
+    outcomes_lst = list(
       data = outcomes,
       info = info,
       extras = NULL
