@@ -171,11 +171,7 @@ mold_xy_default_clean <- function(engine, x, y) {
   c(engine, x) %<-% mold_xy_default_clean_predictors(engine, x)
   c(engine, y) %<-% mold_xy_default_clean_outcomes(engine, y)
 
-  list(
-    engine = engine,
-    x = x,
-    y = y
-  )
+  out$mold$clean_xy(engine, x, y)
 }
 
 mold_xy_default_clean_predictors <- function(engine, x) {
@@ -197,14 +193,7 @@ mold_xy_default_process <- function(engine, x, y) {
   info <- info_lst(predictors_lst$info, outcomes_lst$info)
   extras <- c(predictors_lst$extras, outcomes_lst$extras)
 
-  list(
-    engine = engine,
-    predictors = predictors_lst$data,
-    outcomes = outcomes_lst$data,
-    info = info,
-    extras = extras
-  )
-
+  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
 }
 
 mold_xy_default_process_predictors <- function(engine, x) {
@@ -214,30 +203,18 @@ mold_xy_default_process_predictors <- function(engine, x) {
 
   x <- maybe_add_intercept_column(x, engine$intercept)
 
-  list(
-    engine = engine,
-    predictors_lst = list(
-      data = x,
-      info = info,
-      extras = NULL
-    )
-  )
+  predictors_lst <- out$mold$process_terms_lst(data = x, info)
 
+  out$mold$process_terms(engine, predictors_lst)
 }
 
 mold_xy_default_process_outcomes <- function(engine, y) {
 
   info <- extract_info(y)
 
-  list(
-    engine = engine,
-    outcomes_lst = list(
-      data = y,
-      info = info,
-      extras = NULL
-    )
-  )
+  outcomes_lst <- out$mold$process_terms_lst(data = y, info)
 
+  out$mold$process_terms(engine, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------
@@ -255,68 +232,46 @@ forge_xy_default_clean <- function(engine, new_data, outcomes) {
   new_data <- shrink(new_data, engine, outcomes)
   new_data <- scream(new_data, engine, outcomes)
 
-  list(
-    engine = engine,
-    new_data = new_data
-  )
-
+  out$forge$clean(engine, new_data)
 }
 
 forge_xy_default_process <- function(engine, new_data, outcomes) {
 
-  c(engine, .predictors) %<-% forge_xy_default_process_predictors(engine, new_data)
-  c(engine, .outcomes) %<-% forge_xy_default_process_outcomes(engine, new_data, outcomes)
+  c(engine, predictors_lst) %<-% forge_xy_default_process_predictors(engine, new_data)
+  c(engine, outcomes_lst) %<-% forge_xy_default_process_outcomes(engine, new_data, outcomes)
 
-  list(
-    engine = engine,
-    predictors = .predictors,
-    outcomes = .outcomes
-  )
+  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+
+  out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
 }
 
 forge_xy_default_process_predictors <- function(engine, new_data) {
 
   original_names <- engine$info$predictors$names
 
-  .predictors <- new_data[, original_names, drop = FALSE]
+  data <- new_data[, original_names, drop = FALSE]
 
-  .predictors <- maybe_add_intercept_column(.predictors, engine$intercept)
+  data <- maybe_add_intercept_column(data, engine$intercept)
 
-  list(
-    engine = engine,
-    predictors = list(
-      data = .predictors,
-      extras = NULL
-    )
-  )
+  predictors_lst <- out$forge$process_terms_lst(data = data)
 
+  out$forge$process_terms(engine, predictors_lst)
 }
 
 forge_xy_default_process_outcomes <- function(engine, new_data, outcomes) {
 
+  # don't process and return outcomes
   if (!outcomes) {
-
-    out <- list(
-      engine = engine,
-      outcomes = list(
-        data = NULL,
-        extras = NULL
-      )
-    )
-
-    return(out)
+    outcomes_lst <- out$forge$process_terms_lst()
+    result <- out$forge$process_terms(engine, outcomes_lst)
+    return(result)
   }
 
   original_names <- engine$info$outcomes$names
 
-  .outcomes <- new_data[, original_names, drop = FALSE]
+  data <- new_data[, original_names, drop = FALSE]
 
-  list(
-    engine = engine,
-    outcomes = list(
-      data = .outcomes,
-      extras = NULL
-    )
-  )
+  outcomes_lst <- out$forge$process_terms_lst(data = data)
 
+  out$forge$process_terms(engine, outcomes_lst)
 }

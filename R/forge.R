@@ -79,6 +79,11 @@ forge.matrix <- forge.data.frame
 # But, for now, they all do the same thing (as they should!),
 # and we don't expose this to the user/developer.
 
+# TODO - Having this as a non-exported generic makes it impossible to
+# implement a completely new engine type (subclassing `new_engine()`)
+# because it will be something like `custom_engine` and there won't be
+# anything to dispatch on
+
 forge_impl <- function(engine, ...) {
   UseMethod("forge_impl")
 }
@@ -91,20 +96,13 @@ forge_impl.xy_engine <- function(engine, new_data, outcomes) {
     outcomes = outcomes
   )
 
-  c(engine, predictors, outcomes) %<-% engine$forge$process(
+  c(engine, predictors, outcomes, extras) %<-% engine$forge$process(
     engine = engine,
     new_data = new_data,
     outcomes = outcomes
   )
 
-  extras <- c(predictors$extras, outcomes$extras)
-
-  forge_list(
-    predictors = predictors$data,
-    outcomes = outcomes$data,
-    extras = extras
-  )
-
+  out$forge$final(predictors, outcomes, extras)
 }
 
 forge_impl.formula_engine <- forge_impl.xy_engine

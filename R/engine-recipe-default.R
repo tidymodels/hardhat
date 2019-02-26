@@ -139,10 +139,7 @@ mold_recipe_default_clean <- function(engine, data) {
 
   data <- check_is_data_like(data)
 
-  list(
-    engine = engine,
-    data = data
-  )
+  out$mold$clean(engine, data)
 }
 
 # mold - recipe - process
@@ -162,14 +159,7 @@ mold_recipe_default_process <- function(engine, data) {
   info <- info_lst(predictors_lst$info, outcomes_lst$info)
   extras <- c(predictors_lst$extras, outcomes_lst$extras)
 
-  list(
-    engine = engine,
-    predictors = predictors_lst$data,
-    outcomes = outcomes_lst$data,
-    info = info,
-    extras = extras
-  )
-
+  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
 }
 
 mold_recipe_default_process_predictors <- function(engine, data) {
@@ -182,15 +172,9 @@ mold_recipe_default_process_predictors <- function(engine, data) {
 
   info <- get_original_predictor_info(engine$recipe, data)
 
-  list(
-    engine = engine,
-    predictors_lst = list(
-      data = predictors,
-      info = info,
-      extras = NULL
-    )
-  )
+  predictors_lst <- out$mold$process_terms_lst(data = predictors, info)
 
+  out$mold$process_terms(engine, predictors_lst)
 }
 
 mold_recipe_default_process_outcomes <- function(engine, data) {
@@ -201,15 +185,9 @@ mold_recipe_default_process_outcomes <- function(engine, data) {
 
   info <- get_original_outcome_info(engine$recipe, data)
 
-  list(
-    engine = engine,
-    outcomes_lst = list(
-      data = outcomes,
-      info = info,
-      extras = NULL
-    )
-  )
+  outcomes_lst <- out$mold$process_terms_lst(data = outcomes, info)
 
+  out$mold$process_terms(engine, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------
@@ -227,11 +205,7 @@ forge_recipe_default_clean <- function(engine, new_data, outcomes) {
   new_data <- shrink(new_data, engine, outcomes)
   new_data <- scream(new_data, engine, outcomes)
 
-  list(
-    engine = engine,
-    new_data = new_data
-  )
-
+  out$forge$clean(engine, new_data)
 }
 
 forge_recipe_default_process <- function(engine, new_data, outcomes) {
@@ -242,14 +216,20 @@ forge_recipe_default_process <- function(engine, new_data, outcomes) {
     new_data = new_data
   )
 
-  c(engine, .predictors) %<-% forge_recipe_default_process_predictors(engine, new_data)
-  c(engine, .outcomes) %<-% forge_recipe_default_process_outcomes(engine, new_data, outcomes)
-
-  list(
+  c(engine, predictors_lst) %<-% forge_recipe_default_process_predictors(
     engine = engine,
-    predictors = .predictors,
-    outcomes = .outcomes
+    new_data = new_data
   )
+
+  c(engine, outcomes_lst) %<-% forge_recipe_default_process_outcomes(
+    engine = engine,
+    new_data = new_data,
+    outcomes = outcomes
+  )
+
+  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+
+  out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
 }
 
 forge_recipe_default_process_predictors <- function(engine, new_data) {
@@ -258,49 +238,33 @@ forge_recipe_default_process_predictors <- function(engine, new_data) {
   roles <- recipe$term_info$role
   processed_names <- recipe$term_info$variable[roles == "predictor"]
 
-  .predictors <- new_data[, processed_names, drop = FALSE]
+  data <- new_data[, processed_names, drop = FALSE]
 
-  .predictors <- maybe_add_intercept_column(.predictors, engine$intercept)
+  data <- maybe_add_intercept_column(data, engine$intercept)
 
-  list(
-    engine = engine,
-    predictors = list(
-      data = .predictors,
-      extras = NULL
-    )
-  )
+  predictors_lst <- out$forge$process_terms_lst(data = data)
 
+  out$forge$process_terms(engine, predictors_lst)
 }
 
 forge_recipe_default_process_outcomes <- function(engine, new_data, outcomes) {
 
+  # don't process and return outcomes
   if (!outcomes) {
-
-    out <- list(
-      engine = engine,
-      outcomes = list(
-        data = NULL,
-        extras = NULL
-      )
-    )
-
-    return(out)
+    outcomes_lst <- out$forge$process_terms_lst()
+    result <- out$forge$process_terms(engine, outcomes_lst)
+    return(result)
   }
 
   recipe <- engine$recipe
   roles <- recipe$term_info$role
   processed_names <- recipe$term_info$variable[roles == "outcome"]
 
-  .outcomes <- new_data[, processed_names, drop = FALSE]
+  data <- new_data[, processed_names, drop = FALSE]
 
-  list(
-    engine = engine,
-    outcomes = list(
-      data = .outcomes,
-      extras = NULL
-    )
-  )
+  outcomes_lst <- out$forge$process_terms_lst(data = data)
 
+  out$forge$process_terms(engine, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------

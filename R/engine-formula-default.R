@@ -326,11 +326,7 @@ mold_formula_default_clean <- function(engine, data) {
 
   engine <- update_engine(engine, formula = formula)
 
-  list(
-    engine = engine,
-    data = data
-  )
-
+  out$mold$clean(engine, data)
 }
 
 # mold - formula - process
@@ -346,14 +342,7 @@ mold_formula_default_process <- function(engine, data) {
   info <- info_lst(predictors_lst$info, outcomes_lst$info)
   extras <- c(predictors_lst$extras, outcomes_lst$extras)
 
-  list(
-    engine = engine,
-    predictors = predictors_lst$data,
-    outcomes = outcomes_lst$data,
-    info = info,
-    extras = extras
-  )
-
+  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
 }
 
 mold_formula_default_process_predictors <- function(engine, data) {
@@ -390,15 +379,13 @@ mold_formula_default_process_predictors <- function(engine, data) {
   engine_terms$predictors <- terms
   engine <- update_engine(engine, terms = engine_terms)
 
-  list(
-    engine = engine,
-    predictors_lst = list(
-      data = predictors,
-      info = info,
-      extras = list(offset = offset)
-    )
+  predictors_lst <- out$mold$process_terms_lst(
+    data = predictors,
+    info = info,
+    extras = list(offset = offset)
   )
 
+  out$mold$process_terms(engine, predictors_lst)
 }
 
 mold_formula_default_process_outcomes <- function(engine, data) {
@@ -425,15 +412,9 @@ mold_formula_default_process_outcomes <- function(engine, data) {
   engine_terms$outcomes <- terms
   engine <- update_engine(engine, terms = engine_terms)
 
-  list(
-    engine = engine,
-    outcomes_lst = list(
-      data = outcomes,
-      info = info,
-      extras = NULL
-    )
-  )
+  outcomes_lst <- out$mold$process_terms_lst(data = outcomes, info)
 
+  out$mold$process_terms(engine, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------
@@ -451,23 +432,17 @@ forge_formula_default_clean <- function(engine, new_data, outcomes) {
   new_data <- shrink(new_data, engine, outcomes)
   new_data <- scream(new_data, engine, outcomes)
 
-  list(
-    engine = engine,
-    new_data = new_data
-  )
-
+  out$forge$clean(engine, new_data)
 }
 
 forge_formula_default_process <- function(engine, new_data, outcomes) {
 
-  c(engine, .predictors) %<-% forge_formula_default_process_predictors(engine, new_data)
-  c(engine, .outcomes) %<-% forge_formula_default_process_outcomes(engine, new_data, outcomes)
+  c(engine, predictors_lst) %<-% forge_formula_default_process_predictors(engine, new_data)
+  c(engine, outcomes_lst) %<-% forge_formula_default_process_outcomes(engine, new_data, outcomes)
 
-  list(
-    engine = engine,
-    predictors = .predictors,
-    outcomes = .outcomes
-  )
+  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+
+  out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
 }
 
 forge_formula_default_process_predictors <- function(engine, new_data) {
@@ -478,41 +453,33 @@ forge_formula_default_process_predictors <- function(engine, new_data) {
 
   framed <- model_frame(terms, new_data, engine$info$predictors$levels)
 
-  .predictors <- model_matrix(
+  data <- model_matrix(
     terms = framed$terms,
     data = framed$data
   )
 
   if (!engine$indicators) {
     factor_names <- extract_original_factor_names(engine$info$predictors$classes)
-    .predictors <- reattach_factor_columns(.predictors, new_data, factor_names)
+    data <- reattach_factor_columns(data, new_data, factor_names)
   }
 
   .offset <- extract_offset(framed$data, framed$terms)
 
-  list(
-    engine = engine,
-    predictors = list(
-      data = .predictors,
-      extras = list(offset = .offset)
-    )
+  predictors_lst <- out$forge$process_terms_lst(
+    data = data,
+    extras = list(offset = .offset)
   )
 
+  out$forge$process_terms(engine, predictors_lst)
 }
 
 forge_formula_default_process_outcomes <- function(engine, new_data, outcomes) {
 
+  # don't process and return outcomes
   if (!outcomes) {
-
-    out <- list(
-      engine = engine,
-      outcomes = list(
-        data = NULL,
-        extras = NULL
-      )
-    )
-
-    return(out)
+    outcomes_lst <- out$forge$process_terms_lst()
+    result <- out$forge$process_terms(engine, outcomes_lst)
+    return(result)
   }
 
   terms <- engine$terms$outcomes
@@ -523,16 +490,11 @@ forge_formula_default_process_outcomes <- function(engine, new_data, outcomes) {
   # Because model.matrix() does this for the RHS and we want
   # to be consistent even though we are only going through
   # model.frame()
-  .outcomes <- flatten_embedded_columns(framed$data)
+  data <- flatten_embedded_columns(framed$data)
 
-  list(
-    engine = engine,
-    outcomes = list(
-      data = .outcomes,
-      extras = NULL
-    )
-  )
+  outcomes_lst <- out$forge$process_terms_lst(data = data)
 
+  out$forge$process_terms(engine, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------
