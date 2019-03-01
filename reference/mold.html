@@ -33,11 +33,12 @@
 <meta property="og:title" content="Mold data for modeling — mold" />
 
 <meta property="og:description" content="mold() applies the appropriate processing steps required to get training
-data ready to be fed into a model.
-The return values of each engine are all consistent with one another, but the
-nuances of exactly what is being done for each engine vary enough to warrant
-separate help files for each. Click through to each one below to learn
-about each engine and see a large amount of engine specific examples:
+data ready to be fed into a model. It does this through the use of various
+engines that understand how to preprocess data that come in various
+forms, such as a formula or a recipe.
+All engines have consistent return values with the others, but each is
+unique enough to have its own help page. Click through below to learn
+how to use each one in conjunction with mold().
 XY Method - default_xy_engine()
 Formula Method - default_formula_engine()
 Recipes Method - default_recipe_engine()
@@ -131,11 +132,12 @@ Recipes Method - default_recipe_engine()
     <div class="ref-description">
     
     <p><code>mold()</code> applies the appropriate processing steps required to get training
-data ready to be fed into a model.</p>
-<p>The return values of each engine are all consistent with one another, but the
-nuances of exactly what is being done for each engine vary enough to warrant
-separate help files for each. Click through to each one below to learn
-about each engine and see a large amount of engine specific examples:</p><ul>
+data ready to be fed into a model. It does this through the use of various
+<em>engines</em> that understand how to preprocess data that come in various
+forms, such as a formula or a recipe.</p>
+<p>All engines have consistent return values with the others, but each is
+unique enough to have its own help page. Click through below to learn
+how to use each one in conjunction with <code>mold()</code>.</p><ul>
 <li><p>XY Method - <code><a href='default_xy_engine.html'>default_xy_engine()</a></code></p></li>
 <li><p>Formula Method - <code><a href='default_formula_engine.html'>default_formula_engine()</a></code></p></li>
 <li><p>Recipes Method - <code><a href='default_recipe_engine.html'>default_recipe_engine()</a></code></p></li>
@@ -143,48 +145,19 @@ about each engine and see a large amount of engine specific examples:</p><ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for matrix</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for formula</span>
-<span class='fu'>mold</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for recipe</span>
-<span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>data</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>mold</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A data frame, matrix, formula, or <code><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipes::recipe()</a></code>. If this is a
-data.frame or matrix, it should contain the predictors.</p></td>
+      <td><p>An object. See the method specific implementations linked in the
+Description for more information.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently unused.</p></td>
-    </tr>
-    <tr>
-      <th>y</th>
-      <td><p>A data frame, matrix, or vector. This should contain the outcomes.</p></td>
-    </tr>
-    <tr>
-      <th>engine</th>
-      <td><p>A preprocessing <code>engine</code>. If left as <code>NULL</code>, then a default
-engine is chosen based on the type of <code>x</code>.</p></td>
-    </tr>
-    <tr>
-      <th>formula</th>
-      <td><p>A formula specifying the terms of the model.</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>A data frame or matrix containing the predictors and the outcomes.</p></td>
+      <td><p>Not used.</p></td>
     </tr>
     </table>
     
@@ -195,13 +168,152 @@ engine is chosen based on the type of <code>x</code>.</p></td>
 model.</p></li>
 <li><p><code>outcome</code>: A tibble containing the molded outcomes to be used in the
 model.</p></li>
-<li><p><code>engine</code>: A <code>"hardhat_engine"</code> object for use when making predictions.</p></li>
-<li><p><code>offset</code>: A tibble with a single column named <code>".offset"</code> if an offset
-was specified in the formula method. Otherwise, <code>NULL</code>.</p></li>
+<li><p><code>engine</code>: A method specific <code>"hardhat_engine"</code> object for use when
+making predictions.</p></li>
+<li><p><code>extras</code>: Either <code>NULL</code> if the engine returns no extra information,
+or a named list containing the extra information.</p></li>
 </ul>
 
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># See the method specific documentation linked in Description</span>
+<span class='co'># for the details of each engine, and more examples.</span>
+
+<span class='co'># XY</span>
+<span class='fu'>mold</span>(<span class='no'>iris</span>[, <span class='st'>"Sepal.Width"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>], <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; $predictors
+#&gt; # A tibble: 150 x 1
+#&gt;    Sepal.Width
+#&gt;          &lt;dbl&gt;
+#&gt;  1         3.5
+#&gt;  2         3  
+#&gt;  3         3.2
+#&gt;  4         3.1
+#&gt;  5         3.6
+#&gt;  6         3.9
+#&gt;  7         3.4
+#&gt;  8         3.4
+#&gt;  9         2.9
+#&gt; 10         3.1
+#&gt; # … with 140 more rows
+#&gt; 
+#&gt; $outcomes
+#&gt; # A tibble: 150 x 1
+#&gt;    .outcome
+#&gt;    &lt;fct&gt;   
+#&gt;  1 setosa  
+#&gt;  2 setosa  
+#&gt;  3 setosa  
+#&gt;  4 setosa  
+#&gt;  5 setosa  
+#&gt;  6 setosa  
+#&gt;  7 setosa  
+#&gt;  8 setosa  
+#&gt;  9 setosa  
+#&gt; 10 setosa  
+#&gt; # … with 140 more rows
+#&gt; 
+#&gt; $engine
+#&gt; XY Engine: 
+#&gt;  
+#&gt; # Predictors: 1 
+#&gt;   # Outcomes: 1 
+#&gt;    Intercept: FALSE 
+#&gt; 
+#&gt; $extras
+#&gt; NULL
+#&gt; </div><div class='input'>
+<span class='co'># Formula</span>
+<span class='fu'>mold</span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Width</span>, <span class='no'>iris</span>)</div><div class='output co'>#&gt; $predictors
+#&gt; # A tibble: 150 x 1
+#&gt;    Sepal.Width
+#&gt;          &lt;dbl&gt;
+#&gt;  1         3.5
+#&gt;  2         3  
+#&gt;  3         3.2
+#&gt;  4         3.1
+#&gt;  5         3.6
+#&gt;  6         3.9
+#&gt;  7         3.4
+#&gt;  8         3.4
+#&gt;  9         2.9
+#&gt; 10         3.1
+#&gt; # … with 140 more rows
+#&gt; 
+#&gt; $outcomes
+#&gt; # A tibble: 150 x 1
+#&gt;    Species
+#&gt;    &lt;fct&gt;  
+#&gt;  1 setosa 
+#&gt;  2 setosa 
+#&gt;  3 setosa 
+#&gt;  4 setosa 
+#&gt;  5 setosa 
+#&gt;  6 setosa 
+#&gt;  7 setosa 
+#&gt;  8 setosa 
+#&gt;  9 setosa 
+#&gt; 10 setosa 
+#&gt; # … with 140 more rows
+#&gt; 
+#&gt; $engine
+#&gt; Formula Engine: 
+#&gt;  
+#&gt; # Predictors: 1 
+#&gt;   # Outcomes: 1 
+#&gt;    Intercept: FALSE 
+#&gt;   Indicators: TRUE 
+#&gt; 
+#&gt; $extras
+#&gt; $extras$offset
+#&gt; NULL
+#&gt; 
+#&gt; </div><div class='input'>
+<span class='co'># Recipe</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>recipes</span>)
+<span class='fu'>mold</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipe</a></span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Width</span>, <span class='no'>iris</span>), <span class='no'>iris</span>)</div><div class='output co'>#&gt; $predictors
+#&gt; # A tibble: 150 x 1
+#&gt;    Sepal.Width
+#&gt;          &lt;dbl&gt;
+#&gt;  1         3.5
+#&gt;  2         3  
+#&gt;  3         3.2
+#&gt;  4         3.1
+#&gt;  5         3.6
+#&gt;  6         3.9
+#&gt;  7         3.4
+#&gt;  8         3.4
+#&gt;  9         2.9
+#&gt; 10         3.1
+#&gt; # … with 140 more rows
+#&gt; 
+#&gt; $outcomes
+#&gt; # A tibble: 150 x 1
+#&gt;    Species
+#&gt;    &lt;fct&gt;  
+#&gt;  1 setosa 
+#&gt;  2 setosa 
+#&gt;  3 setosa 
+#&gt;  4 setosa 
+#&gt;  5 setosa 
+#&gt;  6 setosa 
+#&gt;  7 setosa 
+#&gt;  8 setosa 
+#&gt;  9 setosa 
+#&gt; 10 setosa 
+#&gt; # … with 140 more rows
+#&gt; 
+#&gt; $engine
+#&gt; Recipe Engine: 
+#&gt;  
+#&gt; # Predictors: 1 
+#&gt;   # Outcomes: 1 
+#&gt;    Intercept: FALSE 
+#&gt; 
+#&gt; $extras
+#&gt; NULL
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -209,7 +321,9 @@ was specified in the formula method. Otherwise, <code>NULL</code>.</p></li>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a new default XY engine — default_xy_engine • hardhat</title>
+<title>Default XY engine — default_xy_engine • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,11 @@
 
 
 
-<meta property="og:title" content="Create a new default XY engine — default_xy_engine" />
+<meta property="og:title" content="Default XY engine — default_xy_engine" />
 
-<meta property="og:description" content="This is the constructor for a default XY preprocessing engine. This
+<meta property="og:description" content="This pages holds the details for the XY preprocessing engine. This
 is the engine used by default from mold() if x and y are provided
-separately (i.e. the XY interface is used). To learn about what the
-default mold and forge functionality are, see the Mold and Forge
-sections below." />
+separately (i.e. the XY interface is used)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,25 +116,26 @@ sections below." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a new default XY engine</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/engine-xy-default.R'><code>R/engine-xy-default.R</code></a></small>
+    <h1>Default XY engine</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/engine-xy-default.R'><code>R/engine-xy-default.R</code></a>, <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/mold.R'><code>R/mold.R</code></a></small>
     <div class="hidden name"><code>default_xy_engine.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This is the constructor for a default XY preprocessing engine. This
+    <p>This pages holds the details for the XY preprocessing engine. This
 is the engine used by default from <code><a href='mold.html'>mold()</a></code> if <code>x</code> and <code>y</code> are provided
-separately (i.e. the XY interface is used). To learn about what the
-default mold and forge functionality are, see the Mold and Forge
-sections below.</p>
+separately (i.e. the XY interface is used).</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>default_xy_engine</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>new_default_xy_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
-  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())</pre>
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for matrix</span>
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,39 +147,23 @@ processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></td>
     </tr>
     <tr>
-      <th>mold</th>
-      <td><p>A named list with two elements, <code>clean</code> and <code>process</code>, see
-the <code><a href='new_engine.html'>new_engine()</a></code> section, Mold Functions, for details.</p></td>
+      <th>x</th>
+      <td><p>A data frame or matrix containing the predictors.</p></td>
     </tr>
     <tr>
-      <th>forge</th>
-      <td><p>A named list with two elements, <code>clean</code> and <code>process</code>, see
-the <code><a href='new_engine.html'>new_engine()</a></code> section, Forge Functions, for details.</p></td>
+      <th>y</th>
+      <td><p>A data frame, matrix, or vector containing the outcomes.</p></td>
     </tr>
     <tr>
-      <th>info</th>
-      <td><p>Either <code>NULL</code>, or a named list with 2 elements, <code>predictors</code>
-and <code>outcomes</code>. <code>info</code> is generated automatically at <code><a href='mold.html'>mold()</a></code> time and
-is used to validate <code>new_data</code> at prediction time. The
-information in <code>predictors</code> is the <code>predictors$info</code> element from running
-<code>engine$mold$process()</code> and the information is <code>outcomes</code> is the
-corresponding <code>outcomes$info</code>.</p></td>
+      <th>engine</th>
+      <td><p>A preprocessing <code>engine</code>. If left as <code>NULL</code>, then a
+<code>default_xy_engine()</code> is used.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Name-value pairs for additional elements of engines that
-subclass this engine.</p></td>
-    </tr>
-    <tr>
-      <th>subclass</th>
-      <td><p>A character vector. The subclasses of this engine.</p></td>
+      <td><p>Not used.</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A preprocessing engine with the class, <code>"default_xy_engine"</code> that can
-be used with <code><a href='mold.html'>mold()</a></code> and <code><a href='forge.html'>forge()</a></code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -188,7 +171,7 @@ be used with <code><a href='mold.html'>mold()</a></code> and <code><a href='forg
 outcomes tibble has 1 column with a standardized name of <code>".outcome"</code>.</p>
 <p>The one special thing about the XY method's forge function is the behavior of
 <code>outcomes = TRUE</code> when a <em>vector</em> <code>y</code> value was provided to the original
-call to <code><a href='mold.html'>mold()</a></code>. In that case, <code><a href='mold.html'>mold()</a></code> converted <code>y</code> into a tibble, with
+call to <code><a href='mold.html'>mold()</a></code>. In that case, <code><a href='mold.html'>mold()</a></code> converts <code>y</code> into a tibble, with
 a default name of <code>.outcome</code>. This is the column that <code><a href='forge.html'>forge()</a></code> will look
 for in <code>new_data</code> to preprocess. See the examples section for a
 demonstration of this.</p>
@@ -196,31 +179,26 @@ demonstration of this.</p>
     <h2 class="hasAnchor" id="mold"><a class="anchor" href="#mold"></a>Mold</h2>
 
     
-    <p>The XY engine's mold function does the following:</p><ul>
-<li><p>Converts <code>x</code> to a tibble.</p></li>
-<li><p>Adds an intercept column to <code>x</code> if <code>intercept = TRUE</code>.</p></li>
-<li><p>Runs <code><a href='standardize.html'>standardize()</a></code> on <code>y</code>.</p></li>
+    <p>When <code><a href='mold.html'>mold()</a></code> is used with the default xy engine:</p><ul>
+<li><p>It converts <code>x</code> to a tibble.</p></li>
+<li><p>It adds an intercept column to <code>x</code> if <code>intercept = TRUE</code>.</p></li>
+<li><p>It runs <code><a href='standardize.html'>standardize()</a></code> on <code>y</code>.</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="forge"><a class="anchor" href="#forge"></a>Forge</h2>
 
     
-    <p>The XY engine's forge function does the following:</p><ul>
-<li><p>Calls <code><a href='shrink.html'>shrink()</a></code> to trim <code>new_data</code> to only the required columns and
+    <p>When <code><a href='forge.html'>forge()</a></code> is used with the default xy engine:</p><ul>
+<li><p>It calls <code><a href='shrink.html'>shrink()</a></code> to trim <code>new_data</code> to only the required columns and
 coerce <code>new_data</code> to a tibble.</p></li>
-<li><p>Calls <code><a href='scream.html'>scream()</a></code> to perform validation on the structure of the columns
+<li><p>It calls <code><a href='scream.html'>scream()</a></code> to perform validation on the structure of the columns
 of <code>new_data</code>.</p></li>
-<li><p>Potentially adds an intercept column onto <code>new_data</code>, if
-<code>intercept = TRUE</code>.</p></li>
+<li><p>It adds an intercept column onto <code>new_data</code> if <code>intercept = TRUE</code>.</p></li>
 </ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># In all of the examples below, X and Y are supplied to mold(),</span>
-<span class='co'># which means that the default_xy_engine() is being used.</span>
-
-<span class='co'># ---------------------------------------------------------------------------</span>
+    <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Setup</span>
 
 <span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
@@ -396,8 +374,6 @@ of <code>new_data</code>.</p></li>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
 
       <li><a href="#mold">Mold</a></li>

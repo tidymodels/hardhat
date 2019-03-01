@@ -32,12 +32,12 @@
 
 <meta property="og:title" content="Forge prediction-ready data — forge" />
 
-<meta property="og:description" content="forge() applies the transformations requested by the engine
-on a set of new_data to be used in predictions.
-The return values of each engine are all consistent with one another, but the
-nuances of exactly what is being done for each engine vary enough to warrant
-separate help files for each. Click through to each one below to learn
-about each engine and see a large amount of engine specific examples:
+<meta property="og:description" content="forge() applies the transformations requested by the specific engine
+on a set of new_data. This new_data contains new predictors
+(and potentially outcomes) that will be used to generate predictions.
+All engines have consistent return values with the others, but each is
+unique enough to have its own help page. Click through below to learn
+how to use each one in conjunction with forge().
 XY Method - default_xy_engine()
 Formula Method - default_formula_engine()
 Recipes Method - default_recipe_engine()
@@ -130,12 +130,12 @@ Recipes Method - default_recipe_engine()
 
     <div class="ref-description">
     
-    <p><code>forge()</code> applies the transformations requested by the <code>engine</code>
-on a set of <code>new_data</code> to be used in predictions.</p>
-<p>The return values of each engine are all consistent with one another, but the
-nuances of exactly what is being done for each engine vary enough to warrant
-separate help files for each. Click through to each one below to learn
-about each engine and see a large amount of engine specific examples:</p><ul>
+    <p><code>forge()</code> applies the transformations requested by the specific <code>engine</code>
+on a set of <code>new_data</code>. This <code>new_data</code> contains new predictors
+(and potentially outcomes) that will be used to generate predictions.</p>
+<p>All engines have consistent return values with the others, but each is
+unique enough to have its own help page. Click through below to learn
+how to use each one in conjunction with <code>forge()</code>.</p><ul>
 <li><p>XY Method - <code><a href='default_xy_engine.html'>default_xy_engine()</a></code></p></li>
 <li><p>Formula Method - <code><a href='default_formula_engine.html'>default_formula_engine()</a></code></p></li>
 <li><p>Recipes Method - <code><a href='default_recipe_engine.html'>default_recipe_engine()</a></code></p></li>
@@ -150,7 +150,8 @@ about each engine and see a large amount of engine specific examples:</p><ul>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>new_data</th>
-      <td><p>A data frame or matrix to preprocess.</p></td>
+      <td><p>A data frame or matrix of predictors to process. If
+<code>outcomes = TRUE</code>, this should also contain the outcomes to process.</p></td>
     </tr>
     <tr>
       <th>engine</th>
@@ -163,7 +164,7 @@ as well?</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Not currently used.</p></td>
+      <td><p>Not used.</p></td>
     </tr>
     </table>
     
@@ -173,21 +174,75 @@ as well?</p></td>
 <li><p><code>predictors</code>: A tibble containing the preprocessed
 <code>new_data</code> predictors.</p></li>
 <li><p><code>outcomes</code>: If <code>outcomes = TRUE</code>, a tibble containing the preprocessed
-<code>new_data</code> outcomes. Otherwise, <code>NULL</code>.</p></li>
-<li><p><code>offset</code>: If the <code>preprocessor</code> was a <code>"formula_engine"</code>, and offsets
-were specified in the formula, this is a tibble containing the preprocessed
-offsets. Otherwise, <code>NULL</code>.</p></li>
+outcomes found in <code>new_data</code>. Otherwise, <code>NULL</code>.</p></li>
+<li><p><code>extras</code>: Either <code>NULL</code> if the engine returns no extra information,
+or a named list containing the extra information.</p></li>
 </ul>
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>If the outcomes are present in <code>new_data</code>, they can optionally be processed
-and returned in the <code>outcomes</code> slot of the returned list. This is very
-useful when doing cross validation where you need to preprocess the
-outcomes of a test set before computing performance.</p>
+and returned in the <code>outcomes</code> slot of the returned list by setting
+<code>outcomes = TRUE</code>. This is very useful when doing cross validation where
+you need to preprocess the outcomes of a test set before computing
+performance.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># See the engine specific documentation linked above</span>
+<span class='co'># for various ways to call forge with different</span>
+<span class='co'># engines.</span>
+
+<span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
+<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>101</span>:<span class='fl'>150</span>,]
+
+<span class='co'># Formula</span>
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>,
+  <span class='no'>train</span>,
+  <span class='fu'><a href='default_formula_engine.html'>default_formula_engine</a></span>(<span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+)
+
+<span class='fu'>forge</span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
+#&gt; # A tibble: 50 x 1
+#&gt;    Species  
+#&gt;    &lt;fct&gt;    
+#&gt;  1 virginica
+#&gt;  2 virginica
+#&gt;  3 virginica
+#&gt;  4 virginica
+#&gt;  5 virginica
+#&gt;  6 virginica
+#&gt;  7 virginica
+#&gt;  8 virginica
+#&gt;  9 virginica
+#&gt; 10 virginica
+#&gt; # … with 40 more rows
+#&gt; 
+#&gt; $outcomes
+#&gt; # A tibble: 50 x 1
+#&gt;    `log(Sepal.Width)`
+#&gt;                 &lt;dbl&gt;
+#&gt;  1              1.19 
+#&gt;  2              0.993
+#&gt;  3              1.10 
+#&gt;  4              1.06 
+#&gt;  5              1.10 
+#&gt;  6              1.10 
+#&gt;  7              0.916
+#&gt;  8              1.06 
+#&gt;  9              0.916
+#&gt; 10              1.28 
+#&gt; # … with 40 more rows
+#&gt; 
+#&gt; $extras
+#&gt; $extras$offset
+#&gt; NULL
+#&gt; 
+#&gt; </div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -197,7 +252,9 @@ outcomes of a test set before computing performance.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
