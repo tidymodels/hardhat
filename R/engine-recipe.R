@@ -30,8 +30,6 @@ new_recipe_engine <- function(mold,
     required_process_args = c("engine", "data")
   )
 
-  validate_forge_args(forge)
-
   validate_is_recipe_or_null(recipe)
 
   new_engine(

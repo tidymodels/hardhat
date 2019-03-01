@@ -32,7 +32,6 @@ new_formula_engine <- function(mold,
     required_process_args = c("engine", "data")
   )
 
-  validate_forge_args(forge)
   validate_is_formula_or_null(formula)
   validate_is_bool(indicators)
 

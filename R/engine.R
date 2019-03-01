@@ -57,6 +57,10 @@ new_engine <- function(mold,
   validate_is_info_list_or_null(info)
   validate_is_character(subclass, "subclass")
 
+  # Can't validate mold() args here
+  # as they differ per engine
+  validate_forge_args(forge)
+
   elems <- list(
     mold = mold,
     forge = forge,

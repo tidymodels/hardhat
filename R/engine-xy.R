@@ -24,8 +24,6 @@ new_xy_engine <- function(mold,
     required_process_args = c("engine", "x", "y")
   )
 
-  validate_forge_args(forge)
-
   new_engine(
     mold = mold,
     forge = forge,
