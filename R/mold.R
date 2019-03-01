@@ -3,12 +3,13 @@
 #' @description
 #'
 #' `mold()` applies the appropriate processing steps required to get training
-#' data ready to be fed into a model.
+#' data ready to be fed into a model. It does this through the use of various
+#' _engines_ that understand how to preprocess data that come in various
+#' forms, such as a formula or a recipe.
 #'
-#' The return values of each engine are all consistent with one another, but the
-#' nuances of exactly what is being done for each engine vary enough to warrant
-#' separate help files for each. Click through to each one below to learn
-#' about each engine and see a large amount of engine specific examples:
+#' All engines have consistent return values with the others, but each is
+#' unique enough to have its own help page. Click through below to learn
+#' how to use each one in conjunction with `mold()`.
 #'
 #' * XY Method - [default_xy_engine()]
 #'
@@ -38,7 +39,6 @@
 #'  or a named list containing the extra information.
 #'
 #' @examples
-#'
 #' # See the method specific documentation linked in Description
 #' # for the details of each engine, and more examples.
 #'

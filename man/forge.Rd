@@ -30,13 +30,12 @@ or a named list containing the extra information.
 }
 \description{
 \code{forge()} applies the transformations requested by the specific \code{engine}
-on a set of \code{new_data} to be used in predictions.
+on a set of \code{new_data}. This \code{new_data} contains new predictors
+(and potentially outcomes) that will be used to generate predictions.
 
-The return values of each engine are all consistent with one another, but the
-nuances of exactly what is being done for each engine vary enough to warrant
-separate help files for each. Click through to each one below to learn
-about each default engine that can be used with \code{forge()}, and to see a large
-amount of engine specific examples:
+All engines have consistent return values with the others, but each is
+unique enough to have its own help page. Click through below to learn
+how to use each one in conjunction with \code{forge()}.
 \itemize{
 \item XY Method - \code{\link[=default_xy_engine]{default_xy_engine()}}
 \item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
