@@ -1,21 +1,10 @@
-#' Create a new formula engine
-#'
-#' This is the base class for a formula preprocessing engine. If you want to
-#' create a new preprocessing engine that accepts input from the user in the
-#' form of a formula, start here.
-#'
-#' @return
-#'
-#' A preprocessing engine with the class, `"formula_engine"`.
-#'
-#' @inheritParams new_engine
-#'
 #' @param formula Either `NULL`, or a formula that specifies how the
 #' predictors and outcomes should be preprocessed. This argument is set
 #' automatically at [mold()] time.
 #'
 #' @param indicators A logical. Should factors be expanded into dummy variables?
 #'
+#' @rdname new-engine
 #' @export
 new_formula_engine <- function(mold,
                                forge,

@@ -7,14 +7,15 @@
 forge(new_data, engine, outcomes = FALSE, ...)
 }
 \arguments{
-\item{new_data}{A data frame or matrix to preprocess.}
+\item{new_data}{A data frame or matrix of predictors to process. If
+\code{outcomes = TRUE}, this should also contain the outcomes to process.}
 
 \item{engine}{A preprocessing \code{engine}.}
 
 \item{outcomes}{A logical. Should the outcomes be processed and returned
 as well?}
 
-\item{...}{Not currently used.}
+\item{...}{Not used.}
 }
 \value{
 A named list with 3 elements:
@@ -22,20 +23,19 @@ A named list with 3 elements:
 \item \code{predictors}: A tibble containing the preprocessed
 \code{new_data} predictors.
 \item \code{outcomes}: If \code{outcomes = TRUE}, a tibble containing the preprocessed
-\code{new_data} outcomes. Otherwise, \code{NULL}.
-\item \code{offset}: If the \code{preprocessor} was a \code{"formula_engine"}, and offsets
-were specified in the formula, this is a tibble containing the preprocessed
-offsets. Otherwise, \code{NULL}.
+outcomes found in \code{new_data}. Otherwise, \code{NULL}.
+\item \code{extras}: Either \code{NULL} if the engine returns no extra information,
+or a named list containing the extra information.
 }
 }
 \description{
-\code{forge()} applies the transformations requested by the \code{engine}
-on a set of \code{new_data} to be used in predictions.
+\code{forge()} applies the transformations requested by the specific \code{engine}
+on a set of \code{new_data}. This \code{new_data} contains new predictors
+(and potentially outcomes) that will be used to generate predictions.
 
-The return values of each engine are all consistent with one another, but the
-nuances of exactly what is being done for each engine vary enough to warrant
-separate help files for each. Click through to each one below to learn
-about each engine and see a large amount of engine specific examples:
+All engines have consistent return values with the others, but each is
+unique enough to have its own help page. Click through below to learn
+how to use each one in conjunction with \code{forge()}.
 \itemize{
 \item XY Method - \code{\link[=default_xy_engine]{default_xy_engine()}}
 \item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
@@ -44,7 +44,27 @@ about each engine and see a large amount of engine specific examples:
 }
 \details{
 If the outcomes are present in \code{new_data}, they can optionally be processed
-and returned in the \code{outcomes} slot of the returned list. This is very
-useful when doing cross validation where you need to preprocess the
-outcomes of a test set before computing performance.
+and returned in the \code{outcomes} slot of the returned list by setting
+\code{outcomes = TRUE}. This is very useful when doing cross validation where
+you need to preprocess the outcomes of a test set before computing
+performance.
+}
+\examples{
+# See the engine specific documentation linked above
+# for various ways to call forge with different
+# engines.
+
+train <- iris[1:100,]
+test <- iris[101:150,]
+
+# Formula
+processed <- mold(
+  log(Sepal.Width) ~ Species,
+  train,
+  default_formula_engine(indicators = FALSE)
+)
+
+forge(test, processed$engine, outcomes = TRUE)
+
+
 }

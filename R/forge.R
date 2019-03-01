@@ -2,13 +2,13 @@
 #'
 #' @description
 #'
-#' `forge()` applies the transformations requested by the `engine`
-#' on a set of `new_data` to be used in predictions.
+#' `forge()` applies the transformations requested by the specific `engine`
+#' on a set of `new_data`. This `new_data` contains new predictors
+#' (and potentially outcomes) that will be used to generate predictions.
 #'
-#' The return values of each engine are all consistent with one another, but the
-#' nuances of exactly what is being done for each engine vary enough to warrant
-#' separate help files for each. Click through to each one below to learn
-#' about each engine and see a large amount of engine specific examples:
+#' All engines have consistent return values with the others, but each is
+#' unique enough to have its own help page. Click through below to learn
+#' how to use each one in conjunction with `forge()`.
 #'
 #' * XY Method - [default_xy_engine()]
 #'
@@ -19,18 +19,20 @@
 #' @details
 #'
 #' If the outcomes are present in `new_data`, they can optionally be processed
-#' and returned in the `outcomes` slot of the returned list. This is very
-#' useful when doing cross validation where you need to preprocess the
-#' outcomes of a test set before computing performance.
+#' and returned in the `outcomes` slot of the returned list by setting
+#' `outcomes = TRUE`. This is very useful when doing cross validation where
+#' you need to preprocess the outcomes of a test set before computing
+#' performance.
 #'
-#' @param new_data A data frame or matrix to preprocess.
+#' @param new_data A data frame or matrix of predictors to process. If
+#' `outcomes = TRUE`, this should also contain the outcomes to process.
 #'
 #' @param engine A preprocessing `engine`.
 #'
 #' @param outcomes A logical. Should the outcomes be processed and returned
 #' as well?
 #'
-#' @param ... Not currently used.
+#' @param ... Not used.
 #'
 #' @return
 #'
@@ -40,11 +42,28 @@
 #'  `new_data` predictors.
 #'
 #'  - `outcomes`: If `outcomes = TRUE`, a tibble containing the preprocessed
-#'  `new_data` outcomes. Otherwise, `NULL`.
+#'  outcomes found in `new_data`. Otherwise, `NULL`.
 #'
-#'  - `offset`: If the `preprocessor` was a `"formula_engine"`, and offsets
-#'  were specified in the formula, this is a tibble containing the preprocessed
-#'  offsets. Otherwise, `NULL`.
+#'  - `extras`: Either `NULL` if the engine returns no extra information,
+#'  or a named list containing the extra information.
+#'
+#' @examples
+#' # See the engine specific documentation linked above
+#' # for various ways to call forge with different
+#' # engines.
+#'
+#' train <- iris[1:100,]
+#' test <- iris[101:150,]
+#'
+#' # Formula
+#' processed <- mold(
+#'   log(Sepal.Width) ~ Species,
+#'   train,
+#'   default_formula_engine(indicators = FALSE)
+#' )
+#'
+#' forge(test, processed$engine, outcomes = TRUE)
+#'
 #'
 #' @export
 forge <- function(new_data, engine, outcomes = FALSE, ...) {
@@ -108,18 +127,3 @@ forge_impl.xy_engine <- function(engine, new_data, outcomes) {
 forge_impl.formula_engine <- forge_impl.xy_engine
 
 forge_impl.recipe_engine <- forge_impl.xy_engine
-
-# ------------------------------------------------------------------------------
-
-# Would it also be useful to add an `extras` element here?
-# So specific implementations can return other processed
-# information as needed? (`offset` could count as an `extra` for
-# for formula method)
-
-forge_list <- function(predictors, outcomes = NULL, extras = NULL) {
-  list(
-    predictors = predictors,
-    outcomes = outcomes,
-    extras = extras
-  )
-}

@@ -26,7 +26,7 @@
 #'
 #'       - If not using an xy engine:
 #'
-#'          - `data`: The cleaned input data.
+#'          - `data`: The cleaned data.
 #'
 #' - `process`: A function that performs the actual preprocessing of the data.
 #'
@@ -36,43 +36,31 @@
 #'
 #'       - Otherwise, `engine` and `data`.
 #'
-#'    - _Output_: A named list of three elements:
+#'    - _Output_: A named list of 5 elements:
 #'
 #'       - `engine`: The engine, returned and potentially updated.
 #'
-#'       - `predictors`: A named list of 3 elements:
+#'       - `predictors`: A tibble of predictors.
 #'
-#'          - `data`: The processed predictors.
+#'       - `outcomes`: A tibble of outcomes.
 #'
-#'          - `info`: A named list of 3 elements:
+#'       - `info`: A named list with 2 elements, `predictors` and `outcomes`,
+#'       where both elements are themselves named lists of the following
+#'       3 elements:
 #'
-#'             - `names`: A character vector of names of the original
-#'             predictors.
+#'          - `names`: A character vector of names of the original
+#'          predictors.
 #'
-#'             - `classes`: A named list where the names are the original
-#'             predictors, and the values are the classes of that predictor.
+#'          - `classes`: A named list where the names are the original
+#'          predictors, and the values are the classes of that predictor.
 #'
-#'             - `levels`: A named list where the names are the original
-#'             factor predictors, and the values are the levels of that
-#'             factor predictor.
+#'          - `levels`: A named list where the names are the original
+#'          factor predictors, and the values are the levels of that
+#'          factor predictor.
 #'
-#'          - `offset`: An offset, or `NULL`.
-#'
-#'       - `outcomes`: A named list of 2 elements:
-#'
-#'          - `data`: The processed outcomes.
-#'
-#'          - `info`: A named list of 3 elements:
-#'
-#'             - `names`: A character vector of names of the original
-#'             outcomes.
-#'
-#'             - `classes`: A named list where the names are the original
-#'             outcomes, and the values are the classes of that outcome.
-#'
-#'             - `levels`: A named list where the names are the original
-#'             factor outcomes, and the values are the levels of that
-#'             factor outcome.
+#'       - `extras`: Varies based on the engine. If the engine has no
+#'       extra information, `NULL`. Otherwise a named list of the
+#'       extra elements returned by the engine.
 #'
 #' Both `engine$mold$clean()` and `engine$mold$process()` will be called,
 #' in order, from [mold()].

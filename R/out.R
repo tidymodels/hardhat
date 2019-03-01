@@ -95,6 +95,25 @@ out_forge_clean <- function(engine, new_data) {
 }
 
 # ------------------------------------------------------------------------------
+# Info
+
+out_info_lst <- function(predictors, outcomes) {
+  list(
+    predictors = predictors,
+    outcomes = outcomes
+  )
+}
+
+# ------------------------------------------------------------------------------
+# Extras
+
+# Just c() them together
+# Extras aren't predictor or outcome specific
+out_extras_lst <- function(predictors_extras, outcomes_extras) {
+  c(predictors_extras, outcomes_extras)
+}
+
+# ------------------------------------------------------------------------------
 # Output list helper
 
 # This must be at the end (after all functions have been defined)
@@ -116,5 +135,11 @@ out <- list(
     process = out_forge_process,
     process_terms = out_forge_process_terms,
     process_terms_lst = out_forge_process_terms_lst
+  ),
+  info = list(
+    final = out_info_lst
+  ),
+  extras = list(
+    final = out_extras_lst
   )
 )

@@ -24,19 +24,17 @@
 #'
 #'       - `engine`, `new_data`, and `outcomes`.
 #'
-#'    - _Output_: A named list of three elements:
+#'    - _Output_: A named list of 4 elements:
 #'
 #'       - `engine`: The engine, returned and potentially updated.
 #'
-#'       - `predictors`: A named list of 2 elements:
+#'       - `predictors`: A tibble of the predictors.
 #'
-#'          - `data`: The processed predictors.
+#'       - `outcomes`: A tibble of the outcomes, or `NULL`.
 #'
-#'          - `offset`: An offset, or `NULL`.
-#'
-#'       - `outcomes`: A named list of 1 element:
-#'
-#'          - `data`: The processed outcomes.
+#'       - `extras`: Varies based on the engine. If the engine has no
+#'       extra information, `NULL`. Otherwise a named list of the
+#'       extra elements returned by the engine.
 #'
 #' Both `engine$forge$clean()` and `engine$forge$process()` will be called,
 #' in order, from [forge()].
