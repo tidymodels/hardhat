@@ -158,7 +158,7 @@ test_that("formula intercepts can be added", {
   expect_equal(attr(x$engine$terms$predictors, "intercept"), 1)
 
   # Don't want intercept in original predictors
-  expect_false("(Intercept)" %in% x$engine$info$predictors$names)
+  expect_false("(Intercept)" %in% colnames(x$engine$info$predictors))
 })
 
 test_that("can mold formulas with special terms", {
@@ -172,7 +172,7 @@ test_that("can mold formulas with special terms", {
   )
 
   expect_equal(
-    x$engine$info$predictors$names,
+    colnames(x$engine$info$predictors),
     c("Sepal.Length", "Sepal.Width")
   )
 })
@@ -311,12 +311,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(log(Sepal.Length) ~ log(Sepal.Width), iris)
 
   expect_equal(
-    x$engine$info$predictors$classes,
+    get_data_classes(x$engine$info$predictors),
     list(Sepal.Width = "numeric")
   )
 
   expect_equal(
-    x$engine$info$outcomes$classes,
+    get_data_classes(x$engine$info$outcomes),
     list(Sepal.Length = "numeric")
   )
 
@@ -328,13 +328,13 @@ test_that("`.` notation works as expected", {
 
   # no Species columns in predictors
   expect_equal(
-    x$engine$info$predictors$names,
+    colnames(x$engine$info$predictors),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
 
   # species is the outcome
   expect_equal(
-    x$engine$info$outcomes$names,
+    colnames(x$engine$info$outcomes),
     "Species"
   )
 
@@ -357,12 +357,12 @@ test_that("`.` notation with variable as predictor and outcome", {
 
   # Sepal.Width IS a predictor
   expect_true(
-    "Sepal.Width" %in% x$engine$info$predictors$names
+    "Sepal.Width" %in% colnames(x$engine$info$predictors)
   )
 
   # Sepal.Width IS the outcome
   expect_equal(
-    x$engine$info$outcomes$names,
+    colnames(x$engine$info$outcomes),
     "Sepal.Width"
   )
 
@@ -370,12 +370,12 @@ test_that("`.` notation with variable as predictor and outcome", {
 
   # Sepal.Width IS a predictor
   expect_true(
-    "Sepal.Width" %in% xx$engine$info$predictors$names
+    "Sepal.Width" %in% colnames(x$engine$info$predictors)
   )
 
   # Sepal.Width IS the outcome
   expect_equal(
-    xx$engine$info$outcomes$names,
+    colnames(x$engine$info$outcomes),
     "Sepal.Width"
   )
 
@@ -393,7 +393,7 @@ test_that("`.` notation with no outcome works fine", {
   )
 
   expect_equal(
-    x$engine$info$predictors$names,
+    colnames(x$engine$info$predictors),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
   )
 
@@ -406,7 +406,7 @@ test_that("`-var` still registers var as a predictor", {
 
   # Sepal.Length IS a predictor
   expect_true(
-    "Sepal.Length" %in% x$engine$info$predictors$names
+    "Sepal.Length" %in% colnames(x$engine$info$predictors)
   )
 
 })

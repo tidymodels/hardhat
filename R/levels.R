@@ -6,8 +6,8 @@
 #' `get_levels()` for extracting levels from a factor outcome
 #' that first calls [standardize()] on `y`.
 #'
-#' @param x A data.frame to extract levels from.
 #' @inheritParams standardize
+#' @param x A data.frame to extract levels from.
 #'
 #' @return
 #'

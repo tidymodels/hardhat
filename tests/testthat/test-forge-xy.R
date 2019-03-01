@@ -39,7 +39,7 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   )
 
   expect_equal(
-    x$engine$info$outcomes$names,
+    colnames(x$engine$info$outcomes),
     ".outcome"
   )
 
@@ -173,12 +173,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_equal(
-    x$engine$info$predictors$classes,
+    get_data_classes(x$engine$info$predictors),
     list(Sepal.Length = "numeric", Sepal.Width = "numeric")
   )
 
   expect_equal(
-    x$engine$info$outcomes$classes,
+    get_data_classes(x$engine$info$outcomes),
     list(.outcome = "factor")
   )
 
@@ -237,7 +237,7 @@ test_that("intercept is not included as a predictor", {
   )
 
   expect_false(
-    "(Intercept)" %in% x$engine$info$predictors$names
+    "(Intercept)" %in% colnames(x$engine$info$predictors)
   )
 
   expect_error(
@@ -258,7 +258,7 @@ test_that("intercept is not included as a predictor", {
   )
 
   expect_false(
-    "(Intercept)" %in% xx$engine$info$predictors$names
+    "(Intercept)" %in% colnames(xx$engine$info$predictors)
   )
 
 })

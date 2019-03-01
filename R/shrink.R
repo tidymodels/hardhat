@@ -56,12 +56,12 @@ shrink <- function(new_data, engine, outcomes = FALSE) {
 
   new_data <- check_is_data_like(new_data)
 
-  cols <- engine$info$predictors$names
+  cols <- colnames(engine$info$predictors)
   validate_new_data_column_names(new_data, cols)
 
   if (outcomes) {
 
-    outcome_cols <- engine$info$outcomes$names
+    outcome_cols <- colnames(engine$info$outcomes)
     validate_new_data_column_names(new_data, outcome_cols)
 
     cols <- c(outcome_cols, cols)

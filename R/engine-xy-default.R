@@ -259,7 +259,7 @@ forge_xy_default_process <- function(engine, new_data, outcomes) {
 
 forge_xy_default_process_predictors <- function(engine, new_data) {
 
-  original_names <- engine$info$predictors$names
+  original_names <- colnames(engine$info$predictors)
 
   data <- new_data[, original_names, drop = FALSE]
 
@@ -279,7 +279,7 @@ forge_xy_default_process_outcomes <- function(engine, new_data, outcomes) {
     return(result)
   }
 
-  original_names <- engine$info$outcomes$names
+  original_names <- colnames(engine$info$outcomes)
 
   data <- new_data[, original_names, drop = FALSE]
 

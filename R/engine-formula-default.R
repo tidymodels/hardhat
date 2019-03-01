@@ -358,7 +358,7 @@ mold_formula_default_process_predictors <- function(engine, data) {
   info <- extract_info(original_data)
 
   if (!engine$indicators) {
-    factor_names <- extract_original_factor_names(info$classes)
+    factor_names <- extract_original_factor_names(info)
     validate_no_factors_in_functions(formula, factor_names)
     validate_no_factors_in_interactions(formula, factor_names)
     formula <- remove_factors_from_formula(formula, factor_names)
@@ -462,7 +462,7 @@ forge_formula_default_process_predictors <- function(engine, new_data) {
   terms <- alter_terms_environment(terms)
   terms <- delete_response(terms)
 
-  framed <- model_frame(terms, new_data, engine$info$predictors$levels)
+  framed <- model_frame(terms, new_data, get_levels(engine$info$predictors))
 
   data <- model_matrix(
     terms = framed$terms,
@@ -470,7 +470,7 @@ forge_formula_default_process_predictors <- function(engine, new_data) {
   )
 
   if (!engine$indicators) {
-    factor_names <- extract_original_factor_names(engine$info$predictors$classes)
+    factor_names <- extract_original_factor_names(engine$info$predictors)
     data <- reattach_factor_columns(data, new_data, factor_names)
   }
 
@@ -496,7 +496,7 @@ forge_formula_default_process_outcomes <- function(engine, new_data, outcomes) {
   terms <- engine$terms$outcomes
   terms <- alter_terms_environment(terms)
 
-  framed <- model_frame(terms, new_data, engine$info$outcomes$levels)
+  framed <- model_frame(terms, new_data, get_levels(engine$info$outcomes))
 
   # Because model.matrix() does this for the RHS and we want
   # to be consistent even though we are only going through
@@ -791,22 +791,11 @@ detect_interactions <- function(.formula) {
   bad_terms
 }
 
-extract_original_factor_names <- function(.data_classes) {
+extract_original_factor_names <- function(info) {
 
-  no_data_classes <- length(.data_classes) == 0L
-  if (no_data_classes) {
-    return(character(0))
-  }
+  where_factor <- vapply(info, is.factor, logical(1))
 
-  where_factor <- vapply(.data_classes, function(cls) any(cls %in% c("factor", "ordered")), logical(1))
-  factor_classes <- .data_classes[where_factor]
-
-  no_factor_classes <- length(factor_classes) == 0L
-  if (no_factor_classes) {
-    return(character(0))
-  }
-
-  original_factor_columns <- names(factor_classes)
+  original_factor_columns <- colnames(info)[where_factor]
 
   original_factor_columns
 }

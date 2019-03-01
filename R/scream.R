@@ -87,8 +87,8 @@ scream <- function(new_data, engine, outcomes = FALSE, drop_novel = TRUE) {
 
   new_data <- tibble::as_tibble(new_data)
 
-  original_predictor_classes <- engine$info$predictors$classes
-  original_predictor_levels <- engine$info$predictors$levels
+  original_predictor_classes <- get_data_classes(engine$info$predictors)
+  original_predictor_levels <- get_levels(engine$info$predictors)
 
   validate_new_data_classes(new_data, original_predictor_classes)
 
@@ -105,8 +105,8 @@ scream <- function(new_data, engine, outcomes = FALSE, drop_novel = TRUE) {
 
   if (outcomes) {
 
-    original_outcome_classes <- engine$info$outcomes$classes
-    original_outcome_levels <- engine$info$outcomes$levels
+    original_outcome_classes <- get_data_classes(engine$info$outcomes)
+    original_outcome_levels <- get_levels(engine$info$outcomes)
 
     validate_new_data_classes(new_data, original_outcome_classes)
 

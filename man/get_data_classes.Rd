@@ -18,18 +18,6 @@ When predicting from a model, it is often important for the \code{new_data} to
 have the same classes as the original data used to fit the model.
 \code{get_data_classes()} extracts the classes from the original training data.
 }
-\details{
-\code{get_data_classes()} is inspired by \code{\link[stats:.MFclass]{stats::.MFclass()}}. It returns the
-exact classes of the data frame columns with the one exception that integer
-and double columns are both returned as \code{"numeric"}. This is to ensure
-that if an integer column is used when fitting, an error is not thrown if
-a double column is used at prediction time. It also does not allow for
-any columns of \code{x} to be multivariate themselves (no data frame columns,
-or matrix columns).
-
-The classes returned by \code{get_data_classes()} are stored in the \code{engine}
-objects. This function is called by \code{\link[=mold]{mold()}}.
-}
 \examples{
 get_data_classes(iris)
 
