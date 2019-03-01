@@ -3,8 +3,8 @@ destination: docs
 reference:
   - title: Preprocessing
     contents:
-    - contains("mold")
-    - contains("forge")
+    - "mold"
+    - "forge"
 
   - title: Prediction
     contents:
@@ -15,7 +15,6 @@ reference:
     - contains("model_")
     - standardize
     - new_base_model
-    - is_preprocessor
     - add_intercept_column
     - delete_response
 
@@ -26,6 +25,10 @@ reference:
     - contains("validate")
     - contains("check")
     - contains("enforce")
+
+  - title: Engine
+    contents:
+    - contains("engine")
 
   - title: Information
     contents:
