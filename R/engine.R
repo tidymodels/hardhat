@@ -1,7 +1,16 @@
 #' Create a new preprocessing engine
 #'
-#' This is the base class for a preprocessing engine. All other engines
-#' subclass this one.
+#' @description
+#'
+#' These are the base classes for creating new preprocessing engines. All
+#' engines inherit from the one created by `new_engine()`, and the default
+#' method specific engines inherit from the other three here.
+#'
+#' If you want to create your own processing engine for a specific method,
+#' generally you will subclass one of the method specific engines here. If
+#' you want to create a completely new preprocessing engine for a totally new
+#' preprocessing method (i.e. not the formula, xy, or recipe method) then
+#' you should subclass `new_engine()`.
 #'
 #' @param mold A named list with two elements, `clean` and `process`, see
 #' the [new_engine()] section, Mold Functions, for details.
@@ -15,10 +24,9 @@
 #'
 #' @param info Either `NULL`, or a named list with 2 elements, `predictors`
 #' and `outcomes`. `info` is generated automatically at [mold()] time and
-#' is used to validate `new_data` at prediction time. The
-#' information in `predictors` is the `predictors$info` element from running
-#' `engine$mold$process()` and the information is `outcomes` is the
-#' corresponding `outcomes$info`.
+#' is used to validate `new_data` at prediction time. At [mold()] time, the
+#' information found in `engine$mold$process()$info` is used to set `info`
+#' for the `engine`.
 #'
 #' @param ... Name-value pairs for additional elements of engines that
 #' subclass this engine.
@@ -27,9 +35,14 @@
 #'
 #' @return
 #'
-#' An object of class `"hardhat_engine"` containing a list of the supplied
-#' named arguments.
+#' A preprocessing engine, which is a list containing the inputs used as
+#' arguments to the function, along with a class specific to the type
+#' of engine being created.
 #'
+#' @template section-mold-functions
+#' @template section-forge-functions
+#'
+#' @name new-engine
 #' @export
 new_engine <- function(mold,
                        forge,
@@ -213,51 +226,6 @@ engine_function_set <- function(clean, process) {
   list(
     clean = clean,
     process = process
-  )
-}
-
-mold_predictors_set <- function(data, offset = NULL) {
-  list(
-    data = data,
-    offset = offset
-  )
-}
-
-mold_outcomes_set <- function(data) {
-  list(
-    data = data
-  )
-}
-
-# ------------------------------------------------------------------------------
-
-info_lst <- function(predictors = predictors_info(),
-                     outcomes = outcomes_info()) {
-
-  list(
-    predictors = predictors,
-    outcomes = outcomes
-  )
-
-}
-
-predictors_info <- function(names = character(),
-                            classes = NULL,
-                            levels = NULL) {
-  list(
-    names = names,
-    classes = classes,
-    levels = levels
-  )
-}
-
-outcomes_info <- function(names = character(),
-                          classes = NULL,
-                          levels = NULL) {
-  list(
-    names = names,
-    classes = classes,
-    levels = levels
   )
 }
 

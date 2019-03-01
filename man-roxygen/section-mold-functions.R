@@ -45,7 +45,7 @@
 #'       - `outcomes`: A tibble of outcomes.
 #'
 #'       - `info`: A named list with 2 elements, `predictors` and `outcomes`,
-#'       where both elements are thenselves named lists of the following
+#'       where both elements are themselves named lists of the following
 #'       3 elements:
 #'
 #'          - `names`: A character vector of names of the original

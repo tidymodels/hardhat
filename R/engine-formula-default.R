@@ -1,15 +1,18 @@
-#' Create a new default formula engine
+#' Default formula engine
 #'
-#' This is the constructor for a default formula preprocessing engine. This
+#' This pages holds the details for the formula preprocessing engine. This
 #' is the engine used by default from `mold()` if `x` is a formula.
-#' To learn about what the default mold and forge functionality are,
-#' see the Mold and Forge sections below.
 #'
 #' @inheritParams new_formula_engine
 #'
-#' @param terms A named list of two elements, `predictors` and `outcomes`. Both
-#' elements are `terms` objects that describe the terms for the outcomes and
-#' predictors separately. This argument is set automatically at [mold()] time.
+#' @param formula A formula specifying the predictors and the outcomes.
+#'
+#' @param data A data frame or matrix containing the outcomes and predictors.
+#'
+#' @param engine A preprocessing `engine`. If left as `NULL`, then a
+#' [default_formula_engine()] is used.
+#'
+#' @param ... Not used.
 #'
 #' @details
 #'
@@ -24,35 +27,11 @@
 #'
 #' Offsets can be included in the formula method through the use of the inline
 #' function [stats::offset()]. These are returned as a tibble with 1 column
-#' named `".offset"` in the `$outcome` slot of the return value.
-#'
-#' @section Differences From Base R:
-#'
-#' There are a number of differences from base R regarding how formulas are
-#' processed by `mold()` that require some explanation.
-#'
-#' Multivariate outcomes can be specified on the LHS using syntax that is
-#' similar to the RHS (i.e. `outcome_1 + outcome_2 ~ predictors`).
-#' If any complex calculations are done on the LHS and they return matrices
-#' (like [stats::poly()]), then those matrices are flattened into multiple
-#' columns of the tibble after the call to `model.frame()`. While this is
-#' possible, it is not recommended, and if a large amount of preprocessing is
-#' required on the outcomes you are better off using a [recipes::recipe()].
-#'
-#' Global variables are _not_ allowed in the formula. An error will be thrown
-#' if they are included. All terms in the formula should come from `data`.
-#'
-#' By default, intercepts are _not_ included in the predictor output from the
-#' formula. To include an intercept, set `intercept = TRUE`. Having an intercept
-#' argument is consistent with the other `mold()` methods. More importantly,
-#' there are often modeling packages where an intercept is either always or
-#' never allowed (for example, the `earth` package), and they do some fancy
-#' footwork to keep the user from providing or removing an intercept.
-#' This interface standardizes all of that flexibility in one place.
+#' named `".offset"` in the `$extras$offset` slot of the return value.
 #'
 #' @section Mold:
 #'
-#' The formula engine's mold function does the following:
+#' When `mold()` is used with the default formula engine:
 #'
 #' - Predictors
 #'
@@ -86,17 +65,17 @@
 #'
 #' @section Forge:
 #'
-#' The formula engine's forge function does the following:
+#' When `forge()` is used with the default formula engine:
 #'
-#' - Calls [shrink()] to trim `new_data` to only the required columns and
+#' - It calls [shrink()] to trim `new_data` to only the required columns and
 #' coerce `new_data` to a tibble.
 #'
-#' - Calls [scream()] to perform validation on the structure of the columns
+#' - It calls [scream()] to perform validation on the structure of the columns
 #' of `new_data`.
 #'
 #' - Predictors
 #'
-#'    - Runs [stats::model.frame()] on `new_data` using the stored terms
+#'    - It runs [stats::model.frame()] on `new_data` using the stored terms
 #'    object corresponding to the _predictors_.
 #'
 #'    - If, in the original [mold()] call, `indicators = TRUE` was set, it
@@ -112,25 +91,41 @@
 #'    - If `intercept = TRUE` in the original call to [mold()], then an
 #'    intecept column is added.
 #'
-#'    - Coerces the result of the above steps to a tibble.
+#'    - It coerces the result of the above steps to a tibble.
 #'
 #'  - Outcomes
 #'
-#'    - Runs [stats::model.frame()] on `new_data` using the stored terms object
-#'    corresponding to the _outcomes_.
+#'    - It runs [stats::model.frame()] on `new_data` using the
+#'    stored terms object corresponding to the _outcomes_.
 #'
 #'    - Coerces the result to a tibble.
 #'
-#' @return
+#' @section Differences From Base R:
 #'
-#' A preprocessing engine with the class, `"default_formula_engine"` that can
-#' be used with [mold()] and [forge()].
+#' There are a number of differences from base R regarding how formulas are
+#' processed by `mold()` that require some explanation.
+#'
+#' Multivariate outcomes can be specified on the LHS using syntax that is
+#' similar to the RHS (i.e. `outcome_1 + outcome_2 ~ predictors`).
+#' If any complex calculations are done on the LHS and they return matrices
+#' (like [stats::poly()]), then those matrices are flattened into multiple
+#' columns of the tibble after the call to `model.frame()`. While this is
+#' possible, it is not recommended, and if a large amount of preprocessing is
+#' required on the outcomes, then you are better off
+#' using a [recipes::recipe()].
+#'
+#' Global variables are _not_ allowed in the formula. An error will be thrown
+#' if they are included. All terms in the formula should come from `data`.
+#'
+#' By default, intercepts are _not_ included in the predictor output from the
+#' formula. To include an intercept, set
+#' `engine = default_formula_engine(intercept = TRUE)`. The rationale
+#' for this is that many packages either always require or never allow an
+#' intercept (for example, the `earth` package), and they do a large amount of
+#' extra work to keep the user from supplying one or removing it. This
+#' interface standardizes all of that flexibility in one place.
 #'
 #' @examples
-#'
-#' # In all of the examples below, a formula is supplied to mold(),
-#' # which means that the new_default_formula_engine() is being used.
-#'
 #' # ---------------------------------------------------------------------------
 #' # Setup
 #'
@@ -147,7 +142,7 @@
 #'   engine = default_formula_engine(intercept = TRUE)
 #' )
 #'
-#' # Then, call forge() with the preengine and the test data
+#' # Then, call forge() with the engine and the test data
 #' # to have it preprocess the test data in the same way
 #' forge(test, processed$engine)
 #'
@@ -189,7 +184,7 @@
 #' # but still might want to use the formula method.
 #' # In those cases, set `indicators = FALSE` to not
 #' # run model.matrix() on factor columns. Interactions
-#' # are still allowed and run on numeric columns.
+#' # are still allowed and are run on numeric columns.
 #'
 #' engine_no_indicators <- default_formula_engine(indicators = FALSE)
 #'
@@ -270,7 +265,7 @@ default_formula_engine <- function(intercept = FALSE,
 
 }
 
-#' @rdname default_formula_engine
+#' @rdname new-default-engine
 #' @export
 new_default_formula_engine <- function(mold,
                                        forge,
@@ -332,15 +327,22 @@ mold_formula_default_clean <- function(engine, data) {
 # mold - formula - process
 mold_formula_default_process <- function(engine, data) {
 
-  c(engine, predictors_lst) %<-% mold_formula_default_process_predictors(engine, data)
-  c(engine, outcomes_lst) %<-% mold_formula_default_process_outcomes(engine, data)
+  c(engine, predictors_lst) %<-% mold_formula_default_process_predictors(
+    engine = engine,
+    data = data
+  )
+
+  c(engine, outcomes_lst) %<-% mold_formula_default_process_outcomes(
+    engine = engine,
+    data = data
+  )
 
   # nuke formula environment before returning
   formula_empty_env <- nuke_formula_environment(engine$formula)
   engine <- update_engine(engine, formula = formula_empty_env)
 
-  info <- info_lst(predictors_lst$info, outcomes_lst$info)
-  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+  info <- out$info$final(predictors_lst$info, outcomes_lst$info)
+  extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
   out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
 }
@@ -437,10 +439,18 @@ forge_formula_default_clean <- function(engine, new_data, outcomes) {
 
 forge_formula_default_process <- function(engine, new_data, outcomes) {
 
-  c(engine, predictors_lst) %<-% forge_formula_default_process_predictors(engine, new_data)
-  c(engine, outcomes_lst) %<-% forge_formula_default_process_outcomes(engine, new_data, outcomes)
+  c(engine, predictors_lst) %<-% forge_formula_default_process_predictors(
+    engine = engine,
+    new_data = new_data
+  )
 
-  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+  c(engine, outcomes_lst) %<-% forge_formula_default_process_outcomes(
+    engine = engine,
+    new_data = new_data,
+    outcomes = outcomes
+  )
+
+  extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
   out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
 }

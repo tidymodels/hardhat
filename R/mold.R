@@ -16,19 +16,10 @@
 #'
 #' * Recipes Method - [default_recipe_engine()]
 #'
-#' @param x A data frame, matrix, formula, or [recipes::recipe()]. If this is a
-#' data.frame or matrix, it should contain the predictors.
+#' @param x An object. See the method specific implementations linked in the
+#' Description for more information.
 #'
-#' @param y A data frame, matrix, or vector. This should contain the outcomes.
-#'
-#' @param engine A preprocessing `engine`. If left as `NULL`, then a default
-#' engine is chosen based on the type of `x`.
-#'
-#' @param formula A formula specifying the terms of the model.
-#'
-#' @param data A data frame or matrix containing the predictors and the outcomes.
-#'
-#' @param ... Currently unused.
+#' @param ... Not used.
 #'
 #' @return
 #'
@@ -40,10 +31,26 @@
 #'  - `outcome`: A tibble containing the molded outcomes to be used in the
 #'  model.
 #'
-#'  - `engine`: A `"hardhat_engine"` object for use when making predictions.
+#'  - `engine`: A method specific `"hardhat_engine"` object for use when
+#'  making predictions.
 #'
-#'  - `offset`: A tibble with a single column named `".offset"` if an offset
-#'  was specified in the formula method. Otherwise, `NULL`.
+#'  - `extras`: Either `NULL` if the engine returns no extra information,
+#'  or a named list containing the extra information.
+#'
+#' @examples
+#'
+#' # See the method specific documentation linked in Description
+#' # for the details of each engine, and more examples.
+#'
+#' # XY
+#' mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
+#'
+#' # Formula
+#' mold(Species ~ Sepal.Width, iris)
+#'
+#' # Recipe
+#' library(recipes)
+#' mold(recipe(Species ~ Sepal.Width, iris), iris)
 #'
 #' @export
 mold <- function(x, ...) {
@@ -55,7 +62,7 @@ mold.default <- function(x, ...) {
   abort_unknown_mold_class(x)
 }
 
-#' @rdname mold
+#' @rdname default_xy_engine
 #' @export
 mold.data.frame <- function(x, y, engine = NULL, ...) {
 
@@ -70,11 +77,11 @@ mold.data.frame <- function(x, y, engine = NULL, ...) {
   mold_impl(engine, x, y)
 }
 
-#' @rdname mold
+#' @rdname default_xy_engine
 #' @export
 mold.matrix <- mold.data.frame
 
-#' @rdname mold
+#' @rdname default_formula_engine
 #' @export
 mold.formula <- function(formula, data, engine = NULL, ...) {
 
@@ -94,7 +101,7 @@ mold.formula <- function(formula, data, engine = NULL, ...) {
   mold_impl(engine, data)
 }
 
-#' @rdname mold
+#' @rdname default_recipe_engine
 #' @export
 mold.recipe <- function(x, data, engine = NULL, ...) {
 

@@ -1,15 +1,4 @@
-#' Create a new XY engine
-#'
-#' This is the base class for an XY preprocessing engine. If you want to create
-#' a new preprocessing engine that accepts input from the user in the form
-#' of `x` for the predictors and `y` for the outcome, start here.
-#'
-#' @return
-#'
-#' A preprocessing engine with the class, `"xy_engine"`.
-#'
-#' @inheritParams new_engine
-#'
+#' @rdname new-engine
 #' @export
 new_xy_engine <- function(mold,
                           forge,

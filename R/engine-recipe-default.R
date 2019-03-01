@@ -1,46 +1,46 @@
-#' Create a new default recipe engine
+#' Default recipe engine
 #'
-#' This is the constructor for a default recipe preprocessing engine. This
-#' is the engine used by default from `mold()` if `x` is a recipe. To learn
-#' about what the default mold and forge functionality are, see the
-#' Mold and Forge sections below.
+#' This pages holds the details for the recipe preprocessing engine. This
+#' is the engine used by default from `mold()` if `x` is a recipe.
+#'
+#' @inheritParams new_recipe_engine
+#'
+#' @param x An unprepped recipe created from [recipes::recipe()].
+#'
+#' @param data A data frame or matrix containing the outcomes and predictors.
+#'
+#' @param engine A preprocessing `engine`. If left as `NULL`, then a
+#' [default_recipe_engine()] is used.
+#'
+#' @param ... Not used.
 #'
 #' @section Mold:
 #'
-#' The recipe engine's mold function does the following:
+#' When `mold()` is used with the default recipe engine:
 #'
-#' - Calls [recipes::prep()] to prep the recipe.
+#' - It calls [recipes::prep()] to prep the recipe.
 #'
-#' - Calls [recipes::juice()] to extract the outcomes and predictors. These
+#' - It calls [recipes::juice()] to extract the outcomes and predictors. These
 #' are returned as tibbles.
 #'
 #' - If `intercept = TRUE`, adds an intercept column to the predictors.
 #'
 #' @section Forge:
 #'
-#' The recipe engine's forge function does the following:
+#' When `forge()` is used with the default recipe engine:
 #'
-#' - Calls [shrink()] to trim `new_data` to only the required columns and
+#' - It calls [shrink()] to trim `new_data` to only the required columns and
 #' coerce `new_data` to a tibble.
 #'
-#' - Calls [scream()] to perform validation on the structure of the columns
+#' - It calls [scream()] to perform validation on the structure of the columns
 #' of `new_data`.
 #'
-#' - Calls [recipes::bake()] on the `new_data` using the prepped recipe
+#' - It calls [recipes::bake()] on the `new_data` using the prepped recipe
 #' used during training.
 #'
-#' - Potentially adds an intercept column onto `new_data`,
-#' if `intercept = TRUE`.
-#'
-#' @return
-#'
-#' A preprocessing engine with the class, `"default_recipe_engine"` that can
-#' be used with [mold()] and [forge()].
-#'
-#' @inheritParams new_recipe_engine
+#' - It adds an intercept column onto `new_data` if `intercept = TRUE`.
 #'
 #' @examples
-#'
 #' library(recipes)
 #'
 #' # ---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ default_recipe_engine <- function(intercept = FALSE) {
 
 }
 
-#' @rdname default_recipe_engine
+#' @rdname new-default-engine
 #' @export
 new_default_recipe_engine <- function(mold,
                                       forge,
@@ -149,15 +149,22 @@ mold_recipe_default_process <- function(engine, data) {
   recipe <- recipes::prep(engine$recipe, training = data)
   engine <- update_engine(engine, recipe = recipe)
 
-  c(engine, predictors_lst) %<-% mold_recipe_default_process_predictors(engine, data)
-  c(engine, outcomes_lst) %<-% mold_recipe_default_process_outcomes(engine, data)
+  c(engine, predictors_lst) %<-% mold_recipe_default_process_predictors(
+    engine = engine,
+    data = data
+  )
+
+  c(engine, outcomes_lst) %<-% mold_recipe_default_process_outcomes(
+    engine = engine,
+    data = data
+  )
 
   # un-retain training data
   recipe <- compost(engine$recipe)
   engine <- update_engine(engine, recipe = recipe)
 
-  info <- info_lst(predictors_lst$info, outcomes_lst$info)
-  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+  info <- out$info$final(predictors_lst$info, outcomes_lst$info)
+  extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
   out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
 }

@@ -1,10 +1,19 @@
-#' Create a new default XY engine
+#' Default XY engine
 #'
-#' This is the constructor for a default XY preprocessing engine. This
+#' This pages holds the details for the XY preprocessing engine. This
 #' is the engine used by default from `mold()` if `x` and `y` are provided
-#' separately (i.e. the XY interface is used). To learn about what the
-#' default mold and forge functionality are, see the Mold and Forge
-#' sections below.
+#' separately (i.e. the XY interface is used).
+#'
+#' @inheritParams new-engine
+#'
+#' @param x A data frame or matrix containing the predictors.
+#'
+#' @param y A data frame, matrix, or vector containing the outcomes.
+#'
+#' @param engine A preprocessing `engine`. If left as `NULL`, then a
+#' [default_xy_engine()] is used.
+#'
+#' @param ... Not used.
 #'
 #' @details
 #'
@@ -13,46 +22,34 @@
 #'
 #' The one special thing about the XY method's forge function is the behavior of
 #' `outcomes = TRUE` when a _vector_ `y` value was provided to the original
-#' call to [mold()]. In that case, `mold()` converted `y` into a tibble, with
+#' call to [mold()]. In that case, `mold()` converts `y` into a tibble, with
 #' a default name of `.outcome`. This is the column that `forge()` will look
 #' for in `new_data` to preprocess. See the examples section for a
 #' demonstration of this.
 #'
 #' @section Mold:
 #'
-#' The XY engine's mold function does the following:
+#' When `mold()` is used with the default xy engine:
 #'
-#' - Converts `x` to a tibble.
+#' - It converts `x` to a tibble.
 #'
-#' - Adds an intercept column to `x` if `intercept = TRUE`.
+#' - It adds an intercept column to `x` if `intercept = TRUE`.
 #'
-#' - Runs [standardize()] on `y`.
+#' - It runs [standardize()] on `y`.
 #'
 #' @section Forge:
 #'
-#' The XY engine's forge function does the following:
+#' When `forge()` is used with the default xy engine:
 #'
-#' - Calls [shrink()] to trim `new_data` to only the required columns and
+#' - It calls [shrink()] to trim `new_data` to only the required columns and
 #' coerce `new_data` to a tibble.
 #'
-#' - Calls [scream()] to perform validation on the structure of the columns
+#' - It calls [scream()] to perform validation on the structure of the columns
 #' of `new_data`.
 #'
-#' - Potentially adds an intercept column onto `new_data`, if
-#' `intercept = TRUE`.
-#'
-#' @return
-#'
-#' A preprocessing engine with the class, `"default_xy_engine"` that can
-#' be used with [mold()] and [forge()].
-#'
-#' @inheritParams new_xy_engine
+#' - It adds an intercept column onto `new_data` if `intercept = TRUE`.
 #'
 #' @examples
-#'
-#' # In all of the examples below, X and Y are supplied to mold(),
-#' # which means that the default_xy_engine() is being used.
-#'
 #' # ---------------------------------------------------------------------------
 #' # Setup
 #'
@@ -134,7 +131,22 @@ default_xy_engine <- function(intercept = FALSE) {
 
 }
 
-#' @rdname default_xy_engine
+#' Create a new default engine
+#'
+#' This page contains the constructors for the default engines. They can be
+#' extended if you want to add extra behavior on top of what the default
+#' engines already do, but generally you will extend the non-default versions
+#' of the constructors found in the documentation for [new_engine()].
+#'
+#' @inheritParams new_xy_engine
+#' @inheritParams new_formula_engine
+#' @inheritParams new_recipe_engine
+#'
+#' @param terms A named list of two elements, `predictors` and `outcomes`. Both
+#' elements are `terms` objects that describe the terms for the outcomes and
+#' predictors separately. This argument is set automatically at [mold()] time.
+#'
+#' @name new-default-engine
 #' @export
 new_default_xy_engine <- function(mold,
                                   forge,
@@ -190,8 +202,8 @@ mold_xy_default_process <- function(engine, x, y) {
   c(engine, predictors_lst) %<-% mold_xy_default_process_predictors(engine, x)
   c(engine, outcomes_lst) %<-% mold_xy_default_process_outcomes(engine, y)
 
-  info <- info_lst(predictors_lst$info, outcomes_lst$info)
-  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+  info <- out$info$final(predictors_lst$info, outcomes_lst$info)
+  extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
   out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
 }

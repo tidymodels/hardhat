@@ -2,36 +2,15 @@
 % Please edit documentation in R/mold.R
 \name{mold}
 \alias{mold}
-\alias{mold.data.frame}
-\alias{mold.matrix}
-\alias{mold.formula}
-\alias{mold.recipe}
 \title{Mold data for modeling}
 \usage{
 mold(x, ...)
-
-\method{mold}{data.frame}(x, y, engine = NULL, ...)
-
-\method{mold}{matrix}(x, y, engine = NULL, ...)
-
-\method{mold}{formula}(formula, data, engine = NULL, ...)
-
-\method{mold}{recipe}(x, data, engine = NULL, ...)
 }
 \arguments{
-\item{x}{A data frame, matrix, formula, or \code{\link[recipes:recipe]{recipes::recipe()}}. If this is a
-data.frame or matrix, it should contain the predictors.}
+\item{x}{An object. See the method specific implementations linked in the
+Description for more information.}
 
-\item{...}{Currently unused.}
-
-\item{y}{A data frame, matrix, or vector. This should contain the outcomes.}
-
-\item{engine}{A preprocessing \code{engine}. If left as \code{NULL}, then a default
-engine is chosen based on the type of \code{x}.}
-
-\item{formula}{A formula specifying the terms of the model.}
-
-\item{data}{A data frame or matrix containing the predictors and the outcomes.}
+\item{...}{Not used.}
 }
 \value{
 A named list containing 4 elements:
@@ -40,9 +19,10 @@ A named list containing 4 elements:
 model.
 \item \code{outcome}: A tibble containing the molded outcomes to be used in the
 model.
-\item \code{engine}: A \code{"hardhat_engine"} object for use when making predictions.
-\item \code{offset}: A tibble with a single column named \code{".offset"} if an offset
-was specified in the formula method. Otherwise, \code{NULL}.
+\item \code{engine}: A method specific \code{"hardhat_engine"} object for use when
+making predictions.
+\item \code{extras}: Either \code{NULL} if the engine returns no extra information,
+or a named list containing the extra information.
 }
 }
 \description{
@@ -58,4 +38,20 @@ about each engine and see a large amount of engine specific examples:
 \item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
 \item Recipes Method - \code{\link[=default_recipe_engine]{default_recipe_engine()}}
 }
+}
+\examples{
+
+# See the method specific documentation linked in Description
+# for the details of each engine, and more examples.
+
+# XY
+mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
+
+# Formula
+mold(Species ~ Sepal.Width, iris)
+
+# Recipe
+library(recipes)
+mold(recipe(Species ~ Sepal.Width, iris), iris)
+
 }
