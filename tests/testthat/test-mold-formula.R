@@ -321,3 +321,92 @@ test_that("original predictor and outcome classes are recorded", {
   )
 
 })
+
+test_that("`.` notation works as expected", {
+
+  x <- mold(Species ~ ., iris)
+
+  # no Species columns in predictors
+  expect_equal(
+    x$engine$info$predictors$names,
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+
+  # species is the outcome
+  expect_equal(
+    x$engine$info$outcomes$names,
+    "Species"
+  )
+
+})
+
+test_that("`.` notation fails on the LHS", {
+
+  # Get this for free from base R
+  # get_all_vars() does not like `.` on the LHS
+  expect_error(
+    mold(. ~ Species, iris),
+    "object '.' not found"
+  )
+
+})
+
+test_that("`.` notation with variable as predictor and outcome", {
+
+  x <- mold(Sepal.Width ~ . + Sepal.Width, iris)
+
+  # Sepal.Width IS a predictor
+  expect_true(
+    "Sepal.Width" %in% x$engine$info$predictors$names
+  )
+
+  # Sepal.Width IS the outcome
+  expect_equal(
+    x$engine$info$outcomes$names,
+    "Sepal.Width"
+  )
+
+  xx <- mold(Sepal.Width ~ . + log(Sepal.Width), iris)
+
+  # Sepal.Width IS a predictor
+  expect_true(
+    "Sepal.Width" %in% xx$engine$info$predictors$names
+  )
+
+  # Sepal.Width IS the outcome
+  expect_equal(
+    xx$engine$info$outcomes$names,
+    "Sepal.Width"
+  )
+
+})
+
+test_that("`.` notation with no outcome works fine", {
+
+  # Uses all columns of iris
+  x <- mold(~ ., iris)
+
+  # Sepal.Length IS a predictor
+  expect_equal(
+    ncol(x$predictors),
+    7
+  )
+
+  expect_equal(
+    x$engine$info$predictors$names,
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
+  )
+
+})
+
+test_that("`-var` still registers var as a predictor", {
+
+  # This is expected, and is the same as base R
+  x <- mold(Sepal.Width ~ . - Sepal.Length, iris)
+
+  # Sepal.Length IS a predictor
+  expect_true(
+    "Sepal.Length" %in% x$engine$info$predictors$names
+  )
+
+})

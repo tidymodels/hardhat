@@ -349,7 +349,8 @@ mold_formula_default_process <- function(engine, data) {
 
 mold_formula_default_process_predictors <- function(engine, data) {
 
-  formula <- get_predictors_formula(engine$formula)
+  formula <- expand_formula_dot_notation(engine$formula, data)
+  formula <- get_predictors_formula(formula)
 
   original_names <- get_all_predictors(formula, data)
   original_data <- data[, original_names, drop = FALSE]
@@ -520,6 +521,20 @@ alter_terms_environment <- function(terms_engine) {
 }
 
 # ------------------------------------------------------------------------------
+
+expand_formula_dot_notation <- function(formula, data) {
+
+  # Calling terms() on the formula, and providing
+  # data will go ahead and expand the formula
+  # if any `.` was present
+  .terms <- terms(formula, data = data)
+
+  rlang::new_formula(
+    lhs = rlang::f_lhs(.terms),
+    rhs = rlang::f_rhs(.terms),
+    env = rlang::f_env(.terms)
+  )
+}
 
 nuke_formula_environment <- function(formula) {
   rlang::new_formula(
