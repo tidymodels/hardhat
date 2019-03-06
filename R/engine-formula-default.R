@@ -462,7 +462,7 @@ forge_formula_default_process_predictors <- function(engine, predictors) {
   terms <- engine$terms$predictors
   terms <- alter_terms_environment(terms)
 
-  framed <- model_frame(terms, predictors, get_levels(engine$info$predictors))
+  framed <- model_frame(terms, predictors)
 
   data <- model_matrix(
     terms = framed$terms,
@@ -496,7 +496,7 @@ forge_formula_default_process_outcomes <- function(engine, outcomes) {
   terms <- engine$terms$outcomes
   terms <- alter_terms_environment(terms)
 
-  framed <- model_frame(terms, outcomes, get_levels(engine$info$outcomes))
+  framed <- model_frame(terms, outcomes)
 
   # Because model.matrix() does this for the RHS and we want
   # to be consistent even though we are only going through

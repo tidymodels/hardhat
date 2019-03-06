@@ -4,25 +4,13 @@
 \alias{model_frame}
 \title{Construct a model frame}
 \usage{
-model_frame(formula, data, original_levels = NULL, drop_novel = TRUE)
+model_frame(formula, data)
 }
 \arguments{
 \item{formula}{A formula or terms object representing the terms of the
 model frame.}
 
 \item{data}{A data frame or matrix containing the terms of \code{formula}.}
-
-\item{original_levels}{Optional. A named list of character vectors.
-These represent the assumed factor levels for factor columns in \code{data}.
-If any levels are missing for a factor, then the levels are restored with a
-warning. If there are novel levels for a factor, then they are coerced to
-\code{NA} with a warning.}
-
-\item{drop_novel}{Optional. A logical. Passed on to
-\code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}}, and only applicable if \code{original_levels}
-is not \code{NULL}. Should novel levels found in \code{new_data} but not in
-\code{original_levels} be coerced to \code{NA}? No matter the value of \code{drop_novel},
-a warning will be thrown if any novel levels are detected.}
 }
 \value{
 A named list with two elements:
@@ -50,6 +38,9 @@ be the same.
 \code{data} and the result of \code{model_frame()} to ever have the same factor column
 but with different levels, unless specified though \code{original_levels}. If
 this is required, it should be done through a recipe step explicitly.
+\item \code{xlev}: Not allowed because this check should have been done ahead of
+time. Use \code{\link[=scream]{scream()}} to check the integrity of \code{data} against a training
+set if that is required.
 \item \code{...}: Not exposed because offsets are handled separately, and
 it is not necessary to pass weights here any more because rows are never
 dropped (so weights don't have to be subset alongside the rest of the
@@ -84,21 +75,5 @@ framed2 <- model_frame(Species ~ Sepal.Width, iris2)
 head(framed2$data)
 
 nrow(framed2$data) == nrow(iris2)
-
-# ---------------------------------------------------------------------------
-# Novel and missing levels
-
-train <- data.frame(y = factor(c("a", "b")))
-test_not_enough <- data.frame(y = factor("a"))
-test_too_many <- data.frame(y = factor(c("a", "b", "c")))
-original_levels <- get_levels(train)
-
-# Missing levels are recovered with a warning
-model_frame(~y, test_not_enough, original_levels)
-
-# Novel levels are forced to NA with a warning
-model_frame(~y, test_too_many, original_levels)
-
-model_frame(~y, test_too_many, original_levels, drop_novel = FALSE)
 
 }
