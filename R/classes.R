@@ -4,11 +4,11 @@
 #' have the same classes as the original data used to fit the model.
 #' `get_data_classes()` extracts the classes from the original training data.
 #'
-#' @param x A data frame or matrix.
+#' @param data A data frame or matrix.
 #'
 #' @return
 #'
-#' A named list. The names are the column names of `x` and the values are
+#' A named list. The names are the column names of `data` and the values are
 #' character vectors containing the class of that column.
 #'
 #' @examples
@@ -18,18 +18,18 @@
 #'
 #' # Unlike .MFclass(), the full class
 #' # vector is returned
-#' x <- data.frame(col = ordered(c("a", "b")))
+#' data <- data.frame(col = ordered(c("a", "b")))
 #'
-#' .MFclass(x$col)
+#' .MFclass(data$col)
 #'
-#' get_data_classes(x)
+#' get_data_classes(data)
 #'
 #' @export
-get_data_classes <- function(x) {
+get_data_classes <- function(data) {
 
-  ptype <- extract_ptype(x)
+  ptype <- extract_ptype(data)
 
-  validate_has_unique_column_names(ptype, "x")
+  validate_has_unique_column_names(ptype, "data")
 
   lapply(ptype, class)
 }

@@ -4,13 +4,13 @@
 \alias{get_data_classes}
 \title{Extract data classes from a data frame or matrix}
 \usage{
-get_data_classes(x)
+get_data_classes(data)
 }
 \arguments{
-\item{x}{A data frame or matrix.}
+\item{data}{A data frame or matrix.}
 }
 \value{
-A named list. The names are the column names of \code{x} and the values are
+A named list. The names are the column names of \code{data} and the values are
 character vectors containing the class of that column.
 }
 \description{
@@ -25,10 +25,10 @@ get_data_classes(as.matrix(mtcars))
 
 # Unlike .MFclass(), the full class
 # vector is returned
-x <- data.frame(col = ordered(c("a", "b")))
+data <- data.frame(col = ordered(c("a", "b")))
 
-.MFclass(x$col)
+.MFclass(data$col)
 
-get_data_classes(x)
+get_data_classes(data)
 
 }
