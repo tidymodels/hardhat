@@ -33,10 +33,10 @@ processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
 
 \item{info}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
-and \code{outcomes}. \code{info} is generated automatically at \code{\link[=mold]{mold()}} time and
-is used to validate \code{new_data} at prediction time. At \code{\link[=mold]{mold()}} time, the
-information found in \code{engine$mold$process()$info} is used to set \code{info}
-for the \code{engine}.}
+and \code{outcomes}, both of which are 0 row tibbles. \code{info} is generated
+automatically at \code{\link[=mold]{mold()}} time and is used to validate \code{new_data} at
+prediction time. At \code{\link[=mold]{mold()}} time, the information found in
+\code{engine$mold$process()$info} is used to set \code{info} for the \code{engine}.}
 
 \item{formula}{Either \code{NULL}, or a formula that specifies how the
 predictors and outcomes should be preprocessed. This argument is set

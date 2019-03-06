@@ -11,8 +11,8 @@ format.formula_engine <- function(x, ...) "Formula"
 print.hardhat_engine <- function(x, ...) {
   cat_line("{format(x)} Engine:")
   cat_line("\n")
-  cat_line("# Predictors: {length(x$info$predictors$names)}")
-  cat_line("  # Outcomes: {length(x$info$outcomes$names)}")
+  cat_line("# Predictors: {ncol(x$info$predictors)}")
+  cat_line("  # Outcomes: {ncol(x$info$outcomes)}")
   cat_line("   Intercept: {x$intercept}")
   invisible(x)
 }

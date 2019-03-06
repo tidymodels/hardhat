@@ -109,7 +109,7 @@ forge_impl <- function(engine, ...) {
 
 forge_impl.xy_engine <- function(engine, new_data, outcomes) {
 
-  c(engine, new_data) %<-% engine$forge$clean(
+  c(engine, predictors, outcomes) %<-% engine$forge$clean(
     engine = engine,
     new_data = new_data,
     outcomes = outcomes
@@ -117,7 +117,7 @@ forge_impl.xy_engine <- function(engine, new_data, outcomes) {
 
   c(engine, predictors, outcomes, extras) %<-% engine$forge$process(
     engine = engine,
-    new_data = new_data,
+    predictors = predictors,
     outcomes = outcomes
   )
 

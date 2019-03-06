@@ -87,10 +87,11 @@ out_forge_process_terms_lst <- function(data = NULL, extras = NULL) {
   )
 }
 
-out_forge_clean <- function(engine, new_data) {
+out_forge_clean <- function(engine, predictors, outcomes) {
   list(
     engine = engine,
-    new_data = new_data
+    predictors = predictors,
+    outcomes = outcomes
   )
 }
 

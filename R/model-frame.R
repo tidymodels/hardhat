@@ -10,18 +10,6 @@
 #'
 #' @param data A data frame or matrix containing the terms of `formula`.
 #'
-#' @param original_levels Optional. A named list of character vectors.
-#' These represent the assumed factor levels for factor columns in `data`.
-#' If any levels are missing for a factor, then the levels are restored with a
-#' warning. If there are novel levels for a factor, then they are coerced to
-#' `NA` with a warning.
-#'
-#' @param drop_novel Optional. A logical. Passed on to
-#' [enforce_new_data_novel_levels()], and only applicable if `original_levels`
-#' is not `NULL`. Should novel levels found in `new_data` but not in
-#' `original_levels` be coerced to `NA`? No matter the value of `drop_novel`,
-#' a warning will be thrown if any novel levels are detected.
-#'
 #' @details
 #'
 #' The following explains the rationale for some of the difference in arguments
@@ -38,6 +26,10 @@
 #' `data` and the result of `model_frame()` to ever have the same factor column
 #' but with different levels, unless specified though `original_levels`. If
 #' this is required, it should be done through a recipe step explicitly.
+#'
+#' - `xlev`: Not allowed because this check should have been done ahead of
+#' time. Use [scream()] to check the integrity of `data` against a training
+#' set if that is required.
 #'
 #' - `...`: Not exposed because offsets are handled separately, and
 #' it is not necessary to pass weights here any more because rows are never
@@ -81,32 +73,12 @@
 #'
 #' nrow(framed2$data) == nrow(iris2)
 #'
-#' # ---------------------------------------------------------------------------
-#' # Novel and missing levels
-#'
-#' train <- data.frame(y = factor(c("a", "b")))
-#' test_not_enough <- data.frame(y = factor("a"))
-#' test_too_many <- data.frame(y = factor(c("a", "b", "c")))
-#' original_levels <- get_levels(train)
-#'
-#' # Missing levels are recovered with a warning
-#' model_frame(~y, test_not_enough, original_levels)
-#'
-#' # Novel levels are forced to NA with a warning
-#' model_frame(~y, test_too_many, original_levels)
-#'
-#' model_frame(~y, test_too_many, original_levels, drop_novel = FALSE)
-#'
 #' @export
 #'
-model_frame <- function(formula, data, original_levels = NULL, drop_novel = TRUE) {
+model_frame <- function(formula, data) {
 
   validate_is_formula(formula)
   data <- check_is_data_like(data)
-  validate_levels_list(original_levels, "original_levels")
-
-  data <- enforce_new_data_novel_levels(data, original_levels, drop_novel)
-  data <- enforce_new_data_level_recovery(data, original_levels)
 
   frame <- rlang::with_options(
     stats::model.frame(formula, data = data),

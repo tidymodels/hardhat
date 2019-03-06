@@ -23,10 +23,10 @@
 #' in the `mold` and `forge` function list.
 #'
 #' @param info Either `NULL`, or a named list with 2 elements, `predictors`
-#' and `outcomes`. `info` is generated automatically at [mold()] time and
-#' is used to validate `new_data` at prediction time. At [mold()] time, the
-#' information found in `engine$mold$process()$info` is used to set `info`
-#' for the `engine`.
+#' and `outcomes`, both of which are 0 row tibbles. `info` is generated
+#' automatically at [mold()] time and is used to validate `new_data` at
+#' prediction time. At [mold()] time, the information found in
+#' `engine$mold$process()$info` is used to set `info` for the `engine`.
 #'
 #' @param ... Name-value pairs for additional elements of engines that
 #' subclass this engine.
@@ -299,22 +299,22 @@ validate_is_info_list_or_null <- function(.x, .x_nm) {
   validate_has_name(.x, .x_nm, "predictors")
   validate_has_name(.x, .x_nm, "outcomes")
 
-  validate_is_terms_info_list(.x$predictors, glue("{.x_nm}$predictors"))
-  validate_is_terms_info_list(.x$outcomes, glue("{.x_nm}$outcomes"))
+  validate_is_0_row_tibble(.x$predictors, glue("{.x_nm}$predictors"))
+  validate_is_0_row_tibble(.x$outcomes, glue("{.x_nm}$outcomes"))
 
   invisible(.x)
 }
 
 
-validate_is_terms_info_list <- function(.x, .x_nm) {
+validate_is_0_row_tibble <- function(.x, .x_nm) {
 
-  validate_has_name(.x, .x_nm, "names")
-  validate_has_name(.x, .x_nm, "classes")
-  validate_has_name(.x, .x_nm, "levels")
+  validate_is(.x, tibble::is_tibble, "tibble", .x_nm)
 
-  validate_is_character(.x$names, glue("{.x_nm}$names"))
-  validate_classes_list(.x$classes, glue("{.x_nm}$classes"))
-  validate_levels_list(.x$levels, glue("{.x_nm}$levels"))
+  .n <- nrow(.x)
+
+  if (.n != 0) {
+    glubort("`{.x_nm}` must be a tibble of size 0, not {.n}.")
+  }
 
   invisible(.x)
 }

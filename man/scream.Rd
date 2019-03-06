@@ -4,41 +4,36 @@
 \alias{scream}
 \title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
-scream(new_data, engine, outcomes = FALSE, drop_novel = TRUE)
+scream(data, ptype)
 }
 \arguments{
-\item{new_data}{A data frame containing the new data to check the structure
-of. This should contain the predictors, and potentially the outcomes if
-\code{outcomes = TRUE}.}
+\item{data}{A data frame containing the new data to check the structure
+of.}
 
-\item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
-
-\item{outcomes}{A logical. Should the outcomes be checked as well?}
-
-\item{drop_novel}{A logical. Should novel levels be dropped? If \code{TRUE}, a
-warning is thrown if novel levels are detected and they are coerced to \code{NA}.
-If \code{FALSE}, a warning is still thrown for new levels, but they are
-left unchanged.}
+\item{ptype}{A data frame prototype to cast \code{data} to. This is commonly
+a 0-row slice of the training set.}
 }
 \value{
-A tibble containing the required predictors (and potentially the
-outcomes) after any required structural modifications have been made.
+A tibble containing the required columns after any required structural
+modifications have been made.
 }
 \description{
-\code{scream()} performs a number of validation checks on \code{new_data}, and yells
-loudly if anything is wrong. \code{scream()} performs the following validation:
+\code{scream()} ensures that the structure of \code{data} is the same as
+prototype, \code{ptype}. Under the hood, \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} is used, which
+casts each column of \code{data} to the same type as the corresponding
+column in \code{ptype}.
+
+This casting enforces a number of important structural checks,
+including but not limited to:
 \itemize{
-\item \code{\link[=validate_new_data_classes]{validate_new_data_classes()}} - Checks that the class of each
-required predictor in \code{new_data} is the same as the class used
-during training.
-\item \code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}} - Checks that all \code{new_data} factor
-columns don't have any \emph{new} levels when compared with the original data
-used in training. If there are new levels, a warning is issued and
-if \code{drop_novel = TRUE} then they are coerced to \code{NA}.
-\item \code{\link[=enforce_new_data_level_recovery]{enforce_new_data_level_recovery()}} -  Checks that all \code{new_data} factor
-columns aren't missing any factor levels when compared with the original data
-used in training. If there are missing levels, then they are restored
-and a warning is issued.
+\item \emph{Data Classes} - Checks that the class of each column in \code{data} is the
+same as the corresponding column in \code{ptype}.
+\item \emph{Novel Levels} - Checks that the factor columns in \code{data} don't have any
+\emph{new} levels when compared with the \code{ptype} columns. If there are new
+levels, a warning is issued and they are coerced to \code{NA}.
+\item \emph{Level Recovery} - Checks that the factor columns in \code{data} aren't
+missing any factor levels when compared with the \code{ptype} columns. If
+there are missing levels, then they are restored.
 }
 }
 \details{
@@ -46,46 +41,69 @@ and a warning is issued.
 actual processing is done. Generally, you don't need to call \code{scream()}
 directly, as \code{forge()} will do it for you.
 
-If \code{outcomes = TRUE}, then the validation steps are performed on the known
-outcome columns as well. If \code{\link[=mold]{mold()}} was called with the XY interface,
-then no preprocessing was done to \code{y} and \code{outcomes} will have no effect
-(if a vector was passed as \code{y} during the fit, \code{scream()} has no
-way of knowing what column in \code{new_data} corresponds to the outcome).
-
 If \code{scream()} is used as a standalone function, it is good practice to call
 \code{\link[=shrink]{shrink()}} right before it as there are no checks in \code{scream()} that ensure
-that all of the required column names actually exist in \code{new_data}. Those
+that all of the required column names actually exist in \code{data}. Those
 checks exist in \code{shrink()}.
 }
 \examples{
+# ---------------------------------------------------------------------------
+# Setup
+
 train <- iris[1:100,]
 test <- iris[101:150,]
+
+# ---------------------------------------------------------------------------
+# shrink() / scream()
 
 # mold() is run at model fit time
 # and a formula preprocessing engine is recorded
 x <- mold(log(Sepal.Width) ~ Species, train)
 
-# Pass that engine to shrink(), along with new_data
-# to get a tibble of required predictors back
-test_shrunk <- shrink(test, x$engine)
+# Inside the result of mold() are the prototype tibbles
+# for the predictors and the outcomes
+ptype_pred <- x$engine$info$predictors
+ptype_out <- x$engine$info$outcomes
+
+# Pass the test data, along with a prototype, to
+# shrink() to extract the prototype columns
+test_shrunk <- shrink(test, ptype_pred)
 
 # Now pass that to scream() to perform validation checks
-# Silence is key!
-scream(test_shrunk, x$engine)
+# If no warnings / errors are thrown, the checks were
+# successful!
+scream(test_shrunk, ptype_pred)
 
-# If `outcomes = TRUE` is used with shrink(),
-# it should also be used with scream()
-test_outcome <- shrink(test, x$engine, outcomes = TRUE)
-scream(test_outcome, x$engine, outcomes = TRUE)
+# ---------------------------------------------------------------------------
+# Outcomes
 
-# scream() validates that the classes of `new_data`
-# are the same as the ones used in mold(). The below call
-# to scream() will fail with an informative error.
+# To also extract the outcomes, use the outcome prototype
+test_outcome <- shrink(test, ptype_out)
+scream(test_outcome, ptype_out)
+
+# ---------------------------------------------------------------------------
+# Casting
+
+# scream() uses vctrs::vec_cast() to intelligently convert
+# new data to the prototype automatically. This means
+# it can automatically perform certain conversions, like
+# coercing character columns to factors.
 test2 <- test
 test2$Species <- as.character(test2$Species)
 
-\dontrun{
-scream(test2, x$engine)
-}
+test2_shrunk <- shrink(test2, ptype_pred)
+scream(test2_shrunk, ptype_pred)
+
+# It can also recover missing factor levels.
+# For example, it is plausible that the test data only had the
+# "virginica" level
+test3 <- test
+test3$Species <- factor(test3$Species, levels = "virginica")
+
+test3_shrunk <- shrink(test3, ptype_pred)
+test3_fixed <- scream(test3_shrunk, ptype_pred)
+
+# scream() recovered the missing levels
+levels(test3_fixed$Species)
 
 }

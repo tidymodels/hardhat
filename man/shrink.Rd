@@ -4,60 +4,57 @@
 \alias{shrink}
 \title{Subset only required columns}
 \usage{
-shrink(new_data, engine, outcomes = FALSE)
+shrink(data, ptype)
 }
 \arguments{
-\item{new_data}{A data frame containing the new data to check the structure
-of. This should contain the predictors, and potentially the outcomes if
-\code{outcomes = TRUE}.}
+\item{data}{A data frame containing the data to subset.}
 
-\item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
-
-\item{outcomes}{A logical. Should the outcomes be included in the shrunk
-\code{new_data} output as well?}
+\item{ptype}{A data frame prototype containing the required columns.}
 }
 \value{
-A tibble containing the required predictors (and potentially the
-outcomes).
+A tibble containing the required columns.
 }
 \description{
-\code{shrink()} subsets \code{new_data} to only contain the required columns.
-\code{shrink()} also performs the following validation checks on \code{new_data}:
-\itemize{
-\item \code{\link[=validate_new_data_column_names]{validate_new_data_column_names()}} - Checks that all required columns
-exist in \code{new_data}.
-}
+\code{shrink()} subsets \code{data} to only contain the required columns specified by
+the prototype, \code{ptype}.
 }
 \details{
-If \code{outcomes = TRUE}, then the validation checks are performed on the known
-outcome columns as well, and they are returned along with the predictors. If
-\code{\link[=mold]{mold()}} was called with the XY interface, then no preprocessing was done
-to \code{y} and \code{outcomes} will have no effect (if a vector was passed as \code{y}
-during the fit, \code{shrink()} has no way of knowing what column in \code{new_data}
-corresponds to the outcome).
-
 \code{shrink()} is called by \code{\link[=forge]{forge()}} before \code{\link[=scream]{scream()}} and before the actual
 processing is done.
 }
 \examples{
+# ---------------------------------------------------------------------------
+# Setup
+
 train <- iris[1:100,]
 test <- iris[101:150,]
+
+# ---------------------------------------------------------------------------
+# shrink()
 
 # mold() is run at model fit time
 # and a formula preprocessing engine is recorded
 x <- mold(log(Sepal.Width) ~ Species, train)
 
-# Pass that engine to shrink(), along with new_data
-# to get a tibble of required predictors back
-shrink(test, x$engine)
+# Inside the result of mold() are the prototype tibbles
+# for the predictors and the outcomes
+ptype_pred <- x$engine$info$predictors
+ptype_out <- x$engine$info$outcomes
 
-# outcomes = TRUE also returns the outcomes,
-# this can be useful if doing cross validation
-shrink(test, x$engine, outcomes = TRUE)
+# Pass the test data, along with a prototype, to
+# shrink() to extract the prototype columns
+shrink(test, ptype_pred)
 
-# forge() actually preprocesses the new_data, after
-# a call to shrink(). Notice how now the Sepal.Width
-# column is logged
-forge(test, x$engine, outcomes = TRUE)$outcomes
+# To extract the outcomes, just use the
+# outcome prototype
+shrink(test, ptype_out)
+
+# shrink() makes sure that the columns
+# required by `ptype` actually exist in the data
+# and errors nicely when they don't
+\dontrun{
+test2 <- subset(test, select = -Species)
+shrink(test2, ptype_pred)
+}
 
 }

@@ -39,7 +39,7 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   )
 
   expect_equal(
-    x$engine$info$outcomes$names,
+    colnames(x$engine$info$outcomes),
     ".outcome"
   )
 
@@ -129,7 +129,7 @@ test_that("novel predictor levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$engine),
-    "The following factor levels"
+    "Lossy cast"
   )
 
   expect_equal(
@@ -158,7 +158,7 @@ test_that("novel outcome levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$engine, outcomes = TRUE),
-    "The following factor levels"
+    "Lossy cast"
   )
 
   expect_equal(
@@ -173,12 +173,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_equal(
-    x$engine$info$predictors$classes,
+    get_data_classes(x$engine$info$predictors),
     list(Sepal.Length = "numeric", Sepal.Width = "numeric")
   )
 
   expect_equal(
-    x$engine$info$outcomes$classes,
+    get_data_classes(x$engine$info$outcomes),
     list(.outcome = "factor")
   )
 
@@ -191,25 +191,31 @@ test_that("new data classes are caught", {
 
   x <- mold(iris[, "Species", drop = FALSE], iris$Sepal.Length)
 
+  # Silent recovery
   expect_error(
-    forge(iris2, x$engine),
-    "`Species`: `character` should be `factor`"
+    x_iris2 <- forge(iris2, x$engine),
+    NA
+  )
+
+  expect_is(
+    x_iris2$predictors$Species,
+    "factor"
   )
 
   xx <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-
-  expect_error(
-    forge(iris2, xx$engine),
-    NA
-  )
 
   iris3 <- iris2
   iris3$.outcome <- iris2$Species
   iris3$Species <- NULL
 
   expect_error(
-    forge(iris3, xx$engine, outcomes = TRUE),
-    "`.outcome`: `character` should be `factor`."
+    xx_iris3 <- forge(iris3, xx$engine, outcomes = TRUE),
+    NA
+  )
+
+  expect_is(
+    xx_iris3$outcomes$.outcome,
+    "factor"
   )
 
 })
@@ -237,7 +243,7 @@ test_that("intercept is not included as a predictor", {
   )
 
   expect_false(
-    "(Intercept)" %in% x$engine$info$predictors$names
+    "(Intercept)" %in% colnames(x$engine$info$predictors)
   )
 
   expect_error(
@@ -258,7 +264,7 @@ test_that("intercept is not included as a predictor", {
   )
 
   expect_false(
-    "(Intercept)" %in% xx$engine$info$predictors$names
+    "(Intercept)" %in% colnames(xx$engine$info$predictors)
   )
 
 })

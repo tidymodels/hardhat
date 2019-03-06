@@ -171,7 +171,7 @@ test_that("novel predictor levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$engine),
-    "The following factor levels"
+    "Lossy cast"
   )
 
   expect_equal(
@@ -197,7 +197,7 @@ test_that("novel ordered factor predictor levels have order maintained", {
 
   expect_warning(
     xx <- forge(new, x$engine),
-    "The following factor levels"
+    "Lossy cast"
   )
 
   expect_equal(
@@ -228,7 +228,7 @@ test_that("novel outcome levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$engine, outcomes = TRUE),
-    "The following factor levels"
+    "Lossy cast"
   )
 
   expect_equal(
@@ -238,7 +238,7 @@ test_that("novel outcome levels are caught", {
 
 })
 
-test_that("missing predictor levels are added", {
+test_that("missing predictor levels are restored silently", {
 
   dat <- data.frame(
     y = 1:4,
@@ -260,19 +260,23 @@ test_that("missing predictor levels are added", {
   x <- mold(y ~ f, dat)
 
   expect_warning(
-    forge(new, x$engine),
-    glue::glue(
-      "The following original factor levels are missing for column, ",
-      "'f', and have been restored: 'd'."
-    )
+    x_new <- forge(new, x$engine),
+    NA
+  )
+
+  expect_equal(
+    colnames(x_new$predictors),
+    c("fa", "fb", "fc", "fd")
   )
 
   expect_warning(
-    forge(new2, x$engine),
-    glue::glue(
-      "The following original factor levels are missing for column, ",
-      "'f', and have been restored: 'c', 'd'."
-    )
+    x_new2 <- forge(new2, x$engine),
+    NA
+  )
+
+  expect_equal(
+    colnames(x_new2$predictors),
+    c("fa", "fb", "fc", "fd")
   )
 
 })
@@ -287,7 +291,7 @@ test_that("missing ordered factor levels are handled correctly", {
   x <- mold(y ~ f, dat, default_formula_engine(indicators = FALSE))
 
   # Ordered - strictly wrong order
-  # Nothing happens!
+  # Silently recover order!
   new <- data.frame(
     y = 1:2,
     f = ordered(letters[1:4], levels = rev(letters[1:4]))
@@ -298,12 +302,10 @@ test_that("missing ordered factor levels are handled correctly", {
     NA
   )
 
-  # Currently expected that
-  # enforce_new_data_level_recovery()
-  # only checks for missing or new levels, not wrong order
+  # Order is restored
   expect_equal(
     levels(xx$predictors$f),
-    rev(letters[1:4])
+    letters[1:4]
   )
 
   # Ordered - missing levels
@@ -312,12 +314,15 @@ test_that("missing ordered factor levels are handled correctly", {
     f = ordered(letters[1:3], levels = rev(letters[1:3]))
   )
 
+  # Silently recover missing levels in the right order
   expect_warning(
-    forge(new2, x$engine),
-    glue::glue(
-      "The following original factor levels are missing for column, ",
-      "'f', and have been restored: 'd'."
-    )
+    xx2 <- forge(new2, x$engine),
+    NA
+  )
+
+  expect_equal(
+    levels(xx2$predictors$f),
+    letters[1:4]
   )
 
 })
@@ -334,16 +339,17 @@ test_that("can be both missing levels and have new levels", {
     f = factor(letters[c(1:3, 5)])
   )
 
-  x <- mold(y ~ f, dat)
+  x <- mold(y ~ f, dat, engine = default_formula_engine(indicators = FALSE))
 
+  # Lossy cast warning for the extra level
   expect_warning(
     xx <- forge(new, x$engine),
-    "The following factor levels are new for column"
+    "Lossy cast"
   )
 
-  expect_warning(
-    xx <- forge(new, x$engine),
-    "The following original factor levels are missing"
+  expect_equal(
+    levels(xx$predictors$f),
+    levels(dat$f)
   )
 
 })
@@ -353,23 +359,29 @@ test_that("new data classes are caught", {
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
 
-  x <- mold(Sepal.Length ~ Species, iris)
+  x <- mold(Sepal.Length ~ Species, iris, engine = default_formula_engine(indicators = FALSE))
 
+  # Silently recover character -> factor
   expect_error(
-    forge(iris2, x$engine),
-    "`Species`: `character` should be `factor`"
+    x_iris2 <- forge(iris2, x$engine),
+    NA
+  )
+
+  expect_is(
+    x_iris2$predictors$Species,
+    "factor"
   )
 
   xx <- mold(Species ~ Sepal.Length, iris)
 
   expect_error(
-    forge(iris2, xx$engine),
+    xx_iris2 <- forge(iris2, xx$engine, outcomes = TRUE),
     NA
   )
 
-  expect_error(
-    forge(iris2, xx$engine, outcomes = TRUE),
-    "`Species`: `character` should be `factor`"
+  expect_is(
+    xx_iris2$outcomes$Species,
+    "factor"
   )
 
 })

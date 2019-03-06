@@ -10,24 +10,22 @@ extract_info(x)
 \item{x}{A data frame or matrix.}
 }
 \value{
-A named list with 3 elements: \code{names}, \code{classes}, and \code{levels}.
+A 0 row slice of \code{x} after converting it to a tibble.
 }
 \description{
-\code{extract_info()} extracts the following pieces of information from \code{x}:
-\itemize{
-\item \code{names}: Using \code{colnames()}.
-\item \code{classes}: Use \code{\link[=get_data_classes]{get_data_classes()}}.
-\item \code{levels}: Using \code{\link[=get_levels]{get_levels()}}.
-}
+\code{extract_info()} extracts a tibble with 0 rows from \code{x}. This contains
+all of the required information about column names, classes, and factor
+levels that are required to check the structure of new data at prediction
+time.
 }
 \details{
-\code{extract_info()} is useful when creating new preprocessing \code{engine}. It
+\code{extract_info()} is useful when creating a new preprocessing \code{engine}. It
 extracts the required information that will be used by the validation checks
 at prediction time.
 }
 \examples{
 
-str(hardhat:::extract_info(iris))
+hardhat:::extract_info(iris)
 
 }
 \keyword{internal}

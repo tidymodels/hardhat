@@ -241,49 +241,49 @@ forge_xy_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  new_data <- shrink(new_data, engine, outcomes)
-  new_data <- scream(new_data, engine, outcomes)
+  predictors <- shrink(new_data, engine$info$predictors)
+  predictors <- scream(predictors, engine$info$predictors)
 
-  out$forge$clean(engine, new_data)
+  if (outcomes) {
+    outcomes <- shrink(new_data, engine$info$outcomes)
+    outcomes <- scream(outcomes, engine$info$outcomes)
+  }
+  else {
+    outcomes <- NULL
+  }
+
+  out$forge$clean(engine, predictors, outcomes)
 }
 
-forge_xy_default_process <- function(engine, new_data, outcomes) {
+forge_xy_default_process <- function(engine, predictors, outcomes) {
 
-  c(engine, predictors_lst) %<-% forge_xy_default_process_predictors(engine, new_data)
-  c(engine, outcomes_lst) %<-% forge_xy_default_process_outcomes(engine, new_data, outcomes)
+  c(engine, predictors_lst) %<-% forge_xy_default_process_predictors(engine, predictors)
+  c(engine, outcomes_lst) %<-% forge_xy_default_process_outcomes(engine, outcomes)
 
   extras <- c(predictors_lst$extras, outcomes_lst$extras)
 
   out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
 }
 
-forge_xy_default_process_predictors <- function(engine, new_data) {
+forge_xy_default_process_predictors <- function(engine, predictors) {
 
-  original_names <- engine$info$predictors$names
+  predictors <- maybe_add_intercept_column(predictors, engine$intercept)
 
-  data <- new_data[, original_names, drop = FALSE]
-
-  data <- maybe_add_intercept_column(data, engine$intercept)
-
-  predictors_lst <- out$forge$process_terms_lst(data = data)
+  predictors_lst <- out$forge$process_terms_lst(data = predictors)
 
   out$forge$process_terms(engine, predictors_lst)
 }
 
-forge_xy_default_process_outcomes <- function(engine, new_data, outcomes) {
+forge_xy_default_process_outcomes <- function(engine, outcomes) {
 
-  # don't process and return outcomes
-  if (!outcomes) {
+  # no outcomes to process
+  if (is.null(outcomes)) {
     outcomes_lst <- out$forge$process_terms_lst()
     result <- out$forge$process_terms(engine, outcomes_lst)
     return(result)
   }
 
-  original_names <- engine$info$outcomes$names
-
-  data <- new_data[, original_names, drop = FALSE]
-
-  outcomes_lst <- out$forge$process_terms_lst(data = data)
+  outcomes_lst <- out$forge$process_terms_lst(data = outcomes)
 
   out$forge$process_terms(engine, outcomes_lst)
 }
