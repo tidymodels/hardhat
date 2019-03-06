@@ -33,15 +33,3 @@ get_data_classes <- function(x) {
 
   lapply(info, class)
 }
-
-
-# TODO - Remove this after we switch to better validation functions with vctrs
-
-get_data_class <- function(x) {
-
-  if (dims(x) > 1) {
-    glubort("Each element of `x` can only be a 1D vector.")
-  }
-
-  class(x)
-}
