@@ -23,7 +23,7 @@ outcomes) after any required structural modifications have been made.
 \code{scream()} performs a number of validation checks on \code{new_data}, and yells
 loudly if anything is wrong. \code{scream()} performs the following validation:
 \itemize{
-\item \code{\link[=validate_new_data_classes]{validate_new_data_classes()}} - Checks that the class of each
+\item \code{validate_new_data_classes()} - Checks that the class of each
 required predictor in \code{new_data} is the same as the class used
 during training.
 \item \code{enforce_new_data_novel_levels()} - Checks that all \code{new_data} factor

@@ -5,7 +5,7 @@
 #' `scream()` performs a number of validation checks on `new_data`, and yells
 #' loudly if anything is wrong. `scream()` performs the following validation:
 #'
-#' - [validate_new_data_classes()] - Checks that the class of each
+#' - `validate_new_data_classes()` - Checks that the class of each
 #' required predictor in `new_data` is the same as the class used
 #' during training.
 #'
@@ -88,14 +88,10 @@ scream <- function(new_data, engine, outcomes = FALSE) {
   original_predictor_classes <- get_data_classes(engine$info$predictors)
   original_predictor_levels <- get_levels(engine$info$predictors)
 
-  validate_new_data_classes(new_data, original_predictor_classes)
-
   if (outcomes) {
 
     original_outcome_classes <- get_data_classes(engine$info$outcomes)
     original_outcome_levels <- get_levels(engine$info$outcomes)
-
-    validate_new_data_classes(new_data, original_outcome_classes)
 
   }
 
