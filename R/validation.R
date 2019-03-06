@@ -1,60 +1,61 @@
-#' Ensure that the outcome is univariate
+#' Ensure that `data` is univariate
 #'
 #' @description
 #'
 #' validate - asserts the following:
 #'
-#' - `data` must have 1 column.
+#' - `data` must have 1 column. Atomic vectors are treated as 1 column matrices.
 #'
 #' check - returns the following:
 #'
 #' - `ok` A logical. Does the check pass?
 #'
-#' - `n_cols` A single numeric. The number of columns.
+#' - `n_cols` A single numeric. The actual number of columns.
 #'
-#' @param data Ideally, a data frame with 1 column.
+#' @param data An object to check.
+#'
+#' @param name A name to be used in the default error message.
 #'
 #' @template section-validation
 #'
 #' @details
 #'
-#' The easiest way to use this validation function is to supply it the
-#' `$outcomes` element of the result of [mold()].
+#' The expected way to use this validation function is to supply it the
+#' `$outcomes` element of the result of a call to [mold()].
 #'
 #' @examples
-#'
-#' validate_outcomes_is_univariate(data.frame(x = 1))
+#' validate_is_univariate(data.frame(x = 1))
 #'
 #' \dontrun{
-#' validate_outcomes_is_univariate(mtcars)
+#' validate_is_univariate(mtcars)
 #' }
 #'
 #' @family validation functions
 #' @export
-validate_outcomes_is_univariate <- function(data) {
+validate_is_univariate <- function(data, name = "data") {
 
-  check <- check_outcomes_is_univariate(data)
+  validate_is_name(name, "name")
+  check <- check_is_univariate(data)
 
   if (!check$ok) {
-
     glubort(
-      "There must only be 1 outcome, not {check$n_cols}."
+      "`{name}` must be univariate, but {check$n_cols} columns were found."
     )
-
   }
 
   invisible(data)
 }
 
-#' @rdname validate_outcomes_is_univariate
+#' @rdname validate_is_univariate
 #' @export
-check_outcomes_is_univariate <- function(data) {
+check_is_univariate <- function(data) {
 
   if (!rlang::is_vector(data)) {
-    glubort("`data` must be a vector, not a {class1(data)}.")
+    n_cols <- 0L
   }
-
-  n_cols <- NCOL(data)
+  else {
+    n_cols <- NCOL(data) %||% 0L
+  }
 
   ok <- (n_cols == 1L)
 
@@ -327,3 +328,16 @@ check_list <- function(ok = TRUE, ...) {
   c(list(ok = ok), elems)
 }
 
+# ------------------------------------------------------------------------------
+
+validate_is_name <- function(.x, .x_nm) {
+  validate_is_character(.x, .x_nm)
+
+  if (length(.x) != 1L) {
+    glubort(
+      "`{.x_nm}` must be of size 1, not {length(.x)}."
+    )
+  }
+
+  invisible(.x)
+}
