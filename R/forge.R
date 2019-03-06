@@ -32,8 +32,6 @@
 #' @param outcomes A logical. Should the outcomes be processed and returned
 #' as well?
 #'
-#' @param ... Not used.
-#'
 #' @return
 #'
 #' A named list with 3 elements:
@@ -66,24 +64,21 @@
 #'
 #'
 #' @export
-forge <- function(new_data, engine, outcomes = FALSE, ...) {
+forge <- function(new_data, engine, outcomes = FALSE) {
   UseMethod("forge")
 }
 
 #' @export
-forge.default <- function(new_data, engine, outcomes = FALSE, ...) {
+forge.default <- function(new_data, engine, outcomes = FALSE) {
   glubort("The class of `new_data`, '{class1(new_data)}', is not recognized.")
 }
 
 #' @export
-forge.data.frame <- function(new_data, engine, outcomes = FALSE, ...) {
+forge.data.frame <- function(new_data, engine, outcomes = FALSE) {
 
   validate_is_engine(engine)
 
-  validate_empty_dots(...)
-
   forge_impl(engine, new_data, outcomes)
-
 }
 
 #' @export
@@ -103,7 +98,7 @@ forge.matrix <- forge.data.frame
 # because it will be something like `custom_engine` and there won't be
 # anything to dispatch on
 
-forge_impl <- function(engine, ...) {
+forge_impl <- function(engine, new_data, outcomes) {
   UseMethod("forge_impl")
 }
 
