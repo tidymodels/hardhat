@@ -13,6 +13,10 @@ NULL
 #' @importFrom stats terms
 NULL
 
+# https://github.com/r-lib/vctrs/issues/114
+#' @importFrom vctrs vec_cast.data.frame
+NULL
+
 # for zeallot
 utils::globalVariables(
   c(
