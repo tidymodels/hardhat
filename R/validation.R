@@ -314,6 +314,101 @@ check_prediction_size <- function(.pred, new_data) {
 
 # ------------------------------------------------------------------------------
 
+#' Ensure no duplicate terms appear in `formula`
+#'
+#' @description
+#'
+#' validate - asserts the following:
+#'
+#' - `formula` must not have duplicates terms on the left and right hand
+#' side of the formula.
+#'
+#' check - returns the following:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `duplicates` A character vector. The duplicate terms.
+#'
+#' @param formula A formula to check.
+#'
+#' @param original A logical. Should the original names be checked, or should
+#' the names after processing be used? If `FALSE`, `y ~ log(y)` is allowed
+#' because the names are `"y"` and `"log(y)"`, if `TRUE`, `y ~ log(y)` is not
+#' allowed because the original names are both `"y"`.
+#'
+#' @template section-validation
+#'
+#' @examples
+#' # All good
+#' check_no_formula_duplication(y ~ x)
+#'
+#' # Not good!
+#' check_no_formula_duplication(y ~ y)
+#'
+#' # This is generally okay
+#' check_no_formula_duplication(y ~ log(y))
+#'
+#' # But you can be more strict
+#' check_no_formula_duplication(y ~ log(y), original = TRUE)
+#'
+#' # This would throw an error
+#' \dontrun{
+#' validate_no_formula_duplication(log(y) ~ log(y))
+#' }
+#'
+#'
+#' @family validation functions
+#' @export
+validate_no_formula_duplication <- function(formula, original = FALSE) {
+
+  check <- check_no_formula_duplication(formula, original)
+
+  if (!check$ok) {
+    duplicates <- glue_quote_collapse(check$duplicates)
+
+    glubort(
+      "The following terms are duplicated on the left and right hand side ",
+      "of the `formula`: {duplicates}."
+    )
+  }
+
+  invisible(formula)
+}
+
+#' @rdname validate_no_formula_duplication
+#' @export
+check_no_formula_duplication <- function(formula, original = FALSE) {
+
+  validate_is_formula(formula)
+  validate_is_bool(original, "original")
+
+  # Only required to expand any `.` values so terms() can be called
+  # The `.` is designed to never contain duplicates, so we just expand
+  # it to this column name that we hope never exists
+  dummy_data <- data.frame(`...dummy...` = 1)
+  formula <- expand_formula_dot_notation(formula, data = dummy_data)
+
+  formula_predictors <- get_predictors_formula(formula)
+  formula_outcomes <- get_outcomes_formula(formula)
+
+  if (original) {
+    predictors <- all.vars(formula_predictors)
+    outcomes <- all.vars(formula_outcomes)
+  }
+  else {
+    predictors <- attr(terms(formula_predictors), "term.labels")
+    outcomes <- attr(terms(formula_outcomes), "term.labels")
+  }
+
+  duplicates <- intersect(predictors, outcomes)
+
+  ok <- length(duplicates) == 0L
+
+  check_list(ok = ok, duplicates = duplicates)
+}
+
+# ------------------------------------------------------------------------------
+
 # ok = bool
 # ... = extra info when not ok
 check_list <- function(ok = TRUE, ...) {

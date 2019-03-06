@@ -83,6 +83,7 @@ validate_prediction_size(spruce_response(1:4), new_data)
 }
 \seealso{
 Other validation functions: \code{\link{validate_column_names}},
-  \code{\link{validate_is_univariate}}
+  \code{\link{validate_is_univariate}},
+  \code{\link{validate_no_formula_duplication}}
 }
 \concept{validation functions}
