@@ -22,11 +22,11 @@
 #' processed data? This information is used by the `process` function
 #' in the `mold` and `forge` function list.
 #'
-#' @param info Either `NULL`, or a named list with 2 elements, `predictors`
-#' and `outcomes`, both of which are 0 row tibbles. `info` is generated
+#' @param ptypes Either `NULL`, or a named list with 2 elements, `predictors`
+#' and `outcomes`, both of which are 0-row tibbles. `ptypes` is generated
 #' automatically at [mold()] time and is used to validate `new_data` at
 #' prediction time. At [mold()] time, the information found in
-#' `engine$mold$process()$info` is used to set `info` for the `engine`.
+#' `engine$mold$process()$ptype` is used to set `ptypes` for the `engine`.
 #'
 #' @param ... Name-value pairs for additional elements of engines that
 #' subclass this engine.
@@ -47,14 +47,14 @@
 new_engine <- function(mold,
                        forge,
                        intercept = FALSE,
-                       info = NULL,
+                       ptypes = NULL,
                        ...,
                        subclass = character()) {
 
   validate_is_function_set(mold)
   validate_is_function_set(forge)
   validate_is_bool(intercept)
-  validate_is_info_list_or_null(info)
+  validate_is_ptype_list_or_null(ptypes)
   validate_is_character(subclass, "subclass")
 
   # Can't validate mold() args here
@@ -65,7 +65,7 @@ new_engine <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
-    info = info
+    ptypes = ptypes
   )
 
   new_elems <- list(...)
@@ -286,7 +286,7 @@ validate_has_function_set_structure <- function(.x, .x_nm) {
   invisible(.x)
 }
 
-validate_is_info_list_or_null <- function(.x, .x_nm) {
+validate_is_ptype_list_or_null <- function(.x, .x_nm) {
 
   if (rlang::is_missing(.x_nm)) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))

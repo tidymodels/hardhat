@@ -3,7 +3,7 @@
 new_xy_engine <- function(mold,
                           forge,
                           intercept = FALSE,
-                          info = NULL,
+                          ptypes = NULL,
                           ...,
                           subclass = character()) {
 
@@ -28,7 +28,7 @@ new_xy_engine <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
-    info = info,
+    ptypes = ptypes,
     ...,
     subclass = c(subclass, "xy_engine")
   )

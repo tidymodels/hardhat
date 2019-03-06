@@ -151,7 +151,7 @@ default_xy_engine <- function(intercept = FALSE) {
 new_default_xy_engine <- function(mold,
                                   forge,
                                   intercept = FALSE,
-                                  info = NULL,
+                                  ptypes = NULL,
                                   ...,
                                   subclass = character()) {
 
@@ -159,7 +159,7 @@ new_default_xy_engine <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
-    info = info,
+    ptypes = ptypes,
     ...,
     subclass = c(subclass, "default_xy_engine")
   )
@@ -202,29 +202,29 @@ mold_xy_default_process <- function(engine, x, y) {
   c(engine, predictors_lst) %<-% mold_xy_default_process_predictors(engine, x)
   c(engine, outcomes_lst) %<-% mold_xy_default_process_outcomes(engine, y)
 
-  info <- out$info$final(predictors_lst$info, outcomes_lst$info)
+  ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
-  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
+  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, ptypes, extras)
 }
 
 mold_xy_default_process_predictors <- function(engine, x) {
 
-  # Important! Collect info before adding intercept!
-  info <- extract_info(x)
+  # Important! Collect ptype before adding intercept!
+  ptype <- extract_ptype(x)
 
   x <- maybe_add_intercept_column(x, engine$intercept)
 
-  predictors_lst <- out$mold$process_terms_lst(data = x, info)
+  predictors_lst <- out$mold$process_terms_lst(data = x, ptype)
 
   out$mold$process_terms(engine, predictors_lst)
 }
 
 mold_xy_default_process_outcomes <- function(engine, y) {
 
-  info <- extract_info(y)
+  ptype <- extract_ptype(y)
 
-  outcomes_lst <- out$mold$process_terms_lst(data = y, info)
+  outcomes_lst <- out$mold$process_terms_lst(data = y, ptype)
 
   out$mold$process_terms(engine, outcomes_lst)
 }
@@ -241,12 +241,12 @@ forge_xy_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  predictors <- shrink(new_data, engine$info$predictors)
-  predictors <- scream(predictors, engine$info$predictors)
+  predictors <- shrink(new_data, engine$ptypes$predictors)
+  predictors <- scream(predictors, engine$ptypes$predictors)
 
   if (outcomes) {
-    outcomes <- shrink(new_data, engine$info$outcomes)
-    outcomes <- scream(outcomes, engine$info$outcomes)
+    outcomes <- shrink(new_data, engine$ptypes$outcomes)
+    outcomes <- scream(outcomes, engine$ptypes$outcomes)
   }
   else {
     outcomes <- NULL

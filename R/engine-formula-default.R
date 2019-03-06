@@ -270,7 +270,7 @@ default_formula_engine <- function(intercept = FALSE,
 new_default_formula_engine <- function(mold,
                                        forge,
                                        intercept = FALSE,
-                                       info = NULL,
+                                       ptypes = NULL,
                                        formula = NULL,
                                        indicators = TRUE,
                                        terms = list(
@@ -286,7 +286,7 @@ new_default_formula_engine <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
-    info = info,
+    ptypes = ptypes,
     formula = formula,
     indicators = indicators,
     terms = terms,
@@ -341,10 +341,10 @@ mold_formula_default_process <- function(engine, data) {
   formula_empty_env <- nuke_formula_environment(engine$formula)
   engine <- update_engine(engine, formula = formula_empty_env)
 
-  info <- out$info$final(predictors_lst$info, outcomes_lst$info)
+  ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
-  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
+  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, ptypes, extras)
 }
 
 mold_formula_default_process_predictors <- function(engine, data) {
@@ -355,10 +355,10 @@ mold_formula_default_process_predictors <- function(engine, data) {
   original_names <- get_all_predictors(formula, data)
   original_data <- data[, original_names, drop = FALSE]
 
-  info <- extract_info(original_data)
+  ptype <- extract_ptype(original_data)
 
   if (!engine$indicators) {
-    factor_names <- extract_original_factor_names(info)
+    factor_names <- extract_original_factor_names(ptype)
     validate_no_factors_in_functions(formula, factor_names)
     validate_no_factors_in_interactions(formula, factor_names)
     formula <- remove_factors_from_formula(formula, factor_names)
@@ -384,7 +384,7 @@ mold_formula_default_process_predictors <- function(engine, data) {
 
   predictors_lst <- out$mold$process_terms_lst(
     data = predictors,
-    info = info,
+    ptype = ptype,
     extras = list(offset = offset)
   )
 
@@ -398,7 +398,7 @@ mold_formula_default_process_outcomes <- function(engine, data) {
   original_names <- get_all_outcomes(formula, data)
   original_data <- data[, original_names, drop = FALSE]
 
-  info <- extract_info(original_data)
+  ptype <- extract_ptype(original_data)
 
   formula <- get_outcomes_formula(formula)
 
@@ -415,7 +415,7 @@ mold_formula_default_process_outcomes <- function(engine, data) {
   engine_terms$outcomes <- terms
   engine <- update_engine(engine, terms = engine_terms)
 
-  outcomes_lst <- out$mold$process_terms_lst(data = outcomes, info)
+  outcomes_lst <- out$mold$process_terms_lst(data = outcomes, ptype)
 
   out$mold$process_terms(engine, outcomes_lst)
 }
@@ -432,12 +432,12 @@ forge_formula_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  predictors <- shrink(new_data, engine$info$predictors)
-  predictors <- scream(predictors, engine$info$predictors)
+  predictors <- shrink(new_data, engine$ptypes$predictors)
+  predictors <- scream(predictors, engine$ptypes$predictors)
 
   if (outcomes) {
-    outcomes <- shrink(new_data, engine$info$outcomes)
-    outcomes <- scream(outcomes, engine$info$outcomes)
+    outcomes <- shrink(new_data, engine$ptypes$outcomes)
+    outcomes <- scream(outcomes, engine$ptypes$outcomes)
   }
   else {
     outcomes <- NULL
@@ -476,7 +476,7 @@ forge_formula_default_process_predictors <- function(engine, predictors) {
   )
 
   if (!engine$indicators) {
-    factor_names <- extract_original_factor_names(engine$info$predictors)
+    factor_names <- extract_original_factor_names(engine$ptypes$predictors)
     data <- reattach_factor_columns(data, predictors, factor_names)
   }
 
@@ -797,11 +797,11 @@ detect_interactions <- function(.formula) {
   bad_terms
 }
 
-extract_original_factor_names <- function(info) {
+extract_original_factor_names <- function(ptype) {
 
-  where_factor <- vapply(info, is.factor, logical(1))
+  where_factor <- vapply(ptype, is.factor, logical(1))
 
-  original_factor_columns <- colnames(info)[where_factor]
+  original_factor_columns <- colnames(ptype)[where_factor]
 
   original_factor_columns
 }

@@ -8,15 +8,16 @@
 \alias{new_default_xy_engine}
 \title{Create a new default engine}
 \usage{
-new_default_formula_engine(mold, forge, intercept = FALSE, info = NULL,
-  formula = NULL, indicators = TRUE, terms = list(predictors = NULL,
-  outcomes = NULL), ..., subclass = character())
-
-new_default_recipe_engine(mold, forge, intercept = FALSE, info = NULL,
-  recipe = NULL, ..., subclass = character())
-
-new_default_xy_engine(mold, forge, intercept = FALSE, info = NULL, ...,
+new_default_formula_engine(mold, forge, intercept = FALSE,
+  ptypes = NULL, formula = NULL, indicators = TRUE,
+  terms = list(predictors = NULL, outcomes = NULL), ...,
   subclass = character())
+
+new_default_recipe_engine(mold, forge, intercept = FALSE,
+  ptypes = NULL, recipe = NULL, ..., subclass = character())
+
+new_default_xy_engine(mold, forge, intercept = FALSE, ptypes = NULL,
+  ..., subclass = character())
 }
 \arguments{
 \item{mold}{A named list with two elements, \code{clean} and \code{process}, see
@@ -29,11 +30,11 @@ the \code{\link[=new_engine]{new_engine()}} section, Forge Functions, for detail
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
 
-\item{info}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
-and \code{outcomes}, both of which are 0 row tibbles. \code{info} is generated
+\item{ptypes}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
+and \code{outcomes}, both of which are 0-row tibbles. \code{ptypes} is generated
 automatically at \code{\link[=mold]{mold()}} time and is used to validate \code{new_data} at
 prediction time. At \code{\link[=mold]{mold()}} time, the information found in
-\code{engine$mold$process()$info} is used to set \code{info} for the \code{engine}.}
+\code{engine$mold$process()$ptype} is used to set \code{ptypes} for the \code{engine}.}
 
 \item{formula}{Either \code{NULL}, or a formula that specifies how the
 predictors and outcomes should be preprocessed. This argument is set

@@ -9,16 +9,16 @@
 \alias{new_engine}
 \title{Create a new preprocessing engine}
 \usage{
-new_formula_engine(mold, forge, intercept = FALSE, info = NULL,
+new_formula_engine(mold, forge, intercept = FALSE, ptypes = NULL,
   formula = NULL, indicators = TRUE, ..., subclass = character())
 
-new_recipe_engine(mold, forge, intercept = FALSE, info = NULL,
+new_recipe_engine(mold, forge, intercept = FALSE, ptypes = NULL,
   recipe = NULL, ..., subclass = character())
 
-new_xy_engine(mold, forge, intercept = FALSE, info = NULL, ...,
+new_xy_engine(mold, forge, intercept = FALSE, ptypes = NULL, ...,
   subclass = character())
 
-new_engine(mold, forge, intercept = FALSE, info = NULL, ...,
+new_engine(mold, forge, intercept = FALSE, ptypes = NULL, ...,
   subclass = character())
 }
 \arguments{
@@ -32,11 +32,11 @@ the \code{\link[=new_engine]{new_engine()}} section, Forge Functions, for detail
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
 
-\item{info}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
-and \code{outcomes}, both of which are 0 row tibbles. \code{info} is generated
+\item{ptypes}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
+and \code{outcomes}, both of which are 0-row tibbles. \code{ptypes} is generated
 automatically at \code{\link[=mold]{mold()}} time and is used to validate \code{new_data} at
 prediction time. At \code{\link[=mold]{mold()}} time, the information found in
-\code{engine$mold$process()$info} is used to set \code{info} for the \code{engine}.}
+\code{engine$mold$process()$ptype} is used to set \code{ptypes} for the \code{engine}.}
 
 \item{formula}{Either \code{NULL}, or a formula that specifies how the
 predictors and outcomes should be preprocessed. This argument is set
@@ -108,18 +108,8 @@ data to be used in the model.
 \item \code{engine}: The engine, returned and potentially updated.
 \item \code{predictors}: A tibble of predictors.
 \item \code{outcomes}: A tibble of outcomes.
-\item \code{info}: A named list with 2 elements, \code{predictors} and \code{outcomes},
-where both elements are themselves named lists of the following
-3 elements:
-\itemize{
-\item \code{names}: A character vector of names of the original
-predictors.
-\item \code{classes}: A named list where the names are the original
-predictors, and the values are the classes of that predictor.
-\item \code{levels}: A named list where the names are the original
-factor predictors, and the values are the levels of that
-factor predictor.
-}
+\item \code{ptypes}: A named list with 2 elements, \code{predictors} and \code{outcomes},
+where both elements are 0-row tibbles.
 \item \code{extras}: Varies based on the engine. If the engine has no
 extra information, \code{NULL}. Otherwise a named list of the
 extra elements returned by the engine.

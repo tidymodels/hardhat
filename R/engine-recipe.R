@@ -6,7 +6,7 @@
 new_recipe_engine <- function(mold,
                               forge,
                               intercept = FALSE,
-                              info = NULL,
+                              ptypes = NULL,
                               recipe = NULL,
                               ...,
                               subclass = character()) {
@@ -36,7 +36,7 @@ new_recipe_engine <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
-    info = info,
+    ptypes = ptypes,
     recipe = recipe,
     ...,
     subclass = c(subclass, "recipe_engine")

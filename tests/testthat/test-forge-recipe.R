@@ -151,22 +151,22 @@ test_that("original predictor and outcome classes / names are recorded", {
   )
 
   expect_equal(
-    colnames(x$engine$info$predictors),
+    colnames(x$engine$ptypes$predictors),
     "Species"
   )
 
   expect_equal(
-    colnames(x$engine$info$outcomes),
+    colnames(x$engine$ptypes$outcomes),
     "Sepal.Length"
   )
 
   expect_equal(
-    get_data_classes(x$engine$info$predictors),
+    get_data_classes(x$engine$ptypes$predictors),
     list(Species = "factor")
   )
 
   expect_equal(
-    get_data_classes(x$engine$info$outcomes),
+    get_data_classes(x$engine$ptypes$outcomes),
     list(Sepal.Length = "numeric")
   )
 

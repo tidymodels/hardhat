@@ -24,7 +24,8 @@ utils::globalVariables(
     ".outcomes",
     "predictors",
     "outcomes",
-    "info",
+    "ptypes",
+    "ptype",
     "extras",
     "predictors_lst",
     "outcomes_lst"

@@ -44,19 +44,8 @@
 #'
 #'       - `outcomes`: A tibble of outcomes.
 #'
-#'       - `info`: A named list with 2 elements, `predictors` and `outcomes`,
-#'       where both elements are themselves named lists of the following
-#'       3 elements:
-#'
-#'          - `names`: A character vector of names of the original
-#'          predictors.
-#'
-#'          - `classes`: A named list where the names are the original
-#'          predictors, and the values are the classes of that predictor.
-#'
-#'          - `levels`: A named list where the names are the original
-#'          factor predictors, and the values are the levels of that
-#'          factor predictor.
+#'       - `ptypes`: A named list with 2 elements, `predictors` and `outcomes`,
+#'       where both elements are 0-row tibbles.
 #'
 #'       - `extras`: Varies based on the engine. If the engine has no
 #'       extra information, `NULL`. Otherwise a named list of the

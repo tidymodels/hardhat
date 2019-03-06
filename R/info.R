@@ -1,8 +1,8 @@
-#' Extract class and type information
+#' Extract a prototype
 #'
 #' @description
 #'
-#' `extract_info()` extracts a tibble with 0 rows from `x`. This contains
+#' `extract_ptype()` extracts a tibble with 0 rows from `x`. This contains
 #' all of the required information about column names, classes, and factor
 #' levels that are required to check the structure of new data at prediction
 #' time.
@@ -15,17 +15,17 @@
 #'
 #' @details
 #'
-#' `extract_info()` is useful when creating a new preprocessing `engine`. It
+#' `extract_ptype()` is useful when creating a new preprocessing `engine`. It
 #' extracts the required information that will be used by the validation checks
 #' at prediction time.
 #'
 #' @examples
 #'
-#' hardhat:::extract_info(iris)
+#' hardhat:::extract_ptype(iris)
 #'
 #' @keywords internal
 #'
-extract_info <- function(x) {
+extract_ptype <- function(x) {
 
   x <- check_is_data_like(x)
 

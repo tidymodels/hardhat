@@ -106,7 +106,7 @@ default_recipe_engine <- function(intercept = FALSE) {
 new_default_recipe_engine <- function(mold,
                                       forge,
                                       intercept = FALSE,
-                                      info = NULL,
+                                      ptypes = NULL,
                                       recipe = NULL,
                                       ...,
                                       subclass = character()) {
@@ -115,7 +115,7 @@ new_default_recipe_engine <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
-    info = info,
+    ptypes = ptypes,
     recipe = recipe,
     ...,
     subclass = c(subclass, "default_recipe_engine")
@@ -163,10 +163,10 @@ mold_recipe_default_process <- function(engine, data) {
   recipe <- compost(engine$recipe)
   engine <- update_engine(engine, recipe = recipe)
 
-  info <- out$info$final(predictors_lst$info, outcomes_lst$info)
+  ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
-  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, info, extras)
+  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, ptypes, extras)
 }
 
 mold_recipe_default_process_predictors <- function(engine, data) {
@@ -177,9 +177,9 @@ mold_recipe_default_process_predictors <- function(engine, data) {
 
   predictors <- maybe_add_intercept_column(predictors, engine$intercept)
 
-  info <- get_original_predictor_info(engine$recipe, data)
+  ptype <- get_original_predictor_ptype(engine$recipe, data)
 
-  predictors_lst <- out$mold$process_terms_lst(data = predictors, info)
+  predictors_lst <- out$mold$process_terms_lst(data = predictors, ptype)
 
   out$mold$process_terms(engine, predictors_lst)
 }
@@ -190,9 +190,9 @@ mold_recipe_default_process_outcomes <- function(engine, data) {
 
   outcomes <- recipes::juice(engine$recipe, all_outcomes())
 
-  info <- get_original_outcome_info(engine$recipe, data)
+  ptype <- get_original_outcome_ptype(engine$recipe, data)
 
-  outcomes_lst <- out$mold$process_terms_lst(data = outcomes, info)
+  outcomes_lst <- out$mold$process_terms_lst(data = outcomes, ptype)
 
   out$mold$process_terms(engine, outcomes_lst)
 }
@@ -209,12 +209,12 @@ forge_recipe_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  predictors <- shrink(new_data, engine$info$predictors)
-  predictors <- scream(predictors, engine$info$predictors)
+  predictors <- shrink(new_data, engine$ptypes$predictors)
+  predictors <- scream(predictors, engine$ptypes$predictors)
 
   if (outcomes) {
-    outcomes <- shrink(new_data, engine$info$outcomes)
-    outcomes <- scream(outcomes, engine$info$outcomes)
+    outcomes <- shrink(new_data, engine$ptypes$outcomes)
+    outcomes <- scream(outcomes, engine$ptypes$outcomes)
   }
   else {
     outcomes <- NULL
@@ -284,22 +284,22 @@ forge_recipe_default_process_outcomes <- function(engine, outcomes) {
 
 # ------------------------------------------------------------------------------
 
-get_original_predictor_info <- function(rec, data) {
+get_original_predictor_ptype <- function(rec, data) {
 
   roles <- rec$var_info$role
   original_names <- rec$var_info$variable[roles == "predictor"]
 
   original_data <- data[, original_names, drop = FALSE]
 
-  extract_info(original_data)
+  extract_ptype(original_data)
 }
 
-get_original_outcome_info <- function(rec, data) {
+get_original_outcome_ptype <- function(rec, data) {
 
   roles <- rec$var_info$role
   original_names <- rec$var_info$variable[roles == "outcome"]
 
   original_data <- data[, original_names, drop = FALSE]
 
-  extract_info(original_data)
+  extract_ptype(original_data)
 }

@@ -137,13 +137,13 @@ mold_impl.xy_engine <- function(engine, x, y, ...) {
     y = y
   )
 
-  c(engine, predictors, outcomes, info, extras) %<-% engine$mold$process(
+  c(engine, predictors, outcomes, ptypes, extras) %<-% engine$mold$process(
     engine = engine,
     x = x,
     y = y
   )
 
-  engine <- update_engine(engine, info = info)
+  engine <- update_engine(engine, ptypes = ptypes)
 
   out$mold$final(predictors, outcomes, engine, extras)
 
@@ -156,12 +156,12 @@ mold_impl.formula_engine <- function(engine, data, ...) {
     data = data
   )
 
-  c(engine, predictors, outcomes, info, extras) %<-% engine$mold$process(
+  c(engine, predictors, outcomes, ptypes, extras) %<-% engine$mold$process(
     engine = engine,
     data = data
   )
 
-  engine <- update_engine(engine, info = info)
+  engine <- update_engine(engine, ptypes = ptypes)
 
   out$mold$final(predictors, outcomes, engine, extras)
 
@@ -174,12 +174,12 @@ mold_impl.recipe_engine <- function(engine, data, ...) {
     data = data
   )
 
-  c(engine, predictors, outcomes, info, extras) %<-% engine$mold$process(
+  c(engine, predictors, outcomes, ptypes, extras) %<-% engine$mold$process(
     engine = engine,
     data = data
   )
 
-  engine <- update_engine(engine, info = info)
+  engine <- update_engine(engine, ptypes = ptypes)
 
   out$mold$final(predictors, outcomes, engine, extras)
 

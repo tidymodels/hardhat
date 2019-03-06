@@ -38,8 +38,8 @@ x <- mold(log(Sepal.Width) ~ Species, train)
 
 # Inside the result of mold() are the prototype tibbles
 # for the predictors and the outcomes
-ptype_pred <- x$engine$info$predictors
-ptype_out <- x$engine$info$outcomes
+ptype_pred <- x$engine$ptypes$predictors
+ptype_out <- x$engine$ptypes$outcomes
 
 # Pass the test data, along with a prototype, to
 # shrink() to extract the prototype columns

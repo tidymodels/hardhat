@@ -130,7 +130,7 @@ test_that("offset columns are stored as predictors", {
   x <- mold(Species ~ offset(Sepal.Length), iris)
 
   expect_equal(
-    colnames(x$engine$info$predictors),
+    colnames(x$engine$ptypes$predictors),
     "Sepal.Length"
   )
 

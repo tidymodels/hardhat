@@ -27,12 +27,12 @@ out_mold_clean_xy <- function(engine, x, y) {
   )
 }
 
-out_mold_process <- function(engine, predictors, outcomes, info, extras) {
+out_mold_process <- function(engine, predictors, outcomes, ptypes, extras) {
   list(
     engine = engine,
     predictors = predictors,
     outcomes = outcomes,
-    info = info,
+    ptypes = ptypes,
     extras = extras
   )
 }
@@ -44,10 +44,10 @@ out_mold_process_terms <- function(engine, terms_lst) {
   )
 }
 
-out_mold_process_terms_lst <- function(data, info, extras = NULL) {
+out_mold_process_terms_lst <- function(data, ptype, extras = NULL) {
   list(
     data = data,
-    info = info,
+    ptype = ptype,
     extras = extras
   )
 }
@@ -96,9 +96,9 @@ out_forge_clean <- function(engine, predictors, outcomes) {
 }
 
 # ------------------------------------------------------------------------------
-# Info
+# ptypes
 
-out_info_lst <- function(predictors, outcomes) {
+out_ptype_lst <- function(predictors, outcomes) {
   list(
     predictors = predictors,
     outcomes = outcomes
@@ -137,8 +137,8 @@ out <- list(
     process_terms = out_forge_process_terms,
     process_terms_lst = out_forge_process_terms_lst
   ),
-  info = list(
-    final = out_info_lst
+  ptypes = list(
+    final = out_ptype_lst
   ),
   extras = list(
     final = out_extras_lst
