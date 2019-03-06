@@ -365,7 +365,7 @@ mold_formula_default_process_predictors <- function(engine, data) {
   }
 
   framed <- model_frame(formula, data)
-  offset <- extract_offset(framed$data, framed$terms)
+  offset <- extract_offset(framed$terms, framed$data)
 
   predictors <- model_matrix(
     terms = framed$terms,
@@ -480,7 +480,7 @@ forge_formula_default_process_predictors <- function(engine, predictors) {
     data <- reattach_factor_columns(data, predictors, factor_names)
   }
 
-  .offset <- extract_offset(framed$data, framed$terms)
+  .offset <- extract_offset(framed$terms, framed$data)
 
   predictors_lst <- out$forge$process_terms_lst(
     data = data,

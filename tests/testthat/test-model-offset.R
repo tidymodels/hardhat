@@ -40,7 +40,7 @@ test_that("(offset) is not recognized as an offset", {
 
   # Us
   expect_equal(
-    model_offset(mf, terms(mf)),
+    model_offset(terms(mf), mf),
     NULL
   )
 

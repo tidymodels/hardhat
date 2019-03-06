@@ -4,13 +4,13 @@
 \alias{model_offset}
 \title{Extract a model offset}
 \usage{
-model_offset(data, terms)
+model_offset(terms, data)
 }
 \arguments{
-\item{data}{A data frame that was the result of a call to \code{model_frame()}.}
+\item{terms}{A \code{"terms"} object corresponding to \code{data}, returned from a
+call to \code{model_frame()}.}
 
-\item{terms}{A \code{"terms"} object corresponding to \code{data}. This is also
-returned by \code{model_frame()}.}
+\item{data}{A data frame returned from a call to \code{model_frame()}.}
 }
 \description{
 \code{model_offset()} extracts a numeric offset from a model frame. It is
@@ -32,17 +32,17 @@ by \code{model_offset()}.
 
 x <- model.frame(Species ~ offset(Sepal.Width), iris)
 
-model_offset(x, terms(x))
+model_offset(terms(x), x)
 
 xx <- model.frame(Species ~ offset(Sepal.Width) + offset(Sepal.Length), iris)
 
-model_offset(xx, terms(xx))
+model_offset(terms(xx), xx)
 
 # Problematic columns are caught with intuitive errors
 tryCatch(
   expr = {
     x <- model.frame(~ offset(Species), iris)
-    model_offset(x, terms(x))
+    model_offset(terms(x), x)
   },
   error = function(e) {
     print(e$message)

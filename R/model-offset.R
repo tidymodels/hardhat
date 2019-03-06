@@ -4,9 +4,10 @@
 #' inspired by [stats::model.offset()], but has nicer error messages and
 #' is slightly stricter.
 #'
-#' @param data A data frame that was the result of a call to `model_frame()`.
-#' @param terms A `"terms"` object corresponding to `data`. This is also
-#' returned by `model_frame()`.
+#' @param terms A `"terms"` object corresponding to `data`, returned from a
+#' call to `model_frame()`.
+#'
+#' @param data A data frame returned from a call to `model_frame()`.
 #'
 #' @details
 #'
@@ -24,17 +25,17 @@
 #'
 #' x <- model.frame(Species ~ offset(Sepal.Width), iris)
 #'
-#' model_offset(x, terms(x))
+#' model_offset(terms(x), x)
 #'
 #' xx <- model.frame(Species ~ offset(Sepal.Width) + offset(Sepal.Length), iris)
 #'
-#' model_offset(xx, terms(xx))
+#' model_offset(terms(xx), xx)
 #'
 #' # Problematic columns are caught with intuitive errors
 #' tryCatch(
 #'   expr = {
 #'     x <- model.frame(~ offset(Species), iris)
-#'     model_offset(x, terms(x))
+#'     model_offset(terms(x), x)
 #'   },
 #'   error = function(e) {
 #'     print(e$message)
@@ -42,7 +43,7 @@
 #' )
 #'
 #' @export
-model_offset <- function (data, terms) {
+model_offset <- function (terms, data) {
 
   .offset_pos <- attr(terms, "offset")
 
@@ -93,9 +94,9 @@ remove_offsets <- function(frame) {
 
 }
 
-extract_offset <- function(data, terms) {
+extract_offset <- function(terms, data) {
 
-  .offset <- model_offset(data, terms)
+  .offset <- model_offset(terms, data)
 
   if (is.null(.offset)) {
     NULL
