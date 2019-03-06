@@ -14,6 +14,7 @@ NULL
 NULL
 
 # R 3.1 bug https://github.com/r-lib/vctrs/issues/114
+#' @importFrom vctrs vec_cast
 #' @importFrom vctrs vec_cast.character
 #' @importFrom vctrs vec_cast.data.frame
 #' @importFrom vctrs vec_cast.Date
