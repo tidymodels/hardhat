@@ -76,24 +76,6 @@ model_offset <- function (terms, data) {
   ans
 }
 
-# model.matrix() does this automatically, but
-# we have to do it separately here
-# TODO - remove this since we always run model.matrix()
-# on the RHS now?
-remove_offsets <- function(frame) {
-
-  .offset_pos <- attr(attr(frame, "terms"), "offset")
-
-  has_offset <- !is.null(.offset_pos)
-
-  if (has_offset) {
-    frame <- frame[, -.offset_pos, drop = FALSE]
-  }
-
-  frame
-
-}
-
 extract_offset <- function(terms, data) {
 
   .offset <- model_offset(terms, data)
