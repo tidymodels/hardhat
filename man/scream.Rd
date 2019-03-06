@@ -4,33 +4,35 @@
 \alias{scream}
 \title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
-scream(data, reference)
+scream(data, ptype)
 }
 \arguments{
 \item{data}{A data frame containing the new data to check the structure
 of.}
 
-\item{reference}{A data frame to cast \code{data} to.}
+\item{ptype}{A data frame prototype to cast \code{data} to. This is commonly
+a 0-row slice of the training set.}
 }
 \value{
 A tibble containing the required columns after any required structural
 modifications have been made.
 }
 \description{
-\code{scream()} ensures that the structure of \code{data} is the same as \code{reference}.
-Under the hood, \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} is used, which casts each column of
-\code{data} to the same type as the corresponding column in \code{reference}.
+\code{scream()} ensures that the structure of \code{data} is the same as
+prototype, \code{ptype}. Under the hood, \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} is used, which
+casts each column of \code{data} to the same type as the corresponding
+column in \code{ptype}.
 
 This casting enforces a number of important structural checks,
 including but not limited to:
 \itemize{
 \item \emph{Data Classes} - Checks that the class of each column in \code{data} is the
-same as the corresponding column in \code{reference}.
+same as the corresponding column in \code{ptype}.
 \item \emph{Novel Levels} - Checks that the factor columns in \code{data} don't have any
-\emph{new} levels when compared with the \code{reference} columns. If there are new
+\emph{new} levels when compared with the \code{ptype} columns. If there are new
 levels, a warning is issued and they are coerced to \code{NA}.
 \item \emph{Level Recovery} - Checks that the factor columns in \code{data} aren't
-missing any factor levels when compared with the \code{reference} columns. If
+missing any factor levels when compared with the \code{ptype} columns. If
 there are missing levels, then they are restored.
 }
 }
@@ -45,39 +47,63 @@ that all of the required column names actually exist in \code{data}. Those
 checks exist in \code{shrink()}.
 }
 \examples{
+# ---------------------------------------------------------------------------
+# Setup
+
 train <- iris[1:100,]
 test <- iris[101:150,]
+
+# ---------------------------------------------------------------------------
+# shrink() / scream()
 
 # mold() is run at model fit time
 # and a formula preprocessing engine is recorded
 x <- mold(log(Sepal.Width) ~ Species, train)
 
-# Inside the result of mold() are the reference tibbles
+# Inside the result of mold() are the prototype tibbles
 # for the predictors and the outcomes
-ref_pred <- x$engine$info$predictors
-ref_out <- x$engine$info$outcomes
+ptype_pred <- x$engine$info$predictors
+ptype_out <- x$engine$info$outcomes
 
-# Pass that engine to shrink(), along with new_data
-# to get a tibble of required predictors back
-test_shrunk <- shrink(test, x$engine)
+# Pass the test data, along with a prototype, to
+# shrink() to extract the prototype columns
+test_shrunk <- shrink(test, ptype_pred)
 
 # Now pass that to scream() to perform validation checks
-# Silence is key!
-scream(test_shrunk, ref_pred)
+# If no warnings / errors are thrown, the checks were
+# successful!
+scream(test_shrunk, ptype_pred)
 
-# If `outcomes = TRUE` is used with shrink(),
-# it should also be used with scream()
-test_outcome <- shrink(test, x$engine, outcomes = TRUE)
-scream(test_outcome, ref_out)
+# ---------------------------------------------------------------------------
+# Outcomes
 
-# scream() validates that the classes of `new_data`
-# are the same as the ones used in mold(). The below call
-# to scream() will fail with an informative error.
+# To also extract the outcomes, use the outcome prototype
+test_outcome <- shrink(test, ptype_out)
+scream(test_outcome, ptype_out)
+
+# ---------------------------------------------------------------------------
+# Casting
+
+# scream() uses vctrs::vec_cast() to intelligently convert
+# new data to the prototype automatically. This means
+# it can automatically perform certain conversions, like
+# coercing character columns to factors.
 test2 <- test
 test2$Species <- as.character(test2$Species)
 
-\dontrun{
-scream(test2, ref_pred)
-}
+test2_shrunk <- shrink(test2, ptype_pred)
+scream(test2_shrunk, ptype_pred)
+
+# It can also recover missing factor levels.
+# For example, it is plausible that the test data only had the
+# "virginica" level
+test3 <- test
+test3$Species <- factor(test3$Species, levels = "virginica")
+
+test3_shrunk <- shrink(test3, ptype_pred)
+test3_fixed <- scream(test3_shrunk, ptype_pred)
+
+# scream() recovered the missing levels
+levels(test3_fixed$Species)
 
 }

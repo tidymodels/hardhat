@@ -432,10 +432,16 @@ forge_formula_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  c(predictors, outcomes) %<-% shrink2(new_data, engine, outcomes)
-
+  predictors <- shrink(new_data, engine$info$predictors)
   predictors <- scream(predictors, engine$info$predictors)
-  outcomes <- scream(outcomes, engine$info$outcomes)
+
+  if (outcomes) {
+    outcomes <- shrink(new_data, engine$info$outcomes)
+    outcomes <- scream(outcomes, engine$info$outcomes)
+  }
+  else {
+    outcomes <- NULL
+  }
 
   out$forge$clean(engine, predictors, outcomes)
 }
