@@ -21,7 +21,6 @@ NULL
 #' @importFrom vctrs vec_cast.double
 #' @importFrom vctrs vec_cast.factor
 #' @importFrom vctrs vec_cast.integer
-#' @importFrom vctrs vec_cast.integer64
 #' @importFrom vctrs vec_cast.list
 #' @importFrom vctrs vec_cast.logical
 #' @importFrom vctrs vec_cast.POSIXct
