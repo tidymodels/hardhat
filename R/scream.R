@@ -2,22 +2,23 @@
 #'
 #' @description
 #'
-#' `scream()` performs a number of validation checks on `new_data`, and yells
-#' loudly if anything is wrong. `scream()` performs the following validation:
+#' `scream()` ensures that the structure of `data` is the same as `reference`.
+#' Under the hood, [vctrs::vec_cast()] is used, which casts each column of
+#' `data` to the same type as the corresponding column in `reference`.
 #'
-#' - `validate_new_data_classes()` - Checks that the class of each
-#' required predictor in `new_data` is the same as the class used
-#' during training.
+#' This casting enforces a number of important structural checks,
+#' including but not limited to:
 #'
-#' - `enforce_new_data_novel_levels()` - Checks that all `new_data` factor
-#' columns don't have any _new_ levels when compared with the original data
-#' used in training. If there are new levels, a warning is issued and
-#' if `drop_novel = TRUE` then they are coerced to `NA`.
+#' - _Data Classes_ - Checks that the class of each column in `data` is the
+#' same as the corresponding column in `reference`.
 #'
-#' - `enforce_new_data_level_recovery()` -  Checks that all `new_data` factor
-#' columns aren't missing any factor levels when compared with the original data
-#' used in training. If there are missing levels, then they are restored
-#' and a warning is issued.
+#' - _Novel Levels_ - Checks that the factor columns in `data` don't have any
+#' _new_ levels when compared with the `reference` columns. If there are new
+#' levels, a warning is issued and they are coerced to `NA`.
+#'
+#' - _Level Recovery_ - Checks that the factor columns in `data` aren't
+#' missing any factor levels when compared with the `reference` columns. If
+#' there are missing levels, then they are restored.
 #'
 #' @details
 #'
@@ -25,29 +26,20 @@
 #' actual processing is done. Generally, you don't need to call `scream()`
 #' directly, as `forge()` will do it for you.
 #'
-#' If `outcomes = TRUE`, then the validation steps are performed on the known
-#' outcome columns as well. If [mold()] was called with the XY interface,
-#' then no preprocessing was done to `y` and `outcomes` will have no effect
-#' (if a vector was passed as `y` during the fit, `scream()` has no
-#' way of knowing what column in `new_data` corresponds to the outcome).
-#'
 #' If `scream()` is used as a standalone function, it is good practice to call
 #' [shrink()] right before it as there are no checks in `scream()` that ensure
-#' that all of the required column names actually exist in `new_data`. Those
+#' that all of the required column names actually exist in `data`. Those
 #' checks exist in `shrink()`.
 #'
-#' @param new_data A data frame containing the new data to check the structure
-#' of. This should contain the predictors, and potentially the outcomes if
-#' `outcomes = TRUE`.
+#' @param data A data frame containing the new data to check the structure
+#' of.
 #'
-#' @param engine A preprocessing `engine` returned from a call to [mold()].
-#'
-#' @param outcomes A logical. Should the outcomes be checked as well?
+#' @param reference A data frame to cast `data` to.
 #'
 #' @return
 #'
-#' A tibble containing the required predictors (and potentially the
-#' outcomes) after any required structural modifications have been made.
+#' A tibble containing the required columns after any required structural
+#' modifications have been made.
 #'
 #' @examples
 #' train <- iris[1:100,]
@@ -57,18 +49,23 @@
 #' # and a formula preprocessing engine is recorded
 #' x <- mold(log(Sepal.Width) ~ Species, train)
 #'
+#' # Inside the result of mold() are the reference tibbles
+#' # for the predictors and the outcomes
+#' ref_pred <- x$engine$info$predictors
+#' ref_out <- x$engine$info$outcomes
+#'
 #' # Pass that engine to shrink(), along with new_data
 #' # to get a tibble of required predictors back
 #' test_shrunk <- shrink(test, x$engine)
 #'
 #' # Now pass that to scream() to perform validation checks
 #' # Silence is key!
-#' scream(test_shrunk, x$engine)
+#' scream(test_shrunk, ref_pred)
 #'
 #' # If `outcomes = TRUE` is used with shrink(),
 #' # it should also be used with scream()
 #' test_outcome <- shrink(test, x$engine, outcomes = TRUE)
-#' scream(test_outcome, x$engine, outcomes = TRUE)
+#' scream(test_outcome, ref_out)
 #'
 #' # scream() validates that the classes of `new_data`
 #' # are the same as the ones used in mold(). The below call
@@ -77,23 +74,32 @@
 #' test2$Species <- as.character(test2$Species)
 #'
 #' \dontrun{
-#' scream(test2, x$engine)
+#' scream(test2, ref_pred)
 #' }
 #'
 #' @export
-scream <- function(new_data, engine, outcomes = FALSE) {
+scream <- function(data, reference) {
 
-  new_data <- tibble::as_tibble(new_data)
-
-  original_predictor_classes <- get_data_classes(engine$info$predictors)
-  original_predictor_levels <- get_levels(engine$info$predictors)
-
-  if (outcomes) {
-
-    original_outcome_classes <- get_data_classes(engine$info$outcomes)
-    original_outcome_levels <- get_levels(engine$info$outcomes)
-
+  if (is.null(data)) {
+    return(NULL)
   }
 
-  new_data
+  data <- check_is_data_like(data, "data")
+
+  # can imagine this catching and rethrowing errors / warnings related to:
+  # - factor recovery
+  #   - silently recover missing levels
+  #   - novel levels dropped. warning only if its actually used in the data and the data becomes NA
+  # - ordered factor recovery
+  #   - order is always recovered
+  #   - same as factor otherwise
+  # - errors in casting individual columns to the reference type
+  #   - will silently do it if possible
+
+  # NOT caring about too many columns / missing columns, as that was taken care of by shrink
+  # and the vctrs behavior (adding NA columns) isn't great here
+
+  # TODO waiting on https://github.com/r-lib/vctrs/issues/225 thoughts
+
+  vctrs::vec_cast(data, reference)
 }

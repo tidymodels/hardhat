@@ -7,12 +7,6 @@
 shrink(new_data, engine, outcomes = FALSE)
 }
 \arguments{
-\item{new_data}{A data frame containing the new data to check the structure
-of. This should contain the predictors, and potentially the outcomes if
-\code{outcomes = TRUE}.}
-
-\item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
-
 \item{outcomes}{A logical. Should the outcomes be included in the shrunk
 \code{new_data} output as well?}
 }

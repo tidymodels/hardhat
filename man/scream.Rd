@@ -4,36 +4,34 @@
 \alias{scream}
 \title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
-scream(new_data, engine, outcomes = FALSE)
+scream(data, reference)
 }
 \arguments{
-\item{new_data}{A data frame containing the new data to check the structure
-of. This should contain the predictors, and potentially the outcomes if
-\code{outcomes = TRUE}.}
+\item{data}{A data frame containing the new data to check the structure
+of.}
 
-\item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
-
-\item{outcomes}{A logical. Should the outcomes be checked as well?}
+\item{reference}{A data frame to cast \code{data} to.}
 }
 \value{
-A tibble containing the required predictors (and potentially the
-outcomes) after any required structural modifications have been made.
+A tibble containing the required columns after any required structural
+modifications have been made.
 }
 \description{
-\code{scream()} performs a number of validation checks on \code{new_data}, and yells
-loudly if anything is wrong. \code{scream()} performs the following validation:
+\code{scream()} ensures that the structure of \code{data} is the same as \code{reference}.
+Under the hood, \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} is used, which casts each column of
+\code{data} to the same type as the corresponding column in \code{reference}.
+
+This casting enforces a number of important structural checks,
+including but not limited to:
 \itemize{
-\item \code{validate_new_data_classes()} - Checks that the class of each
-required predictor in \code{new_data} is the same as the class used
-during training.
-\item \code{enforce_new_data_novel_levels()} - Checks that all \code{new_data} factor
-columns don't have any \emph{new} levels when compared with the original data
-used in training. If there are new levels, a warning is issued and
-if \code{drop_novel = TRUE} then they are coerced to \code{NA}.
-\item \code{enforce_new_data_level_recovery()} -  Checks that all \code{new_data} factor
-columns aren't missing any factor levels when compared with the original data
-used in training. If there are missing levels, then they are restored
-and a warning is issued.
+\item \emph{Data Classes} - Checks that the class of each column in \code{data} is the
+same as the corresponding column in \code{reference}.
+\item \emph{Novel Levels} - Checks that the factor columns in \code{data} don't have any
+\emph{new} levels when compared with the \code{reference} columns. If there are new
+levels, a warning is issued and they are coerced to \code{NA}.
+\item \emph{Level Recovery} - Checks that the factor columns in \code{data} aren't
+missing any factor levels when compared with the \code{reference} columns. If
+there are missing levels, then they are restored.
 }
 }
 \details{
@@ -41,15 +39,9 @@ and a warning is issued.
 actual processing is done. Generally, you don't need to call \code{scream()}
 directly, as \code{forge()} will do it for you.
 
-If \code{outcomes = TRUE}, then the validation steps are performed on the known
-outcome columns as well. If \code{\link[=mold]{mold()}} was called with the XY interface,
-then no preprocessing was done to \code{y} and \code{outcomes} will have no effect
-(if a vector was passed as \code{y} during the fit, \code{scream()} has no
-way of knowing what column in \code{new_data} corresponds to the outcome).
-
 If \code{scream()} is used as a standalone function, it is good practice to call
 \code{\link[=shrink]{shrink()}} right before it as there are no checks in \code{scream()} that ensure
-that all of the required column names actually exist in \code{new_data}. Those
+that all of the required column names actually exist in \code{data}. Those
 checks exist in \code{shrink()}.
 }
 \examples{
@@ -60,18 +52,23 @@ test <- iris[101:150,]
 # and a formula preprocessing engine is recorded
 x <- mold(log(Sepal.Width) ~ Species, train)
 
+# Inside the result of mold() are the reference tibbles
+# for the predictors and the outcomes
+ref_pred <- x$engine$info$predictors
+ref_out <- x$engine$info$outcomes
+
 # Pass that engine to shrink(), along with new_data
 # to get a tibble of required predictors back
 test_shrunk <- shrink(test, x$engine)
 
 # Now pass that to scream() to perform validation checks
 # Silence is key!
-scream(test_shrunk, x$engine)
+scream(test_shrunk, ref_pred)
 
 # If `outcomes = TRUE` is used with shrink(),
 # it should also be used with scream()
 test_outcome <- shrink(test, x$engine, outcomes = TRUE)
-scream(test_outcome, x$engine, outcomes = TRUE)
+scream(test_outcome, ref_out)
 
 # scream() validates that the classes of `new_data`
 # are the same as the ones used in mold(). The below call
@@ -80,7 +77,7 @@ test2 <- test
 test2$Species <- as.character(test2$Species)
 
 \dontrun{
-scream(test2, x$engine)
+scream(test2, ref_pred)
 }
 
 }

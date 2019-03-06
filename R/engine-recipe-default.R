@@ -211,8 +211,8 @@ forge_recipe_default_clean <- function(engine, new_data, outcomes) {
 
   c(predictors, outcomes) %<-% shrink2(new_data, engine, outcomes)
 
-  predictors <- scream2(predictors, engine$info$predictors)
-  outcomes <- scream2(outcomes, engine$info$outcomes)
+  predictors <- scream(predictors, engine$info$predictors)
+  outcomes <- scream(outcomes, engine$info$outcomes)
 
   out$forge$clean(engine, predictors, outcomes)
 }
