@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract data classes from a data frame or matrix — get_data_classes • hardhat</title>
+<title>Ensure that <code>data</code> is univariate — validate_is_univariate • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,16 @@
 
 
 
-<meta property="og:title" content="Extract data classes from a data frame or matrix — get_data_classes" />
+<meta property="og:title" content="Ensure that <code>data</code> is univariate — validate_is_univariate" />
 
-<meta property="og:description" content="When predicting from a model, it is often important for the new_data to
-have the same classes as the original data used to fit the model.
-get_data_classes() extracts the classes from the original training data." />
+<meta property="og:description" content="validate - asserts the following:
+data must have 1 column. Atomic vectors are treated as 1 column matrices.
+" />
+
+<meta property="og:description" content="check - returns the following:
+ok A logical. Does the check pass?
+n_cols A single numeric. The actual number of columns.
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,93 +121,70 @@ get_data_classes() extracts the classes from the original training data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract data classes from a data frame or matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/classes.R'><code>R/classes.R</code></a></small>
-    <div class="hidden name"><code>get_data_classes.Rd</code></div>
+    <h1>Ensure that <code>data</code> is univariate</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/validation.R'><code>R/validation.R</code></a></small>
+    <div class="hidden name"><code>validate_is_univariate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>When predicting from a model, it is often important for the <code>new_data</code> to
-have the same classes as the original data used to fit the model.
-<code>get_data_classes()</code> extracts the classes from the original training data.</p>
+    <p>validate - asserts the following:</p><ul>
+<li><p><code>data</code> must have 1 column. Atomic vectors are treated as 1 column matrices.</p></li>
+</ul>
+
+    <p>check - returns the following:</p><ul>
+<li><p><code>ok</code> A logical. Does the check pass?</p></li>
+<li><p><code>n_cols</code> A single numeric. The actual number of columns.</p></li>
+</ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_data_classes</span>(<span class='no'>data</span>)</pre>
+    <pre class="usage"><span class='fu'>validate_is_univariate</span>(<span class='no'>data</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"data"</span>)
+
+<span class='fu'>check_is_univariate</span>(<span class='no'>data</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A data frame or matrix.</p></td>
+      <td><p>An object to check.</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>A name to be used in the default error message.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A named list. The names are the column names of <code>data</code> and the values are
-character vectors containing the class of that column.</p>
+    <p>The expected way to use this validation function is to supply it the
+<code>$outcomes</code> element of the result of a call to <code><a href='mold.html'>mold()</a></code>.</p>
+    
+    <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
+
+    
+    <p>hardhat provides validation functions at two levels.</p><ul>
+<li><p><code>check_*()</code>:  <em>check a condition, and return a list</em>. The list
+always contains at least one element, <code>ok</code>, a logical that specifies if the
+check passed. Each check also has check specific elements in the returned
+list that can be used to construct meaningful error messages.</p></li>
+<li><p><code>validate_*()</code>: <em>check a condition, and error if it does not pass</em>. These
+functions call their corresponding check function, and
+then provide a default error message. If you, as a developer, want a
+different error message, then call the <code>check_*()</code> function yourself,
+and provide your own validation function.</p></li>
+</ul>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other validation functions: <code><a href='validate_column_names.html'>validate_column_names</a></code>,
+  <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code>,
+  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>get_data_classes</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $Sepal.Length
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Sepal.Width
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Petal.Length
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Petal.Width
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $Species
-#&gt; [1] "factor"
-#&gt; </div><div class='input'>
-<span class='fu'>get_data_classes</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='no'>mtcars</span>))</div><div class='output co'>#&gt; $mpg
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $cyl
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $disp
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $hp
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $drat
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $wt
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $qsec
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $vs
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $am
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $gear
-#&gt; [1] "numeric"
-#&gt; 
-#&gt; $carb
-#&gt; [1] "numeric"
-#&gt; </div><div class='input'>
-<span class='co'># Unlike .MFclass(), the full class</span>
-<span class='co'># vector is returned</span>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>ordered</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)))
-
-<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/checkMFClasses'>.MFclass</a></span>(<span class='no'>data</span>$<span class='no'>col</span>)</div><div class='output co'>#&gt; [1] "ordered"</div><div class='input'>
-<span class='fu'>get_data_classes</span>(<span class='no'>data</span>)</div><div class='output co'>#&gt; $col
-#&gt; [1] "ordered" "factor" 
-#&gt; </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>validate_is_univariate</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>))</div><div class='input'><span class='fu'>validate_is_univariate</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `data` must be univariate, but 11 columns were found.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -210,7 +192,11 @@ character vectors containing the class of that column.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#validation">Validation</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

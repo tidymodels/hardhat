@@ -176,7 +176,7 @@ conventions this package tries to promote.</p>
     <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
 
     
-    <p>hardhat provides validation functions at three levels.</p><ul>
+    <p>hardhat provides validation functions at two levels.</p><ul>
 <li><p><code>check_*()</code>:  <em>check a condition, and return a list</em>. The list
 always contains at least one element, <code>ok</code>, a logical that specifies if the
 check passed. Each check also has check specific elements in the returned
@@ -186,16 +186,13 @@ functions call their corresponding check function, and
 then provide a default error message. If you, as a developer, want a
 different error message, then call the <code>check_*()</code> function yourself,
 and provide your own validation function.</p></li>
-<li><p><code>enforce_*()</code>: <em>check a condition, modify the input with a warning
-if the check fails, and return the modified input</em>. These functions are
-used when user input is incorrect in some non-critical way, and you can
-correct it automatically, with a warning.</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other validation functions: <code><a href='validate_new_data_column_names.html'>validate_new_data_column_names</a></code>,
-  <code><a href='validate_outcomes_is_univariate.html'>validate_outcomes_is_univariate</a></code></p></div>
+    <div class='dont-index'><p>Other validation functions: <code><a href='validate_column_names.html'>validate_column_names</a></code>,
+  <code><a href='validate_is_univariate.html'>validate_is_univariate</a></code>,
+  <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

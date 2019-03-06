@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add an intercept column to <code>x</code> — add_intercept_column • hardhat</title>
+<title>Add an intercept column to <code>data</code> — add_intercept_column • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Add an intercept column to <code>x</code> — add_intercept_column" />
+<meta property="og:title" content="Add an intercept column to <code>data</code> — add_intercept_column" />
 
-<meta property="og:description" content="This function adds an integer column of 1's to x." />
+<meta property="og:description" content="This function adds an integer column of 1's to data." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,24 +114,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add an intercept column to <code>x</code></h1>
+    <h1>Add an intercept column to <code>data</code></h1>
     <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/intercept.R'><code>R/intercept.R</code></a></small>
     <div class="hidden name"><code>add_intercept_column.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function adds an integer column of <code>1</code>'s to <code>x</code>.</p>
+    <p>This function adds an integer column of <code>1</code>'s to <code>data</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_intercept_column</span>(<span class='no'>x</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"(Intercept)"</span>)</pre>
+    <pre class="usage"><span class='fu'>add_intercept_column</span>(<span class='no'>data</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"(Intercept)"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
+      <th>data</th>
       <td><p>A data frame or matrix.</p></td>
     </tr>
     <tr>
@@ -143,7 +143,7 @@ which is the same name that <code><a href='https://www.rdocumentation.org/packag
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If a column named <code>name</code> already exists in <code>x</code>, then <code>x</code> is returned
+    <p>If a column named <code>name</code> already exists in <code>data</code>, then <code>data</code> is returned
 unchanged and a warning is issued.</p>
     
 

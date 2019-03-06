@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract factor levels from a data frame — get_levels • hardhat</title>
+<title>Ensure no duplicate terms appear in <code>formula</code> — validate_no_formula_duplication • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,17 @@
 
 
 
-<meta property="og:title" content="Extract factor levels from a data frame — get_levels" />
+<meta property="og:title" content="Ensure no duplicate terms appear in <code>formula</code> — validate_no_formula_duplication" />
 
-<meta property="og:description" content="get_levels() extracts the levels from any factor columns in data. It is
-mainly useful for extracting the original factor levels from the predictors
-in the training set. get_outcome_levels() is a small wrapper around
-get_levels() for extracting levels from a factor outcome
-that first calls standardize() on y." />
+<meta property="og:description" content="validate - asserts the following:
+formula must not have duplicates terms on the left and right hand
+side of the formula.
+" />
+
+<meta property="og:description" content="check - returns the following:
+ok A logical. Does the check pass?
+duplicates A character vector. The duplicate terms.
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,71 +122,99 @@ that first calls standardize() on y." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract factor levels from a data frame</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/levels.R'><code>R/levels.R</code></a></small>
-    <div class="hidden name"><code>get_levels.Rd</code></div>
+    <h1>Ensure no duplicate terms appear in <code>formula</code></h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/validation.R'><code>R/validation.R</code></a></small>
+    <div class="hidden name"><code>validate_no_formula_duplication.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>get_levels()</code> extracts the levels from any factor columns in <code>data</code>. It is
-mainly useful for extracting the original factor levels from the predictors
-in the training set. <code>get_outcome_levels()</code> is a small wrapper around
-<code>get_levels()</code> for extracting levels from a factor outcome
-that first calls <code><a href='standardize.html'>standardize()</a></code> on <code>y</code>.</p>
+    <p>validate - asserts the following:</p><ul>
+<li><p><code>formula</code> must not have duplicates terms on the left and right hand
+side of the formula.</p></li>
+</ul>
+
+    <p>check - returns the following:</p><ul>
+<li><p><code>ok</code> A logical. Does the check pass?</p></li>
+<li><p><code>duplicates</code> A character vector. The duplicate terms.</p></li>
+</ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_levels</span>(<span class='no'>data</span>)
+    <pre class="usage"><span class='fu'>validate_no_formula_duplication</span>(<span class='no'>formula</span>, <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>get_outcome_levels</span>(<span class='no'>y</span>)</pre>
+<span class='fu'>check_no_formula_duplication</span>(<span class='no'>formula</span>, <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>A data.frame to extract levels from.</p></td>
+      <th>formula</th>
+      <td><p>A formula to check.</p></td>
     </tr>
     <tr>
-      <th>y</th>
-      <td><p>The outcome. This can be:</p><ul>
-<li><p>A factor vector</p></li>
-<li><p>A numeric vector</p></li>
-<li><p>A 1D numeric array</p></li>
-<li><p>A numeric matrix with column names</p></li>
-<li><p>A 2D numeric array with column names</p></li>
-<li><p>A data frame with numeric or factor columns</p></li>
-</ul></td>
+      <th>original</th>
+      <td><p>A logical. Should the original names be checked, or should
+the names after processing be used? If <code>FALSE</code>, <code>y ~ log(y)</code> is allowed
+because the names are <code>"y"</code> and <code>"log(y)"</code>, if <code>TRUE</code>, <code>y ~ log(y)</code> is not
+allowed because the original names are both <code>"y"</code>.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
 
-    <p>A named list with as many elements as there are factor columns in <code>data</code>.
-The names are the names of the factor columns, and the values are character
-vectors of the levels.</p>
-<p>If there are no factor columns, <code>NULL</code> is returned.</p>
+    
+    <p>hardhat provides validation functions at two levels.</p><ul>
+<li><p><code>check_*()</code>:  <em>check a condition, and return a list</em>. The list
+always contains at least one element, <code>ok</code>, a logical that specifies if the
+check passed. Each check also has check specific elements in the returned
+list that can be used to construct meaningful error messages.</p></li>
+<li><p><code>validate_*()</code>: <em>check a condition, and error if it does not pass</em>. These
+functions call their corresponding check function, and
+then provide a default error message. If you, as a developer, want a
+different error message, then call the <code>check_*()</code> function yourself,
+and provide your own validation function.</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://www.rdocumentation.org/packages/stats/topics/checkMFClasses'>stats::.getXlevels()</a></code></p></div>
+    <div class='dont-index'><p>Other validation functions: <code><a href='validate_column_names.html'>validate_column_names</a></code>,
+  <code><a href='validate_is_univariate.html'>validate_is_univariate</a></code>,
+  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># Factor columns are returned with their levels</span>
-<span class='fu'>get_levels</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $Species
-#&gt; [1] "setosa"     "versicolor" "virginica" 
+    <pre class="examples"><div class='input'><span class='co'># All good</span>
+<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='no'>x</span>)</div><div class='output co'>#&gt; $ok
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $duplicates
+#&gt; character(0)
 #&gt; </div><div class='input'>
-<span class='co'># No factor columns</span>
-<span class='fu'>get_levels</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; NULL</div><div class='input'>
-<span class='co'># standardize() is first run on `y`</span>
-<span class='co'># which converts the input to a data frame</span>
-<span class='co'># with an automatically named column, `".outcome"`</span>
-<span class='fu'>get_outcome_levels</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>]))</div><div class='output co'>#&gt; $.outcome
-#&gt; [1] "a" "b" "c" "d" "e"
+<span class='co'># Not good!</span>
+<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='no'>y</span>)</div><div class='output co'>#&gt; $ok
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $duplicates
+#&gt; [1] "y"
 #&gt; </div><div class='input'>
+<span class='co'># This is generally okay</span>
+<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>))</div><div class='output co'>#&gt; $ok
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $duplicates
+#&gt; character(0)
+#&gt; </div><div class='input'>
+<span class='co'># But you can be more strict</span>
+<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>), <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $ok
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $duplicates
+#&gt; [1] "y"
+#&gt; </div><div class='input'>
+# This would throw an error
+</div><div class='input'><span class='fu'>validate_no_formula_duplication</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>) ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>))</div><div class='output co'>#&gt; <span class='error'>Error: The following terms are duplicated on the left and right hand side of the `formula`: 'log(y)'.</span></div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -190,7 +222,7 @@ vectors of the levels.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#validation">Validation</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

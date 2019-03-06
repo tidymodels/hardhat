@@ -275,8 +275,7 @@ of <code>new_data</code>.</p></li>
 
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>train_x</span>, <span class='no'>train_y</span>)
 
-<span class='co'># Can't do this!</span></div><div class='input'><span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test_x</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `new_data` is missing the following required columns:</span>
-#&gt; <span class='error'>'Species'.</span></div><div class='input'>
+<span class='co'># Can't do this!</span></div><div class='input'><span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test_x</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The following required columns are missing: 'Species'.</span></div><div class='input'>
 <span class='co'># Need to use the full test set, including `y`</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 1
@@ -323,10 +322,9 @@ of <code>new_data</code>.</p></li>
 <span class='no'>processed_vec</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>train_x</span>, <span class='no'>y_vec</span>)
 
 <span class='co'># This throws an informative error that tell you</span>
-<span class='co'># to include an `".outcome"` column in `new_data`.</span></div><div class='input'><span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>iris</span>, <span class='no'>processed_vec</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `new_data` is missing the following required columns:</span>
-#&gt; <span class='error'>'.outcome'</span>
+<span class='co'># to include an `".outcome"` column in `new_data`.</span></div><div class='input'><span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>iris</span>, <span class='no'>processed_vec</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The following required columns are missing: '.outcome'.</span>
 #&gt; <span class='error'></span>
-#&gt; <span class='error'>(This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name '.outcome' containing the outcome.)</span></div><div class='input'>
+#&gt; <span class='error'>(This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, '.outcome', containing the outcome.)</span></div><div class='input'>
 <span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>
 <span class='no'>test2</span>$<span class='no'>.outcome</span> <span class='kw'>&lt;-</span> <span class='no'>test2</span>$<span class='no'>Species</span>
 <span class='no'>test2</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='kw'>NULL</span>

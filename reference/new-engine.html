@@ -139,16 +139,16 @@ you should subclass <code>new_engine()</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>new_formula_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>new_formula_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())
 
-<span class='fu'>new_recipe_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='fu'>new_recipe_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())
 
-<span class='fu'>new_xy_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+<span class='fu'>new_xy_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
   <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())
 
-<span class='fu'>new_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+<span class='fu'>new_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
   <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -171,12 +171,12 @@ processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></td>
     </tr>
     <tr>
-      <th>info</th>
+      <th>ptypes</th>
       <td><p>Either <code>NULL</code>, or a named list with 2 elements, <code>predictors</code>
-and <code>outcomes</code>, both of which are 0 row tibbles. <code>info</code> is generated
+and <code>outcomes</code>, both of which are 0-row tibbles. <code>ptypes</code> is generated
 automatically at <code><a href='mold.html'>mold()</a></code> time and is used to validate <code>new_data</code> at
 prediction time. At <code><a href='mold.html'>mold()</a></code> time, the information found in
-<code>engine$mold$process()$info</code> is used to set <code>info</code> for the <code>engine</code>.</p></td>
+<code>engine$mold$process()$ptype</code> is used to set <code>ptypes</code> for the <code>engine</code>.</p></td>
     </tr>
     <tr>
       <th>formula</th>
@@ -241,17 +241,8 @@ data to be used in the model.</p><ul>
 <li><p><code>engine</code>: The engine, returned and potentially updated.</p></li>
 <li><p><code>predictors</code>: A tibble of predictors.</p></li>
 <li><p><code>outcomes</code>: A tibble of outcomes.</p></li>
-<li><p><code>info</code>: A named list with 2 elements, <code>predictors</code> and <code>outcomes</code>,
-where both elements are themselves named lists of the following
-3 elements:</p><ul>
-<li><p><code>names</code>: A character vector of names of the original
-predictors.</p></li>
-<li><p><code>classes</code>: A named list where the names are the original
-predictors, and the values are the classes of that predictor.</p></li>
-<li><p><code>levels</code>: A named list where the names are the original
-factor predictors, and the values are the levels of that
-factor predictor.</p></li>
-</ul></li>
+<li><p><code>ptypes</code>: A named list with 2 elements, <code>predictors</code> and <code>outcomes</code>,
+where both elements are 0-row tibbles.</p></li>
 <li><p><code>extras</code>: Varies based on the engine. If the engine has no
 extra information, <code>NULL</code>. Otherwise a named list of the
 extra elements returned by the engine.</p></li>

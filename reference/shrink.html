@@ -168,8 +168,8 @@ processing is done.</p>
 
 <span class='co'># Inside the result of mold() are the prototype tibbles</span>
 <span class='co'># for the predictors and the outcomes</span>
-<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>info</span>$<span class='no'>predictors</span>
-<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>info</span>$<span class='no'>outcomes</span>
+<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>ptypes</span>$<span class='no'>predictors</span>
+<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>ptypes</span>$<span class='no'>outcomes</span>
 
 <span class='co'># Pass the test data, along with a prototype, to</span>
 <span class='co'># shrink() to extract the prototype columns</span>
@@ -207,8 +207,7 @@ processing is done.</p>
 # required by `ptype` actually exist in the data
 # and errors nicely when they don't
 </div><div class='input'><span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/subset'>subset</a></span>(<span class='no'>test</span>, <span class='kw'>select</span> <span class='kw'>=</span> -<span class='no'>Species</span>)
-<span class='fu'>shrink</span>(<span class='no'>test2</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `new_data` is missing the following required columns:</span>
-#&gt; <span class='error'>'Species'.</span></div><div class='input'>
+<span class='fu'>shrink</span>(<span class='no'>test2</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The following required columns are missing: 'Species'.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -205,8 +205,8 @@ checks exist in <code><a href='shrink.html'>shrink()</a></code>.</p>
 
 <span class='co'># Inside the result of mold() are the prototype tibbles</span>
 <span class='co'># for the predictors and the outcomes</span>
-<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>info</span>$<span class='no'>predictors</span>
-<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>info</span>$<span class='no'>outcomes</span>
+<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>ptypes</span>$<span class='no'>predictors</span>
+<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>ptypes</span>$<span class='no'>outcomes</span>
 
 <span class='co'># Pass the test data, along with a prototype, to</span>
 <span class='co'># shrink() to extract the prototype columns</span>
