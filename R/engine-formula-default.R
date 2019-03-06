@@ -461,7 +461,6 @@ forge_formula_default_process_predictors <- function(engine, predictors) {
 
   terms <- engine$terms$predictors
   terms <- alter_terms_environment(terms)
-  terms <- delete_response(terms)
 
   framed <- model_frame(terms, predictors, get_levels(engine$info$predictors))
 
