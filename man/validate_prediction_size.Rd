@@ -42,7 +42,7 @@ conventions this package tries to promote.
 \section{Validation}{
 
 
-hardhat provides validation functions at three levels.
+hardhat provides validation functions at two levels.
 \itemize{
 \item \code{check_*()}:  \emph{check a condition, and return a list}. The list
 always contains at least one element, \code{ok}, a logical that specifies if the
@@ -53,10 +53,6 @@ functions call their corresponding check function, and
 then provide a default error message. If you, as a developer, want a
 different error message, then call the \code{check_*()} function yourself,
 and provide your own validation function.
-\item \code{enforce_*()}: \emph{check a condition, modify the input with a warning
-if the check fails, and return the modified input}. These functions are
-used when user input is incorrect in some non-critical way, and you can
-correct it automatically, with a warning.
 }
 }
 
