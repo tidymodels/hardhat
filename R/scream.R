@@ -14,7 +14,7 @@
 #' used in training. If there are new levels, a warning is issued and
 #' if `drop_novel = TRUE` then they are coerced to `NA`.
 #'
-#' - [enforce_new_data_level_recovery()] -  Checks that all `new_data` factor
+#' - `enforce_new_data_level_recovery()` -  Checks that all `new_data` factor
 #' columns aren't missing any factor levels when compared with the original data
 #' used in training. If there are missing levels, then they are restored
 #' and a warning is issued.
@@ -90,22 +90,12 @@ scream <- function(new_data, engine, outcomes = FALSE) {
 
   validate_new_data_classes(new_data, original_predictor_classes)
 
-  new_data <- enforce_new_data_level_recovery(
-    new_data = new_data,
-    original_levels = original_predictor_levels
-  )
-
   if (outcomes) {
 
     original_outcome_classes <- get_data_classes(engine$info$outcomes)
     original_outcome_levels <- get_levels(engine$info$outcomes)
 
     validate_new_data_classes(new_data, original_outcome_classes)
-
-    new_data <- enforce_new_data_level_recovery(
-      new_data = new_data,
-      original_levels = original_outcome_levels
-    )
 
   }
 

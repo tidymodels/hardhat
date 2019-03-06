@@ -30,7 +30,7 @@ during training.
 columns don't have any \emph{new} levels when compared with the original data
 used in training. If there are new levels, a warning is issued and
 if \code{drop_novel = TRUE} then they are coerced to \code{NA}.
-\item \code{\link[=enforce_new_data_level_recovery]{enforce_new_data_level_recovery()}} -  Checks that all \code{new_data} factor
+\item \code{enforce_new_data_level_recovery()} -  Checks that all \code{new_data} factor
 columns aren't missing any factor levels when compared with the original data
 used in training. If there are missing levels, then they are restored
 and a warning is issued.
