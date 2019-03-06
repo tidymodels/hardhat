@@ -1,11 +1,11 @@
-#' Add an intercept column to `x`
+#' Add an intercept column to `data`
 #'
-#' This function adds an integer column of `1`'s to `x`.
+#' This function adds an integer column of `1`'s to `data`.
 #'
-#' If a column named `name` already exists in `x`, then `x` is returned
+#' If a column named `name` already exists in `data`, then `data` is returned
 #' unchanged and a warning is issued.
 #'
-#' @param x A data frame or matrix.
+#' @param data A data frame or matrix.
 #' @param name The name for the intercept column. Defaults to `"(Intercept)"`,
 #' which is the same name that [stats::lm()] uses.
 #'
@@ -17,58 +17,58 @@
 #' add_intercept_column(as.matrix(mtcars))
 #'
 #' @export
-add_intercept_column <- function(x, name = "(Intercept)") {
+add_intercept_column <- function(data, name = "(Intercept)") {
 
-  ok <- is.data.frame(x) || is.matrix(x)
+  ok <- is.data.frame(data) || is.matrix(data)
 
   if (!ok) {
     glubort(
-      "`x` must be a data.frame or matrix to add an intercept column, ",
-      "not a '{class1(x)}'."
+      "`data` must be a data.frame or matrix to add an intercept column, ",
+      "not a '{class1(data)}'."
     )
   }
 
   validate_name(name)
 
-  if (name %in% colnames(x)) {
+  if (name %in% colnames(data)) {
 
     rlang::warn(glue::glue(
-      "`x` already has a column named '{name}'. ",
-      "Returning `x` unchanged."
+      "`data` already has a column named '{name}'. ",
+      "Returning `data` unchanged."
     ))
 
-    return(x)
+    return(data)
   }
 
-  if (is.matrix(x)) {
+  if (is.matrix(data)) {
 
     new_col <- matrix(
       data = 1L,
-      nrow = nrow(x),
+      nrow = nrow(data),
       dimnames = list(NULL, name)
     )
 
-    x <- cbind(new_col, x)
+    data <- cbind(new_col, data)
 
-    return(x)
+    return(data)
   }
 
-  if (is.data.frame(x)) {
+  if (is.data.frame(data)) {
 
-    x <- tibble::add_column(x, !!name := 1L, .before = 1L)
+    data <- tibble::add_column(data, !!name := 1L, .before = 1L)
 
-    return(x)
+    return(data)
   }
 
 }
 
-maybe_add_intercept_column <- function(x, intercept = FALSE) {
+maybe_add_intercept_column <- function(data, intercept = FALSE) {
 
   if (!intercept) {
-    return(x)
+    return(data)
   }
 
-  add_intercept_column(x)
+  add_intercept_column(data)
 }
 
 validate_name <- function(name) {

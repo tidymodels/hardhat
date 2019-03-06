@@ -2,21 +2,21 @@
 % Please edit documentation in R/intercept.R
 \name{add_intercept_column}
 \alias{add_intercept_column}
-\title{Add an intercept column to \code{x}}
+\title{Add an intercept column to \code{data}}
 \usage{
-add_intercept_column(x, name = "(Intercept)")
+add_intercept_column(data, name = "(Intercept)")
 }
 \arguments{
-\item{x}{A data frame or matrix.}
+\item{data}{A data frame or matrix.}
 
 \item{name}{The name for the intercept column. Defaults to \code{"(Intercept)"},
 which is the same name that \code{\link[stats:lm]{stats::lm()}} uses.}
 }
 \description{
-This function adds an integer column of \code{1}'s to \code{x}.
+This function adds an integer column of \code{1}'s to \code{data}.
 }
 \details{
-If a column named \code{name} already exists in \code{x}, then \code{x} is returned
+If a column named \code{name} already exists in \code{data}, then \code{data} is returned
 unchanged and a warning is issued.
 }
 \examples{
