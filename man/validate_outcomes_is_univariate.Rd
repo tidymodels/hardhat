@@ -5,17 +5,17 @@
 \alias{check_outcomes_is_univariate}
 \title{Ensure that the outcome is univariate}
 \usage{
-validate_outcomes_is_univariate(outcomes)
+validate_outcomes_is_univariate(data)
 
-check_outcomes_is_univariate(outcomes)
+check_outcomes_is_univariate(data)
 }
 \arguments{
-\item{outcomes}{Ideally, a data frame with 1 column.}
+\item{data}{Ideally, a data frame with 1 column.}
 }
 \description{
 validate - asserts the following:
 \itemize{
-\item \code{outcomes} must have 1 column.
+\item \code{data} must have 1 column.
 }
 
 check - returns the following:
