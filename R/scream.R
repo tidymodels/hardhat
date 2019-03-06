@@ -9,7 +9,7 @@
 #' required predictor in `new_data` is the same as the class used
 #' during training.
 #'
-#' - [enforce_new_data_novel_levels()] - Checks that all `new_data` factor
+#' - `enforce_new_data_novel_levels()` - Checks that all `new_data` factor
 #' columns don't have any _new_ levels when compared with the original data
 #' used in training. If there are new levels, a warning is issued and
 #' if `drop_novel = TRUE` then they are coerced to `NA`.
@@ -35,8 +35,6 @@
 #' [shrink()] right before it as there are no checks in `scream()` that ensure
 #' that all of the required column names actually exist in `new_data`. Those
 #' checks exist in `shrink()`.
-#'
-#' @inheritParams enforce_new_data_novel_levels
 #'
 #' @param new_data A data frame containing the new data to check the structure
 #' of. This should contain the predictors, and potentially the outcomes if
@@ -83,7 +81,7 @@
 #' }
 #'
 #' @export
-scream <- function(new_data, engine, outcomes = FALSE, drop_novel = TRUE) {
+scream <- function(new_data, engine, outcomes = FALSE) {
 
   new_data <- tibble::as_tibble(new_data)
 
@@ -91,12 +89,6 @@ scream <- function(new_data, engine, outcomes = FALSE, drop_novel = TRUE) {
   original_predictor_levels <- get_levels(engine$info$predictors)
 
   validate_new_data_classes(new_data, original_predictor_classes)
-
-  new_data <- enforce_new_data_novel_levels(
-    new_data = new_data,
-    original_levels = original_predictor_levels,
-    drop_novel = drop_novel
-  )
 
   new_data <- enforce_new_data_level_recovery(
     new_data = new_data,
@@ -109,12 +101,6 @@ scream <- function(new_data, engine, outcomes = FALSE, drop_novel = TRUE) {
     original_outcome_levels <- get_levels(engine$info$outcomes)
 
     validate_new_data_classes(new_data, original_outcome_classes)
-
-    new_data <- enforce_new_data_novel_levels(
-      new_data = new_data,
-      original_levels = original_outcome_levels,
-      drop_novel = drop_novel
-    )
 
     new_data <- enforce_new_data_level_recovery(
       new_data = new_data,

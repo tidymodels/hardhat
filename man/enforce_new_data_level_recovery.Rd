@@ -20,7 +20,7 @@ new factor to have the original levels, with a warning.
 }
 \details{
 If this function is used in your package, it is a good idea to call
-\code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}} first, as that will take care of any \emph{new}
+\code{enforce_new_data_novel_levels()} first, as that will take care of any \emph{new}
 levels if \code{drop_novel = TRUE}. This will ensure that \code{new_data} factor
 columns can only have either exactly the right levels, or a subset of
 the correct levels.
@@ -108,8 +108,5 @@ df2_recovered <- enforce_new_data_level_recovery(df2, get_levels(df1))
 # order of the original levels takes priority
 df2_recovered$x
 
-}
-\seealso{
-Other enforce functions: \code{\link{enforce_new_data_novel_levels}}
 }
 \concept{enforce functions}

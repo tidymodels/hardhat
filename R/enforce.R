@@ -5,7 +5,7 @@
 #' new factor to have the original levels, with a warning.
 #'
 #' If this function is used in your package, it is a good idea to call
-#' [enforce_new_data_novel_levels()] first, as that will take care of any _new_
+#' `enforce_new_data_novel_levels()` first, as that will take care of any _new_
 #' levels if `drop_novel = TRUE`. This will ensure that `new_data` factor
 #' columns can only have either exactly the right levels, or a subset of
 #' the correct levels.
@@ -153,123 +153,6 @@ enforce_new_data_level_recovery <- function(new_data, original_levels) {
         levels = old_levels,
         ordered = is.ordered(new_nominal)
       )
-
-    }
-
-  }
-
-  new_data
-}
-
-# ------------------------------------------------------------------------------
-
-#' Check for new factor levels
-#'
-#' A factor column of `new_data` might have _new_ factor levels when compared
-#' to the original levels used in training. These new levels are undefined, and
-#' are caught when preprocessing the `new_data` and converted to `NA` with
-#' a warning.
-#'
-#' @inheritParams enforce_new_data_level_recovery
-#'
-#' @param drop_novel A logical. Should novel levels be dropped? If `TRUE`, a
-#' warning is thrown if novel levels are detected and they are coerced to `NA`.
-#' If `FALSE`, a warning is still thrown for new levels, but they are
-#' left unchanged.
-#'
-#' @template section-validation
-#'
-#' @examples
-#'
-#' # ---------------------------------------------------------------------------
-#' # Setup
-#'
-#' iris <- tibble::as_tibble(iris)
-#' train <- iris[1:75,]
-#' test <- iris[76:150,]
-#'
-#' # ---------------------------------------------------------------------------
-#' # Use with get_levels()
-#'
-#' # If rolling your package, get_levels() can be useful alongside this check
-#' original_levels <- get_levels(train)
-#'
-#' # All good!
-#' enforce_new_data_novel_levels(test, original_levels)
-#'
-#' # New level! Coerced to NA
-#' bad_test <- test
-#'
-#' bad_test$Species <- factor(
-#'   gsub("versicolor", "new_level", bad_test$Species),
-#'   levels = c("new_level", levels(test$Species))
-#' )
-#'
-#' levels(bad_test$Species)
-#'
-#' # 'new_level' is forced to NA
-#' enforce_new_data_novel_levels(bad_test, original_levels)
-#'
-#' # Warn about 'new_level' but don't force it to NA
-#' enforce_new_data_novel_levels(bad_test, original_levels, drop_novel = FALSE)
-#'
-#' @family enforce functions
-#' @export
-enforce_new_data_novel_levels <- function(new_data, original_levels,
-                                          drop_novel = TRUE) {
-
-  new_data <- check_is_data_like(new_data)
-  validate_levels_list(original_levels, "original_levels")
-  validate_is_bool(drop_novel, "drop_novel")
-
-  required_column_names <- names(original_levels)
-
-  for(required_column_name in required_column_names) {
-
-    new_nominal <- new_data[[required_column_name]]
-
-    # Missing or non-factor
-    if (!is.factor(new_nominal)) {
-      next()
-    }
-
-    new_levels <- levels(new_nominal)
-    old_levels <- original_levels[[required_column_name]]
-
-    unseen_levels <- setdiff(new_levels, old_levels)
-
-    if (length(unseen_levels) > 0) {
-
-      if (drop_novel) {
-
-        na_coerce <- ", and have been coerced to `NA` "
-
-        # In this order so ordered factors are correct
-        # Order is determined by `new_levels`, which is
-        # what we want in this check
-        seen_lvls <- intersect(new_levels, old_levels)
-
-        new_data[[required_column_name]] <- factor(
-          x = new_nominal,
-          levels = seen_lvls,
-          ordered = is.ordered(new_nominal)
-        )
-
-      }
-      else{
-
-        na_coerce <- ""
-
-      }
-
-      unseen_levels <- glue_quote_collapse(unseen_levels)
-
-      rlang::warn(glue(
-        "The following factor levels are new ",
-        "for column, `{required_column_name}`",
-        na_coerce,
-        ": {unseen_levels}."
-      ))
 
     }
 

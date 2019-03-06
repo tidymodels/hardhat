@@ -4,7 +4,7 @@
 \alias{scream}
 \title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
-scream(new_data, engine, outcomes = FALSE, drop_novel = TRUE)
+scream(new_data, engine, outcomes = FALSE)
 }
 \arguments{
 \item{new_data}{A data frame containing the new data to check the structure
@@ -14,11 +14,6 @@ of. This should contain the predictors, and potentially the outcomes if
 \item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
 
 \item{outcomes}{A logical. Should the outcomes be checked as well?}
-
-\item{drop_novel}{A logical. Should novel levels be dropped? If \code{TRUE}, a
-warning is thrown if novel levels are detected and they are coerced to \code{NA}.
-If \code{FALSE}, a warning is still thrown for new levels, but they are
-left unchanged.}
 }
 \value{
 A tibble containing the required predictors (and potentially the
@@ -31,7 +26,7 @@ loudly if anything is wrong. \code{scream()} performs the following validation:
 \item \code{\link[=validate_new_data_classes]{validate_new_data_classes()}} - Checks that the class of each
 required predictor in \code{new_data} is the same as the class used
 during training.
-\item \code{\link[=enforce_new_data_novel_levels]{enforce_new_data_novel_levels()}} - Checks that all \code{new_data} factor
+\item \code{enforce_new_data_novel_levels()} - Checks that all \code{new_data} factor
 columns don't have any \emph{new} levels when compared with the original data
 used in training. If there are new levels, a warning is issued and
 if \code{drop_novel = TRUE} then they are coerced to \code{NA}.
