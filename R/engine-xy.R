@@ -126,25 +126,27 @@ get_default_forge_clean <- function() {
 
 validate_forge_args <- function(forge) {
 
-  required_args <- c("engine", "new_data", "outcomes")
+  required_clean_args <- c("engine", "new_data", "outcomes")
 
   actual_clean_args <- rlang::fn_fmls_names(forge$clean)
 
-  if (!identical(actual_clean_args, required_args)) {
-    required_args <- glue_quote_collapse(required_args)
+  if (!identical(actual_clean_args, required_clean_args)) {
+    required_clean_args <- glue_quote_collapse(required_clean_args)
 
     glubort(
-      "`forge$clean()` must have the following arguments: {required_args}."
+      "`forge$clean()` must have the following arguments: {required_clean_args}."
     )
   }
 
+  required_process_args <- c("engine", "predictors", "outcomes")
+
   actual_process_args <- rlang::fn_fmls_names(forge$process)
 
-  if (!identical(required_args, actual_process_args)) {
-    required_args <- glue_quote_collapse(required_args)
+  if (!identical(required_process_args, actual_process_args)) {
+    required_process_args <- glue_quote_collapse(required_process_args)
 
     glubort(
-      "`forge$process()` must have the following arguments: {required_args}."
+      "`forge$process()` must have the following arguments: {required_process_args}."
     )
   }
 

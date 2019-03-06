@@ -432,22 +432,23 @@ forge_formula_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  new_data <- shrink(new_data, engine, outcomes)
-  new_data <- scream(new_data, engine, outcomes)
+  c(predictors, outcomes) %<-% shrink2(new_data, engine, outcomes)
 
-  out$forge$clean(engine, new_data)
+  predictors <- scream2(predictors, engine$info$predictors)
+  outcomes <- scream2(outcomes, engine$info$outcomes)
+
+  out$forge$clean(engine, predictors, outcomes)
 }
 
-forge_formula_default_process <- function(engine, new_data, outcomes) {
+forge_formula_default_process <- function(engine, predictors, outcomes) {
 
   c(engine, predictors_lst) %<-% forge_formula_default_process_predictors(
     engine = engine,
-    new_data = new_data
+    predictors = predictors
   )
 
   c(engine, outcomes_lst) %<-% forge_formula_default_process_outcomes(
     engine = engine,
-    new_data = new_data,
     outcomes = outcomes
   )
 
@@ -456,13 +457,13 @@ forge_formula_default_process <- function(engine, new_data, outcomes) {
   out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
 }
 
-forge_formula_default_process_predictors <- function(engine, new_data) {
+forge_formula_default_process_predictors <- function(engine, predictors) {
 
   terms <- engine$terms$predictors
   terms <- alter_terms_environment(terms)
   terms <- delete_response(terms)
 
-  framed <- model_frame(terms, new_data, get_levels(engine$info$predictors))
+  framed <- model_frame(terms, predictors, get_levels(engine$info$predictors))
 
   data <- model_matrix(
     terms = framed$terms,
@@ -471,7 +472,7 @@ forge_formula_default_process_predictors <- function(engine, new_data) {
 
   if (!engine$indicators) {
     factor_names <- extract_original_factor_names(engine$info$predictors)
-    data <- reattach_factor_columns(data, new_data, factor_names)
+    data <- reattach_factor_columns(data, predictors, factor_names)
   }
 
   .offset <- extract_offset(framed$data, framed$terms)
@@ -484,10 +485,10 @@ forge_formula_default_process_predictors <- function(engine, new_data) {
   out$forge$process_terms(engine, predictors_lst)
 }
 
-forge_formula_default_process_outcomes <- function(engine, new_data, outcomes) {
+forge_formula_default_process_outcomes <- function(engine, outcomes) {
 
-  # don't process and return outcomes
-  if (!outcomes) {
+  # no outcomes to process
+  if (is.null(outcomes)) {
     outcomes_lst <- out$forge$process_terms_lst()
     result <- out$forge$process_terms(engine, outcomes_lst)
     return(result)
@@ -496,7 +497,7 @@ forge_formula_default_process_outcomes <- function(engine, new_data, outcomes) {
   terms <- engine$terms$outcomes
   terms <- alter_terms_environment(terms)
 
-  framed <- model_frame(terms, new_data, get_levels(engine$info$outcomes))
+  framed <- model_frame(terms, outcomes, get_levels(engine$info$outcomes))
 
   # Because model.matrix() does this for the RHS and we want
   # to be consistent even though we are only going through

@@ -129,7 +129,7 @@ test_that("novel predictor levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$engine),
-    "The following factor levels"
+    "Lossy cast"
   )
 
   expect_equal(
@@ -158,7 +158,7 @@ test_that("novel outcome levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$engine, outcomes = TRUE),
-    "The following factor levels"
+    "Lossy cast"
   )
 
   expect_equal(
@@ -191,25 +191,31 @@ test_that("new data classes are caught", {
 
   x <- mold(iris[, "Species", drop = FALSE], iris$Sepal.Length)
 
+  # Silent recovery
   expect_error(
-    forge(iris2, x$engine),
-    "`Species`: `character` should be `factor`"
+    x_iris2 <- forge(iris2, x$engine),
+    NA
+  )
+
+  expect_is(
+    x_iris2$predictors$Species,
+    "factor"
   )
 
   xx <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-
-  expect_error(
-    forge(iris2, xx$engine),
-    NA
-  )
 
   iris3 <- iris2
   iris3$.outcome <- iris2$Species
   iris3$Species <- NULL
 
   expect_error(
-    forge(iris3, xx$engine, outcomes = TRUE),
-    "`.outcome`: `character` should be `factor`."
+    xx_iris3 <- forge(iris3, xx$engine, outcomes = TRUE),
+    NA
+  )
+
+  expect_is(
+    xx_iris3$outcomes$.outcome,
+    "factor"
   )
 
 })

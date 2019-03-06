@@ -209,28 +209,42 @@ forge_recipe_default_clean <- function(engine, new_data, outcomes) {
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  new_data <- shrink(new_data, engine, outcomes)
-  new_data <- scream(new_data, engine, outcomes)
+  c(predictors, outcomes) %<-% shrink2(new_data, engine, outcomes)
 
-  out$forge$clean(engine, new_data)
+  predictors <- scream2(predictors, engine$info$predictors)
+  outcomes <- scream2(outcomes, engine$info$outcomes)
+
+  out$forge$clean(engine, predictors, outcomes)
 }
 
-forge_recipe_default_process <- function(engine, new_data, outcomes) {
+forge_recipe_default_process <- function(engine, predictors, outcomes) {
 
-  # Can't move this inside core functions, would be double baking
-  new_data <- recipes::bake(
-    object = engine$recipe,
-    new_data = new_data
+  rec <- engine$recipe
+  roles <- rec$term_info$role
+  vars <- rec$term_info$variable
+
+  # Can't move this inside core functions
+  # predictors and outcomes both must be present
+  baked_data <- recipes::bake(
+    object = rec,
+    new_data = vctrs::vec_cbind(predictors, outcomes)
   )
+
+  processed_predictor_names <- vars[roles == "predictor"]
+  predictors <- baked_data[, processed_predictor_names, drop = FALSE]
+
+  if (!is.null(outcomes)) {
+    processed_outcome_names <- vars[roles == "outcome"]
+    outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
+  }
 
   c(engine, predictors_lst) %<-% forge_recipe_default_process_predictors(
     engine = engine,
-    new_data = new_data
+    predictors = predictors
   )
 
   c(engine, outcomes_lst) %<-% forge_recipe_default_process_outcomes(
     engine = engine,
-    new_data = new_data,
     outcomes = outcomes
   )
 
@@ -239,37 +253,25 @@ forge_recipe_default_process <- function(engine, new_data, outcomes) {
   out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
 }
 
-forge_recipe_default_process_predictors <- function(engine, new_data) {
+forge_recipe_default_process_predictors <- function(engine, predictors) {
 
-  recipe <- engine$recipe
-  roles <- recipe$term_info$role
-  processed_names <- recipe$term_info$variable[roles == "predictor"]
+  predictors <- maybe_add_intercept_column(predictors, engine$intercept)
 
-  data <- new_data[, processed_names, drop = FALSE]
-
-  data <- maybe_add_intercept_column(data, engine$intercept)
-
-  predictors_lst <- out$forge$process_terms_lst(data = data)
+  predictors_lst <- out$forge$process_terms_lst(data = predictors)
 
   out$forge$process_terms(engine, predictors_lst)
 }
 
-forge_recipe_default_process_outcomes <- function(engine, new_data, outcomes) {
+forge_recipe_default_process_outcomes <- function(engine, outcomes) {
 
-  # don't process and return outcomes
-  if (!outcomes) {
+  # no outcomes to process
+  if (is.null(outcomes)) {
     outcomes_lst <- out$forge$process_terms_lst()
     result <- out$forge$process_terms(engine, outcomes_lst)
     return(result)
   }
 
-  recipe <- engine$recipe
-  roles <- recipe$term_info$role
-  processed_names <- recipe$term_info$variable[roles == "outcome"]
-
-  data <- new_data[, processed_names, drop = FALSE]
-
-  outcomes_lst <- out$forge$process_terms_lst(data = data)
+  outcomes_lst <- out$forge$process_terms_lst(data = outcomes)
 
   out$forge$process_terms(engine, outcomes_lst)
 }
