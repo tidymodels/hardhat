@@ -25,7 +25,6 @@ NULL
 #' @importFrom vctrs vec_cast.logical
 #' @importFrom vctrs vec_cast.POSIXct
 #' @importFrom vctrs vec_cast.POSIXlt
-#' @importFrom vctrs vec_cast.raw
 #' @importFrom vctrs vec_cast.vctrs_list_of
 NULL
 
