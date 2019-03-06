@@ -20,7 +20,7 @@ test_that("existing intercepts are skipped with a warning", {
 
   expect_warning(
     xx <- add_intercept_column(x),
-    "`x` already has a column named"
+    "`data` already has a column named"
   )
 
   expect_equal(
