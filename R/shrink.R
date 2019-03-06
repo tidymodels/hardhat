@@ -63,7 +63,7 @@ shrink <- function(data, ptype) {
   data <- check_is_data_like(data)
 
   cols <- colnames(ptype)
-  validate_new_data_column_names(data, cols)
+  validate_column_names(data, cols)
 
   out <- data[, cols, drop = FALSE]
 

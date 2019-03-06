@@ -57,13 +57,13 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   # standard message
   expect_error(
     forge(iris, x$engine, outcomes = TRUE),
-    "`new_data` is missing the following required columns"
+    "The following required columns"
   )
 
   # but also more detail
   expect_error(
     forge(iris, x$engine, outcomes = TRUE),
-    "`new_data` must include a column with the automatically generated name '.outcome'"
+    "`new_data` must include a column with the automatically generated name, '.outcome'"
   )
 
 })

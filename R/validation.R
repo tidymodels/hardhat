@@ -66,13 +66,13 @@ check_is_univariate <- function(data) {
 
 # ------------------------------------------------------------------------------
 
-#' Ensure that `new_data` contains required column names
+#' Ensure that `data` contains required column names
 #'
 #' @description
 #'
 #' validate - asserts the following:
 #'
-#' - The column names of `new_data` must contain all `original_names`.
+#' - The column names of `data` must contain all `original_names`.
 #'
 #' check - returns the following:
 #'
@@ -86,20 +86,18 @@ check_is_univariate <- function(data) {
 #' only happens in the case where [mold()] is called using the xy-method, and
 #' a _vector_ `y` value is supplied rather than a data frame or matrix. In that
 #' case, `y` is coerced to a data frame, and the automatic name `".outcome"` is
-#' added, and this is what is looked for in [forge()]. If this happens and the
+#' added, and this is what is looked for in [forge()]. If this happens, and the
 #' user tries to request outcomes using `forge(..., outcomes = TRUE)` but
-#' their `new_data` does not contain the required `".outcome"` column, a special
-#' error is thrown telling them what to do. See the examples!
+#' the supplied `new_data` does not contain the required `".outcome"` column,
+#' a special error is thrown telling them what to do. See the examples!
 #'
-#' @param new_data A data frame of new predictors and possibly outcomes.
+#' @param data A data frame to check.
 #'
-#' @param original_names A character vector. The original column names used
-#' in training.
+#' @param original_names A character vector. The original column names.
 #'
 #' @template section-validation
 #'
 #' @examples
-#'
 #' # ---------------------------------------------------------------------------
 #'
 #' original_names <- colnames(mtcars)
@@ -108,14 +106,14 @@ check_is_univariate <- function(data) {
 #' bad_test <- test[, -c(3, 4)]
 #'
 #' # All good
-#' check_new_data_column_names(test, original_names)
+#' check_column_names(test, original_names)
 #'
 #' # Missing 2 columns
-#' check_new_data_column_names(bad_test, original_names)
+#' check_column_names(bad_test, original_names)
 #'
 #' \dontrun{
 #' # Will error
-#' validate_new_data_column_names(bad_test, original_names)
+#' validate_column_names(bad_test, original_names)
 #' }
 #'
 #' # ---------------------------------------------------------------------------
@@ -150,9 +148,11 @@ check_is_univariate <- function(data) {
 #'
 #' @family validation functions
 #' @export
-validate_new_data_column_names <- function(new_data, original_names) {
+validate_column_names <- function(data, original_names) {
 
-  check <- check_new_data_column_names(new_data, original_names)
+  data <- check_is_data_like(data)
+
+  check <- check_column_names(data, original_names)
 
   if (!check$ok) {
 
@@ -161,26 +161,23 @@ validate_new_data_column_names <- function(new_data, original_names) {
     missing_names <- glue_quote_collapse(check$missing_names)
 
     glubort(
-      "`new_data` is missing the following required columns:
-      {missing_names}."
+      "The following required columns are missing: {missing_names}."
     )
 
   }
 
-  invisible(new_data)
+  invisible(data)
 }
 
-#' @rdname validate_new_data_column_names
+#' @rdname validate_column_names
 #' @export
-check_new_data_column_names <- function(new_data, original_names) {
-
-  new_data <- check_is_data_like(new_data)
+check_column_names <- function(data, original_names) {
 
   if (!is.character(original_names)) {
     glubort("`original_names` must be a character vector.")
   }
 
-  new_names <- colnames(new_data)
+  new_names <- colnames(data)
 
   has_names <- original_names %in% new_names
 
@@ -205,13 +202,12 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
     missing_names <- glue_quote_collapse(missing_names)
 
     glubort(
-      "`new_data` is missing the following required columns:
-      {missing_names}
+      "The following required columns are missing: {missing_names}.
 
       (This indicates that `mold()` was called with a vector for `y`. ",
       "When this is the case, and the outcome columns are requested ",
       "in `forge()`, `new_data` must include a column with the automatically ",
-      "generated name '.outcome' containing the outcome.)"
+      "generated name, '.outcome', containing the outcome.)"
     )
 
   }

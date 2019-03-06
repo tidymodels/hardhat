@@ -83,7 +83,7 @@ test_that("asking for the outcome when it isn't there fails", {
 
   expect_error(
     forge(iris2, x$engine, outcomes = TRUE),
-    "`new_data` is missing the following"
+    "The following required columns"
   )
 })
 
