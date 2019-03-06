@@ -4,16 +4,16 @@
 \alias{extract_ptype}
 \title{Extract a prototype}
 \usage{
-extract_ptype(x)
+extract_ptype(data)
 }
 \arguments{
-\item{x}{A data frame or matrix.}
+\item{data}{A data frame or matrix.}
 }
 \value{
-A 0 row slice of \code{x} after converting it to a tibble.
+A 0 row slice of \code{data} after converting it to a tibble.
 }
 \description{
-\code{extract_ptype()} extracts a tibble with 0 rows from \code{x}. This contains
+\code{extract_ptype()} extracts a tibble with 0 rows from \code{data}. This contains
 all of the required information about column names, classes, and factor
 levels that are required to check the structure of new data at prediction
 time.
