@@ -147,8 +147,28 @@
 <a class="sourceLine" id="cb5-5" data-line-number="5">iris_test_bad<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(iris_test_bad<span class="op">$</span>Species)</a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test_bad, processed<span class="op">$</span>engine)</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; Error: Some columns in `new_data` have an incorrect class:</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; `Species`: `character` should be `factor`.</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; $predictors</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; # A tibble: 50 x 4</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;    Speciessetosa Speciesversicolor Speciesvirginica Petal.Width</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;            &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;       &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  1             0                 0                1         2.5</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  2             0                 0                1         1.9</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  3             0                 0                1         2.1</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  4             0                 0                1         1.8</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;  5             0                 0                1         2.2</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;  6             0                 0                1         2.1</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt;  7             0                 0                1         1.7</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt;  8             0                 0                1         1.8</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt;  9             0                 0                1         1.8</span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; 10             0                 0                1         2.5</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; # … with 40 more rows</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; $outcomes</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt; $extras</span></a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt; $extras$offset</span></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt; NULL</span></a></code></pre></div>
 <p>And each predictor column has to exist in <code>new_data</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># Removing species alltogether</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">iris_test_bad<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
@@ -166,8 +186,8 @@
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; [1] "new_level"  "setosa"     "versicolor" "virginica"</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb7-9" data-line-number="9">processed_bad_test &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test_bad, processed<span class="op">$</span>engine)</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Warning: The following factor levels are new for column, `Species`, and</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; have been coerced to `NA` : 'new_level'.</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Warning: Lossy cast from &lt;factor&lt;f0194&gt;&gt; to &lt;factor&lt;12d60&gt;&gt;</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; Locations: 1</span></a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"></a>
 <a class="sourceLine" id="cb7-13" data-line-number="13">processed_bad_test<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; # A tibble: 150 x 4</span></a>

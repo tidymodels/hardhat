@@ -32,11 +32,10 @@
 
 <meta property="og:title" content="Extract class and type information — extract_info" />
 
-<meta property="og:description" content="extract_info() extracts the following pieces of information from x:
-names: Using colnames().
-classes: Use get_data_classes().
-levels: Using get_levels().
-" />
+<meta property="og:description" content="extract_info() extracts a tibble with 0 rows from x. This contains
+all of the required information about column names, classes, and factor
+levels that are required to check the structure of new data at prediction
+time." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -125,11 +124,10 @@ levels: Using get_levels().
 
     <div class="ref-description">
     
-    <p><code>extract_info()</code> extracts the following pieces of information from <code>x</code>:</p><ul>
-<li><p><code>names</code>: Using <code><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames()</a></code>.</p></li>
-<li><p><code>classes</code>: Use <code><a href='get_data_classes.html'>get_data_classes()</a></code>.</p></li>
-<li><p><code>levels</code>: Using <code><a href='get_levels.html'>get_levels()</a></code>.</p></li>
-</ul>
+    <p><code>extract_info()</code> extracts a tibble with 0 rows from <code>x</code>. This contains
+all of the required information about column names, classes, and factor
+levels that are required to check the structure of new data at prediction
+time.</p>
     
     </div>
 
@@ -146,27 +144,20 @@ levels: Using get_levels().
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list with 3 elements: <code>names</code>, <code>classes</code>, and <code>levels</code>.</p>
+    <p>A 0 row slice of <code>x</code> after converting it to a tibble.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>extract_info()</code> is useful when creating new preprocessing <code>engine</code>. It
+    <p><code>extract_info()</code> is useful when creating a new preprocessing <code>engine</code>. It
 extracts the required information that will be used by the validation checks
 at prediction time.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='kw pkg'>hardhat</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/hardhat/topics/extract_info'>extract_info</a></span>(<span class='no'>iris</span>))</div><div class='output co'>#&gt; List of 3
-#&gt;  $ names  : chr [1:5] "Sepal.Length" "Sepal.Width" "Petal.Length" "Petal.Width" ...
-#&gt;  $ classes:List of 5
-#&gt;   ..$ Sepal.Length: chr "numeric"
-#&gt;   ..$ Sepal.Width : chr "numeric"
-#&gt;   ..$ Petal.Length: chr "numeric"
-#&gt;   ..$ Petal.Width : chr "numeric"
-#&gt;   ..$ Species     : chr "factor"
-#&gt;  $ levels :List of 1
-#&gt;   ..$ Species: chr [1:3] "setosa" "versicolor" "virginica"</div><div class='input'>
+<span class='kw pkg'>hardhat</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/hardhat/topics/extract_info'>extract_info</a></span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; # A tibble: 0 x 5
+#&gt; # … with 5 variables: Sepal.Length &lt;dbl&gt;, Sepal.Width &lt;dbl&gt;,
+#&gt; #   Petal.Length &lt;dbl&gt;, Petal.Width &lt;dbl&gt;, Species &lt;fct&gt;</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

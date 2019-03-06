@@ -173,10 +173,10 @@ in the <code>mold</code> and <code>forge</code> function list.</p></td>
     <tr>
       <th>info</th>
       <td><p>Either <code>NULL</code>, or a named list with 2 elements, <code>predictors</code>
-and <code>outcomes</code>. <code>info</code> is generated automatically at <code><a href='mold.html'>mold()</a></code> time and
-is used to validate <code>new_data</code> at prediction time. At <code><a href='mold.html'>mold()</a></code> time, the
-information found in <code>engine$mold$process()$info</code> is used to set <code>info</code>
-for the <code>engine</code>.</p></td>
+and <code>outcomes</code>, both of which are 0 row tibbles. <code>info</code> is generated
+automatically at <code><a href='mold.html'>mold()</a></code> time and is used to validate <code>new_data</code> at
+prediction time. At <code><a href='mold.html'>mold()</a></code> time, the information found in
+<code>engine$mold$process()$info</code> is used to set <code>info</code> for the <code>engine</code>.</p></td>
     </tr>
     <tr>
       <th>formula</th>

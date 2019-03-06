@@ -145,18 +145,6 @@ have the same classes as the original data used to fit the model.
     <p>A named list. The names are the column names of <code>x</code> and the values are
 character vectors containing the class of that column.</p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>get_data_classes()</code> is inspired by <code><a href='https://www.rdocumentation.org/packages/stats/topics/checkMFClasses'>stats::.MFclass()</a></code>. It returns the
-exact classes of the data frame columns with the one exception that integer
-and double columns are both returned as <code>"numeric"</code>. This is to ensure
-that if an integer column is used when fitting, an error is not thrown if
-a double column is used at prediction time. It also does not allow for
-any columns of <code>x</code> to be multivariate themselves (no data frame columns,
-or matrix columns).</p>
-<p>The classes returned by <code>get_data_classes()</code> are stored in the <code>engine</code>
-objects. This function is called by <code><a href='mold.html'>mold()</a></code>.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>get_data_classes</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $Sepal.Length
@@ -223,8 +211,6 @@ objects. This function is called by <code><a href='mold.html'>mold()</a></code>.
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
