@@ -4,7 +4,7 @@
 #'
 #' validate - asserts the following:
 #'
-#' - `outcomes` must have 1 column.
+#' - `data` must have 1 column.
 #'
 #' check - returns the following:
 #'
@@ -12,7 +12,7 @@
 #'
 #' - `n_cols` A single numeric. The number of columns.
 #'
-#' @param outcomes Ideally, a data frame with 1 column.
+#' @param data Ideally, a data frame with 1 column.
 #'
 #' @template section-validation
 #'
@@ -31,9 +31,9 @@
 #'
 #' @family validation functions
 #' @export
-validate_outcomes_is_univariate <- function(outcomes) {
+validate_outcomes_is_univariate <- function(data) {
 
-  check <- check_outcomes_is_univariate(outcomes)
+  check <- check_outcomes_is_univariate(data)
 
   if (!check$ok) {
 
@@ -43,18 +43,18 @@ validate_outcomes_is_univariate <- function(outcomes) {
 
   }
 
-  invisible(outcomes)
+  invisible(data)
 }
 
 #' @rdname validate_outcomes_is_univariate
 #' @export
-check_outcomes_is_univariate <- function(outcomes) {
+check_outcomes_is_univariate <- function(data) {
 
-  if (!rlang::is_vector(outcomes)) {
-    glubort("`outcomes` must be a vector, not a {class1(outcomes)}.")
+  if (!rlang::is_vector(data)) {
+    glubort("`data` must be a vector, not a {class1(data)}.")
   }
 
-  n_cols <- NCOL(outcomes)
+  n_cols <- NCOL(data)
 
   ok <- (n_cols == 1L)
 

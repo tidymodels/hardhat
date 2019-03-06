@@ -1,16 +1,3 @@
-#' Validation
-#'
-#' Various input validation helpers. These should not be exported.
-#'
-#' `@keywords internal` is used to generate documentation even though the
-#' function is not exposed to the user. This is helpful for developers as it
-#' allows you to document your internal functions.
-#'
-#' @keywords internal
-#' @name validation
-NULL
-
-#' @rdname validation
 validate_is <- function(.x, .f, .expected, .x_nm, .note = "") {
 
   if (rlang::is_missing(.x_nm)) {
@@ -36,7 +23,6 @@ validate_is <- function(.x, .f, .expected, .x_nm, .note = "") {
   invisible(.x)
 }
 
-#' @rdname validation
 validate_has_unique_names <- function(x, x_nm) {
 
   if (!has_unique_names(x)) {
@@ -48,7 +34,6 @@ validate_has_unique_names <- function(x, x_nm) {
   invisible(x)
 }
 
-#' @rdname validation
 validate_has_unique_column_names <- function(x, x_nm) {
 
   if (!has_unique_column_names(x)) {
@@ -60,7 +45,6 @@ validate_has_unique_column_names <- function(x, x_nm) {
   invisible(x)
 }
 
-#' @rdname validation
 validate_x_has_numeric_cols <- function(x) {
 
   all_cols_numeric <- all_numeric(x)
@@ -78,7 +62,6 @@ validate_x_has_numeric_cols <- function(x) {
   invisible(x)
 }
 
-#' @rdname validation
 validate_recipes_available <- function() {
 
   if (!requireNamespace("recipes", quietly = TRUE)) {
@@ -92,7 +75,6 @@ validate_recipes_available <- function() {
   invisible()
 }
 
-#' @rdname validation
 validate_intercept <- function(intercept) {
 
   if (!is.logical(intercept)) {
@@ -112,7 +94,6 @@ validate_intercept <- function(intercept) {
 # the formula must have an implicit intercept to remove
 # dont let the user do `0+` or `+0` or `-1`
 
-#' @rdname validation
 validate_formula_has_intercept <- function(formula) {
 
   formula <- rlang::f_rhs(formula)

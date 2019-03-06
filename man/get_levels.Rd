@@ -5,12 +5,12 @@
 \alias{get_outcome_levels}
 \title{Extract factor levels from a data frame}
 \usage{
-get_levels(x)
+get_levels(data)
 
 get_outcome_levels(y)
 }
 \arguments{
-\item{x}{A data.frame to extract levels from.}
+\item{data}{A data.frame to extract levels from.}
 
 \item{y}{The outcome. This can be:
 \itemize{
@@ -23,14 +23,14 @@ get_outcome_levels(y)
 }}
 }
 \value{
-A named list with as many elements as there are factor columns in \code{x}.
+A named list with as many elements as there are factor columns in \code{data}.
 The names are the names of the factor columns, and the values are character
 vectors of the levels.
 
 If there are no factor columns, \code{NULL} is returned.
 }
 \description{
-\code{get_levels()} extracts the levels from any factor columns in \code{x}. It is
+\code{get_levels()} extracts the levels from any factor columns in \code{data}. It is
 mainly useful for extracting the original factor levels from the predictors
 in the training set. \code{get_outcome_levels()} is a small wrapper around
 \code{get_levels()} for extracting levels from a factor outcome

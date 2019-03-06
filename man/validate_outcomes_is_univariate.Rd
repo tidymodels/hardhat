@@ -5,17 +5,17 @@
 \alias{check_outcomes_is_univariate}
 \title{Ensure that the outcome is univariate}
 \usage{
-validate_outcomes_is_univariate(outcomes)
+validate_outcomes_is_univariate(data)
 
-check_outcomes_is_univariate(outcomes)
+check_outcomes_is_univariate(data)
 }
 \arguments{
-\item{outcomes}{Ideally, a data frame with 1 column.}
+\item{data}{Ideally, a data frame with 1 column.}
 }
 \description{
 validate - asserts the following:
 \itemize{
-\item \code{outcomes} must have 1 column.
+\item \code{data} must have 1 column.
 }
 
 check - returns the following:
@@ -31,7 +31,7 @@ The easiest way to use this validation function is to supply it the
 \section{Validation}{
 
 
-hardhat provides validation functions at three levels.
+hardhat provides validation functions at two levels.
 \itemize{
 \item \code{check_*()}:  \emph{check a condition, and return a list}. The list
 always contains at least one element, \code{ok}, a logical that specifies if the
@@ -42,10 +42,6 @@ functions call their corresponding check function, and
 then provide a default error message. If you, as a developer, want a
 different error message, then call the \code{check_*()} function yourself,
 and provide your own validation function.
-\item \code{enforce_*()}: \emph{check a condition, modify the input with a warning
-if the check fails, and return the modified input}. These functions are
-used when user input is incorrect in some non-critical way, and you can
-correct it automatically, with a warning.
 }
 }
 

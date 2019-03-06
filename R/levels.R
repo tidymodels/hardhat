@@ -1,17 +1,17 @@
 #' Extract factor levels from a data frame
 #'
-#' `get_levels()` extracts the levels from any factor columns in `x`. It is
+#' `get_levels()` extracts the levels from any factor columns in `data`. It is
 #' mainly useful for extracting the original factor levels from the predictors
 #' in the training set. `get_outcome_levels()` is a small wrapper around
 #' `get_levels()` for extracting levels from a factor outcome
 #' that first calls [standardize()] on `y`.
 #'
 #' @inheritParams standardize
-#' @param x A data.frame to extract levels from.
+#' @param data A data.frame to extract levels from.
 #'
 #' @return
 #'
-#' A named list with as many elements as there are factor columns in `x`.
+#' A named list with as many elements as there are factor columns in `data`.
 #' The names are the names of the factor columns, and the values are character
 #' vectors of the levels.
 #'
@@ -33,13 +33,13 @@
 #' get_outcome_levels(y = factor(letters[1:5]))
 #'
 #' @export
-get_levels <- function(x) {
+get_levels <- function(data) {
 
-  if (!is.data.frame(x)) {
+  if (!is.data.frame(data)) {
     return(NULL)
   }
 
-  lvl_lst <- lapply(x, levels)
+  lvl_lst <- lapply(data, levels)
 
   null_elems <- vapply(lvl_lst, is.null, logical(1))
 
