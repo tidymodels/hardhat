@@ -32,6 +32,8 @@
 #' @param outcomes A logical. Should the outcomes be processed and returned
 #' as well?
 #'
+#' @param ... Not used.
+#'
 #' @return
 #'
 #' A named list with 3 elements:
@@ -64,21 +66,23 @@
 #'
 #'
 #' @export
-forge <- function(new_data, engine, outcomes = FALSE) {
+forge <- function(new_data, engine, ..., outcomes = FALSE) {
   UseMethod("forge")
 }
 
 #' @export
-forge.default <- function(new_data, engine, outcomes = FALSE) {
+forge.default <- function(new_data, engine, ..., outcomes = FALSE) {
   glubort("The class of `new_data`, '{class1(new_data)}', is not recognized.")
 }
 
 #' @export
-forge.data.frame <- function(new_data, engine, outcomes = FALSE) {
+forge.data.frame <- function(new_data, engine, ..., outcomes = FALSE) {
+
+  validate_empty_dots(...)
 
   validate_is_engine(engine)
 
-  forge_impl(engine, new_data, outcomes)
+  forge_impl(engine, new_data, outcomes = outcomes)
 }
 
 #' @export
@@ -98,11 +102,13 @@ forge.matrix <- forge.data.frame
 # because it will be something like `custom_engine` and there won't be
 # anything to dispatch on
 
-forge_impl <- function(engine, new_data, outcomes) {
+forge_impl <- function(engine, new_data, ..., outcomes = FALSE) {
   UseMethod("forge_impl")
 }
 
-forge_impl.xy_engine <- function(engine, new_data, outcomes) {
+forge_impl.xy_engine <- function(engine, new_data, ..., outcomes = FALSE) {
+
+  validate_empty_dots(...)
 
   c(engine, predictors, outcomes) %<-% engine$forge$clean(
     engine = engine,

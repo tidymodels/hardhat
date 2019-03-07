@@ -4,13 +4,15 @@
 \alias{forge}
 \title{Forge prediction-ready data}
 \usage{
-forge(new_data, engine, outcomes = FALSE)
+forge(new_data, engine, ..., outcomes = FALSE)
 }
 \arguments{
 \item{new_data}{A data frame or matrix of predictors to process. If
 \code{outcomes = TRUE}, this should also contain the outcomes to process.}
 
 \item{engine}{A preprocessing \code{engine}.}
+
+\item{...}{Not used.}
 
 \item{outcomes}{A logical. Should the outcomes be processed and returned
 as well?}
