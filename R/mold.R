@@ -74,7 +74,11 @@ mold.data.frame <- function(x, y, ..., engine = NULL) {
 
   validate_is_xy_engine(engine)
 
-  mold_impl(engine, x, y)
+  c(engine, predictors, outcomes, ptypes, extras) %<-% mold_impl(engine, x, y)
+
+  engine <- update_engine(engine, ptypes = ptypes)
+
+  out$mold$final(predictors, outcomes, engine, extras)
 }
 
 #' @rdname default_xy_engine
@@ -93,12 +97,13 @@ mold.formula <- function(formula, data, ..., engine = NULL) {
 
   validate_is_formula_engine(engine)
 
-  engine <- update_engine(
-    engine = engine,
-    formula = formula
-  )
+  engine <- update_engine(engine = engine, formula = formula)
 
-  mold_impl(engine, data)
+  c(engine, predictors, outcomes, ptypes, extras) %<-% mold_impl(engine, data)
+
+  engine <- update_engine(engine, ptypes = ptypes)
+
+  out$mold$final(predictors, outcomes, engine, extras)
 }
 
 #' @rdname default_recipe_engine
@@ -115,12 +120,13 @@ mold.recipe <- function(x, data, ..., engine = NULL) {
 
   validate_is_recipe_engine(engine)
 
-  engine <- update_engine(
-    engine = engine,
-    recipe = x
-  )
+  engine <- update_engine(engine = engine, recipe = x)
 
-  mold_impl(engine, data)
+  c(engine, predictors, outcomes, ptypes, extras) %<-% mold_impl(engine, data)
+
+  engine <- update_engine(engine, ptypes = ptypes)
+
+  out$mold$final(predictors, outcomes, engine, extras)
 }
 
 # ------------------------------------------------------------------------------
@@ -137,51 +143,20 @@ mold_impl.xy_engine <- function(engine, x, y, ...) {
     y = y
   )
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% engine$mold$process(
-    engine = engine,
-    x = x,
-    y = y
-  )
-
-  engine <- update_engine(engine, ptypes = ptypes)
-
-  out$mold$final(predictors, outcomes, engine, extras)
-
+  engine$mold$process(engine = engine, x = x, y = y)
 }
 
 mold_impl.formula_engine <- function(engine, data, ...) {
 
-  c(engine, data) %<-% engine$mold$clean(
-    engine = engine,
-    data = data
-  )
+  c(engine, data) %<-% engine$mold$clean(engine = engine, data = data)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% engine$mold$process(
-    engine = engine,
-    data = data
-  )
-
-  engine <- update_engine(engine, ptypes = ptypes)
-
-  out$mold$final(predictors, outcomes, engine, extras)
-
+  engine$mold$process(engine = engine, data = data)
 }
 
 mold_impl.recipe_engine <- function(engine, data, ...) {
 
-  c(engine, data) %<-% engine$mold$clean(
-    engine = engine,
-    data = data
-  )
+  c(engine, data) %<-% engine$mold$clean(engine = engine, data = data)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% engine$mold$process(
-    engine = engine,
-    data = data
-  )
-
-  engine <- update_engine(engine, ptypes = ptypes)
-
-  out$mold$final(predictors, outcomes, engine, extras)
-
+  engine$mold$process(engine = engine, data = data)
 }
 
