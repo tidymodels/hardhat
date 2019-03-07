@@ -29,3 +29,5 @@ Imports:
 URL: https://github.com/DavisVaughan/hardhat
 BugReports: https://github.com/DavisVaughan/hardhat/issues
 VignetteBuilder: knitr
+Remotes:
+    r-lib/vctrs
