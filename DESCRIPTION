@@ -30,4 +30,4 @@ URL: https://github.com/DavisVaughan/hardhat
 BugReports: https://github.com/DavisVaughan/hardhat/issues
 VignetteBuilder: knitr
 Remotes:
-    DavisVaughan/vctrs@3.1-testing
+    r-lib/vctrs
