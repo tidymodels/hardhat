@@ -59,7 +59,7 @@ test <- iris[101:150,]
 processed <- mold(
   log(Sepal.Width) ~ Species,
   train,
-  default_formula_engine(indicators = FALSE)
+  engine = default_formula_engine(indicators = FALSE)
 )
 
 forge(test, processed$engine, outcomes = TRUE)

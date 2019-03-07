@@ -78,7 +78,7 @@
 #' # With an intercept
 #'
 #' # You can add an intercept with `intercept = TRUE`
-#' processed <- mold(rec, train, default_recipe_engine(intercept = TRUE))
+#' processed <- mold(rec, train, engine = default_recipe_engine(intercept = TRUE))
 #'
 #' processed$predictors
 #'

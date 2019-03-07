@@ -16,7 +16,7 @@ test_that("xy intercepts can be added", {
   x <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris$Species,
-    default_xy_engine(intercept = TRUE)
+    engine = default_xy_engine(intercept = TRUE)
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))

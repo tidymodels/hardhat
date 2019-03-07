@@ -23,7 +23,7 @@ test_that("can mold recipes with intercepts", {
   x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris,
-    default_recipe_engine(intercept = TRUE)
+    engine = default_recipe_engine(intercept = TRUE)
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))

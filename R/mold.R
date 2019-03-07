@@ -64,7 +64,7 @@ mold.default <- function(x, ...) {
 
 #' @rdname default_xy_engine
 #' @export
-mold.data.frame <- function(x, y, engine = NULL, ...) {
+mold.data.frame <- function(x, y, ..., engine = NULL) {
 
   validate_empty_dots(...)
 
@@ -83,7 +83,7 @@ mold.matrix <- mold.data.frame
 
 #' @rdname default_formula_engine
 #' @export
-mold.formula <- function(formula, data, engine = NULL, ...) {
+mold.formula <- function(formula, data, ..., engine = NULL) {
 
   validate_empty_dots(...)
 
@@ -103,7 +103,7 @@ mold.formula <- function(formula, data, engine = NULL, ...) {
 
 #' @rdname default_recipe_engine
 #' @export
-mold.recipe <- function(x, data, engine = NULL, ...) {
+mold.recipe <- function(x, data, ..., engine = NULL) {
 
   validate_empty_dots(...)
 

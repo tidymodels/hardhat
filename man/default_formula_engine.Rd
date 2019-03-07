@@ -7,7 +7,7 @@
 \usage{
 default_formula_engine(intercept = FALSE, indicators = TRUE)
 
-\method{mold}{formula}(formula, data, engine = NULL, ...)
+\method{mold}{formula}(formula, data, ..., engine = NULL)
 }
 \arguments{
 \item{intercept}{A logical. Should an intercept be included in the
@@ -20,10 +20,10 @@ in the \code{mold} and \code{forge} function list.}
 
 \item{data}{A data frame or matrix containing the outcomes and predictors.}
 
+\item{...}{Not used.}
+
 \item{engine}{A preprocessing \code{engine}. If left as \code{NULL}, then a
 \code{\link[=default_formula_engine]{default_formula_engine()}} is used.}
-
-\item{...}{Not used.}
 }
 \description{
 This pages holds the details for the formula preprocessing engine. This
@@ -199,7 +199,7 @@ engine_no_indicators <- default_formula_engine(indicators = FALSE)
 processed <- mold(
   ~ Species + Sepal.Width:Sepal.Length,
   train,
-  engine_no_indicators
+  engine = engine_no_indicators
 )
 
 processed$predictors
@@ -207,8 +207,8 @@ processed$predictors
 # An informative error is thrown when `indicators = FALSE` and
 # factors are present in interaction terms or in inline functions
 \dontrun{
-mold(Sepal.Width ~ Sepal.Length:Species, train, engine_no_indicators)
-mold(Sepal.Width ~ paste0(Species), train, engine_no_indicators)
+mold(Sepal.Width ~ Sepal.Length:Species, train, engine = engine_no_indicators)
+mold(Sepal.Width ~ paste0(Species), train, engine = engine_no_indicators)
 }
 
 # ---------------------------------------------------------------------------

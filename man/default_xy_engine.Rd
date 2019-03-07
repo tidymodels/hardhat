@@ -8,9 +8,9 @@
 \usage{
 default_xy_engine(intercept = FALSE)
 
-\method{mold}{data.frame}(x, y, engine = NULL, ...)
+\method{mold}{data.frame}(x, y, ..., engine = NULL)
 
-\method{mold}{matrix}(x, y, engine = NULL, ...)
+\method{mold}{matrix}(x, y, ..., engine = NULL)
 }
 \arguments{
 \item{intercept}{A logical. Should an intercept be included in the
@@ -21,10 +21,10 @@ in the \code{mold} and \code{forge} function list.}
 
 \item{y}{A data frame, matrix, or vector containing the outcomes.}
 
+\item{...}{Not used.}
+
 \item{engine}{A preprocessing \code{engine}. If left as \code{NULL}, then a
 \code{\link[=default_xy_engine]{default_xy_engine()}} is used.}
-
-\item{...}{Not used.}
 }
 \description{
 This pages holds the details for the XY preprocessing engine. This
@@ -92,7 +92,7 @@ forge(test_x, processed$engine)
 # ---------------------------------------------------------------------------
 # Intercept
 
-processed <- mold(train_x, train_y, default_xy_engine(intercept = TRUE))
+processed <- mold(train_x, train_y, engine = default_xy_engine(intercept = TRUE))
 
 forge(test_x, processed$engine)
 

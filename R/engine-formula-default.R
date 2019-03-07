@@ -191,7 +191,7 @@
 #' processed <- mold(
 #'   ~ Species + Sepal.Width:Sepal.Length,
 #'   train,
-#'   engine_no_indicators
+#'   engine = engine_no_indicators
 #' )
 #'
 #' processed$predictors
@@ -199,8 +199,8 @@
 #' # An informative error is thrown when `indicators = FALSE` and
 #' # factors are present in interaction terms or in inline functions
 #' \dontrun{
-#' mold(Sepal.Width ~ Sepal.Length:Species, train, engine_no_indicators)
-#' mold(Sepal.Width ~ paste0(Species), train, engine_no_indicators)
+#' mold(Sepal.Width ~ Sepal.Length:Species, train, engine = engine_no_indicators)
+#' mold(Sepal.Width ~ paste0(Species), train, engine = engine_no_indicators)
 #' }
 #'
 #' # ---------------------------------------------------------------------------

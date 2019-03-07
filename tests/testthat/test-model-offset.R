@@ -79,7 +79,7 @@ test_that("a 0 col tibble is returned for predictors if only offsets are used", 
 
 test_that("intercepts and offsets can be intermingled", {
 
-  x <- mold(Species ~ offset(Sepal.Length), iris, default_formula_engine(intercept = TRUE))
+  x <- mold(Species ~ offset(Sepal.Length), iris, engine = default_formula_engine(intercept = TRUE))
 
   expect_equal(
     colnames(x$predictors),
@@ -93,7 +93,7 @@ test_that("intercepts and offsets can be intermingled", {
 # that so we have to handle it specially ourselves.
 test_that("offsets columns are removed from predictors with `indicators = FALSE`", {
 
-  x <- mold(Species ~ offset(Sepal.Length), iris, default_formula_engine(indicators = FALSE))
+  x <- mold(Species ~ offset(Sepal.Length), iris, engine = default_formula_engine(indicators = FALSE))
 
   expect_equal(
     ncol(x$predictors),

@@ -7,7 +7,7 @@
 \usage{
 default_recipe_engine(intercept = FALSE)
 
-\method{mold}{recipe}(x, data, engine = NULL, ...)
+\method{mold}{recipe}(x, data, ..., engine = NULL)
 }
 \arguments{
 \item{intercept}{A logical. Should an intercept be included in the
@@ -18,10 +18,10 @@ in the \code{mold} and \code{forge} function list.}
 
 \item{data}{A data frame or matrix containing the outcomes and predictors.}
 
+\item{...}{Not used.}
+
 \item{engine}{A preprocessing \code{engine}. If left as \code{NULL}, then a
 \code{\link[=default_recipe_engine]{default_recipe_engine()}} is used.}
-
-\item{...}{Not used.}
 }
 \description{
 This pages holds the details for the recipe preprocessing engine. This
@@ -92,7 +92,7 @@ forge(test, processed$engine, outcomes = TRUE)
 # With an intercept
 
 # You can add an intercept with `intercept = TRUE`
-processed <- mold(rec, train, default_recipe_engine(intercept = TRUE))
+processed <- mold(rec, train, engine = default_recipe_engine(intercept = TRUE))
 
 processed$predictors
 
