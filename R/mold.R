@@ -74,7 +74,7 @@ mold.data.frame <- function(x, y, ..., engine = NULL) {
 
   validate_is_xy_engine(engine)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% mold_impl(engine, x, y)
+  c(engine, predictors, outcomes, ptypes, extras) %<-% run_mold(engine, x, y)
 
   engine <- update_engine(engine, ptypes = ptypes)
 
@@ -99,7 +99,7 @@ mold.formula <- function(formula, data, ..., engine = NULL) {
 
   engine <- update_engine(engine = engine, formula = formula)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% mold_impl(engine, data)
+  c(engine, predictors, outcomes, ptypes, extras) %<-% run_mold(engine, data)
 
   engine <- update_engine(engine, ptypes = ptypes)
 
@@ -122,7 +122,7 @@ mold.recipe <- function(x, data, ..., engine = NULL) {
 
   engine <- update_engine(engine = engine, recipe = x)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% mold_impl(engine, data)
+  c(engine, predictors, outcomes, ptypes, extras) %<-% run_mold(engine, data)
 
   engine <- update_engine(engine, ptypes = ptypes)
 
@@ -131,11 +131,45 @@ mold.recipe <- function(x, data, ..., engine = NULL) {
 
 # ------------------------------------------------------------------------------
 
-mold_impl <- function(engine, ...) {
-  UseMethod("mold_impl")
+#' Call `mold$clean()` and `mold$process()`
+#'
+#' This is a purely developer facing function, that is _only_ used if you are
+#' creating a completely new engine inheriting only from [new_engine()], and
+#' not from one of the more common: [new_xy_engine()], [new_recipe_engine()],
+#' [new_formula_engine()].
+#'
+#' @param engine A preprocessing engine.
+#'
+#' @param ... Not used. Required for extensibility.
+#'
+#' @details
+#'
+#' Because `mold()` has different interfaces (like XY and formula),
+#' which require different arguments (`x` and `y` vs `data`), their
+#' corresponding engines also have different arguments for the
+#' `engine$mold$clean()` and `engine$mold$process()` functions. The sole
+#' job of `run_mold()` is simply to call these two functions with the right
+#' arguments.
+#'
+#' The only time you need to implement a method for `run_mold()` is if you
+#' are creating a `new_engine()` that does not follow one of the three core
+#' engine types. In that special case, create a method for `run_mold()` with
+#' your engine type, and pass through whatever arguments are necessary to call
+#' your engine specific `clean()` and `process()` functions.
+#'
+#' If you go this route, you will also need to create a `mold()` method if `x`
+#' is not a data frame / matrix, recipe, or formula. If `x` is one of
+#' those types, then `run_mold()` will be called for you by the
+#' existing `mold()` method, you just have to supply the `run_mold()` method
+#' for your engine.
+#'
+#' @export
+run_mold <- function(engine, ...) {
+  UseMethod("run_mold")
 }
 
-mold_impl.xy_engine <- function(engine, x, y, ...) {
+#' @export
+run_mold.xy_engine <- function(engine, x, y, ...) {
 
   c(engine, x, y) %<-% engine$mold$clean(
     engine = engine,
@@ -146,14 +180,16 @@ mold_impl.xy_engine <- function(engine, x, y, ...) {
   engine$mold$process(engine = engine, x = x, y = y)
 }
 
-mold_impl.formula_engine <- function(engine, data, ...) {
+#' @export
+run_mold.formula_engine <- function(engine, data, ...) {
 
   c(engine, data) %<-% engine$mold$clean(engine = engine, data = data)
 
   engine$mold$process(engine = engine, data = data)
 }
 
-mold_impl.recipe_engine <- function(engine, data, ...) {
+#' @export
+run_mold.recipe_engine <- function(engine, data, ...) {
 
   c(engine, data) %<-% engine$mold$clean(engine = engine, data = data)
 
