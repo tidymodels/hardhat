@@ -63,9 +63,8 @@ out_forge <- function(predictors, outcomes, extras) {
   )
 }
 
-out_forge_process <- function(engine, predictors, outcomes, extras) {
+out_forge_process <- function(predictors, outcomes, extras) {
   list(
-    engine = engine,
     predictors = predictors,
     outcomes = outcomes,
     extras = extras

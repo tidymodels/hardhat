@@ -460,7 +460,7 @@ forge_formula_default_process <- function(engine, predictors, outcomes) {
 
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
-  out$forge$process(engine, predictors_lst$data, outcomes_lst$data, extras)
+  out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
 }
 
 forge_formula_default_process_predictors <- function(engine, predictors) {

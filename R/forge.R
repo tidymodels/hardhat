@@ -87,7 +87,7 @@ forge.data.frame <- function(new_data, engine, ..., outcomes = FALSE) {
     outcomes = outcomes
   )
 
-  c(engine, predictors, outcomes, extras) %<-% engine$forge$process(
+  c(predictors, outcomes, extras) %<-% engine$forge$process(
     engine = engine,
     predictors = predictors,
     outcomes = outcomes
