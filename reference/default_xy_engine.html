@@ -132,10 +132,10 @@ separately (i.e. the XY interface is used).</p>
     <pre class="usage"><span class='fu'>default_xy_engine</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'># S3 method for matrix</span>
-<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,13 +155,13 @@ in the <code>mold</code> and <code>forge</code> function list.</p></td>
       <td><p>A data frame, matrix, or vector containing the outcomes.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Not used.</p></td>
+    </tr>
+    <tr>
       <th>engine</th>
       <td><p>A preprocessing <code>engine</code>. If left as <code>NULL</code>, then a
 <code>default_xy_engine()</code> is used.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not used.</p></td>
     </tr>
     </table>
     
@@ -243,7 +243,7 @@ of <code>new_data</code>.</p></li>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Intercept</span>
 
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>train_x</span>, <span class='no'>train_y</span>, <span class='fu'>default_xy_engine</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>train_x</span>, <span class='no'>train_y</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'>default_xy_engine</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
 
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test_x</span>, <span class='no'>processed</span>$<span class='no'>engine</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 2

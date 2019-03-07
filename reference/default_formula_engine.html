@@ -130,7 +130,7 @@ is the engine used by default from <code><a href='mold.html'>mold()</a></code> i
     <pre class="usage"><span class='fu'>default_formula_engine</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for formula</span>
-<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,13 +154,13 @@ in the <code>mold</code> and <code>forge</code> function list.</p></td>
       <td><p>A data frame or matrix containing the outcomes and predictors.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Not used.</p></td>
+    </tr>
+    <tr>
       <th>engine</th>
       <td><p>A preprocessing <code>engine</code>. If left as <code>NULL</code>, then a
 <code>default_formula_engine()</code> is used.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not used.</p></td>
     </tr>
     </table>
     
@@ -395,7 +395,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
   ~ <span class='no'>Species</span> + <span class='no'>Sepal.Width</span>:<span class='no'>Sepal.Length</span>,
   <span class='no'>train</span>,
-  <span class='no'>engine_no_indicators</span>
+  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='no'>engine_no_indicators</span>
 )
 
 <span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; # A tibble: 100 x 2
@@ -414,7 +414,7 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; # … with 90 more rows</div><div class='input'>
 # An informative error is thrown when `indicators = FALSE` and
 # factors are present in interaction terms or in inline functions
-</div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>train</span>, <span class='no'>engine_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Interaction terms involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Interactions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>train</span>, <span class='no'>engine_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Functions involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Functions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'>
+</div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>train</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='no'>engine_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Interaction terms involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Interactions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>train</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='no'>engine_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Functions involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Functions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Multivariate outcomes</span>
 

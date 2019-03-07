@@ -201,7 +201,7 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">x &lt;-<span class="st"> </span>iris_train[, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Species"</span>, <span class="st">"Petal.Width"</span>)]</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">y &lt;-<span class="st"> </span>iris_train<span class="op">$</span>Sepal.Length</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">processed_xy &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="kw"><a href="../reference/default_xy_engine.html">default_xy_engine</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">processed_xy &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_xy_engine.html">default_xy_engine</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">processed_xy<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; # A tibble: 100 x 3</span></a>
