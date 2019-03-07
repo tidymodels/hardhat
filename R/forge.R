@@ -79,36 +79,7 @@ forge.default <- function(new_data, engine, ..., outcomes = FALSE) {
 forge.data.frame <- function(new_data, engine, ..., outcomes = FALSE) {
 
   validate_empty_dots(...)
-
   validate_is_engine(engine)
-
-  forge_impl(engine, new_data, outcomes = outcomes)
-}
-
-#' @export
-forge.matrix <- forge.data.frame
-
-# ------------------------------------------------------------------------------
-
-# We make this generic because mold_impl() has to be generic to support the
-# different ways data can come in (`x` and `y` or `data`) and we want to be
-# consistent with that.
-
-# But, for now, they all do the same thing (as they should!),
-# and we don't expose this to the user/developer.
-
-# TODO - Having this as a non-exported generic makes it impossible to
-# implement a completely new engine type (subclassing `new_engine()`)
-# because it will be something like `custom_engine` and there won't be
-# anything to dispatch on
-
-forge_impl <- function(engine, new_data, ..., outcomes = FALSE) {
-  UseMethod("forge_impl")
-}
-
-forge_impl.xy_engine <- function(engine, new_data, ..., outcomes = FALSE) {
-
-  validate_empty_dots(...)
 
   c(engine, predictors, outcomes) %<-% engine$forge$clean(
     engine = engine,
@@ -125,6 +96,5 @@ forge_impl.xy_engine <- function(engine, new_data, ..., outcomes = FALSE) {
   out$forge$final(predictors, outcomes, extras)
 }
 
-forge_impl.formula_engine <- forge_impl.xy_engine
-
-forge_impl.recipe_engine <- forge_impl.xy_engine
+#' @export
+forge.matrix <- forge.data.frame
