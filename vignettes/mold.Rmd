@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+options(rlang__backtrace_on_error = "none")
 ```
 
 ```{r setup}
@@ -22,122 +24,211 @@ library(hardhat)
 
 ## Introduction
 
-For most modeling functions, data must be accepted from the user in some format where the _outcomes_ and _predictors_ are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used (i.e. terms are specified using `outcomes ~ predictors`), R provides some infrastructure for preprocessing the user input through the `model.frame()` and `model.matrix()` functions. 
+For most modeling functions, data must be accepted from the user in some format where the _outcomes_ and _predictors_ are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used, R provides some infrastructure for preprocessing the user input through the `model.frame()` and `model.matrix()` functions. 
 
-But the formula method is not the only way to specify modeling terms. There is also an XY method, where `x` and `y` are supplied directly, and, recently, a `recipe` object can be used to preprocess data using a set of sequential steps.
+But the formula method is not the only way to specify modeling terms. There is also an XY method, where `x` and `y` are supplied directly, and, recently, a `recipe` implementation can be used to preprocess data using a set of sequential steps.
 
 As a developer, you likely won't want to care about the details of how each of these methods work, but (hopefully) still want to provide all three of these interfaces for your shiny new model. `mold()` makes this easy on you, and takes care of the details of preprocessing user input from any of these methods.
 
-## `mold()` By Example
+The intended use of `mold()` is to be called from your user facing modeling function. To see that in action, have a look at the vignette found here: `vignette("package", "hardhat")`. The rest of this vignette will be focused on the various different ways to use `mold()`, but keep in mind that generally it is not used as an interactive function like this.
 
-The intended use of `mold()` is to be called from your top level modeling function (the one that users will call). Suppose that we have such a function, `modeler()`, along with it's core implementation `modeler_impl()`, and a constructor to make a new `"modeler"` object, `new_modeler()`.
+## A first example
+
+The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: `outcomes ~ predictors`. Generally, as a developer, you have to then call `model.frame()` and `model.matrix()` on this result to coerce it into the right format for ingestion into your model. `mold()` handles all of that for you.
 
 ```{r}
-# Create a new `modeler` object
-new_modeler <- function(y_mean) {
-  
-  if (!is.numeric(y_mean)) {
-    stop("`y_mean` must be numeric.")
-  }
-  
-  elements <- list(
-    y_mean = y_mean
-  )
-  
-  structure(elements, class = "modeler")
-}
+iris_form <- mold(Sepal.Width ~ log(Sepal.Length), iris)
 
-# Implementation function
-modeler_impl <- function(x, y) {
-  
-  # core modeling implementation
-  
-  list(
-    y_mean = mean(y)
-  )
-}
-
-
-modeler <- function(x, y) {
-  res <- modeler_impl(x, y)
-  new_modeler(y_mean = res$y_mean)
-}
+names(iris_form)
 ```
 
-You probably expect users to use `modeler()` like this:
+`mold()` returns four things. Two of them are immediately useful, and are almost always applicable to the modeling implementation you have created. The first is the `predictors`, returned as a tibble. All of the required processing has been done for you, so you just have to focus on the modeling implementation.
 
 ```{r}
-# X and Y
-x <- iris
-x$Petal.Width <- NULL
-y <- iris$Petal.Width
-
-modeler(x, y)
+iris_form$predictors
 ```
 
-
-To use it with `mold()`, pass through the input
-
-### `mold()`
-
-`mold()` readies input data for ingestion into a modeling function. It is to be called from the interface layer of your modeling package. For instance, if you have a top level function called `linear_regression()` that accepts input from the user, you would call `mold()` inside of `linear_regression()`, before passing on the input to the actual implementation function, which should be separated from the top level interface and might be called `linear_regression_impl()`.
-
-If your modeling function has a formula interface, `mold()` will call `model.frame()` and `model.matrix()` for you, storing important information such as the predictor factor levels and the class of each predictor and outcome column.
+Second is the `outcomes`, also returned as a tibble. While not used here, any processing on the outcome that was specified in the formula would also be done here.
 
 ```{r}
-iris_train <- iris[1:100,]
-iris_test <- iris[101:150,]
-
-processed <- mold(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
+iris_form$outcomes
 ```
 
-The return value of `mold()` has three things. The `predictors`, the `outcomes`, and a `engine` that varies based on the interface you are using. Notice that the default behavior for `mold()` is to _not_ add an intercept column. This is completely controlled by the `intercept` argument and not by the formula itself.
+Beyond these two elements, `mold()` also returns a slot for any `extras` that might have been generated during preprocessing, but aren't specifically predictors or outcomes. For example, an `offset()` can be specified directly in the formula, but isn't technically a predictor.
 
 ```{r}
-processed$predictors
-
-processed$outcomes
+mold(Sepal.Width ~ log(Sepal.Length) + offset(Petal.Width), iris)$extras
 ```
 
-The engine stores a number of things that are useful to any model when it is time to make predictions on new data.
+Lastly, `mold()` returns a very important object, the `engine`. This is responsible for knowing how to preprocess both the training data, and any new data at prediction time. As a developer, you should attach the `engine` to your model object before returning it to the user. For more information about this, see the package development vignette, `vignette("package", "hardhat")`.
+
+## Engines
+
+As mentioned above, one of the objects that `mold()` returns is an `engine` responsible for controlling the preprocessing. There are multiple engines available in `hardhat`, but when you call `mold()` one is selected automatically for you. The following two calls generate the same result, using the default formula engine.
 
 ```{r}
-names(processed$engine)
+identical(
+  mold(~ Sepal.Width, iris), 
+  mold(~ Sepal.Width, iris, engine = default_formula_engine())
+)
 ```
 
-For instance, the original levels and classes of the predictors are stored automatically.
+Each engine can be tweaked to change how the processing for that interface occurs, and the options vary per engine. To understand why you'd ever want to do this, read on!
+
+## Formulas
+
+Now that you have a basic idea of how `mold()` works, we can talk about some of the more interesting functionality.
+
+### Intercepts
+
+One challenge with the standard formula interface is that, by default, intercepts are always implicitly present and are added to your data set automatically. This works great for the simple regression case. However, other models might either always require or never allow an intercept, but still use the formula interface because of its convenience (for example, `earth`). This has led to many ad hoc solutions that prevent the user from removing or adding an intercept.
+
+To get around this, `mold()` will never add an intercept by default. Instead, the addition of an intercept is completely controlled by the formula engine argument, `intercept`.
 
 ```{r}
-processed$engine$info$predictors$levels
+no_intercept <- mold(~ Sepal.Width, iris)
 
-processed$engine$info$predictors$classes
+no_intercept$predictors
 ```
 
-There is also an interface for the XY method (providing the predictors and outcome directly to `x` and `y`). The preprocessing that occurs here is minimal, but you can add an intercept to `x` with `intercept = TRUE`. 
-
-Notice how even though `y` is a vector, the `outcomes` slot of the return value _always_ holds a tibble. Because `y` is not a data frame / matrix with existing column names, a default name of `".outcome"` is used.
-
 ```{r}
-x <- iris_train[, c("Species", "Petal.Width")]
-y <- iris_train$Sepal.Length
+with_intercept <- mold(
+  ~ Sepal.Width, iris, 
+  engine = default_formula_engine(intercept = TRUE)
+)
 
-processed_xy <- mold(x, y, engine = default_xy_engine(intercept = TRUE))
-
-processed_xy$predictors
-
-processed_xy$outcomes
+with_intercept$predictors
 ```
 
-Finally, there is an interface for `recipes`. It calls `recipes::prep()` on the recipe for you.
+An error is thrown if an intercept removal term is specified:
+
+```{r, error=TRUE}
+mold(~ Sepal.Width - 1, iris)
+
+mold(~ Sepal.Width + 0, iris)
+```
+
+### Dummy variables
+
+One of the nice things about the formula interface is that it expands factors into dummy variable columns for you. Like intercepts, this is great...until it isn't. For example, `ranger` fits a random forest, which can take factors directly, but still uses the formula notation. In this case, it would be great if the factor columns specified as predictors _weren't_ expanded. This is the job of the engine argument, `indicators`.
 
 ```{r}
-suppressPackageStartupMessages(library(recipes))
+expanded_dummies <- mold(~ Sepal.Width + Species, iris)
 
-rec <- recipe(Sepal.Length ~ Species + Petal.Width, iris_train) %>%
+expanded_dummies$predictors
+```
+
+```{r}
+non_expanded_dummies <- mold(
+  ~ Sepal.Width + Species, iris, 
+  engine = default_formula_engine(indicators = FALSE)
+)
+
+non_expanded_dummies$predictors
+```
+
+_Note:_ It's worth mentioning that when an intercept is not present, base R expands factors columns completely (also known as one hot encoding) into `K` columns corresponding to the `K` levels present in the factor. When an intercept is present, only `K-1` columns are generated.
+
+```{r}
+k_cols <- mold(~ Species, iris)
+
+k_minus_one_cols <- mold(
+  ~ Species, iris, 
+  engine = default_formula_engine(intercept = TRUE)
+)
+
+colnames(k_cols$predictors)
+
+colnames(k_minus_one_cols$predictors)
+```
+
+### Multivariate outcomes
+
+One of the other frustrating things about working with the formula method is that multivariate outcomes are a bit clunky to specify.
+
+```{r}
+.f <- cbind(Sepal.Width, Sepal.Length) ~ Petal.Width
+
+frame <- model.frame(.f, iris)
+
+head(frame)
+```
+
+This might look like 3 columns, but it is actually 2, where the first column is named `cbind(Sepal.Width, Sepal.Length)`, and it is actually a matrix with 2 columns, `Sepal.Width` and `Sepal.Length` inside it.
+
+```{r}
+ncol(frame)
+
+class(frame$`cbind(Sepal.Width, Sepal.Length)`)
+
+head(frame$`cbind(Sepal.Width, Sepal.Length)`)
+```
+
+The default formula engine used with `mold()` allows you to specify multiple outcomes like you specify multiple predictors. You can even do inline transformations of each outcome, although if you are doing very much of that, I'd advise using a recipe instead. `outcomes` then holds the two outcomes columns.
+
+```{r}
+multivariate <- mold(Sepal.Width + log(Sepal.Length) ~ Petal.Width, iris)
+
+multivariate$outcomes
+```
+
+## XY
+
+The second interface is the XY interface, useful when the predictors and outcomes are specified separately.
+
+```{r}
+x <- subset(iris, select = -Sepal.Width)
+y <- subset(iris, select = Sepal.Width)
+
+iris_xy <- mold(x, y)
+
+iris_xy$predictors
+
+iris_xy$outcomes
+```
+
+This interface doesn't do too much in the way of preprocessing, but it does let you specify an `intercept` in the engine specific arguments. Rather than `default_formula_engine()`, this uses the `default_xy_engine()`.
+
+```{r}
+xy_with_intercept <- mold(x, y, engine = default_xy_engine(intercept = TRUE))
+
+xy_with_intercept$predictors
+```
+
+### Vector outcomes
+
+`y` is a bit special in the XY interface, because in the univariate case users might expect to be able to pass a vector, a 1 column data frame, or a matrix. `mold()` is prepared for all of those cases, but the vector case requires special attention. To be consistent with all of the other `mold()` interfaces, the `outcomes` slot of the return value should be a tibble. To achieve this when `y` is supplied as a vector, a default column name is created, `".outcome"`.
+
+```{r}
+mold(x, y$Sepal.Width)$outcomes
+```
+
+## Recipe
+
+The last of the three interfaces is the relatively new recipes interface. The `default_recipe_engine()` knows how to `prep()` your recipe, and `juice()` it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.
+
+```{r, message=FALSE, warning=FALSE}
+library(recipes)
+
+rec <- recipe(Sepal.Length ~ Species + Petal.Width, iris) %>%
   step_log(Sepal.Length) %>%
   step_dummy(Species)
 
-processed_rec <- mold(rec, iris_train)
+iris_recipe <- mold(rec, iris)
 
-processed_rec$predictors
+iris_recipe$predictors
+
+iris_recipe$outcomes
 ```
+
+The only special thing you can tweak with the recipe engine is whether or not an intercept is added.
+
+```{r}
+recipe_with_intercept <- mold(
+  rec, iris, 
+  engine = default_recipe_engine(intercept = TRUE)
+)
+
+recipe_with_intercept$predictors
+```
+
