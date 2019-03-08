@@ -1,0 +1,66 @@
+---
+title: "package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hardhat)
+```
+
+## `mold()` By Example
+
+The intended use of `mold()` is to be called from your top level modeling function (the one that users will call). Suppose that we have such a function, `modeler()`, along with it's core implementation `modeler_impl()`, and a constructor to make a new `"modeler"` object, `new_modeler()`.
+
+```{r}
+# Create a new `modeler` object
+new_modeler <- function(y_mean) {
+  
+  if (!is.numeric(y_mean)) {
+    stop("`y_mean` must be numeric.")
+  }
+  
+  elements <- list(
+    y_mean = y_mean
+  )
+  
+  structure(elements, class = "modeler")
+}
+
+# Implementation function
+modeler_impl <- function(x, y) {
+  
+  # core modeling implementation
+  
+  list(
+    y_mean = mean(y)
+  )
+}
+
+
+modeler <- function(x, y) {
+  res <- modeler_impl(x, y)
+  new_modeler(y_mean = res$y_mean)
+}
+```
+
+You probably expect users to use `modeler()` like this:
+
+```{r}
+# X and Y
+x <- iris
+x$Petal.Width <- NULL
+y <- iris$Petal.Width
+
+modeler(x, y)
+```
