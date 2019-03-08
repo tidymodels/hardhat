@@ -4,4 +4,5 @@ pkgdown_sha: ~
 articles:
   forge: forge.html
   mold: mold.html
+  package: package.html
 
