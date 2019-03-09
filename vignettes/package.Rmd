@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 library(hardhat)
 ```
 
+TODO - Finish me
+
 ## `mold()` By Example
 
 The intended use of `mold()` is to be called from your top level modeling function (the one that users will call). Suppose that we have such a function, `modeler()`, along with it's core implementation `modeler_impl()`, and a constructor to make a new `"modeler"` object, `new_modeler()`.

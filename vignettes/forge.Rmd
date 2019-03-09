@@ -3,8 +3,10 @@ title: "Forging data for predictions"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Forging data for predictions}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -13,80 +15,205 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-options(rlang__backtrace_on_error = "reminder")
+options(rlang__backtrace_on_error = "none")
 ```
 
 ```{r setup}
 library(hardhat)
 ```
 
+## Introduction
+
+The counterpart to `mold()`, which you can read all about in `vignette("mold", "hardhat")`, is `forge()`. Where `mold()` is used to preprocess your training data, `forge()` is used to preprocess new data that you are going to use to generate predictions from your model.
+
+Like `mold()`, `forge()` is not intended to be used interactively. Instead, it should be called from the `predict()` method for your model. To learn more about using `forge()` in a modeling package, see `vignette("package", "hardhat")`. The rest of this vignette will be focused on the many features the `forge()` offers.
+
+## Connection with `mold()`
+
+When `mold()` is used, one of the returned objects is an `engine`. This is the key to preprocessing new data with `forge()`. For instance, assume you've called `mold()` like so:
+
 ```{r}
 iris_train <- iris[1:100,]
 iris_test <- iris[101:150,]
-
-processed <- mold(log(Sepal.Length) ~ Species + Petal.Width, iris_train)
 ```
 
-
-### `forge()`
-
-`forge()` takes `new_data` and applies the same preprocessing steps that happened to the data used in training the model. It is to be called from `predict()`, or potentially from a cross validation function where you will use `predict()` repeatedly to measure performance of different folds or different hyperparameters.
-
-Say you fit a model and called `mold()` from your fitting function. When you return the model object, you should attach the `engine` that you get with the output of `mold()` onto the model object (using the model constructor, `new_base_model()`, makes this easier to do). Then when you call `predict()` on that model object along with `new_data`, you should call `forge()` inside of the `predict()` method with the stored `engine` and the `new_data`.
-
 ```{r}
-processed_test <- forge(
-  new_data = iris_test,
-  engine = processed$engine, 
-  outcomes = TRUE
+iris_form <- mold(
+  log(Sepal.Length) ~ Species + Petal.Width, 
+  iris_train, 
+  engine = default_formula_engine(indicators = FALSE)
 )
+
+formula_eng <- iris_form$engine
+
+formula_eng
 ```
 
-`forge()` always returns a list with two things. The first is a tibble containing the preprocessed `predictors`. The second is optionally the preprocessed `outcomes` if you are performing cross validation and used a formula or recipes interface. Because we used the formula interface to generate the `processed` object, we could set `outcomes = TRUE` above to also return the processed outcome column.
+A formula engine is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don't want to expand `Species` into dummy variables by setting `indicators = FALSE`.
+
+When it comes time to make predictions, the first thing that you should do inside your `predict()` method is pass the user supplied data to `forge()`, along with the `engine` that was attached to the model object. This will preprocess the `new_data` using the same steps specified when the model was being trained. Since we can't recreate that full fit+predict workflow in this simple example, let's just use `iris_test` as our new data, and the engine we created above.
 
 ```{r}
-processed_test$predictors
-
-processed_test$outcomes
+forge(iris_test, formula_eng)
 ```
 
-The nice thing about `forge()` is that the `engine` remembers a lot of information about what happened at fit time, and keeps the user from shooting themselves in the foot at prediction time. 
+Note that in `predictors`, `Species` was not expanded because the `engine` knew about the preprocessing options that were set when `mold()` was called.
 
-For instance, each predictor used at fit time has to have the same class at prediction time.
+`forge()` always returns three things, and they should look familiar to you if you have used `mold()`. 
+
+- `predictors` holds a tibble of the predictors.
+
+- `outcomes` is returned as `NULL` by default, because most `predict()` methods assume you only have access to the new predictors. Alternatively, this might contain a tibble of the new outcomes.
+
+- `extras` varies per engine, but is a catch-all slot to hold the same kind of extra objects that were returned by the engine when `mold()` was called.
+
+## Outcomes
+
+Generally when generating predictions you only need to know about the new predictors. However, when performing resampling you will need to have the processed outcomes as well so you can compute cross validated performance statistics and decide between multiple models, or choose between hyperparameters.
+
+You can easily request the outcomes as well with `outcomes = TRUE`. Just like with the predictors, these get processed using the same steps as done to the outcomes at fit time.
+
+```{r}
+forge(iris_test, formula_eng, outcomes = TRUE)
+```
+
+## Validation
+
+One of the most useful things about `forge()` is its robustness against malformed new data. It isn't unreasonable to enforce that the new data a user provides at prediction time should have the same _type_ as the data used at fit time. _Type_ is defined in the [vctrs](https://vctrs.r-lib.org/articles/type-size.html) sense, and for our uses essentially means that a number of checks on the testing data have to pass, including:
+
+- The column names of the training data and testing data must be the same.
+
+- The _type_ of each column of the training data must be the same as the columns found in the testing data. This means:
+
+  - The classes must be the same (e.g. if it was a factor in training, it must be a factor in testing).
+  
+  - The attributes must also be the same (e.g. the levels of the factors must also be the same).
+
+Almost all of this validation is possible through the use of `vctrs::vec_cast()`, and is called for you by `forge()`.
+
+### Column existance
+
+The easiest example to demonstrate is missing columns in the testing data. `forge()` won't let you continue until all of the required predictors used at training are also present in the new data.
 
 ```{r, error=TRUE}
-iris_test_bad <- iris_test
+test_missing_column <- subset(iris_test, select = -Species)
 
-# Turning Species into a character column rather than
-# a factor
-iris_test_bad$Species <- as.character(iris_test_bad$Species)
-
-forge(iris_test_bad, processed$engine)
+forge(test_missing_column, formula_eng)
 ```
 
-And each predictor column has to exist in `new_data`.
+### Column types
+
+After an initial scan for the column names is done, a deeper scan of each column is performed, checking the type of that column. For instance, what happens if the new `Species` column was a double, not a factor?
 
 ```{r, error=TRUE}
-# Removing species alltogether
-iris_test_bad$Species <- NULL
+test_species_double <- iris_test
+test_species_double$Species <- as.double(test_species_double$Species)
 
-forge(iris_test_bad, processed$engine)
+forge(test_species_double, formula_eng)
 ```
 
-And new levels in any of the predictors throw a warning and are coerced to `NA`.
+An error is thrown, indicating that a double can't be cast to a factor.
+
+### Lossless conversion
+
+The error message above suggests that in some cases you _can_ automatically cast from one type to another, and in fact that is true! Rather than being a double, what if `Species` was just a character?
+
+```{r}
+test_species_character <- iris_test
+test_species_character$Species <- as.character(test_species_character$Species)
+
+forged_char <- forge(test_species_character, formula_eng)
+
+forged_char$predictors
+
+class(forged_char$predictors$Species)
+
+levels(forged_char$predictors$Species)
+```
+
+Interesting, so in this case we can actually convert to a factor, and the class and even the levels are all restored. The key here is that this was a _lossless_ conversion. We lost no information when converting the character `Species` to a factor because the unique character values were a subset of the original levels.
+
+An example of a conversion that would be lossy is if the character `Species` column had a value that was _not_ a level in the training data.
 
 ```{r, warning=TRUE}
-iris_test_bad <- iris
-iris_test_bad$Species <- as.character(iris_test_bad$Species)
-iris_test_bad$Species[1] <- "new_level"
-iris_test_bad$Species  <- factor(iris_test_bad$Species)
+test_species_lossy <- iris_test
+test_species_lossy$Species <- as.character(test_species_lossy$Species)
+test_species_lossy$Species[2] <- "im new!"
 
-levels(iris_test_bad$Species)
+forged_lossy <- forge(test_species_lossy, formula_eng)
 
-processed_bad_test <- forge(iris_test_bad, processed$engine)
-
-processed_bad_test$predictors
+forged_lossy$predictors
 ```
 
+In this case:
 
+- A lossy warning is thrown
 
+- The `Species` column is still converted to a factor with the right levels
+
+- The novel level is removed and its value is set to `NA`
+
+## Recipes and `forge()`
+
+TODO - Finish me
+
+Just like with the formula method, recipes can be used as the preprocessor at
+fit and prediction time.
+
+```{r, error=FALSE, warning=FALSE}
+library(recipes)
+
+rec <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
+  step_dummy(Species)
+
+iris_recipe <- mold(rec, iris_train)
+
+recipe_eng <- iris_recipe$engine
+
+recipe_eng
+```
+
+```{r, error=TRUE}
+iris_test_no_outcome <- subset(iris_test, select = -Sepal.Width)
+
+forge(iris_test_no_outcome, recipe_eng)
+
+forge(iris_test_no_outcome, recipe_eng, outcomes = TRUE)
+```
+
+```{r}
+rec2 <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
+  step_dummy(Species) %>%
+  step_log(Sepal.Width)
+
+iris_recipe2 <- mold(rec2, iris_train)
+
+recipe_eng_log_outcome <- iris_recipe2$engine
+```
+
+```{r, error=TRUE}
+# this works? this is a recipe bug it should error
+forge(iris_test_no_outcome, recipe_eng_log_outcome)
+
+forge(iris_test_no_outcome, recipe_eng_log_outcome, outcomes = TRUE)
+```
+
+```{r}
+rec3 <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
+  step_dummy(Species) %>%
+  step_log(Sepal.Width, skip = TRUE)
+
+iris_recipe3 <- mold(rec3, iris_train)
+
+recipe_eng_skip_outcome <- iris_recipe3$engine
+```
+
+```{r}
+forge(iris_test_no_outcome, recipe_eng_skip_outcome)
+```
+
+## Appendix: Vector outcomes
+
+TODO - Finish me
+
+There is one special case of 
