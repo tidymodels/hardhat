@@ -257,4 +257,13 @@ identical(
 # and include the offset
 forge(test, processed$engine)
 
+# ---------------------------------------------------------------------------
+# Intercept only
+
+# Because `1` and `0` are intercept modifying terms, they are
+# not allowed in the formula and are controlled by the
+# `intercept` argument of the engine. To use an intercept
+# only formula, you should supply `NULL` on the RHS,
+mold(~ NULL, train, engine = default_formula_engine(intercept = TRUE))
+
 }
