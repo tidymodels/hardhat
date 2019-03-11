@@ -555,6 +555,45 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; # … with 40 more rows
 #&gt; 
 #&gt; </div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Intercept only</span>
+
+<span class='co'># Because `1` and `0` are intercept modifying terms, they are</span>
+<span class='co'># not allowed in the formula and are controlled by the</span>
+<span class='co'># `intercept` argument of the engine. To use an intercept</span>
+<span class='co'># only formula, you should supply `NULL` on the RHS,</span>
+<span class='fu'><a href='mold.html'>mold</a></span>(~ <span class='kw'>NULL</span>, <span class='no'>train</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'>default_formula_engine</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; $predictors
+#&gt; # A tibble: 100 x 1
+#&gt;    `(Intercept)`
+#&gt;            &lt;dbl&gt;
+#&gt;  1             1
+#&gt;  2             1
+#&gt;  3             1
+#&gt;  4             1
+#&gt;  5             1
+#&gt;  6             1
+#&gt;  7             1
+#&gt;  8             1
+#&gt;  9             1
+#&gt; 10             1
+#&gt; # … with 90 more rows
+#&gt; 
+#&gt; $outcomes
+#&gt; # A tibble: 100 x 0
+#&gt; 
+#&gt; $engine
+#&gt; Formula Engine: 
+#&gt;  
+#&gt; # Predictors: 0 
+#&gt;   # Outcomes: 0 
+#&gt;    Intercept: TRUE 
+#&gt;   Indicators: TRUE 
+#&gt; 
+#&gt; $extras
+#&gt; $extras$offset
+#&gt; NULL
+#&gt; 
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
