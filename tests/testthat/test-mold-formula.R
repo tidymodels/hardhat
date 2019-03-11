@@ -137,7 +137,7 @@ test_that("errors are thrown if `indicator = FALSE` and factors are used in inli
 
 test_that("`indicators = FALSE` works fine in strange formulas", {
 
-  x <- mold(~ 1, iris, engine = default_formula_engine(indicators = FALSE, intercept = TRUE))
+  x <- mold(~ NULL, iris, engine = default_formula_engine(indicators = FALSE, intercept = TRUE))
 
   expect_equal(
     colnames(x$predictors),
@@ -206,8 +206,32 @@ test_that("cannot manually remove intercept in the formula itself", {
   )
 
   expect_error(
+    mold(Species ~ 0 + y, iris),
+    "`formula` must not contain"
+  )
+
+  expect_error(
     mold(Species ~ y - 1, iris),
     "`formula` must not contain"
+  )
+
+})
+
+test_that("RHS with _only_ intercept related terms are caught", {
+
+  expect_error(
+    mold(~ 0, iris),
+    "`formula` must not contain the intercept removal term"
+  )
+
+  expect_error(
+    mold(~ 1, iris),
+    "`formula` must not contain the intercept term"
+  )
+
+  expect_error(
+    mold(~ -1, iris),
+    "`formula` must not contain the intercept removal term"
   )
 
 })

@@ -98,7 +98,30 @@ validate_formula_has_intercept <- function(formula) {
 
   formula <- rlang::f_rhs(formula)
 
+  validate_not_1_or_0(formula)
+
   recurse_intercept_search(formula)
+}
+
+validate_not_1_or_0 <- function(formula) {
+
+  if (!rlang::is_scalar_integerish(formula)) {
+    return(invisible(formula))
+  }
+
+  if (formula == 1) {
+    glubort(
+      "`formula` must not contain the intercept term, `1`."
+    )
+  }
+
+  if (formula == 0) {
+    glubort(
+      "`formula` must not contain the intercept removal term, `0`."
+    )
+  }
+
+  invisible(formula)
 }
 
 recurse_intercept_search <- function(x) {
