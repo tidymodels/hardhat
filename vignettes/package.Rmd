@@ -66,3 +66,5 @@ y <- iris$Petal.Width
 
 modeler(x, y)
 ```
+
+When it comes time to make predictions, the first thing that you should do inside your `predict()` method is pass the user supplied data to `forge()`, along with the `engine` that was attached to the model object. This will preprocess the `new_data` using the same steps specified when the model was being trained.
