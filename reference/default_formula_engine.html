@@ -561,7 +561,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Because `1` and `0` are intercept modifying terms, they are</span>
 <span class='co'># not allowed in the formula and are controlled by the</span>
 <span class='co'># `intercept` argument of the engine. To use an intercept</span>
-<span class='co'># only formula, you should supply `NULL` on the RHS,</span>
+<span class='co'># only formula, you should supply `NULL` on the RHS of the formula.</span>
 <span class='fu'><a href='mold.html'>mold</a></span>(~ <span class='kw'>NULL</span>, <span class='no'>train</span>, <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'>default_formula_engine</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 100 x 1
 #&gt;    `(Intercept)`

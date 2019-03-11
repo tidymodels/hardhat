@@ -140,6 +140,7 @@
 <a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; attr(,"class")</span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; [1] "modeler"</span></a></code></pre></div>
+<p>When it comes time to make predictions, the first thing that you should do inside your <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method is pass the user supplied data to <code><a href="../reference/forge.html">forge()</a></code>, along with the <code>engine</code> that was attached to the model object. This will preprocess the <code>new_data</code> using the same steps specified when the model was being trained.</p>
 </div>
   </div>
 
