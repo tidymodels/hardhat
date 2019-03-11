@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-options(rlang__backtrace_on_error = "none")
+options(rlang__backtrace_on_error = "reminder")
 ```
 
 ```{r setup}
