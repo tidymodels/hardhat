@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-options(rlang__backtrace_on_error = "none")
+options(rlang__backtrace_on_error = "reminder")
 ```
 
 ```{r setup}
@@ -24,9 +24,9 @@ library(hardhat)
 
 ## Introduction
 
-The counterpart to `mold()`, which you can read all about in `vignette("mold", "hardhat")`, is `forge()`. Where `mold()` is used to preprocess your training data, `forge()` is used to preprocess new data that you are going to use to generate predictions from your model.
+The counterpart to `mold()` (which you can read all about in `vignette("mold", "hardhat")`), is `forge()`. Where `mold()` is used to preprocess your training data, `forge()` is used to preprocess new data that you are going to use to generate predictions from your model.
 
-Like `mold()`, `forge()` is not intended to be used interactively. Instead, it should be called from the `predict()` method for your model. To learn more about using `forge()` in a modeling package, see `vignette("package", "hardhat")`. The rest of this vignette will be focused on the many features the `forge()` offers.
+Like `mold()`, `forge()` is not intended to be used interactively. Instead, it should be called from the `predict()` method for your model. To learn more about using `forge()` in a modeling package, see `vignette("package", "hardhat")`. The rest of this vignette will be focused on the many features that `forge()` offers.
 
 ## Connection with `mold()`
 
@@ -51,7 +51,7 @@ formula_eng
 
 A formula engine is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don't want to expand `Species` into dummy variables by setting `indicators = FALSE`.
 
-When it comes time to make predictions, the first thing that you should do inside your `predict()` method is pass the user supplied data to `forge()`, along with the `engine` that was attached to the model object. This will preprocess the `new_data` using the same steps specified when the model was being trained. Since we can't recreate that full fit+predict workflow in this simple example, let's just use `iris_test` as our new data, and the engine we created above.
+When it is time to `predict()` on new data, that data is passed on to `forge()` along with the `engine` we just created.
 
 ```{r}
 forge(iris_test, formula_eng)
@@ -63,7 +63,7 @@ Note that in `predictors`, `Species` was not expanded because the `engine` knew 
 
 - `predictors` holds a tibble of the predictors.
 
-- `outcomes` is returned as `NULL` by default, because most `predict()` methods assume you only have access to the new predictors. Alternatively, this might contain a tibble of the new outcomes.
+- `outcomes` is returned as `NULL` by default, because most `predict()` methods assume you only have access to the new predictors. Alternatively, as you will read in a moment, this can contain a tibble of the new outcomes.
 
 - `extras` varies per engine, but is a catch-all slot to hold the same kind of extra objects that were returned by the engine when `mold()` was called.
 
@@ -79,15 +79,15 @@ forge(iris_test, formula_eng, outcomes = TRUE)
 
 ## Validation
 
-One of the most useful things about `forge()` is its robustness against malformed new data. It isn't unreasonable to enforce that the new data a user provides at prediction time should have the same _type_ as the data used at fit time. _Type_ is defined in the [vctrs](https://vctrs.r-lib.org/articles/type-size.html) sense, and for our uses essentially means that a number of checks on the testing data have to pass, including:
+One of the most useful things about `forge()` is its robustness against malformed new data. It isn't unreasonable to enforce that the new data a user provides at prediction time should have the same _type_ as the data used at fit time. _Type_ is defined in the [vctrs](https://vctrs.r-lib.org/articles/type-size.html) sense, and for our uses essentially means that a number of checks on the test data have to pass, including:
 
-- The column names of the training data and testing data must be the same.
+- The column names of the testing data and training data must be the same.
 
-- The _type_ of each column of the training data must be the same as the columns found in the testing data. This means:
+- The _type_ of each column of the testing data must be the same as the columns found in the training data. This means:
 
   - The classes must be the same (e.g. if it was a factor in training, it must be a factor in testing).
   
-  - The attributes must also be the same (e.g. the levels of the factors must also be the same).
+  - The attributes must be the same (e.g. the levels of the factors must also be the same).
 
 Almost all of this validation is possible through the use of `vctrs::vec_cast()`, and is called for you by `forge()`.
 
@@ -155,10 +155,7 @@ In this case:
 
 ## Recipes and `forge()`
 
-TODO - Finish me
-
-Just like with the formula method, recipes can be used as the preprocessor at
-fit and prediction time.
+Just like with the formula method, a recipe can be used as the preprocessor at fit and prediction time. `hardhat` handles calling `prep()`, `juice()`, and `bake()` for you at the right times. For instance, say we have a recipe that just creates dummy variables out of `Species`.
 
 ```{r, error=FALSE, warning=FALSE}
 library(recipes)
@@ -168,52 +165,71 @@ rec <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
 
 iris_recipe <- mold(rec, iris_train)
 
+iris_recipe$predictors
+```
+
+The engine is a `recipe` engine.
+
+```{r}
 recipe_eng <- iris_recipe$engine
 
 recipe_eng
 ```
 
-```{r, error=TRUE}
-iris_test_no_outcome <- subset(iris_test, select = -Sepal.Width)
+When we `forge()`, we can request `outcomes` to have the predictors and outcomes separated like with the formula method.
 
-forge(iris_test_no_outcome, recipe_eng)
-
-forge(iris_test_no_outcome, recipe_eng, outcomes = TRUE)
+```{r}
+forge(iris_test, recipe_eng, outcomes = TRUE)
 ```
+
+### A note on recipes
+
+One complication with `recipes` is that, in the `bake()` step, the processing happens to the predictors and the outcomes all together. This means that you might run into the situation where the outcomes seem to be required to `forge()`, even if you aren't requesting them.
 
 ```{r}
 rec2 <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
   step_dummy(Species) %>%
-  step_log(Sepal.Width)
+  step_center(Sepal.Width) # Here we modify the outcome
 
 iris_recipe2 <- mold(rec2, iris_train)
 
 recipe_eng_log_outcome <- iris_recipe2$engine
 ```
 
-```{r, error=TRUE}
-# this works? this is a recipe bug it should error
-forge(iris_test_no_outcome, recipe_eng_log_outcome)
+If our `new_data` doesn't have the outcome, baking this recipe will fail even if we don't request that the outcomes are returned by `forge()`.
 
-forge(iris_test_no_outcome, recipe_eng_log_outcome, outcomes = TRUE)
+```{r, error=TRUE}
+iris_test_no_outcome <- subset(iris_test, select = -Sepal.Width)
+
+forge(iris_test_no_outcome, recipe_eng_log_outcome)
 ```
+
+The way around this is to use the built-in recipe argument, `skip`, on the step containing the outcome. This skips the processing of that step at `bake()` time.
 
 ```{r}
 rec3 <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
   step_dummy(Species) %>%
-  step_log(Sepal.Width, skip = TRUE)
+  step_center(Sepal.Width, skip = TRUE)
 
 iris_recipe3 <- mold(rec3, iris_train)
 
 recipe_eng_skip_outcome <- iris_recipe3$engine
-```
 
-```{r}
 forge(iris_test_no_outcome, recipe_eng_skip_outcome)
 ```
 
-## Appendix: Vector outcomes
+There is a tradeoff here that you need to be aware of. 
 
-TODO - Finish me
+- If you are just interested in generating predictions on completely new data, you can safely use `skip = TRUE` because you will almost never have access to the corresponding true outcomes to preprocess and compare against. 
 
-There is one special case of 
+- If you know you need to do resampling, you will likely have access to the outcomes during the resampling step so you can cross-validate the performance. In this case, you can't set `skip = TRUE` because then the outcomes won't be processed, but since you have access to them, you shouldn't need to.
+
+For example, if we used `iris_test` with the above recipe (which has the outcome), `Sepal.Width` wouldn't get centered when `forge()` is called. But we probably would not have skipped that step if we knew that our test data would have the outcome.
+
+```{r}
+forge(iris_test, recipe_eng_skip_outcome, outcomes = TRUE)$outcomes
+
+# Notice that the `outcome` values haven't been centered
+# and are the same as before
+head(iris_test$Sepal.Width)
+```
