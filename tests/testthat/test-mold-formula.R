@@ -236,6 +236,25 @@ test_that("RHS with _only_ intercept related terms are caught", {
 
 })
 
+test_that("`NULL` can be used to represent empty RHS formulas", {
+
+  expect_error(
+    x <- mold(~NULL, iris),
+    NA
+  )
+
+  expect_equal(nrow(x$predictors), 150)
+  expect_equal(nrow(x$outcomes), 150)
+
+  expect_error(
+    x2 <- mold(~NULL, iris, engine = default_formula_engine(intercept = TRUE)),
+    NA
+  )
+
+  expect_equal(colnames(x2$predictors), "(Intercept)")
+
+})
+
 test_that("intercepts can still be added when not using indicators (i.e. model.matrix())", {
 
   x <- mold(Sepal.Width ~ Species, iris, engine = default_formula_engine(intercept = TRUE, indicators = FALSE))
