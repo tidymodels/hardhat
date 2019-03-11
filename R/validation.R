@@ -14,8 +14,6 @@
 #'
 #' @param data An object to check.
 #'
-#' @param name A name to be used in the default error message.
-#'
 #' @template section-validation
 #'
 #' @details
@@ -32,14 +30,13 @@
 #'
 #' @family validation functions
 #' @export
-validate_is_univariate <- function(data, name = "data") {
+validate_is_univariate <- function(data) {
 
-  validate_is_name(name, "name")
   check <- check_is_univariate(data)
 
   if (!check$ok) {
     glubort(
-      "`{name}` must be univariate, but {check$n_cols} columns were found."
+      "`data` must be univariate, but {check$n_cols} columns were found."
     )
   }
 
@@ -417,18 +414,4 @@ check_list <- function(ok = TRUE, ...) {
   elems <- rlang::list2(...)
 
   c(list(ok = ok), elems)
-}
-
-# ------------------------------------------------------------------------------
-
-validate_is_name <- function(.x, .x_nm) {
-  validate_is_character(.x, .x_nm)
-
-  if (length(.x) != 1L) {
-    glubort(
-      "`{.x_nm}` must be of size 1, not {length(.x)}."
-    )
-  }
-
-  invisible(.x)
 }

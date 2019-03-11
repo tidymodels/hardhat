@@ -5,14 +5,12 @@
 \alias{check_is_univariate}
 \title{Ensure that \code{data} is univariate}
 \usage{
-validate_is_univariate(data, name = "data")
+validate_is_univariate(data)
 
 check_is_univariate(data)
 }
 \arguments{
 \item{data}{An object to check.}
-
-\item{name}{A name to be used in the default error message.}
 }
 \description{
 validate - asserts the following:
