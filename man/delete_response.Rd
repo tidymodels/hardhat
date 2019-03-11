@@ -4,10 +4,10 @@
 \alias{delete_response}
 \title{Delete the response from a terms object}
 \usage{
-delete_response(x)
+delete_response(terms)
 }
 \arguments{
-\item{x}{A terms object.}
+\item{terms}{A terms object.}
 }
 \description{
 \code{delete_response()} is exactly the same as \code{delete.response()}, except

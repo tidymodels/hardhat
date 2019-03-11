@@ -42,6 +42,6 @@ test_that("equal results if no response, but dataClasses exist", {
 test_that("errors out if not passed a terms object", {
   expect_error(
     delete_response(1),
-    "x should be a terms object"
+    "terms should be a terms object"
   )
 })

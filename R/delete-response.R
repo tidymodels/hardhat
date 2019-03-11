@@ -4,7 +4,7 @@
 #' that it fixes a long standing bug by also removing the part of the
 #' `"dataClasses"` attribute corresponding to the response, if it exists.
 #'
-#' @param x A terms object.
+#' @param terms A terms object.
 #'
 #' @details
 #'
@@ -21,20 +21,20 @@
 #' attr(delete_response(framed$terms), "dataClasses")
 #'
 #' @export
-delete_response <- function(x) {
+delete_response <- function(terms) {
 
-  validate_is_terms(x)
+  validate_is_terms(terms)
 
-  resp <- attr(x, "response")
-  data_class <- attr(x, "dataClasses")
+  resp <- attr(terms, "response")
+  data_class <- attr(terms, "dataClasses")
 
   response_exists <- ! (is.null(resp) || (resp == 0L))
   data_class_exists <- !is.null(data_class)
 
   # Remove dataClass corresponding to y if it exists
   if (response_exists & data_class_exists) {
-      attr(x, "dataClasses") <- data_class[-resp]
+      attr(terms, "dataClasses") <- data_class[-resp]
   }
 
-  delete.response(x)
+  delete.response(terms)
 }
