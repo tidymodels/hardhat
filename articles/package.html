@@ -95,6 +95,48 @@
     
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hardhat)</a></code></pre></div>
 <p>TODO - Finish me</p>
+<div id="high-level-ideas-here" class="section level2">
+<h2 class="hasAnchor">
+<a href="#high-level-ideas-here" class="anchor"></a>High level ideas here</h2>
+<ul>
+<li><p>Introduce a modeling function that you might use in a package</p></li>
+<li><p>Demonstrate the constructor</p></li>
+<li><p>Demonstrate an implementation function</p></li>
+<li><p>Demonstrate the user facing interface</p></li>
+<li><p>Show how to call <code><a href="../reference/mold.html">mold()</a></code> in this setup to preprocess data</p></li>
+<li><p>And show how the engine gets added to the constructor</p></li>
+<li><p>Then create a <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method</p></li>
+<li><p>Create a predict impl</p></li>
+<li><p>Add in <code><a href="../reference/forge.html">forge()</a></code> to the predict method</p></li>
+</ul>
+</div>
+<div id="introduction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h2>
+<p>The goal of this vignette is to teach you how to use <code><a href="../reference/mold.html">mold()</a></code> and <code><a href="../reference/forge.html">forge()</a></code> in a modeling package. This is the intended use of these functions, even though they can also be called interactively. Creating a new modeling package has two main stages, creating the modeling function, and implementing a predict method. The stages break down like this:</p>
+<ul>
+<li>
+<p>Modeling function</p>
+<ul>
+<li><p>Create a constructor</p></li>
+<li><p>Create an implementation function</p></li>
+<li><p>Create a user facing function with methods for xy, formula, and recipe interfaces</p></li>
+</ul>
+</li>
+<li>
+<p>Predict method</p>
+<ul>
+<li><p>Create one or more predict implementation function, varying by the <code>"type"</code> of prediction to make</p></li>
+<li><p>Create a user facing predict method</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="whats-our-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#whats-our-model" class="anchor"></a>What’s our model?</h2>
+<p>We will</p>
+</div>
 <div id="mold-by-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#mold-by-example" class="anchor"></a><code><a href="../reference/mold.html">mold()</a></code> By Example</h2>
@@ -149,7 +191,10 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#mold-by-example"><code><a href="--/reference/mold-html">mold()</a></code> By Example</a></li>
+<li><a href="#high-level-ideas-here">High level ideas here</a></li>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#whats-our-model">What’s our model?</a></li>
+      <li><a href="#mold-by-example"><code><a href="--/reference/mold-html">mold()</a></code> By Example</a></li>
       </ul>
 </div>
       </div>
