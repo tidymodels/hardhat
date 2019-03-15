@@ -455,7 +455,7 @@ forge_formula_default_clean <- function(engine, new_data, outcomes) {
   out$forge$clean(engine, predictors, outcomes)
 }
 
-forge_formula_default_process <- function(engine, predictors, outcomes) {
+forge_formula_default_process <- function(engine, predictors, outcomes, extras) {
 
   c(engine, predictors_lst) %<-% forge_formula_default_process_predictors(
     engine = engine,
@@ -467,7 +467,10 @@ forge_formula_default_process <- function(engine, predictors, outcomes) {
     outcomes = outcomes
   )
 
-  extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
+  extras <- c(
+    extras,
+    out$extras$final(predictors_lst$extras, outcomes_lst$extras)
+  )
 
   out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
 }

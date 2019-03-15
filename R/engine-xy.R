@@ -138,7 +138,7 @@ validate_forge_args <- function(forge) {
     )
   }
 
-  required_process_args <- c("engine", "predictors", "outcomes")
+  required_process_args <- c("engine", "predictors", "outcomes", "extras")
 
   actual_process_args <- rlang::fn_fmls_names(forge$process)
 
