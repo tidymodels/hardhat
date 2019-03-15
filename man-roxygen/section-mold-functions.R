@@ -1,5 +1,3 @@
-# Lists are too deeply nested to include in the rd docs
-
 #' @section Mold Functions:
 #'
 #' `engine$mold` should be a named list with two elements, both of which
