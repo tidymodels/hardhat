@@ -225,17 +225,24 @@ test_that("new data classes can interchange integer/numeric", {
 
 })
 
+test_that("an `extras` slot exists for `roles`", {
+
+
+
+})
+
 test_that("non standard roles are returned as extras", {
 
-  x <- recipe(Species ~ ., iris) %>%
-    update_role(Sepal.Width, new_role = "dummy") %>%
-    mold(iris)
+  x <- mold(
+    recipe(Species ~ Sepal.Length, data = iris),
+    iris
+  )
 
   xx <- forge(iris, x$engine)
 
   expect_equal(
-    xx$extras$roles,
-    list(dummy = tibble::tibble(Sepal.Width = iris$Sepal.Width))
+    xx$extras,
+    list(roles = NULL)
   )
 
 })
