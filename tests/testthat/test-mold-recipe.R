@@ -112,3 +112,44 @@ test_that("multiple extra roles types can be stored", {
   )
 
 })
+
+test_that("`NA` roles are skipped over", {
+
+  rec <- recipe(iris) %>%
+    update_role(Sepal.Length, new_role = "predictor") %>%
+    update_role(Species, new_role = "outcome") %>%
+    update_role(Sepal.Width, new_role = "custom")
+
+  x <- mold(rec, iris)
+
+  expect_equal(
+    colnames(x$predictors),
+    "Sepal.Length"
+  )
+
+  expect_equal(
+    colnames(x$engine$ptypes$predictors),
+    "Sepal.Length"
+  )
+
+  expect_equal(
+    colnames(x$outcomes),
+    "Species"
+  )
+
+  expect_equal(
+    colnames(x$engine$ptypes$outcomes),
+    "Species"
+  )
+
+  expect_equal(
+    colnames(x$extras$roles$custom),
+    "Sepal.Width"
+  )
+
+  expect_equal(
+    colnames(x$engine$extra_role_ptypes$custom),
+    "Sepal.Width"
+  )
+
+})
