@@ -87,6 +87,24 @@
 #'
 #' mold(rec2, iris)$predictors
 #'
+#' # ---------------------------------------------------------------------------
+#' # Non standard roles
+#'
+#' # If you have custom recipe roles, they are processed and returned in
+#' # the `$extras$roles` slot of the return value of `mold()` and `forge()`.
+#'
+#' rec_roles <- recipe(train) %>%
+#'   update_role(Sepal.Width, new_role = "predictor") %>%
+#'   update_role(Species, new_role = "outcome") %>%
+#'   update_role(Sepal.Length, new_role = "custom_role") %>%
+#'   update_role(Petal.Length, new_role = "custom_role2")
+#'
+#' processed_roles <- mold(rec_roles, train)
+#'
+#' processed_roles$extras
+#'
+#' forge(test, processed_roles$engine)
+#'
 #' @export
 default_recipe_engine <- function(intercept = FALSE) {
 
@@ -101,6 +119,11 @@ default_recipe_engine <- function(intercept = FALSE) {
 
 }
 
+#' @param extra_role_ptypes A named list. The names are the unique non-standard
+#' recipe roles (i.e. everything except `"predictors"` and `"outcomes"`). The
+#' values are prototypes of the original columns with that role. These are
+#' used for validation in `forge()`.
+#'
 #' @rdname new-default-engine
 #' @export
 new_default_recipe_engine <- function(mold,
@@ -290,11 +313,11 @@ forge_recipe_default_process <- function(engine, predictors, outcomes, extras) {
     new_data = vctrs::vec_cbind(predictors, outcomes, !!!unname(extras$roles))
   )
 
-  processed_predictor_names <- vars[roles == "predictor"]
+  processed_predictor_names <- vars[strict_equal(roles, "predictor")]
   predictors <- baked_data[, processed_predictor_names, drop = FALSE]
 
   if (!is.null(outcomes)) {
-    processed_outcome_names <- vars[roles == "outcome"]
+    processed_outcome_names <- vars[strict_equal(roles, "outcome")]
     outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
   }
 
@@ -362,7 +385,8 @@ forge_recipe_default_process_extras <- function(extras, rec, baked_data,
 get_original_predictor_ptype <- function(rec, data) {
 
   roles <- rec$var_info$role
-  original_names <- rec$var_info$variable[roles == "predictor"]
+  original_names <- rec$var_info$variable[strict_equal(roles, "predictor")]
+  original_names <- original_names[!is.na(original_names)]
 
   original_data <- data[, original_names, drop = FALSE]
 
@@ -372,7 +396,7 @@ get_original_predictor_ptype <- function(rec, data) {
 get_original_outcome_ptype <- function(rec, data) {
 
   roles <- rec$var_info$role
-  original_names <- rec$var_info$variable[roles == "outcome"]
+  original_names <- rec$var_info$variable[strict_equal(roles, "outcome")]
 
   original_data <- data[, original_names, drop = FALSE]
 
@@ -391,7 +415,7 @@ get_extra_role_columns <- function(rec, data, original = TRUE) {
   roles <- rec[[info_type]][["role"]]
   vars <- rec[[info_type]][["variable"]]
 
-  extra_roles <- setdiff(roles, c("predictor", "outcome"))
+  extra_roles <- setdiff(roles, c("predictor", "outcome", NA_character_))
 
   has_any_extra_roles <- length(extra_roles) > 0
 
@@ -400,7 +424,7 @@ get_extra_role_columns <- function(rec, data, original = TRUE) {
   }
 
   extra_role_cols_list <- lapply(extra_roles, function(.role) {
-    .role_cols <- vars[roles == .role]
+    .role_cols <- vars[strict_equal(roles, .role)]
     data[, .role_cols, drop = FALSE]
   })
 

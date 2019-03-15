@@ -274,6 +274,10 @@ default_formula_engine <- function(intercept = FALSE,
 
 }
 
+#' @param terms A named list of two elements, `predictors` and `outcomes`. Both
+#' elements are `terms` objects that describe the terms for the outcomes and
+#' predictors separately. This argument is set automatically at [mold()] time.
+#'
 #' @rdname new-default-engine
 #' @export
 new_default_formula_engine <- function(mold,

@@ -142,10 +142,6 @@ default_xy_engine <- function(intercept = FALSE) {
 #' @inheritParams new_formula_engine
 #' @inheritParams new_recipe_engine
 #'
-#' @param terms A named list of two elements, `predictors` and `outcomes`. Both
-#' elements are `terms` objects that describe the terms for the outcomes and
-#' predictors separately. This argument is set automatically at [mold()] time.
-#'
 #' @name new-default-engine
 #' @export
 new_default_xy_engine <- function(mold,
