@@ -133,10 +133,13 @@ are functions:
 \itemize{
 \item \code{engine}, \code{new_data}, and \code{outcomes}.
 }
-\item \emph{Output}: A named list of two elements:
+\item \emph{Output}: A named list of the following elements:
 \itemize{
 \item \code{engine}: The engine, returned and potentially updated.
-\item \code{new_data}: The \code{new_data}, cleaned.
+\item \code{predictors}: A tibble containing the cleaned predictors.
+\item \code{outcomes}: A tibble containing the cleaned outcomes.
+\item \code{extras}: A named list of any extras obtained while cleaning. These
+are passed on to the \code{process()} function for further use.
 }
 }
 \item \code{process}: A function that performs the actual preprocessing of the data
@@ -144,9 +147,9 @@ using the known information in the \code{engine}.
 \itemize{
 \item \emph{Arguments}:
 \itemize{
-\item \code{engine}, \code{new_data}, and \code{outcomes}.
+\item \code{engine}, \code{new_data}, \code{outcomes}, \code{extras}.
 }
-\item \emph{Output}: A named list of 4 elements:
+\item \emph{Output}: A named list of the following elements:
 \itemize{
 \item \code{engine}: The engine, returned and potentially updated.
 \item \code{predictors}: A tibble of the predictors.
