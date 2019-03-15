@@ -27,6 +27,10 @@
 #'
 extract_ptype <- function(data) {
 
+  if (is.null(data)) {
+    return(NULL)
+  }
+
   data <- check_is_data_like(data)
 
   vctrs::vec_slice(data, 0L)
