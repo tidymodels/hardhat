@@ -363,3 +363,33 @@ validate_levels_list <- function(lst, lst_nm) {
 
 # Just happen to be the same structure
 validate_classes_list <- validate_levels_list
+
+
+validate_forge_args <- function(forge) {
+
+  required_clean_args <- c("engine", "new_data", "outcomes")
+
+  actual_clean_args <- rlang::fn_fmls_names(forge$clean)
+
+  if (!identical(actual_clean_args, required_clean_args)) {
+    required_clean_args <- glue_quote_collapse(required_clean_args)
+
+    glubort(
+      "`forge$clean()` must have the following arguments: {required_clean_args}."
+    )
+  }
+
+  required_process_args <- c("engine", "predictors", "outcomes", "extras")
+
+  actual_process_args <- rlang::fn_fmls_names(forge$process)
+
+  if (!identical(required_process_args, actual_process_args)) {
+    required_process_args <- glue_quote_collapse(required_process_args)
+
+    glubort(
+      "`forge$process()` must have the following arguments: {required_process_args}."
+    )
+  }
+
+  invisible(forge)
+}
