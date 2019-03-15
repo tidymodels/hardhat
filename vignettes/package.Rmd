@@ -20,6 +20,48 @@ library(hardhat)
 
 TODO - Finish me
 
+## High level ideas here
+
+- Introduce a modeling function that you might use in a package
+
+- Demonstrate the constructor
+
+- Demonstrate an implementation function
+
+- Demonstrate the user facing interface
+
+- Show how to call `mold()` in this setup to preprocess data
+
+- And show how the engine gets added to the constructor
+
+- Then create a `predict()` method
+
+- Create a predict impl
+
+- Add in `forge()` to the predict method
+
+## Introduction
+
+The goal of this vignette is to teach you how to use `mold()` and `forge()` in a modeling package. This is the intended use of these functions, even though they can also be called interactively. Creating a new modeling package has two main stages, creating the modeling function, and implementing a predict method. The stages break down like this:
+
+- Modeling function
+  
+  - Create a constructor
+  
+  - Create an implementation function
+  
+  - Create a user facing function with methods for xy, formula, and recipe interfaces
+  
+- Predict method
+
+  - Create one or more predict implementation function, varying by the `"type"` of prediction to make
+  
+  - Create a user facing predict method
+
+## What's our model?
+
+We will 
+
 ## `mold()` By Example
 
 The intended use of `mold()` is to be called from your top level modeling function (the one that users will call). Suppose that we have such a function, `modeler()`, along with it's core implementation `modeler_impl()`, and a constructor to make a new `"modeler"` object, `new_modeler()`.
