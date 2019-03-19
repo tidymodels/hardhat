@@ -398,9 +398,9 @@
 <a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; [1] "log(Sepal.Width)"  "Speciessetosa"     "Speciesversicolor"</span></a>
 <a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; [4] "Speciesvirginica"</span></a></code></pre></div>
 </div>
-<div id="prediction-implementation-functions" class="section level2">
+<div id="prediction-implementation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#prediction-implementation-functions" class="anchor"></a>Prediction Implementation Functions</h2>
+<a href="#prediction-implementation" class="anchor"></a>Prediction Implementation</h2>
 <p>On the prediction side, we need “implementation” functions like with fitting our model. These vary based on the <code>"type"</code> argument to <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>. The <code>"type"</code> might be <code>"response"</code> for numeric predictions as we will use here, or it could be <code>"class"</code> for hard class predictions, <code>"prob"</code> for class probabilities, and more. A set of recommended names for <code>"type"</code> can be found in the <a href="https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data">Model Predictions</a> section of the implementation principles.</p>
 <p>For our model, we will focus on only returning numeric predictions. I generally like to name these prediciton implementation functions <code>predict_&lt;model-class&gt;_&lt;type&gt;()</code>. The arguments should be the model object, and the predictors in the form that your prediction implementation expects them (here, a matrix).</p>
 <p>Also used here is another hardhat function for standardizing prediction output, <code><a href="../reference/spruce.html">spruce_response()</a></code>. This function tidies up the response output, and automatically standardizes it to match the recommendations in the principles guide. The output is always a tibble, and for the response type it has 1 column, <code>.pred</code>.</p>
@@ -593,7 +593,7 @@
       <li><a href="#model-wrapper">Model Wrapper</a></li>
       <li><a href="#user-facing-fitting-function">User Facing Fitting Function</a></li>
       <li><a href="#adding-an-intercept-option">Adding an Intercept Option</a></li>
-      <li><a href="#prediction-implementation-functions">Prediction Implementation Functions</a></li>
+      <li><a href="#prediction-implementation">Prediction Implementation</a></li>
       <li><a href="#prediction-wrapper">Prediction Wrapper</a></li>
       <li><a href="#user-facing-prediction-function">User Facing Prediction Function</a></li>
       <li><a href="#final-testing">Final Testing</a></li>
