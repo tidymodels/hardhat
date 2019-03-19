@@ -74,3 +74,6 @@ To learn about how to use hardhat, check out the vignettes:
 
   - `vignette("forge", "hardhat")`: Learn how to preprocess new data at
     prediction time with `forge()`.
+
+  - `vignette("package", "hardhat")`: Learn how to use `mold()` and
+    `forge()` to help in creating a new modeling package.
