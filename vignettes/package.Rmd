@@ -1,8 +1,8 @@
 ---
-title: "package"
+title: "Creating Modeling Packages With hardhat"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{package}
+  %\VignetteIndexEntry{Creating Modeling Packages With hardhat}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
