@@ -17,9 +17,10 @@ status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.or
 
 ## Introduction
 
-hardhat is designed to ease the creation of new modeling packages, while
-simultaneously promoting good R modeling package standards as laid out
-by the set of opinionated [Conventions for R Modeling
+hardhat is a *developer focused* package designed to ease the creation
+of new modeling packages, while simultaneously promoting good R modeling
+package standards as laid out by the set of opinionated [Conventions for
+R Modeling
 Packages](https://tidymodels.github.io/model-implementation-principles/).
 
 hardhat has four main goals:
