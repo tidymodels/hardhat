@@ -30,10 +30,25 @@ new_model <- function(..., engine = default_xy_engine(), class = character()) {
 
   validate_is_engine(engine)
 
-  new_abstract_model(..., engine = engine, class = class)
+  new_abstract_model(..., engine = engine, class = c(class, "hardhat_model"))
 }
 
-new_abstract_model <- function(..., class = character()) {
+# ------------------------------------------------------------------------------
+
+#' @export
+print.hardhat_model <- function(x, ...) {
+  cat_line("<", class(x)[1], ">")
+  x$engine <- NULL
+  print(unclass(x))
+}
+
+cat_line <- function (...) {
+  cat(paste0(..., "\n", collapse = ""))
+}
+
+# ------------------------------------------------------------------------------
+
+new_abstract_model <- function(..., class) {
 
   if (is_missing(class)) {
     abort("A model `class` must be provided.")
@@ -42,13 +57,15 @@ new_abstract_model <- function(..., class = character()) {
   elems <- rlang::list2(...)
   validate_has_unique_names(elems, "...")
 
-  new_scalar(elems, class = c(class, "hardhat_model"))
+  new_scalar(elems, class = class)
 }
 
 new_scalar <- function(elems, ..., class = character()) {
   check_elems(elems)
   structure(elems, ..., class = c(class, "hardhat_scalar"))
 }
+
+# ------------------------------------------------------------------------------
 
 check_elems <- function(elems) {
 
