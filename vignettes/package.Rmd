@@ -3,8 +3,10 @@ title: "package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{package}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -58,9 +60,103 @@ The goal of this vignette is to teach you how to use `mold()` and `forge()` in a
   
   - Create a user facing predict method
 
-## What's our model?
+## What's Our Model?
 
-We will 
+We will use the underlying `lm()` infrastructure, `lm.fit()`, to create our model. Linear regression should be recognizable to many, so we can focus on understanding how `mold()` and `forge()` fit in the picture, rather than understanding how the model works.
+
+`lm.fit()` takes `x` and `y` directly, rather than using the formula method. It will serve as the core part of our modeling implementation function, and generally it is easiest if the implementation function takes `x` and `y` in this manner.
+
+## Model Constructor
+
+The first thing we need is a _constructor_ that creates new objects of our model class. The hardhat function `new_base_model()` can help with creating that. Our constructor should have the name `new_<class>()`, should take all of the required pieces to the model as named arguments, and should pass them on to `new_base_model()` which will return a classed list.
+
+```{r}
+new_linear_regression <- function(coefs, coef_names, engine) {
+  
+  if (!is.numeric(coefs)) {
+    stop("`coefs` should be a numeric vector.", call. = FALSE)
+  }
+  
+  if (!is.character(coef_names)) {
+    stop("`coef_names` should be a character vector.", call. = FALSE)
+  }
+  
+  if (length(coefs) != length(coef_names)) {
+    stop("`coefs` and `coef_names` must have the same length.")
+  }
+  
+  new_model(
+    coefs = coefs, 
+    coef_names = coef_names,
+    engine = engine, 
+    class = "linear_regression"
+  )
+}
+```
+
+```{r}
+linear_regression_impl <- function(predictors, outcomes) {
+  lm_fit <- lm.fit(predictors, outcomes)
+  
+  coefs <- lm_fit$coefficients
+  
+  coef_names <- names(coefs)
+  coefs <- unname(coefs)
+  
+  list(
+    coefs = coefs,
+    coef_names = coef_names
+  )
+}
+```
+
+```{r}
+linear_regression_wrapper <- function(processed) {
+  
+  x <- as.matrix(processed$predictors)
+  y <- processed$outcomes[[1]]
+  
+  fit <- linear_regression_impl(x, y)
+  
+  new_linear_regression(
+    coefs = fit$coefs,
+    coef_names = fit$coef_names,
+    engine = processed$engine
+  )
+}
+```
+
+```{r}
+linear_regression <- function(x, ...) {
+  UseMethod("linear_regression")
+}
+
+linear_regression.data.frame <- function(x, y, ...) {
+  processed <- mold(x, y)
+  linear_regression_wrapper(processed)
+}
+
+linear_regression.matrix <- function(x, y, ...) {
+  processed <- mold(x, y)
+  linear_regression_wrapper(processed)
+}
+
+linear_regression.formula <- function(formula, data, ...) {
+  processed <- mold(formula, data)
+  linear_regression_wrapper(processed)
+}
+
+linear_regression.recipe <- function(x, data, ...) {
+  processed <- mold(x, data)
+  linear_regression_wrapper(processed)
+}
+```
+
+
+```{r}
+linear_regression(iris[, "Sepal.Width", drop = FALSE], iris$Sepal.Length)
+```
+
 
 ## `mold()` By Example
 
