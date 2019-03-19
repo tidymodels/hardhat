@@ -287,7 +287,7 @@ simple_lm(predictors, outcomes_df)
 simple_lm(Sepal.Length ~ log(Sepal.Width) + Species, iris, intercept = FALSE)
 ```
 
-## Prediction Implementation Functions
+## Prediction Implementation
 
 On the prediction side, we need "implementation" functions like with fitting our model. These vary based on the `"type"` argument to `predict()`. The `"type"` might be `"response"` for numeric predictions as we will use here, or it could be `"class"` for hard class predictions, `"prob"` for class probabilities, and more. A set of recommended names for `"type"` can be found in the [Model Predictions](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) section of the implementation principles.
 
