@@ -81,7 +81,7 @@ forge.data.frame <- function(new_data, engine, ..., outcomes = FALSE) {
   validate_empty_dots(...)
   validate_is_engine(engine)
 
-  c(engine, predictors, outcomes) %<-% engine$forge$clean(
+  c(engine, predictors, outcomes, extras) %<-% engine$forge$clean(
     engine = engine,
     new_data = new_data,
     outcomes = outcomes
@@ -90,7 +90,8 @@ forge.data.frame <- function(new_data, engine, ..., outcomes = FALSE) {
   c(predictors, outcomes, extras) %<-% engine$forge$process(
     engine = engine,
     predictors = predictors,
-    outcomes = outcomes
+    outcomes = outcomes,
+    extras = extras
   )
 
   out$forge$final(predictors, outcomes, extras)

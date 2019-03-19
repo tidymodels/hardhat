@@ -101,4 +101,22 @@ rec2 <- step_intercept(rec)
 
 mold(rec2, iris)$predictors
 
+# ---------------------------------------------------------------------------
+# Non standard roles
+
+# If you have custom recipe roles, they are processed and returned in
+# the `$extras$roles` slot of the return value of `mold()` and `forge()`.
+
+rec_roles <- recipe(train) \%>\%
+  update_role(Sepal.Width, new_role = "predictor") \%>\%
+  update_role(Species, new_role = "outcome") \%>\%
+  update_role(Sepal.Length, new_role = "custom_role") \%>\%
+  update_role(Petal.Length, new_role = "custom_role2")
+
+processed_roles <- mold(rec_roles, train)
+
+processed_roles$extras
+
+forge(test, processed_roles$engine)
+
 }

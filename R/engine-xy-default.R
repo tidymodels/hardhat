@@ -142,10 +142,6 @@ default_xy_engine <- function(intercept = FALSE) {
 #' @inheritParams new_formula_engine
 #' @inheritParams new_recipe_engine
 #'
-#' @param terms A named list of two elements, `predictors` and `outcomes`. Both
-#' elements are `terms` objects that describe the terms for the outcomes and
-#' predictors separately. This argument is set automatically at [mold()] time.
-#'
 #' @name new-default-engine
 #' @export
 new_default_xy_engine <- function(mold,
@@ -255,12 +251,15 @@ forge_xy_default_clean <- function(engine, new_data, outcomes) {
   out$forge$clean(engine, predictors, outcomes)
 }
 
-forge_xy_default_process <- function(engine, predictors, outcomes) {
+forge_xy_default_process <- function(engine, predictors, outcomes, extras) {
 
   c(engine, predictors_lst) %<-% forge_xy_default_process_predictors(engine, predictors)
   c(engine, outcomes_lst) %<-% forge_xy_default_process_outcomes(engine, outcomes)
 
-  extras <- c(predictors_lst$extras, outcomes_lst$extras)
+  extras <- c(
+    extras,
+    out$extras$final(predictors_lst$extras, outcomes_lst$extras)
+  )
 
   out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
 }

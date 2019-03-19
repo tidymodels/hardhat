@@ -1,5 +1,3 @@
-# Lists are too deeply nested to include in the rd docs
-
 #' @section Forge Functions:
 #'
 #' `engine$forge` should be a named list with two elements, both of which
@@ -11,20 +9,25 @@
 #'
 #'       - `engine`, `new_data`, and `outcomes`.
 #'
-#'    - _Output_: A named list of two elements:
+#'    - _Output_: A named list of the following elements:
 #'
 #'       - `engine`: The engine, returned and potentially updated.
 #'
-#'       - `new_data`: The `new_data`, cleaned.
+#'       - `predictors`: A tibble containing the cleaned predictors.
+#'
+#'       - `outcomes`: A tibble containing the cleaned outcomes.
+#'
+#'       - `extras`: A named list of any extras obtained while cleaning. These
+#'       are passed on to the `process()` function for further use.
 #'
 #' - `process`: A function that performs the actual preprocessing of the data
 #' using the known information in the `engine`.
 #'
 #'    - _Arguments_:
 #'
-#'       - `engine`, `new_data`, and `outcomes`.
+#'       - `engine`, `new_data`, `outcomes`, `extras`.
 #'
-#'    - _Output_: A named list of 4 elements:
+#'    - _Output_: A named list of the following elements:
 #'
 #'       - `engine`: The engine, returned and potentially updated.
 #'

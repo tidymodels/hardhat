@@ -225,3 +225,44 @@ test_that("new data classes can interchange integer/numeric", {
 
 })
 
+test_that("an `extras` slot exists for `roles`", {
+
+
+
+})
+
+test_that("non standard roles are returned as extras", {
+
+  x <- mold(
+    recipe(Species ~ Sepal.Length, data = iris),
+    iris
+  )
+
+  xx <- forge(iris, x$engine)
+
+  expect_equal(
+    xx$extras,
+    list(roles = NULL)
+  )
+
+})
+
+test_that("only original non standard role columns are required", {
+
+  # columns created by step_bs() shouldnt be required,
+  # but are returned in `extras`
+  x <- recipe(Species ~ ., iris) %>%
+    step_bs(Sepal.Length, role = "dummy", deg_free = 3) %>%
+    mold(iris)
+
+  expect_error(
+    xx <- forge(iris, x$engine),
+    NA
+  )
+
+  expect_equal(
+    colnames(xx$extras$roles$dummy),
+    paste("Sepal.Length", c("1", "2", "3"), sep = "_bs_")
+  )
+
+})

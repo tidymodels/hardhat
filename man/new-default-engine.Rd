@@ -14,7 +14,8 @@ new_default_formula_engine(mold, forge, intercept = FALSE,
   subclass = character())
 
 new_default_recipe_engine(mold, forge, intercept = FALSE,
-  ptypes = NULL, recipe = NULL, ..., subclass = character())
+  ptypes = NULL, recipe = NULL, extra_role_ptypes = NULL, ...,
+  subclass = character())
 
 new_default_xy_engine(mold, forge, intercept = FALSE, ptypes = NULL,
   ..., subclass = character())
@@ -53,6 +54,11 @@ subclass this engine.}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
+
+\item{extra_role_ptypes}{A named list. The names are the unique non-standard
+recipe roles (i.e. everything except \code{"predictors"} and \code{"outcomes"}). The
+values are prototypes of the original columns with that role. These are
+used for validation in \code{forge()}.}
 }
 \description{
 This page contains the constructors for the default engines. They can be
