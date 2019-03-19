@@ -134,54 +134,146 @@
 </div>
 <div id="whats-our-model" class="section level2">
 <h2 class="hasAnchor">
-<a href="#whats-our-model" class="anchor"></a>What’s our model?</h2>
-<p>We will</p>
+<a href="#whats-our-model" class="anchor"></a>What’s Our Model?</h2>
+<p>We will use the underlying <code><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm()</a></code> infrastructure, <code><a href="https://www.rdocumentation.org/packages/stats/topics/lmfit">lm.fit()</a></code>, to create our model. Linear regression should be recognizable to many, so we can focus on understanding how <code><a href="../reference/mold.html">mold()</a></code> and <code><a href="../reference/forge.html">forge()</a></code> fit in the picture, rather than understanding how the model works.</p>
+<p><code><a href="https://www.rdocumentation.org/packages/stats/topics/lmfit">lm.fit()</a></code> takes <code>x</code> and <code>y</code> directly, rather than using the formula method. It will serve as the core part of our modeling implementation function, and generally it is easiest if the implementation function takes <code>x</code> and <code>y</code> in this manner.</p>
+</div>
+<div id="model-constructor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#model-constructor" class="anchor"></a>Model Constructor</h2>
+<p>The first thing we need is a <em>constructor</em> that creates new objects of our model class. The hardhat function <code>new_base_model()</code> can help with creating that. Our constructor should have the name <code>new_&lt;class&gt;()</code>, should take all of the required pieces to the model as named arguments, and should pass them on to <code>new_base_model()</code> which will return a classed list.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">new_linear_regression &lt;-<span class="st"> </span><span class="cf">function</span>(coefs, coef_names, engine) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  </a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">is.numeric</a></span>(coefs)) {</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"`coefs` should be a numeric vector."</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  }</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">is.character</a></span>(coef_names)) {</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"`coef_names` should be a character vector."</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">  }</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(coefs) <span class="op">!=</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(coef_names)) {</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"`coefs` and `coef_names` must have the same length."</span>)</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">  }</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">  </a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">  <span class="kw"><a href="../reference/new_model.html">new_model</a></span>(</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">    <span class="dt">coefs =</span> coefs, </a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">    <span class="dt">coef_names =</span> coef_names,</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">    <span class="dt">engine =</span> engine, </a>
+<a class="sourceLine" id="cb2-19" data-line-number="19">    <span class="dt">class =</span> <span class="st">"linear_regression"</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">  )</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">}</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">linear_regression_impl &lt;-<span class="st"> </span><span class="cf">function</span>(predictors, outcomes) {</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  lm_fit &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lmfit">lm.fit</a></span>(predictors, outcomes)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  coefs &lt;-<span class="st"> </span>lm_fit<span class="op">$</span>coefficients</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  </a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  coef_names &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(coefs)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  coefs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unname">unname</a></span>(coefs)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  </a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">    <span class="dt">coefs =</span> coefs,</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">    <span class="dt">coef_names =</span> coef_names</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">  )</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">linear_regression_wrapper &lt;-<span class="st"> </span><span class="cf">function</span>(processed) {</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(processed<span class="op">$</span>predictors)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  y &lt;-<span class="st"> </span>processed<span class="op">$</span>outcomes[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">  </a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">  fit &lt;-<span class="st"> </span><span class="kw">linear_regression_impl</span>(x, y)</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  </a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="kw">new_linear_regression</span>(</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="dt">coefs =</span> fit<span class="op">$</span>coefs,</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="dt">coef_names =</span> fit<span class="op">$</span>coef_names,</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">    <span class="dt">engine =</span> processed<span class="op">$</span>engine</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">  )</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">linear_regression &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/UseMethod">UseMethod</a></span>(<span class="st">"linear_regression"</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">linear_regression.data.frame &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, ...) {</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="kw">linear_regression_wrapper</span>(processed)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">linear_regression.matrix &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, ...) {</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y)</a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="kw">linear_regression_wrapper</span>(processed)</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">linear_regression.formula &lt;-<span class="st"> </span><span class="cf">function</span>(formula, data, ...) {</a>
+<a class="sourceLine" id="cb5-16" data-line-number="16">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(formula, data)</a>
+<a class="sourceLine" id="cb5-17" data-line-number="17">  <span class="kw">linear_regression_wrapper</span>(processed)</a>
+<a class="sourceLine" id="cb5-18" data-line-number="18">}</a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20">linear_regression.recipe &lt;-<span class="st"> </span><span class="cf">function</span>(x, data, ...) {</a>
+<a class="sourceLine" id="cb5-21" data-line-number="21">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, data)</a>
+<a class="sourceLine" id="cb5-22" data-line-number="22">  <span class="kw">linear_regression_wrapper</span>(processed)</a>
+<a class="sourceLine" id="cb5-23" data-line-number="23">}</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">linear_regression</span>(iris[, <span class="st">"Sepal.Width"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>], iris<span class="op">$</span>Sepal.Length)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; $coefs</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; [1] 1.869009</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; $coef_names</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] "Sepal.Width"</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; $engine</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; XY Engine: </span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; # Predictors: 1 </span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;   # Outcomes: 1 </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;    Intercept: FALSE </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; attr(,"class")</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; [1] "linear_regression" "hardhat_model"     "hardhat_scalar"</span></a></code></pre></div>
 </div>
 <div id="mold-by-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#mold-by-example" class="anchor"></a><code><a href="../reference/mold.html">mold()</a></code> By Example</h2>
 <p>The intended use of <code><a href="../reference/mold.html">mold()</a></code> is to be called from your top level modeling function (the one that users will call). Suppose that we have such a function, <code>modeler()</code>, along with it’s core implementation <code>modeler_impl()</code>, and a constructor to make a new <code>"modeler"</code> object, <code>new_modeler()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Create a new `modeler` object</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">new_modeler &lt;-<span class="st"> </span><span class="cf">function</span>(y_mean) {</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  </a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">is.numeric</a></span>(y_mean)) {</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"`y_mean` must be numeric."</span>)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  }</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  </a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">  elements &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">    <span class="dt">y_mean =</span> y_mean</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">  )</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">  </a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/structure">structure</a></span>(elements, <span class="dt">class =</span> <span class="st">"modeler"</span>)</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">}</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co"># Implementation function</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">modeler_impl &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">  </a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">  <span class="co"># core modeling implementation</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">  </a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">    <span class="dt">y_mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(y)</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">  )</a>
-<a class="sourceLine" id="cb2-23" data-line-number="23">}</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26">modeler &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
-<a class="sourceLine" id="cb2-27" data-line-number="27">  res &lt;-<span class="st"> </span><span class="kw">modeler_impl</span>(x, y)</a>
-<a class="sourceLine" id="cb2-28" data-line-number="28">  <span class="kw">new_modeler</span>(<span class="dt">y_mean =</span> res<span class="op">$</span>y_mean)</a>
-<a class="sourceLine" id="cb2-29" data-line-number="29">}</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Create a new `modeler` object</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">new_modeler &lt;-<span class="st"> </span><span class="cf">function</span>(y_mean) {</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">is.numeric</a></span>(y_mean)) {</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"`y_mean` must be numeric."</span>)</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">  }</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">  </a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">  elements &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">    <span class="dt">y_mean =</span> y_mean</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">  )</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">  </a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/structure">structure</a></span>(elements, <span class="dt">class =</span> <span class="st">"modeler"</span>)</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co"># Implementation function</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16">modeler_impl &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17">  </a>
+<a class="sourceLine" id="cb7-18" data-line-number="18">  <span class="co"># core modeling implementation</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19">  </a>
+<a class="sourceLine" id="cb7-20" data-line-number="20">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb7-21" data-line-number="21">    <span class="dt">y_mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(y)</a>
+<a class="sourceLine" id="cb7-22" data-line-number="22">  )</a>
+<a class="sourceLine" id="cb7-23" data-line-number="23">}</a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb7-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb7-26" data-line-number="26">modeler &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb7-27" data-line-number="27">  res &lt;-<span class="st"> </span><span class="kw">modeler_impl</span>(x, y)</a>
+<a class="sourceLine" id="cb7-28" data-line-number="28">  <span class="kw">new_modeler</span>(<span class="dt">y_mean =</span> res<span class="op">$</span>y_mean)</a>
+<a class="sourceLine" id="cb7-29" data-line-number="29">}</a></code></pre></div>
 <p>You probably expect users to use <code>modeler()</code> like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># X and Y</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">x &lt;-<span class="st"> </span>iris</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">x<span class="op">$</span>Petal.Width &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">y &lt;-<span class="st"> </span>iris<span class="op">$</span>Petal.Width</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">modeler</span>(x, y)</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; $y_mean</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; [1] 1.199333</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; attr(,"class")</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; [1] "modeler"</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># X and Y</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">x &lt;-<span class="st"> </span>iris</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">x<span class="op">$</span>Petal.Width &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">y &lt;-<span class="st"> </span>iris<span class="op">$</span>Petal.Width</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="kw">modeler</span>(x, y)</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; $y_mean</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; [1] 1.199333</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; attr(,"class")</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; [1] "modeler"</span></a></code></pre></div>
 <p>When it comes time to make predictions, the first thing that you should do inside your <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method is pass the user supplied data to <code><a href="../reference/forge.html">forge()</a></code>, along with the <code>engine</code> that was attached to the model object. This will preprocess the <code>new_data</code> using the same steps specified when the model was being trained.</p>
 </div>
   </div>
@@ -193,7 +285,8 @@
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#high-level-ideas-here">High level ideas here</a></li>
       <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#whats-our-model">What’s our model?</a></li>
+      <li><a href="#whats-our-model">What’s Our Model?</a></li>
+      <li><a href="#model-constructor">Model Constructor</a></li>
       <li><a href="#mold-by-example"><code><a href="--/reference/mold-html">mold()</a></code> By Example</a></li>
       </ul>
 </div>
