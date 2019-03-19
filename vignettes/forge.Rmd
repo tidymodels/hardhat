@@ -28,7 +28,7 @@ The counterpart to `mold()` (which you can read all about in `vignette("mold", "
 
 Like `mold()`, `forge()` is not intended to be used interactively. Instead, it should be called from the `predict()` method for your model. To learn more about using `forge()` in a modeling package, see `vignette("package", "hardhat")`. The rest of this vignette will be focused on the many features that `forge()` offers.
 
-## Connection with `mold()`
+## Connection with mold()
 
 When `mold()` is used, one of the returned objects is an `engine`. This is the key to preprocessing new data with `forge()`. For instance, assume you've called `mold()` like so:
 
@@ -153,7 +153,7 @@ In this case:
 
 - The novel level is removed and its value is set to `NA`
 
-## Recipes and `forge()`
+## Recipes and forge()
 
 Just like with the formula method, a recipe can be used as the preprocessor at fit and prediction time. `hardhat` handles calling `prep()`, `juice()`, and `bake()` for you at the right times. For instance, say we have a recipe that just creates dummy variables out of `Species`.
 

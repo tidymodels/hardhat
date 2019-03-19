@@ -32,7 +32,7 @@ As a developer, you likely won't want to care about the details of how each of t
 
 The intended use of `mold()` is to be called from your user facing modeling function. To see that in action, have a look at the vignette found here: `vignette("package", "hardhat")`. The rest of this vignette will be focused on the various different ways to use `mold()`, but keep in mind that generally it is not used as an interactive function like this.
 
-## A first example
+## A First Example
 
 The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: `outcomes ~ predictors`. Generally, as a developer, you have to then call `model.frame()` and `model.matrix()` on this result to coerce it into the right format for ingestion into your model. `mold()` handles all of that for you.
 
