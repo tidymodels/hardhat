@@ -18,29 +18,9 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(hardhat)
+library(tibble)
+iris <- as_tibble(iris)
 ```
-
-TODO - Finish me
-
-## High level ideas here
-
-- Introduce a modeling function that you might use in a package
-
-- Demonstrate the constructor
-
-- Demonstrate an implementation function
-
-- Demonstrate the user facing interface
-
-- Show how to call `mold()` in this setup to preprocess data
-
-- And show how the engine gets added to the constructor
-
-- Then create a `predict()` method
-
-- Create a predict impl
-
-- Add in `forge()` to the predict method
 
 ## Introduction
 
@@ -48,17 +28,23 @@ The goal of this vignette is to teach you how to use `mold()` and `forge()` in a
 
 - Modeling function
   
-  - Create a constructor
+  - Create a constructor.
   
-  - Create an implementation function
+  - Create an implementation function.
   
-  - Create a user facing function with methods for xy, formula, and recipe interfaces
+  - Create a standardized wrapper for the constructor and the implementation function.
+  
+  - Create a user facing function with methods for xy, formula, and recipe interfaces.
   
 - Predict method
 
-  - Create one or more predict implementation function, varying by the `"type"` of prediction to make
+  - Create one or more prediction implementation functions, varying by the `"type"` of prediction to make.
   
-  - Create a user facing predict method
+  - Create a standardized wrapper for switching between the prediction implementation functions.
+  
+  - Create a user facing predict method.
+
+The end result is a single high level modeling function that has methods for multiple different interfaces, and a corresponding predict method to make predictions using one of these models along with new data.
 
 ## What's Our Model?
 
@@ -66,12 +52,24 @@ We will use the underlying `lm()` infrastructure, `lm.fit()`, to create our mode
 
 `lm.fit()` takes `x` and `y` directly, rather than using the formula method. It will serve as the core part of our modeling implementation function, and generally it is easiest if the implementation function takes `x` and `y` in this manner.
 
+We will call our model `simple_lm()` because it won't have all the features of normal linear regression (weights, offsets, etc).
+
 ## Model Constructor
 
-The first thing we need is a _constructor_ that creates new objects of our model class. The hardhat function `new_base_model()` can help with creating that. Our constructor should have the name `new_<class>()`, should take all of the required pieces to the model as named arguments, and should pass them on to `new_base_model()` which will return a classed list.
+The first thing we need is a _constructor_ that creates new objects of our model class. The hardhat function `new_model()` can help with creating that. 
+
+A model constructor should:
+
+- Have the name `new_<model-class>()`.
+
+- Take the required model elements as named arguments, including a required `engine`.
+
+- Validate the types of the new elements.
+
+- Pass the named elements on to `new_model()` along with the `"<model-class>"`.
 
 ```{r}
-new_linear_regression <- function(coefs, coef_names, engine) {
+new_simple_lm <- function(coefs, coef_names, engine) {
   
   if (!is.numeric(coefs)) {
     stop("`coefs` should be a numeric vector.", call. = FALSE)
@@ -89,13 +87,29 @@ new_linear_regression <- function(coefs, coef_names, engine) {
     coefs = coefs, 
     coef_names = coef_names,
     engine = engine, 
-    class = "linear_regression"
+    class = "simple_lm"
   )
 }
 ```
 
+We can use this to manually generate a model object. This object has a `hardhat_model` class, which provides a very simple print method. Specifically, it tells you the name of the class at the top, and only prints our your custom elements (i.e. not the `engine`).
+
 ```{r}
-linear_regression_impl <- function(predictors, outcomes) {
+manual_model <- new_simple_lm(1, "my_coef", default_xy_engine())
+
+manual_model
+
+names(manual_model)
+
+manual_model$engine
+```
+
+## Model Implementation
+
+The implementation function is where the hard work is done. I generally recommend naming it `<model-class>_impl()`. It should accept predictors and outcomes in whatever form is required for the algorithm, run the algorithm, and return a named list of elements that will make up your new model. You might also have arguments for extra options that can be used to tweak the internal algorithm.
+
+```{r}
+simple_lm_impl <- function(predictors, outcomes) {
   lm_fit <- lm.fit(predictors, outcomes)
   
   coefs <- lm_fit$coefficients
@@ -110,15 +124,32 @@ linear_regression_impl <- function(predictors, outcomes) {
 }
 ```
 
+This simple linear regression implementation just calls `lm.fit()` with `x = predictors` and `y = outcomes`. `lm.fit()` expects a matrix of predictors and a vector of outcomes (for univariate regression). More on that in a moment.
+
+The return value has just enough information to make predictions on new data, the coefficient values.
+
 ```{r}
-linear_regression_wrapper <- function(processed) {
+predictors <- as.matrix(subset(iris, select = Sepal.Width))
+outcomes <- iris$Sepal.Length
+
+simple_lm_impl(predictors, outcomes)
+```
+
+## Model Wrapper
+
+Now that we have our constructor and out implementation function, we can create a wrapper function that will be used in all of our top level methods (for data frames, formulas, and recipes). It will call the implementation function, and then use that information along with the engine to create a new instance of our model. It should have an argument for the output from a call to `mold()`, here I've called that `processed`. In that object will be the predictors, outcomes, and engine. You might also have arguments for additional options to pass on to the implementation function.
+
+The wrapper should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The `predictors` and `outcomes` that are returned from `mold()` will _always_ be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.
+
+```{r}
+simple_lm_wrapper <- function(processed) {
   
-  x <- as.matrix(processed$predictors)
-  y <- processed$outcomes[[1]]
+  predictors <- as.matrix(processed$predictors)
+  outcomes <- processed$outcomes[[1]]
   
-  fit <- linear_regression_impl(x, y)
+  fit <- simple_lm_impl(predictors, outcomes)
   
-  new_linear_regression(
+  new_simple_lm(
     coefs = fit$coefs,
     coef_names = fit$coef_names,
     engine = processed$engine
@@ -126,83 +157,264 @@ linear_regression_wrapper <- function(processed) {
 }
 ```
 
+At this point, we can simulate user input and pass it on to our wrapper to run a model.
+
 ```{r}
-linear_regression <- function(x, ...) {
-  UseMethod("linear_regression")
+# Simulate formula interface
+processed_1 <- mold(Sepal.Width ~ Sepal.Length + Species, iris)
+
+# Simulate xy interface
+processed_2 <- mold(x = iris["Sepal.Length"], y = iris$Sepal.Width)
+
+simple_lm_wrapper(processed_1)
+
+simple_lm_wrapper(processed_2)
+```
+
+## User Facing Fitting Function
+
+With all of the pieces in place, we have everything we need to create our high level modeling interface. This should be a generic function, with methods for data frames, matrices, formulas, and recipes. Each method should call `mold()` with the arguments to standardize things and run the preprocessing, and then pass off to the wrapper function to run the actual model. It is also good practice to provide a default method with a nice error message for unknown types.
+
+```{r}
+# Generic
+simple_lm <- function(x, ...) {
+  UseMethod("simple_lm")
 }
 
-linear_regression.data.frame <- function(x, y, ...) {
+# Default
+simple_lm.default <- function(x, ...) {
+  stop(
+    "`simple_lm()` is not defined for a '", class(x)[1], "'.", 
+    call. = FALSE
+  )
+}
+
+# XY method - data frame
+simple_lm.data.frame <- function(x, y, ...) {
   processed <- mold(x, y)
-  linear_regression_wrapper(processed)
+  simple_lm_wrapper(processed)
 }
 
-linear_regression.matrix <- function(x, y, ...) {
+# XY method - matrix
+simple_lm.matrix <- function(x, y, ...) {
   processed <- mold(x, y)
-  linear_regression_wrapper(processed)
+  simple_lm_wrapper(processed)
 }
 
-linear_regression.formula <- function(formula, data, ...) {
+# Formula method
+simple_lm.formula <- function(formula, data, ...) {
   processed <- mold(formula, data)
-  linear_regression_wrapper(processed)
+  simple_lm_wrapper(processed)
 }
 
-linear_regression.recipe <- function(x, data, ...) {
+# Recipe method
+simple_lm.recipe <- function(x, data, ...) {
   processed <- mold(x, data)
-  linear_regression_wrapper(processed)
+  simple_lm_wrapper(processed)
 }
 ```
 
+Let's give it a try:
 
 ```{r}
-linear_regression(iris[, "Sepal.Width", drop = FALSE], iris$Sepal.Length)
+predictors <- iris[c("Sepal.Width", "Petal.Width")]
+outcomes_vec <- iris$Sepal.Length
+outcomes_df <- iris["Sepal.Length"]
+
+simple_lm(predictors, outcomes_vec)
+
+simple_lm(predictors, outcomes_df)
+
+simple_lm(Sepal.Length ~ Sepal.Width + Petal.Width, iris)
 ```
 
+We can use preprocessing as well, and it is handled by `mold()`.
 
-## `mold()` By Example
+```{r, warning=FALSE, message=FALSE}
+library(recipes)
 
-The intended use of `mold()` is to be called from your top level modeling function (the one that users will call). Suppose that we have such a function, `modeler()`, along with it's core implementation `modeler_impl()`, and a constructor to make a new `"modeler"` object, `new_modeler()`.
+# - Log a predictor
+# - Generate dummy variables for factors
+simple_lm(Sepal.Length ~ log(Sepal.Width) + Species, iris)
+
+# Same, but with a recipe
+rec <- recipe(Sepal.Length ~ Sepal.Width + Species, iris) %>%
+  step_log(Sepal.Width) %>%
+  step_dummy(Species, one_hot = TRUE)
+
+simple_lm(rec, iris)
+```
+
+## Adding an Intercept Option
+
+You might have noticed that our linear regression isn't adding an intercept. Generally, with linear regression models we will want a default intercept added on. To accomplish this, we can add an `intercept` argument to our user facing function, and then tweak the engine that would otherwise be created for you automatically.
 
 ```{r}
-# Create a new `modeler` object
-new_modeler <- function(y_mean) {
+simple_lm <- function(x, ...) {
+  UseMethod("simple_lm")
+}
+
+simple_lm.data.frame <- function(x, y, intercept = TRUE, ...) {
+  engine <- default_xy_engine(intercept = intercept)
+  processed <- mold(x, y, engine = engine)
+  simple_lm_wrapper(processed)
+}
+
+simple_lm.matrix <- function(x, y, intercept = TRUE,...) {
+  engine <- default_xy_engine(intercept = intercept)
+  processed <- mold(x, y, engine = engine)
+  simple_lm_wrapper(processed)
+}
+
+simple_lm.formula <- function(formula, data, intercept = TRUE, ...) {
+  engine <- default_formula_engine(intercept = intercept)
+  processed <- mold(formula, data, engine = engine)
+  simple_lm_wrapper(processed)
+}
+
+simple_lm.recipe <- function(x, data, intercept = TRUE, ...) {
+  engine <- default_recipe_engine(intercept = intercept)
+  processed <- mold(x, data, engine = engine)
+  simple_lm_wrapper(processed)
+}
+```
+
+```{r}
+# By default an intercept is included
+simple_lm(predictors, outcomes_df)
+
+# But the user can turn this off
+simple_lm(Sepal.Length ~ log(Sepal.Width) + Species, iris, intercept = FALSE)
+```
+
+## Prediction Implementation Functions
+
+On the prediction side, we need "implementation" functions like with fitting our model. These vary based on the `"type"` argument to `predict()`. The `"type"` might be `"response"` for numeric predictions as we will use here, or it could be `"class"` for hard class predictions, `"prob"` for class probabilities, and more. A set of recommended names for `"type"` can be found in the [Model Predictions](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) section of the implementation principles.
+
+For our model, we will focus on only returning numeric predictions. I generally like to name these prediciton implementation functions `predict_<model-class>_<type>()`. The arguments should be the model object, and the predictors in the form that your prediction implementation expects them (here, a matrix).
+
+Also used here is another hardhat function for standardizing prediction output, `spruce_response()`. This function tidies up the response output, and automatically standardizes it to match the recommendations in the principles guide. The output is always a tibble, and for the response type it has 1 column, `.pred`.
+
+```{r}
+predict_simple_lm_response <- function(object, predictors) {
   
-  if (!is.numeric(y_mean)) {
-    stop("`y_mean` must be numeric.")
-  }
+  coefs <- object$coefs
   
-  elements <- list(
-    y_mean = y_mean
+  .pred <- as.vector(predictors %*% coefs)
+  
+  out <- spruce_response(.pred)
+  
+  out
+}
+```
+
+To test it, we will have to do some of the work that will be done automatically by the higher level prediction helpers.
+
+```{r}
+model <- simple_lm(Sepal.Width ~ Sepal.Length + Species, iris)
+
+predictors <- forge(iris, model$engine)$predictors
+predictors <- as.matrix(predictors)
+
+predict_simple_lm_response(model, predictors)
+```
+
+## Prediction Wrapper
+
+A prediction wrapper converts the standardized `predictors` into the lower level type that the prediction implemenation function might expect. `predictors` here is always a data frame, and is part of the return value of a call to `forge()`.
+
+Additionally, it should `switch()` on the `type` argument to decide which of the prediction implementation functions to call. Here, when `type == "response"`, the `predict_simple_lm_response()` function is called.
+
+I also like using `rlang::arg_match()` to validate that `type` is one of the accepted prediction types. This has the advantage over `match.arg()` in that partial matches are not allowed, and the error messages are a bit nicer.
+
+```{r}
+predict_simple_lm_wrapper <- function(type, object, predictors) {
+  
+  type <- rlang::arg_match(type, c("response"))
+  
+  predictors <- as.matrix(predictors)
+  
+  switch(
+    type,
+    response = predict_simple_lm_response(object, predictors)
   )
-  
-  structure(elements, class = "modeler")
-}
-
-# Implementation function
-modeler_impl <- function(x, y) {
-  
-  # core modeling implementation
-  
-  list(
-    y_mean = mean(y)
-  )
-}
-
-
-modeler <- function(x, y) {
-  res <- modeler_impl(x, y)
-  new_modeler(y_mean = res$y_mean)
 }
 ```
 
-You probably expect users to use `modeler()` like this:
+Let's test:
+
+```{r, error=TRUE}
+model <- simple_lm(Sepal.Width ~ Sepal.Length + Species, iris)
+
+# Pass in the data frame
+predictors <- forge(iris, model$engine)$predictors
+
+predict_simple_lm_wrapper("response", model, predictors)
+
+# Partial matches are an error
+predict_simple_lm_wrapper("resp", model, predictors)
+```
+
+## User Facing Prediction Function
+
+Finally, we can create an S3 method for the generic `predict()` function from the stats package. To match the modeling principles, it should use `new_data` to accept a matrix or data frame of new predictors.
+
+The first thing that the `predict()` method should do is call `forge()` with the `new_data` and the `engine` that we attached to our `simple_lm` model at fit time. This performs the required preprocessing on the new data, and checks that the _type_ of the data frame supplied to `new_data` matches the type of data frame supplied at fit time.
+
+After calling `forge()`, it should pass off to the prediction wrapper to call the correct prediction function based on the type.
+
+Finally, it is good practice to call the hardhat function, `validate_prediction_size()` with the return value and the original `new_data` to ensure that the number of rows in the output are the same as the number of rows of the input. If a prediction cannot be made for a row of `new_data`, an `NA` value should be placed there instead.
 
 ```{r}
-# X and Y
-x <- iris
-x$Petal.Width <- NULL
-y <- iris$Petal.Width
-
-modeler(x, y)
+predict.simple_lm <- function(object, new_data, type = "response", ...) {
+  
+  # Enforces column order, type, column names, etc
+  processed <- forge(new_data, object$engine)
+  
+  out <- predict_simple_lm_wrapper(type, object, processed$predictors)
+  
+  validate_prediction_size(out, new_data)
+  
+  out
+}
 ```
 
-When it comes time to make predictions, the first thing that you should do inside your `predict()` method is pass the user supplied data to `forge()`, along with the `engine` that was attached to the model object. This will preprocess the `new_data` using the same steps specified when the model was being trained.
+## Final Testing
+
+Finally, we can test out our top level modeling function along with its corresponding `predict()` method.
+
+```{r}
+model <- simple_lm(Sepal.Width ~ log(Sepal.Length) + Species, iris)
+
+predict(model, iris)
+```
+
+By using `forge()`, you automatically get powerful type checking to ensure that the `new_data` is in a form that you expect.
+
+```{r, warning=TRUE, error=TRUE}
+# new_data isn't a data frame
+predict(model, iris$Species)
+
+# missing a required column
+predict(model, subset(iris, select = -Sepal.Length))
+
+# 'Species' is a character, but can be losslessy converted to a factor
+# so that happens for you automatically and silently.
+iris_chr_species <- transform(iris, Species = as.character(Species))
+
+predict(model, iris_chr_species)
+
+# 'Species' is a character, AND has an extra level. It is removed with a warning.
+# but you still get a factor with the correct levels
+iris_chr_bad_species <- iris_chr_species
+iris_chr_bad_species$Species[1] <- "new_level"
+
+predict(model, iris_chr_bad_species)
+
+# 'Species' is a double
+# Can't cast a double to a factor!
+iris_dbl_species <- transform(iris, Species = 1)
+
+predict(model, iris_dbl_species)
+```
+
