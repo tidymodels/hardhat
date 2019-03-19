@@ -140,7 +140,8 @@ of the constructors found in the documentation for <code><a href='new-engine.htm
   <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())
 
 <span class='fu'>new_default_recipe_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>extra_role_ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())
 
 <span class='fu'>new_default_xy_engine</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>())</pre>
@@ -201,6 +202,13 @@ subclass this engine.</p></td>
       <th>recipe</th>
       <td><p>Either <code>NULL</code>, or an unprepped recipe. This argument is set
 automatically at <code><a href='mold.html'>mold()</a></code> time.</p></td>
+    </tr>
+    <tr>
+      <th>extra_role_ptypes</th>
+      <td><p>A named list. The names are the unique non-standard
+recipe roles (i.e. everything except <code>"predictors"</code> and <code>"outcomes"</code>). The
+values are prototypes of the original columns with that role. These are
+used for validation in <code><a href='forge.html'>forge()</a></code>.</p></td>
     </tr>
     </table>
     

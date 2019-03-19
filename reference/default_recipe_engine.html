@@ -279,7 +279,9 @@ used during training.</p></li>
 #&gt; NULL
 #&gt; 
 #&gt; $extras
+#&gt; $extras$roles
 #&gt; NULL
+#&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># Use `outcomes = TRUE` to also extract the preprocessed outcome!</span>
 <span class='co'># This logged the Sepal.Length column of `new_data`</span>
@@ -316,7 +318,9 @@ used during training.</p></li>
 #&gt; # … with 40 more rows
 #&gt; 
 #&gt; $extras
+#&gt; $extras$roles
 #&gt; NULL
+#&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># With an intercept</span>
@@ -355,6 +359,109 @@ used during training.</p></li>
 #&gt;  9         1         1.48         2.9
 #&gt; 10         1         1.59         3.1
 #&gt; # … with 140 more rows</div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Non standard roles</span>
+
+<span class='co'># If you have custom recipe roles, they are processed and returned in</span>
+<span class='co'># the `$extras$roles` slot of the return value of `mold()` and `forge()`.</span>
+
+<span class='no'>rec_roles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipe</a></span>(<span class='no'>train</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/recipes/topics/roles'>update_role</a></span>(<span class='no'>Sepal.Width</span>, <span class='kw'>new_role</span> <span class='kw'>=</span> <span class='st'>"predictor"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/recipes/topics/roles'>update_role</a></span>(<span class='no'>Species</span>, <span class='kw'>new_role</span> <span class='kw'>=</span> <span class='st'>"outcome"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/recipes/topics/roles'>update_role</a></span>(<span class='no'>Sepal.Length</span>, <span class='kw'>new_role</span> <span class='kw'>=</span> <span class='st'>"custom_role"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/recipes/topics/roles'>update_role</a></span>(<span class='no'>Petal.Length</span>, <span class='kw'>new_role</span> <span class='kw'>=</span> <span class='st'>"custom_role2"</span>)
+
+<span class='no'>processed_roles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>rec_roles</span>, <span class='no'>train</span>)
+
+<span class='no'>processed_roles</span>$<span class='no'>extras</span></div><div class='output co'>#&gt; $roles
+#&gt; $roles$custom_role
+#&gt; # A tibble: 100 x 1
+#&gt;    Sepal.Length
+#&gt;           &lt;dbl&gt;
+#&gt;  1          5.1
+#&gt;  2          4.9
+#&gt;  3          4.7
+#&gt;  4          4.6
+#&gt;  5          5  
+#&gt;  6          5.4
+#&gt;  7          4.6
+#&gt;  8          5  
+#&gt;  9          4.4
+#&gt; 10          4.9
+#&gt; # … with 90 more rows
+#&gt; 
+#&gt; $roles$custom_role2
+#&gt; # A tibble: 100 x 1
+#&gt;    Petal.Length
+#&gt;           &lt;dbl&gt;
+#&gt;  1          1.4
+#&gt;  2          1.4
+#&gt;  3          1.3
+#&gt;  4          1.5
+#&gt;  5          1.4
+#&gt;  6          1.7
+#&gt;  7          1.4
+#&gt;  8          1.5
+#&gt;  9          1.4
+#&gt; 10          1.5
+#&gt; # … with 90 more rows
+#&gt; 
+#&gt; </div><div class='input'>
+<span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed_roles</span>$<span class='no'>engine</span>)</div><div class='output co'>#&gt; $predictors
+#&gt; # A tibble: 50 x 1
+#&gt;    Sepal.Width
+#&gt;          &lt;dbl&gt;
+#&gt;  1         3.3
+#&gt;  2         2.7
+#&gt;  3         3  
+#&gt;  4         2.9
+#&gt;  5         3  
+#&gt;  6         3  
+#&gt;  7         2.5
+#&gt;  8         2.9
+#&gt;  9         2.5
+#&gt; 10         3.6
+#&gt; # … with 40 more rows
+#&gt; 
+#&gt; $outcomes
+#&gt; NULL
+#&gt; 
+#&gt; $extras
+#&gt; $extras$roles
+#&gt; $extras$roles$custom_role
+#&gt; # A tibble: 50 x 1
+#&gt;    Sepal.Length
+#&gt;           &lt;dbl&gt;
+#&gt;  1          6.3
+#&gt;  2          5.8
+#&gt;  3          7.1
+#&gt;  4          6.3
+#&gt;  5          6.5
+#&gt;  6          7.6
+#&gt;  7          4.9
+#&gt;  8          7.3
+#&gt;  9          6.7
+#&gt; 10          7.2
+#&gt; # … with 40 more rows
+#&gt; 
+#&gt; $extras$roles$custom_role2
+#&gt; # A tibble: 50 x 1
+#&gt;    Petal.Length
+#&gt;           &lt;dbl&gt;
+#&gt;  1          6  
+#&gt;  2          5.1
+#&gt;  3          5.9
+#&gt;  4          5.6
+#&gt;  5          5.8
+#&gt;  6          6.6
+#&gt;  7          4.5
+#&gt;  8          6.3
+#&gt;  9          5.8
+#&gt; 10          6.1
+#&gt; # … with 40 more rows
+#&gt; 
+#&gt; 
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

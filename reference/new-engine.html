@@ -264,17 +264,20 @@ are functions:</p><ul>
 <li><p><em>Arguments</em>:</p><ul>
 <li><p><code>engine</code>, <code>new_data</code>, and <code>outcomes</code>.</p></li>
 </ul></li>
-<li><p><em>Output</em>: A named list of two elements:</p><ul>
+<li><p><em>Output</em>: A named list of the following elements:</p><ul>
 <li><p><code>engine</code>: The engine, returned and potentially updated.</p></li>
-<li><p><code>new_data</code>: The <code>new_data</code>, cleaned.</p></li>
+<li><p><code>predictors</code>: A tibble containing the cleaned predictors.</p></li>
+<li><p><code>outcomes</code>: A tibble containing the cleaned outcomes.</p></li>
+<li><p><code>extras</code>: A named list of any extras obtained while cleaning. These
+are passed on to the <code>process()</code> function for further use.</p></li>
 </ul></li>
 </ul></li>
 <li><p><code>process</code>: A function that performs the actual preprocessing of the data
 using the known information in the <code>engine</code>.</p><ul>
 <li><p><em>Arguments</em>:</p><ul>
-<li><p><code>engine</code>, <code>new_data</code>, and <code>outcomes</code>.</p></li>
+<li><p><code>engine</code>, <code>new_data</code>, <code>outcomes</code>, <code>extras</code>.</p></li>
 </ul></li>
-<li><p><em>Output</em>: A named list of 4 elements:</p><ul>
+<li><p><em>Output</em>: A named list of the following elements:</p><ul>
 <li><p><code>engine</code>: The engine, returned and potentially updated.</p></li>
 <li><p><code>predictors</code>: A tibble of the predictors.</p></li>
 <li><p><code>outcomes</code>: A tibble of the outcomes, or <code>NULL</code>.</p></li>
