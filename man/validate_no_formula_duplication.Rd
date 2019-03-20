@@ -69,7 +69,7 @@ validate_no_formula_duplication(log(y) ~ log(y))
 }
 \seealso{
 Other validation functions: \code{\link{validate_column_names}},
-  \code{\link{validate_is_univariate}},
+  \code{\link{validate_outcomes_is_univariate}},
   \code{\link{validate_prediction_size}}
 }
 \concept{validation functions}

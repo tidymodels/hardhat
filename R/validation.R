@@ -1,10 +1,11 @@
-#' Ensure that `data` is univariate
+#' Ensure that the outcome is univariate
 #'
 #' @description
 #'
 #' validate - asserts the following:
 #'
-#' - `data` must have 1 column. Atomic vectors are treated as 1 column matrices.
+#' - `outcomes` must have 1 column. Atomic vectors are treated as
+#' 1 column matrices.
 #'
 #' check - returns the following:
 #'
@@ -12,7 +13,7 @@
 #'
 #' - `n_cols` A single numeric. The actual number of columns.
 #'
-#' @param data An object to check.
+#' @param outcomes An object to check.
 #'
 #' @template section-validation
 #'
@@ -22,36 +23,36 @@
 #' `$outcomes` element of the result of a call to [mold()].
 #'
 #' @examples
-#' validate_is_univariate(data.frame(x = 1))
+#' validate_outcomes_is_univariate(data.frame(x = 1))
 #'
 #' \dontrun{
-#' validate_is_univariate(mtcars)
+#' validate_outcomes_is_univariate(mtcars)
 #' }
 #'
 #' @family validation functions
 #' @export
-validate_is_univariate <- function(data) {
+validate_outcomes_is_univariate <- function(outcomes) {
 
-  check <- check_is_univariate(data)
+  check <- check_outcomes_is_univariate(outcomes)
 
   if (!check$ok) {
     glubort(
-      "`data` must be univariate, but {check$n_cols} columns were found."
+      "The outcome must be univariate, but {check$n_cols} columns were found."
     )
   }
 
-  invisible(data)
+  invisible(outcomes)
 }
 
-#' @rdname validate_is_univariate
+#' @rdname validate_outcomes_is_univariate
 #' @export
-check_is_univariate <- function(data) {
+check_outcomes_is_univariate <- function(outcomes) {
 
-  if (!rlang::is_vector(data)) {
+  if (!rlang::is_vector(outcomes)) {
     n_cols <- 0L
   }
   else {
-    n_cols <- NCOL(data) %||% 0L
+    n_cols <- NCOL(outcomes) %||% 0L
   }
 
   ok <- (n_cols == 1L)

@@ -104,8 +104,8 @@ forge(test, processed$engine, outcomes = TRUE)
 
 }
 \seealso{
-Other validation functions: \code{\link{validate_is_univariate}},
-  \code{\link{validate_no_formula_duplication}},
+Other validation functions: \code{\link{validate_no_formula_duplication}},
+  \code{\link{validate_outcomes_is_univariate}},
   \code{\link{validate_prediction_size}}
 }
 \concept{validation functions}
