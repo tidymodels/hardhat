@@ -32,7 +32,7 @@ The goal of this vignette is to teach you how to use `mold()` and `forge()` in a
   
   - Create an implementation function.
   
-  - Create a standardized wrapper for the constructor and the implementation function.
+  - Create a common wrapper for the constructor and the implementation function.
   
   - Create a user facing function with methods for xy, formula, and recipe interfaces.
   
@@ -40,7 +40,7 @@ The goal of this vignette is to teach you how to use `mold()` and `forge()` in a
 
   - Create one or more prediction implementation functions, varying by the `"type"` of prediction to make.
   
-  - Create a standardized wrapper for switching between the prediction implementation functions.
+  - Create a common wrapper for switching between the prediction implementation functions.
   
   - Create a user facing predict method.
 
@@ -142,7 +142,7 @@ Now that we have our constructor and out implementation function, we can create 
 The wrapper should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The `predictors` and `outcomes` that are returned from `mold()` will _always_ be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.
 
 ```{r}
-simple_lm_wrapper <- function(processed) {
+simple_lm_common <- function(processed) {
   
   predictors <- as.matrix(processed$predictors)
   outcomes <- processed$outcomes[[1]]
@@ -166,9 +166,9 @@ processed_1 <- mold(Sepal.Width ~ Sepal.Length + Species, iris)
 # Simulate xy interface
 processed_2 <- mold(x = iris["Sepal.Length"], y = iris$Sepal.Width)
 
-simple_lm_wrapper(processed_1)
+simple_lm_common(processed_1)
 
-simple_lm_wrapper(processed_2)
+simple_lm_common(processed_2)
 ```
 
 ## User Facing Fitting Function
@@ -192,25 +192,25 @@ simple_lm.default <- function(x, ...) {
 # XY method - data frame
 simple_lm.data.frame <- function(x, y, ...) {
   processed <- mold(x, y)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 
 # XY method - matrix
 simple_lm.matrix <- function(x, y, ...) {
   processed <- mold(x, y)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 
 # Formula method
 simple_lm.formula <- function(formula, data, ...) {
   processed <- mold(formula, data)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 
 # Recipe method
 simple_lm.recipe <- function(x, data, ...) {
   processed <- mold(x, data)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 ```
 
@@ -257,25 +257,25 @@ simple_lm <- function(x, ...) {
 simple_lm.data.frame <- function(x, y, intercept = TRUE, ...) {
   engine <- default_xy_engine(intercept = intercept)
   processed <- mold(x, y, engine = engine)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 
 simple_lm.matrix <- function(x, y, intercept = TRUE,...) {
   engine <- default_xy_engine(intercept = intercept)
   processed <- mold(x, y, engine = engine)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 
 simple_lm.formula <- function(formula, data, intercept = TRUE, ...) {
   engine <- default_formula_engine(intercept = intercept)
   processed <- mold(formula, data, engine = engine)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 
 simple_lm.recipe <- function(x, data, intercept = TRUE, ...) {
   engine <- default_recipe_engine(intercept = intercept)
   processed <- mold(x, data, engine = engine)
-  simple_lm_wrapper(processed)
+  simple_lm_common(processed)
 }
 ```
 
@@ -328,7 +328,7 @@ Additionally, it should `switch()` on the `type` argument to decide which of the
 I also like using `rlang::arg_match()` to validate that `type` is one of the accepted prediction types. This has the advantage over `match.arg()` in that partial matches are not allowed, and the error messages are a bit nicer.
 
 ```{r}
-predict_simple_lm_wrapper <- function(type, object, predictors) {
+predict_simple_lm_common <- function(type, object, predictors) {
   
   type <- rlang::arg_match(type, c("response"))
   
@@ -349,10 +349,10 @@ model <- simple_lm(Sepal.Width ~ Sepal.Length + Species, iris)
 # Pass in the data frame
 predictors <- forge(iris, model$engine)$predictors
 
-predict_simple_lm_wrapper("response", model, predictors)
+predict_simple_lm_common("response", model, predictors)
 
 # Partial matches are an error
-predict_simple_lm_wrapper("resp", model, predictors)
+predict_simple_lm_common("resp", model, predictors)
 ```
 
 ## User Facing Prediction Function
@@ -371,7 +371,7 @@ predict.simple_lm <- function(object, new_data, type = "response", ...) {
   # Enforces column order, type, column names, etc
   processed <- forge(new_data, object$engine)
   
-  out <- predict_simple_lm_wrapper(type, object, processed$predictors)
+  out <- predict_simple_lm_common(type, object, processed$predictors)
   
   validate_prediction_size(out, new_data)
   
