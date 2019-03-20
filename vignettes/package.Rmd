@@ -141,8 +141,12 @@ Now that we have our constructor and our implementation function, we can create 
 
 The wrapper should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The `predictors` and `outcomes` that are returned from `mold()` will _always_ be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.
 
+This is also a good place to use some of hardhat's validation functions. In this case, we always expect the outcome to have a single column since this is a univariate model, so we can use `validate_outcomes_is_univariate()` to enforce that.
+
 ```{r}
 simple_lm_common <- function(processed) {
+  
+  validate_outcomes_is_univariate(processed$outcomes)
   
   predictors <- as.matrix(processed$predictors)
   outcomes <- processed$outcomes[[1]]
@@ -169,6 +173,14 @@ processed_2 <- mold(x = iris["Sepal.Length"], y = iris$Sepal.Width)
 simple_lm_common(processed_1)
 
 simple_lm_common(processed_2)
+```
+
+Multiple outcomes are an error:
+
+```{r, error=TRUE}
+multi_outcome <- mold(Sepal.Width + Petal.Width ~ Sepal.Length + Species, iris)
+
+simple_lm_common(multi_outcome)
 ```
 
 ## User Facing Fitting Function
