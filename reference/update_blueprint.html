@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Subset only required columns — shrink • hardhat</title>
+<title>Update a preprocessing blueprint — update_blueprint • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,16 @@
 
 
 
-<meta property="og:title" content="Subset only required columns — shrink" />
+<meta property="og:title" content="Update a preprocessing blueprint — update_blueprint" />
 
-<meta property="og:description" content="shrink() subsets data to only contain the required columns specified by
-the prototype, ptype." />
+<meta property="og:description" content="update_blueprint() is the correct way to alter elements of an existing
+blueprint object. It has two benefits over just doing
+blueprint$elem &amp;lt;- new_elem.
+The name you are updating must already exist in the blueprint. This prevents
+you from accidentally updating non-existant elements.
+The constructor for the blueprint is automatically run after the update by
+refresh_blueprint() to ensure that the blueprint is still valid.
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,110 +124,67 @@ the prototype, ptype." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Subset only required columns</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/shrink.R'><code>R/shrink.R</code></a></small>
-    <div class="hidden name"><code>shrink.Rd</code></div>
+    <h1>Update a preprocessing blueprint</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/blueprint.R'><code>R/blueprint.R</code></a></small>
+    <div class="hidden name"><code>update_blueprint.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>shrink()</code> subsets <code>data</code> to only contain the required columns specified by
-the prototype, <code>ptype</code>.</p>
+    <p><code>update_blueprint()</code> is the correct way to alter elements of an existing
+<code>blueprint</code> object. It has two benefits over just doing
+<code>blueprint$elem &lt;- new_elem</code>.</p><ul>
+<li><p>The name you are updating <em>must</em> already exist in the blueprint. This prevents
+you from accidentally updating non-existant elements.</p></li>
+<li><p>The constructor for the blueprint is automatically run after the update by
+<code><a href='refresh_blueprint.html'>refresh_blueprint()</a></code> to ensure that the blueprint is still valid.</p></li>
+</ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>shrink</span>(<span class='no'>data</span>, <span class='no'>ptype</span>)</pre>
+    <pre class="usage"><span class='fu'>update_blueprint</span>(<span class='no'>blueprint</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>A data frame containing the data to subset.</p></td>
+      <th>blueprint</th>
+      <td><p>A preprocessing blueprint.</p></td>
     </tr>
     <tr>
-      <th>ptype</th>
-      <td><p>A data frame prototype containing the required columns.</p></td>
+      <th>...</th>
+      <td><p>Name-value pairs of <em>existing</em> elements in <code>blueprint</code> that should
+be updated.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A tibble containing the required columns.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>shrink()</code> is called by <code><a href='forge.html'>forge()</a></code> before <code><a href='scream.html'>scream()</a></code> and before the actual
-processing is done.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Setup</span>
+    <pre class="examples"><div class='input'>
+<span class='no'>blueprint</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='default_xy_blueprint.html'>default_xy_blueprint</a></span>()
 
-<span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
-<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>101</span>:<span class='fl'>150</span>,]
-
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># shrink()</span>
-
-<span class='co'># mold() is run at model fit time</span>
-<span class='co'># and a formula preprocessing blueprint is recorded</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
-
-<span class='co'># Inside the result of mold() are the prototype tibbles</span>
-<span class='co'># for the predictors and the outcomes</span>
-<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>predictors</span>
-<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>outcomes</span>
-
-<span class='co'># Pass the test data, along with a prototype, to</span>
-<span class='co'># shrink() to extract the prototype columns</span>
-<span class='fu'>shrink</span>(<span class='no'>test</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; # A tibble: 50 x 1
-#&gt;    Species  
-#&gt;    &lt;fct&gt;    
-#&gt;  1 virginica
-#&gt;  2 virginica
-#&gt;  3 virginica
-#&gt;  4 virginica
-#&gt;  5 virginica
-#&gt;  6 virginica
-#&gt;  7 virginica
-#&gt;  8 virginica
-#&gt;  9 virginica
-#&gt; 10 virginica
-#&gt; # … with 40 more rows</div><div class='input'>
-<span class='co'># To extract the outcomes, just use the</span>
-<span class='co'># outcome prototype</span>
-<span class='fu'>shrink</span>(<span class='no'>test</span>, <span class='no'>ptype_out</span>)</div><div class='output co'>#&gt; # A tibble: 50 x 1
-#&gt;    Sepal.Width
-#&gt;          &lt;dbl&gt;
-#&gt;  1         3.3
-#&gt;  2         2.7
-#&gt;  3         3  
-#&gt;  4         2.9
-#&gt;  5         3  
-#&gt;  6         3  
-#&gt;  7         2.5
-#&gt;  8         2.9
-#&gt;  9         2.5
-#&gt; 10         3.6
-#&gt; # … with 40 more rows</div><div class='input'>
-# shrink() makes sure that the columns
-# required by `ptype` actually exist in the data
-# and errors nicely when they don't
-</div><div class='input'><span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/subset'>subset</a></span>(<span class='no'>test</span>, <span class='kw'>select</span> <span class='kw'>=</span> -<span class='no'>Species</span>)
-<span class='fu'>shrink</span>(<span class='no'>test2</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The following required columns are missing: 'Species'.</span></div><div class='input'>
+<span class='co'># `intercept` defaults to FALSE</span>
+<span class='no'>blueprint</span></div><div class='output co'>#&gt; XY blueprint: 
+#&gt;  
+#&gt; # Predictors: 0 
+#&gt;   # Outcomes: 0 
+#&gt;    Intercept: FALSE </div><div class='input'>
+<span class='fu'>update_blueprint</span>(<span class='no'>blueprint</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; XY blueprint: 
+#&gt;  
+#&gt; # Predictors: 0 
+#&gt;   # Outcomes: 0 
+#&gt;    Intercept: TRUE </div><div class='input'>
+# Can't update non-existant elements
+</div><div class='input'><span class='fu'>update_blueprint</span>(<span class='no'>blueprint</span>, <span class='kw'>intercpt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: All elements to change must already exist. `intercpt` is a new field.</span></div><div class='input'>
+# Can't add non-valid elements
+</div><div class='input'><span class='fu'>update_blueprint</span>(<span class='no'>blueprint</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error: intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 

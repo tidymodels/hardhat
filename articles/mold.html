@@ -109,7 +109,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">iris_form &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(Sepal.Length), iris)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(iris_form)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; [1] "predictors" "outcomes"   "engine"     "extras"</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; [1] "predictors" "outcomes"   "blueprint"  "extras"</span></a></code></pre></div>
 <p><code><a href="../reference/mold.html">mold()</a></code> returns four things. Two of them are immediately useful, and are almost always applicable to the modeling implementation you have created. The first is the <code>predictors</code>, returned as a tibble. All of the required processing has been done for you, so you just have to focus on the modeling implementation.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">iris_form<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; # A tibble: 150 x 1</span></a>
@@ -159,18 +159,18 @@
 <a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  9     0.2</span></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 10     0.1</span></a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
-<p>Lastly, <code><a href="../reference/mold.html">mold()</a></code> returns a very important object, the <code>engine</code>. This is responsible for knowing how to preprocess both the training data, and any new data at prediction time. As a developer, you should attach the <code>engine</code> to your model object before returning it to the user. For more information about this, see the package development vignette, <code><a href="../articles/package.html">vignette("package", "hardhat")</a></code>.</p>
+<p>Lastly, <code><a href="../reference/mold.html">mold()</a></code> returns a very important object, the <code>blueprint</code>. This is responsible for knowing how to preprocess both the training data, and any new data at prediction time. As a developer, you should attach the <code>blueprint</code> to your model object before returning it to the user. For more information about this, see the package development vignette, <code><a href="../articles/package.html">vignette("package", "hardhat")</a></code>.</p>
 </div>
-<div id="engines" class="section level2">
+<div id="blueprints" class="section level2">
 <h2 class="hasAnchor">
-<a href="#engines" class="anchor"></a>Engines</h2>
-<p>As mentioned above, one of the objects that <code><a href="../reference/mold.html">mold()</a></code> returns is an <code>engine</code> responsible for controlling the preprocessing. There are multiple engines available in <code>hardhat</code>, but when you call <code><a href="../reference/mold.html">mold()</a></code> one is selected automatically for you. The following two calls generate the same result, using the default formula engine.</p>
+<a href="#blueprints" class="anchor"></a>blueprints</h2>
+<p>As mentioned above, one of the objects that <code><a href="../reference/mold.html">mold()</a></code> returns is an <code>blueprint</code> responsible for controlling the preprocessing. There are multiple blueprints available in <code>hardhat</code>, but when you call <code><a href="../reference/mold.html">mold()</a></code> one is selected automatically for you. The following two calls generate the same result, using the default formula blueprint.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/identical">identical</a></span>(</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width, iris), </a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width, iris, <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_formula_engine.html">default_formula_engine</a></span>())</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width, iris, <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>())</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">)</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
-<p>Each engine can be tweaked to change how the processing for that interface occurs, and the options vary per engine. To understand why you’d ever want to do this, read on!</p>
+<p>Each blueprint can be tweaked to change how the processing for that interface occurs, and the options vary per blueprint. To understand why you’d ever want to do this, read on!</p>
 </div>
 <div id="formulas" class="section level2">
 <h2 class="hasAnchor">
@@ -180,7 +180,7 @@
 <h3 class="hasAnchor">
 <a href="#intercepts" class="anchor"></a>Intercepts</h3>
 <p>One challenge with the standard formula interface is that, by default, intercepts are always implicitly present and are added to your data set automatically. This works great for the simple regression case. However, other models might either always require or never allow an intercept, but still use the formula interface because of its convenience (for example, <code>earth</code>). This has led to many ad hoc solutions that prevent the user from removing or adding an intercept.</p>
-<p>To get around this, <code><a href="../reference/mold.html">mold()</a></code> will never add an intercept by default. Instead, the addition of an intercept is completely controlled by the formula engine argument, <code>intercept</code>.</p>
+<p>To get around this, <code><a href="../reference/mold.html">mold()</a></code> will never add an intercept by default. Instead, the addition of an intercept is completely controlled by the formula blueprint argument, <code>intercept</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">no_intercept &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width, iris)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">no_intercept<span class="op">$</span>predictors</a>
@@ -200,7 +200,7 @@
 <a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">with_intercept &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="op">~</span><span class="st"> </span>Sepal.Width, iris, </a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_formula_engine.html">default_formula_engine</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">)</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">with_intercept<span class="op">$</span>predictors</a>
@@ -228,7 +228,7 @@
 <div id="dummy-variables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dummy-variables" class="anchor"></a>Dummy variables</h3>
-<p>One of the nice things about the formula interface is that it expands factors into dummy variable columns for you. Like intercepts, this is great…until it isn’t. For example, <code>ranger</code> fits a random forest, which can take factors directly, but still uses the formula notation. In this case, it would be great if the factor columns specified as predictors <em>weren’t</em> expanded. This is the job of the engine argument, <code>indicators</code>.</p>
+<p>One of the nice things about the formula interface is that it expands factors into dummy variable columns for you. Like intercepts, this is great…until it isn’t. For example, <code>ranger</code> fits a random forest, which can take factors directly, but still uses the formula notation. In this case, it would be great if the factor columns specified as predictors <em>weren’t</em> expanded. This is the job of the blueprint argument, <code>indicators</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">expanded_dummies &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Species, iris)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">expanded_dummies<span class="op">$</span>predictors</a>
@@ -248,7 +248,7 @@
 <a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">non_expanded_dummies &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Species, iris, </a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_formula_engine.html">default_formula_engine</a></span>(<span class="dt">indicators =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="dt">indicators =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb11-4" data-line-number="4">)</a>
 <a class="sourceLine" id="cb11-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb11-6" data-line-number="6">non_expanded_dummies<span class="op">$</span>predictors</a>
@@ -271,7 +271,7 @@
 <a class="sourceLine" id="cb12-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">k_minus_one_cols &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4">  <span class="op">~</span><span class="st"> </span>Species, iris, </a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">  <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_formula_engine.html">default_formula_engine</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">  <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb12-6" data-line-number="6">)</a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"></a>
 <a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(k_cols<span class="op">$</span>predictors)</a>
@@ -318,7 +318,7 @@
 <a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt; [4,]         3.1          4.6</span></a>
 <a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; [5,]         3.6          5.0</span></a>
 <a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; [6,]         3.9          5.4</span></a></code></pre></div>
-<p>The default formula engine used with <code><a href="../reference/mold.html">mold()</a></code> allows you to specify multiple outcomes like you specify multiple predictors. You can even do inline transformations of each outcome, although if you are doing very much of that, I’d advise using a recipe instead. <code>outcomes</code> then holds the two outcomes columns.</p>
+<p>The default formula blueprint used with <code><a href="../reference/mold.html">mold()</a></code> allows you to specify multiple outcomes like you specify multiple predictors. You can even do inline transformations of each outcome, although if you are doing very much of that, I’d advise using a recipe instead. <code>outcomes</code> then holds the two outcomes columns.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">multivariate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(Sepal.Length) <span class="op">~</span><span class="st"> </span>Petal.Width, iris)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb15-3" data-line-number="3">multivariate<span class="op">$</span>outcomes</a>
@@ -378,8 +378,8 @@
 <a class="sourceLine" id="cb16-34" data-line-number="34"><span class="co">#&gt;  9         2.9</span></a>
 <a class="sourceLine" id="cb16-35" data-line-number="35"><span class="co">#&gt; 10         3.1</span></a>
 <a class="sourceLine" id="cb16-36" data-line-number="36"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
-<p>This interface doesn’t do too much in the way of preprocessing, but it does let you specify an <code>intercept</code> in the engine specific arguments. Rather than <code><a href="../reference/default_formula_engine.html">default_formula_engine()</a></code>, this uses the <code><a href="../reference/default_xy_engine.html">default_xy_engine()</a></code>.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">xy_with_intercept &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_xy_engine.html">default_xy_engine</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>))</a>
+<p>This interface doesn’t do too much in the way of preprocessing, but it does let you specify an <code>intercept</code> in the blueprint specific arguments. Rather than <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code>, this uses the <code><a href="../reference/default_xy_blueprint.html">default_xy_blueprint()</a></code>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">xy_with_intercept &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb17-3" data-line-number="3">xy_with_intercept<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#&gt; # A tibble: 150 x 5</span></a>
@@ -420,7 +420,7 @@
 <div id="recipe" class="section level2">
 <h2 class="hasAnchor">
 <a href="#recipe" class="anchor"></a>Recipe</h2>
-<p>The last of the three interfaces is the relatively new recipes interface. The <code><a href="../reference/default_recipe_engine.html">default_recipe_engine()</a></code> knows how to <code><a href="https://www.rdocumentation.org/packages/recipes/topics/prep">prep()</a></code> your recipe, and <code><a href="https://www.rdocumentation.org/packages/recipes/topics/juice">juice()</a></code> it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.</p>
+<p>The last of the three interfaces is the relatively new recipes interface. The <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> knows how to <code><a href="https://www.rdocumentation.org/packages/recipes/topics/prep">prep()</a></code> your recipe, and <code><a href="https://www.rdocumentation.org/packages/recipes/topics/juice">juice()</a></code> it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(recipes)</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb19-3" data-line-number="3">rec &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/recipe">recipe</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width, iris) <span class="op">%&gt;%</span></a>
@@ -460,10 +460,10 @@
 <a class="sourceLine" id="cb19-37" data-line-number="37"><span class="co">#&gt;  9         1.48</span></a>
 <a class="sourceLine" id="cb19-38" data-line-number="38"><span class="co">#&gt; 10         1.59</span></a>
 <a class="sourceLine" id="cb19-39" data-line-number="39"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
-<p>The only special thing you can tweak with the recipe engine is whether or not an intercept is added.</p>
+<p>The only special thing you can tweak with the recipe blueprint is whether or not an intercept is added.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">recipe_with_intercept &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(</a>
 <a class="sourceLine" id="cb20-2" data-line-number="2">  rec, iris, </a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">  <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_recipe_engine.html">default_recipe_engine</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">  <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb20-4" data-line-number="4">)</a>
 <a class="sourceLine" id="cb20-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb20-6" data-line-number="6">recipe_with_intercept<span class="op">$</span>predictors</a>
@@ -491,7 +491,7 @@
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
       <li><a href="#a-first-example">A First Example</a></li>
-      <li><a href="#engines">Engines</a></li>
+      <li><a href="#blueprints">blueprints</a></li>
       <li><a href="#formulas">Formulas</a></li>
       <li><a href="#xy">XY</a></li>
       <li><a href="#recipe">Recipe</a></li>

@@ -135,11 +135,11 @@
 <p>A model constructor should:</p>
 <ul>
 <li><p>Have the name <code>new_&lt;model_class&gt;()</code>.</p></li>
-<li><p>Take the required model elements as named arguments, including a required <code>engine</code>.</p></li>
+<li><p>Take the required model elements as named arguments, including a required <code>blueprint</code>.</p></li>
 <li><p>Validate the types of the new elements.</p></li>
 <li><p>Pass the named elements on to <code><a href="../reference/new_model.html">new_model()</a></code> along with setting the class to <code>"&lt;model_class&gt;"</code>.</p></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">new_simple_lm &lt;-<span class="st"> </span><span class="cf">function</span>(coefs, coef_names, engine) {</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">new_simple_lm &lt;-<span class="st"> </span><span class="cf">function</span>(coefs, coef_names, blueprint) {</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">  </a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">is.numeric</a></span>(coefs)) {</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"`coefs` should be a numeric vector."</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</a>
@@ -156,13 +156,13 @@
 <a class="sourceLine" id="cb2-15" data-line-number="15">  <span class="kw"><a href="../reference/new_model.html">new_model</a></span>(</a>
 <a class="sourceLine" id="cb2-16" data-line-number="16">    <span class="dt">coefs =</span> coefs, </a>
 <a class="sourceLine" id="cb2-17" data-line-number="17">    <span class="dt">coef_names =</span> coef_names,</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">    <span class="dt">engine =</span> engine, </a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">    <span class="dt">blueprint =</span> blueprint, </a>
 <a class="sourceLine" id="cb2-19" data-line-number="19">    <span class="dt">class =</span> <span class="st">"simple_lm"</span></a>
 <a class="sourceLine" id="cb2-20" data-line-number="20">  )</a>
 <a class="sourceLine" id="cb2-21" data-line-number="21">}</a></code></pre></div>
 <p>A <code>"simple_lm"</code> object has just enough information to make numeric predictions on new data, but you can store other things here as well to enable your model object to work with extra post-fitting functionality.</p>
-<p>We can test this by manually generating a model object. Along with the custom class we provided, this object also has a <code>"hardhat_model"</code> class. There is a very simple print method for objects of this type. Specifically, it prints the name of the class at the top, and only prints out the custom elements (i.e. not the <code>engine</code>).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">manual_model &lt;-<span class="st"> </span><span class="kw">new_simple_lm</span>(<span class="dv">1</span>, <span class="st">"my_coef"</span>, <span class="kw"><a href="../reference/default_xy_engine.html">default_xy_engine</a></span>())</a>
+<p>We can test this by manually generating a model object. Along with the custom class we provided, this object also has a <code>"hardhat_model"</code> class. There is a very simple print method for objects of this type. Specifically, it prints the name of the class at the top, and only prints out the custom elements (i.e. not the <code>blueprint</code>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">manual_model &lt;-<span class="st"> </span><span class="kw">new_simple_lm</span>(<span class="dv">1</span>, <span class="st">"my_coef"</span>, <span class="kw"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span>())</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">manual_model</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; &lt;simple_lm&gt; </span></a>
@@ -173,10 +173,10 @@
 <a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; [1] "my_coef"</span></a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(manual_model)</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; [1] "coefs"      "coef_names" "engine"</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; [1] "coefs"      "coef_names" "blueprint"</span></a>
 <a class="sourceLine" id="cb3-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">manual_model<span class="op">$</span>engine</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; XY Engine: </span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">manual_model<span class="op">$</span>blueprint</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; XY blueprint: </span></a>
 <a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  </span></a>
 <a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; # Predictors: 0 </span></a>
 <a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;   # Outcomes: 0 </span></a>
@@ -213,7 +213,7 @@
 <div id="model-wrapper" class="section level2">
 <h2 class="hasAnchor">
 <a href="#model-wrapper" class="anchor"></a>Model Wrapper</h2>
-<p>Now that we have our constructor and our implementation function, we can create a common wrapper function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the engine to create a new instance of our model. It should have an argument for the output from a call to <code><a href="../reference/mold.html">mold()</a></code>, here I’ve called that <code>processed</code>. In that object will be (at a minimum) the predictors, outcomes, and engine. You might also have arguments for additional options to pass on to the implementation function.</p>
+<p>Now that we have our constructor and our implementation function, we can create a common wrapper function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the blueprint to create a new instance of our model. It should have an argument for the output from a call to <code><a href="../reference/mold.html">mold()</a></code>, here I’ve called that <code>processed</code>. In that object will be (at a minimum) the predictors, outcomes, and blueprint. You might also have arguments for additional options to pass on to the implementation function.</p>
 <p>The wrapper should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The <code>predictors</code> and <code>outcomes</code> that are returned from <code><a href="../reference/mold.html">mold()</a></code> will <em>always</em> be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.</p>
 <p>This is also a good place to use some of hardhat’s validation functions. In this case, we always expect the outcome to have a single column since this is a univariate model, so we can use <code><a href="../reference/validate_outcomes_is_univariate.html">validate_outcomes_is_univariate()</a></code> to enforce that.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">simple_lm_common &lt;-<span class="st"> </span><span class="cf">function</span>(processed) {</a>
@@ -228,7 +228,7 @@
 <a class="sourceLine" id="cb6-10" data-line-number="10">  <span class="kw">new_simple_lm</span>(</a>
 <a class="sourceLine" id="cb6-11" data-line-number="11">    <span class="dt">coefs =</span> fit<span class="op">$</span>coefs,</a>
 <a class="sourceLine" id="cb6-12" data-line-number="12">    <span class="dt">coef_names =</span> fit<span class="op">$</span>coef_names,</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">    <span class="dt">engine =</span> processed<span class="op">$</span>engine</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">    <span class="dt">blueprint =</span> processed<span class="op">$</span>blueprint</a>
 <a class="sourceLine" id="cb6-14" data-line-number="14">  )</a>
 <a class="sourceLine" id="cb6-15" data-line-number="15">}</a></code></pre></div>
 <p>At this point, we can simulate user input and pass it on to our wrapper to run a model.</p>
@@ -362,32 +362,32 @@
 <div id="adding-an-intercept-option" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-an-intercept-option" class="anchor"></a>Adding an Intercept Option</h2>
-<p>You might have noticed that our linear regression isn’t adding an intercept. Generally, with linear regression models we will want a default intercept added on. To accomplish this, we can add an <code>intercept</code> argument to our user facing function, and then use that to tweak the engine that would otherwise be created for you automatically.</p>
+<p>You might have noticed that our linear regression isn’t adding an intercept. Generally, with linear regression models we will want a default intercept added on. To accomplish this, we can add an <code>intercept</code> argument to our user facing function, and then use that to tweak the blueprint that would otherwise be created for you automatically.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">simple_lm &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/UseMethod">UseMethod</a></span>(<span class="st">"simple_lm"</span>)</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">}</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb12-5" data-line-number="5">simple_lm.data.frame &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, ...) {</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">  engine &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_xy_engine.html">default_xy_engine</a></span>(<span class="dt">intercept =</span> intercept)</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">engine =</span> engine)</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">blueprint =</span> blueprint)</a>
 <a class="sourceLine" id="cb12-8" data-line-number="8">  <span class="kw">simple_lm_common</span>(processed)</a>
 <a class="sourceLine" id="cb12-9" data-line-number="9">}</a>
 <a class="sourceLine" id="cb12-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb12-11" data-line-number="11">simple_lm.matrix &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, <span class="dt">intercept =</span> <span class="ot">TRUE</span>,...) {</a>
-<a class="sourceLine" id="cb12-12" data-line-number="12">  engine &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_xy_engine.html">default_xy_engine</a></span>(<span class="dt">intercept =</span> intercept)</a>
-<a class="sourceLine" id="cb12-13" data-line-number="13">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">engine =</span> engine)</a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
+<a class="sourceLine" id="cb12-13" data-line-number="13">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">blueprint =</span> blueprint)</a>
 <a class="sourceLine" id="cb12-14" data-line-number="14">  <span class="kw">simple_lm_common</span>(processed)</a>
 <a class="sourceLine" id="cb12-15" data-line-number="15">}</a>
 <a class="sourceLine" id="cb12-16" data-line-number="16"></a>
 <a class="sourceLine" id="cb12-17" data-line-number="17">simple_lm.formula &lt;-<span class="st"> </span><span class="cf">function</span>(formula, data, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, ...) {</a>
-<a class="sourceLine" id="cb12-18" data-line-number="18">  engine &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_formula_engine.html">default_formula_engine</a></span>(<span class="dt">intercept =</span> intercept)</a>
-<a class="sourceLine" id="cb12-19" data-line-number="19">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(formula, data, <span class="dt">engine =</span> engine)</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(formula, data, <span class="dt">blueprint =</span> blueprint)</a>
 <a class="sourceLine" id="cb12-20" data-line-number="20">  <span class="kw">simple_lm_common</span>(processed)</a>
 <a class="sourceLine" id="cb12-21" data-line-number="21">}</a>
 <a class="sourceLine" id="cb12-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb12-23" data-line-number="23">simple_lm.recipe &lt;-<span class="st"> </span><span class="cf">function</span>(x, data, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, ...) {</a>
-<a class="sourceLine" id="cb12-24" data-line-number="24">  engine &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_recipe_engine.html">default_recipe_engine</a></span>(<span class="dt">intercept =</span> intercept)</a>
-<a class="sourceLine" id="cb12-25" data-line-number="25">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, data, <span class="dt">engine =</span> engine)</a>
+<a class="sourceLine" id="cb12-24" data-line-number="24">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
+<a class="sourceLine" id="cb12-25" data-line-number="25">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, data, <span class="dt">blueprint =</span> blueprint)</a>
 <a class="sourceLine" id="cb12-26" data-line-number="26">  <span class="kw">simple_lm_common</span>(processed)</a>
 <a class="sourceLine" id="cb12-27" data-line-number="27">}</a></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># By default an intercept is included</span></a>
@@ -429,7 +429,7 @@
 <p>To test it, we will have to run a model and call <code><a href="../reference/forge.html">forge()</a></code> on the output manually. The higher level user facing function will do this automatically.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw">simple_lm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Species, iris)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">predictors &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris, model<span class="op">$</span>engine)<span class="op">$</span>predictors</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">predictors &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris, model<span class="op">$</span>blueprint)<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb15-4" data-line-number="4">predictors &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(predictors)</a>
 <a class="sourceLine" id="cb15-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw">predict_simple_lm_response</span>(model, predictors)</a>
@@ -469,7 +469,7 @@
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw">simple_lm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Species, iris)</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co"># Pass in the data frame</span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4">predictors &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris, model<span class="op">$</span>engine)<span class="op">$</span>predictors</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">predictors &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris, model<span class="op">$</span>blueprint)<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb17-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw">predict_simple_lm_common</span>(<span class="st">"response"</span>, model, predictors)</a>
 <a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt; # A tibble: 150 x 1</span></a>
@@ -496,13 +496,13 @@
 <h2 class="hasAnchor">
 <a href="#user-facing-prediction-function" class="anchor"></a>User Facing Prediction Function</h2>
 <p>Finally, we can create an S3 method for the generic <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> function. To match the modeling principles, it should use <code>new_data</code> to accept a matrix or data frame of new predictors.</p>
-<p>The first thing that the <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method should do is call <code><a href="../reference/forge.html">forge()</a></code> with the <code>new_data</code> and the <code>engine</code> that we attached to our <code>simple_lm</code> model at fit time. This performs the required preprocessing on the new data, and checks that the <em>type</em> of the data frame supplied to <code>new_data</code> matches the type of data frame supplied at fit time. This is one of the most valuable features of <code><a href="../reference/forge.html">forge()</a></code>, as it adds a large amount of robustness to your <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>ion function. You will see some examples of this at the end of the vignette.</p>
+<p>The first thing that the <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method should do is call <code><a href="../reference/forge.html">forge()</a></code> with the <code>new_data</code> and the <code>blueprint</code> that we attached to our <code>simple_lm</code> model at fit time. This performs the required preprocessing on the new data, and checks that the <em>type</em> of the data frame supplied to <code>new_data</code> matches the type of data frame supplied at fit time. This is one of the most valuable features of <code><a href="../reference/forge.html">forge()</a></code>, as it adds a large amount of robustness to your <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>ion function. You will see some examples of this at the end of the vignette.</p>
 <p>After calling <code><a href="../reference/forge.html">forge()</a></code>, it should pass off to the common prediction wrapper to call the correct prediction function based on the type.</p>
 <p>Finally, it is good practice to call the hardhat function, <code><a href="../reference/validate_prediction_size.html">validate_prediction_size()</a></code>, with the return value and the original <code>new_data</code> to ensure that the number of rows in the output are the same as the number of rows of the input. If a prediction cannot be made for a row of <code>new_data</code>, an <code>NA</code> value should be placed there instead. Mainly, this validation function is a check on the model developer to ensure that you always return output with a sane length.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">predict.simple_lm &lt;-<span class="st"> </span><span class="cf">function</span>(object, new_data, <span class="dt">type =</span> <span class="st">"response"</span>, ...) {</a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">  </a>
 <a class="sourceLine" id="cb18-3" data-line-number="3">  <span class="co"># Enforces column order, type, column names, etc</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(new_data, object<span class="op">$</span>engine)</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(new_data, object<span class="op">$</span>blueprint)</a>
 <a class="sourceLine" id="cb18-5" data-line-number="5">  </a>
 <a class="sourceLine" id="cb18-6" data-line-number="6">  out &lt;-<span class="st"> </span><span class="kw">predict_simple_lm_common</span>(type, object, processed<span class="op">$</span>predictors)</a>
 <a class="sourceLine" id="cb18-7" data-line-number="7">  </a>

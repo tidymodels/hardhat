@@ -203,13 +203,13 @@ checks exist in <code><a href='shrink.html'>shrink()</a></code>.</p>
 <span class='co'># shrink() / scream()</span>
 
 <span class='co'># mold() is run at model fit time</span>
-<span class='co'># and a formula preprocessing engine is recorded</span>
+<span class='co'># and a formula preprocessing blueprint is recorded</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
 
 <span class='co'># Inside the result of mold() are the prototype tibbles</span>
 <span class='co'># for the predictors and the outcomes</span>
-<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>ptypes</span>$<span class='no'>predictors</span>
-<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>engine</span>$<span class='no'>ptypes</span>$<span class='no'>outcomes</span>
+<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>predictors</span>
+<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>outcomes</span>
 
 <span class='co'># Pass the test data, along with a prototype, to</span>
 <span class='co'># shrink() to extract the prototype columns</span>

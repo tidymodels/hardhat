@@ -34,14 +34,14 @@
 
 <meta property="og:description" content="mold() applies the appropriate processing steps required to get training
 data ready to be fed into a model. It does this through the use of various
-engines that understand how to preprocess data that come in various
+blueprints that understand how to preprocess data that come in various
 forms, such as a formula or a recipe.
-All engines have consistent return values with the others, but each is
+All blueprints have consistent return values with the others, but each is
 unique enough to have its own help page. Click through below to learn
 how to use each one in conjunction with mold().
-XY Method - default_xy_engine()
-Formula Method - default_formula_engine()
-Recipes Method - default_recipe_engine()
+XY Method - default_xy_blueprint()
+Formula Method - default_formula_blueprint()
+Recipes Method - default_recipe_blueprint()
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -136,14 +136,14 @@ Recipes Method - default_recipe_engine()
     
     <p><code>mold()</code> applies the appropriate processing steps required to get training
 data ready to be fed into a model. It does this through the use of various
-<em>engines</em> that understand how to preprocess data that come in various
+<em>blueprints</em> that understand how to preprocess data that come in various
 forms, such as a formula or a recipe.</p>
-<p>All engines have consistent return values with the others, but each is
+<p>All blueprints have consistent return values with the others, but each is
 unique enough to have its own help page. Click through below to learn
 how to use each one in conjunction with <code>mold()</code>.</p><ul>
-<li><p>XY Method - <code><a href='default_xy_engine.html'>default_xy_engine()</a></code></p></li>
-<li><p>Formula Method - <code><a href='default_formula_engine.html'>default_formula_engine()</a></code></p></li>
-<li><p>Recipes Method - <code><a href='default_recipe_engine.html'>default_recipe_engine()</a></code></p></li>
+<li><p>XY Method - <code><a href='default_xy_blueprint.html'>default_xy_blueprint()</a></code></p></li>
+<li><p>Formula Method - <code><a href='default_formula_blueprint.html'>default_formula_blueprint()</a></code></p></li>
+<li><p>Recipes Method - <code><a href='default_recipe_blueprint.html'>default_recipe_blueprint()</a></code></p></li>
 </ul>
     
     </div>
@@ -171,9 +171,9 @@ Description for more information.</p></td>
 model.</p></li>
 <li><p><code>outcome</code>: A tibble containing the molded outcomes to be used in the
 model.</p></li>
-<li><p><code>engine</code>: A method specific <code>"hardhat_engine"</code> object for use when
+<li><p><code>blueprint</code>: A method specific <code>"hardhat_blueprint"</code> object for use when
 making predictions.</p></li>
-<li><p><code>extras</code>: Either <code>NULL</code> if the engine returns no extra information,
+<li><p><code>extras</code>: Either <code>NULL</code> if the blueprint returns no extra information,
 or a named list containing the extra information.</p></li>
 </ul>
 
@@ -181,7 +181,7 @@ or a named list containing the extra information.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># See the method specific documentation linked in Description</span>
-<span class='co'># for the details of each engine, and more examples.</span>
+<span class='co'># for the details of each blueprint, and more examples.</span>
 
 <span class='co'># XY</span>
 <span class='fu'>mold</span>(<span class='no'>iris</span>[, <span class='st'>"Sepal.Width"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>], <span class='no'>iris</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; $predictors
@@ -216,8 +216,8 @@ or a named list containing the extra information.</p></li>
 #&gt; 10 setosa  
 #&gt; # … with 140 more rows
 #&gt; 
-#&gt; $engine
-#&gt; XY Engine: 
+#&gt; $blueprint
+#&gt; XY blueprint: 
 #&gt;  
 #&gt; # Predictors: 1 
 #&gt;   # Outcomes: 1 
@@ -259,8 +259,8 @@ or a named list containing the extra information.</p></li>
 #&gt; 10 setosa 
 #&gt; # … with 140 more rows
 #&gt; 
-#&gt; $engine
-#&gt; Formula Engine: 
+#&gt; $blueprint
+#&gt; Formula blueprint: 
 #&gt;  
 #&gt; # Predictors: 1 
 #&gt;   # Outcomes: 1 
@@ -306,8 +306,8 @@ or a named list containing the extra information.</p></li>
 #&gt; 10 setosa 
 #&gt; # … with 140 more rows
 #&gt; 
-#&gt; $engine
-#&gt; Recipe Engine: 
+#&gt; $blueprint
+#&gt; Recipe blueprint: 
 #&gt;  
 #&gt; # Predictors: 1 
 #&gt;   # Outcomes: 1 

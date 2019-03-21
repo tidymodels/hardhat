@@ -32,15 +32,15 @@
 
 <meta property="og:title" content="Forge prediction-ready data — forge" />
 
-<meta property="og:description" content="forge() applies the transformations requested by the specific engine
+<meta property="og:description" content="forge() applies the transformations requested by the specific blueprint
 on a set of new_data. This new_data contains new predictors
 (and potentially outcomes) that will be used to generate predictions.
-All engines have consistent return values with the others, but each is
+All blueprints have consistent return values with the others, but each is
 unique enough to have its own help page. Click through below to learn
 how to use each one in conjunction with forge().
-XY Method - default_xy_engine()
-Formula Method - default_formula_engine()
-Recipes Method - default_recipe_engine()
+XY Method - default_xy_blueprint()
+Formula Method - default_formula_blueprint()
+Recipes Method - default_recipe_blueprint()
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -133,20 +133,20 @@ Recipes Method - default_recipe_engine()
 
     <div class="ref-description">
     
-    <p><code>forge()</code> applies the transformations requested by the specific <code>engine</code>
+    <p><code>forge()</code> applies the transformations requested by the specific <code>blueprint</code>
 on a set of <code>new_data</code>. This <code>new_data</code> contains new predictors
 (and potentially outcomes) that will be used to generate predictions.</p>
-<p>All engines have consistent return values with the others, but each is
+<p>All blueprints have consistent return values with the others, but each is
 unique enough to have its own help page. Click through below to learn
 how to use each one in conjunction with <code>forge()</code>.</p><ul>
-<li><p>XY Method - <code><a href='default_xy_engine.html'>default_xy_engine()</a></code></p></li>
-<li><p>Formula Method - <code><a href='default_formula_engine.html'>default_formula_engine()</a></code></p></li>
-<li><p>Recipes Method - <code><a href='default_recipe_engine.html'>default_recipe_engine()</a></code></p></li>
+<li><p>XY Method - <code><a href='default_xy_blueprint.html'>default_xy_blueprint()</a></code></p></li>
+<li><p>Formula Method - <code><a href='default_formula_blueprint.html'>default_formula_blueprint()</a></code></p></li>
+<li><p>Recipes Method - <code><a href='default_recipe_blueprint.html'>default_recipe_blueprint()</a></code></p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>new_data</span>, <span class='no'>engine</span>, <span class='no'>...</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>new_data</span>, <span class='no'>blueprint</span>, <span class='no'>...</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,8 +157,8 @@ how to use each one in conjunction with <code>forge()</code>.</p><ul>
 <code>outcomes = TRUE</code>, this should also contain the outcomes to process.</p></td>
     </tr>
     <tr>
-      <th>engine</th>
-      <td><p>A preprocessing <code>engine</code>.</p></td>
+      <th>blueprint</th>
+      <td><p>A preprocessing <code>blueprint</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -178,7 +178,7 @@ as well?</p></td>
 <code>new_data</code> predictors.</p></li>
 <li><p><code>outcomes</code>: If <code>outcomes = TRUE</code>, a tibble containing the preprocessed
 outcomes found in <code>new_data</code>. Otherwise, <code>NULL</code>.</p></li>
-<li><p><code>extras</code>: Either <code>NULL</code> if the engine returns no extra information,
+<li><p><code>extras</code>: Either <code>NULL</code> if the blueprint returns no extra information,
 or a named list containing the extra information.</p></li>
 </ul>
 
@@ -193,9 +193,9 @@ performance.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># See the engine specific documentation linked above</span>
+    <pre class="examples"><div class='input'><span class='co'># See the blueprint specific documentation linked above</span>
 <span class='co'># for various ways to call forge with different</span>
-<span class='co'># engines.</span>
+<span class='co'># blueprints.</span>
 
 <span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
 <span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>101</span>:<span class='fl'>150</span>,]
@@ -204,10 +204,10 @@ performance.</p>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>,
   <span class='no'>train</span>,
-  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='default_formula_engine.html'>default_formula_engine</a></span>(<span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='fu'><a href='default_formula_blueprint.html'>default_formula_blueprint</a></span>(<span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 )
 
-<span class='fu'>forge</span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>engine</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
+<span class='fu'>forge</span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 1
 #&gt;    Species  
 #&gt;    &lt;fct&gt;    

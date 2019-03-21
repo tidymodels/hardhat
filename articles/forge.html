@@ -103,26 +103,26 @@
 <div id="connection-with-mold" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connection-with-mold" class="anchor"></a>Connection with mold()</h2>
-<p>When <code><a href="../reference/mold.html">mold()</a></code> is used, one of the returned objects is an <code>engine</code>. This is the key to preprocessing new data with <code><a href="../reference/forge.html">forge()</a></code>. For instance, assume you’ve called <code><a href="../reference/mold.html">mold()</a></code> like so:</p>
+<p>When <code><a href="../reference/mold.html">mold()</a></code> is used, one of the returned objects is an <code>blueprint</code>. This is the key to preprocessing new data with <code><a href="../reference/forge.html">forge()</a></code>. For instance, assume you’ve called <code><a href="../reference/mold.html">mold()</a></code> like so:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">iris_train &lt;-<span class="st"> </span>iris[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>,]</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">iris_test &lt;-<span class="st"> </span>iris[<span class="dv">101</span><span class="op">:</span><span class="dv">150</span>,]</a></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">iris_form &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(Sepal.Length) <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width, </a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">  iris_train, </a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">engine =</span> <span class="kw"><a href="../reference/default_formula_engine.html">default_formula_engine</a></span>(<span class="dt">indicators =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="dt">indicators =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">)</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">formula_eng &lt;-<span class="st"> </span>iris_form<span class="op">$</span>engine</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">formula_eng &lt;-<span class="st"> </span>iris_form<span class="op">$</span>blueprint</a>
 <a class="sourceLine" id="cb3-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb3-9" data-line-number="9">formula_eng</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; Formula Engine: </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; Formula blueprint: </span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  </span></a>
 <a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; # Predictors: 2 </span></a>
 <a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;   # Outcomes: 1 </span></a>
 <a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;    Intercept: FALSE </span></a>
 <a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;   Indicators: FALSE</span></a></code></pre></div>
-<p>A formula engine is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don’t want to expand <code>Species</code> into dummy variables by setting <code>indicators = FALSE</code>.</p>
-<p>When it is time to <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> on new data, that data is passed on to <code><a href="../reference/forge.html">forge()</a></code> along with the <code>engine</code> we just created.</p>
+<p>A formula blueprint is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don’t want to expand <code>Species</code> into dummy variables by setting <code>indicators = FALSE</code>.</p>
+<p>When it is time to <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> on new data, that data is passed on to <code><a href="../reference/forge.html">forge()</a></code> along with the <code>blueprint</code> we just created.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test, formula_eng)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; $predictors</span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; # A tibble: 50 x 2</span></a>
@@ -146,12 +146,12 @@
 <a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; $extras</span></a>
 <a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; $extras$offset</span></a>
 <a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; NULL</span></a></code></pre></div>
-<p>Note that in <code>predictors</code>, <code>Species</code> was not expanded because the <code>engine</code> knew about the preprocessing options that were set when <code><a href="../reference/mold.html">mold()</a></code> was called.</p>
+<p>Note that in <code>predictors</code>, <code>Species</code> was not expanded because the <code>blueprint</code> knew about the preprocessing options that were set when <code><a href="../reference/mold.html">mold()</a></code> was called.</p>
 <p><code><a href="../reference/forge.html">forge()</a></code> always returns three things, and they should look familiar to you if you have used <code><a href="../reference/mold.html">mold()</a></code>.</p>
 <ul>
 <li><p><code>predictors</code> holds a tibble of the predictors.</p></li>
 <li><p><code>outcomes</code> is returned as <code>NULL</code> by default, because most <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> methods assume you only have access to the new predictors. Alternatively, as you will read in a moment, this can contain a tibble of the new outcomes.</p></li>
-<li><p><code>extras</code> varies per engine, but is a catch-all slot to hold the same kind of extra objects that were returned by the engine when <code><a href="../reference/mold.html">mold()</a></code> was called.</p></li>
+<li><p><code>extras</code> varies per blueprint, but is a catch-all slot to hold the same kind of extra objects that were returned by the blueprint when <code><a href="../reference/mold.html">mold()</a></code> was called.</p></li>
 </ul>
 </div>
 <div id="outcomes" class="section level2">
@@ -334,11 +334,11 @@
 <a class="sourceLine" id="cb10-34" data-line-number="34"><span class="co">#&gt;  9          4.4                  0                 0</span></a>
 <a class="sourceLine" id="cb10-35" data-line-number="35"><span class="co">#&gt; 10          4.9                  0                 0</span></a>
 <a class="sourceLine" id="cb10-36" data-line-number="36"><span class="co">#&gt; # … with 90 more rows</span></a></code></pre></div>
-<p>The engine is a <code>recipe</code> engine.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">recipe_eng &lt;-<span class="st"> </span>iris_recipe<span class="op">$</span>engine</a>
+<p>The blueprint is a <code>recipe</code> blueprint.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">recipe_eng &lt;-<span class="st"> </span>iris_recipe<span class="op">$</span>blueprint</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb11-3" data-line-number="3">recipe_eng</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; Recipe Engine: </span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; Recipe blueprint: </span></a>
 <a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;  </span></a>
 <a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; # Predictors: 2 </span></a>
 <a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;   # Outcomes: 1 </span></a>
@@ -390,7 +390,7 @@
 <a class="sourceLine" id="cb13-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb13-5" data-line-number="5">iris_recipe2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(rec2, iris_train)</a>
 <a class="sourceLine" id="cb13-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7">recipe_eng_log_outcome &lt;-<span class="st"> </span>iris_recipe2<span class="op">$</span>engine</a></code></pre></div>
+<a class="sourceLine" id="cb13-7" data-line-number="7">recipe_eng_log_outcome &lt;-<span class="st"> </span>iris_recipe2<span class="op">$</span>blueprint</a></code></pre></div>
 <p>If our <code>new_data</code> doesn’t have the outcome, baking this recipe will fail even if we don’t request that the outcomes are returned by <code><a href="../reference/forge.html">forge()</a></code>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">iris_test_no_outcome &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(iris_test, <span class="dt">select =</span> <span class="op">-</span>Sepal.Width)</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"></a>
@@ -403,7 +403,7 @@
 <a class="sourceLine" id="cb15-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb15-5" data-line-number="5">iris_recipe3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(rec3, iris_train)</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">recipe_eng_skip_outcome &lt;-<span class="st"> </span>iris_recipe3<span class="op">$</span>engine</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">recipe_eng_skip_outcome &lt;-<span class="st"> </span>iris_recipe3<span class="op">$</span>blueprint</a>
 <a class="sourceLine" id="cb15-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test_no_outcome, recipe_eng_skip_outcome)</a>
 <a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt; $predictors</span></a>
