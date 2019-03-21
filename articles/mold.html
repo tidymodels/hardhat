@@ -220,10 +220,13 @@
 <a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
 <p>An error is thrown if an intercept removal term is specified:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, iris)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `- 1`.</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span><span class="dv">0</span>, iris)</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; Warning: `rlang__backtrace_on_error` is no longer experimental.</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; It has been renamed to `rlang_backtrace_on_error`. Please update your RProfile.</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; This warning is displayed once per session.</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `- 1`.</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span><span class="dv">0</span>, iris)</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></a></code></pre></div>
 </div>
 <div id="dummy-variables" class="section level3">
 <h3 class="hasAnchor">

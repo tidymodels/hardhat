@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ensure no duplicate terms appear in <code>formula</code> — validate_no_formula_duplication • hardhat</title>
+<title>Ensure predictors are all numeric — validate_predictors_are_numeric • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,16 +30,16 @@
 
 
 
-<meta property="og:title" content="Ensure no duplicate terms appear in <code>formula</code> — validate_no_formula_duplication" />
+<meta property="og:title" content="Ensure predictors are all numeric — validate_predictors_are_numeric" />
 
 <meta property="og:description" content="validate - asserts the following:
-formula must not have duplicates terms on the left and right hand
-side of the formula.
+predictors must have numeric columns.
 " />
 
 <meta property="og:description" content="check - returns the following:
 ok A logical. Does the check pass?
-duplicates A character vector. The duplicate terms.
+bad_classes A named list. The names are the names of problematic columns,
+and the values are the classes of the matching column.
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -125,44 +125,42 @@ duplicates A character vector. The duplicate terms.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Ensure no duplicate terms appear in <code>formula</code></h1>
+    <h1>Ensure predictors are all numeric</h1>
     <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/validation.R'><code>R/validation.R</code></a></small>
-    <div class="hidden name"><code>validate_no_formula_duplication.Rd</code></div>
+    <div class="hidden name"><code>validate_predictors_are_numeric.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
     <p>validate - asserts the following:</p><ul>
-<li><p><code>formula</code> must not have duplicates terms on the left and right hand
-side of the formula.</p></li>
+<li><p><code>predictors</code> must have numeric columns.</p></li>
 </ul>
 
     <p>check - returns the following:</p><ul>
 <li><p><code>ok</code> A logical. Does the check pass?</p></li>
-<li><p><code>duplicates</code> A character vector. The duplicate terms.</p></li>
+<li><p><code>bad_classes</code> A named list. The names are the names of problematic columns,
+and the values are the classes of the matching column.</p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>validate_no_formula_duplication</span>(<span class='no'>formula</span>, <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>validate_predictors_are_numeric</span>(<span class='no'>predictors</span>)
 
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>formula</span>, <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>check_predictors_are_numeric</span>(<span class='no'>predictors</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>formula</th>
-      <td><p>A formula to check.</p></td>
-    </tr>
-    <tr>
-      <th>original</th>
-      <td><p>A logical. Should the original names be checked, or should
-the names after processing be used? If <code>FALSE</code>, <code>y ~ log(y)</code> is allowed
-because the names are <code>"y"</code> and <code>"log(y)"</code>, if <code>TRUE</code>, <code>y ~ log(y)</code> is not
-allowed because the original names are both <code>"y"</code>.</p></td>
+      <th>predictors</th>
+      <td><p>An object to check.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The expected way to use this validation function is to supply it the
+<code>$predictors</code> element of the result of a call to <code><a href='mold.html'>mold()</a></code>.</p>
     
     <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
 
@@ -182,44 +180,32 @@ and provide your own validation function.</p></li>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other validation functions: <code><a href='validate_column_names.html'>validate_column_names</a></code>,
+  <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code>,
   <code><a href='validate_outcomes_is_binary.html'>validate_outcomes_is_binary</a></code>,
   <code><a href='validate_outcomes_is_univariate.html'>validate_outcomes_is_univariate</a></code>,
-  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code>,
-  <code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a></code></p></div>
+  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># All good</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='no'>x</span>)</div><div class='output co'>#&gt; $ok
+<span class='fu'>check_predictors_are_numeric</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; $ok
 #&gt; [1] TRUE
 #&gt; 
-#&gt; $duplicates
-#&gt; character(0)
+#&gt; $bad_classes
+#&gt; list()
 #&gt; </div><div class='input'>
-<span class='co'># Not good!</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='no'>y</span>)</div><div class='output co'>#&gt; $ok
+<span class='co'># Species is not numeric</span>
+<span class='fu'>check_predictors_are_numeric</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $ok
 #&gt; [1] FALSE
 #&gt; 
-#&gt; $duplicates
-#&gt; [1] "y"
-#&gt; </div><div class='input'>
-<span class='co'># This is generally okay</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>))</div><div class='output co'>#&gt; $ok
-#&gt; [1] TRUE
+#&gt; $bad_classes
+#&gt; $bad_classes$Species
+#&gt; [1] "factor"
 #&gt; 
-#&gt; $duplicates
-#&gt; character(0)
 #&gt; </div><div class='input'>
-<span class='co'># But you can be more strict</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>), <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $ok
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $duplicates
-#&gt; [1] "y"
-#&gt; </div><div class='input'>
-# This would throw an error
-</div><div class='input'><span class='fu'>validate_no_formula_duplication</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>) ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>))</div><div class='output co'>#&gt; <span class='error'>Error: The following terms are duplicated on the left and right hand side of the `formula`: 'log(y)'.</span></div><div class='input'>
-
+# This gives an intelligent error message
+</div><div class='input'><span class='fu'>validate_predictors_are_numeric</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; <span class='error'>Error: All predictors must be numeric, but the following are not:</span>
+#&gt; <span class='error'>'Species': 'factor'</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -227,6 +213,8 @@ and provide your own validation function.</p></li>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#validation">Validation</a></li>
 
       <li><a href="#see-also">See also</a></li>
