@@ -64,11 +64,22 @@ check_outcomes_is_univariate <- function(outcomes) {
 
 # ------------------------------------------------------------------------------
 
-#' Check if the outcome holds binary factors
+#' Ensure that the outcome has binary factors
 #'
 #' @description
 #'
-#' Checks that `outcomes` is a data frame with binary factor columns.
+#' validate - asserts the following:
+#'
+#' - `outcomes` must have binary factor columns.
+#'
+#' check - returns the following:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `bad_cols` A character vector. The names of the columns with problems.
+#'
+#' - `num_levels` An integer vector. The actual number of levels of the columns
+#' with problems.
 #'
 #' @param outcomes An object to check.
 #'
@@ -78,17 +89,6 @@ check_outcomes_is_univariate <- function(outcomes) {
 #'
 #' The expected way to use this validation function is to supply it the
 #' `$outcomes` element of the result of a call to [mold()].
-#'
-#' @return
-#'
-#' A list containing the elements:
-#'
-#' - `ok` A logical. Does the check pass?
-#'
-#' - `bad_cols` A character vector. The names of the columns with problems.
-#'
-#' - `num_levels` An integer vector. The actual number of levels of the columns
-#' with problems.
 #'
 #' @examples
 #' # Not a binary factor. 0 levels
@@ -101,6 +101,28 @@ check_outcomes_is_univariate <- function(outcomes) {
 #' check_outcomes_is_binary(data.frame(x = factor(c("A", "B"))))
 #'
 #' @family validation functions
+#' @export
+validate_outcomes_is_binary <- function(outcomes) {
+
+  check <- check_outcomes_is_binary(outcomes)
+
+  if (!check$ok) {
+    bad_cols <- glue::single_quote(check$bad_cols)
+    bad_msg <- glue::glue("{bad_cols}: {check$num_levels}")
+    bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
+
+    glubort(
+      "The outcome must be binary, ",
+      "but the following number of levels were found:",
+      "\n",
+      "{bad_msg}"
+    )
+  }
+
+  invisible(outcomes)
+}
+
+#' @rdname validate_outcomes_is_binary
 #' @export
 check_outcomes_is_binary <- function(outcomes) {
 

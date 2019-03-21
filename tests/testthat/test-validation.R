@@ -10,7 +10,7 @@ test_that("validate_outcomes_is_univariate()", {
 
   expect_error(
     validate_outcomes_is_univariate(iris),
-    "`data` must be univariate, but 5 columns were found."
+    "The outcome must be univariate, but 5 columns were found."
   )
 
 })
@@ -49,6 +49,19 @@ test_that("validate_no_formula_duplication()", {
   expect_error(
     validate_no_formula_duplication(y ~ offset(y), original = TRUE),
     "'y'"
+  )
+
+})
+
+test_that("validate_outcomes_is_binary()", {
+
+  expect_silent(
+    validate_outcomes_is_binary(data.frame(x = factor(c("A", "B"))))
+  )
+
+  expect_error(
+    validate_outcomes_is_binary(iris),
+    "'Sepal.Length': 0\n'Sepal.Width': 0\n'Petal.Length': 0\n'Petal.Width': 0\n'Species': 3"
   )
 
 })
