@@ -13,10 +13,11 @@ reference:
   - title: Utility
     contents:
     - contains("model_")
-    - standardize
-    - new_base_model
-    - add_intercept_column
     - delete_response
+    - standardize
+    - new_model
+    - add_intercept_column
+    - run_mold
 
   - title: Validation
     contents:
@@ -24,7 +25,6 @@ reference:
     - shrink
     - contains("validate")
     - contains("check")
-    - contains("enforce")
 
   - title: Blueprint
     contents:
