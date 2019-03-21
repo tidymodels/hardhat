@@ -152,10 +152,6 @@ validate_is_bool <- function(.x, .x_nm) {
   validate_is(.x, is_bool, "bool", .x_nm, .note = "'TRUE' / 'FALSE'")
 }
 
-all_numeric <- function(x) {
-  all(vapply(x, is.numeric, logical(1)))
-}
-
 # ------------------------------------------------------------------------------
 
 is_new_data_like <- function(x) {
