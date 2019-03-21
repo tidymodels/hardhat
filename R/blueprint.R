@@ -249,15 +249,6 @@ validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
   validate_is(.x, .f, .expected, .x_nm, .note)
 }
 
-validate_is_bool_or_null <- function(.x, .x_nm) {
-
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
-  }
-
-  validate_is_or_null(.x, is_bool, "bool", .x_nm = .x_nm, .note = "'TRUE' / 'FALSE'")
-}
-
 validate_is_function_set <- function(.x, .x_nm) {
 
   if (rlang::is_missing(.x_nm)) {
