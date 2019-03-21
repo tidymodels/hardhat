@@ -86,3 +86,16 @@ test_that("validate_predictors_are_numeric()", {
   )
 
 })
+
+test_that("validate_prediction_size()", {
+
+  expect_silent(
+    validate_prediction_size(mtcars, mtcars)
+  )
+
+  expect_error(
+    validate_prediction_size(mtcars[1:5,], mtcars),
+    "The number of rows in `new_data` \\(32\\) must match the number of rows in `.pred` \\(5\\)."
+  )
+
+})
