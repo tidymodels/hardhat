@@ -326,36 +326,6 @@ validate_is_character <- function(.x, .x_nm) {
   )
 }
 
-validate_levels_list <- function(lst, lst_nm) {
-
-  valid_levels_obj <- function(x) {
-
-    if (is.null(x)) {
-      return(TRUE)
-    }
-
-    if (!is.list(x)) {
-      return(FALSE)
-    }
-
-    ok <- vapply(x, rlang::is_character, logical(1))
-
-    all(ok)
-  }
-
-  validate_has_unique_names(lst, lst_nm)
-
-  if (!valid_levels_obj(lst)) {
-    glubort("`{lst_nm}` must be a list of character vectors, or `NULL`.")
-  }
-
-  invisible(lst)
-}
-
-# Just happen to be the same structure
-validate_classes_list <- validate_levels_list
-
-
 validate_forge_args <- function(forge) {
 
   required_clean_args <- c("blueprint", "new_data", "outcomes")
