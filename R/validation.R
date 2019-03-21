@@ -108,7 +108,7 @@ validate_outcomes_is_binary <- function(outcomes) {
 
   if (!check$ok) {
     bad_cols <- glue::single_quote(check$bad_cols)
-    bad_msg <- glue::glue("{check$bad_cols}: {check$num_levels}")
+    bad_msg <- glue::glue("{bad_cols}: {check$num_levels}")
     bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
 
     glubort(
