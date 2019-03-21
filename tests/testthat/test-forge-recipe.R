@@ -227,12 +227,6 @@ test_that("new data classes can interchange integer/numeric", {
 
 test_that("an `extras` slot exists for `roles`", {
 
-
-
-})
-
-test_that("non standard roles are returned as extras", {
-
   x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris
