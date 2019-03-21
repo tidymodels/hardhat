@@ -19,30 +19,30 @@ A named list containing 4 elements:
 model.
 \item \code{outcome}: A tibble containing the molded outcomes to be used in the
 model.
-\item \code{engine}: A method specific \code{"hardhat_engine"} object for use when
+\item \code{blueprint}: A method specific \code{"hardhat_blueprint"} object for use when
 making predictions.
-\item \code{extras}: Either \code{NULL} if the engine returns no extra information,
+\item \code{extras}: Either \code{NULL} if the blueprint returns no extra information,
 or a named list containing the extra information.
 }
 }
 \description{
 \code{mold()} applies the appropriate processing steps required to get training
 data ready to be fed into a model. It does this through the use of various
-\emph{engines} that understand how to preprocess data that come in various
+\emph{blueprints} that understand how to preprocess data that come in various
 forms, such as a formula or a recipe.
 
-All engines have consistent return values with the others, but each is
+All blueprints have consistent return values with the others, but each is
 unique enough to have its own help page. Click through below to learn
 how to use each one in conjunction with \code{mold()}.
 \itemize{
-\item XY Method - \code{\link[=default_xy_engine]{default_xy_engine()}}
-\item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
-\item Recipes Method - \code{\link[=default_recipe_engine]{default_recipe_engine()}}
+\item XY Method - \code{\link[=default_xy_blueprint]{default_xy_blueprint()}}
+\item Formula Method - \code{\link[=default_formula_blueprint]{default_formula_blueprint()}}
+\item Recipes Method - \code{\link[=default_recipe_blueprint]{default_recipe_blueprint()}}
 }
 }
 \examples{
 # See the method specific documentation linked in Description
-# for the details of each engine, and more examples.
+# for the details of each blueprint, and more examples.
 
 # XY
 mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)

@@ -4,18 +4,18 @@
 #'
 #' `mold()` applies the appropriate processing steps required to get training
 #' data ready to be fed into a model. It does this through the use of various
-#' _engines_ that understand how to preprocess data that come in various
+#' _blueprints_ that understand how to preprocess data that come in various
 #' forms, such as a formula or a recipe.
 #'
-#' All engines have consistent return values with the others, but each is
+#' All blueprints have consistent return values with the others, but each is
 #' unique enough to have its own help page. Click through below to learn
 #' how to use each one in conjunction with `mold()`.
 #'
-#' * XY Method - [default_xy_engine()]
+#' * XY Method - [default_xy_blueprint()]
 #'
-#' * Formula Method - [default_formula_engine()]
+#' * Formula Method - [default_formula_blueprint()]
 #'
-#' * Recipes Method - [default_recipe_engine()]
+#' * Recipes Method - [default_recipe_blueprint()]
 #'
 #' @param x An object. See the method specific implementations linked in the
 #' Description for more information.
@@ -32,15 +32,15 @@
 #'  - `outcome`: A tibble containing the molded outcomes to be used in the
 #'  model.
 #'
-#'  - `engine`: A method specific `"hardhat_engine"` object for use when
+#'  - `blueprint`: A method specific `"hardhat_blueprint"` object for use when
 #'  making predictions.
 #'
-#'  - `extras`: Either `NULL` if the engine returns no extra information,
+#'  - `extras`: Either `NULL` if the blueprint returns no extra information,
 #'  or a named list containing the extra information.
 #'
 #' @examples
 #' # See the method specific documentation linked in Description
-#' # for the details of each engine, and more examples.
+#' # for the details of each blueprint, and more examples.
 #'
 #' # XY
 #' mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
@@ -62,71 +62,71 @@ mold.default <- function(x, ...) {
   abort_unknown_mold_class(x)
 }
 
-#' @rdname default_xy_engine
+#' @rdname default_xy_blueprint
 #' @export
-mold.data.frame <- function(x, y, ..., engine = NULL) {
+mold.data.frame <- function(x, y, ..., blueprint = NULL) {
 
   validate_empty_dots(...)
 
-  if (is.null(engine)) {
-    engine <- default_xy_engine()
+  if (is.null(blueprint)) {
+    blueprint <- default_xy_blueprint()
   }
 
-  validate_is_xy_engine(engine)
+  validate_is_xy_blueprint(blueprint)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% run_mold(engine, x, y)
+  c(blueprint, predictors, outcomes, ptypes, extras) %<-% run_mold(blueprint, x, y)
 
-  engine <- update_engine(engine, ptypes = ptypes)
+  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
-  out$mold$final(predictors, outcomes, engine, extras)
+  out$mold$final(predictors, outcomes, blueprint, extras)
 }
 
-#' @rdname default_xy_engine
+#' @rdname default_xy_blueprint
 #' @export
 mold.matrix <- mold.data.frame
 
-#' @rdname default_formula_engine
+#' @rdname default_formula_blueprint
 #' @export
-mold.formula <- function(formula, data, ..., engine = NULL) {
+mold.formula <- function(formula, data, ..., blueprint = NULL) {
 
   validate_empty_dots(...)
 
-  if (is.null(engine)) {
-    engine <- default_formula_engine()
+  if (is.null(blueprint)) {
+    blueprint <- default_formula_blueprint()
   }
 
-  validate_is_formula_engine(engine)
+  validate_is_formula_blueprint(blueprint)
 
-  engine <- update_engine(engine = engine, formula = formula)
+  blueprint <- update_blueprint(blueprint = blueprint, formula = formula)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% run_mold(engine, data)
+  c(blueprint, predictors, outcomes, ptypes, extras) %<-% run_mold(blueprint, data)
 
-  engine <- update_engine(engine, ptypes = ptypes)
+  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
-  out$mold$final(predictors, outcomes, engine, extras)
+  out$mold$final(predictors, outcomes, blueprint, extras)
 }
 
-#' @rdname default_recipe_engine
+#' @rdname default_recipe_blueprint
 #' @export
-mold.recipe <- function(x, data, ..., engine = NULL) {
+mold.recipe <- function(x, data, ..., blueprint = NULL) {
 
   validate_empty_dots(...)
 
   validate_recipes_available()
 
-  if (is.null(engine)) {
-    engine <- default_recipe_engine()
+  if (is.null(blueprint)) {
+    blueprint <- default_recipe_blueprint()
   }
 
-  validate_is_recipe_engine(engine)
+  validate_is_recipe_blueprint(blueprint)
 
-  engine <- update_engine(engine = engine, recipe = x)
+  blueprint <- update_blueprint(blueprint = blueprint, recipe = x)
 
-  c(engine, predictors, outcomes, ptypes, extras) %<-% run_mold(engine, data)
+  c(blueprint, predictors, outcomes, ptypes, extras) %<-% run_mold(blueprint, data)
 
-  engine <- update_engine(engine, ptypes = ptypes)
+  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
-  out$mold$final(predictors, outcomes, engine, extras)
+  out$mold$final(predictors, outcomes, blueprint, extras)
 }
 
 # ------------------------------------------------------------------------------
@@ -134,11 +134,11 @@ mold.recipe <- function(x, data, ..., engine = NULL) {
 #' Call `mold$clean()` and `mold$process()`
 #'
 #' This is a purely developer facing function, that is _only_ used if you are
-#' creating a completely new engine inheriting only from [new_engine()], and
-#' not from one of the more common: [new_xy_engine()], [new_recipe_engine()],
-#' [new_formula_engine()].
+#' creating a completely new blueprint inheriting only from [new_blueprint()], and
+#' not from one of the more common: [new_xy_blueprint()], [new_recipe_blueprint()],
+#' [new_formula_blueprint()].
 #'
-#' @param engine A preprocessing engine.
+#' @param blueprint A preprocessing blueprint.
 #'
 #' @param ... Not used. Required for extensibility.
 #'
@@ -146,53 +146,53 @@ mold.recipe <- function(x, data, ..., engine = NULL) {
 #'
 #' Because `mold()` has different interfaces (like XY and formula),
 #' which require different arguments (`x` and `y` vs `data`), their
-#' corresponding engines also have different arguments for the
-#' `engine$mold$clean()` and `engine$mold$process()` functions. The sole
+#' corresponding blueprints also have different arguments for the
+#' `blueprint$mold$clean()` and `blueprint$mold$process()` functions. The sole
 #' job of `run_mold()` is simply to call these two functions with the right
 #' arguments.
 #'
 #' The only time you need to implement a method for `run_mold()` is if you
-#' are creating a `new_engine()` that does not follow one of the three core
-#' engine types. In that special case, create a method for `run_mold()` with
-#' your engine type, and pass through whatever arguments are necessary to call
-#' your engine specific `clean()` and `process()` functions.
+#' are creating a `new_blueprint()` that does not follow one of the three core
+#' blueprint types. In that special case, create a method for `run_mold()` with
+#' your blueprint type, and pass through whatever arguments are necessary to call
+#' your blueprint specific `clean()` and `process()` functions.
 #'
 #' If you go this route, you will also need to create a `mold()` method if `x`
 #' is not a data frame / matrix, recipe, or formula. If `x` is one of
 #' those types, then `run_mold()` will be called for you by the
 #' existing `mold()` method, you just have to supply the `run_mold()` method
-#' for your engine.
+#' for your blueprint.
 #'
 #' @export
-run_mold <- function(engine, ...) {
+run_mold <- function(blueprint, ...) {
   UseMethod("run_mold")
 }
 
 #' @export
-run_mold.xy_engine <- function(engine, x, y, ...) {
+run_mold.xy_blueprint <- function(blueprint, x, y, ...) {
 
-  c(engine, x, y) %<-% engine$mold$clean(
-    engine = engine,
+  c(blueprint, x, y) %<-% blueprint$mold$clean(
+    blueprint = blueprint,
     x = x,
     y = y
   )
 
-  engine$mold$process(engine = engine, x = x, y = y)
+  blueprint$mold$process(blueprint = blueprint, x = x, y = y)
 }
 
 #' @export
-run_mold.formula_engine <- function(engine, data, ...) {
+run_mold.formula_blueprint <- function(blueprint, data, ...) {
 
-  c(engine, data) %<-% engine$mold$clean(engine = engine, data = data)
+  c(blueprint, data) %<-% blueprint$mold$clean(blueprint = blueprint, data = data)
 
-  engine$mold$process(engine = engine, data = data)
+  blueprint$mold$process(blueprint = blueprint, data = data)
 }
 
 #' @export
-run_mold.recipe_engine <- function(engine, data, ...) {
+run_mold.recipe_blueprint <- function(blueprint, data, ...) {
 
-  c(engine, data) %<-% engine$mold$clean(engine = engine, data = data)
+  c(blueprint, data) %<-% blueprint$mold$clean(blueprint = blueprint, data = data)
 
-  engine$mold$process(engine = engine, data = data)
+  blueprint$mold$process(blueprint = blueprint, data = data)
 }
 

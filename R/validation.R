@@ -220,19 +220,19 @@ is_binary <- function(x) {
 #' processed$outcomes
 #'
 #' # It doesn't affect forge() normally
-#' forge(test, processed$engine)
+#' forge(test, processed$blueprint)
 #'
 #' # But if the outcome is requested, and `".outcome"`
 #' # is not present in `new_data`, an error is thrown
 #' # with very specific instructions
 #' \dontrun{
-#' forge(test, processed$engine, outcomes = TRUE)
+#' forge(test, processed$blueprint, outcomes = TRUE)
 #' }
 #'
 #' # To get this to work, just create an .outcome column in new_data
 #' test$.outcome <- test$Species
 #'
-#' forge(test, processed$engine, outcomes = TRUE)
+#' forge(test, processed$blueprint, outcomes = TRUE)
 #'
 #' @family validation functions
 #' @export
@@ -335,7 +335,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #' This validation function is one that is more developer focused rather than
 #' user focused. It is a final check to be used right before a value is
 #' returned from your specific `predict()` method, and is mainly a "good
-#' practice" sanity check to ensure that your prediction engine always returns
+#' practice" sanity check to ensure that your prediction blueprint always returns
 #' the same number of rows as `new_data`, which is one of the modeling
 #' conventions this package tries to promote.
 #'

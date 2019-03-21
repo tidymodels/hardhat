@@ -30,7 +30,7 @@ Like `mold()`, `forge()` is not intended to be used interactively. Instead, it s
 
 ## Connection with mold()
 
-When `mold()` is used, one of the returned objects is an `engine`. This is the key to preprocessing new data with `forge()`. For instance, assume you've called `mold()` like so:
+When `mold()` is used, one of the returned objects is an `blueprint`. This is the key to preprocessing new data with `forge()`. For instance, assume you've called `mold()` like so:
 
 ```{r}
 iris_train <- iris[1:100,]
@@ -41,23 +41,23 @@ iris_test <- iris[101:150,]
 iris_form <- mold(
   log(Sepal.Length) ~ Species + Petal.Width, 
   iris_train, 
-  engine = default_formula_engine(indicators = FALSE)
+  blueprint = default_formula_blueprint(indicators = FALSE)
 )
 
-formula_eng <- iris_form$engine
+formula_eng <- iris_form$blueprint
 
 formula_eng
 ```
 
-A formula engine is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don't want to expand `Species` into dummy variables by setting `indicators = FALSE`.
+A formula blueprint is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don't want to expand `Species` into dummy variables by setting `indicators = FALSE`.
 
-When it is time to `predict()` on new data, that data is passed on to `forge()` along with the `engine` we just created.
+When it is time to `predict()` on new data, that data is passed on to `forge()` along with the `blueprint` we just created.
 
 ```{r}
 forge(iris_test, formula_eng)
 ```
 
-Note that in `predictors`, `Species` was not expanded because the `engine` knew about the preprocessing options that were set when `mold()` was called.
+Note that in `predictors`, `Species` was not expanded because the `blueprint` knew about the preprocessing options that were set when `mold()` was called.
 
 `forge()` always returns three things, and they should look familiar to you if you have used `mold()`. 
 
@@ -65,7 +65,7 @@ Note that in `predictors`, `Species` was not expanded because the `engine` knew 
 
 - `outcomes` is returned as `NULL` by default, because most `predict()` methods assume you only have access to the new predictors. Alternatively, as you will read in a moment, this can contain a tibble of the new outcomes.
 
-- `extras` varies per engine, but is a catch-all slot to hold the same kind of extra objects that were returned by the engine when `mold()` was called.
+- `extras` varies per blueprint, but is a catch-all slot to hold the same kind of extra objects that were returned by the blueprint when `mold()` was called.
 
 ## Outcomes
 
@@ -168,10 +168,10 @@ iris_recipe <- mold(rec, iris_train)
 iris_recipe$predictors
 ```
 
-The engine is a `recipe` engine.
+The blueprint is a `recipe` blueprint.
 
 ```{r}
-recipe_eng <- iris_recipe$engine
+recipe_eng <- iris_recipe$blueprint
 
 recipe_eng
 ```
@@ -193,7 +193,7 @@ rec2 <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
 
 iris_recipe2 <- mold(rec2, iris_train)
 
-recipe_eng_log_outcome <- iris_recipe2$engine
+recipe_eng_log_outcome <- iris_recipe2$blueprint
 ```
 
 If our `new_data` doesn't have the outcome, baking this recipe will fail even if we don't request that the outcomes are returned by `forge()`.
@@ -213,7 +213,7 @@ rec3 <- recipe(Sepal.Width ~ Sepal.Length + Species, iris_train) %>%
 
 iris_recipe3 <- mold(rec3, iris_train)
 
-recipe_eng_skip_outcome <- iris_recipe3$engine
+recipe_eng_skip_outcome <- iris_recipe3$blueprint
 
 forge(iris_test_no_outcome, recipe_eng_skip_outcome)
 ```

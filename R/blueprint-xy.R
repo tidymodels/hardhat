@@ -1,6 +1,6 @@
-#' @rdname new-engine
+#' @rdname new-blueprint
 #' @export
-new_xy_engine <- function(mold,
+new_xy_blueprint <- function(mold,
                           forge,
                           intercept = FALSE,
                           ptypes = NULL,
@@ -20,32 +20,32 @@ new_xy_engine <- function(mold,
 
   validate_mold_args(
     mold = mold,
-    required_clean_args = c("engine", "x", "y"),
-    required_process_args = c("engine", "x", "y")
+    required_clean_args = c("blueprint", "x", "y"),
+    required_process_args = c("blueprint", "x", "y")
   )
 
-  new_engine(
+  new_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept,
     ptypes = ptypes,
     ...,
-    subclass = c(subclass, "xy_engine")
+    subclass = c(subclass, "xy_blueprint")
   )
 
 }
 
 #' @export
-refresh_engine.xy_engine <- function(engine) {
-  do.call(new_xy_engine, as.list(engine))
+refresh_blueprint.xy_blueprint <- function(blueprint) {
+  do.call(new_xy_blueprint, as.list(blueprint))
 }
 
-is_xy_engine <- function(x) {
-  inherits(x, "xy_engine")
+is_xy_blueprint <- function(x) {
+  inherits(x, "xy_blueprint")
 }
 
-validate_is_xy_engine <- function(engine) {
-  validate_is(engine, is_xy_engine, "xy_engine")
+validate_is_xy_blueprint <- function(blueprint) {
+  validate_is(blueprint, is_xy_blueprint, "xy_blueprint")
 }
 
 # ------------------------------------------------------------------------------
@@ -63,9 +63,9 @@ check_mold_xy <- function(mold) {
 
 get_default_mold_xy_clean <- function() {
 
-  function(engine, x, y) {
+  function(blueprint, x, y) {
     list(
-      engine = engine,
+      blueprint = blueprint,
       x = x,
       y = y
     )
@@ -115,9 +115,9 @@ check_forge <- function(forge) {
 
 get_default_forge_clean <- function() {
 
-  function(engine, new_data) {
+  function(blueprint, new_data) {
     list(
-      engine = engine,
+      blueprint = blueprint,
       new_data
     )
   }

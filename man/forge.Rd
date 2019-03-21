@@ -4,13 +4,13 @@
 \alias{forge}
 \title{Forge prediction-ready data}
 \usage{
-forge(new_data, engine, ..., outcomes = FALSE)
+forge(new_data, blueprint, ..., outcomes = FALSE)
 }
 \arguments{
 \item{new_data}{A data frame or matrix of predictors to process. If
 \code{outcomes = TRUE}, this should also contain the outcomes to process.}
 
-\item{engine}{A preprocessing \code{engine}.}
+\item{blueprint}{A preprocessing \code{blueprint}.}
 
 \item{...}{Not used.}
 
@@ -24,22 +24,22 @@ A named list with 3 elements:
 \code{new_data} predictors.
 \item \code{outcomes}: If \code{outcomes = TRUE}, a tibble containing the preprocessed
 outcomes found in \code{new_data}. Otherwise, \code{NULL}.
-\item \code{extras}: Either \code{NULL} if the engine returns no extra information,
+\item \code{extras}: Either \code{NULL} if the blueprint returns no extra information,
 or a named list containing the extra information.
 }
 }
 \description{
-\code{forge()} applies the transformations requested by the specific \code{engine}
+\code{forge()} applies the transformations requested by the specific \code{blueprint}
 on a set of \code{new_data}. This \code{new_data} contains new predictors
 (and potentially outcomes) that will be used to generate predictions.
 
-All engines have consistent return values with the others, but each is
+All blueprints have consistent return values with the others, but each is
 unique enough to have its own help page. Click through below to learn
 how to use each one in conjunction with \code{forge()}.
 \itemize{
-\item XY Method - \code{\link[=default_xy_engine]{default_xy_engine()}}
-\item Formula Method - \code{\link[=default_formula_engine]{default_formula_engine()}}
-\item Recipes Method - \code{\link[=default_recipe_engine]{default_recipe_engine()}}
+\item XY Method - \code{\link[=default_xy_blueprint]{default_xy_blueprint()}}
+\item Formula Method - \code{\link[=default_formula_blueprint]{default_formula_blueprint()}}
+\item Recipes Method - \code{\link[=default_recipe_blueprint]{default_recipe_blueprint()}}
 }
 }
 \details{
@@ -50,9 +50,9 @@ you need to preprocess the outcomes of a test set before computing
 performance.
 }
 \examples{
-# See the engine specific documentation linked above
+# See the blueprint specific documentation linked above
 # for various ways to call forge with different
-# engines.
+# blueprints.
 
 train <- iris[1:100,]
 test <- iris[101:150,]
@@ -61,10 +61,10 @@ test <- iris[101:150,]
 processed <- mold(
   log(Sepal.Width) ~ Species,
   train,
-  engine = default_formula_engine(indicators = FALSE)
+  blueprint = default_formula_blueprint(indicators = FALSE)
 )
 
-forge(test, processed$engine, outcomes = TRUE)
+forge(test, processed$blueprint, outcomes = TRUE)
 
 
 }

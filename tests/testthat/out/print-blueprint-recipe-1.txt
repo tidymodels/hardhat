@@ -1,4 +1,4 @@
-XY Engine: 
+Recipe blueprint: 
  
 # Predictors: 1 
   # Outcomes: 1 

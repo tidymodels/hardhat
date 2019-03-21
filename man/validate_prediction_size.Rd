@@ -35,7 +35,7 @@ check - returns the following:
 This validation function is one that is more developer focused rather than
 user focused. It is a final check to be used right before a value is
 returned from your specific \code{predict()} method, and is mainly a "good
-practice" sanity check to ensure that your prediction engine always returns
+practice" sanity check to ensure that your prediction blueprint always returns
 the same number of rows as \code{new_data}, which is one of the modeling
 conventions this package tries to promote.
 }

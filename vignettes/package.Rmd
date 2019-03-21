@@ -62,14 +62,14 @@ A model constructor should:
 
 - Have the name `new_<model_class>()`.
 
-- Take the required model elements as named arguments, including a required `engine`.
+- Take the required model elements as named arguments, including a required `blueprint`.
 
 - Validate the types of the new elements.
 
 - Pass the named elements on to `new_model()` along with setting the class to `"<model_class>"`.
 
 ```{r}
-new_simple_lm <- function(coefs, coef_names, engine) {
+new_simple_lm <- function(coefs, coef_names, blueprint) {
   
   if (!is.numeric(coefs)) {
     stop("`coefs` should be a numeric vector.", call. = FALSE)
@@ -86,7 +86,7 @@ new_simple_lm <- function(coefs, coef_names, engine) {
   new_model(
     coefs = coefs, 
     coef_names = coef_names,
-    engine = engine, 
+    blueprint = blueprint, 
     class = "simple_lm"
   )
 }
@@ -94,16 +94,16 @@ new_simple_lm <- function(coefs, coef_names, engine) {
 
 A `"simple_lm"` object has just enough information to make numeric predictions on new data, but you can store other things here as well to enable your model object to work with extra post-fitting functionality.
 
-We can test this by manually generating a model object. Along with the custom class we provided, this object also has a `"hardhat_model"` class. There is a very simple print method for objects of this type. Specifically, it prints the name of the class at the top, and only prints out the custom elements (i.e. not the `engine`).
+We can test this by manually generating a model object. Along with the custom class we provided, this object also has a `"hardhat_model"` class. There is a very simple print method for objects of this type. Specifically, it prints the name of the class at the top, and only prints out the custom elements (i.e. not the `blueprint`).
 
 ```{r}
-manual_model <- new_simple_lm(1, "my_coef", default_xy_engine())
+manual_model <- new_simple_lm(1, "my_coef", default_xy_blueprint())
 
 manual_model
 
 names(manual_model)
 
-manual_model$engine
+manual_model$blueprint
 ```
 
 ## Model Implementation
@@ -137,7 +137,7 @@ simple_lm_impl(predictors, outcomes)
 
 ## Model Wrapper
 
-Now that we have our constructor and our implementation function, we can create a common wrapper function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the engine to create a new instance of our model. It should have an argument for the output from a call to `mold()`, here I've called that `processed`. In that object will be (at a minimum) the predictors, outcomes, and engine. You might also have arguments for additional options to pass on to the implementation function.
+Now that we have our constructor and our implementation function, we can create a common wrapper function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the blueprint to create a new instance of our model. It should have an argument for the output from a call to `mold()`, here I've called that `processed`. In that object will be (at a minimum) the predictors, outcomes, and blueprint. You might also have arguments for additional options to pass on to the implementation function.
 
 The wrapper should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The `predictors` and `outcomes` that are returned from `mold()` will _always_ be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.
 
@@ -156,7 +156,7 @@ simple_lm_common <- function(processed) {
   new_simple_lm(
     coefs = fit$coefs,
     coef_names = fit$coef_names,
-    engine = processed$engine
+    blueprint = processed$blueprint
   )
 }
 ```
@@ -262,7 +262,7 @@ simple_lm(rec, iris)
 
 ## Adding an Intercept Option
 
-You might have noticed that our linear regression isn't adding an intercept. Generally, with linear regression models we will want a default intercept added on. To accomplish this, we can add an `intercept` argument to our user facing function, and then use that to tweak the engine that would otherwise be created for you automatically.
+You might have noticed that our linear regression isn't adding an intercept. Generally, with linear regression models we will want a default intercept added on. To accomplish this, we can add an `intercept` argument to our user facing function, and then use that to tweak the blueprint that would otherwise be created for you automatically.
 
 ```{r}
 simple_lm <- function(x, ...) {
@@ -270,26 +270,26 @@ simple_lm <- function(x, ...) {
 }
 
 simple_lm.data.frame <- function(x, y, intercept = TRUE, ...) {
-  engine <- default_xy_engine(intercept = intercept)
-  processed <- mold(x, y, engine = engine)
+  blueprint <- default_xy_blueprint(intercept = intercept)
+  processed <- mold(x, y, blueprint = blueprint)
   simple_lm_common(processed)
 }
 
 simple_lm.matrix <- function(x, y, intercept = TRUE,...) {
-  engine <- default_xy_engine(intercept = intercept)
-  processed <- mold(x, y, engine = engine)
+  blueprint <- default_xy_blueprint(intercept = intercept)
+  processed <- mold(x, y, blueprint = blueprint)
   simple_lm_common(processed)
 }
 
 simple_lm.formula <- function(formula, data, intercept = TRUE, ...) {
-  engine <- default_formula_engine(intercept = intercept)
-  processed <- mold(formula, data, engine = engine)
+  blueprint <- default_formula_blueprint(intercept = intercept)
+  processed <- mold(formula, data, blueprint = blueprint)
   simple_lm_common(processed)
 }
 
 simple_lm.recipe <- function(x, data, intercept = TRUE, ...) {
-  engine <- default_recipe_engine(intercept = intercept)
-  processed <- mold(x, data, engine = engine)
+  blueprint <- default_recipe_blueprint(intercept = intercept)
+  processed <- mold(x, data, blueprint = blueprint)
   simple_lm_common(processed)
 }
 ```
@@ -330,7 +330,7 @@ To test it, we will have to run a model and call `forge()` on the output manuall
 ```{r}
 model <- simple_lm(Sepal.Width ~ Sepal.Length + Species, iris)
 
-predictors <- forge(iris, model$engine)$predictors
+predictors <- forge(iris, model$blueprint)$predictors
 predictors <- as.matrix(predictors)
 
 predict_simple_lm_response(model, predictors)
@@ -364,7 +364,7 @@ Let's test:
 model <- simple_lm(Sepal.Width ~ Sepal.Length + Species, iris)
 
 # Pass in the data frame
-predictors <- forge(iris, model$engine)$predictors
+predictors <- forge(iris, model$blueprint)$predictors
 
 predict_simple_lm_common("response", model, predictors)
 
@@ -376,7 +376,7 @@ predict_simple_lm_common("resp", model, predictors)
 
 Finally, we can create an S3 method for the generic `predict()` function. To match the modeling principles, it should use `new_data` to accept a matrix or data frame of new predictors.
 
-The first thing that the `predict()` method should do is call `forge()` with the `new_data` and the `engine` that we attached to our `simple_lm` model at fit time. This performs the required preprocessing on the new data, and checks that the _type_ of the data frame supplied to `new_data` matches the type of data frame supplied at fit time. This is one of the most valuable features of `forge()`, as it adds a large amount of robustness to your `predict()`ion function. You will see some examples of this at the end of the vignette.
+The first thing that the `predict()` method should do is call `forge()` with the `new_data` and the `blueprint` that we attached to our `simple_lm` model at fit time. This performs the required preprocessing on the new data, and checks that the _type_ of the data frame supplied to `new_data` matches the type of data frame supplied at fit time. This is one of the most valuable features of `forge()`, as it adds a large amount of robustness to your `predict()`ion function. You will see some examples of this at the end of the vignette.
 
 After calling `forge()`, it should pass off to the common prediction wrapper to call the correct prediction function based on the type.
 
@@ -386,7 +386,7 @@ Finally, it is good practice to call the hardhat function, `validate_prediction_
 predict.simple_lm <- function(object, new_data, type = "response", ...) {
   
   # Enforces column order, type, column names, etc
-  processed <- forge(new_data, object$engine)
+  processed <- forge(new_data, object$blueprint)
   
   out <- predict_simple_lm_common(type, object, processed$predictors)
   

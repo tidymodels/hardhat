@@ -6,31 +6,31 @@
 #' a class of `class`. This entire object represent a single model.
 #'
 #' Because every model should have multiple interfaces, including formula
-#' and `recipes` interfaces, all models should have an `engine` that
+#' and `recipes` interfaces, all models should have an `blueprint` that
 #' can process new data when `predict()` is called. The easiest way to generate
-#' an engine with all of the information required at prediction time is to
+#' an blueprint with all of the information required at prediction time is to
 #' use the one that is returned from a call to [mold()].
 #'
 #' @param ... Name-value pairs for elements specific to the model defined by
 #' `class`.
 #'
-#' @param engine A preprocessing `engine` returned from a call to [mold()].
+#' @param blueprint A preprocessing `blueprint` returned from a call to [mold()].
 #'
 #' @param class A character vector representing the class of the model.
 #'
 #' @examples
 #' new_model(
 #'   custom_element= "my-elem",
-#'   engine = default_xy_engine(),
+#'   blueprint = default_xy_blueprint(),
 #'   class = "custom_model"
 #' )
 #'
 #' @export
-new_model <- function(..., engine = default_xy_engine(), class = character()) {
+new_model <- function(..., blueprint = default_xy_blueprint(), class = character()) {
 
-  validate_is_engine(engine)
+  validate_is_blueprint(blueprint)
 
-  new_abstract_model(..., engine = engine, class = c(class, "hardhat_model"))
+  new_abstract_model(..., blueprint = blueprint, class = c(class, "hardhat_model"))
 }
 
 # ------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ new_model <- function(..., engine = default_xy_engine(), class = character()) {
 #' @export
 print.hardhat_model <- function(x, ...) {
   cat_line("<", class(x)[1], ">")
-  x$engine <- NULL
+  x$blueprint <- NULL
   print(unclass(x))
 }
 
@@ -84,6 +84,6 @@ check_elems <- function(elems) {
   invisible(elems)
 }
 
-validate_is_engine <- function(engine) {
-  validate_is(engine, is_engine, "engine")
+validate_is_blueprint <- function(blueprint) {
+  validate_is(blueprint, is_blueprint, "blueprint")
 }

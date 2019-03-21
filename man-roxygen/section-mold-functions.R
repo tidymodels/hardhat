@@ -1,6 +1,6 @@
 #' @section Mold Functions:
 #'
-#' `engine$mold` should be a named list with two elements, both of which
+#' `blueprint$mold` should be a named list with two elements, both of which
 #' are functions:
 #'
 #' - `clean`: A function that performs initial cleaning of the user's input
@@ -8,21 +8,21 @@
 #'
 #'    - _Arguments_:
 #'
-#'       - If this is an xy engine, `engine`, `x` and `y`.
+#'       - If this is an xy blueprint, `blueprint`, `x` and `y`.
 #'
-#'       - Otherwise, `engine` and `data`.
+#'       - Otherwise, `blueprint` and `data`.
 #'
 #'    - _Output_: A named list of three elements:
 #'
-#'       - `engine`: The engine, returned and potentially updated.
+#'       - `blueprint`: The blueprint, returned and potentially updated.
 #'
-#'       - If using an xy engine:
+#'       - If using an xy blueprint:
 #'
 #'          - `x`: The cleaned predictor data.
 #'
 #'          - `y`: The cleaned outcome data.
 #'
-#'       - If not using an xy engine:
+#'       - If not using an xy blueprint:
 #'
 #'          - `data`: The cleaned data.
 #'
@@ -30,13 +30,13 @@
 #'
 #'    - _Arguments_:
 #'
-#'       - If this is an xy engine, `engine`, `x` and `y`.
+#'       - If this is an xy blueprint, `blueprint`, `x` and `y`.
 #'
-#'       - Otherwise, `engine` and `data`.
+#'       - Otherwise, `blueprint` and `data`.
 #'
 #'    - _Output_: A named list of 5 elements:
 #'
-#'       - `engine`: The engine, returned and potentially updated.
+#'       - `blueprint`: The blueprint, returned and potentially updated.
 #'
 #'       - `predictors`: A tibble of predictors.
 #'
@@ -45,9 +45,9 @@
 #'       - `ptypes`: A named list with 2 elements, `predictors` and `outcomes`,
 #'       where both elements are 0-row tibbles.
 #'
-#'       - `extras`: Varies based on the engine. If the engine has no
+#'       - `extras`: Varies based on the blueprint. If the blueprint has no
 #'       extra information, `NULL`. Otherwise a named list of the
-#'       extra elements returned by the engine.
+#'       extra elements returned by the blueprint.
 #'
-#' Both `engine$mold$clean()` and `engine$mold$process()` will be called,
+#' Both `blueprint$mold$clean()` and `blueprint$mold$process()` will be called,
 #' in order, from [mold()].

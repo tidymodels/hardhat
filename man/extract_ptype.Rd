@@ -19,7 +19,7 @@ levels that are required to check the structure of new data at prediction
 time.
 }
 \details{
-\code{extract_ptype()} is useful when creating a new preprocessing \code{engine}. It
+\code{extract_ptype()} is useful when creating a new preprocessing \code{blueprint}. It
 extracts the required information that will be used by the validation checks
 at prediction time.
 }

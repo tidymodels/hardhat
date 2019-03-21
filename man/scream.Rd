@@ -57,13 +57,13 @@ test <- iris[101:150,]
 # shrink() / scream()
 
 # mold() is run at model fit time
-# and a formula preprocessing engine is recorded
+# and a formula preprocessing blueprint is recorded
 x <- mold(log(Sepal.Width) ~ Species, train)
 
 # Inside the result of mold() are the prototype tibbles
 # for the predictors and the outcomes
-ptype_pred <- x$engine$ptypes$predictors
-ptype_out <- x$engine$ptypes$outcomes
+ptype_pred <- x$blueprint$ptypes$predictors
+ptype_out <- x$blueprint$ptypes$outcomes
 
 # Pass the test data, along with a prototype, to
 # shrink() to extract the prototype columns

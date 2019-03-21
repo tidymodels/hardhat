@@ -88,19 +88,19 @@ processed <- mold(train_x, train_y)
 processed$outcomes
 
 # It doesn't affect forge() normally
-forge(test, processed$engine)
+forge(test, processed$blueprint)
 
 # But if the outcome is requested, and `".outcome"`
 # is not present in `new_data`, an error is thrown
 # with very specific instructions
 \dontrun{
-forge(test, processed$engine, outcomes = TRUE)
+forge(test, processed$blueprint, outcomes = TRUE)
 }
 
 # To get this to work, just create an .outcome column in new_data
 test$.outcome <- test$Species
 
-forge(test, processed$engine, outcomes = TRUE)
+forge(test, processed$blueprint, outcomes = TRUE)
 
 }
 \seealso{
