@@ -64,6 +64,74 @@ check_outcomes_is_univariate <- function(outcomes) {
 
 # ------------------------------------------------------------------------------
 
+#' Check if the outcome holds binary factors
+#'
+#' @description
+#'
+#' Checks that `outcomes` is a data frame with binary factor columns.
+#'
+#' @param outcomes An object to check.
+#'
+#' @template section-validation
+#'
+#' @details
+#'
+#' The expected way to use this validation function is to supply it the
+#' `$outcomes` element of the result of a call to [mold()].
+#'
+#' @return
+#'
+#' A list containing the elements:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `bad_cols` A character vector. The names of the columns with problems.
+#'
+#' - `num_levels` An integer vector. The actual number of levels of the columns
+#' with problems.
+#'
+#' @examples
+#' # Not a binary factor. 0 levels
+#' check_outcomes_is_binary(data.frame(x = 1))
+#'
+#' # Not a binary factor. 1 level
+#' check_outcomes_is_binary(data.frame(x = factor("A")))
+#'
+#' # All good
+#' check_outcomes_is_binary(data.frame(x = factor(c("A", "B"))))
+#'
+#' @family validation functions
+#' @export
+check_outcomes_is_binary <- function(outcomes) {
+
+  outcomes <- check_is_data_like(outcomes, "outcomes")
+
+  outcomes_levels <- map(outcomes, levels)
+
+  pos_binary_factors <- map_lgl(outcomes_levels, is_binary)
+
+  ok <- all(pos_binary_factors)
+
+  if (!ok) {
+    non_binary_levels <- outcomes_levels[!pos_binary_factors]
+    num_levels <- map_int(non_binary_levels, length)
+    bad_cols <- names(num_levels)
+    num_levels <- unname(num_levels)
+  }
+  else {
+    num_levels <- integer()
+    bad_cols <- character()
+  }
+
+  check_list(ok = ok, bad_cols = bad_cols, num_levels = num_levels)
+}
+
+is_binary <- function(x) {
+  length(x) == 2L
+}
+
+# ------------------------------------------------------------------------------
+
 #' Ensure that `data` contains required column names
 #'
 #' @description
