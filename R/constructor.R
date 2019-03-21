@@ -50,10 +50,6 @@ cat_line <- function (...) {
 
 new_abstract_model <- function(..., class) {
 
-  if (is_missing(class)) {
-    abort("A model `class` must be provided.")
-  }
-
   elems <- rlang::list2(...)
   validate_has_unique_names(elems, "...")
 
