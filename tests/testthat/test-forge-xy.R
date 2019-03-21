@@ -3,7 +3,7 @@ context("test-forge-xy")
 test_that("simple forge works", {
 
   x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-  xx <- forge(iris, x$engine)
+  xx <- forge(iris, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
@@ -22,7 +22,7 @@ test_that("asking for the outcome works", {
     iris[, "Species", drop = FALSE]
   )
 
-  xx <- forge(iris, x$engine, outcomes = TRUE)
+  xx <- forge(iris, x$blueprint, outcomes = TRUE)
 
   expect_equal(
     xx$outcomes,
@@ -39,7 +39,7 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   )
 
   expect_equal(
-    colnames(x$engine$ptypes$outcomes),
+    colnames(x$blueprint$ptypes$outcomes),
     ".outcome"
   )
 
@@ -47,7 +47,7 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   iris2$.outcome <- iris2$Species
   iris2$Species <- NULL
 
-  xx <- forge(iris2, x$engine, outcomes = TRUE)
+  xx <- forge(iris2, x$blueprint, outcomes = TRUE)
 
   expect_equal(
     xx$outcomes,
@@ -56,13 +56,13 @@ test_that("asking for the outcome is special cased for vector `y` values", {
 
   # standard message
   expect_error(
-    forge(iris, x$engine, outcomes = TRUE),
+    forge(iris, x$blueprint, outcomes = TRUE),
     "The following required columns"
   )
 
   # but also more detail
   expect_error(
-    forge(iris, x$engine, outcomes = TRUE),
+    forge(iris, x$blueprint, outcomes = TRUE),
     "`new_data` must include a column with the automatically generated name, '.outcome'"
   )
 
@@ -74,7 +74,7 @@ test_that("new_data can be a matrix", {
   iris_mat <- as.matrix(iris[,"Sepal.Length", drop = FALSE])
 
   expect_error(
-    xx <- forge(iris_mat, x$engine),
+    xx <- forge(iris_mat, x$blueprint),
     NA
   )
 
@@ -92,7 +92,7 @@ test_that("new_data can only be a data frame / matrix", {
   x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_error(
-    forge("hi", x$engine),
+    forge("hi", x$blueprint),
     "The class of `new_data`, 'character'"
   )
 
@@ -102,12 +102,12 @@ test_that("missing predictor columns fail appropriately", {
   x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_error(
-    forge(iris[,1, drop = FALSE], x$engine),
+    forge(iris[,1, drop = FALSE], x$blueprint),
     "Sepal.Width"
   )
 
   expect_error(
-    forge(iris[,3, drop = FALSE], x$engine),
+    forge(iris[,3, drop = FALSE], x$blueprint),
     "'Sepal.Length', 'Sepal.Width'"
   )
 
@@ -128,7 +128,7 @@ test_that("novel predictor levels are caught", {
   x <- mold(dat[, "f", drop = FALSE], dat$y)
 
   expect_warning(
-    xx <- forge(new, x$engine),
+    xx <- forge(new, x$blueprint),
     "Lossy cast"
   )
 
@@ -157,7 +157,7 @@ test_that("novel outcome levels are caught", {
   )
 
   expect_warning(
-    xx <- forge(new, x$engine, outcomes = TRUE),
+    xx <- forge(new, x$blueprint, outcomes = TRUE),
     "Lossy cast"
   )
 
@@ -173,12 +173,12 @@ test_that("original predictor and outcome classes are recorded", {
   x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
 
   expect_equal(
-    get_data_classes(x$engine$ptypes$predictors),
+    get_data_classes(x$blueprint$ptypes$predictors),
     list(Sepal.Length = "numeric", Sepal.Width = "numeric")
   )
 
   expect_equal(
-    get_data_classes(x$engine$ptypes$outcomes),
+    get_data_classes(x$blueprint$ptypes$outcomes),
     list(.outcome = "factor")
   )
 
@@ -193,7 +193,7 @@ test_that("new data classes are caught", {
 
   # Silent recovery
   expect_error(
-    x_iris2 <- forge(iris2, x$engine),
+    x_iris2 <- forge(iris2, x$blueprint),
     NA
   )
 
@@ -209,7 +209,7 @@ test_that("new data classes are caught", {
   iris3$Species <- NULL
 
   expect_error(
-    xx_iris3 <- forge(iris3, xx$engine, outcomes = TRUE),
+    xx_iris3 <- forge(iris3, xx$blueprint, outcomes = TRUE),
     NA
   )
 
@@ -228,7 +228,7 @@ test_that("new data classes can interchange integer/numeric", {
   x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
 
   expect_error(
-    forge(iris2, x$engine),
+    forge(iris2, x$blueprint),
     NA
   )
 
@@ -239,15 +239,15 @@ test_that("intercept is not included as a predictor", {
   x <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris[, "Species", drop = FALSE],
-    engine = default_xy_engine(intercept = TRUE)
+    blueprint = default_xy_blueprint(intercept = TRUE)
   )
 
   expect_false(
-    "(Intercept)" %in% colnames(x$engine$ptypes$predictors)
+    "(Intercept)" %in% colnames(x$blueprint$ptypes$predictors)
   )
 
   expect_error(
-    xx <- forge(iris, x$engine),
+    xx <- forge(iris, x$blueprint),
     NA
   )
 
@@ -260,11 +260,11 @@ test_that("intercept is not included as a predictor", {
   xx <- mold(
     as.matrix(iris[, "Sepal.Length", drop = FALSE]),
     iris$Sepal.Width,
-    engine = default_xy_engine(intercept = TRUE)
+    blueprint = default_xy_blueprint(intercept = TRUE)
   )
 
   expect_false(
-    "(Intercept)" %in% colnames(xx$engine$ptypes$predictors)
+    "(Intercept)" %in% colnames(xx$blueprint$ptypes$predictors)
   )
 
 })

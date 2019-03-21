@@ -79,7 +79,7 @@ test_that("a 0 col tibble is returned for predictors if only offsets are used", 
 
 test_that("intercepts and offsets can be intermingled", {
 
-  x <- mold(Species ~ offset(Sepal.Length), iris, engine = default_formula_engine(intercept = TRUE))
+  x <- mold(Species ~ offset(Sepal.Length), iris, blueprint = default_formula_blueprint(intercept = TRUE))
 
   expect_equal(
     colnames(x$predictors),
@@ -93,7 +93,7 @@ test_that("intercepts and offsets can be intermingled", {
 # that so we have to handle it specially ourselves.
 test_that("offsets columns are removed from predictors with `indicators = FALSE`", {
 
-  x <- mold(Species ~ offset(Sepal.Length), iris, engine = default_formula_engine(indicators = FALSE))
+  x <- mold(Species ~ offset(Sepal.Length), iris, blueprint = default_formula_blueprint(indicators = FALSE))
 
   expect_equal(
     ncol(x$predictors),
@@ -105,7 +105,7 @@ test_that("offsets columns are removed from predictors with `indicators = FALSE`
 test_that("offsets are NULL in forge() result if not used", {
 
   x <- mold(Species ~ Sepal.Length, iris)
-  xx <- forge(iris, x$engine)
+  xx <- forge(iris, x$blueprint)
 
   expect_true(rlang::has_name(xx$extras, "offset"))
 
@@ -116,7 +116,7 @@ test_that("offsets are NULL in forge() result if not used", {
 test_that("offsets show up in forged results", {
 
   x <- mold(Species ~ offset(Sepal.Length), iris)
-  xx <- forge(iris, x$engine)
+  xx <- forge(iris, x$blueprint)
 
   expect_equal(
     xx$extras$offset,
@@ -130,7 +130,7 @@ test_that("offset columns are stored as predictors", {
   x <- mold(Species ~ offset(Sepal.Length), iris)
 
   expect_equal(
-    colnames(x$engine$ptypes$predictors),
+    colnames(x$blueprint$ptypes$predictors),
     "Sepal.Length"
   )
 
@@ -138,7 +138,7 @@ test_that("offset columns are stored as predictors", {
   iris2$Sepal.Length <- NULL
 
   expect_error(
-    forge(iris2, x$engine),
+    forge(iris2, x$blueprint),
     "Sepal.Length"
   )
 
@@ -154,7 +154,7 @@ test_that("inline offset wrapped in a function is not recognized as an offset (s
   expect_equal(x$extras$offset, NULL)
 
   expect_equal(
-    attr(x$engine$terms$predictors, "offset"),
+    attr(x$blueprint$terms$predictors, "offset"),
     attr(trms, "offset")
   )
 

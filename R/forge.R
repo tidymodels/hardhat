@@ -2,19 +2,19 @@
 #'
 #' @description
 #'
-#' `forge()` applies the transformations requested by the specific `engine`
+#' `forge()` applies the transformations requested by the specific `blueprint`
 #' on a set of `new_data`. This `new_data` contains new predictors
 #' (and potentially outcomes) that will be used to generate predictions.
 #'
-#' All engines have consistent return values with the others, but each is
+#' All blueprints have consistent return values with the others, but each is
 #' unique enough to have its own help page. Click through below to learn
 #' how to use each one in conjunction with `forge()`.
 #'
-#' * XY Method - [default_xy_engine()]
+#' * XY Method - [default_xy_blueprint()]
 #'
-#' * Formula Method - [default_formula_engine()]
+#' * Formula Method - [default_formula_blueprint()]
 #'
-#' * Recipes Method - [default_recipe_engine()]
+#' * Recipes Method - [default_recipe_blueprint()]
 #'
 #' @details
 #'
@@ -27,7 +27,7 @@
 #' @param new_data A data frame or matrix of predictors to process. If
 #' `outcomes = TRUE`, this should also contain the outcomes to process.
 #'
-#' @param engine A preprocessing `engine`.
+#' @param blueprint A preprocessing `blueprint`.
 #'
 #' @param outcomes A logical. Should the outcomes be processed and returned
 #' as well?
@@ -44,13 +44,13 @@
 #'  - `outcomes`: If `outcomes = TRUE`, a tibble containing the preprocessed
 #'  outcomes found in `new_data`. Otherwise, `NULL`.
 #'
-#'  - `extras`: Either `NULL` if the engine returns no extra information,
+#'  - `extras`: Either `NULL` if the blueprint returns no extra information,
 #'  or a named list containing the extra information.
 #'
 #' @examples
-#' # See the engine specific documentation linked above
+#' # See the blueprint specific documentation linked above
 #' # for various ways to call forge with different
-#' # engines.
+#' # blueprints.
 #'
 #' train <- iris[1:100,]
 #' test <- iris[101:150,]
@@ -59,36 +59,36 @@
 #' processed <- mold(
 #'   log(Sepal.Width) ~ Species,
 #'   train,
-#'   engine = default_formula_engine(indicators = FALSE)
+#'   blueprint = default_formula_blueprint(indicators = FALSE)
 #' )
 #'
-#' forge(test, processed$engine, outcomes = TRUE)
+#' forge(test, processed$blueprint, outcomes = TRUE)
 #'
 #'
 #' @export
-forge <- function(new_data, engine, ..., outcomes = FALSE) {
+forge <- function(new_data, blueprint, ..., outcomes = FALSE) {
   UseMethod("forge")
 }
 
 #' @export
-forge.default <- function(new_data, engine, ..., outcomes = FALSE) {
+forge.default <- function(new_data, blueprint, ..., outcomes = FALSE) {
   glubort("The class of `new_data`, '{class1(new_data)}', is not recognized.")
 }
 
 #' @export
-forge.data.frame <- function(new_data, engine, ..., outcomes = FALSE) {
+forge.data.frame <- function(new_data, blueprint, ..., outcomes = FALSE) {
 
   validate_empty_dots(...)
-  validate_is_engine(engine)
+  validate_is_blueprint(blueprint)
 
-  c(engine, predictors, outcomes, extras) %<-% engine$forge$clean(
-    engine = engine,
+  c(blueprint, predictors, outcomes, extras) %<-% blueprint$forge$clean(
+    blueprint = blueprint,
     new_data = new_data,
     outcomes = outcomes
   )
 
-  c(predictors, outcomes, extras) %<-% engine$forge$process(
-    engine = engine,
+  c(predictors, outcomes, extras) %<-% blueprint$forge$process(
+    blueprint = blueprint,
     predictors = predictors,
     outcomes = outcomes,
     extras = extras

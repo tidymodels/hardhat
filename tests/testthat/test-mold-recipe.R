@@ -12,10 +12,10 @@ test_that("can mold recipes", {
   expect_equal(colnames(x$predictors), "Sepal.Length")
   expect_is(x$outcomes, "data.frame")
   expect_is(x$outcomes[[1]], "factor")
-  expect_is(x$engine, "default_recipe_engine")
+  expect_is(x$blueprint, "default_recipe_blueprint")
 
   # Training data should _not_ be in the recipe
-  expect_error(recipes::juice(x$engine))
+  expect_error(recipes::juice(x$blueprint))
 })
 
 test_that("can mold recipes with intercepts", {
@@ -23,7 +23,7 @@ test_that("can mold recipes with intercepts", {
   x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris,
-    engine = default_recipe_engine(intercept = TRUE)
+    blueprint = default_recipe_blueprint(intercept = TRUE)
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))
@@ -47,7 +47,7 @@ test_that("`extras` holds a slot for `roles`", {
 
   expect_equal(x$extras, list(roles = NULL))
 
-  expect_equal(x$engine$extra_role_ptypes, NULL)
+  expect_equal(x$blueprint$extra_role_ptypes, NULL)
 })
 
 test_that("non-standard roles columns are stored", {
@@ -58,7 +58,7 @@ test_that("non-standard roles columns are stored", {
   x <- mold(rec, iris)
 
   expect_equal(
-    x$engine$extra_role_ptypes,
+    x$blueprint$extra_role_ptypes,
     list(dummy = tibble::tibble(Sepal.Width = double()))
   )
 
@@ -80,7 +80,7 @@ test_that("only original non-standard columns are in the extra roles ptype", {
 
   # extra roles ptype only has original columns
   expect_equal(
-    colnames(x$engine$extra_role_ptypes$dummy),
+    colnames(x$blueprint$extra_role_ptypes$dummy),
     "Sepal.Width"
   )
 
@@ -102,7 +102,7 @@ test_that("multiple extra roles types can be stored", {
 
   # these are not original columns
   expect_equal(
-    x$engine$extra_role_ptypes,
+    x$blueprint$extra_role_ptypes,
     NULL
   )
 
@@ -128,7 +128,7 @@ test_that("`NA` roles are skipped over", {
   )
 
   expect_equal(
-    colnames(x$engine$ptypes$predictors),
+    colnames(x$blueprint$ptypes$predictors),
     "Sepal.Length"
   )
 
@@ -138,7 +138,7 @@ test_that("`NA` roles are skipped over", {
   )
 
   expect_equal(
-    colnames(x$engine$ptypes$outcomes),
+    colnames(x$blueprint$ptypes$outcomes),
     "Species"
   )
 
@@ -148,7 +148,7 @@ test_that("`NA` roles are skipped over", {
   )
 
   expect_equal(
-    colnames(x$engine$extra_role_ptypes$custom),
+    colnames(x$blueprint$extra_role_ptypes$custom),
     "Sepal.Width"
   )
 

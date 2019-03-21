@@ -3,33 +3,33 @@
 # ------------------------------------------------------------------------------
 # Mold
 
-out_mold <- function(predictors, outcomes, engine, extras) {
+out_mold <- function(predictors, outcomes, blueprint, extras) {
   list(
     predictors = predictors,
     outcomes = outcomes,
-    engine = engine,
+    blueprint = blueprint,
     extras = extras
   )
 }
 
-out_mold_clean <- function(engine, data) {
+out_mold_clean <- function(blueprint, data) {
   list(
-    engine = engine,
+    blueprint = blueprint,
     data = data
   )
 }
 
-out_mold_clean_xy <- function(engine, x, y) {
+out_mold_clean_xy <- function(blueprint, x, y) {
   list(
-    engine = engine,
+    blueprint = blueprint,
     x = x,
     y = y
   )
 }
 
-out_mold_process <- function(engine, predictors, outcomes, ptypes, extras) {
+out_mold_process <- function(blueprint, predictors, outcomes, ptypes, extras) {
   list(
-    engine = engine,
+    blueprint = blueprint,
     predictors = predictors,
     outcomes = outcomes,
     ptypes = ptypes,
@@ -37,9 +37,9 @@ out_mold_process <- function(engine, predictors, outcomes, ptypes, extras) {
   )
 }
 
-out_mold_process_terms <- function(engine, terms_lst) {
+out_mold_process_terms <- function(blueprint, terms_lst) {
   list(
-    engine = engine,
+    blueprint = blueprint,
     terms_lst = terms_lst
   )
 }
@@ -71,9 +71,9 @@ out_forge_process <- function(predictors, outcomes, extras) {
   )
 }
 
-out_forge_process_terms <- function(engine, terms_lst) {
+out_forge_process_terms <- function(blueprint, terms_lst) {
   list(
-    engine = engine,
+    blueprint = blueprint,
     terms_lst = terms_lst
   )
 }
@@ -86,9 +86,9 @@ out_forge_process_terms_lst <- function(data = NULL, extras = NULL) {
   )
 }
 
-out_forge_clean <- function(engine, predictors, outcomes, extras = NULL) {
+out_forge_clean <- function(blueprint, predictors, outcomes, extras = NULL) {
   list(
-    engine = engine,
+    blueprint = blueprint,
     predictors = predictors,
     outcomes = outcomes,
     extras = extras

@@ -4,9 +4,9 @@
 #'
 #' @param indicators A logical. Should factors be expanded into dummy variables?
 #'
-#' @rdname new-engine
+#' @rdname new-blueprint
 #' @export
-new_formula_engine <- function(mold,
+new_formula_blueprint <- function(mold,
                                forge,
                                intercept = FALSE,
                                ptypes = NULL,
@@ -28,14 +28,14 @@ new_formula_engine <- function(mold,
 
   validate_mold_args(
     mold,
-    required_clean_args = c("engine", "data"),
-    required_process_args = c("engine", "data")
+    required_clean_args = c("blueprint", "data"),
+    required_process_args = c("blueprint", "data")
   )
 
   validate_is_formula_or_null(formula)
   validate_is_bool(indicators)
 
-  new_engine(
+  new_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept,
@@ -43,22 +43,22 @@ new_formula_engine <- function(mold,
     formula = formula,
     indicators = indicators,
     ...,
-    subclass = c(subclass, "formula_engine")
+    subclass = c(subclass, "formula_blueprint")
   )
 
 }
 
 #' @export
-refresh_engine.formula_engine <- function(engine) {
-  do.call(new_formula_engine, as.list(engine))
+refresh_blueprint.formula_blueprint <- function(blueprint) {
+  do.call(new_formula_blueprint, as.list(blueprint))
 }
 
-is_formula_engine <- function(x) {
-  inherits(x, "formula_engine")
+is_formula_blueprint <- function(x) {
+  inherits(x, "formula_blueprint")
 }
 
-validate_is_formula_engine <- function(engine) {
-  validate_is(engine, is_formula_engine, "formula_engine")
+validate_is_formula_blueprint <- function(blueprint) {
+  validate_is(blueprint, is_formula_blueprint, "formula_blueprint")
 }
 
 # ------------------------------------------------------------------------------
@@ -76,9 +76,9 @@ check_mold_formula <- function(mold) {
 
 get_default_mold_formula_clean <- function() {
 
-  function(engine, data) {
+  function(blueprint, data) {
     list(
-      engine = engine,
+      blueprint = blueprint,
       data = data
     )
   }

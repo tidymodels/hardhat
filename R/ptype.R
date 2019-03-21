@@ -15,7 +15,7 @@
 #'
 #' @details
 #'
-#' `extract_ptype()` is useful when creating a new preprocessing `engine`. It
+#' `extract_ptype()` is useful when creating a new preprocessing `blueprint`. It
 #' extracts the required information that will be used by the validation checks
 #' at prediction time.
 #'

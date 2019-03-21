@@ -1,16 +1,16 @@
-#' Default formula engine
+#' Default formula blueprint
 #'
-#' This pages holds the details for the formula preprocessing engine. This
-#' is the engine used by default from `mold()` if `x` is a formula.
+#' This pages holds the details for the formula preprocessing blueprint. This
+#' is the blueprint used by default from `mold()` if `x` is a formula.
 #'
-#' @inheritParams new_formula_engine
+#' @inheritParams new_formula_blueprint
 #'
 #' @param formula A formula specifying the predictors and the outcomes.
 #'
 #' @param data A data frame or matrix containing the outcomes and predictors.
 #'
-#' @param engine A preprocessing `engine`. If left as `NULL`, then a
-#' [default_formula_engine()] is used.
+#' @param blueprint A preprocessing `blueprint`. If left as `NULL`, then a
+#' [default_formula_blueprint()] is used.
 #'
 #' @param ... Not used.
 #'
@@ -31,7 +31,7 @@
 #'
 #' @section Mold:
 #'
-#' When `mold()` is used with the default formula engine:
+#' When `mold()` is used with the default formula blueprint:
 #'
 #' - Predictors
 #'
@@ -65,7 +65,7 @@
 #'
 #' @section Forge:
 #'
-#' When `forge()` is used with the default formula engine:
+#' When `forge()` is used with the default formula blueprint:
 #'
 #' - It calls [shrink()] to trim `new_data` to only the required columns and
 #' coerce `new_data` to a tibble.
@@ -119,7 +119,7 @@
 #'
 #' By default, intercepts are _not_ included in the predictor output from the
 #' formula. To include an intercept, set
-#' `engine = default_formula_engine(intercept = TRUE)`. The rationale
+#' `blueprint = default_formula_blueprint(intercept = TRUE)`. The rationale
 #' for this is that many packages either always require or never allow an
 #' intercept (for example, the `earth` package), and they do a large amount of
 #' extra work to keep the user from supplying one or removing it. This
@@ -139,15 +139,15 @@
 #' processed <- mold(
 #'   log(Sepal.Width) ~ Sepal.Length + Species,
 #'   train,
-#'   engine = default_formula_engine(intercept = TRUE)
+#'   blueprint = default_formula_blueprint(intercept = TRUE)
 #' )
 #'
-#' # Then, call forge() with the engine and the test data
+#' # Then, call forge() with the blueprint and the test data
 #' # to have it preprocess the test data in the same way
-#' forge(test, processed$engine)
+#' forge(test, processed$blueprint)
 #'
 #' # Use `outcomes = TRUE` to also extract the preprocessed outcome
-#' forge(test, processed$engine, outcomes = TRUE)
+#' forge(test, processed$blueprint, outcomes = TRUE)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Factors without an intercept
@@ -186,12 +186,12 @@
 #' # run model.matrix() on factor columns. Interactions
 #' # are still allowed and are run on numeric columns.
 #'
-#' engine_no_indicators <- default_formula_engine(indicators = FALSE)
+#' blueprint_no_indicators <- default_formula_blueprint(indicators = FALSE)
 #'
 #' processed <- mold(
 #'   ~ Species + Sepal.Width:Sepal.Length,
 #'   train,
-#'   engine = engine_no_indicators
+#'   blueprint = blueprint_no_indicators
 #' )
 #'
 #' processed$predictors
@@ -199,8 +199,8 @@
 #' # An informative error is thrown when `indicators = FALSE` and
 #' # factors are present in interaction terms or in inline functions
 #' \dontrun{
-#' mold(Sepal.Width ~ Sepal.Length:Species, train, engine = engine_no_indicators)
-#' mold(Sepal.Width ~ paste0(Species), train, engine = engine_no_indicators)
+#' mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators)
+#' mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators)
 #' }
 #'
 #' # ---------------------------------------------------------------------------
@@ -222,7 +222,7 @@
 #'
 #' # Multivariate formulas specified in mold()
 #' # carry over into forge()
-#' forge(test, processed$engine, outcomes = TRUE)
+#' forge(test, processed$blueprint, outcomes = TRUE)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Offsets
@@ -247,25 +247,25 @@
 #'
 #' # Forging test data will also require
 #' # and include the offset
-#' forge(test, processed$engine)
+#' forge(test, processed$blueprint)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Intercept only
 #'
 #' # Because `1` and `0` are intercept modifying terms, they are
 #' # not allowed in the formula and are controlled by the
-#' # `intercept` argument of the engine. To use an intercept
+#' # `intercept` argument of the blueprint. To use an intercept
 #' # only formula, you should supply `NULL` on the RHS of the formula.
-#' mold(~ NULL, train, engine = default_formula_engine(intercept = TRUE))
+#' mold(~ NULL, train, blueprint = default_formula_blueprint(intercept = TRUE))
 #'
 #' @export
-default_formula_engine <- function(intercept = FALSE,
+default_formula_blueprint <- function(intercept = FALSE,
                                    indicators = TRUE) {
 
   mold <- get_mold_formula_default_function_set()
   forge <- get_forge_formula_default_function_set()
 
-  new_default_formula_engine(
+  new_default_formula_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept,
@@ -278,9 +278,9 @@ default_formula_engine <- function(intercept = FALSE,
 #' elements are `terms` objects that describe the terms for the outcomes and
 #' predictors separately. This argument is set automatically at [mold()] time.
 #'
-#' @rdname new-default-engine
+#' @rdname new-default-blueprint
 #' @export
-new_default_formula_engine <- function(mold,
+new_default_formula_blueprint <- function(mold,
                                        forge,
                                        intercept = FALSE,
                                        ptypes = NULL,
@@ -295,7 +295,7 @@ new_default_formula_engine <- function(mold,
 
   validate_is_terms_list_or_null(terms)
 
-  new_formula_engine(
+  new_formula_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept,
@@ -304,65 +304,65 @@ new_default_formula_engine <- function(mold,
     indicators = indicators,
     terms = terms,
     ...,
-    subclass = c(subclass, "default_formula_engine")
+    subclass = c(subclass, "default_formula_blueprint")
   )
 
 }
 
 #' @export
-refresh_engine.default_formula_engine <- function(engine) {
-  do.call(new_default_formula_engine, as.list(engine))
+refresh_blueprint.default_formula_blueprint <- function(blueprint) {
+  do.call(new_default_formula_blueprint, as.list(blueprint))
 }
 
 # ------------------------------------------------------------------------------
 
 get_mold_formula_default_function_set <- function() {
-  engine_function_set(mold_formula_default_clean, mold_formula_default_process)
+  blueprint_function_set(mold_formula_default_clean, mold_formula_default_process)
 }
 
 # mold - formula - clean
-mold_formula_default_clean <- function(engine, data) {
+mold_formula_default_clean <- function(blueprint, data) {
 
   data <- check_is_data_like(data)
 
   # validate here, not in the constructor, because we
   # put a non-intercept-containing formula back in
-  validate_formula_has_intercept(engine$formula)
+  validate_formula_has_intercept(blueprint$formula)
 
-  formula <- remove_formula_intercept(engine$formula, engine$intercept)
+  formula <- remove_formula_intercept(blueprint$formula, blueprint$intercept)
   formula <- alter_formula_environment(formula)
 
-  engine <- update_engine(engine, formula = formula)
+  blueprint <- update_blueprint(blueprint, formula = formula)
 
-  out$mold$clean(engine, data)
+  out$mold$clean(blueprint, data)
 }
 
 # mold - formula - process
-mold_formula_default_process <- function(engine, data) {
+mold_formula_default_process <- function(blueprint, data) {
 
-  c(engine, predictors_lst) %<-% mold_formula_default_process_predictors(
-    engine = engine,
+  c(blueprint, predictors_lst) %<-% mold_formula_default_process_predictors(
+    blueprint = blueprint,
     data = data
   )
 
-  c(engine, outcomes_lst) %<-% mold_formula_default_process_outcomes(
-    engine = engine,
+  c(blueprint, outcomes_lst) %<-% mold_formula_default_process_outcomes(
+    blueprint = blueprint,
     data = data
   )
 
   # nuke formula environment before returning
-  formula_empty_env <- nuke_formula_environment(engine$formula)
-  engine <- update_engine(engine, formula = formula_empty_env)
+  formula_empty_env <- nuke_formula_environment(blueprint$formula)
+  blueprint <- update_blueprint(blueprint, formula = formula_empty_env)
 
   ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
-  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, ptypes, extras)
+  out$mold$process(blueprint, predictors_lst$data, outcomes_lst$data, ptypes, extras)
 }
 
-mold_formula_default_process_predictors <- function(engine, data) {
+mold_formula_default_process_predictors <- function(blueprint, data) {
 
-  formula <- expand_formula_dot_notation(engine$formula, data)
+  formula <- expand_formula_dot_notation(blueprint$formula, data)
   formula <- get_predictors_formula(formula)
 
   original_names <- get_all_predictors(formula, data)
@@ -370,7 +370,7 @@ mold_formula_default_process_predictors <- function(engine, data) {
 
   ptype <- extract_ptype(original_data)
 
-  if (!engine$indicators) {
+  if (!blueprint$indicators) {
     factor_names <- extract_original_factor_names(ptype)
     validate_no_factors_in_functions(formula, factor_names)
     validate_no_factors_in_interactions(formula, factor_names)
@@ -385,15 +385,15 @@ mold_formula_default_process_predictors <- function(engine, data) {
     data = framed$data
   )
 
-  if (!engine$indicators) {
+  if (!blueprint$indicators) {
     predictors <- reattach_factor_columns(predictors, data, factor_names)
   }
 
   terms <- simplify_terms(framed$terms)
 
-  engine_terms <- engine$terms
-  engine_terms$predictors <- terms
-  engine <- update_engine(engine, terms = engine_terms)
+  blueprint_terms <- blueprint$terms
+  blueprint_terms$predictors <- terms
+  blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
 
   predictors_lst <- out$mold$process_terms_lst(
     data = predictors,
@@ -401,12 +401,12 @@ mold_formula_default_process_predictors <- function(engine, data) {
     extras = list(offset = offset)
   )
 
-  out$mold$process_terms(engine, predictors_lst)
+  out$mold$process_terms(blueprint, predictors_lst)
 }
 
-mold_formula_default_process_outcomes <- function(engine, data) {
+mold_formula_default_process_outcomes <- function(blueprint, data) {
 
-  formula <- engine$formula
+  formula <- blueprint$formula
 
   original_names <- get_all_outcomes(formula, data)
   original_data <- data[, original_names, drop = FALSE]
@@ -424,50 +424,50 @@ mold_formula_default_process_outcomes <- function(engine, data) {
 
   terms <- simplify_terms(framed$terms)
 
-  engine_terms <- engine$terms
-  engine_terms$outcomes <- terms
-  engine <- update_engine(engine, terms = engine_terms)
+  blueprint_terms <- blueprint$terms
+  blueprint_terms$outcomes <- terms
+  blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
 
   outcomes_lst <- out$mold$process_terms_lst(data = outcomes, ptype)
 
-  out$mold$process_terms(engine, outcomes_lst)
+  out$mold$process_terms(blueprint, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------
 
 get_forge_formula_default_function_set <- function() {
-  engine_function_set(forge_formula_default_clean, forge_formula_default_process)
+  blueprint_function_set(forge_formula_default_clean, forge_formula_default_process)
 }
 
-forge_formula_default_clean <- function(engine, new_data, outcomes) {
+forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
 
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  predictors <- shrink(new_data, engine$ptypes$predictors)
-  predictors <- scream(predictors, engine$ptypes$predictors)
+  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  predictors <- scream(predictors, blueprint$ptypes$predictors)
 
   if (outcomes) {
-    outcomes <- shrink(new_data, engine$ptypes$outcomes)
-    outcomes <- scream(outcomes, engine$ptypes$outcomes)
+    outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   }
   else {
     outcomes <- NULL
   }
 
-  out$forge$clean(engine, predictors, outcomes)
+  out$forge$clean(blueprint, predictors, outcomes)
 }
 
-forge_formula_default_process <- function(engine, predictors, outcomes, extras) {
+forge_formula_default_process <- function(blueprint, predictors, outcomes, extras) {
 
-  c(engine, predictors_lst) %<-% forge_formula_default_process_predictors(
-    engine = engine,
+  c(blueprint, predictors_lst) %<-% forge_formula_default_process_predictors(
+    blueprint = blueprint,
     predictors = predictors
   )
 
-  c(engine, outcomes_lst) %<-% forge_formula_default_process_outcomes(
-    engine = engine,
+  c(blueprint, outcomes_lst) %<-% forge_formula_default_process_outcomes(
+    blueprint = blueprint,
     outcomes = outcomes
   )
 
@@ -479,9 +479,9 @@ forge_formula_default_process <- function(engine, predictors, outcomes, extras) 
   out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
 }
 
-forge_formula_default_process_predictors <- function(engine, predictors) {
+forge_formula_default_process_predictors <- function(blueprint, predictors) {
 
-  terms <- engine$terms$predictors
+  terms <- blueprint$terms$predictors
   terms <- alter_terms_environment(terms)
 
   framed <- model_frame(terms, predictors)
@@ -491,8 +491,8 @@ forge_formula_default_process_predictors <- function(engine, predictors) {
     data = framed$data
   )
 
-  if (!engine$indicators) {
-    factor_names <- extract_original_factor_names(engine$ptypes$predictors)
+  if (!blueprint$indicators) {
+    factor_names <- extract_original_factor_names(blueprint$ptypes$predictors)
     data <- reattach_factor_columns(data, predictors, factor_names)
   }
 
@@ -503,19 +503,19 @@ forge_formula_default_process_predictors <- function(engine, predictors) {
     extras = list(offset = .offset)
   )
 
-  out$forge$process_terms(engine, predictors_lst)
+  out$forge$process_terms(blueprint, predictors_lst)
 }
 
-forge_formula_default_process_outcomes <- function(engine, outcomes) {
+forge_formula_default_process_outcomes <- function(blueprint, outcomes) {
 
   # no outcomes to process
   if (is.null(outcomes)) {
     outcomes_lst <- out$forge$process_terms_lst()
-    result <- out$forge$process_terms(engine, outcomes_lst)
+    result <- out$forge$process_terms(blueprint, outcomes_lst)
     return(result)
   }
 
-  terms <- engine$terms$outcomes
+  terms <- blueprint$terms$outcomes
   terms <- alter_terms_environment(terms)
 
   framed <- model_frame(terms, outcomes)
@@ -527,7 +527,7 @@ forge_formula_default_process_outcomes <- function(engine, outcomes) {
 
   outcomes_lst <- out$forge$process_terms_lst(data = data)
 
-  out$forge$process_terms(engine, outcomes_lst)
+  out$forge$process_terms(blueprint, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------
@@ -536,10 +536,10 @@ forge_formula_default_process_outcomes <- function(engine, outcomes) {
 # an inline function may have been used like poly(), but there
 # is no gurantee that the env above the global env is the same
 # as the one that was used in mold()
-alter_terms_environment <- function(terms_engine) {
+alter_terms_environment <- function(terms_blueprint) {
   env_above_global_env <- rlang::env_parent(rlang::global_env())
-  attr(terms_engine, ".Environment") <- env_above_global_env
-  terms_engine
+  attr(terms_blueprint, ".Environment") <- env_above_global_env
+  terms_blueprint
 }
 
 # ------------------------------------------------------------------------------

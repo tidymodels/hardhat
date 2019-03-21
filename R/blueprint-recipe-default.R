@@ -1,22 +1,22 @@
-#' Default recipe engine
+#' Default recipe blueprint
 #'
-#' This pages holds the details for the recipe preprocessing engine. This
-#' is the engine used by default from `mold()` if `x` is a recipe.
+#' This pages holds the details for the recipe preprocessing blueprint. This
+#' is the blueprint used by default from `mold()` if `x` is a recipe.
 #'
-#' @inheritParams new_recipe_engine
+#' @inheritParams new_recipe_blueprint
 #'
 #' @param x An unprepped recipe created from [recipes::recipe()].
 #'
 #' @param data A data frame or matrix containing the outcomes and predictors.
 #'
-#' @param engine A preprocessing `engine`. If left as `NULL`, then a
-#' [default_recipe_engine()] is used.
+#' @param blueprint A preprocessing `blueprint`. If left as `NULL`, then a
+#' [default_recipe_blueprint()] is used.
 #'
 #' @param ... Not used.
 #'
 #' @section Mold:
 #'
-#' When `mold()` is used with the default recipe engine:
+#' When `mold()` is used with the default recipe blueprint:
 #'
 #' - It calls [recipes::prep()] to prep the recipe.
 #'
@@ -27,7 +27,7 @@
 #'
 #' @section Forge:
 #'
-#' When `forge()` is used with the default recipe engine:
+#' When `forge()` is used with the default recipe blueprint:
 #'
 #' - It calls [shrink()] to trim `new_data` to only the required columns and
 #' coerce `new_data` to a tibble.
@@ -63,22 +63,22 @@
 #'
 #' processed$outcomes
 #'
-#' # The underlying engine is a prepped recipe
-#' processed$engine$recipe
+#' # The underlying blueprint is a prepped recipe
+#' processed$blueprint$recipe
 #'
-#' # Call forge() with the engine and the test data
+#' # Call forge() with the blueprint and the test data
 #' # to have it preprocess the test data in the same way
-#' forge(test, processed$engine)
+#' forge(test, processed$blueprint)
 #'
 #' # Use `outcomes = TRUE` to also extract the preprocessed outcome!
 #' # This logged the Sepal.Length column of `new_data`
-#' forge(test, processed$engine, outcomes = TRUE)
+#' forge(test, processed$blueprint, outcomes = TRUE)
 #'
 #' # ---------------------------------------------------------------------------
 #' # With an intercept
 #'
 #' # You can add an intercept with `intercept = TRUE`
-#' processed <- mold(rec, train, engine = default_recipe_engine(intercept = TRUE))
+#' processed <- mold(rec, train, blueprint = default_recipe_blueprint(intercept = TRUE))
 #'
 #' processed$predictors
 #'
@@ -103,15 +103,15 @@
 #'
 #' processed_roles$extras
 #'
-#' forge(test, processed_roles$engine)
+#' forge(test, processed_roles$blueprint)
 #'
 #' @export
-default_recipe_engine <- function(intercept = FALSE) {
+default_recipe_blueprint <- function(intercept = FALSE) {
 
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
 
-  new_default_recipe_engine(
+  new_default_recipe_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept
@@ -124,9 +124,9 @@ default_recipe_engine <- function(intercept = FALSE) {
 #' values are prototypes of the original columns with that role. These are
 #' used for validation in `forge()`.
 #'
-#' @rdname new-default-engine
+#' @rdname new-default-blueprint
 #' @export
-new_default_recipe_engine <- function(mold,
+new_default_recipe_blueprint <- function(mold,
                                       forge,
                                       intercept = FALSE,
                                       ptypes = NULL,
@@ -135,7 +135,7 @@ new_default_recipe_engine <- function(mold,
                                       ...,
                                       subclass = character()) {
 
-  new_recipe_engine(
+  new_recipe_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept,
@@ -143,48 +143,48 @@ new_default_recipe_engine <- function(mold,
     recipe = recipe,
     extra_role_ptypes = extra_role_ptypes,
     ...,
-    subclass = c(subclass, "default_recipe_engine")
+    subclass = c(subclass, "default_recipe_blueprint")
   )
 
 }
 
 #' @export
-refresh_engine.default_recipe_engine <- function(engine) {
-  do.call(new_default_recipe_engine, as.list(engine))
+refresh_blueprint.default_recipe_blueprint <- function(blueprint) {
+  do.call(new_default_recipe_blueprint, as.list(blueprint))
 }
 
 # ------------------------------------------------------------------------------
 
 get_mold_recipe_default_function_set <- function() {
-  engine_function_set(mold_recipe_default_clean, mold_recipe_default_process)
+  blueprint_function_set(mold_recipe_default_clean, mold_recipe_default_process)
 }
 
 # mold - recipe - clean
-mold_recipe_default_clean <- function(engine, data) {
+mold_recipe_default_clean <- function(blueprint, data) {
 
   data <- check_is_data_like(data)
 
-  out$mold$clean(engine, data)
+  out$mold$clean(blueprint, data)
 }
 
 # mold - recipe - process
-mold_recipe_default_process <- function(engine, data) {
+mold_recipe_default_process <- function(blueprint, data) {
 
   # Prep for predictors and outcomes
-  recipe <- recipes::prep(engine$recipe, training = data)
-  engine <- update_engine(engine, recipe = recipe)
+  recipe <- recipes::prep(blueprint$recipe, training = data)
+  blueprint <- update_blueprint(blueprint, recipe = recipe)
 
-  c(engine, predictors_lst) %<-% mold_recipe_default_process_predictors(
-    engine = engine,
+  c(blueprint, predictors_lst) %<-% mold_recipe_default_process_predictors(
+    blueprint = blueprint,
     data = data
   )
 
-  c(engine, outcomes_lst) %<-% mold_recipe_default_process_outcomes(
-    engine = engine,
+  c(blueprint, outcomes_lst) %<-% mold_recipe_default_process_outcomes(
+    blueprint = blueprint,
     data = data
   )
 
-  c(engine, extras) %<-% mold_recipe_default_process_extras(engine, data)
+  c(blueprint, extras) %<-% mold_recipe_default_process_extras(blueprint, data)
 
   extras <- c(
     extras,
@@ -192,53 +192,53 @@ mold_recipe_default_process <- function(engine, data) {
   )
 
   # un-retain training data
-  engine <- update_engine(engine, recipe = compost(engine$recipe))
+  blueprint <- update_blueprint(blueprint, recipe = compost(blueprint$recipe))
 
   ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
 
-  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, ptypes, extras)
+  out$mold$process(blueprint, predictors_lst$data, outcomes_lst$data, ptypes, extras)
 }
 
-mold_recipe_default_process_predictors <- function(engine, data) {
+mold_recipe_default_process_predictors <- function(blueprint, data) {
 
   all_predictors <- recipes::all_predictors
 
-  predictors <- recipes::juice(engine$recipe, all_predictors())
+  predictors <- recipes::juice(blueprint$recipe, all_predictors())
 
-  predictors <- maybe_add_intercept_column(predictors, engine$intercept)
+  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  ptype <- get_original_predictor_ptype(engine$recipe, data)
+  ptype <- get_original_predictor_ptype(blueprint$recipe, data)
 
   predictors_lst <- out$mold$process_terms_lst(data = predictors, ptype)
 
-  out$mold$process_terms(engine, predictors_lst)
+  out$mold$process_terms(blueprint, predictors_lst)
 }
 
-mold_recipe_default_process_outcomes <- function(engine, data) {
+mold_recipe_default_process_outcomes <- function(blueprint, data) {
 
   all_outcomes <- recipes::all_outcomes
 
-  outcomes <- recipes::juice(engine$recipe, all_outcomes())
+  outcomes <- recipes::juice(blueprint$recipe, all_outcomes())
 
-  ptype <- get_original_outcome_ptype(engine$recipe, data)
+  ptype <- get_original_outcome_ptype(blueprint$recipe, data)
 
   outcomes_lst <- out$mold$process_terms_lst(data = outcomes, ptype)
 
-  out$mold$process_terms(engine, outcomes_lst)
+  out$mold$process_terms(blueprint, outcomes_lst)
 }
 
-mold_recipe_default_process_extras <- function(engine, data) {
+mold_recipe_default_process_extras <- function(blueprint, data) {
 
   # Capture original non standard role columns (anything but "predictor"
   # or "outcome"). These are required in `new_data`
   original_extra_role_cols <- get_extra_role_columns(
-    engine$recipe,
+    blueprint$recipe,
     data
   )
 
   if (!is.null(original_extra_role_cols)) {
-    engine <- update_engine(
-      engine,
+    blueprint <- update_blueprint(
+      blueprint,
       extra_role_ptypes = lapply(original_extra_role_cols, extract_ptype)
     )
   }
@@ -246,13 +246,13 @@ mold_recipe_default_process_extras <- function(engine, data) {
   # Return the processed non standard role columns
   # (could be generated by prep(), not required in `new_data`)
   processed_extra_role_cols <- get_extra_role_columns(
-    engine$recipe,
-    recipes::juice(engine$recipe),
+    blueprint$recipe,
+    recipes::juice(blueprint$recipe),
     original = FALSE
   )
 
   list(
-    engine = engine,
+    blueprint = blueprint,
     extras = list(roles = processed_extra_role_cols)
   )
 }
@@ -260,36 +260,36 @@ mold_recipe_default_process_extras <- function(engine, data) {
 # ------------------------------------------------------------------------------
 
 get_forge_recipe_default_function_set <- function() {
-  engine_function_set(forge_recipe_default_clean, forge_recipe_default_process)
+  blueprint_function_set(forge_recipe_default_clean, forge_recipe_default_process)
 }
 
-forge_recipe_default_clean <- function(engine, new_data, outcomes) {
+forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
 
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  predictors <- shrink(new_data, engine$ptypes$predictors)
-  predictors <- scream(predictors, engine$ptypes$predictors)
+  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  predictors <- scream(predictors, blueprint$ptypes$predictors)
 
   if (outcomes) {
-    outcomes <- shrink(new_data, engine$ptypes$outcomes)
-    outcomes <- scream(outcomes, engine$ptypes$outcomes)
+    outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   }
   else {
     outcomes <- NULL
   }
 
-  extras <- forge_recipe_default_clean_extras(engine, new_data)
+  extras <- forge_recipe_default_clean_extras(blueprint, new_data)
 
-  out$forge$clean(engine, predictors, outcomes, extras)
+  out$forge$clean(blueprint, predictors, outcomes, extras)
 }
 
-forge_recipe_default_clean_extras <- function(engine, new_data) {
+forge_recipe_default_clean_extras <- function(blueprint, new_data) {
 
-  if (!is.null(engine$extra_role_ptypes)) {
-    extra_role_cols <- map(engine$extra_role_ptypes, shrink, data = new_data)
-    extra_role_cols <- map2(extra_role_cols, engine$extra_role_ptypes, scream)
+  if (!is.null(blueprint$extra_role_ptypes)) {
+    extra_role_cols <- map(blueprint$extra_role_ptypes, shrink, data = new_data)
+    extra_role_cols <- map2(extra_role_cols, blueprint$extra_role_ptypes, scream)
   }
   else {
     extra_role_cols <- NULL
@@ -300,9 +300,9 @@ forge_recipe_default_clean_extras <- function(engine, new_data) {
   extras
 }
 
-forge_recipe_default_process <- function(engine, predictors, outcomes, extras) {
+forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras) {
 
-  rec <- engine$recipe
+  rec <- blueprint$recipe
   roles <- rec$term_info$role
   vars <- rec$term_info$variable
 
@@ -321,13 +321,13 @@ forge_recipe_default_process <- function(engine, predictors, outcomes, extras) {
     outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
   }
 
-  c(engine, predictors_lst) %<-% forge_recipe_default_process_predictors(
-    engine = engine,
+  c(blueprint, predictors_lst) %<-% forge_recipe_default_process_predictors(
+    blueprint = blueprint,
     predictors = predictors
   )
 
-  c(engine, outcomes_lst) %<-% forge_recipe_default_process_outcomes(
-    engine = engine,
+  c(blueprint, outcomes_lst) %<-% forge_recipe_default_process_outcomes(
+    blueprint = blueprint,
     outcomes = outcomes
   )
 
@@ -342,27 +342,27 @@ forge_recipe_default_process <- function(engine, predictors, outcomes, extras) {
   out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
 }
 
-forge_recipe_default_process_predictors <- function(engine, predictors) {
+forge_recipe_default_process_predictors <- function(blueprint, predictors) {
 
-  predictors <- maybe_add_intercept_column(predictors, engine$intercept)
+  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
   predictors_lst <- out$forge$process_terms_lst(data = predictors)
 
-  out$forge$process_terms(engine, predictors_lst)
+  out$forge$process_terms(blueprint, predictors_lst)
 }
 
-forge_recipe_default_process_outcomes <- function(engine, outcomes) {
+forge_recipe_default_process_outcomes <- function(blueprint, outcomes) {
 
   # no outcomes to process
   if (is.null(outcomes)) {
     outcomes_lst <- out$forge$process_terms_lst()
-    result <- out$forge$process_terms(engine, outcomes_lst)
+    result <- out$forge$process_terms(blueprint, outcomes_lst)
     return(result)
   }
 
   outcomes_lst <- out$forge$process_terms_lst(data = outcomes)
 
-  out$forge$process_terms(engine, outcomes_lst)
+  out$forge$process_terms(blueprint, outcomes_lst)
 }
 
 forge_recipe_default_process_extras <- function(extras, rec, baked_data,

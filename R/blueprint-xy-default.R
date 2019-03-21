@@ -1,17 +1,17 @@
-#' Default XY engine
+#' Default XY blueprint
 #'
-#' This pages holds the details for the XY preprocessing engine. This
-#' is the engine used by default from `mold()` if `x` and `y` are provided
+#' This pages holds the details for the XY preprocessing blueprint. This
+#' is the blueprint used by default from `mold()` if `x` and `y` are provided
 #' separately (i.e. the XY interface is used).
 #'
-#' @inheritParams new-engine
+#' @inheritParams new-blueprint
 #'
 #' @param x A data frame or matrix containing the predictors.
 #'
 #' @param y A data frame, matrix, or vector containing the outcomes.
 #'
-#' @param engine A preprocessing `engine`. If left as `NULL`, then a
-#' [default_xy_engine()] is used.
+#' @param blueprint A preprocessing `blueprint`. If left as `NULL`, then a
+#' [default_xy_blueprint()] is used.
 #'
 #' @param ... Not used.
 #'
@@ -29,7 +29,7 @@
 #'
 #' @section Mold:
 #'
-#' When `mold()` is used with the default xy engine:
+#' When `mold()` is used with the default xy blueprint:
 #'
 #' - It converts `x` to a tibble.
 #'
@@ -39,7 +39,7 @@
 #'
 #' @section Forge:
 #'
-#' When `forge()` is used with the default xy engine:
+#' When `forge()` is used with the default xy blueprint:
 #'
 #' - It calls [shrink()] to trim `new_data` to only the required columns and
 #' coerce `new_data` to a tibble.
@@ -68,16 +68,16 @@
 #' # First, call mold() with the training data
 #' processed <- mold(train_x, train_y)
 #'
-#' # Then, call forge() with the engine and the test data
+#' # Then, call forge() with the blueprint and the test data
 #' # to have it preprocess the test data in the same way
-#' forge(test_x, processed$engine)
+#' forge(test_x, processed$blueprint)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Intercept
 #'
-#' processed <- mold(train_x, train_y, engine = default_xy_engine(intercept = TRUE))
+#' processed <- mold(train_x, train_y, blueprint = default_xy_blueprint(intercept = TRUE))
 #'
-#' forge(test_x, processed$engine)
+#' forge(test_x, processed$blueprint)
 #'
 #' # ---------------------------------------------------------------------------
 #' # XY Method and forge(outcomes = TRUE)
@@ -89,11 +89,11 @@
 #'
 #' # Can't do this!
 #' \dontrun{
-#' forge(test_x, processed$engine, outcomes = TRUE)
+#' forge(test_x, processed$blueprint, outcomes = TRUE)
 #' }
 #'
 #' # Need to use the full test set, including `y`
-#' forge(test, processed$engine, outcomes = TRUE)
+#' forge(test, processed$blueprint, outcomes = TRUE)
 #'
 #' # With the XY method, if the Y value used in `mold()` is a vector,
 #' # then a column name of `.outcome` is automatically generated.
@@ -107,7 +107,7 @@
 #' # This throws an informative error that tell you
 #' # to include an `".outcome"` column in `new_data`.
 #' \dontrun{
-#' forge(iris, processed_vec$engine, outcomes = TRUE)
+#' forge(iris, processed_vec$blueprint, outcomes = TRUE)
 #' }
 #'
 #' test2 <- test
@@ -115,15 +115,15 @@
 #' test2$Species <- NULL
 #'
 #' # This works, and returns a tibble in the $outcomes slot
-#' forge(test2, processed_vec$engine, outcomes = TRUE)
+#' forge(test2, processed_vec$blueprint, outcomes = TRUE)
 #'
 #' @export
-default_xy_engine <- function(intercept = FALSE) {
+default_xy_blueprint <- function(intercept = FALSE) {
 
   mold <- get_mold_xy_default_function_set()
   forge <- get_forge_xy_default_function_set()
 
-  new_default_xy_engine(
+  new_default_xy_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept
@@ -131,130 +131,130 @@ default_xy_engine <- function(intercept = FALSE) {
 
 }
 
-#' Create a new default engine
+#' Create a new default blueprint
 #'
-#' This page contains the constructors for the default engines. They can be
+#' This page contains the constructors for the default blueprints. They can be
 #' extended if you want to add extra behavior on top of what the default
-#' engines already do, but generally you will extend the non-default versions
-#' of the constructors found in the documentation for [new_engine()].
+#' blueprints already do, but generally you will extend the non-default versions
+#' of the constructors found in the documentation for [new_blueprint()].
 #'
-#' @inheritParams new_xy_engine
-#' @inheritParams new_formula_engine
-#' @inheritParams new_recipe_engine
+#' @inheritParams new_xy_blueprint
+#' @inheritParams new_formula_blueprint
+#' @inheritParams new_recipe_blueprint
 #'
-#' @name new-default-engine
+#' @name new-default-blueprint
 #' @export
-new_default_xy_engine <- function(mold,
+new_default_xy_blueprint <- function(mold,
                                   forge,
                                   intercept = FALSE,
                                   ptypes = NULL,
                                   ...,
                                   subclass = character()) {
 
-  new_xy_engine(
+  new_xy_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept,
     ptypes = ptypes,
     ...,
-    subclass = c(subclass, "default_xy_engine")
+    subclass = c(subclass, "default_xy_blueprint")
   )
 
 }
 
 #' @export
-refresh_engine.default_xy_engine <- function(engine) {
-  do.call(new_default_xy_engine, as.list(engine))
+refresh_blueprint.default_xy_blueprint <- function(blueprint) {
+  do.call(new_default_xy_blueprint, as.list(blueprint))
 }
 
 # ------------------------------------------------------------------------------
 
 get_mold_xy_default_function_set <- function() {
-  engine_function_set(mold_xy_default_clean, mold_xy_default_process)
+  blueprint_function_set(mold_xy_default_clean, mold_xy_default_process)
 }
 
 # mold - xy - clean
-mold_xy_default_clean <- function(engine, x, y) {
+mold_xy_default_clean <- function(blueprint, x, y) {
 
-  c(engine, x) %<-% mold_xy_default_clean_predictors(engine, x)
-  c(engine, y) %<-% mold_xy_default_clean_outcomes(engine, y)
+  c(blueprint, x) %<-% mold_xy_default_clean_predictors(blueprint, x)
+  c(blueprint, y) %<-% mold_xy_default_clean_outcomes(blueprint, y)
 
-  out$mold$clean_xy(engine, x, y)
+  out$mold$clean_xy(blueprint, x, y)
 }
 
-mold_xy_default_clean_predictors <- function(engine, x) {
+mold_xy_default_clean_predictors <- function(blueprint, x) {
   x <- tibble::as_tibble(x)
-  list(engine = engine, x = x)
+  list(blueprint = blueprint, x = x)
 }
 
-mold_xy_default_clean_outcomes <- function(engine, y) {
+mold_xy_default_clean_outcomes <- function(blueprint, y) {
   y <- standardize(y)
-  list(engine = engine, y = y)
+  list(blueprint = blueprint, y = y)
 }
 
 # mold - xy - process
-mold_xy_default_process <- function(engine, x, y) {
+mold_xy_default_process <- function(blueprint, x, y) {
 
-  c(engine, predictors_lst) %<-% mold_xy_default_process_predictors(engine, x)
-  c(engine, outcomes_lst) %<-% mold_xy_default_process_outcomes(engine, y)
+  c(blueprint, predictors_lst) %<-% mold_xy_default_process_predictors(blueprint, x)
+  c(blueprint, outcomes_lst) %<-% mold_xy_default_process_outcomes(blueprint, y)
 
   ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
-  out$mold$process(engine, predictors_lst$data, outcomes_lst$data, ptypes, extras)
+  out$mold$process(blueprint, predictors_lst$data, outcomes_lst$data, ptypes, extras)
 }
 
-mold_xy_default_process_predictors <- function(engine, x) {
+mold_xy_default_process_predictors <- function(blueprint, x) {
 
   # Important! Collect ptype before adding intercept!
   ptype <- extract_ptype(x)
 
-  x <- maybe_add_intercept_column(x, engine$intercept)
+  x <- maybe_add_intercept_column(x, blueprint$intercept)
 
   predictors_lst <- out$mold$process_terms_lst(data = x, ptype)
 
-  out$mold$process_terms(engine, predictors_lst)
+  out$mold$process_terms(blueprint, predictors_lst)
 }
 
-mold_xy_default_process_outcomes <- function(engine, y) {
+mold_xy_default_process_outcomes <- function(blueprint, y) {
 
   ptype <- extract_ptype(y)
 
   outcomes_lst <- out$mold$process_terms_lst(data = y, ptype)
 
-  out$mold$process_terms(engine, outcomes_lst)
+  out$mold$process_terms(blueprint, outcomes_lst)
 }
 
 # ------------------------------------------------------------------------------
 
 get_forge_xy_default_function_set <- function() {
-  engine_function_set(forge_xy_default_clean, forge_xy_default_process)
+  blueprint_function_set(forge_xy_default_clean, forge_xy_default_process)
 }
 
-forge_xy_default_clean <- function(engine, new_data, outcomes) {
+forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
 
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
 
-  predictors <- shrink(new_data, engine$ptypes$predictors)
-  predictors <- scream(predictors, engine$ptypes$predictors)
+  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  predictors <- scream(predictors, blueprint$ptypes$predictors)
 
   if (outcomes) {
-    outcomes <- shrink(new_data, engine$ptypes$outcomes)
-    outcomes <- scream(outcomes, engine$ptypes$outcomes)
+    outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   }
   else {
     outcomes <- NULL
   }
 
-  out$forge$clean(engine, predictors, outcomes)
+  out$forge$clean(blueprint, predictors, outcomes)
 }
 
-forge_xy_default_process <- function(engine, predictors, outcomes, extras) {
+forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
 
-  c(engine, predictors_lst) %<-% forge_xy_default_process_predictors(engine, predictors)
-  c(engine, outcomes_lst) %<-% forge_xy_default_process_outcomes(engine, outcomes)
+  c(blueprint, predictors_lst) %<-% forge_xy_default_process_predictors(blueprint, predictors)
+  c(blueprint, outcomes_lst) %<-% forge_xy_default_process_outcomes(blueprint, outcomes)
 
   extras <- c(
     extras,
@@ -264,25 +264,25 @@ forge_xy_default_process <- function(engine, predictors, outcomes, extras) {
   out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
 }
 
-forge_xy_default_process_predictors <- function(engine, predictors) {
+forge_xy_default_process_predictors <- function(blueprint, predictors) {
 
-  predictors <- maybe_add_intercept_column(predictors, engine$intercept)
+  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
   predictors_lst <- out$forge$process_terms_lst(data = predictors)
 
-  out$forge$process_terms(engine, predictors_lst)
+  out$forge$process_terms(blueprint, predictors_lst)
 }
 
-forge_xy_default_process_outcomes <- function(engine, outcomes) {
+forge_xy_default_process_outcomes <- function(blueprint, outcomes) {
 
   # no outcomes to process
   if (is.null(outcomes)) {
     outcomes_lst <- out$forge$process_terms_lst()
-    result <- out$forge$process_terms(engine, outcomes_lst)
+    result <- out$forge$process_terms(blueprint, outcomes_lst)
     return(result)
   }
 
   outcomes_lst <- out$forge$process_terms_lst(data = outcomes)
 
-  out$forge$process_terms(engine, outcomes_lst)
+  out$forge$process_terms(blueprint, outcomes_lst)
 }

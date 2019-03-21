@@ -4,13 +4,13 @@
 \alias{new_model}
 \title{Constructor for a base model}
 \usage{
-new_model(..., engine = default_xy_engine(), class = character())
+new_model(..., blueprint = default_xy_blueprint(), class = character())
 }
 \arguments{
 \item{...}{Name-value pairs for elements specific to the model defined by
 \code{class}.}
 
-\item{engine}{A preprocessing \code{engine} returned from a call to \code{\link[=mold]{mold()}}.}
+\item{blueprint}{A preprocessing \code{blueprint} returned from a call to \code{\link[=mold]{mold()}}.}
 
 \item{class}{A character vector representing the class of the model.}
 }
@@ -22,15 +22,15 @@ a class of \code{class}. This entire object represent a single model.
 }
 \details{
 Because every model should have multiple interfaces, including formula
-and \code{recipes} interfaces, all models should have an \code{engine} that
+and \code{recipes} interfaces, all models should have an \code{blueprint} that
 can process new data when \code{predict()} is called. The easiest way to generate
-an engine with all of the information required at prediction time is to
+an blueprint with all of the information required at prediction time is to
 use the one that is returned from a call to \code{\link[=mold]{mold()}}.
 }
 \examples{
 new_model(
   custom_element= "my-elem",
-  engine = default_xy_engine(),
+  blueprint = default_xy_blueprint(),
   class = "custom_model"
 )
 

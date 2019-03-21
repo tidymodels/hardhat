@@ -2,7 +2,7 @@ context("test-forge-formula")
 
 test_that("simple forge works", {
   x <- mold(Species ~ Sepal.Length, iris)
-  xx <- forge(iris, x$engine)
+  xx <- forge(iris, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
@@ -18,13 +18,13 @@ test_that("simple forge works", {
 test_that("can forge multivariate formulas", {
 
   x <- mold(Sepal.Length + Sepal.Width ~ Petal.Length, iris)
-  xx <- forge(iris, x$engine, outcomes = TRUE)
+  xx <- forge(iris, x$blueprint, outcomes = TRUE)
 
   expect_is(xx$outcomes, "tbl_df")
   expect_equal(colnames(xx$outcomes), c("Sepal.Length", "Sepal.Width"))
 
   y <- mold(log(Sepal.Width) + poly(Sepal.Width, degree = 2) ~ Species, iris)
-  yy <- forge(iris, y$engine, outcomes = TRUE)
+  yy <- forge(iris, y$blueprint, outcomes = TRUE)
 
   expect_equal(
     colnames(yy$outcomes),
@@ -39,8 +39,8 @@ test_that("can forge multivariate formulas", {
 
 test_that("can forge new data without expanding factors into dummies", {
 
-  x <- mold(Sepal.Length ~ Species, iris, engine = default_formula_engine(indicators = FALSE))
-  xx <- forge(iris, x$engine)
+  x <- mold(Sepal.Length ~ Species, iris, blueprint = default_formula_blueprint(indicators = FALSE))
+  xx <- forge(iris, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
@@ -56,8 +56,8 @@ test_that("can forge new data without expanding factors into dummies", {
 
 test_that("forging with `indicators = FALSE` works with numeric interactions", {
 
-  x <- mold(Species ~ Sepal.Width:Sepal.Length, iris, engine = default_formula_engine(indicators = FALSE))
-  xx <- forge(iris, x$engine)
+  x <- mold(Species ~ Sepal.Width:Sepal.Length, iris, blueprint = default_formula_blueprint(indicators = FALSE))
+  xx <- forge(iris, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
@@ -68,7 +68,7 @@ test_that("forging with `indicators = FALSE` works with numeric interactions", {
 
 test_that("asking for the outcome works", {
   x <- mold(Species ~ Sepal.Length, iris)
-  xx <- forge(iris, x$engine, outcomes = TRUE)
+  xx <- forge(iris, x$blueprint, outcomes = TRUE)
 
   expect_equal(
     xx$outcomes,
@@ -82,14 +82,14 @@ test_that("asking for the outcome when it isn't there fails", {
   iris2$Species <- NULL
 
   expect_error(
-    forge(iris2, x$engine, outcomes = TRUE),
+    forge(iris2, x$blueprint, outcomes = TRUE),
     "The following required columns"
   )
 })
 
 test_that("can use special inline functions", {
   x <- mold(log(Sepal.Length) ~ poly(Sepal.Length, degree = 2), iris)
-  xx <- forge(iris, x$engine, outcomes = TRUE)
+  xx <- forge(iris, x$blueprint, outcomes = TRUE)
 
   # manually create poly df
   x_poly <- stats::poly(iris$Sepal.Length, degree = 2)
@@ -116,7 +116,7 @@ test_that("new_data can be a matrix", {
   iris_mat <- as.matrix(iris[,"Sepal.Length", drop = FALSE])
 
   expect_error(
-    xx <- forge(iris_mat, x$engine),
+    xx <- forge(iris_mat, x$blueprint),
     NA
   )
 
@@ -134,7 +134,7 @@ test_that("new_data can only be a data frame / matrix", {
   x <- mold(Species ~ Sepal.Length, iris)
 
   expect_error(
-    forge("hi", x$engine),
+    forge("hi", x$blueprint),
     "The class of `new_data`, 'character'"
   )
 
@@ -144,12 +144,12 @@ test_that("missing predictor columns fail appropriately", {
   x <- mold(Species ~ Sepal.Length + Sepal.Width, iris)
 
   expect_error(
-    forge(iris[,1, drop = FALSE], x$engine),
+    forge(iris[,1, drop = FALSE], x$blueprint),
     "Sepal.Width"
   )
 
   expect_error(
-    forge(iris[,3, drop = FALSE], x$engine),
+    forge(iris[,3, drop = FALSE], x$blueprint),
     "'Sepal.Length', 'Sepal.Width'"
   )
 
@@ -170,7 +170,7 @@ test_that("novel predictor levels are caught", {
   x <- mold(y ~ f, dat)
 
   expect_warning(
-    xx <- forge(new, x$engine),
+    xx <- forge(new, x$blueprint),
     "Lossy cast"
   )
 
@@ -193,10 +193,10 @@ test_that("novel ordered factor predictor levels have order maintained", {
     f = ordered(letters[c(1:2, 5, 3:4)], levels = letters[c(1:2, 5, 3:4)])
   )
 
-  x <- mold(y ~ f, dat, engine = default_formula_engine(indicators = FALSE))
+  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = FALSE))
 
   expect_warning(
-    xx <- forge(new, x$engine),
+    xx <- forge(new, x$blueprint),
     "Lossy cast"
   )
 
@@ -227,7 +227,7 @@ test_that("novel outcome levels are caught", {
   x <- mold(f ~ y, dat)
 
   expect_warning(
-    xx <- forge(new, x$engine, outcomes = TRUE),
+    xx <- forge(new, x$blueprint, outcomes = TRUE),
     "Lossy cast"
   )
 
@@ -260,7 +260,7 @@ test_that("missing predictor levels are restored silently", {
   x <- mold(y ~ f, dat)
 
   expect_warning(
-    x_new <- forge(new, x$engine),
+    x_new <- forge(new, x$blueprint),
     NA
   )
 
@@ -270,7 +270,7 @@ test_that("missing predictor levels are restored silently", {
   )
 
   expect_warning(
-    x_new2 <- forge(new2, x$engine),
+    x_new2 <- forge(new2, x$blueprint),
     NA
   )
 
@@ -288,7 +288,7 @@ test_that("missing ordered factor levels are handled correctly", {
     f = ordered(letters[1:4])
   )
 
-  x <- mold(y ~ f, dat, engine = default_formula_engine(indicators = FALSE))
+  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = FALSE))
 
   # Ordered - strictly wrong order
   # Silently recover order!
@@ -298,7 +298,7 @@ test_that("missing ordered factor levels are handled correctly", {
   )
 
   expect_warning(
-    xx <- forge(new, x$engine),
+    xx <- forge(new, x$blueprint),
     NA
   )
 
@@ -316,7 +316,7 @@ test_that("missing ordered factor levels are handled correctly", {
 
   # Silently recover missing levels in the right order
   expect_warning(
-    xx2 <- forge(new2, x$engine),
+    xx2 <- forge(new2, x$blueprint),
     NA
   )
 
@@ -339,11 +339,11 @@ test_that("can be both missing levels and have new levels", {
     f = factor(letters[c(1:3, 5)])
   )
 
-  x <- mold(y ~ f, dat, engine = default_formula_engine(indicators = FALSE))
+  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = FALSE))
 
   # Lossy cast warning for the extra level
   expect_warning(
-    xx <- forge(new, x$engine),
+    xx <- forge(new, x$blueprint),
     "Lossy cast"
   )
 
@@ -359,11 +359,11 @@ test_that("new data classes are caught", {
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
 
-  x <- mold(Sepal.Length ~ Species, iris, engine = default_formula_engine(indicators = FALSE))
+  x <- mold(Sepal.Length ~ Species, iris, blueprint = default_formula_blueprint(indicators = FALSE))
 
   # Silently recover character -> factor
   expect_error(
-    x_iris2 <- forge(iris2, x$engine),
+    x_iris2 <- forge(iris2, x$blueprint),
     NA
   )
 
@@ -375,7 +375,7 @@ test_that("new data classes are caught", {
   xx <- mold(Species ~ Sepal.Length, iris)
 
   expect_error(
-    xx_iris2 <- forge(iris2, xx$engine, outcomes = TRUE),
+    xx_iris2 <- forge(iris2, xx$blueprint, outcomes = TRUE),
     NA
   )
 
@@ -394,14 +394,14 @@ test_that("new data classes can interchange integer/numeric", {
   x <- mold(Species ~ Sepal.Length, iris)
 
   expect_error(
-    forge(iris2, x$engine),
+    forge(iris2, x$blueprint),
     NA
   )
 
   xx <- mold(Sepal.Length ~ Species, iris)
 
   expect_error(
-    forge(iris2, xx$engine, outcomes = TRUE),
+    forge(iris2, xx$blueprint, outcomes = TRUE),
     NA
   )
 
@@ -409,8 +409,8 @@ test_that("new data classes can interchange integer/numeric", {
 
 test_that("intercepts can still be forged on when not using indicators (i.e. model.matrix())", {
 
-  x <- mold(Sepal.Width ~ Species, iris, engine = default_formula_engine(intercept = TRUE, indicators = FALSE))
-  xx <- forge(iris, x$engine)
+  x <- mold(Sepal.Width ~ Species, iris, blueprint = default_formula_blueprint(intercept = TRUE, indicators = FALSE))
+  xx <- forge(iris, x$blueprint)
 
   expect_true(
     "(Intercept)" %in% colnames(xx$predictors)

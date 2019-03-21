@@ -1,22 +1,22 @@
-#' Create a new preprocessing engine
+#' Create a new preprocessing blueprint
 #'
 #' @description
 #'
-#' These are the base classes for creating new preprocessing engines. All
-#' engines inherit from the one created by `new_engine()`, and the default
-#' method specific engines inherit from the other three here.
+#' These are the base classes for creating new preprocessing blueprints. All
+#' blueprints inherit from the one created by `new_blueprint()`, and the default
+#' method specific blueprints inherit from the other three here.
 #'
-#' If you want to create your own processing engine for a specific method,
-#' generally you will subclass one of the method specific engines here. If
-#' you want to create a completely new preprocessing engine for a totally new
+#' If you want to create your own processing blueprint for a specific method,
+#' generally you will subclass one of the method specific blueprints here. If
+#' you want to create a completely new preprocessing blueprint for a totally new
 #' preprocessing method (i.e. not the formula, xy, or recipe method) then
-#' you should subclass `new_engine()`.
+#' you should subclass `new_blueprint()`.
 #'
 #' @param mold A named list with two elements, `clean` and `process`, see
-#' the [new_engine()] section, Mold Functions, for details.
+#' the [new_blueprint()] section, Mold Functions, for details.
 #'
 #' @param forge A named list with two elements, `clean` and `process`, see
-#' the [new_engine()] section, Forge Functions, for details.
+#' the [new_blueprint()] section, Forge Functions, for details.
 #'
 #' @param intercept A logical. Should an intercept be included in the
 #' processed data? This information is used by the `process` function
@@ -26,25 +26,25 @@
 #' and `outcomes`, both of which are 0-row tibbles. `ptypes` is generated
 #' automatically at [mold()] time and is used to validate `new_data` at
 #' prediction time. At [mold()] time, the information found in
-#' `engine$mold$process()$ptype` is used to set `ptypes` for the `engine`.
+#' `blueprint$mold$process()$ptype` is used to set `ptypes` for the `blueprint`.
 #'
-#' @param ... Name-value pairs for additional elements of engines that
-#' subclass this engine.
+#' @param ... Name-value pairs for additional elements of blueprints that
+#' subclass this blueprint.
 #'
-#' @param subclass A character vector. The subclasses of this engine.
+#' @param subclass A character vector. The subclasses of this blueprint.
 #'
 #' @return
 #'
-#' A preprocessing engine, which is a list containing the inputs used as
+#' A preprocessing blueprint, which is a list containing the inputs used as
 #' arguments to the function, along with a class specific to the type
-#' of engine being created.
+#' of blueprint being created.
 #'
 #' @template section-mold-functions
 #' @template section-forge-functions
 #'
-#' @name new-engine
+#' @name new-blueprint
 #' @export
-new_engine <- function(mold,
+new_blueprint <- function(mold,
                        forge,
                        intercept = FALSE,
                        ptypes = NULL,
@@ -58,7 +58,7 @@ new_engine <- function(mold,
   validate_is_character(subclass, "subclass")
 
   # Can't validate mold() args here
-  # as they differ per engine
+  # as they differ per blueprint
   validate_forge_args(forge)
 
   elems <- list(
@@ -74,110 +74,110 @@ new_engine <- function(mold,
 
   elems <- c(elems, new_elems)
 
-  structure(elems, class = c(subclass, "hardhat_engine"))
+  structure(elems, class = c(subclass, "hardhat_blueprint"))
 
 }
 
 # ------------------------------------------------------------------------------
 
-#' Refresh a preprocessing engine
+#' Refresh a preprocessing blueprint
 #'
-#' `refresh_engine()` is a developer facing generic function that is called
-#' at the end of [update_engine()]. It simply is a wrapper around the
-#' method specific `new_*_engine()` function that runs the updated engine
+#' `refresh_blueprint()` is a developer facing generic function that is called
+#' at the end of [update_blueprint()]. It simply is a wrapper around the
+#' method specific `new_*_blueprint()` function that runs the updated blueprint
 #' through the constructor again to ensure that all of the elements of the
-#' engine are still valid after the update.
+#' blueprint are still valid after the update.
 #'
-#' If you implement your own custom `engine`, you should export a
-#' `refresh_engine()` method that just calls the constructor for your engine
-#' and passes through all of the elements of the engine to the constructor.
+#' If you implement your own custom `blueprint`, you should export a
+#' `refresh_blueprint()` method that just calls the constructor for your blueprint
+#' and passes through all of the elements of the blueprint to the constructor.
 #'
-#' @param engine A preprocessing engine.
+#' @param blueprint A preprocessing blueprint.
 #'
 #' @return
 #'
-#' `engine` is returned after a call to the corresponding constructor.
+#' `blueprint` is returned after a call to the corresponding constructor.
 #'
 #' @examples
 #'
-#' engine <- default_xy_engine()
+#' blueprint <- default_xy_blueprint()
 #'
 #' # This should never be done manually, but is essentially
-#' # what `update_engine(engine, intercept = TRUE)` does for you
-#' engine$intercept <- TRUE
+#' # what `update_blueprint(blueprint, intercept = TRUE)` does for you
+#' blueprint$intercept <- TRUE
 #'
-#' # Then update_engine() will call refresh_engine()
+#' # Then update_blueprint() will call refresh_blueprint()
 #' # to ensure that the structure is correct
-#' refresh_engine(engine)
+#' refresh_blueprint(blueprint)
 #'
 #' # So you can't do something like...
-#' engine_bad <- engine
-#' engine_bad$intercept <- 1
+#' blueprint_bad <- blueprint
+#' blueprint_bad$intercept <- 1
 #'
 #' # ...because the constructor will catch it
 #' \dontrun{
-#' refresh_engine(engine_bad)
+#' refresh_blueprint(blueprint_bad)
 #' }
 #'
-#' # And update_engine() catches this automatically
+#' # And update_blueprint() catches this automatically
 #' \dontrun{
-#' update_engine(engine, intercept = 1)
+#' update_blueprint(blueprint, intercept = 1)
 #' }
 #'
 #' @export
-refresh_engine <- function(engine) {
-  UseMethod("refresh_engine")
+refresh_blueprint <- function(blueprint) {
+  UseMethod("refresh_blueprint")
 }
 
 #' @export
-refresh_engine.hardhat_engine <- function(engine) {
-  do.call(new_engine, as.list(engine))
+refresh_blueprint.hardhat_blueprint <- function(blueprint) {
+  do.call(new_blueprint, as.list(blueprint))
 }
 
 # ------------------------------------------------------------------------------
 
-#' Update a preprocessing engine
+#' Update a preprocessing blueprint
 #'
 #' @description
 #'
-#' `update_engine()` is the correct way to alter elements of an existing
-#' `engine` object. It has two benefits over just doing
-#' `engine$elem <- new_elem`.
+#' `update_blueprint()` is the correct way to alter elements of an existing
+#' `blueprint` object. It has two benefits over just doing
+#' `blueprint$elem <- new_elem`.
 #'
-#' - The name you are updating _must_ already exist in the engine. This prevents
+#' - The name you are updating _must_ already exist in the blueprint. This prevents
 #' you from accidentally updating non-existant elements.
 #'
-#' - The constructor for the engine is automatically run after the update by
-#' `refresh_engine()` to ensure that the engine is still valid.
+#' - The constructor for the blueprint is automatically run after the update by
+#' `refresh_blueprint()` to ensure that the blueprint is still valid.
 #'
-#' @inheritParams refresh_engine
+#' @inheritParams refresh_blueprint
 #'
-#' @param ... Name-value pairs of _existing_ elements in `engine` that should
+#' @param ... Name-value pairs of _existing_ elements in `blueprint` that should
 #' be updated.
 #'
 #' @examples
 #'
-#' engine <- default_xy_engine()
+#' blueprint <- default_xy_blueprint()
 #'
 #' # `intercept` defaults to FALSE
-#' engine
+#' blueprint
 #'
-#' update_engine(engine, intercept = TRUE)
+#' update_blueprint(blueprint, intercept = TRUE)
 #'
 #' # Can't update non-existant elements
 #' \dontrun{
-#' update_engine(engine, intercpt = TRUE)
+#' update_blueprint(blueprint, intercpt = TRUE)
 #' }
 #'
 #' # Can't add non-valid elements
 #' \dontrun{
-#' update_engine(engine, intercept = 1)
+#' update_blueprint(blueprint, intercept = 1)
 #' }
 #'
 #' @export
-update_engine <- function(engine, ...) {
+update_blueprint <- function(blueprint, ...) {
 
-  validate_is_engine(engine)
+  validate_is_blueprint(blueprint)
 
   changes <- rlang::list2(...)
 
@@ -186,7 +186,7 @@ update_engine <- function(engine, ...) {
   }
 
   new_nms <- names(changes)
-  old_nms <- names(engine)
+  old_nms <- names(blueprint)
 
   for (nm in new_nms) {
 
@@ -197,32 +197,32 @@ update_engine <- function(engine, ...) {
     }
 
     # this nukes elements if we set them to NULL
-    engine[[nm]] <- changes[[nm]]
+    blueprint[[nm]] <- changes[[nm]]
   }
 
-  refresh_engine(engine)
+  refresh_blueprint(blueprint)
 }
 
 # ------------------------------------------------------------------------------
 
-#' Is `x` a preprocessing engine?
+#' Is `x` a preprocessing blueprint?
 #'
-#' `is_engine()` checks if `x` inherits from `"hardhat_engine"`.
+#' `is_blueprint()` checks if `x` inherits from `"hardhat_blueprint"`.
 #'
 #' @param x An object.
 #'
 #' @examples
-#' is_engine(default_xy_engine())
+#' is_blueprint(default_xy_blueprint())
 #'
 #' @export
-is_engine <- function(x) {
-  inherits(x, "hardhat_engine")
+is_blueprint <- function(x) {
+  inherits(x, "hardhat_blueprint")
 }
 
 # ------------------------------------------------------------------------------
 
-# helper for new_engine()$mold and $forge elements
-engine_function_set <- function(clean, process) {
+# helper for new_blueprint()$mold and $forge elements
+blueprint_function_set <- function(clean, process) {
 
   validate_is(clean, rlang::is_function, "function")
   validate_is(process, rlang::is_function, "function")
@@ -367,7 +367,7 @@ validate_classes_list <- validate_levels_list
 
 validate_forge_args <- function(forge) {
 
-  required_clean_args <- c("engine", "new_data", "outcomes")
+  required_clean_args <- c("blueprint", "new_data", "outcomes")
 
   actual_clean_args <- rlang::fn_fmls_names(forge$clean)
 
@@ -379,7 +379,7 @@ validate_forge_args <- function(forge) {
     )
   }
 
-  required_process_args <- c("engine", "predictors", "outcomes", "extras")
+  required_process_args <- c("blueprint", "predictors", "outcomes", "extras")
 
   actual_process_args <- rlang::fn_fmls_names(forge$process)
 

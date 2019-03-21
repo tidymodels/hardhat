@@ -9,7 +9,7 @@ test_that("simple forge works", {
     iris
   )
 
-  xx <- forge(iris, x$engine)
+  xx <- forge(iris, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
@@ -29,7 +29,7 @@ test_that("asking for the outcome works", {
     iris
   )
 
-  xx <- forge(iris, x$engine, outcomes = TRUE)
+  xx <- forge(iris, x$blueprint, outcomes = TRUE)
 
   expect_equal(
     xx$outcomes,
@@ -48,7 +48,7 @@ test_that("asking for the outcome when it isn't there fails", {
   iris2$Species <- NULL
 
   expect_error(
-    forge(iris2, x$engine, outcomes = TRUE),
+    forge(iris2, x$blueprint, outcomes = TRUE),
     "The following required columns"
   )
 
@@ -62,7 +62,7 @@ test_that("outcomes steps get processed", {
     iris
   )
 
-  processed <- forge(iris, x$engine, outcomes = TRUE)
+  processed <- forge(iris, x$blueprint, outcomes = TRUE)
 
   expect_equal(
     processed$outcomes$Sepal.Width,
@@ -79,12 +79,12 @@ test_that("missing predictor columns fail appropriately", {
   )
 
   expect_error(
-    forge(iris[,1, drop = FALSE], x$engine),
+    forge(iris[,1, drop = FALSE], x$blueprint),
     "Sepal.Width"
   )
 
   expect_error(
-    forge(iris[,3, drop = FALSE], x$engine),
+    forge(iris[,3, drop = FALSE], x$blueprint),
     "'Sepal.Length', 'Sepal.Width'"
   )
 
@@ -105,7 +105,7 @@ test_that("novel predictor levels are caught", {
   x <- mold(recipe(y ~ f, dat), dat)
 
   expect_warning(
-    xx <- forge(new, x$engine),
+    xx <- forge(new, x$blueprint),
     "Lossy cast"
   )
 
@@ -131,7 +131,7 @@ test_that("novel outcome levels are caught", {
   x <- mold(recipe(f ~ y, dat), dat)
 
   expect_warning(
-    xx <- forge(new, x$engine, outcomes = TRUE),
+    xx <- forge(new, x$blueprint, outcomes = TRUE),
     "Lossy cast"
   )
 
@@ -151,22 +151,22 @@ test_that("original predictor and outcome classes / names are recorded", {
   )
 
   expect_equal(
-    colnames(x$engine$ptypes$predictors),
+    colnames(x$blueprint$ptypes$predictors),
     "Species"
   )
 
   expect_equal(
-    colnames(x$engine$ptypes$outcomes),
+    colnames(x$blueprint$ptypes$outcomes),
     "Sepal.Length"
   )
 
   expect_equal(
-    get_data_classes(x$engine$ptypes$predictors),
+    get_data_classes(x$blueprint$ptypes$predictors),
     list(Species = "factor")
   )
 
   expect_equal(
-    get_data_classes(x$engine$ptypes$outcomes),
+    get_data_classes(x$blueprint$ptypes$outcomes),
     list(Sepal.Length = "numeric")
   )
 
@@ -181,7 +181,7 @@ test_that("new data classes are caught", {
 
   # Silent recovery
   expect_error(
-    x_iris2 <- forge(iris2, x$engine),
+    x_iris2 <- forge(iris2, x$blueprint),
     NA
   )
 
@@ -193,7 +193,7 @@ test_that("new data classes are caught", {
   xx <- mold(recipe(Species ~ Sepal.Length, iris), iris)
 
   expect_error(
-    xx_iris2 <- forge(iris2, xx$engine, outcomes = TRUE),
+    xx_iris2 <- forge(iris2, xx$blueprint, outcomes = TRUE),
     NA
   )
 
@@ -212,14 +212,14 @@ test_that("new data classes can interchange integer/numeric", {
   x <- mold(recipe(Species ~ Sepal.Length, iris), iris)
 
   expect_error(
-    forge(iris2, x$engine),
+    forge(iris2, x$blueprint),
     NA
   )
 
   xx <- mold(recipe(Sepal.Length ~ Species, iris), iris)
 
   expect_error(
-    forge(iris2, xx$engine, outcomes = TRUE),
+    forge(iris2, xx$blueprint, outcomes = TRUE),
     NA
   )
 
@@ -227,18 +227,12 @@ test_that("new data classes can interchange integer/numeric", {
 
 test_that("an `extras` slot exists for `roles`", {
 
-
-
-})
-
-test_that("non standard roles are returned as extras", {
-
   x <- mold(
     recipe(Species ~ Sepal.Length, data = iris),
     iris
   )
 
-  xx <- forge(iris, x$engine)
+  xx <- forge(iris, x$blueprint)
 
   expect_equal(
     xx$extras,
@@ -256,7 +250,7 @@ test_that("only original non standard role columns are required", {
     mold(iris)
 
   expect_error(
-    xx <- forge(iris, x$engine),
+    xx <- forge(iris, x$blueprint),
     NA
   )
 
