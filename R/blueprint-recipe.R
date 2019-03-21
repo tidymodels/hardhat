@@ -13,17 +13,7 @@ new_recipe_blueprint <- function(mold,
 
   validate_recipes_available()
 
-  if (rlang::is_missing(mold)) {
-    abort_no_mold()
-  }
-
-  if (rlang::is_missing(forge)) {
-    abort_no_forge()
-  }
-
-  mold <- check_mold_xy(mold)
-  forge <- check_forge(forge)
-
+  validate_is_function_set(mold)
   validate_mold_args(
     mold = mold,
     required_clean_args = c("blueprint", "data"),

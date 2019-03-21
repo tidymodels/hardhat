@@ -15,17 +15,7 @@ new_formula_blueprint <- function(mold,
                                   ...,
                                   subclass = character()) {
 
-  if (rlang::is_missing(mold)) {
-    abort_no_mold()
-  }
-
-  if (rlang::is_missing(forge)) {
-    abort_no_forge()
-  }
-
-  mold <- check_mold_formula(mold)
-  forge <- check_forge(forge)
-
+  validate_is_function_set(mold)
   validate_mold_args(
     mold,
     required_clean_args = c("blueprint", "data"),
@@ -59,30 +49,6 @@ is_formula_blueprint <- function(x) {
 
 validate_is_formula_blueprint <- function(blueprint) {
   validate_is(blueprint, is_formula_blueprint, "formula_blueprint")
-}
-
-# ------------------------------------------------------------------------------
-
-check_mold_formula <- function(mold) {
-
-  validate_has_function_set_structure(mold)
-
-  if (is.null(mold$clean)) {
-    mold$clean <- get_default_mold_formula_clean()
-  }
-
-  mold
-}
-
-get_default_mold_formula_clean <- function() {
-
-  function(blueprint, data) {
-    list(
-      blueprint = blueprint,
-      data = data
-    )
-  }
-
 }
 
 # ------------------------------------------------------------------------------

@@ -7,17 +7,7 @@ new_xy_blueprint <- function(mold,
                              ...,
                              subclass = character()) {
 
-  if (rlang::is_missing(mold)) {
-    abort_no_mold()
-  }
-
-  if (rlang::is_missing(forge)) {
-    abort_no_forge()
-  }
-
-  mold <- check_mold_xy(mold)
-  forge <- check_forge(forge)
-
+  validate_is_function_set(mold)
   validate_mold_args(
     mold = mold,
     required_clean_args = c("blueprint", "x", "y"),
@@ -50,29 +40,6 @@ validate_is_xy_blueprint <- function(blueprint) {
 
 # ------------------------------------------------------------------------------
 
-check_mold_xy <- function(mold) {
-
-  validate_has_function_set_structure(mold)
-
-  if (is.null(mold$clean)) {
-    mold$clean <- get_default_mold_xy_clean()
-  }
-
-  mold
-}
-
-get_default_mold_xy_clean <- function() {
-
-  function(blueprint, x, y) {
-    list(
-      blueprint = blueprint,
-      x = x,
-      y = y
-    )
-  }
-
-}
-
 validate_mold_args <- function(mold, required_clean_args, required_process_args) {
 
   actual_clean_args <- rlang::fn_fmls_names(mold$clean)
@@ -97,43 +64,4 @@ validate_mold_args <- function(mold, required_clean_args, required_process_args)
 
   invisible(mold)
 
-}
-
-
-# ------------------------------------------------------------------------------
-
-check_forge <- function(forge) {
-
-  validate_has_function_set_structure(forge)
-
-  if (is.null(forge$clean)) {
-    forge$clean <- get_default_forge_clean()
-  }
-
-  forge
-}
-
-get_default_forge_clean <- function() {
-
-  function(blueprint, new_data) {
-    list(
-      blueprint = blueprint,
-      new_data
-    )
-  }
-
-}
-
-abort_no_mold <- function() {
-  glubort(
-    "`mold` must be supplied in the form: ",
-    "list(clean = <function>, process = <function>)."
-  )
-}
-
-abort_no_forge <- function() {
-  glubort(
-    "`forge` must be supplied in the form: ",
-    "list(clean = <function>, process = <function>)."
-  )
 }
