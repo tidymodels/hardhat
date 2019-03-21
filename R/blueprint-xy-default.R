@@ -145,11 +145,11 @@ default_xy_blueprint <- function(intercept = FALSE) {
 #' @name new-default-blueprint
 #' @export
 new_default_xy_blueprint <- function(mold,
-                                  forge,
-                                  intercept = FALSE,
-                                  ptypes = NULL,
-                                  ...,
-                                  subclass = character()) {
+                                     forge,
+                                     intercept = FALSE,
+                                     ptypes = NULL,
+                                     ...,
+                                     subclass = character()) {
 
   new_xy_blueprint(
     mold = mold,

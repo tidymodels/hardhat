@@ -260,7 +260,7 @@
 #'
 #' @export
 default_formula_blueprint <- function(intercept = FALSE,
-                                   indicators = TRUE) {
+                                      indicators = TRUE) {
 
   mold <- get_mold_formula_default_function_set()
   forge <- get_forge_formula_default_function_set()
@@ -281,17 +281,17 @@ default_formula_blueprint <- function(intercept = FALSE,
 #' @rdname new-default-blueprint
 #' @export
 new_default_formula_blueprint <- function(mold,
-                                       forge,
-                                       intercept = FALSE,
-                                       ptypes = NULL,
-                                       formula = NULL,
-                                       indicators = TRUE,
-                                       terms = list(
-                                         predictors = NULL,
-                                         outcomes = NULL
-                                       ),
-                                       ...,
-                                       subclass = character()) {
+                                          forge,
+                                          intercept = FALSE,
+                                          ptypes = NULL,
+                                          formula = NULL,
+                                          indicators = TRUE,
+                                          terms = list(
+                                            predictors = NULL,
+                                            outcomes = NULL
+                                          ),
+                                          ...,
+                                          subclass = character()) {
 
   validate_is_terms_list_or_null(terms)
 

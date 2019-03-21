@@ -127,13 +127,13 @@ default_recipe_blueprint <- function(intercept = FALSE) {
 #' @rdname new-default-blueprint
 #' @export
 new_default_recipe_blueprint <- function(mold,
-                                      forge,
-                                      intercept = FALSE,
-                                      ptypes = NULL,
-                                      recipe = NULL,
-                                      extra_role_ptypes = NULL,
-                                      ...,
-                                      subclass = character()) {
+                                         forge,
+                                         intercept = FALSE,
+                                         ptypes = NULL,
+                                         recipe = NULL,
+                                         extra_role_ptypes = NULL,
+                                         ...,
+                                         subclass = character()) {
 
   new_recipe_blueprint(
     mold = mold,

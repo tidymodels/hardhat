@@ -45,11 +45,11 @@
 #' @name new-blueprint
 #' @export
 new_blueprint <- function(mold,
-                       forge,
-                       intercept = FALSE,
-                       ptypes = NULL,
-                       ...,
-                       subclass = character()) {
+                          forge,
+                          intercept = FALSE,
+                          ptypes = NULL,
+                          ...,
+                          subclass = character()) {
 
   validate_is_function_set(mold)
   validate_is_function_set(forge)

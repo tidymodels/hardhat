@@ -1,11 +1,11 @@
 #' @rdname new-blueprint
 #' @export
 new_xy_blueprint <- function(mold,
-                          forge,
-                          intercept = FALSE,
-                          ptypes = NULL,
-                          ...,
-                          subclass = character()) {
+                             forge,
+                             intercept = FALSE,
+                             ptypes = NULL,
+                             ...,
+                             subclass = character()) {
 
   if (rlang::is_missing(mold)) {
     abort_no_mold()

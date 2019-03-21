@@ -7,13 +7,13 @@
 #' @rdname new-blueprint
 #' @export
 new_formula_blueprint <- function(mold,
-                               forge,
-                               intercept = FALSE,
-                               ptypes = NULL,
-                               formula = NULL,
-                               indicators = TRUE,
-                               ...,
-                               subclass = character()) {
+                                  forge,
+                                  intercept = FALSE,
+                                  ptypes = NULL,
+                                  formula = NULL,
+                                  indicators = TRUE,
+                                  ...,
+                                  subclass = character()) {
 
   if (rlang::is_missing(mold)) {
     abort_no_mold()

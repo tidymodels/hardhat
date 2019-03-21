@@ -4,12 +4,12 @@
 #' @rdname new-blueprint
 #' @export
 new_recipe_blueprint <- function(mold,
-                              forge,
-                              intercept = FALSE,
-                              ptypes = NULL,
-                              recipe = NULL,
-                              ...,
-                              subclass = character()) {
+                                 forge,
+                                 intercept = FALSE,
+                                 ptypes = NULL,
+                                 recipe = NULL,
+                                 ...,
+                                 subclass = character()) {
 
   validate_recipes_available()
 
