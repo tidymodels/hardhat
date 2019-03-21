@@ -1,5 +1,12 @@
 context("test-mold-xy")
 
+test_that("unknown mold() inputs throw an error", {
+  expect_error(
+    mold("hi"),
+    "`x` is not a recognized type.\nOnly data.frame, matrix, recipe, and formula objects are allowed.\nA character was specified."
+  )
+})
+
 test_that("can use x-y mold interface", {
 
   x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
@@ -20,4 +27,15 @@ test_that("xy intercepts can be added", {
   )
 
   expect_true("(Intercept)" %in% colnames(x$predictors))
+})
+
+test_that("cannot pass anything in the dots", {
+  expect_error(
+    mold(
+      iris[, "Sepal.Length", drop = FALSE],
+      iris$Species,
+      z = "in the dots"
+    ),
+    "`...` must not contain any input. 1 elements were found"
+  )
 })
