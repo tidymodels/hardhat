@@ -58,22 +58,6 @@ validate_recipes_available <- function() {
   invisible()
 }
 
-validate_intercept <- function(intercept) {
-
-  if (!is.logical(intercept)) {
-    cls <- class1(intercept)
-    glubort("`intercept` must be a logical, not a {cls}.")
-  }
-
-  n <- length(intercept)
-  if (!(n == 1L)) {
-    glubort("`intercept` must have length 1, not {n}.")
-  }
-
-  invisible(intercept)
-}
-
-
 # the formula must have an implicit intercept to remove
 # dont let the user do `0+` or `+0` or `-1`
 
