@@ -1,0 +1,7 @@
+<custom_class> 
+$x
+[1] 4
+
+$y
+[1] "hi"
+
