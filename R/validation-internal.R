@@ -45,23 +45,6 @@ validate_has_unique_column_names <- function(x, x_nm) {
   invisible(x)
 }
 
-validate_x_has_numeric_cols <- function(x) {
-
-  all_cols_numeric <- all_numeric(x)
-
-  if (!all_cols_numeric) {
-
-    abort(
-      "All columns of `x` must be numeric for this model.
-      Please use the recipe or formula interface for
-      automatic creation of dummy variables."
-    )
-
-  }
-
-  invisible(x)
-}
-
 validate_recipes_available <- function() {
 
   if (!requireNamespace("recipes", quietly = TRUE)) {

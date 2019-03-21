@@ -108,7 +108,7 @@ validate_outcomes_is_binary <- function(outcomes) {
 
   if (!check$ok) {
     bad_cols <- glue::single_quote(check$bad_cols)
-    bad_msg <- glue::glue("{bad_cols}: {check$num_levels}")
+    bad_msg <- glue::glue("{check$bad_cols}: {check$num_levels}")
     bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
 
     glubort(
@@ -150,6 +150,86 @@ check_outcomes_is_binary <- function(outcomes) {
 
 is_binary <- function(x) {
   length(x) == 2L
+}
+
+# ------------------------------------------------------------------------------
+
+#' Ensure predictors are all numeric
+#'
+#' @description
+#'
+#' validate - asserts the following:
+#'
+#' - `predictors` must have numeric columns.
+#'
+#' check - returns the following:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `bad_classes` A named list. The names are the names of problematic columns,
+#' and the values are the classes of the matching column.
+#'
+#' @param predictors An object to check.
+#'
+#' @template section-validation
+#'
+#' @details
+#'
+#' The expected way to use this validation function is to supply it the
+#' `$predictors` element of the result of a call to [mold()].
+#'
+#' @examples
+#' # All good
+#' check_predictors_are_numeric(mtcars)
+#'
+#' # Species is not numeric
+#' check_predictors_are_numeric(iris)
+#'
+#' # This gives an intelligent error message
+#' \dontrun{
+#' validate_predictors_are_numeric(iris)
+#' }
+#'
+#' @family validation functions
+#' @export
+validate_predictors_are_numeric <- function(predictors) {
+
+  check <- check_predictors_are_numeric(predictors)
+
+  if (!check$ok) {
+    bad_cols <- glue::single_quote(names(check$bad_classes))
+    bad_printable_classes <- map(check$bad_classes, glue_quote_collapse)
+    bad_msg <- glue::glue("{bad_cols}: {bad_printable_classes}")
+    bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
+
+    glubort(
+      "All predictors must be numeric, but the following are not:",
+      "\n",
+      "{bad_msg}"
+    )
+  }
+
+  invisible(predictors)
+}
+
+#' @rdname validate_predictors_are_numeric
+#' @export
+check_predictors_are_numeric <- function(predictors) {
+
+  predictors <- check_is_data_like(predictors)
+
+  where_numeric <- map_lgl(predictors, is.numeric)
+
+  ok <- all(where_numeric)
+
+  if (!ok) {
+    bad_classes <- get_data_classes(predictors[, !where_numeric])
+  }
+  else {
+    bad_classes <- list()
+  }
+
+  check_list(ok = ok, bad_classes = bad_classes)
 }
 
 # ------------------------------------------------------------------------------

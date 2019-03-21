@@ -65,3 +65,24 @@ test_that("validate_outcomes_is_binary()", {
   )
 
 })
+
+test_that("validate_predictors_are_numeric()", {
+
+  expect_silent(
+    validate_predictors_are_numeric(mtcars)
+  )
+
+  expect_error(
+    validate_predictors_are_numeric(iris),
+    "'Species': 'factor'"
+  )
+
+  date <- as.POSIXct(as.POSIXlt(as.Date("2019-01-01")))
+  x <- data.frame(x = date, y = "hi")
+
+  expect_error(
+    validate_predictors_are_numeric(x),
+    "'x': 'POSIXct', 'POSIXt'\n'y': 'factor'"
+  )
+
+})
