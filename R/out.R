@@ -1,4 +1,6 @@
-# Standardized helpers for output lists
+# nocov start - these are all implicitly tested already
+
+# Standardized internal helpers for output lists
 
 # ------------------------------------------------------------------------------
 # Mold
@@ -144,3 +146,5 @@ out <- list(
     final = out_extras_lst
   )
 )
+
+# nocov end
