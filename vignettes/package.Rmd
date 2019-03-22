@@ -28,6 +28,10 @@ iris <- as_tibble(iris)
 
 The goal of this vignette is to teach you how to use `mold()` and `forge()` in a modeling package. This is the intended use of these functions, even though they can also be called interactively. Creating a new modeling package has two main stages: creating the model fitting function, and implementing a predict method. The stages break down like this:
 
+<center>
+![](../man/figures/flowchart-model-fitting.png)
+</center>
+
 - Model Fitting Function
   
   - Create a model constructor.
