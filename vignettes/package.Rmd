@@ -24,21 +24,21 @@ library(tibble)
 iris <- as_tibble(iris)
 ```
 
-## Introduction
+# Introduction
 
-The goal of this vignette is to teach you how to use `mold()` and `forge()` in a modeling package. This is the intended use of these functions, even though they can also be called interactively. Creating a new modeling package has two main stages: creating the modeling function, and implementing a predict method. The stages break down like this:
+The goal of this vignette is to teach you how to use `mold()` and `forge()` in a modeling package. This is the intended use of these functions, even though they can also be called interactively. Creating a new modeling package has two main stages: creating the model fitting function, and implementing a predict method. The stages break down like this:
 
-- Modeling function
+- Model Fitting Function
   
-  - Create a constructor.
+  - Create a model constructor.
   
-  - Create an implementation function.
+  - Create a fitting implementation function.
   
-  - Create a common wrapper for the constructor and the implementation function.
+  - Create a common wrapper for the constructor and the fitting implementation function.
   
   - Create a user facing function with methods for data frame, matrix, formula, and recipe inputs.
   
-- Predict method
+- Predict Method
 
   - Create one or more prediction implementation functions, varying by the `"type"` of prediction to make.
   
@@ -46,7 +46,9 @@ The goal of this vignette is to teach you how to use `mold()` and `forge()` in a
   
   - Create a user facing predict method.
 
-The end result is a single high level modeling function that has methods for multiple different interfaces, and a corresponding predict method to make predictions using one of these models along with new data.
+The end result is a single high level modeling function that has methods for multiple different "interfaces", and a corresponding predict method to make predictions using one of these models along with new data (by "interfaces", I just mean the different types of inputs, so: data frame, matrix, formula and recipe).
+
+There are obviously other things that you might want your modeling package to do. For instance, you might implement a `plot()` or `summary()` method. But the two stages described here are necessary for almost every model, and they involve the inputs and outputs that hardhat helps the most with.
 
 ## What's Our Model?
 
@@ -56,9 +58,11 @@ We will use the underlying `lm()` infrastructure, `lm.fit()`, to create our mode
 
 We will call the model `simple_lm()`. It won't have all the features of normal linear regression (weights, offsets, etc), but will serve as a nice dummy model to show off features you get with hardhat.
 
+# Model Fitting Function
+
 ## Model Constructor
 
-The first thing we need is a _constructor_ that creates new objects of our model class. The hardhat function `new_model()` can help with creating that. 
+The first thing we need is a modeling _constructor_. Constructors are very simple functions that creates new objects of our model class. In the arguments to the constructor you supply all of the individual pieces, and it wraps them up into a model object. The hardhat function `new_model()` can help with creating that.
 
 A model constructor should:
 
@@ -69,6 +73,8 @@ A model constructor should:
 - Validate the types of the new elements.
 
 - Pass the named elements on to `new_model()` along with setting the class to `"<model_class>"`.
+
+If you want to learn more about the details of constructors and creating S3 classes, take a look at the S3 section in [Advanced R](https://adv-r.hadley.nz/s3.html#s3-constructor).
 
 ```{r}
 new_simple_lm <- function(coefs, coef_names, blueprint) {
@@ -108,7 +114,7 @@ names(manual_model)
 manual_model$blueprint
 ```
 
-## Model Implementation
+## Model Fitting Implementation
 
 The implementation function is where the hard work is done. I generally recommend naming it `<model_class>_impl()`. It should accept predictors and outcomes in whatever form is required for the algorithm, run the algorithm, and return a named list of the new elements you added to the model constructor. You might also have arguments for extra options that can be used to tweak the internal algorithm.
 
@@ -137,7 +143,7 @@ outcomes <- iris$Sepal.Length
 simple_lm_impl(predictors, outcomes)
 ```
 
-## Model Wrapper
+## Model Fitting Wrapper
 
 Now that we have our constructor and our implementation function, we can create a common wrapper function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the blueprint to create a new instance of our model. It should have an argument for the output from a call to `mold()`, here I've called that `processed`. In that object will be (at a minimum) the predictors, outcomes, and blueprint. You might also have arguments for additional options to pass on to the implementation function.
 
@@ -262,7 +268,7 @@ rec <- recipe(Sepal.Length ~ Sepal.Width + Species, iris) %>%
 simple_lm(rec, iris)
 ```
 
-## Adding an Intercept Option
+### Adding an Intercept Option
 
 You might have noticed that our linear regression isn't adding an intercept. Generally, with linear regression models we will want a default intercept added on. To accomplish this, we can add an `intercept` argument to our user facing function, and then use that to tweak the blueprint that would otherwise be created for you automatically.
 
@@ -305,6 +311,8 @@ simple_lm(Sepal.Length ~ log(Sepal.Width) + Species, iris, intercept = FALSE)
 ```
 
 Note that even the formula method respects this `intercept` argument. To recap, by default `mold()` will _not_ automatically add an intercept for any method, including the formula method.
+
+# Predict Method
 
 ## Prediction Implementation
 
@@ -398,7 +406,7 @@ predict.simple_lm <- function(object, new_data, type = "response", ...) {
 }
 ```
 
-## Final Testing
+# Final Testing
 
 Finally, we can test out our top level modeling function along with its corresponding `predict()` method.
 
