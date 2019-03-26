@@ -28,11 +28,7 @@ iris <- as_tibble(iris)
 
 The goal of this vignette is to teach you how to use `mold()` and `forge()` in a modeling package. This is the intended use of these functions, even though they can also be called interactively. Creating a new modeling package has two main stages: creating the model fitting function, and implementing a predict method. The stages break down like this:
 
-<center>
-![](../man/figures/flowchart-model-fitting.png)
-</center>
-
-- Model Fitting Function
+- Stage 1 - Model Fitting
   
   - Create a model constructor.
   
@@ -42,13 +38,25 @@ The goal of this vignette is to teach you how to use `mold()` and `forge()` in a
   
   - Create a user facing function with methods for data frame, matrix, formula, and recipe inputs.
   
-- Predict Method
+I imagine that this comes together as a few internal pieces that power the user facing methods for your model.
+
+<center>
+<img src="../man/figures/hardhat-fit-flow.svg" style="background:none; border:none; box-shadow:none; width:50%">
+</center>
+  
+- Stage 2 - Model Prediction
 
   - Create one or more prediction implementation functions, varying by the `"type"` of prediction to make.
   
   - Create a common wrapper for switching between the prediction implementation functions.
   
   - Create a user facing predict method.
+
+In this case, you only have 1 user facing method, but have many internal implementation functions that you have to switch between, depending on the `"type"`.
+
+<center>
+<img src="../man/figures/hardhat-predict-flow.svg" style="background:none; border:none; box-shadow:none; width:50%">
+</center>
 
 The end result is a single high level modeling function that has methods for multiple different "interfaces", and a corresponding predict method to make predictions using one of these models along with new data (by "interfaces", I just mean the different types of inputs, so: data frame, matrix, formula and recipe).
 
@@ -62,7 +70,7 @@ We will use the underlying `lm()` infrastructure, `lm.fit()`, to create our mode
 
 We will call the model `simple_lm()`. It won't have all the features of normal linear regression (weights, offsets, etc), but will serve as a nice dummy model to show off features you get with hardhat.
 
-# Model Fitting Function
+# Model Fitting
 
 ## Model Constructor
 
@@ -316,7 +324,7 @@ simple_lm(Sepal.Length ~ log(Sepal.Width) + Species, iris, intercept = FALSE)
 
 Note that even the formula method respects this `intercept` argument. To recap, by default `mold()` will _not_ automatically add an intercept for any method, including the formula method.
 
-# Predict Method
+# Model Prediction
 
 ## Prediction Implementation
 
