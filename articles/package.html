@@ -100,28 +100,35 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>The goal of this vignette is to teach you how to use <code><a href="../reference/mold.html">mold()</a></code> and <code><a href="../reference/forge.html">forge()</a></code> in a modeling package. This is the intended use of these functions, even though they can also be called interactively. Creating a new modeling package has two main stages: creating the model fitting function, and implementing a predict method. The stages break down like this:</p>
-<center>
-<img src="../man/figures/flowchart-model-fitting.png">
-</center>
 <ul>
 <li>
-<p>Model Fitting Function</p>
+<p>Stage 1 - Model Fitting</p>
 <ul>
 <li><p>Create a model constructor.</p></li>
 <li><p>Create a fitting implementation function.</p></li>
-<li><p>Create a common wrapper for the constructor and the fitting implementation function.</p></li>
+<li><p>Create a common bridge to go between high level user facing methods and the lower level constructor and implementation function.</p></li>
 <li><p>Create a user facing function with methods for data frame, matrix, formula, and recipe inputs.</p></li>
 </ul>
 </li>
+</ul>
+<p>I imagine that this comes together as a few internal pieces that power the user facing methods for your model.</p>
+<center>
+<img src="../man/figures/hardhat-fit-flow.svg" style="background:none; border:none; box-shadow:none; width:50%">
+</center>
+<ul>
 <li>
-<p>Predict Method</p>
+<p>Stage 2 - Model Prediction</p>
 <ul>
 <li><p>Create one or more prediction implementation functions, varying by the <code>"type"</code> of prediction to make.</p></li>
-<li><p>Create a common wrapper for switching between the prediction implementation functions.</p></li>
+<li><p>Create a common bridge between a high level predict method and the lower level prediction implementation functions.</p></li>
 <li><p>Create a user facing predict method.</p></li>
 </ul>
 </li>
 </ul>
+<p>In this case, you only have 1 user facing method, but have many internal implementation functions that you have to switch between, depending on the <code>"type"</code>.</p>
+<center>
+<img src="../man/figures/hardhat-predict-flow.svg" style="background:none; border:none; box-shadow:none; width:50%">
+</center>
 <p>The end result is a single high level modeling function that has methods for multiple different “interfaces”, and a corresponding predict method to make predictions using one of these models along with new data (by “interfaces”, I just mean the different types of inputs, so: data frame, matrix, formula and recipe).</p>
 <p>There are obviously other things that you might want your modeling package to do. For instance, you might implement a <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code> or <code><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary()</a></code> method. But the two stages described here are necessary for almost every model, and they involve the inputs and outputs that hardhat helps the most with.</p>
 <div id="whats-our-model" class="section level2">
@@ -132,9 +139,9 @@
 <p>We will call the model <code>simple_lm()</code>. It won’t have all the features of normal linear regression (weights, offsets, etc), but will serve as a nice dummy model to show off features you get with hardhat.</p>
 </div>
 </div>
-<div id="model-fitting-function" class="section level1">
+<div id="model-fitting" class="section level1">
 <h1 class="hasAnchor">
-<a href="#model-fitting-function" class="anchor"></a>Model Fitting Function</h1>
+<a href="#model-fitting" class="anchor"></a>Model Fitting</h1>
 <div id="model-constructor" class="section level2">
 <h2 class="hasAnchor">
 <a href="#model-constructor" class="anchor"></a>Model Constructor</h2>
@@ -218,13 +225,13 @@
 <a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; $coef_names</span></a>
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; [1] "Sepal.Width"</span></a></code></pre></div>
 </div>
-<div id="model-fitting-wrapper" class="section level2">
+<div id="model-fitting-bridge" class="section level2">
 <h2 class="hasAnchor">
-<a href="#model-fitting-wrapper" class="anchor"></a>Model Fitting Wrapper</h2>
-<p>Now that we have our constructor and our implementation function, we can create a common wrapper function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the blueprint to create a new instance of our model. It should have an argument for the output from a call to <code><a href="../reference/mold.html">mold()</a></code>, here I’ve called that <code>processed</code>. In that object will be (at a minimum) the predictors, outcomes, and blueprint. You might also have arguments for additional options to pass on to the implementation function.</p>
-<p>The wrapper should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The <code>predictors</code> and <code>outcomes</code> that are returned from <code><a href="../reference/mold.html">mold()</a></code> will <em>always</em> be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.</p>
+<a href="#model-fitting-bridge" class="anchor"></a>Model Fitting Bridge</h2>
+<p>Now that we have our constructor and our implementation function, we can create a common function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the blueprint to create a new instance of our model. It should have an argument for the output from a call to <code><a href="../reference/mold.html">mold()</a></code>, here I’ve called that <code>processed</code>. In that object will be (at a minimum) the predictors, outcomes, and blueprint. You might also have arguments for additional options to pass on to the implementation function.</p>
+<p>The bridge function should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The <code>predictors</code> and <code>outcomes</code> that are returned from <code><a href="../reference/mold.html">mold()</a></code> will <em>always</em> be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.</p>
 <p>This is also a good place to use some of hardhat’s validation functions. In this case, we always expect the outcome to have a single column since this is a univariate model, so we can use <code><a href="../reference/validate_outcomes_is_univariate.html">validate_outcomes_is_univariate()</a></code> to enforce that.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">simple_lm_common &lt;-<span class="st"> </span><span class="cf">function</span>(processed) {</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">simple_lm_bridge &lt;-<span class="st"> </span><span class="cf">function</span>(processed) {</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">  </a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="../reference/validate_outcomes_is_univariate.html">validate_outcomes_is_univariate</a></span>(processed<span class="op">$</span>outcomes)</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">  </a>
@@ -239,14 +246,14 @@
 <a class="sourceLine" id="cb6-13" data-line-number="13">    <span class="dt">blueprint =</span> processed<span class="op">$</span>blueprint</a>
 <a class="sourceLine" id="cb6-14" data-line-number="14">  )</a>
 <a class="sourceLine" id="cb6-15" data-line-number="15">}</a></code></pre></div>
-<p>At this point, we can simulate user input and pass it on to our wrapper to run a model.</p>
+<p>At this point, we can simulate user input and pass it on to our bridge to run a model.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Simulate formula interface</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">processed_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Species, iris)</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co"># Simulate xy interface</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5">processed_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="dt">x =</span> iris[<span class="st">"Sepal.Length"</span>], <span class="dt">y =</span> iris<span class="op">$</span>Sepal.Width)</a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">simple_lm_common</span>(processed_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">simple_lm_bridge</span>(processed_<span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; &lt;simple_lm&gt; </span></a>
 <a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; $coefs</span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; [1] 0.3498801 1.6765001 0.6931116 0.6689898</span></a>
@@ -255,7 +262,7 @@
 <a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; [1] "Sepal.Length"      "Speciessetosa"     "Speciesversicolor"</span></a>
 <a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; [4] "Speciesvirginica"</span></a>
 <a class="sourceLine" id="cb7-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="kw">simple_lm_common</span>(processed_<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="kw">simple_lm_bridge</span>(processed_<span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; &lt;simple_lm&gt; </span></a>
 <a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; $coefs</span></a>
 <a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; [1] 0.5117739</span></a>
@@ -265,16 +272,13 @@
 <p>Multiple outcomes are an error:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">multi_outcome &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Species, iris)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">simple_lm_common</span>(multi_outcome)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Warning: `rlang__backtrace_on_error` is no longer experimental.</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; It has been renamed to `rlang_backtrace_on_error`. Please update your RProfile.</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; This warning is displayed once per session.</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; Error: The outcome must be univariate, but 2 columns were found.</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">simple_lm_bridge</span>(multi_outcome)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Error: The outcome must be univariate, but 2 columns were found.</span></a></code></pre></div>
 </div>
 <div id="user-facing-fitting-function" class="section level2">
 <h2 class="hasAnchor">
 <a href="#user-facing-fitting-function" class="anchor"></a>User Facing Fitting Function</h2>
-<p>With all of the pieces in place, we have everything we need to create our high level modeling interface. This should be a generic function, generally with methods for data frames, matrices, formulas, and recipes. Each method should call <code><a href="../reference/mold.html">mold()</a></code> with the method specific inputs to run the preprocessing, and then pass off to the common function to run the actual model. It is also good practice to provide a default method with a nice error message for unknown types.</p>
+<p>With all of the pieces in place, we have everything we need to create our high level modeling interface. This should be a generic function, generally with methods for data frames, matrices, formulas, and recipes. Each method should call <code><a href="../reference/mold.html">mold()</a></code> with the method specific inputs to run the preprocessing, and then pass off to the bridge function to run the actual model. It is also good practice to provide a default method with a nice error message for unknown types.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># Generic</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">simple_lm &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/UseMethod">UseMethod</a></span>(<span class="st">"simple_lm"</span>)</a>
@@ -291,25 +295,25 @@
 <a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co"># XY method - data frame</span></a>
 <a class="sourceLine" id="cb9-15" data-line-number="15">simple_lm.data.frame &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, ...) {</a>
 <a class="sourceLine" id="cb9-16" data-line-number="16">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y)</a>
-<a class="sourceLine" id="cb9-17" data-line-number="17">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb9-17" data-line-number="17">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb9-18" data-line-number="18">}</a>
 <a class="sourceLine" id="cb9-19" data-line-number="19"></a>
 <a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co"># XY method - matrix</span></a>
 <a class="sourceLine" id="cb9-21" data-line-number="21">simple_lm.matrix &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, ...) {</a>
 <a class="sourceLine" id="cb9-22" data-line-number="22">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y)</a>
-<a class="sourceLine" id="cb9-23" data-line-number="23">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb9-23" data-line-number="23">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb9-24" data-line-number="24">}</a>
 <a class="sourceLine" id="cb9-25" data-line-number="25"></a>
 <a class="sourceLine" id="cb9-26" data-line-number="26"><span class="co"># Formula method</span></a>
 <a class="sourceLine" id="cb9-27" data-line-number="27">simple_lm.formula &lt;-<span class="st"> </span><span class="cf">function</span>(formula, data, ...) {</a>
 <a class="sourceLine" id="cb9-28" data-line-number="28">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(formula, data)</a>
-<a class="sourceLine" id="cb9-29" data-line-number="29">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb9-29" data-line-number="29">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb9-30" data-line-number="30">}</a>
 <a class="sourceLine" id="cb9-31" data-line-number="31"></a>
 <a class="sourceLine" id="cb9-32" data-line-number="32"><span class="co"># Recipe method</span></a>
 <a class="sourceLine" id="cb9-33" data-line-number="33">simple_lm.recipe &lt;-<span class="st"> </span><span class="cf">function</span>(x, data, ...) {</a>
 <a class="sourceLine" id="cb9-34" data-line-number="34">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, data)</a>
-<a class="sourceLine" id="cb9-35" data-line-number="35">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb9-35" data-line-number="35">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb9-36" data-line-number="36">}</a></code></pre></div>
 <p>Let’s give it a try:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">predictors &lt;-<span class="st"> </span>iris[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Width"</span>)]</a>
@@ -380,25 +384,25 @@
 <a class="sourceLine" id="cb12-5" data-line-number="5">simple_lm.data.frame &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, ...) {</a>
 <a class="sourceLine" id="cb12-6" data-line-number="6">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
 <a class="sourceLine" id="cb12-7" data-line-number="7">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">blueprint =</span> blueprint)</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb12-9" data-line-number="9">}</a>
 <a class="sourceLine" id="cb12-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb12-11" data-line-number="11">simple_lm.matrix &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, <span class="dt">intercept =</span> <span class="ot">TRUE</span>,...) {</a>
 <a class="sourceLine" id="cb12-12" data-line-number="12">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
 <a class="sourceLine" id="cb12-13" data-line-number="13">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y, <span class="dt">blueprint =</span> blueprint)</a>
-<a class="sourceLine" id="cb12-14" data-line-number="14">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb12-15" data-line-number="15">}</a>
 <a class="sourceLine" id="cb12-16" data-line-number="16"></a>
 <a class="sourceLine" id="cb12-17" data-line-number="17">simple_lm.formula &lt;-<span class="st"> </span><span class="cf">function</span>(formula, data, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, ...) {</a>
 <a class="sourceLine" id="cb12-18" data-line-number="18">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
 <a class="sourceLine" id="cb12-19" data-line-number="19">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(formula, data, <span class="dt">blueprint =</span> blueprint)</a>
-<a class="sourceLine" id="cb12-20" data-line-number="20">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb12-20" data-line-number="20">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb12-21" data-line-number="21">}</a>
 <a class="sourceLine" id="cb12-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb12-23" data-line-number="23">simple_lm.recipe &lt;-<span class="st"> </span><span class="cf">function</span>(x, data, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, ...) {</a>
 <a class="sourceLine" id="cb12-24" data-line-number="24">  blueprint &lt;-<span class="st"> </span><span class="kw"><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint</a></span>(<span class="dt">intercept =</span> intercept)</a>
 <a class="sourceLine" id="cb12-25" data-line-number="25">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, data, <span class="dt">blueprint =</span> blueprint)</a>
-<a class="sourceLine" id="cb12-26" data-line-number="26">  <span class="kw">simple_lm_common</span>(processed)</a>
+<a class="sourceLine" id="cb12-26" data-line-number="26">  <span class="kw">simple_lm_bridge</span>(processed)</a>
 <a class="sourceLine" id="cb12-27" data-line-number="27">}</a></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># By default an intercept is included</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">simple_lm</span>(predictors, outcomes_df)</a>
@@ -422,9 +426,9 @@
 </div>
 </div>
 </div>
-<div id="predict-method" class="section level1">
+<div id="model-prediction" class="section level1">
 <h1 class="hasAnchor">
-<a href="#predict-method" class="anchor"></a>Predict Method</h1>
+<a href="#model-prediction" class="anchor"></a>Model Prediction</h1>
 <div id="prediction-implementation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#prediction-implementation" class="anchor"></a>Prediction Implementation</h2>
@@ -463,13 +467,13 @@
 <a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt; 10  3.39</span></a>
 <a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
 </div>
-<div id="prediction-wrapper" class="section level2">
+<div id="prediction-bridge" class="section level2">
 <h2 class="hasAnchor">
-<a href="#prediction-wrapper" class="anchor"></a>Prediction Wrapper</h2>
-<p>A prediction wrapper converts the standardized <code>predictors</code> into the lower level type that the prediction implementation function might expect. <code>predictors</code> here is always a data frame, and is part of the return value of a call to <code><a href="../reference/forge.html">forge()</a></code>. Since the prediction implementation function takes a matrix, we convert it to that here.</p>
-<p>Additionally, it should <code><a href="https://www.rdocumentation.org/packages/base/topics/switch">switch()</a></code> on the <code>type</code> argument to decide which of the prediction implementation functions to call. Here, when <code>type == "response"</code>, the <code>predict_simple_lm_response()</code> function is called.</p>
+<a href="#prediction-bridge" class="anchor"></a>Prediction Bridge</h2>
+<p>A prediction bridge converts the standardized <code>predictors</code> into the lower level type that the prediction implementation functions expect. <code>predictors</code> here is always a data frame, and is part of the return value of a call to <code><a href="../reference/forge.html">forge()</a></code>. Since the prediction implementation function takes a matrix, we convert it to that here.</p>
+<p>Additionally, it should <code><a href="https://www.rdocumentation.org/packages/base/topics/switch">switch()</a></code> on the <code>type</code> argument to decide which of the prediction implementation functions to call. Here, when <code>type == "response"</code>, <code>predict_simple_lm_response()</code> is called.</p>
 <p>I also like using <code><a href="https://rlang.r-lib.org/reference/arg_match.html">rlang::arg_match()</a></code> to validate that <code>type</code> is one of the accepted prediction types. This has an advantage over <code><a href="https://www.rdocumentation.org/packages/base/topics/match.arg">match.arg()</a></code> in that partial matches are not allowed, and the error messages are a bit nicer.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">predict_simple_lm_common &lt;-<span class="st"> </span><span class="cf">function</span>(type, object, predictors) {</a>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">predict_simple_lm_bridge &lt;-<span class="st"> </span><span class="cf">function</span>(type, object, predictors) {</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">  </a>
 <a class="sourceLine" id="cb16-3" data-line-number="3">  type &lt;-<span class="st"> </span>rlang<span class="op">::</span><span class="kw"><a href="https://rlang.r-lib.org/reference/arg_match.html">arg_match</a></span>(type, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"response"</span>))</a>
 <a class="sourceLine" id="cb16-4" data-line-number="4">  </a>
@@ -486,7 +490,7 @@
 <a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co"># Pass in the data frame</span></a>
 <a class="sourceLine" id="cb17-4" data-line-number="4">predictors &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris, model<span class="op">$</span>blueprint)<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb17-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw">predict_simple_lm_common</span>(<span class="st">"response"</span>, model, predictors)</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw">predict_simple_lm_bridge</span>(<span class="st">"response"</span>, model, predictors)</a>
 <a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt; # A tibble: 150 x 1</span></a>
 <a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#&gt;    .pred</span></a>
 <a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">#&gt;    &lt;dbl&gt;</span></a>
@@ -503,7 +507,7 @@
 <a class="sourceLine" id="cb17-20" data-line-number="20"><span class="co">#&gt; # … with 140 more rows</span></a>
 <a class="sourceLine" id="cb17-21" data-line-number="21"></a>
 <a class="sourceLine" id="cb17-22" data-line-number="22"><span class="co"># Partial matches are an error</span></a>
-<a class="sourceLine" id="cb17-23" data-line-number="23"><span class="kw">predict_simple_lm_common</span>(<span class="st">"resp"</span>, model, predictors)</a>
+<a class="sourceLine" id="cb17-23" data-line-number="23"><span class="kw">predict_simple_lm_bridge</span>(<span class="st">"resp"</span>, model, predictors)</a>
 <a class="sourceLine" id="cb17-24" data-line-number="24"><span class="co">#&gt; Error: `type` should be one of: "response"</span></a>
 <a class="sourceLine" id="cb17-25" data-line-number="25"><span class="co">#&gt; Did you mean "response"?</span></a></code></pre></div>
 </div>
@@ -512,14 +516,14 @@
 <a href="#user-facing-prediction-function" class="anchor"></a>User Facing Prediction Function</h2>
 <p>Finally, we can create an S3 method for the generic <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> function. To match the modeling principles, it should use <code>new_data</code> to accept a matrix or data frame of new predictors.</p>
 <p>The first thing that the <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> method should do is call <code><a href="../reference/forge.html">forge()</a></code> with the <code>new_data</code> and the <code>blueprint</code> that we attached to our <code>simple_lm</code> model at fit time. This performs the required preprocessing on the new data, and checks that the <em>type</em> of the data frame supplied to <code>new_data</code> matches the type of data frame supplied at fit time. This is one of the most valuable features of <code><a href="../reference/forge.html">forge()</a></code>, as it adds a large amount of robustness to your <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code>ion function. You will see some examples of this at the end of the vignette.</p>
-<p>After calling <code><a href="../reference/forge.html">forge()</a></code>, it should pass off to the common prediction wrapper to call the correct prediction function based on the type.</p>
+<p>After calling <code><a href="../reference/forge.html">forge()</a></code>, it should pass off to the bridge function to call the correct prediction function based on the type.</p>
 <p>Finally, it is good practice to call the hardhat function, <code><a href="../reference/validate_prediction_size.html">validate_prediction_size()</a></code>, with the return value and the original <code>new_data</code> to ensure that the number of rows in the output are the same as the number of rows of the input. If a prediction cannot be made for a row of <code>new_data</code>, an <code>NA</code> value should be placed there instead. Mainly, this validation function is a check on the model developer to ensure that you always return output with a sane length.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">predict.simple_lm &lt;-<span class="st"> </span><span class="cf">function</span>(object, new_data, <span class="dt">type =</span> <span class="st">"response"</span>, ...) {</a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">  </a>
 <a class="sourceLine" id="cb18-3" data-line-number="3">  <span class="co"># Enforces column order, type, column names, etc</span></a>
 <a class="sourceLine" id="cb18-4" data-line-number="4">  processed &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(new_data, object<span class="op">$</span>blueprint)</a>
 <a class="sourceLine" id="cb18-5" data-line-number="5">  </a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">  out &lt;-<span class="st"> </span><span class="kw">predict_simple_lm_common</span>(type, object, processed<span class="op">$</span>predictors)</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">  out &lt;-<span class="st"> </span><span class="kw">predict_simple_lm_bridge</span>(type, object, processed<span class="op">$</span>predictors)</a>
 <a class="sourceLine" id="cb18-7" data-line-number="7">  </a>
 <a class="sourceLine" id="cb18-8" data-line-number="8">  <span class="kw"><a href="../reference/validate_prediction_size.html">validate_prediction_size</a></span>(out, new_data)</a>
 <a class="sourceLine" id="cb18-9" data-line-number="9">  </a>
@@ -625,17 +629,17 @@
       </ul>
 </li>
       <li>
-<a href="#model-fitting-function">Model Fitting Function</a><ul class="nav nav-pills nav-stacked">
+<a href="#model-fitting">Model Fitting</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#model-constructor">Model Constructor</a></li>
       <li><a href="#model-fitting-implementation">Model Fitting Implementation</a></li>
-      <li><a href="#model-fitting-wrapper">Model Fitting Wrapper</a></li>
+      <li><a href="#model-fitting-bridge">Model Fitting Bridge</a></li>
       <li><a href="#user-facing-fitting-function">User Facing Fitting Function</a></li>
       </ul>
 </li>
       <li>
-<a href="#predict-method">Predict Method</a><ul class="nav nav-pills nav-stacked">
+<a href="#model-prediction">Model Prediction</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#prediction-implementation">Prediction Implementation</a></li>
-      <li><a href="#prediction-wrapper">Prediction Wrapper</a></li>
+      <li><a href="#prediction-bridge">Prediction Bridge</a></li>
       <li><a href="#user-facing-prediction-function">User Facing Prediction Function</a></li>
       </ul>
 </li>
