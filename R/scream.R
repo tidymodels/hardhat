@@ -112,6 +112,8 @@ scream <- function(data, ptype) {
 
   data <- check_is_data_like(data, "data")
 
+  data <- remove_novel_levels(data, ptype)
+
   # can imagine this catching and rethrowing errors / warnings related to:
   # - factor recovery
   #   - silently recover missing levels
@@ -129,3 +131,84 @@ scream <- function(data, ptype) {
 
   vctrs::vec_cast(data, ptype)
 }
+
+# ------------------------------------------------------------------------------
+
+# vec_cast() throws an error for any lossy cast. This means that novel factor
+# levels in the test data throw an error. For most modeling purposes,
+# it is better to convert these to `NA` values, with a warning. We handle this
+# before handing off to vctrs, checking each factor column to ensure that there
+# are no novel levels.
+
+remove_novel_levels <- function(data, ptype) {
+  ptype_fct_loc <- which(map_lgl(ptype, is.factor))
+
+  if (length(ptype_fct_loc) == 0L) {
+    return(data)
+  }
+
+  fct_names <- names(ptype_fct_loc)
+
+  for (fct_name in fct_names) {
+    data[[fct_name]] <- check_novel_levels(
+      data[[fct_name]],
+      ptype[[fct_name]],
+      fct_name
+    )
+  }
+
+  data
+}
+
+check_novel_levels <- function(x, ptype, column) {
+  UseMethod("check_novel_levels", x)
+}
+
+# If the matching column in `data` is not a character / factor
+# then we let vctrs handle the incompatible cast issue
+check_novel_levels.default <- function(x, ptype, column) {
+  x
+}
+
+check_novel_levels.factor <- function(x, ptype, column) {
+  x_lvls <- unique(x)
+  new_lvls <- setdiff(x_lvls, levels(ptype))
+
+  # All good
+  if (length(new_lvls) == 0L) {
+    return(x)
+  }
+
+  new_locs <- which(x %in% new_lvls | is.na(x))
+
+  # There is at least one new level, but none of them are used in the data
+  # vctrs will silently handle it for us
+  if (length(new_locs) == 0L) {
+    return(x)
+  }
+
+  # Use the levels from `x`, not `ptype` as we may still be missing levels
+  old_lvls <- setdiff(x_lvls, new_lvls)
+
+  warn_novel_levels(new_lvls, column)
+
+  factor(as.character(x), levels = old_lvls, ordered = is.ordered(x))
+}
+
+check_novel_levels.character <- check_novel_levels.factor
+
+warn_novel_levels <- function(levels, column) {
+  message <- glue(
+    "Novel levels found in column '{column}': {glue_quote_collapse(levels)}. ",
+    "The levels have been removed, and values have been coerced to 'NA'."
+  )
+
+  rlang::warn(
+    message,
+    .subclass = "hardhat_warn_novel_levels",
+    levels = levels,
+    column = column
+  )
+}
+
+
