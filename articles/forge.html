@@ -218,7 +218,7 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">test_missing_column &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(iris_test, <span class="dt">select =</span> <span class="op">-</span>Species)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="../reference/forge.html">forge</a></span>(test_missing_column, formula_eng)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Error: The following required columns are missing: 'Species'.</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; The following required columns are missing: 'Species'.</span></a></code></pre></div>
 </div>
 <div id="column-types" class="section level3">
 <h3 class="hasAnchor">
@@ -228,7 +228,7 @@
 <a class="sourceLine" id="cb7-2" data-line-number="2">test_species_double<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/double">as.double</a></span>(test_species_double<span class="op">$</span>Species)</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw"><a href="../reference/forge.html">forge</a></span>(test_species_double, formula_eng)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Error: Can't cast &lt;double&gt; to &lt;factor&lt;12d60&gt;&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Can't cast &lt;double&gt; to &lt;factor&lt;12d60&gt;&gt;</span></a></code></pre></div>
 <p>An error is thrown, indicating that a double can’t be cast to a factor.</p>
 </div>
 <div id="lossless-conversion" class="section level3">
@@ -268,8 +268,8 @@
 <a class="sourceLine" id="cb9-3" data-line-number="3">test_species_lossy<span class="op">$</span>Species[<span class="dv">2</span>] &lt;-<span class="st"> "im new!"</span></a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb9-5" data-line-number="5">forged_lossy &lt;-<span class="st"> </span><span class="kw"><a href="../reference/forge.html">forge</a></span>(test_species_lossy, formula_eng)</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; Warning: Lossy cast from &lt;character&gt; to &lt;factor&lt;12d60&gt;&gt;.</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; Locations: 2</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; Warning: Novel levels found in column 'Species': 'im new!'. The levels have</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; been removed, and values have been coerced to 'NA'.</span></a>
 <a class="sourceLine" id="cb9-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb9-9" data-line-number="9">forged_lossy<span class="op">$</span>predictors</a>
 <a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt; # A tibble: 50 x 2</span></a>
@@ -395,7 +395,7 @@
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">iris_test_no_outcome &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(iris_test, <span class="dt">select =</span> <span class="op">-</span>Sepal.Width)</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="../reference/forge.html">forge</a></span>(iris_test_no_outcome, recipe_eng_log_outcome)</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Error: Can't find column `Sepal.Width` in `.data`.</span></a></code></pre></div>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; Can't find column `Sepal.Width` in `.data`.</span></a></code></pre></div>
 <p>The way around this is to use the built-in recipe argument, <code>skip</code>, on the step containing the outcome. This skips the processing of that step at <code><a href="https://www.rdocumentation.org/packages/recipes/topics/bake">bake()</a></code> time.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">rec3 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/recipe">recipe</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Species, iris_train) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_dummy">step_dummy</a></span>(Species) <span class="op">%&gt;%</span></a>

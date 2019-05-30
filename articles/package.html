@@ -275,7 +275,7 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">multi_outcome &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Species, iris)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">simple_lm_bridge</span>(multi_outcome)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Error: The outcome must be univariate, but 2 columns were found.</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; The outcome must be univariate, but 2 columns were found.</span></a></code></pre></div>
 </div>
 <div id="user-facing-fitting-function" class="section level2">
 <h2 class="hasAnchor">
@@ -510,7 +510,7 @@
 <a class="sourceLine" id="cb17-21" data-line-number="21"></a>
 <a class="sourceLine" id="cb17-22" data-line-number="22"><span class="co"># Partial matches are an error</span></a>
 <a class="sourceLine" id="cb17-23" data-line-number="23"><span class="kw">predict_simple_lm_bridge</span>(<span class="st">"resp"</span>, model, predictors)</a>
-<a class="sourceLine" id="cb17-24" data-line-number="24"><span class="co">#&gt; Error: `type` should be one of: "response"</span></a>
+<a class="sourceLine" id="cb17-24" data-line-number="24"><span class="co">#&gt; `type` must be one of "response"</span></a>
 <a class="sourceLine" id="cb17-25" data-line-number="25"><span class="co">#&gt; Did you mean "response"?</span></a></code></pre></div>
 </div>
 <div id="user-facing-prediction-function" class="section level2">
@@ -557,11 +557,11 @@
 <p>By using <code><a href="../reference/forge.html">forge()</a></code>, you automatically get powerful type checking to ensure that the <code>new_data</code> is in a form that you expect.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># `new_data` isn't a data frame</span></a>
 <a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model, iris<span class="op">$</span>Species)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="co">#&gt; Error: The class of `new_data`, 'factor', is not recognized.</span></a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="co">#&gt; The class of `new_data`, 'factor', is not recognized.</span></a>
 <a class="sourceLine" id="cb20-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb20-5" data-line-number="5"><span class="co"># Missing a required column</span></a>
 <a class="sourceLine" id="cb20-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(iris, <span class="dt">select =</span> <span class="op">-</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="co">#&gt; Error: The following required columns are missing: 'Sepal.Length'.</span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="co">#&gt; The following required columns are missing: 'Sepal.Length'.</span></a>
 <a class="sourceLine" id="cb20-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb20-9" data-line-number="9"><span class="co"># In this case, 'Species' is a character, </span></a>
 <a class="sourceLine" id="cb20-10" data-line-number="10"><span class="co"># but can be losslessy converted to a factor.</span></a>
@@ -592,8 +592,8 @@
 <a class="sourceLine" id="cb20-35" data-line-number="35">iris_chr_bad_species<span class="op">$</span>Species[<span class="dv">1</span>] &lt;-<span class="st"> "new_level"</span></a>
 <a class="sourceLine" id="cb20-36" data-line-number="36"></a>
 <a class="sourceLine" id="cb20-37" data-line-number="37"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model, iris_chr_bad_species)</a>
-<a class="sourceLine" id="cb20-38" data-line-number="38"><span class="co">#&gt; Warning: Lossy cast from &lt;character&gt; to &lt;factor&lt;12d60&gt;&gt;.</span></a>
-<a class="sourceLine" id="cb20-39" data-line-number="39"><span class="co">#&gt; Locations: 1</span></a>
+<a class="sourceLine" id="cb20-38" data-line-number="38"><span class="co">#&gt; Warning: Novel levels found in column 'Species': 'new_level'. The levels</span></a>
+<a class="sourceLine" id="cb20-39" data-line-number="39"><span class="co">#&gt; have been removed, and values have been coerced to 'NA'.</span></a>
 <a class="sourceLine" id="cb20-40" data-line-number="40"><span class="co">#&gt; # A tibble: 150 x 1</span></a>
 <a class="sourceLine" id="cb20-41" data-line-number="41"><span class="co">#&gt;    .pred</span></a>
 <a class="sourceLine" id="cb20-42" data-line-number="42"><span class="co">#&gt;    &lt;dbl&gt;</span></a>
@@ -616,7 +616,7 @@
 <a class="sourceLine" id="cb20-59" data-line-number="59">iris_dbl_species &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/transform">transform</a></span>(iris, <span class="dt">Species =</span> <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb20-60" data-line-number="60"></a>
 <a class="sourceLine" id="cb20-61" data-line-number="61"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model, iris_dbl_species)</a>
-<a class="sourceLine" id="cb20-62" data-line-number="62"><span class="co">#&gt; Error: Can't cast &lt;double&gt; to &lt;factor&lt;12d60&gt;&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb20-62" data-line-number="62"><span class="co">#&gt; Can't cast &lt;double&gt; to &lt;factor&lt;12d60&gt;&gt;</span></a></code></pre></div>
 </div>
   </div>
 
