@@ -171,12 +171,74 @@ test_that("novel predictor levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$blueprint),
-    "Lossy cast"
+    "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
     xx$predictors[[5,1]],
     NA_real_
+  )
+
+})
+
+test_that("novel predictor levels without any data are silently removed", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  # The 'e' level exists, but there is no data for it!
+  new <- new[1:4,]
+
+  x <- mold(y ~ f, dat)
+
+  expect_silent(
+    xx <- forge(new, x$blueprint)
+  )
+
+  expect_equal(
+    colnames(xx$predictors),
+    colnames(x$predictors)
+  )
+
+})
+
+test_that("novel levels are handled correctly when the new column is a character", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = letters[1:5] # character!
+  )
+
+  x <- mold(y ~ f, dat)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint),
+    "Novel levels found in column 'f': 'e'"
+  )
+
+  expect_equal(
+    xx$predictors[[5,1]],
+    NA_real_
+  )
+
+  # The 'e' level exists, but there is no data for it!
+  new2 <- new[1:4,]
+
+  # silently coerces to factor, and silently removes novel level
+  expect_silent(
+    xx <- forge(new2, x$blueprint)
   )
 
 })
@@ -197,7 +259,7 @@ test_that("novel ordered factor predictor levels have order maintained", {
 
   expect_warning(
     xx <- forge(new, x$blueprint),
-    "Lossy cast"
+    "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
@@ -228,7 +290,7 @@ test_that("novel outcome levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$blueprint, outcomes = TRUE),
-    "Lossy cast"
+    "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
@@ -341,10 +403,10 @@ test_that("can be both missing levels and have new levels", {
 
   x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = FALSE))
 
-  # Lossy cast warning for the extra level
+  # Warning for the extra level
   expect_warning(
     xx <- forge(new, x$blueprint),
-    "Lossy cast"
+    "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(

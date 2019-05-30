@@ -106,12 +106,40 @@ test_that("novel predictor levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$blueprint),
-    "Lossy cast"
+    "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
     xx$predictors[[5,1]],
     factor(NA_real_, levels = c("a", "b", "c", "d"))
+  )
+
+})
+
+test_that("novel predictor levels without any data are silently removed", {
+
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  # The 'e' level exists, but there is no data for it!
+  new <- new[1:4,]
+
+  x <- mold(recipe(y ~ f, dat), dat)
+
+  expect_silent(
+    xx <- forge(new, x$blueprint)
+  )
+
+  expect_equal(
+    colnames(xx$predictors),
+    colnames(x$predictors)
   )
 
 })
@@ -132,7 +160,7 @@ test_that("novel outcome levels are caught", {
 
   expect_warning(
     xx <- forge(new, x$blueprint, outcomes = TRUE),
-    "Lossy cast"
+    "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
