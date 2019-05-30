@@ -22,7 +22,7 @@ Suggests:
     rmarkdown
 Imports: 
     glue,
-    rlang,
+    rlang (>= 0.3.4.9003),
     tibble,
     zeallot,
     vctrs (>= 0.1.0.9003)
@@ -30,4 +30,5 @@ URL: https://github.com/DavisVaughan/hardhat
 BugReports: https://github.com/DavisVaughan/hardhat/issues
 VignetteBuilder: knitr
 Remotes:
-    r-lib/vctrs
+    r-lib/vctrs,
+    r-lib/rlang
