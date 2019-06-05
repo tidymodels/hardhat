@@ -19,7 +19,8 @@ Suggests:
     testthat,
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    usethis
 Imports: 
     glue,
     rlang (>= 0.3.4.9003),
