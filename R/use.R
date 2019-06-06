@@ -38,7 +38,9 @@
 #'
 #' @export
 use_modeling_package <- function(model) {
-  usethis_available()
+  validate_installed("usethis")
+  validate_installed("roxygen2")
+  validate_installed("devtools")
 
   if (!is_string(model)) {
     abort("`model` must be a string.")
@@ -49,14 +51,14 @@ use_modeling_package <- function(model) {
   }
 
   usethis::ui_info("Adding required packages to the DESCRIPTION")
-
   usethis::use_package("hardhat", type = "Imports")
   usethis::use_package("rlang", type = "Imports")
   usethis::use_package("recipes", type = "Suggests")
+  ui_blank_line()
 
-  if (is_roxygen_available()) {
-    usethis::use_roxygen_md()
-  }
+  usethis::ui_info("Setting up roxygen")
+  usethis::use_roxygen_md()
+  ui_blank_line()
 
   data <- list(model = model)
 
@@ -65,22 +67,20 @@ use_modeling_package <- function(model) {
   }
 
   usethis::ui_info("Writing skeleton files")
-
   usethis::use_package_doc()
-
   use_hardhat_template("R/constructor.R")
-
   use_hardhat_template("R/fit-bridge.R")
   use_hardhat_template("R/fit-implementation.R")
   use_hardhat_template("R/fit-interface.R")
-
   use_hardhat_template("R/predict-bridge.R")
   use_hardhat_template("R/predict-implementation.R")
   use_hardhat_template("R/predict-interface.R")
+  ui_blank_line()
 
-  usethis::ui_todo(
-    "Run {usethis::ui_code('devtools::document()')} to generate documentation."
-  )
+  # Must explicitly set the pkg path
+  usethis::ui_info("Running {usethis::ui_code('devtools::document()')}")
+  devtools::document(pkg = usethis::proj_get())
+  ui_blank_line()
 
   invisible(model)
 }
@@ -92,13 +92,17 @@ create_modeling_package <- function(path,
                                     fields = NULL,
                                     open = interactive()) {
 
-  usethis_available()
+  validate_installed("usethis")
+  validate_installed("roxygen2")
+  validate_installed("devtools")
 
   usethis::create_package(path, fields, open = FALSE)
+  ui_blank_line()
 
   # copied from create_package()
   old_project <- usethis::proj_set(path, force = TRUE)
   on.exit(usethis::proj_set(old_project), add = TRUE)
+  ui_blank_line()
 
   use_modeling_package(model)
 
@@ -116,12 +120,13 @@ is_string <- function (x) {
   length(x) == 1 && is.character(x)
 }
 
-usethis_available <- function() {
-  if (!requireNamespace("usethis", quietly = TRUE)) {
-    abort("The `usethis` must be installed for this functionality.")
+validate_installed <- function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    abort(paste0("The `", pkg, "` package must be installed for this functionality."))
   }
 }
 
-is_roxygen_available <- function() {
-  requireNamespace("roxygen2", quietly = TRUE)
+ui_blank_line <- function() {
+  validate_installed("usethis")
+  usethis::ui_line("")
 }

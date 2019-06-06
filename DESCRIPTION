@@ -21,7 +21,8 @@ Suggests:
     knitr,
     rmarkdown,
     usethis,
-    roxygen2
+    roxygen2,
+    devtools
 Imports: 
     glue,
     rlang (>= 0.3.4.9003),
