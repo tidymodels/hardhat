@@ -8,7 +8,7 @@ predict_{{model}}_bridge <- function(type, model, predictors) {
 get_predict_function <- function(type) {
   switch(
     type,
-    response = predict_{{model}}_response
+    numeric = predict_{{model}}_numeric
   )
 }
 

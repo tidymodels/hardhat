@@ -7,7 +7,7 @@
 #' @param type A single character. The type of predictions to generate.
 #' Valid options are:
 #'
-#' - `"response"` for numeric predictions.
+#' - `"numeric"` for numeric predictions.
 #'
 #' @param ... Not used, but required for extensibility.
 #'
@@ -27,12 +27,12 @@
 #' predict(mod, test)
 #'
 #' @export
-predict.{{model}} <- function(object, new_data, type = "response", ...) {
+predict.{{model}} <- function(object, new_data, type = "numeric", ...) {
   processed <- hardhat::forge(new_data, object$blueprint)
   type <- rlang::arg_match(type, valid_predict_types())
   predict_{{model}}_bridge(type, object, processed$predictors)
 }
 
 valid_predict_types <- function() {
-  c("response")
+  c("numeric")
 }
