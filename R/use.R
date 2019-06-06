@@ -92,7 +92,6 @@ create_modeling_package <- function(path,
   validate_installed("devtools")
 
   usethis::create_package(path, fields, open = FALSE)
-  ui_blank_line()
 
   # copied from create_package()
   old_project <- usethis::proj_set(path, force = TRUE)
