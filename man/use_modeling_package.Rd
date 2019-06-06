@@ -40,6 +40,7 @@ how you can set personalized defaults using package options.}
 \itemize{
 \item Add hardhat and rlang to Imports
 \item Add recipes to Suggests
+\item If roxygen2 is available, uses roxygen markdown
 \item Add a package documentation file
 \item Generate and populate 7 files in \code{R/}:
 \itemize{

@@ -9,6 +9,7 @@
 #' `use_modeling_package()` will:
 #'    - Add hardhat and rlang to Imports
 #'    - Add recipes to Suggests
+#'    - If roxygen2 is available, uses roxygen markdown
 #'    - Add a package documentation file
 #'    - Generate and populate 7 files in `R/`:
 #'       - `constructor.R`
@@ -52,6 +53,10 @@ use_modeling_package <- function(model) {
   usethis::use_package("hardhat", type = "Imports")
   usethis::use_package("rlang", type = "Imports")
   usethis::use_package("recipes", type = "Suggests")
+
+  if (is_roxygen_available()) {
+    usethis::use_roxygen_md()
+  }
 
   data <- list(model = model)
 
@@ -115,4 +120,8 @@ usethis_available <- function() {
   if (!requireNamespace("usethis", quietly = TRUE)) {
     abort("The `usethis` must be installed for this functionality.")
   }
+}
+
+is_roxygen_available <- function() {
+  requireNamespace("roxygen2", quietly = TRUE)
 }

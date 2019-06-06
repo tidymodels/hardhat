@@ -20,7 +20,8 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    usethis
+    usethis,
+    roxygen2
 Imports: 
     glue,
     rlang (>= 0.3.4.9003),
