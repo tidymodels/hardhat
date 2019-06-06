@@ -31,10 +31,10 @@
 #'
 #' @examples
 #' predictors <- mtcars[, -1]
-#' outcomes <- mtcars[, 1]
+#' outcome <- mtcars[, 1]
 #'
 #' # XY interface
-#' mod <- {{model}}(predictors, outcomes)
+#' mod <- {{model}}(predictors, outcome)
 #'
 #' # Formula interface
 #' mod2 <- {{model}}(mpg ~ ., mtcars)

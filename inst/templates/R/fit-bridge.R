@@ -1,8 +1,8 @@
 {{model}}_bridge <- function(processed, ...) {
   predictors <- processed$predictors
-  outcomes <- processed$outcomes[[1]]
+  outcome <- processed$outcomes[[1]]
 
-  fit <- {{model}}_impl(predictors, outcomes)
+  fit <- {{model}}_impl(predictors, outcome)
 
   new_{{model}}_model(
     coefs = fit$coefs,

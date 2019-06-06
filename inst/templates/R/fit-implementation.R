@@ -1,3 +1,3 @@
-{{model}}_impl <- function(predictors, outcomes) {
+{{model}}_impl <- function(predictors, outcome) {
   list(coefs = 1)
 }
