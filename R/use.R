@@ -77,11 +77,6 @@ use_modeling_package <- function(model) {
   use_hardhat_template("R/predict-interface.R")
   ui_blank_line()
 
-  # Must explicitly set the pkg path
-  usethis::ui_info("Running {usethis::ui_code('devtools::document()')}")
-  devtools::document(pkg = usethis::proj_get())
-  ui_blank_line()
-
   invisible(model)
 }
 
@@ -105,6 +100,12 @@ create_modeling_package <- function(path,
   ui_blank_line()
 
   use_modeling_package(model)
+
+  # Only auto-document when creating _new_ packages
+  # Must explicitly set the pkg path
+  usethis::ui_info("Running {usethis::ui_code('devtools::document()')}")
+  devtools::document(pkg = usethis::proj_get())
+  ui_blank_line()
 
   # copied from create_package()
   if (open) {
