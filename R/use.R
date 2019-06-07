@@ -41,6 +41,7 @@ use_modeling_package <- function(model) {
   validate_installed("usethis")
   validate_installed("roxygen2")
   validate_installed("devtools")
+  validate_installed("recipes")
 
   if (!is_string(model)) {
     abort("`model` must be a string.")
@@ -90,6 +91,7 @@ create_modeling_package <- function(path,
   validate_installed("usethis")
   validate_installed("roxygen2")
   validate_installed("devtools")
+  validate_installed("recipes")
 
   usethis::create_package(path, fields, open = FALSE)
 
