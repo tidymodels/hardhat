@@ -22,7 +22,7 @@ a class of \code{class}. This entire object represent a single model.
 }
 \details{
 Because every model should have multiple interfaces, including formula
-and \code{recipes} interfaces, all models should have an \code{blueprint} that
+and \code{recipes} interfaces, all models should have a \code{blueprint} that
 can process new data when \code{predict()} is called. The easiest way to generate
 an blueprint with all of the information required at prediction time is to
 use the one that is returned from a call to \code{\link[=mold]{mold()}}.
