@@ -90,16 +90,16 @@ check_outcomes_is_univariate <- function(outcomes) {
 #'
 #' @examples
 #' # Not a factor column.
-#' check_outcomes_is_factor(data.frame(x = 1))
+#' check_outcomes_are_factors(data.frame(x = 1))
 #'
 #' # All good
-#' check_outcomes_is_factor(data.frame(x = factor(c("A", "B"))))
+#' check_outcomes_are_factors(data.frame(x = factor(c("A", "B"))))
 #'
 #' @family validation functions
 #' @export
-validate_outcomes_is_factor <- function(outcomes) {
+validate_outcomes_are_factors <- function(outcomes) {
 
-  check <- check_outcomes_is_factor(outcomes)
+  check <- check_outcomes_are_factors(outcomes)
 
   if (!check$ok) {
     bad_cols <- glue::single_quote(names(check$bad_classes))
@@ -117,9 +117,9 @@ validate_outcomes_is_factor <- function(outcomes) {
   invisible(outcomes)
 }
 
-#' @rdname validate_outcomes_is_factor
+#' @rdname validate_outcomes_are_factors
 #' @export
-check_outcomes_is_factor <- function(outcomes) {
+check_outcomes_are_factors <- function(outcomes) {
 
   outcomes <- check_is_data_like(outcomes, "outcomes")
 
@@ -167,19 +167,19 @@ check_outcomes_is_factor <- function(outcomes) {
 #'
 #' @examples
 #' # Not a binary factor. 0 levels
-#' check_outcomes_is_binary(data.frame(x = 1))
+#' check_outcomes_are_binary(data.frame(x = 1))
 #'
 #' # Not a binary factor. 1 level
-#' check_outcomes_is_binary(data.frame(x = factor("A")))
+#' check_outcomes_are_binary(data.frame(x = factor("A")))
 #'
 #' # All good
-#' check_outcomes_is_binary(data.frame(x = factor(c("A", "B"))))
+#' check_outcomes_are_binary(data.frame(x = factor(c("A", "B"))))
 #'
 #' @family validation functions
 #' @export
-validate_outcomes_is_binary <- function(outcomes) {
+validate_outcomes_are_binary <- function(outcomes) {
 
-  check <- check_outcomes_is_binary(outcomes)
+  check <- check_outcomes_are_binary(outcomes)
 
   if (!check$ok) {
     bad_cols <- glue::single_quote(check$bad_cols)
@@ -197,9 +197,9 @@ validate_outcomes_is_binary <- function(outcomes) {
   invisible(outcomes)
 }
 
-#' @rdname validate_outcomes_is_binary
+#' @rdname validate_outcomes_are_binary
 #' @export
-check_outcomes_is_binary <- function(outcomes) {
+check_outcomes_are_binary <- function(outcomes) {
 
   outcomes <- check_is_data_like(outcomes, "outcomes")
 

@@ -53,28 +53,28 @@ test_that("validate_no_formula_duplication()", {
 
 })
 
-test_that("validate_outcomes_is_factor()", {
+test_that("validate_outcomes_are_factors()", {
   expect_silent(
-    validate_outcomes_is_factor(data.frame(x = factor(c("A", "B"))))
+    validate_outcomes_are_factors(data.frame(x = factor(c("A", "B"))))
   )
 
   date <- as.POSIXct(as.POSIXlt(as.Date("2019-01-01")))
   x <- data.frame(x = date, y = "hi", stringsAsFactors = FALSE)
 
   expect_error(
-    validate_outcomes_is_factor(x),
+    validate_outcomes_are_factors(x),
     "'x': 'POSIXct', 'POSIXt'\n'y': 'character'"
   )
 })
 
-test_that("validate_outcomes_is_binary()", {
+test_that("validate_outcomes_are_binary()", {
 
   expect_silent(
-    validate_outcomes_is_binary(data.frame(x = factor(c("A", "B"))))
+    validate_outcomes_are_binary(data.frame(x = factor(c("A", "B"))))
   )
 
   expect_error(
-    validate_outcomes_is_binary(iris),
+    validate_outcomes_are_binary(iris),
     "'Sepal.Length': 0\n'Sepal.Width': 0\n'Petal.Length': 0\n'Petal.Width': 0\n'Species': 3"
   )
 
