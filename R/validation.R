@@ -64,6 +64,81 @@ check_outcomes_is_univariate <- function(outcomes) {
 
 # ------------------------------------------------------------------------------
 
+#' Ensure that the outcome has only factor columns
+#'
+#' @description
+#'
+#' validate - asserts the following:
+#'
+#' - `outcomes` must have factor columns.
+#'
+#' check - returns the following:
+#'
+#' - `ok` A logical. Does the check pass?
+#'
+#' - `bad_classes` A named list. The names are the names of problematic columns,
+#' and the values are the classes of the matching column.
+#'
+#' @param outcomes An object to check.
+#'
+#' @template section-validation
+#'
+#' @details
+#'
+#' The expected way to use this validation function is to supply it the
+#' `$outcomes` element of the result of a call to [mold()].
+#'
+#' @examples
+#' # Not a factor column.
+#' check_outcomes_is_factor(data.frame(x = 1))
+#'
+#' # All good
+#' check_outcomes_is_factor(data.frame(x = factor(c("A", "B"))))
+#'
+#' @family validation functions
+#' @export
+validate_outcomes_is_factor <- function(outcomes) {
+
+  check <- check_outcomes_is_factor(outcomes)
+
+  if (!check$ok) {
+    bad_cols <- glue::single_quote(names(check$bad_classes))
+    bad_printable_classes <- map(check$bad_classes, glue_quote_collapse)
+    bad_msg <- glue::glue("{bad_cols}: {bad_printable_classes}")
+    bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
+
+    glubort(
+      "All outcomes must be factors, but the following are not:",
+      "\n",
+      "{bad_msg}"
+    )
+  }
+
+  invisible(outcomes)
+}
+
+#' @rdname validate_outcomes_is_factor
+#' @export
+check_outcomes_is_factor <- function(outcomes) {
+
+  outcomes <- check_is_data_like(outcomes, "outcomes")
+
+  where_factor <- map_lgl(outcomes, is.factor)
+
+  ok <- all(where_factor)
+
+  if (!ok) {
+    bad_classes <- get_data_classes(outcomes[, !where_factor])
+  }
+  else {
+    bad_classes <- list()
+  }
+
+  check_list(ok = ok, bad_classes = bad_classes)
+}
+
+# ------------------------------------------------------------------------------
+
 #' Ensure that the outcome has binary factors
 #'
 #' @description

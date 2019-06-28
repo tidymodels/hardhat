@@ -53,6 +53,20 @@ test_that("validate_no_formula_duplication()", {
 
 })
 
+test_that("validate_outcomes_is_factor()", {
+  expect_silent(
+    validate_outcomes_is_factor(data.frame(x = factor(c("A", "B"))))
+  )
+
+  date <- as.POSIXct(as.POSIXlt(as.Date("2019-01-01")))
+  x <- data.frame(x = date, y = "hi", stringsAsFactors = FALSE)
+
+  expect_error(
+    validate_outcomes_is_factor(x),
+    "'x': 'POSIXct', 'POSIXt'\n'y': 'character'"
+  )
+})
+
 test_that("validate_outcomes_is_binary()", {
 
   expect_silent(

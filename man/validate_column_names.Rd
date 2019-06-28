@@ -106,6 +106,7 @@ forge(test, processed$blueprint, outcomes = TRUE)
 \seealso{
 Other validation functions: \code{\link{validate_no_formula_duplication}},
   \code{\link{validate_outcomes_is_binary}},
+  \code{\link{validate_outcomes_is_factor}},
   \code{\link{validate_outcomes_is_univariate}},
   \code{\link{validate_prediction_size}},
   \code{\link{validate_predictors_are_numeric}}
