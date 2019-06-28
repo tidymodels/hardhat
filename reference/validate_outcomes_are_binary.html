@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ensure no duplicate terms appear in <code>formula</code> — validate_no_formula_duplication • hardhat</title>
+<title>Ensure that the outcome has binary factors — validate_outcomes_are_binary • hardhat</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,16 +30,17 @@
 
 
 
-<meta property="og:title" content="Ensure no duplicate terms appear in <code>formula</code> — validate_no_formula_duplication" />
+<meta property="og:title" content="Ensure that the outcome has binary factors — validate_outcomes_are_binary" />
 
 <meta property="og:description" content="validate - asserts the following:
-formula must not have duplicates terms on the left and right hand
-side of the formula.
+outcomes must have binary factor columns.
 " />
 
 <meta property="og:description" content="check - returns the following:
 ok A logical. Does the check pass?
-duplicates A character vector. The duplicate terms.
+bad_cols A character vector. The names of the columns with problems.
+num_levels An integer vector. The actual number of levels of the columns
+with problems.
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -125,44 +126,43 @@ duplicates A character vector. The duplicate terms.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Ensure no duplicate terms appear in <code>formula</code></h1>
+    <h1>Ensure that the outcome has binary factors</h1>
     <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/validation.R'><code>R/validation.R</code></a></small>
-    <div class="hidden name"><code>validate_no_formula_duplication.Rd</code></div>
+    <div class="hidden name"><code>validate_outcomes_are_binary.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
     <p>validate - asserts the following:</p><ul>
-<li><p><code>formula</code> must not have duplicates terms on the left and right hand
-side of the formula.</p></li>
+<li><p><code>outcomes</code> must have binary factor columns.</p></li>
 </ul>
 
     <p>check - returns the following:</p><ul>
 <li><p><code>ok</code> A logical. Does the check pass?</p></li>
-<li><p><code>duplicates</code> A character vector. The duplicate terms.</p></li>
+<li><p><code>bad_cols</code> A character vector. The names of the columns with problems.</p></li>
+<li><p><code>num_levels</code> An integer vector. The actual number of levels of the columns
+with problems.</p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>validate_no_formula_duplication</span>(<span class='no'>formula</span>, <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>validate_outcomes_are_binary</span>(<span class='no'>outcomes</span>)
 
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>formula</span>, <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>check_outcomes_are_binary</span>(<span class='no'>outcomes</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>formula</th>
-      <td><p>A formula to check.</p></td>
-    </tr>
-    <tr>
-      <th>original</th>
-      <td><p>A logical. Should the original names be checked, or should
-the names after processing be used? If <code>FALSE</code>, <code>y ~ log(y)</code> is allowed
-because the names are <code>"y"</code> and <code>"log(y)"</code>, if <code>TRUE</code>, <code>y ~ log(y)</code> is not
-allowed because the original names are both <code>"y"</code>.</p></td>
+      <th>outcomes</th>
+      <td><p>An object to check.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The expected way to use this validation function is to supply it the
+<code>$outcomes</code> element of the result of a call to <code><a href='mold.html'>mold()</a></code>.</p>
     
     <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
 
@@ -182,7 +182,7 @@ and provide your own validation function.</p></li>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other validation functions: <code><a href='validate_column_names.html'>validate_column_names</a></code>,
-  <code><a href='validate_outcomes_are_binary.html'>validate_outcomes_are_binary</a></code>,
+  <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code>,
   <code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a></code>,
   <code><a href='validate_outcomes_is_univariate.html'>validate_outcomes_is_univariate</a></code>,
   <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code>,
@@ -190,37 +190,36 @@ and provide your own validation function.</p></li>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># All good</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='no'>x</span>)</div><div class='output co'>#&gt; $ok
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $duplicates
-#&gt; character(0)
-#&gt; </div><div class='input'>
-<span class='co'># Not good!</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='no'>y</span>)</div><div class='output co'>#&gt; $ok
+    <pre class="examples"><div class='input'><span class='co'># Not a binary factor. 0 levels</span>
+<span class='fu'>check_outcomes_are_binary</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>))</div><div class='output co'>#&gt; $ok
 #&gt; [1] FALSE
 #&gt; 
-#&gt; $duplicates
-#&gt; [1] "y"
-#&gt; </div><div class='input'>
-<span class='co'># This is generally okay</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>))</div><div class='output co'>#&gt; $ok
-#&gt; [1] TRUE
+#&gt; $bad_cols
+#&gt; [1] "x"
 #&gt; 
-#&gt; $duplicates
-#&gt; character(0)
+#&gt; $num_levels
+#&gt; [1] 0
 #&gt; </div><div class='input'>
-<span class='co'># But you can be more strict</span>
-<span class='fu'>check_no_formula_duplication</span>(<span class='no'>y</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>), <span class='kw'>original</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $ok
+<span class='co'># Not a binary factor. 1 level</span>
+<span class='fu'>check_outcomes_are_binary</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='st'>"A"</span>)))</div><div class='output co'>#&gt; $ok
 #&gt; [1] FALSE
 #&gt; 
-#&gt; $duplicates
-#&gt; [1] "y"
+#&gt; $bad_cols
+#&gt; [1] "x"
+#&gt; 
+#&gt; $num_levels
+#&gt; [1] 1
 #&gt; </div><div class='input'>
-# This would throw an error
-</div><div class='input'><span class='fu'>validate_no_formula_duplication</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>) ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>y</span>))</div><div class='output co'>#&gt; <span class='error'>Error: The following terms are duplicated on the left and right hand side of the `formula`: 'log(y)'.</span></div><div class='input'>
-
+<span class='co'># All good</span>
+<span class='fu'>check_outcomes_are_binary</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>))))</div><div class='output co'>#&gt; $ok
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $bad_cols
+#&gt; character(0)
+#&gt; 
+#&gt; $num_levels
+#&gt; integer(0)
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -228,6 +227,8 @@ and provide your own validation function.</p></li>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#validation">Validation</a></li>
 
       <li><a href="#see-also">See also</a></li>
