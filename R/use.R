@@ -52,6 +52,7 @@ use_modeling_package <- function(model) {
   }
 
   usethis::ui_info("Adding required packages to the DESCRIPTION")
+  usethis::use_package("stats", type = "Imports")
   usethis::use_package("hardhat", type = "Imports")
   usethis::use_package("rlang", type = "Imports")
   usethis::use_package("recipes", type = "Suggests")
