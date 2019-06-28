@@ -159,7 +159,7 @@ of rows in <code>new_data</code>.</p></li>
       <th>.pred</th>
       <td><p>A tibble. The predictions to return from any prediction
 <code>type</code>. This is often created using one of the spruce functions, like
-<code><a href='spruce.html'>spruce_response()</a></code>.</p></td>
+<code><a href='spruce.html'>spruce_numeric()</a></code>.</p></td>
     </tr>
     <tr>
       <th>new_data</th>
@@ -208,9 +208,9 @@ and provide your own validation function.</p></li>
 <span class='co'># for those 5 rows</span>
 <span class='no'>.pred_vec</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>5</span>
 
-<span class='co'># Then you use `spruce_response()` to clean</span>
+<span class='co'># Then you use `spruce_numeric()` to clean</span>
 <span class='co'># up these numeric predictions</span>
-<span class='no'>.pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spruce.html'>spruce_response</a></span>(<span class='no'>.pred_vec</span>)
+<span class='no'>.pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='no'>.pred_vec</span>)
 
 <span class='no'>.pred</span></div><div class='output co'>#&gt; # A tibble: 5 x 1
 #&gt;   .pred
@@ -233,7 +233,7 @@ and provide your own validation function.</p></li>
 #&gt; </div><div class='input'>
 # An informative error message is thrown
 # if the rows are different
-</div><div class='input'><span class='fu'>validate_prediction_size</span>(<span class='fu'><a href='spruce.html'>spruce_response</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>), <span class='no'>new_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The number of rows in `new_data` (5) must match the number of rows in `.pred` (4).</span></div><div class='input'>
+</div><div class='input'><span class='fu'>validate_prediction_size</span>(<span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>), <span class='no'>new_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The number of rows in `new_data` (5) must match the number of rows in `.pred` (4).</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
