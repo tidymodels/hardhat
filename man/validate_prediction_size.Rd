@@ -12,7 +12,7 @@ check_prediction_size(.pred, new_data)
 \arguments{
 \item{.pred}{A tibble. The predictions to return from any prediction
 \code{type}. This is often created using one of the spruce functions, like
-\code{\link[=spruce_response]{spruce_response()}}.}
+\code{\link[=spruce_numeric]{spruce_numeric()}}.}
 
 \item{new_data}{A data frame of new predictors and possibly outcomes.}
 }
@@ -64,9 +64,9 @@ new_data <- mtcars[1:5,]
 # for those 5 rows
 .pred_vec <- 1:5
 
-# Then you use `spruce_response()` to clean
+# Then you use `spruce_numeric()` to clean
 # up these numeric predictions
-.pred <- spruce_response(.pred_vec)
+.pred <- spruce_numeric(.pred_vec)
 
 .pred
 
@@ -77,7 +77,7 @@ check_prediction_size(.pred, new_data)
 # An informative error message is thrown
 # if the rows are different
 \dontrun{
-validate_prediction_size(spruce_response(1:4), new_data)
+validate_prediction_size(spruce_numeric(1:4), new_data)
 }
 
 }

@@ -8,7 +8,7 @@
 #' function `validate_prediction_size()` to ensure that the number of rows
 #' being returned is the same as the number of rows in the input (`new_data`).
 #'
-#' @param .pred (`type = "response"`) A numeric vector of predictions.
+#' @param .pred (`type = "numeric"`) A numeric vector of predictions.
 #'
 #' @param .pred_class (`type = "class"`) A factor of "hard" class predictions.
 #'
@@ -29,7 +29,7 @@ NULL
 
 #' @rdname spruce
 #' @export
-spruce_response <- function(.pred) {
+spruce_numeric <- function(.pred) {
 
   validate_is(.pred, is.numeric, "numeric")
   validate_not_matrix(.pred)

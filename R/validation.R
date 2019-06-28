@@ -406,7 +406,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' @param .pred A tibble. The predictions to return from any prediction
 #' `type`. This is often created using one of the spruce functions, like
-#' [spruce_response()].
+#' [spruce_numeric()].
 #'
 #' @param new_data A data frame of new predictors and possibly outcomes.
 #'
@@ -429,9 +429,9 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #' # for those 5 rows
 #' .pred_vec <- 1:5
 #'
-#' # Then you use `spruce_response()` to clean
+#' # Then you use `spruce_numeric()` to clean
 #' # up these numeric predictions
-#' .pred <- spruce_response(.pred_vec)
+#' .pred <- spruce_numeric(.pred_vec)
 #'
 #' .pred
 #'
@@ -442,7 +442,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #' # An informative error message is thrown
 #' # if the rows are different
 #' \dontrun{
-#' validate_prediction_size(spruce_response(1:4), new_data)
+#' validate_prediction_size(spruce_numeric(1:4), new_data)
 #' }
 #'
 #' @family validation functions

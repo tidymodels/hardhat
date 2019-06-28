@@ -330,20 +330,20 @@ Note that even the formula method respects this `intercept` argument. To recap, 
 
 ## Prediction Implementation
 
-On the prediction side, we need implementation functions like for fitting our model. These vary based on the `"type"` argument to `predict()`. The `"type"` might be `"response"` for numeric predictions as we will use here, or it could be `"class"` for hard class predictions, `"prob"` for class probabilities, and more. A set of recommended names for `"type"` can be found in the [Model Predictions](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) section of the implementation principles.
+On the prediction side, we need implementation functions like for fitting our model. These vary based on the `"type"` argument to `predict()`. The `"type"` might be `"numeric"` for numeric predictions as we will use here, or it could be `"class"` for hard class predictions, `"prob"` for class probabilities, and more. A set of recommended names for `"type"` can be found in the [Model Predictions](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) section of the implementation principles.
 
 For our model, we will focus on only returning numeric predictions. I generally like to name these prediction implementation functions `predict_<model_class>_<type>()`. The arguments for the implementation functions should include the model object and the predictors in the form that your prediction algorithm expects (here, a matrix).
 
-Also used here is another hardhat function for standardizing prediction output, `spruce_response()`. This function tidies up the response output, and automatically standardizes it to match the recommendations in the principles guide. The output is always a tibble, and for the `"response"` type it has 1 column, `.pred`.
+Also used here is another hardhat function for standardizing prediction output, `spruce_numeric()`. This function tidies up the numeric response output, and automatically standardizes it to match the recommendations in the principles guide. The output is always a tibble, and for the `"numeric"` type it has 1 column, `.pred`.
 
 ```{r}
-predict_simple_lm_response <- function(object, predictors) {
+predict_simple_lm_numeric <- function(object, predictors) {
   
   coefs <- object$coefs
   
   .pred <- as.vector(predictors %*% coefs)
   
-  out <- spruce_response(.pred)
+  out <- spruce_numeric(.pred)
   
   out
 }
@@ -357,27 +357,27 @@ model <- simple_lm(Sepal.Width ~ Sepal.Length + Species, iris)
 predictors <- forge(iris, model$blueprint)$predictors
 predictors <- as.matrix(predictors)
 
-predict_simple_lm_response(model, predictors)
+predict_simple_lm_numeric(model, predictors)
 ```
 
 ## Prediction Bridge
 
 A prediction bridge converts the standardized `predictors` into the lower level type that the prediction implementation functions expect. `predictors` here is always a data frame, and is part of the return value of a call to `forge()`. Since the prediction implementation function takes a matrix, we convert it to that here.
 
-Additionally, it should `switch()` on the `type` argument to decide which of the prediction implementation functions to call. Here, when `type == "response"`, `predict_simple_lm_response()` is called.
+Additionally, it should `switch()` on the `type` argument to decide which of the prediction implementation functions to call. Here, when `type == "numeric"`, `predict_simple_lm_numeric()` is called.
 
 I also like using `rlang::arg_match()` to validate that `type` is one of the accepted prediction types. This has an advantage over `match.arg()` in that partial matches are not allowed, and the error messages are a bit nicer.
 
 ```{r}
 predict_simple_lm_bridge <- function(type, object, predictors) {
   
-  type <- rlang::arg_match(type, c("response"))
+  type <- rlang::arg_match(type, "numeric")
   
   predictors <- as.matrix(predictors)
   
   switch(
     type,
-    response = predict_simple_lm_response(object, predictors)
+    numeric = predict_simple_lm_numeric(object, predictors)
   )
 }
 ```
@@ -390,10 +390,10 @@ model <- simple_lm(Sepal.Width ~ Sepal.Length + Species, iris)
 # Pass in the data frame
 predictors <- forge(iris, model$blueprint)$predictors
 
-predict_simple_lm_bridge("response", model, predictors)
+predict_simple_lm_bridge("numeric", model, predictors)
 
 # Partial matches are an error
-predict_simple_lm_bridge("resp", model, predictors)
+predict_simple_lm_bridge("numer", model, predictors)
 ```
 
 ## User Facing Prediction Function
@@ -407,7 +407,7 @@ After calling `forge()`, it should pass off to the bridge function to call the c
 Finally, it is good practice to call the hardhat function, `validate_prediction_size()`, with the return value and the original `new_data` to ensure that the number of rows in the output are the same as the number of rows of the input. If a prediction cannot be made for a row of `new_data`, an `NA` value should be placed there instead. Mainly, this validation function is a check on the model developer to ensure that you always return output with a sane length.
 
 ```{r}
-predict.simple_lm <- function(object, new_data, type = "response", ...) {
+predict.simple_lm <- function(object, new_data, type = "numeric", ...) {
   
   # Enforces column order, type, column names, etc
   processed <- forge(new_data, object$blueprint)

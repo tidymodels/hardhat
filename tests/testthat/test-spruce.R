@@ -1,13 +1,13 @@
 context("test-spruce")
 
-test_that("spruce - response", {
-  spruced <- spruce_response(1:5)
+test_that("spruce - numeric", {
+  spruced <- spruce_numeric(1:5)
 
   expect_is(spruced, "tbl_df")
   expect_equal(colnames(spruced), ".pred")
 
-  expect_error(spruce_response("hi"))
-  expect_error(spruce_response(matrix(1)))
+  expect_error(spruce_numeric("hi"))
+  expect_error(spruce_numeric(matrix(1)))
 })
 
 test_that("spruce - class", {

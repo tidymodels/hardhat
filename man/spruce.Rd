@@ -2,19 +2,19 @@
 % Please edit documentation in R/spruce.R
 \name{spruce}
 \alias{spruce}
-\alias{spruce_response}
+\alias{spruce_numeric}
 \alias{spruce_class}
 \alias{spruce_prob}
 \title{Spruce up predictions}
 \usage{
-spruce_response(.pred)
+spruce_numeric(.pred)
 
 spruce_class(.pred_class)
 
 spruce_prob(.pred_levels, .prob_matrix)
 }
 \arguments{
-\item{.pred}{(\code{type = "response"}) A numeric vector of predictions.}
+\item{.pred}{(\code{type = "numeric"}) A numeric vector of predictions.}
 
 \item{.pred_class}{(\code{type = "class"}) A factor of "hard" class predictions.}
 
