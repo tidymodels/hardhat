@@ -28,9 +28,9 @@
 #'
 #' @export
 predict.{{model}} <- function(object, new_data, type = "numeric", ...) {
-  processed <- hardhat::forge(new_data, object$blueprint)
-  type <- rlang::arg_match(type, valid_predict_types())
-  predict_{{model}}_bridge(type, object, processed$predictors)
+  forged <- hardhat::forge(new_data, object$blueprint)
+  rlang::arg_match(type, valid_predict_types())
+  predict_{{model}}_bridge(type, object, forged$predictors)
 }
 
 valid_predict_types <- function() {
