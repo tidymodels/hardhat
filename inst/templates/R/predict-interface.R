@@ -2,7 +2,7 @@
 #'
 #' @param object A `{{model}}` object.
 #'
-#' @param new_data A data frame of new predictors.
+#' @param new_data A data frame or matrix of new predictors.
 #'
 #' @param type A single character. The type of predictions to generate.
 #' Valid options are:
