@@ -4,7 +4,7 @@
 
   fit <- {{model}}_impl(predictors, outcome)
 
-  new_{{model}}_model(
+  new_{{model}}(
     coefs = fit$coefs,
     blueprint = processed$blueprint
   )
