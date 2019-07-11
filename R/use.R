@@ -43,12 +43,12 @@ use_modeling_package <- function(model) {
   validate_installed("devtools")
   validate_installed("recipes")
 
-  if (!is_string(model)) {
-    abort("`model` must be a string.")
+  if (!is_vector_of_strings(model)) {
+    abort("`model` must be a string or a vector of strings.")
   }
 
-  if (grepl("\\s", model)) {
-    abort("`model` must not contain any spaces.")
+  if (has_spaces(model)) {
+    abort("`model` must not contain strings with spaces.")
   }
 
   usethis::ui_info("Adding required packages to the DESCRIPTION")
@@ -62,21 +62,26 @@ use_modeling_package <- function(model) {
   usethis::use_roxygen_md()
   ui_blank_line()
 
+  invisible(lapply(model, make_model_files))
+
+}
+
+make_model_files <- function(model){
   data <- list(model = model)
 
-  use_hardhat_template <- function(template) {
-    usethis::use_template(template, data = data, package = "hardhat")
+  use_hardhat_template <- function(template, filename) {
+    usethis::use_template(template, save_as = filename, data = data, package = "hardhat")
   }
 
   usethis::ui_info("Writing skeleton files")
   usethis::use_package_doc()
-  use_hardhat_template("R/constructor.R")
-  use_hardhat_template("R/fit-bridge.R")
-  use_hardhat_template("R/fit-implementation.R")
-  use_hardhat_template("R/fit-interface.R")
-  use_hardhat_template("R/predict-bridge.R")
-  use_hardhat_template("R/predict-implementation.R")
-  use_hardhat_template("R/predict-interface.R")
+  use_hardhat_template("R/constructor.R", paste0("R/", model, "-constructor.R"))
+  use_hardhat_template("R/fit-bridge.R", paste0("R/", model, "-fit-bridge.R"))
+  use_hardhat_template("R/fit-implementation.R", paste0("R/", model, "-fit-implementation.R"))
+  use_hardhat_template("R/fit-interface.R", paste0("R/", model, "-fit-interface.R"))
+  use_hardhat_template("R/predict-bridge.R", paste0("R/", model, "-predict-bridge.R"))
+  use_hardhat_template("R/predict-implementation.R", paste0("R/", model, "-predict-implementation.R"))
+  use_hardhat_template("R/predict-interface.R", paste0("R/", model, "-predict-interface.R"))
   ui_blank_line()
 
   invisible(model)
@@ -119,8 +124,13 @@ create_modeling_package <- function(path,
   invisible(usethis::proj_get())
 }
 
-is_string <- function (x) {
-  length(x) == 1 && is.character(x)
+is_vector_of_strings <- function(x) {
+  is.vector(x) && is.character(x)
+}
+
+has_spaces <- function(x) {
+  boolean_list <- lapply(x, grepl, pattern = "\\s")
+  any(unlist(boolean_list))
 }
 
 validate_installed <- function(pkg) {
