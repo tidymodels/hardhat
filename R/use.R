@@ -20,9 +20,9 @@
 #'       - `predict-implementation.R`
 #'       - `predict-interface.R`
 #'
-#' @param model A string. The name of the high level modeling function
-#' that users will call. For example, `"linear_regression"`. This will be used
-#' to populate the skeleton.
+#' @param model A string (or character vector). The names of the high level
+#' modeling functions that users will call. For example, `"linear_regression"`.
+#' This will be used to populate the skeleton. Spaces are not allowed.
 #'
 #' @param path A path. If it exists, it is used. If it does not exist,
 #' it is created, provided that the parent path exists.

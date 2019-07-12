@@ -11,9 +11,9 @@ create_modeling_package(path, model, fields = NULL,
   open = interactive())
 }
 \arguments{
-\item{model}{A string. The name of the high level modeling function
-that users will call. For example, \code{"linear_regression"}. This will be used
-to populate the skeleton.}
+\item{model}{A string (or character vector). The names of the high level
+modeling functions that users will call. For example, \code{"linear_regression"}.
+This will be used to populate the skeleton. Spaces are not allowed.}
 
 \item{path}{A path. If it exists, it is used. If it does not exist,
 it is created, provided that the parent path exists.}
