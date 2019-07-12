@@ -1,3 +1,6 @@
+# ------------------------------------------------------------------------------
+# user interfaces
+
 #' Predict from a `{{model}}`
 #'
 #' @param object A `{{model}}` object.
@@ -35,4 +38,33 @@ predict.{{model}} <- function(object, new_data, type = "numeric", ...) {
 
 valid_predict_types <- function() {
   c("numeric")
+}
+
+# ------------------------------------------------------------------------------
+# bridge
+
+predict_{{model}}_bridge <- function(type, model, predictors) {
+  predictors <- as.matrix(predictors)
+
+  predict_function <- get_predict_function(type)
+  predictions <- predict_function(model, predictors)
+
+  hardhat::validate_prediction_size(predictions, predictors)
+
+  predictions
+}
+
+get_predict_function <- function(type) {
+  switch(
+    type,
+    numeric = predict_{{model}}_numeric
+  )
+}
+
+# ------------------------------------------------------------------------------
+# computational implementation
+
+predict_{{model}}_numeric <- function(model, predictors) {
+  predictions <- rep(1L, times = nrow(predictors))
+  hardhat::spruce_numeric(predictions)
 }

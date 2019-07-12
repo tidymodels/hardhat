@@ -1,13 +1,13 @@
 context("test-package-creation")
 
 pkg_path <- tempfile("fruit")
-
+fruits <- c("cherry", "grape")
 
 test_that("create package", {
 
   expect_output(
     expect_error(
-      create_modeling_package(pkg_path, c("cherry", "grape"), open = FALSE),
+      create_modeling_package(pkg_path, fruits, open = FALSE),
       regex = NA
     )
   )
@@ -18,6 +18,16 @@ test_that("create package", {
   expect_true(sum(top_lvl_files == "R") == 1)
   expect_true(sum(top_lvl_files == "man") == 1)
   expect_true(sum(top_lvl_files == "NAMESPACE") == 1)
+
+  r_files <- list.files(file.path(pkg_path, "R"))
+
+  expect_true(sum(grepl("-package.R", r_files, fixed = TRUE)) == 1)
+  for (i in fruits) {
+    expect_true(sum(grepl(i, r_files)) == 3)
+    expect_true(sum(r_files == paste0(i, "-constructor.R")) == 1)
+    expect_true(sum(r_files == paste0(i, "-fit.R")) == 1)
+    expect_true(sum(r_files == paste0(i, "-predict.R")) == 1)
+  }
 
 })
 
