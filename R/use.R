@@ -20,9 +20,9 @@
 #'       - `predict-implementation.R`
 #'       - `predict-interface.R`
 #'
-#' @param model A string. The name of the high level modeling function
-#' that users will call. For example, `"linear_regression"`. This will be used
-#' to populate the skeleton.
+#' @param model A string (or character vector). The names of the high level
+#' modeling functions that users will call. For example, `"linear_regression"`.
+#' This will be used to populate the skeleton. Spaces are not allowed.
 #'
 #' @param path A path. If it exists, it is used. If it does not exist,
 #' it is created, provided that the parent path exists.
@@ -76,12 +76,8 @@ make_model_files <- function(model){
   usethis::ui_info("Writing skeleton files")
   usethis::use_package_doc()
   use_hardhat_template("R/constructor.R", paste0("R/", model, "-constructor.R"))
-  use_hardhat_template("R/fit-bridge.R", paste0("R/", model, "-fit-bridge.R"))
-  use_hardhat_template("R/fit-implementation.R", paste0("R/", model, "-fit-implementation.R"))
-  use_hardhat_template("R/fit-interface.R", paste0("R/", model, "-fit-interface.R"))
-  use_hardhat_template("R/predict-bridge.R", paste0("R/", model, "-predict-bridge.R"))
-  use_hardhat_template("R/predict-implementation.R", paste0("R/", model, "-predict-implementation.R"))
-  use_hardhat_template("R/predict-interface.R", paste0("R/", model, "-predict-interface.R"))
+  use_hardhat_template("R/fit.R", paste0("R/", model, "-fit.R"))
+  use_hardhat_template("R/predict.R", paste0("R/", model, "-predict.R"))
   ui_blank_line()
 
   invisible(model)
