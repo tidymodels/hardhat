@@ -106,7 +106,7 @@
 #' forge(test, processed_roles$blueprint)
 #'
 #' @export
-default_recipe_blueprint <- function(intercept = FALSE) {
+default_recipe_blueprint <- function(intercept = FALSE, fresh = FALSE) {
 
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
@@ -114,7 +114,8 @@ default_recipe_blueprint <- function(intercept = FALSE) {
   new_default_recipe_blueprint(
     mold = mold,
     forge = forge,
-    intercept = intercept
+    intercept = intercept,
+    fresh = fresh
   )
 
 }
@@ -129,6 +130,7 @@ default_recipe_blueprint <- function(intercept = FALSE) {
 new_default_recipe_blueprint <- function(mold,
                                          forge,
                                          intercept = FALSE,
+                                         fresh = FALSE,
                                          ptypes = NULL,
                                          recipe = NULL,
                                          extra_role_ptypes = NULL,
@@ -139,6 +141,7 @@ new_default_recipe_blueprint <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
+    fresh = fresh,
     ptypes = ptypes,
     recipe = recipe,
     extra_role_ptypes = extra_role_ptypes,
@@ -171,7 +174,7 @@ mold_recipe_default_clean <- function(blueprint, data) {
 mold_recipe_default_process <- function(blueprint, data) {
 
   # Prep for predictors and outcomes
-  recipe <- recipes::prep(blueprint$recipe, training = data)
+  recipe <- recipes::prep(blueprint$recipe, training = data, fresh = blueprint$fresh)
   blueprint <- update_blueprint(blueprint, recipe = recipe)
 
   c(blueprint, predictors_lst) %<-% mold_recipe_default_process_predictors(

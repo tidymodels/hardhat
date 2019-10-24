@@ -1,11 +1,15 @@
 #' @param recipe Either `NULL`, or an unprepped recipe. This argument is set
 #' automatically at [mold()] time.
 #'
+#' @param fresh Should already trained operations be re-trained when `prep()` is
+#' called?
+#'
 #' @rdname new-blueprint
 #' @export
 new_recipe_blueprint <- function(mold,
                                  forge,
                                  intercept = FALSE,
+                                 fresh = FALSE,
                                  ptypes = NULL,
                                  recipe = NULL,
                                  ...,
@@ -22,10 +26,13 @@ new_recipe_blueprint <- function(mold,
 
   validate_is_recipe_or_null(recipe)
 
+  validate_is_bool(fresh)
+
   new_blueprint(
     mold = mold,
     forge = forge,
     intercept = intercept,
+    fresh = fresh,
     ptypes = ptypes,
     recipe = recipe,
     ...,

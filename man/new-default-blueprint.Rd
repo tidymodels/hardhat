@@ -14,8 +14,8 @@ new_default_formula_blueprint(mold, forge, intercept = FALSE,
   subclass = character())
 
 new_default_recipe_blueprint(mold, forge, intercept = FALSE,
-  ptypes = NULL, recipe = NULL, extra_role_ptypes = NULL, ...,
-  subclass = character())
+  fresh = FALSE, ptypes = NULL, recipe = NULL,
+  extra_role_ptypes = NULL, ..., subclass = character())
 
 new_default_xy_blueprint(mold, forge, intercept = FALSE, ptypes = NULL,
   ..., subclass = character())
@@ -51,6 +51,9 @@ predictors separately. This argument is set automatically at \code{\link[=mold]{
 subclass this blueprint.}
 
 \item{subclass}{A character vector. The subclasses of this blueprint.}
+
+\item{fresh}{Should already trained operations be re-trained when \code{prep()} is
+called?}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
