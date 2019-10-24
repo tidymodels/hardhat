@@ -29,6 +29,29 @@ test_that("can mold recipes with intercepts", {
   expect_true("(Intercept)" %in% colnames(x$predictors))
 })
 
+test_that("can pass `fresh` through to `prep()`", {
+  iris1 <- iris[1:50,]
+  iris2 <- iris[51:100,]
+
+  rec <- recipe(Species ~ Sepal.Length, data = iris1)
+  rec <- step_center(rec, Sepal.Length)
+
+  prepped_rec <- prep(rec, iris1)
+  non_fresh_mean <- prepped_rec$steps[[1]]$means
+
+  x <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint(fresh = FALSE))
+  mold_non_fresh_mean <- x$blueprint$recipe$steps[[1]]$means
+
+  y <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint(fresh = TRUE))
+  mold_fresh_mean <- y$blueprint$recipe$steps[[1]]$means
+
+  fresh_mean <- c(Sepal.Length = mean(iris2$Sepal.Length))
+
+  expect_equal(non_fresh_mean, mold_non_fresh_mean)
+  expect_false(identical(non_fresh_mean, mold_fresh_mean))
+  expect_equal(mold_fresh_mean, fresh_mean)
+})
+
 test_that("`data` is validated", {
 
   expect_error(
