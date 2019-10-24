@@ -5,7 +5,7 @@
 \alias{mold.recipe}
 \title{Default recipe blueprint}
 \usage{
-default_recipe_blueprint(intercept = FALSE)
+default_recipe_blueprint(intercept = FALSE, fresh = FALSE)
 
 \method{mold}{recipe}(x, data, ..., blueprint = NULL)
 }
@@ -13,6 +13,9 @@ default_recipe_blueprint(intercept = FALSE)
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
+
+\item{fresh}{Should already trained operations be re-trained when \code{prep()} is
+called?}
 
 \item{x}{An unprepped recipe created from \code{\link[recipes:recipe]{recipes::recipe()}}.}
 
