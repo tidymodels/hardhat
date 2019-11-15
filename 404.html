@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Constructor for a base model — new_model • hardhat</title>
+<title>Page not found (404) • hardhat</title>
 
 
 <!-- jquery -->
@@ -29,18 +29,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Constructor for a base model — new_model" />
-<meta property="og:description" content="A model is a scalar object, as classified in
-Advanced R. As such, it
-takes uniquely named elements in ... and combines them into a list with
-a class of class. This entire object represent a single model." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Page not found (404)" />
 
 
 
@@ -59,7 +54,7 @@ a class of class. This entire object represent a single model." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -71,7 +66,7 @@ a class of class. This entire object represent a single model." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">hardhat</a>
+        <a class="navbar-link" href="index.html">hardhat</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
       </span>
     </div>
@@ -79,13 +74,13 @@ a class of class. This entire object represent a single model." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -95,13 +90,13 @@ a class of class. This entire object represent a single model." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/forge.html">Forging data for predictions</a>
+      <a href="articles/forge.html">Forging data for predictions</a>
     </li>
     <li>
-      <a href="../articles/mold.html">Molding data for modeling</a>
+      <a href="articles/mold.html">Molding data for modeling</a>
     </li>
     <li>
-      <a href="../articles/package.html">Creating Modeling Packages With hardhat</a>
+      <a href="articles/package.html">Creating Modeling Packages With hardhat</a>
     </li>
   </ul>
 </li>
@@ -124,69 +119,17 @@ a class of class. This entire object represent a single model." />
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Constructor for a base model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/hardhat/blob/master/R/constructor.R'><code>R/constructor.R</code></a></small>
-    <div class="hidden name"><code>new_model.Rd</code></div>
+      <h1>Page not found (404)</h1>
     </div>
 
-    <div class="ref-description">
-    <p>A <strong>model</strong> is a <em>scalar object</em>, as classified in
-<a href='https://adv-r.hadley.nz/s3.html#object-styles'>Advanced R</a>. As such, it
-takes uniquely named elements in <code>...</code> and combines them into a list with
-a class of <code>class</code>. This entire object represent a single model.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>new_model</span>(<span class='no'>...</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='fu'><a href='default_xy_blueprint.html'>default_xy_blueprint</a></span>(), <span class='kw'>class</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>...</th>
-      <td><p>Name-value pairs for elements specific to the model defined by
-<code>class</code>.</p></td>
-    </tr>
-    <tr>
-      <th>blueprint</th>
-      <td><p>A preprocessing <code>blueprint</code> returned from a call to <code><a href='mold.html'>mold()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>class</th>
-      <td><p>A character vector representing the class of the model.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Because every model should have multiple interfaces, including formula
-and <code>recipes</code> interfaces, all models should have a <code>blueprint</code> that
-can process new data when <code><a href='https://rdrr.io/r/stats/predict.html'>predict()</a></code> is called. The easiest way to generate
-an blueprint with all of the information required at prediction time is to
-use the one that is returned from a call to <code><a href='mold.html'>mold()</a></code>.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>new_model</span>(
-  <span class='kw'>custom_element</span><span class='kw'>=</span> <span class='st'>"my-elem"</span>,
-  <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='fu'><a href='default_xy_blueprint.html'>default_xy_blueprint</a></span>(),
-  <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"custom_model"</span>
-)</div><div class='output co'>#&gt; &lt;custom_model&gt; 
-#&gt; $custom_element
-#&gt; [1] "my-elem"
-#&gt; </div><div class='input'>
-</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+Content not found. Please use links in the navbar.
 
   </div>
+
 </div>
+
 
 
       <footer>

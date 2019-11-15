@@ -8,21 +8,25 @@
 
 <title>Default formula blueprint — default_formula_blueprint • hardhat</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +34,12 @@
 
 
 
-<meta property="og:title" content="Default formula blueprint — default_formula_blueprint" />
 
+<meta property="og:title" content="Default formula blueprint — default_formula_blueprint" />
 <meta property="og:description" content="This pages holds the details for the formula preprocessing blueprint. This
 is the blueprint used by default from mold() if x is a formula." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -46,6 +51,7 @@ is the blueprint used by default from mold() if x is a formula." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -64,7 +70,7 @@ is the blueprint used by default from mold() if x is a formula." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -72,7 +78,7 @@ is the blueprint used by default from mold() if x is a formula." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,11 +104,10 @@ is the blueprint used by default from mold() if x is a formula." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/hardhat">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -113,6 +118,7 @@ is the blueprint used by default from mold() if x is a formula." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -124,17 +130,15 @@ is the blueprint used by default from mold() if x is a formula." />
     </div>
 
     <div class="ref-description">
-    
     <p>This pages holds the details for the formula preprocessing blueprint. This
 is the blueprint used by default from <code><a href='mold.html'>mold()</a></code> if <code>x</code> is a formula.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>default_formula_blueprint</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for formula</span>
 <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -166,7 +170,7 @@ in the <code>mold</code> and <code>forge</code> function list.</p></td>
 <code>default_formula_blueprint()</code> is used.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>While not different from base R, the behavior of expanding factors into
@@ -176,24 +180,26 @@ where <code>K</code> is the number of levels in the factor.</p></li>
 <li><p>When an intercept is <em>not</em> present, factors are expanded into all <code>K</code>
 columns (one-hot encoding).</p></li>
 </ul>
-    <p>Offsets can be included in the formula method through the use of the inline
-function <code><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>stats::offset()</a></code>. These are returned as a tibble with 1 column
+
+<p>Offsets can be included in the formula method through the use of the inline
+function <code><a href='https://rdrr.io/r/stats/offset.html'>stats::offset()</a></code>. These are returned as a tibble with 1 column
 named <code>".offset"</code> in the <code>$extras$offset</code> slot of the return value.</p>
-    
     <h2 class="hasAnchor" id="mold"><a class="anchor" href="#mold"></a>Mold</h2>
 
     
-    <p>When <code><a href='mold.html'>mold()</a></code> is used with the default formula blueprint:</p><ul>
+
+
+<p>When <code><a href='mold.html'>mold()</a></code> is used with the default formula blueprint:</p><ul>
 <li><p>Predictors</p><ul>
 <li><p>The RHS of the <code>formula</code> is isolated, and converted to its own
 1 sided formula: <code>~ RHS</code>.</p></li>
-<li><p>Runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code> on the RHS formula and uses <code>data</code>.</p></li>
-<li><p>If <code>indicators = TRUE</code>, it then runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code> on the
+<li><p>Runs <code><a href='https://rdrr.io/r/stats/model.frame.html'>stats::model.frame()</a></code> on the RHS formula and uses <code>data</code>.</p></li>
+<li><p>If <code>indicators = TRUE</code>, it then runs <code><a href='https://rdrr.io/r/stats/model.matrix.html'>stats::model.matrix()</a></code> on the
 result.</p></li>
-<li><p>If <code>indicators = FALSE</code>, factors are removed before <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix()</a></code>
+<li><p>If <code>indicators = FALSE</code>, factors are removed before <code><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix()</a></code>
 is run, and then added back afterwards. No interactions or inline
 functions involving factors are allowed.</p></li>
-<li><p>If any offsets are present from using <code><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset()</a></code>, then they are
+<li><p>If any offsets are present from using <code><a href='https://rdrr.io/r/stats/offset.html'>offset()</a></code>, then they are
 extracted with <code><a href='model_offset.html'>model_offset()</a></code>.</p></li>
 <li><p>If <code>intercept = TRUE</code>, adds an intercept column.</p></li>
 <li><p>Coerces the result of the above steps to a tibble.</p></li>
@@ -201,53 +207,57 @@ extracted with <code><a href='model_offset.html'>model_offset()</a></code>.</p><
 <li><p>Outcomes</p><ul>
 <li><p>The LHS of the <code>formula</code> is isolated, and converted to its own
 1 sided formula: <code>~ LHS</code>.</p></li>
-<li><p>Runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code> on the LHS formula and uses <code>data</code>.</p></li>
+<li><p>Runs <code><a href='https://rdrr.io/r/stats/model.frame.html'>stats::model.frame()</a></code> on the LHS formula and uses <code>data</code>.</p></li>
 <li><p>Coerces the result of the above steps to a tibble.</p></li>
 </ul></li>
 </ul>
-    
+
     <h2 class="hasAnchor" id="forge"><a class="anchor" href="#forge"></a>Forge</h2>
 
     
-    <p>When <code><a href='forge.html'>forge()</a></code> is used with the default formula blueprint:</p><ul>
+
+
+<p>When <code><a href='forge.html'>forge()</a></code> is used with the default formula blueprint:</p><ul>
 <li><p>It calls <code><a href='shrink.html'>shrink()</a></code> to trim <code>new_data</code> to only the required columns and
 coerce <code>new_data</code> to a tibble.</p></li>
 <li><p>It calls <code><a href='scream.html'>scream()</a></code> to perform validation on the structure of the columns
 of <code>new_data</code>.</p></li>
 <li><p>Predictors</p><ul>
-<li><p>It runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code> on <code>new_data</code> using the stored terms
+<li><p>It runs <code><a href='https://rdrr.io/r/stats/model.frame.html'>stats::model.frame()</a></code> on <code>new_data</code> using the stored terms
 object corresponding to the <em>predictors</em>.</p></li>
 <li><p>If, in the original <code><a href='mold.html'>mold()</a></code> call, <code>indicators = TRUE</code> was set, it
-then runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code> on the result.</p></li>
+then runs <code><a href='https://rdrr.io/r/stats/model.matrix.html'>stats::model.matrix()</a></code> on the result.</p></li>
 <li><p>If, in the original <code><a href='mold.html'>mold()</a></code> call, <code>indicators = FALSE</code> was set, it
-runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>stats::model.matrix()</a></code> on the result without the factor columns,
+runs <code><a href='https://rdrr.io/r/stats/model.matrix.html'>stats::model.matrix()</a></code> on the result without the factor columns,
 and then adds them on afterwards.</p></li>
-<li><p>If any offsets are present from using <code><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset()</a></code> in the original call
+<li><p>If any offsets are present from using <code><a href='https://rdrr.io/r/stats/offset.html'>offset()</a></code> in the original call
 to <code><a href='mold.html'>mold()</a></code>, then they are extracted with <code><a href='model_offset.html'>model_offset()</a></code>.</p></li>
 <li><p>If <code>intercept = TRUE</code> in the original call to <code><a href='mold.html'>mold()</a></code>, then an
 intecept column is added.</p></li>
 <li><p>It coerces the result of the above steps to a tibble.</p></li>
 </ul></li>
 <li><p>Outcomes</p><ul>
-<li><p>It runs <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>stats::model.frame()</a></code> on <code>new_data</code> using the
+<li><p>It runs <code><a href='https://rdrr.io/r/stats/model.frame.html'>stats::model.frame()</a></code> on <code>new_data</code> using the
 stored terms object corresponding to the <em>outcomes</em>.</p></li>
 <li><p>Coerces the result to a tibble.</p></li>
 </ul></li>
 </ul>
-    
+
     <h2 class="hasAnchor" id="differences-from-base-r"><a class="anchor" href="#differences-from-base-r"></a>Differences From Base R</h2>
 
     
-    <p>There are a number of differences from base R regarding how formulas are
+
+
+<p>There are a number of differences from base R regarding how formulas are
 processed by <code><a href='mold.html'>mold()</a></code> that require some explanation.</p>
 <p>Multivariate outcomes can be specified on the LHS using syntax that is
 similar to the RHS (i.e. <code>outcome_1 + outcome_2 ~ predictors</code>).
 If any complex calculations are done on the LHS and they return matrices
-(like <code><a href='https://www.rdocumentation.org/packages/stats/topics/poly'>stats::poly()</a></code>), then those matrices are flattened into multiple
-columns of the tibble after the call to <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame()</a></code>. While this is
+(like <code><a href='https://rdrr.io/r/stats/poly.html'>stats::poly()</a></code>), then those matrices are flattened into multiple
+columns of the tibble after the call to <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code>. While this is
 possible, it is not recommended, and if a large amount of preprocessing is
 required on the outcomes, then you are better off
-using a <code><a href='https://www.rdocumentation.org/packages/recipes/topics/recipe'>recipes::recipe()</a></code>.</p>
+using a <code><a href='https://rdrr.io/pkg/recipes/man/recipe.html'>recipes::recipe()</a></code>.</p>
 <p>Global variables are <em>not</em> allowed in the formula. An error will be thrown
 if they are included. All terms in the formula should come from <code>data</code>.</p>
 <p>By default, intercepts are <em>not</em> included in the predictor output from the
@@ -257,7 +267,6 @@ for this is that many packages either always require or never allow an
 intercept (for example, the <code>earth</code> package), and they do a large amount of
 extra work to keep the user from supplying one or removing it. This
 interface standardizes all of that flexibility in one place.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
@@ -271,7 +280,7 @@ interface standardizes all of that flexibility in one place.</p>
 
 <span class='co'># Call mold() with the training data</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Sepal.Length</span> + <span class='no'>Species</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Sepal.Length</span> + <span class='no'>Species</span>,
   <span class='no'>train</span>,
   <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='fu'>default_formula_blueprint</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 )
@@ -365,11 +374,11 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Global variables</span>
 
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>1</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>train</span>))
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>train</span>))
 
 <span class='co'># In base R, global variables are allowed in a model formula</span>
-<span class='no'>frame</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame</a></span>(<span class='no'>Species</span> ~ <span class='no'>y</span> + <span class='no'>Sepal.Length</span>, <span class='no'>train</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>frame</span>)</div><div class='output co'>#&gt;   Species y Sepal.Length
+<span class='no'>frame</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span>(<span class='no'>Species</span> ~ <span class='no'>y</span> + <span class='no'>Sepal.Length</span>, <span class='no'>train</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>frame</span>)</div><div class='output co'>#&gt;   Species y Sepal.Length
 #&gt; 1  setosa 1          5.1
 #&gt; 2  setosa 1          4.9
 #&gt; 3  setosa 1          4.7
@@ -377,9 +386,9 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; 5  setosa 1          5.0
 #&gt; 6  setosa 1          5.4</div><div class='input'>
 <span class='co'># mold() does not allow them, and throws an error</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/conditions'>tryCatch</a></span>(
+<span class='fu'><a href='https://rdrr.io/r/base/conditions.html'>tryCatch</a></span>(
   <span class='kw'>expr</span> <span class='kw'>=</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Species</span> ~ <span class='no'>y</span> + <span class='no'>Sepal.Length</span>, <span class='no'>train</span>),
-  <span class='kw'>error</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>e</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>e</span>$<span class='no'>message</span>)
+  <span class='kw'>error</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>e</span>) <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>e</span>$<span class='no'>message</span>)
 )</div><div class='output co'>#&gt; [1] "object 'y' not found"</div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Dummy variables and interactions</span>
@@ -415,14 +424,16 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt;  9                       12.8 setosa 
 #&gt; 10                       15.2 setosa 
 #&gt; # … with 90 more rows</div><div class='input'>
-# An informative error is thrown when `indicators = FALSE` and
-# factors are present in interaction terms or in inline functions
-</div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Interaction terms involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Interactions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Functions involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Functions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'>
+<span class='co'># An informative error is thrown when `indicators = FALSE` and</span>
+<span class='co'># factors are present in interaction terms or in inline functions</span>
+<span class='co'># \dontrun{</span>
+<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Interaction terms involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Interactions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Functions involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Functions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'><span class='co'># }</span>
+
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Multivariate outcomes</span>
 
 <span class='co'># Multivariate formulas can be specified easily</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>Sepal.Length</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> + <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>Sepal.Length</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
 <span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; # A tibble: 100 x 2
 #&gt;    Sepal.Width `log(Sepal.Length)`
 #&gt;          &lt;dbl&gt;               &lt;dbl&gt;
@@ -441,7 +452,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># output is flattened (like what happens in `model.matrix()`)</span>
 <span class='co'># (essentially this means you don't wind up with columns</span>
 <span class='co'># in the tibble that are matrices)</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/poly'>poly</a></span>(<span class='no'>Sepal.Length</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>2</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span>(<span class='no'>Sepal.Length</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>2</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
 <span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; # A tibble: 100 x 2
 #&gt;    `poly(Sepal.Length, degree = 2).1` `poly(Sepal.Length, degree = 2).2`
 #&gt;                                 &lt;dbl&gt;                              &lt;dbl&gt;
@@ -457,7 +468,7 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; 10                            -0.0894                             0.0147
 #&gt; # … with 90 more rows</div><div class='input'>
 <span class='co'># TRUE</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>ncol</a></span>(<span class='no'>processed</span>$<span class='no'>outcomes</span>) <span class='kw'>==</span> <span class='fl'>2</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>processed</span>$<span class='no'>outcomes</span>) <span class='kw'>==</span> <span class='fl'>2</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Multivariate formulas specified in mold()</span>
 <span class='co'># carry over into forge()</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
@@ -503,7 +514,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Offsets are handled specially in base R, so they deserve special</span>
 <span class='co'># treatment here as well. You can add offsets using the inline function</span>
 <span class='co'># offset()</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='no'>Species</span>, <span class='no'>train</span>)
+<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='no'>Species</span>, <span class='no'>train</span>)
 
 <span class='no'>processed</span>$<span class='no'>extras</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; # A tibble: 100 x 1
 #&gt;    .offset
@@ -521,11 +532,11 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; # … with 90 more rows</div><div class='input'>
 <span class='co'># Multiple offsets can be included, and they get added together</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
-  <span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/offset'>offset</a></span>(<span class='no'>Petal.Width</span>),
+  <span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Petal.Width</span>),
   <span class='no'>train</span>
 )
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(
   <span class='no'>processed</span>$<span class='no'>extras</span>$<span class='no'>offset</span>$<span class='no'>.offset</span>,
   <span class='no'>train</span>$<span class='no'>Sepal.Length</span> + <span class='no'>train</span>$<span class='no'>Petal.Width</span>
 )</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
@@ -600,20 +611,16 @@ interface standardizes all of that flexibility in one place.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-
       <li><a href="#mold">Mold</a></li>
-
       <li><a href="#forge">Forge</a></li>
-
       <li><a href="#differences-from-base-r">Differences From Base R</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -621,13 +628,16 @@ interface standardizes all of that flexibility in one place.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

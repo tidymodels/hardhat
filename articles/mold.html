@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Molding data for modeling • hardhat</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Molding data for modeling">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -30,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -38,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -67,7 +68,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/DavisVaughan/hardhat">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -80,6 +81,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -93,11 +95,11 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(hardhat)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(hardhat)</a></code></pre></div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>For most modeling functions, data must be accepted from the user in some format where the <em>outcomes</em> and <em>predictors</em> are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used, R provides some infrastructure for preprocessing the user input through the <code><a href="https://www.rdocumentation.org/packages/stats/topics/model.frame">model.frame()</a></code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/model.matrix">model.matrix()</a></code> functions.</p>
+<p>For most modeling functions, data must be accepted from the user in some format where the <em>outcomes</em> and <em>predictors</em> are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used, R provides some infrastructure for preprocessing the user input through the <code><a href="https://rdrr.io/r/stats/model.frame.html">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> functions.</p>
 <p>But the formula method is not the only way to specify modeling terms. There is also an XY method, where <code>x</code> and <code>y</code> are supplied directly, and, recently, a <code>recipe</code> implementation can be used to preprocess data using a set of sequential steps.</p>
 <p>As a developer, you likely won’t want to care about the details of how each of these methods work, but (hopefully) still want to provide all three of these interfaces for your shiny new model. <code><a href="../reference/mold.html">mold()</a></code> makes this easy on you, and takes care of the details of preprocessing user input from any of these methods.</p>
 <p>The intended use of <code><a href="../reference/mold.html">mold()</a></code> is to be called from your user facing modeling function. To see that in action, have a look at the vignette found here: <code><a href="../articles/package.html">vignette("package", "hardhat")</a></code>. The rest of this vignette will be focused on the various different ways to use <code><a href="../reference/mold.html">mold()</a></code>, but keep in mind that generally it is not used as an interactive function like this.</p>
@@ -105,10 +107,10 @@
 <div id="a-first-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-first-example" class="anchor"></a>A First Example</h2>
-<p>The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: <code>outcomes ~ predictors</code>. Generally, as a developer, you have to then call <code><a href="https://www.rdocumentation.org/packages/stats/topics/model.frame">model.frame()</a></code> and <code><a href="https://www.rdocumentation.org/packages/stats/topics/model.matrix">model.matrix()</a></code> on this result to coerce it into the right format for ingestion into your model. <code><a href="../reference/mold.html">mold()</a></code> handles all of that for you.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">iris_form &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(Sepal.Length), iris)</a>
+<p>The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: <code>outcomes ~ predictors</code>. Generally, as a developer, you have to then call <code><a href="https://rdrr.io/r/stats/model.frame.html">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> on this result to coerce it into the right format for ingestion into your model. <code><a href="../reference/mold.html">mold()</a></code> handles all of that for you.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">iris_form &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(Sepal.Length), iris)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(iris_form)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(iris_form)</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; [1] "predictors" "outcomes"   "blueprint"  "extras"</span></a></code></pre></div>
 <p><code><a href="../reference/mold.html">mold()</a></code> returns four things. Two of them are immediately useful, and are almost always applicable to the modeling implementation you have created. The first is the <code>predictors</code>, returned as a tibble. All of the required processing has been done for you, so you just have to focus on the modeling implementation.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">iris_form<span class="op">$</span>predictors</a>
@@ -142,8 +144,8 @@
 <a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  9         2.9</span></a>
 <a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; 10         3.1</span></a>
 <a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
-<p>Beyond these two elements, <code><a href="../reference/mold.html">mold()</a></code> also returns a slot for any <code>extras</code> that might have been generated during preprocessing, but aren’t specifically predictors or outcomes. For example, an <code><a href="https://www.rdocumentation.org/packages/stats/topics/offset">offset()</a></code> can be specified directly in the formula, but isn’t technically a predictor.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(Sepal.Length) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/offset">offset</a></span>(Petal.Width), iris)<span class="op">$</span>extras</a>
+<p>Beyond these two elements, <code><a href="../reference/mold.html">mold()</a></code> also returns a slot for any <code>extras</code> that might have been generated during preprocessing, but aren’t specifically predictors or outcomes. For example, an <code><a href="https://rdrr.io/r/stats/offset.html">offset()</a></code> can be specified directly in the formula, but isn’t technically a predictor.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(Sepal.Length) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span>(Petal.Width), iris)<span class="op">$</span>extras</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; $offset</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; # A tibble: 150 x 1</span></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;    .offset</span></a>
@@ -165,7 +167,7 @@
 <h2 class="hasAnchor">
 <a href="#blueprints" class="anchor"></a>blueprints</h2>
 <p>As mentioned above, one of the objects that <code><a href="../reference/mold.html">mold()</a></code> returns is an <code>blueprint</code> responsible for controlling the preprocessing. There are multiple blueprints available in <code>hardhat</code>, but when you call <code><a href="../reference/mold.html">mold()</a></code> one is selected automatically for you. The following two calls generate the same result, using the default formula blueprint.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/identical">identical</a></span>(</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/identical.html">identical</a></span>(</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width, iris), </a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width, iris, <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>())</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">)</a>
@@ -220,10 +222,10 @@
 <a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; # … with 140 more rows</span></a></code></pre></div>
 <p>An error is thrown if an intercept removal term is specified:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, iris)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; `formula` must not contain the intercept removal term: `- 1`.</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `- 1`.</span></a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw"><a href="../reference/mold.html">mold</a></span>(<span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span><span class="dv">0</span>, iris)</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></a></code></pre></div>
 </div>
 <div id="dummy-variables" class="section level3">
 <h3 class="hasAnchor">
@@ -274,21 +276,21 @@
 <a class="sourceLine" id="cb12-5" data-line-number="5">  <span class="dt">blueprint =</span> <span class="kw"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="dt">intercept =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb12-6" data-line-number="6">)</a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(k_cols<span class="op">$</span>predictors)</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(k_cols<span class="op">$</span>predictors)</a>
 <a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; [1] "Speciessetosa"     "Speciesversicolor" "Speciesvirginica"</span></a>
 <a class="sourceLine" id="cb12-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(k_minus_one_cols<span class="op">$</span>predictors)</a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(k_minus_one_cols<span class="op">$</span>predictors)</a>
 <a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; [1] "(Intercept)"       "Speciesversicolor" "Speciesvirginica"</span></a></code></pre></div>
 </div>
 <div id="multivariate-outcomes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#multivariate-outcomes" class="anchor"></a>Multivariate outcomes</h3>
 <p>One of the other frustrating things about working with the formula method is that multivariate outcomes are a bit clunky to specify.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">.f &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(Sepal.Width, Sepal.Length) <span class="op">~</span><span class="st"> </span>Petal.Width</a>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">.f &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(Sepal.Width, Sepal.Length) <span class="op">~</span><span class="st"> </span>Petal.Width</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">frame &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/model.frame">model.frame</a></span>(.f, iris)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">frame &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/model.frame.html">model.frame</a></span>(.f, iris)</a>
 <a class="sourceLine" id="cb13-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(frame)</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(frame)</a>
 <a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;   cbind(Sepal.Width, Sepal.Length).Sepal.Width</span></a>
 <a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt; 1                                          3.5</span></a>
 <a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 2                                          3.0</span></a>
@@ -303,14 +305,14 @@
 <a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#&gt; 4                                           4.6         0.2</span></a>
 <a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#&gt; 5                                           5.0         0.2</span></a>
 <a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#&gt; 6                                           5.4         0.4</span></a></code></pre></div>
-<p>This might look like 3 columns, but it is actually 2, where the first column is named <code><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind(Sepal.Width, Sepal.Length)</a></code>, and it is actually a matrix with 2 columns, <code>Sepal.Width</code> and <code>Sepal.Length</code> inside it.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(frame)</a>
+<p>This might look like 3 columns, but it is actually 2, where the first column is named <code><a href="https://rdrr.io/r/base/cbind.html">cbind(Sepal.Width, Sepal.Length)</a></code>, and it is actually a matrix with 2 columns, <code>Sepal.Width</code> and <code>Sepal.Length</code> inside it.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(frame)</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; [1] 2</span></a>
 <a class="sourceLine" id="cb14-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(frame<span class="op">$</span><span class="st">`</span><span class="dt">cbind(Sepal.Width, Sepal.Length)</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(frame<span class="op">$</span><span class="st">`</span><span class="dt">cbind(Sepal.Width, Sepal.Length)</span><span class="st">`</span>)</a>
 <a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; [1] "matrix"</span></a>
 <a class="sourceLine" id="cb14-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(frame<span class="op">$</span><span class="st">`</span><span class="dt">cbind(Sepal.Width, Sepal.Length)</span><span class="st">`</span>)</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(frame<span class="op">$</span><span class="st">`</span><span class="dt">cbind(Sepal.Width, Sepal.Length)</span><span class="st">`</span>)</a>
 <a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;      Sepal.Width Sepal.Length</span></a>
 <a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; [1,]         3.5          5.1</span></a>
 <a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; [2,]         3.0          4.9</span></a>
@@ -319,7 +321,7 @@
 <a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; [5,]         3.6          5.0</span></a>
 <a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; [6,]         3.9          5.4</span></a></code></pre></div>
 <p>The default formula blueprint used with <code><a href="../reference/mold.html">mold()</a></code> allows you to specify multiple outcomes like you specify multiple predictors. You can even do inline transformations of each outcome, although if you are doing very much of that, I’d advise using a recipe instead. <code>outcomes</code> then holds the two outcomes columns.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">multivariate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(Sepal.Length) <span class="op">~</span><span class="st"> </span>Petal.Width, iris)</a>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">multivariate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(Sepal.Width <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(Sepal.Length) <span class="op">~</span><span class="st"> </span>Petal.Width, iris)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb15-3" data-line-number="3">multivariate<span class="op">$</span>outcomes</a>
 <a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; # A tibble: 150 x 2</span></a>
@@ -342,8 +344,8 @@
 <h2 class="hasAnchor">
 <a href="#xy" class="anchor"></a>XY</h2>
 <p>The second interface is the XY interface, useful when the predictors and outcomes are specified separately.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(iris, <span class="dt">select =</span> <span class="op">-</span>Sepal.Width)</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">y &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(iris, <span class="dt">select =</span> Sepal.Width)</a>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(iris, <span class="dt">select =</span> <span class="op">-</span>Sepal.Width)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">y &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(iris, <span class="dt">select =</span> Sepal.Width)</a>
 <a class="sourceLine" id="cb16-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb16-4" data-line-number="4">iris_xy &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(x, y)</a>
 <a class="sourceLine" id="cb16-5" data-line-number="5"></a>
@@ -420,12 +422,12 @@
 <div id="recipe" class="section level2">
 <h2 class="hasAnchor">
 <a href="#recipe" class="anchor"></a>Recipe</h2>
-<p>The last of the three interfaces is the relatively new recipes interface. The <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> knows how to <code><a href="https://www.rdocumentation.org/packages/recipes/topics/prep">prep()</a></code> your recipe, and <code><a href="https://www.rdocumentation.org/packages/recipes/topics/juice">juice()</a></code> it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(recipes)</a>
+<p>The last of the three interfaces is the relatively new recipes interface. The <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> knows how to <code><a href="https://rdrr.io/pkg/recipes/man/prep.html">prep()</a></code> your recipe, and <code><a href="https://rdrr.io/pkg/recipes/man/juice.html">juice()</a></code> it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(recipes)</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">rec &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/recipe">recipe</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width, iris) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_log">step_log</a></span>(Sepal.Length) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_dummy">step_dummy</a></span>(Species)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">rec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/recipes/man/recipe.html">recipe</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Species <span class="op">+</span><span class="st"> </span>Petal.Width, iris) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/recipes/man/step_log.html">step_log</a></span>(Sepal.Length) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/recipes/man/step_dummy.html">step_dummy</a></span>(Species)</a>
 <a class="sourceLine" id="cb19-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb19-7" data-line-number="7">iris_recipe &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mold.html">mold</a></span>(rec, iris)</a>
 <a class="sourceLine" id="cb19-8" data-line-number="8"></a>
@@ -485,6 +487,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -502,17 +505,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Davis Vaughan, Max Kuhn.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
