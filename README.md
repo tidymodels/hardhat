@@ -6,9 +6,9 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/DavisVaughan/hardhat.svg?branch=master)](https://travis-ci.org/DavisVaughan/hardhat)
+status](https://travis-ci.org/tidymodels/hardhat.svg?branch=master)](https://travis-ci.org/tidymodels/hardhat)
 [![Codecov test
-coverage](https://codecov.io/gh/DavisVaughan/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/hardhat?branch=master)
+coverage](https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=master)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
