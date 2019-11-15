@@ -25,13 +25,10 @@ Suggests:
     devtools
 Imports: 
     glue,
-    rlang (>= 0.3.4.9003),
+    rlang (>= 0.4.0),
     tibble,
     zeallot,
-    vctrs (>= 0.1.0.9003)
+    vctrs (>= 0.2.0)
 URL: https://github.com/tidymodels/hardhat
 BugReports: https://github.com/tidymodels/hardhat/issues
 VignetteBuilder: knitr
-Remotes:
-    r-lib/vctrs,
-    r-lib/rlang
