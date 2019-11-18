@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ensure predictors are all numeric — validate_predictors_are_numeric • hardhat</title>
+<title>Ensure that the outcome is univariate — validate_outcomes_are_univariate • hardhat</title>
 
 
 <!-- jquery -->
@@ -35,15 +35,15 @@
 
 
 
-<meta property="og:title" content="Ensure predictors are all numeric — validate_predictors_are_numeric" />
+<meta property="og:title" content="Ensure that the outcome is univariate — validate_outcomes_are_univariate" />
 <meta property="og:description" content="validate - asserts the following:
-predictors must have numeric columns.
+outcomes must have 1 column. Atomic vectors are treated as
+1 column matrices.
 
 
 check - returns the following:
 ok A logical. Does the check pass?
-bad_classes A named list. The names are the names of problematic columns,
-and the values are the classes of the matching column.
+n_cols A single numeric. The actual number of columns.
 
 " />
 <meta name="twitter:card" content="summary" />
@@ -132,33 +132,33 @@ and the values are the classes of the matching column.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Ensure predictors are all numeric</h1>
+    <h1>Ensure that the outcome is univariate</h1>
     <small class="dont-index">Source: <a href='https://github.com/tidymodels/hardhat/blob/master/R/validation.R'><code>R/validation.R</code></a></small>
-    <div class="hidden name"><code>validate_predictors_are_numeric.Rd</code></div>
+    <div class="hidden name"><code>validate_outcomes_are_univariate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>validate - asserts the following:</p><ul>
-<li><p><code>predictors</code> must have numeric columns.</p></li>
+<li><p><code>outcomes</code> must have 1 column. Atomic vectors are treated as
+1 column matrices.</p></li>
 </ul>
 
 <p>check - returns the following:</p><ul>
 <li><p><code>ok</code> A logical. Does the check pass?</p></li>
-<li><p><code>bad_classes</code> A named list. The names are the names of problematic columns,
-and the values are the classes of the matching column.</p></li>
+<li><p><code>n_cols</code> A single numeric. The actual number of columns.</p></li>
 </ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'>validate_predictors_are_numeric</span>(<span class='no'>predictors</span>)
+    <pre class="usage"><span class='fu'>validate_outcomes_are_univariate</span>(<span class='no'>outcomes</span>)
 
-<span class='fu'>check_predictors_are_numeric</span>(<span class='no'>predictors</span>)</pre>
+<span class='fu'>check_outcomes_are_univariate</span>(<span class='no'>outcomes</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>predictors</th>
+      <th>outcomes</th>
       <td><p>An object to check.</p></td>
     </tr>
     </table>
@@ -166,7 +166,7 @@ and the values are the classes of the matching column.</p></li>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The expected way to use this validation function is to supply it the
-<code>$predictors</code> element of the result of a call to <code><a href='mold.html'>mold()</a></code>.</p>
+<code>$outcomes</code> element of the result of a call to <code><a href='mold.html'>mold()</a></code>.</p>
     <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
 
     
@@ -190,30 +190,14 @@ and provide your own validation function.</p></li>
   <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code>,
   <code><a href='validate_outcomes_are_binary.html'>validate_outcomes_are_binary</a></code>,
   <code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a></code>,
-  <code><a href='validate_outcomes_are_univariate.html'>validate_outcomes_are_univariate</a></code>,
-  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code></p></div>
+  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code>,
+  <code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># All good</span>
-<span class='fu'>check_predictors_are_numeric</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; $ok
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $bad_classes
-#&gt; list()
-#&gt; </div><div class='input'>
-<span class='co'># Species is not numeric</span>
-<span class='fu'>check_predictors_are_numeric</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; $ok
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $bad_classes
-#&gt; $bad_classes$Species
-#&gt; [1] "factor"
-#&gt; 
-#&gt; </div><div class='input'>
-<span class='co'># This gives an intelligent error message</span>
+    <pre class="examples"><div class='input'><span class='fu'>validate_outcomes_are_univariate</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>))
+
 <span class='co'># \dontrun{</span>
-<span class='fu'>validate_predictors_are_numeric</span>(<span class='no'>iris</span>)</div><div class='output co'>#&gt; <span class='error'>Error: All predictors must be numeric, but the following are not:</span>
-#&gt; <span class='error'>'Species': 'factor'</span></div><div class='input'># }
+<span class='fu'>validate_outcomes_are_univariate</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The outcome must be univariate, but 11 columns were found.</span></div><div class='input'># }
 
 </div></pre>
   </div>
