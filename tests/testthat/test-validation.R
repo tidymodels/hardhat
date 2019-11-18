@@ -109,7 +109,7 @@ test_that("validate_prediction_size()", {
 
   expect_error(
     validate_prediction_size(mtcars[1:5,], mtcars),
-    "The number of rows in `new_data` \\(32\\) must match the number of rows in `.pred` \\(5\\)."
+    "The size of `new_data` \\(32\\) must match the size of `.pred` \\(5\\)."
   )
 
 })
