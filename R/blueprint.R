@@ -296,7 +296,9 @@ validate_is_ptype_list_or_null <- function(.x, .x_nm) {
   invisible(.x)
 }
 
+
 validate_is_0_row_tibble <- function(.x, .x_nm) {
+
   validate_is(.x, tibble::is_tibble, "tibble", .x_nm)
 
   .n <- nrow(.x)
