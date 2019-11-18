@@ -1,15 +1,15 @@
 context("test-validation")
 
-test_that("validate_outcomes_is_univariate()", {
+test_that("validate_outcomes_are_univariate()", {
 
-  expect_silent(validate_outcomes_is_univariate(data.frame(x = 1)))
+  expect_silent(validate_outcomes_are_univariate(data.frame(x = 1)))
 
-  expect_silent(validate_outcomes_is_univariate(matrix()))
+  expect_silent(validate_outcomes_are_univariate(matrix()))
 
-  expect_silent(validate_outcomes_is_univariate(1))
+  expect_silent(validate_outcomes_are_univariate(1))
 
   expect_error(
-    validate_outcomes_is_univariate(iris),
+    validate_outcomes_are_univariate(iris),
     "The outcome must be univariate, but 5 columns were found."
   )
 

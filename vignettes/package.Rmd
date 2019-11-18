@@ -168,7 +168,7 @@ This is also a good place to use some of hardhat's validation functions. In this
 ```{r}
 simple_lm_bridge <- function(processed) {
   
-  validate_outcomes_is_univariate(processed$outcomes)
+  validate_outcomes_are_univariate(processed$outcomes)
   
   predictors <- as.matrix(processed$predictors)
   outcomes <- processed$outcomes[[1]]

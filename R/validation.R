@@ -23,17 +23,17 @@
 #' `$outcomes` element of the result of a call to [mold()].
 #'
 #' @examples
-#' validate_outcomes_is_univariate(data.frame(x = 1))
+#' validate_outcomes_are_univariate(data.frame(x = 1))
 #'
 #' \dontrun{
-#' validate_outcomes_is_univariate(mtcars)
+#' validate_outcomes_are_univariate(mtcars)
 #' }
 #'
 #' @family validation functions
 #' @export
-validate_outcomes_is_univariate <- function(outcomes) {
+validate_outcomes_are_univariate <- function(outcomes) {
 
-  check <- check_outcomes_is_univariate(outcomes)
+  check <- check_outcomes_are_univariate(outcomes)
 
   if (!check$ok) {
     glubort(
@@ -44,9 +44,9 @@ validate_outcomes_is_univariate <- function(outcomes) {
   invisible(outcomes)
 }
 
-#' @rdname validate_outcomes_is_univariate
+#' @rdname validate_outcomes_are_univariate
 #' @export
-check_outcomes_is_univariate <- function(outcomes) {
+check_outcomes_are_univariate <- function(outcomes) {
 
   if (!rlang::is_vector(outcomes)) {
     n_cols <- 0L
