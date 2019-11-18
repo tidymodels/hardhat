@@ -296,3 +296,18 @@ test_that("intercept is not included as a predictor", {
   )
 
 })
+
+test_that("`NULL` y value results in `NULL` outcome, or error", {
+  x <- mold(iris, y = NULL)
+
+  expect_error(
+    xx <- forge(iris, x$blueprint),
+    NA
+  )
+
+  expect_equal(xx$outcomes, NULL)
+
+  expect_error(
+    forge(iris, x$blueprint, outcomes = TRUE)
+  )
+})

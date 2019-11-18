@@ -39,3 +39,12 @@ test_that("cannot pass anything in the dots", {
     "`...` must not contain any input. 1 elements were found"
   )
 })
+
+test_that("`NULL` y value is allowed for unsupervised methods (#95)", {
+  x <- mold(
+    iris,
+    y = NULL
+  )
+
+  expect_equal(x$outcomes, NULL)
+})
