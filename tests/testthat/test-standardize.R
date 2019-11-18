@@ -89,10 +89,6 @@ test_that("standardize - data.frame", {
 
 })
 
-test_that("standardize - NULL", {
-  expect_equal(standardize(NULL), NULL)
-})
-
 test_that("standardize - unknown", {
 
   expect_error(standardize("hi"), "`y` is of unknown type 'character'")

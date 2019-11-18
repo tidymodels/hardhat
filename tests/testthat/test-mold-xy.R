@@ -40,11 +40,14 @@ test_that("cannot pass anything in the dots", {
   )
 })
 
-test_that("`NULL` y value is allowed for unsupervised methods (#95)", {
-  x <- mold(
-    iris,
-    y = NULL
-  )
+test_that("`NULL` y value returns a 0 column tibble for `outcomes`", {
+  x <- mold(iris, y = NULL)
 
-  expect_equal(x$outcomes, NULL)
+  expect_equal(nrow(x$outcomes), 150)
+  expect_equal(ncol(x$outcomes), 0)
+})
+
+test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
+  x <- mold(iris, y = NULL)
+  expect_equal(x$blueprint$ptypes$outcomes, tibble())
 })
