@@ -437,6 +437,7 @@ get_extra_role_columns <- function(rec, data, original = TRUE) {
 }
 
 validate_is_0_row_tibble_or_null <- function(.x, .x_nm) {
+
   if (is.null(.x)) {
     return(invisible(.x))
   }
