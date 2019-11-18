@@ -290,15 +290,21 @@ validate_is_ptype_list_or_null <- function(.x, .x_nm) {
   validate_has_name(.x, .x_nm, "predictors")
   validate_has_name(.x, .x_nm, "outcomes")
 
-  validate_is_0_row_tibble(.x$predictors, glue("{.x_nm}$predictors"))
-  validate_is_0_row_tibble(.x$outcomes, glue("{.x_nm}$outcomes"))
+  validate_is_0_row_tibble_or_null(.x$predictors, glue("{.x_nm}$predictors"))
+  validate_is_0_row_tibble_or_null(.x$outcomes, glue("{.x_nm}$outcomes"))
 
   invisible(.x)
 }
 
+validate_is_0_row_tibble_or_null <- function(.x, .x_nm) {
+  if (is.null(.x)) {
+    return(invisible(.x))
+  }
+
+  validate_is_0_row_tibble(.x, .x_nm)
+}
 
 validate_is_0_row_tibble <- function(.x, .x_nm) {
-
   validate_is(.x, tibble::is_tibble, "tibble", .x_nm)
 
   .n <- nrow(.x)
