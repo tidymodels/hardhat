@@ -90,6 +90,11 @@ standardize.data.frame <- function(y) {
   tibble::as_tibble(y)
 }
 
+#' @export
+standardize.NULL <- function(y) {
+  y
+}
+
 is_known_output_type <- function(x) {
   is.numeric(x) || is.factor(x)
 }
