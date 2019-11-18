@@ -71,7 +71,7 @@ validate_no_formula_duplication(log(y) ~ log(y))
 Other validation functions: \code{\link{validate_column_names}},
   \code{\link{validate_outcomes_are_binary}},
   \code{\link{validate_outcomes_are_factors}},
-  \code{\link{validate_outcomes_is_univariate}},
+  \code{\link{validate_outcomes_are_univariate}},
   \code{\link{validate_prediction_size}},
   \code{\link{validate_predictors_are_numeric}}
 }
