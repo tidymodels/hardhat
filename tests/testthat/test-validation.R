@@ -15,6 +15,27 @@ test_that("validate_outcomes_are_univariate()", {
 
 })
 
+test_that("validate_outcomes_are_numeric()", {
+
+  expect_silent(
+    validate_outcomes_are_numeric(mtcars)
+  )
+
+  expect_error(
+    validate_outcomes_are_numeric(iris),
+    "'Species': 'factor'"
+  )
+
+  date <- as.POSIXct(as.POSIXlt(as.Date("2019-01-01")))
+  x <- data.frame(x = date, y = "hi")
+
+  expect_error(
+    validate_outcomes_are_numeric(x),
+    "'x': 'POSIXct', 'POSIXt'\n'y': 'factor'"
+  )
+
+})
+
 test_that("validate_no_formula_duplication()", {
 
   expect_silent(validate_no_formula_duplication(y ~ x))
