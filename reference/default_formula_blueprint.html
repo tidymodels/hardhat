@@ -134,7 +134,8 @@ is the blueprint used by default from mold() if x is a formula." />
 is the blueprint used by default from <code><a href='mold.html'>mold()</a></code> if <code>x</code> is a formula.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>default_formula_blueprint</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>default_formula_blueprint</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for formula</span>
 <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -147,6 +148,12 @@ is the blueprint used by default from <code><a href='mold.html'>mold()</a></code
       <td><p>A logical. Should an intercept be included in the
 processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></td>
+    </tr>
+    <tr>
+      <th>allow_novel_levels</th>
+      <td><p>A logical. Should novel factor levels be allowed at
+prediction time? This information is used by the <code>clean</code> function in the
+<code>forge</code> function list, and is passed on to <code><a href='scream.html'>scream()</a></code>.</p></td>
     </tr>
     <tr>
       <th>indicators</th>
@@ -598,6 +605,7 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; # Predictors: 0 
 #&gt;   # Outcomes: 0 
 #&gt;    Intercept: TRUE 
+#&gt; Novel Levels: FALSE 
 #&gt;   Indicators: TRUE 
 #&gt; 
 #&gt; $extras

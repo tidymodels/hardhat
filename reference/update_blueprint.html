@@ -174,12 +174,14 @@ be updated.</p></td>
 #&gt;  
 #&gt; # Predictors: 0 
 #&gt;   # Outcomes: 0 
-#&gt;    Intercept: FALSE </div><div class='input'>
+#&gt;    Intercept: FALSE 
+#&gt; Novel Levels: FALSE </div><div class='input'>
 <span class='fu'>update_blueprint</span>(<span class='no'>blueprint</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; XY blueprint: 
 #&gt;  
 #&gt; # Predictors: 0 
 #&gt;   # Outcomes: 0 
-#&gt;    Intercept: TRUE </div><div class='input'>
+#&gt;    Intercept: TRUE 
+#&gt; Novel Levels: FALSE </div><div class='input'>
 <span class='co'># Can't update non-existant elements</span>
 <span class='co'># \dontrun{</span>
 <span class='fu'>update_blueprint</span>(<span class='no'>blueprint</span>, <span class='kw'>intercpt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: All elements to change must already exist. `intercpt` is a new field.</span></div><div class='input'><span class='co'># }</span>

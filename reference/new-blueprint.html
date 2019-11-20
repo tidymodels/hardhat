@@ -146,16 +146,20 @@ preprocessing method (i.e. not the formula, xy, or recipe method) then
 you should subclass <code>new_blueprint()</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_formula_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+    <pre class="usage"><span class='fu'>new_formula_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
 
-<span class='fu'>new_recipe_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+<span class='fu'>new_recipe_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
 
-<span class='fu'>new_xy_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+<span class='fu'>new_xy_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
   <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
 
-<span class='fu'>new_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+<span class='fu'>new_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
   <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -176,6 +180,12 @@ the <code>new_blueprint()</code> section, Forge Functions, for details.</p></td>
       <td><p>A logical. Should an intercept be included in the
 processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></td>
+    </tr>
+    <tr>
+      <th>allow_novel_levels</th>
+      <td><p>A logical. Should novel factor levels be allowed at
+prediction time? This information is used by the <code>clean</code> function in the
+<code>forge</code> function list, and is passed on to <code><a href='scream.html'>scream()</a></code>.</p></td>
     </tr>
     <tr>
       <th>ptypes</th>
