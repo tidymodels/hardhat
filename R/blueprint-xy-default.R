@@ -175,8 +175,13 @@ get_mold_xy_default_function_set <- function() {
 
 # mold - xy - clean
 mold_xy_default_clean <- function(blueprint, x, y) {
-
   c(blueprint, x) %<-% mold_xy_default_clean_predictors(blueprint, x)
+
+  # Special case `y = NULL` as a 0 column variation on `x`
+  if (is.null(y)) {
+    y <- x[, 0L, drop = FALSE]
+  }
+
   c(blueprint, y) %<-% mold_xy_default_clean_outcomes(blueprint, y)
 
   out$mold$clean_xy(blueprint, x, y)

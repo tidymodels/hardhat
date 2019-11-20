@@ -288,3 +288,20 @@ test_that("only original non standard role columns are required", {
   )
 
 })
+
+test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
+  rec <- recipe(~ Sepal.Width, data = iris)
+  x <- mold(rec, iris)
+  expect_equal(forge(iris, x$blueprint)$outcomes, NULL)
+})
+
+test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
+  rec <- recipe(~ Sepal.Width, data = iris)
+  x <- mold(rec, iris)
+
+  forged <- forge(iris, x$blueprint, outcomes = TRUE)
+  outcomes <- forged$outcomes
+
+  expect_equal(nrow(outcomes), 150)
+  expect_equal(ncol(outcomes), 0)
+})

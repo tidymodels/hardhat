@@ -296,3 +296,18 @@ test_that("intercept is not included as a predictor", {
   )
 
 })
+
+test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
+  x <- mold(iris, y = NULL)
+  expect_equal(forge(iris, x$blueprint)$outcomes, NULL)
+})
+
+test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
+  x <- mold(iris, y = NULL)
+
+  forged <- forge(iris, x$blueprint, outcomes = TRUE)
+  outcomes <- forged$outcomes
+
+  expect_equal(nrow(outcomes), 150)
+  expect_equal(ncol(outcomes), 0)
+})

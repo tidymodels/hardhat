@@ -176,3 +176,21 @@ test_that("`NA` roles are skipped over", {
   )
 
 })
+
+test_that("Missing y value returns a 0 column tibble for `outcomes`", {
+  rec <- recipe(~ Sepal.Width, data = iris)
+  x <- mold(rec, iris)
+
+  # https://github.com/tidymodels/recipes/pull/412
+  expect_failure(
+    expect_equal(nrow(x$outcomes), 150)
+  )
+
+  expect_equal(ncol(x$outcomes), 0)
+})
+
+test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
+  rec <- recipe(~ Sepal.Width, data = iris)
+  x <- mold(rec, iris)
+  expect_equal(x$blueprint$ptypes$outcomes, tibble())
+})

@@ -453,3 +453,31 @@ test_that("`-var` still registers var as a predictor", {
   )
 
 })
+
+test_that("Missing y value returns a 0 column tibble for `outcomes`", {
+  x1 <- mold(~ Sepal.Width, iris)
+  x2 <- mold(NULL ~ Sepal.Width, iris)
+
+  outcomes1 <- x1$outcomes
+  outcomes2 <- x2$outcomes
+
+  expect_equal(nrow(outcomes1), 150)
+  expect_equal(ncol(outcomes1), 0)
+
+  expect_equal(nrow(outcomes2), 150)
+  expect_equal(ncol(outcomes2), 0)
+})
+
+test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
+  x <- mold(~ Sepal.Width, iris)
+  expect_equal(x$blueprint$ptypes$outcomes, tibble())
+})
+
+test_that("Missing y value still has outcome `terms` present", {
+  x <- mold(~ Sepal.Width, iris)
+
+  expect_equal(
+    rlang::f_rhs(x$blueprint$terms$outcomes),
+    rlang::expr(NULL + 0)
+  )
+})
