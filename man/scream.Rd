@@ -4,7 +4,7 @@
 \alias{scream}
 \title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
 \usage{
-scream(data, ptype)
+scream(data, ptype, allow_novel_levels = FALSE)
 }
 \arguments{
 \item{data}{A data frame containing the new data to check the structure
@@ -12,6 +12,11 @@ of.}
 
 \item{ptype}{A data frame prototype to cast \code{data} to. This is commonly
 a 0-row slice of the training set.}
+
+\item{allow_novel_levels}{Should novel factor levels in \code{data} be allowed?
+The safest approach is the default, which throws a warning when novel levels
+are found, and coerces them to \code{NA} values. Setting this argument to \code{TRUE}
+will ignore all novel levels.}
 }
 \value{
 A tibble containing the required columns after any required structural
@@ -30,7 +35,8 @@ including but not limited to:
 same as the corresponding column in \code{ptype}.
 \item \emph{Novel Levels} - Checks that the factor columns in \code{data} don't have any
 \emph{new} levels when compared with the \code{ptype} columns. If there are new
-levels, a warning is issued and they are coerced to \code{NA}.
+levels, a warning is issued and they are coerced to \code{NA}. This check is
+optional, and can be turned off with \code{allow_novel_levels = TRUE}.
 \item \emph{Level Recovery} - Checks that the factor columns in \code{data} aren't
 missing any factor levels when compared with the \code{ptype} columns. If
 there are missing levels, then they are restored.
@@ -53,9 +59,6 @@ checks exist in \code{shrink()}.
 train <- iris[1:100,]
 test <- iris[101:150,]
 
-# ---------------------------------------------------------------------------
-# shrink() / scream()
-
 # mold() is run at model fit time
 # and a formula preprocessing blueprint is recorded
 x <- mold(log(Sepal.Width) ~ Species, train)
@@ -64,6 +67,9 @@ x <- mold(log(Sepal.Width) ~ Species, train)
 # for the predictors and the outcomes
 ptype_pred <- x$blueprint$ptypes$predictors
 ptype_out <- x$blueprint$ptypes$outcomes
+
+# ---------------------------------------------------------------------------
+# shrink() / scream()
 
 # Pass the test data, along with a prototype, to
 # shrink() to extract the prototype columns
@@ -105,5 +111,33 @@ test3_fixed <- scream(test3_shrunk, ptype_pred)
 
 # scream() recovered the missing levels
 levels(test3_fixed$Species)
+
+# ---------------------------------------------------------------------------
+# Novel levels
+
+# When novel levels with any data are present in `data`, the default
+# is to coerce them to `NA` values with a warning.
+test4 <- test
+test4$Species <- as.character(test4$Species)
+test4$Species[1] <- "new_level"
+
+test4$Species <- factor(
+  test4$Species,
+  levels = c(levels(test$Species), "new_level")
+)
+
+test4 <- shrink(test4, ptype_pred)
+
+# Warning is thrown
+test4_removed <- scream(test4, ptype_pred)
+
+# Novel level is removed
+levels(test4_removed$Species)
+
+# No warning is thrown
+test4_kept <- scream(test4, ptype_pred, allow_novel_levels = TRUE)
+
+# Novel level is kept
+levels(test4_kept$Species)
 
 }
