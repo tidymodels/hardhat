@@ -40,9 +40,12 @@ The goal of this vignette is to teach you how to use `mold()` and `forge()` in a
   
 I imagine that this comes together as a few internal pieces that power the user facing methods for your model.
 
-<center>
-<img src="../man/figures/hardhat-fit-flow.svg" style="background:none; border:none; box-shadow:none;">
-</center>
+<br></br>
+
+```{r out.width = '100%', echo = FALSE}
+knitr::include_graphics("../man/figures/Fitting.png")
+```
+
 <br></br>
   
 - Stage 2 - Model Prediction
@@ -53,11 +56,14 @@ I imagine that this comes together as a few internal pieces that power the user 
   
   - Create a user facing predict method.
 
-In this case, you only have 1 user facing method, but have many internal implementation functions that you have to switch between, depending on the `"type"`.
+In this case, there are 2 user facing methods. Many models have multiple internal implementation functions that you'll switch between, depending on the `"type"`.
 
-<center>
-<img src="../man/figures/hardhat-predict-flow.svg" style="background:none; border:none; box-shadow:none;">
-</center>
+<br></br>
+
+```{r out.width = '100%', echo = FALSE}
+knitr::include_graphics("../man/figures/Prediction.png")
+```
+
 <br></br>
 
 The end result is a single high level modeling function that has methods for multiple different "interfaces", and a corresponding predict method to make predictions using one of these models along with new data (by "interfaces", I just mean the different types of inputs, so: data frame, matrix, formula and recipe).
