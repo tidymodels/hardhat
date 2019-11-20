@@ -37,15 +37,13 @@
 
 <meta property="og:title" content="Ensure that predictions have the correct number of rows — validate_prediction_size" />
 <meta property="og:description" content="validate - asserts the following:
-The number of rows in .pred must be the same as the number
-of rows in new_data.
-.pred must be a data frame.
+The size of .pred must be the same as the size of new_data.
 
 
 check - returns the following:
 ok A logical. Does the check pass?
-n_new_data A single numeric. The number of rows in new_data.
-n_pred A single numeric. The number of rows in .pred.
+size_new_data A single numeric. The size of new_data.
+size_pred A single numeric. The size of .pred.
 
 " />
 <meta name="twitter:card" content="summary" />
@@ -141,15 +139,13 @@ n_pred A single numeric. The number of rows in .pred.
 
     <div class="ref-description">
     <p>validate - asserts the following:</p><ul>
-<li><p>The number of rows in <code>.pred</code> must be the same as the number
-of rows in <code>new_data</code>.</p></li>
-<li><p><code>.pred</code> must be a data frame.</p></li>
+<li><p>The size of <code>.pred</code> must be the same as the size of <code>new_data</code>.</p></li>
 </ul>
 
 <p>check - returns the following:</p><ul>
 <li><p><code>ok</code> A logical. Does the check pass?</p></li>
-<li><p><code>n_new_data</code> A single numeric. The number of rows in <code>new_data</code>.</p></li>
-<li><p><code>n_pred</code> A single numeric. The number of rows in <code>.pred</code>.</p></li>
+<li><p><code>size_new_data</code> A single numeric. The size of <code>new_data</code>.</p></li>
+<li><p><code>size_pred</code> A single numeric. The size of <code>.pred</code>.</p></li>
 </ul>
 
     </div>
@@ -232,16 +228,16 @@ and provide your own validation function.</p></li>
 <span class='fu'>check_prediction_size</span>(<span class='no'>.pred</span>, <span class='no'>new_data</span>)</div><div class='output co'>#&gt; $ok
 #&gt; [1] TRUE
 #&gt; 
-#&gt; $n_new_data
+#&gt; $size_new_data
 #&gt; [1] 5
 #&gt; 
-#&gt; $n_pred
+#&gt; $size_pred
 #&gt; [1] 5
 #&gt; </div><div class='input'>
 <span class='co'># An informative error message is thrown</span>
 <span class='co'># if the rows are different</span>
 <span class='co'># \dontrun{</span>
-<span class='fu'>validate_prediction_size</span>(<span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>), <span class='no'>new_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The number of rows in `new_data` (5) must match the number of rows in `.pred` (4).</span></div><div class='input'># }
+<span class='fu'>validate_prediction_size</span>(<span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>), <span class='no'>new_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The size of `new_data` (5) must match the size of `.pred` (4).</span></div><div class='input'># }
 
 </div></pre>
   </div>
