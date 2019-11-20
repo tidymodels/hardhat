@@ -74,7 +74,13 @@ mold.data.frame <- function(x, y, ..., blueprint = NULL) {
 
   validate_is_xy_blueprint(blueprint)
 
-  c(blueprint, predictors, outcomes, ptypes, extras) %<-% run_mold(blueprint, x, y)
+  molded <- run_mold(blueprint, x, y)
+
+  blueprint <- molded$blueprint
+  predictors <- molded$predictors
+  outcomes <- molded$outcomes
+  ptypes <- molded$ptypes
+  extras <- molded$extras
 
   blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
@@ -99,7 +105,13 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
 
   blueprint <- update_blueprint(blueprint = blueprint, formula = formula)
 
-  c(blueprint, predictors, outcomes, ptypes, extras) %<-% run_mold(blueprint, data)
+  molded <- run_mold(blueprint, data)
+
+  blueprint <- molded$blueprint
+  predictors <- molded$predictors
+  outcomes <- molded$outcomes
+  ptypes <- molded$ptypes
+  extras <- molded$extras
 
   blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
@@ -122,7 +134,13 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
 
   blueprint <- update_blueprint(blueprint = blueprint, recipe = x)
 
-  c(blueprint, predictors, outcomes, ptypes, extras) %<-% run_mold(blueprint, data)
+  molded <- run_mold(blueprint, data)
+
+  blueprint <- molded$blueprint
+  predictors <- molded$predictors
+  outcomes <- molded$outcomes
+  ptypes <- molded$ptypes
+  extras <- molded$extras
 
   blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
@@ -170,28 +188,31 @@ run_mold <- function(blueprint, ...) {
 
 #' @export
 run_mold.xy_blueprint <- function(blueprint, x, y, ...) {
+  cleaned <- blueprint$mold$clean(blueprint = blueprint, x = x, y = y)
 
-  c(blueprint, x, y) %<-% blueprint$mold$clean(
-    blueprint = blueprint,
-    x = x,
-    y = y
-  )
+  blueprint <- cleaned$blueprint
+  x <- cleaned$x
+  y <- cleaned$y
 
   blueprint$mold$process(blueprint = blueprint, x = x, y = y)
 }
 
 #' @export
 run_mold.formula_blueprint <- function(blueprint, data, ...) {
+  cleaned <- blueprint$mold$clean(blueprint = blueprint, data = data)
 
-  c(blueprint, data) %<-% blueprint$mold$clean(blueprint = blueprint, data = data)
+  blueprint <- cleaned$blueprint
+  data <- cleaned$data
 
   blueprint$mold$process(blueprint = blueprint, data = data)
 }
 
 #' @export
 run_mold.recipe_blueprint <- function(blueprint, data, ...) {
+  cleaned <- blueprint$mold$clean(blueprint = blueprint, data = data)
 
-  c(blueprint, data) %<-% blueprint$mold$clean(blueprint = blueprint, data = data)
+  blueprint <- cleaned$blueprint
+  data <- cleaned$data
 
   blueprint$mold$process(blueprint = blueprint, data = data)
 }

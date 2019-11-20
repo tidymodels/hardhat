@@ -27,7 +27,6 @@ Imports:
     glue,
     rlang (>= 0.4.1),
     tibble,
-    zeallot,
     vctrs (>= 0.2.0)
 URL: https://github.com/tidymodels/hardhat
 BugReports: https://github.com/tidymodels/hardhat/issues

@@ -182,17 +182,20 @@ mold_recipe_default_process <- function(blueprint, data) {
   recipe <- recipes::prep(blueprint$recipe, training = data, fresh = blueprint$fresh)
   blueprint <- update_blueprint(blueprint, recipe = recipe)
 
-  c(blueprint, predictors_lst) %<-% mold_recipe_default_process_predictors(
-    blueprint = blueprint,
-    data = data
-  )
+  processed <- mold_recipe_default_process_predictors(blueprint = blueprint, data = data)
 
-  c(blueprint, outcomes_lst) %<-% mold_recipe_default_process_outcomes(
-    blueprint = blueprint,
-    data = data
-  )
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
 
-  c(blueprint, extras) %<-% mold_recipe_default_process_extras(blueprint, data)
+  processed <- mold_recipe_default_process_outcomes(blueprint = blueprint, data = data)
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
+
+  processed <- mold_recipe_default_process_extras(blueprint, data)
+
+  blueprint <- processed$blueprint
+  extras <- processed$extras
 
   extras <- c(
     extras,
@@ -344,15 +347,21 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
     outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
   }
 
-  c(blueprint, predictors_lst) %<-% forge_recipe_default_process_predictors(
+  processed <- forge_recipe_default_process_predictors(
     blueprint = blueprint,
     predictors = predictors
   )
 
-  c(blueprint, outcomes_lst) %<-% forge_recipe_default_process_outcomes(
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
+
+  processed <- forge_recipe_default_process_outcomes(
     blueprint = blueprint,
     outcomes = outcomes
   )
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
 
   extras <- forge_recipe_default_process_extras(
     extras,

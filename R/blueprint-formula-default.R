@@ -343,16 +343,21 @@ mold_formula_default_clean <- function(blueprint, data) {
 
 # mold - formula - process
 mold_formula_default_process <- function(blueprint, data) {
-
-  c(blueprint, predictors_lst) %<-% mold_formula_default_process_predictors(
+  processed <- mold_formula_default_process_predictors(
     blueprint = blueprint,
     data = data
   )
 
-  c(blueprint, outcomes_lst) %<-% mold_formula_default_process_outcomes(
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
+
+  processed <- mold_formula_default_process_outcomes(
     blueprint = blueprint,
     data = data
   )
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
 
   # nuke formula environment before returning
   formula_empty_env <- nuke_formula_environment(blueprint$formula)
@@ -470,16 +475,21 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
 }
 
 forge_formula_default_process <- function(blueprint, predictors, outcomes, extras) {
-
-  c(blueprint, predictors_lst) %<-% forge_formula_default_process_predictors(
+  processed <- forge_formula_default_process_predictors(
     blueprint = blueprint,
     predictors = predictors
   )
 
-  c(blueprint, outcomes_lst) %<-% forge_formula_default_process_outcomes(
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
+
+  processed <- forge_formula_default_process_outcomes(
     blueprint = blueprint,
     outcomes = outcomes
   )
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
 
   extras <- c(
     extras,
