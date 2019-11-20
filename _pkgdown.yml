@@ -30,6 +30,11 @@ reference:
     contents:
     - contains("blueprint")
 
+  - title: Setup
+    contents:
+    - contains("use_")
+    - contains("create_")
+
   - title: Information
     contents:
     - contains("get_")
