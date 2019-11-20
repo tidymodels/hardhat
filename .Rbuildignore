@@ -12,3 +12,4 @@
 ^\.github/workflows/R-CMD-check\.yaml$
 ^\.github/workflows/pr-commands\.yaml$
 ^LICENSE\.md$
+^cran-comments\.md$
