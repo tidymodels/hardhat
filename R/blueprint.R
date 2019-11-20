@@ -22,6 +22,10 @@
 #' processed data? This information is used by the `process` function
 #' in the `mold` and `forge` function list.
 #'
+#' @param allow_novel_levels A logical. Should novel factor levels be allowed at
+#' prediction time? This information is used by the `clean` function in the
+#' `forge` function list, and is passed on to [scream()].
+#'
 #' @param ptypes Either `NULL`, or a named list with 2 elements, `predictors`
 #' and `outcomes`, both of which are 0-row tibbles. `ptypes` is generated
 #' automatically at [mold()] time and is used to validate `new_data` at
@@ -47,6 +51,7 @@
 new_blueprint <- function(mold,
                           forge,
                           intercept = FALSE,
+                          allow_novel_levels = FALSE,
                           ptypes = NULL,
                           ...,
                           subclass = character()) {
@@ -54,6 +59,7 @@ new_blueprint <- function(mold,
   validate_is_function_set(mold)
   validate_is_function_set(forge)
   validate_is_bool(intercept)
+  validate_is_bool(allow_novel_levels)
   validate_is_ptype_list_or_null(ptypes)
   validate_is_character(subclass, "subclass")
 
@@ -65,6 +71,7 @@ new_blueprint <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
+    allow_novel_levels = allow_novel_levels,
     ptypes = ptypes
   )
 

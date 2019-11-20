@@ -5,7 +5,8 @@
 \alias{mold.recipe}
 \title{Default recipe blueprint}
 \usage{
-default_recipe_blueprint(intercept = FALSE, fresh = FALSE)
+default_recipe_blueprint(intercept = FALSE, allow_novel_levels = FALSE,
+  fresh = FALSE)
 
 \method{mold}{recipe}(x, data, ..., blueprint = NULL)
 }
@@ -13,6 +14,10 @@ default_recipe_blueprint(intercept = FALSE, fresh = FALSE)
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
+
+\item{allow_novel_levels}{A logical. Should novel factor levels be allowed at
+prediction time? This information is used by the \code{clean} function in the
+\code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}

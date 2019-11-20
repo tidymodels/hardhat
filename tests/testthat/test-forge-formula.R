@@ -181,6 +181,32 @@ test_that("novel predictor levels are caught", {
 
 })
 
+test_that("novel predictor levels can be ignored", {
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+
+  x <- mold(y ~ f, dat, blueprint = blueprint)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint),
+    NA
+  )
+
+  expect_equal(
+    xx$predictors[[5,5]],
+    1
+  )
+})
+
 test_that("novel predictor levels without any data are silently removed", {
 
   dat <- data.frame(
@@ -207,6 +233,34 @@ test_that("novel predictor levels without any data are silently removed", {
     colnames(x$predictors)
   )
 
+})
+
+test_that("novel predictor levels without any data still dropped even if novel levels are ignored", {
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  # The 'e' level exists, but there is no data for it!
+  new <- new[1:4,]
+
+  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+
+  x <- mold(y ~ f, dat, blueprint = blueprint)
+
+  expect_silent(
+    xx <- forge(new, x$blueprint)
+  )
+
+  expect_equal(
+    colnames(xx$predictors),
+    colnames(x$predictors)
+  )
 })
 
 test_that("novel levels are handled correctly when the new column is a character", {
@@ -243,6 +297,45 @@ test_that("novel levels are handled correctly when the new column is a character
 
 })
 
+test_that("novel levels are ignored correctly when the new column is a character", {
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = letters[1:5] # character!
+  )
+
+  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+
+  x <- mold(y ~ f, dat, blueprint = blueprint)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint),
+    NA
+  )
+
+  expect_equal(
+    xx$predictors[[5,5]],
+    1
+  )
+
+  # The 'e' level exists, but there is no data for it!
+  new2 <- new[1:4,]
+
+  # silently coerces to factor, and silently removes novel level
+  expect_silent(
+    yy <- forge(new2, x$blueprint)
+  )
+
+  expect_equal(
+    colnames(yy$predictors),
+    colnames(xx$predictors)[-5L]
+  )
+})
+
 test_that("novel ordered factor predictor levels have order maintained", {
 
   dat <- data.frame(
@@ -274,8 +367,38 @@ test_that("novel ordered factor predictor levels have order maintained", {
 
 })
 
-test_that("novel outcome levels are caught", {
+test_that("novel ordered factor predictor levels have order maintained when they are ignored", {
+  dat <- data.frame(
+    y = 1:4,
+    f = ordered(letters[1:4])
+  )
 
+  new <- data.frame(
+    y = 1:5,
+    f = ordered(letters[c(1:2, 5, 3:4)], levels = letters[c(1:2, 5, 3:4)])
+  )
+
+  blueprint <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
+
+  x <- mold(y ~ f, dat, blueprint = blueprint)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint),
+    NA
+  )
+
+  expect_equal(
+    levels(xx$predictors$f),
+    levels(new$f)
+  )
+
+  expect_is(
+    xx$predictors$f,
+    "ordered"
+  )
+})
+
+test_that("novel outcome levels are caught", {
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -297,7 +420,32 @@ test_that("novel outcome levels are caught", {
     xx$outcomes[[5,1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
+})
 
+test_that("novel outcome levels are always caught, even if `allow_novel_levels = TRUE`", {
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+
+  x <- mold(f ~ y, dat, blueprint = blueprint)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint, outcomes = TRUE),
+    "Novel levels found in column 'f': 'e'"
+  )
+
+  expect_equal(
+    xx$outcomes[[5,1]],
+    factor(NA_real_, c("a", "b", "c", "d"))
+  )
 })
 
 test_that("missing predictor levels are restored silently", {
@@ -414,6 +562,33 @@ test_that("can be both missing levels and have new levels", {
     levels(dat$f)
   )
 
+})
+
+test_that("can be both missing levels and have new levels that get ignored", {
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:4,
+    f = factor(letters[c(1:3, 5)])
+  )
+
+  blueprint <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
+
+  x <- mold(y ~ f, dat, blueprint = blueprint)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint),
+    NA
+  )
+
+  # Order of levels comes from `new` first, then `dat`
+  expect_equal(
+    levels(xx$predictors$f),
+    union(levels(new$f), levels(dat$f))
+  )
 })
 
 test_that("new data classes are caught", {
