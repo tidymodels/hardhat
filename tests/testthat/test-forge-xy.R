@@ -139,6 +139,32 @@ test_that("novel predictor levels are caught", {
 
 })
 
+test_that("novel predictor levels can be ignored", {
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  blueprint <- default_xy_blueprint(allow_novel_levels = TRUE)
+
+  x <- mold(dat[, "f", drop = FALSE], dat$y, blueprint = blueprint)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint),
+    NA
+  )
+
+  expect_equal(
+    xx$predictors[[5,1]],
+    factor("e", c("a", "b", "c", "d", "e"))
+  )
+})
+
 test_that("novel predictor levels without any data are silently removed", {
 
   dat <- data.frame(

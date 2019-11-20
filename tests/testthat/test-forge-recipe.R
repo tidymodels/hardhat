@@ -116,6 +116,48 @@ test_that("novel predictor levels are caught", {
 
 })
 
+test_that("novel predictor levels can be ignored and handled by recipes", {
+  dat <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = factor(letters[1:5])
+  )
+
+  blueprint <- default_recipe_blueprint(allow_novel_levels = TRUE)
+
+  rec1 <- recipe(y ~ f, dat)
+  rec2 <- step_novel(rec1, f)
+
+  x1 <- mold(rec1, dat, blueprint = blueprint)
+  x2 <- mold(rec2, dat, blueprint = blueprint)
+
+  # Recipes will silently handle the novel level
+  expect_warning(
+    xx <- forge(new, x1$blueprint),
+    NA
+  )
+
+  expect_equal(
+    xx$predictors$f[[5]],
+    factor(NA_real_, levels = c("a", "b", "c", "d"))
+  )
+
+  # `step_novel()` let's us handle the novel level differently
+  expect_warning(
+    xx <- forge(new, x2$blueprint),
+    NA
+  )
+
+  expect_equal(
+    xx$predictors$f[[5]],
+    factor("new", levels = c("a", "b", "c", "d", "new"))
+  )
+})
+
 test_that("novel predictor levels without any data are silently removed", {
 
   dat <- data.frame(
