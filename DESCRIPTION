@@ -25,7 +25,7 @@ Suggests:
     devtools
 Imports: 
     glue,
-    rlang (>= 0.4.0),
+    rlang (>= 0.4.1),
     tibble,
     zeallot,
     vctrs (>= 0.2.0)
