@@ -114,9 +114,8 @@
 </li>
 </ul>
 <p>I imagine that this comes together as a few internal pieces that power the user facing methods for your model.</p>
-<center>
-<img src="../man/figures/hardhat-fit-flow.svg" style="background:none; border:none; box-shadow:none;">
-</center>
+<p><br></p>
+<p><img src="../man/figures/Fitting.png" width="100%"></p>
 <p><br></p>
 <ul>
 <li>
@@ -128,10 +127,9 @@
 </ul>
 </li>
 </ul>
-<p>In this case, you only have 1 user facing method, but have many internal implementation functions that you have to switch between, depending on the <code>"type"</code>.</p>
-<center>
-<img src="../man/figures/hardhat-predict-flow.svg" style="background:none; border:none; box-shadow:none;">
-</center>
+<p>In this case, there are 2 user facing methods. Many models have multiple internal implementation functions that you’ll switch between, depending on the <code>"type"</code>.</p>
+<p><br></p>
+<p><img src="../man/figures/Prediction.png" width="100%"></p>
 <p><br></p>
 <p>The end result is a single high level modeling function that has methods for multiple different “interfaces”, and a corresponding predict method to make predictions using one of these models along with new data (by “interfaces”, I just mean the different types of inputs, so: data frame, matrix, formula and recipe).</p>
 <p>There are obviously other things that you might want your modeling package to do. For instance, you might implement a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> or <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method. But the two stages described here are necessary for almost every model, and they involve the inputs and outputs that hardhat helps the most with.</p>
