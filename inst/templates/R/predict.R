@@ -1,6 +1,3 @@
-# ------------------------------------------------------------------------------
-# user interfaces
-
 #' Predict from a `{{model}}`
 #'
 #' @param object A `{{model}}` object.
@@ -41,7 +38,7 @@ valid_predict_types <- function() {
 }
 
 # ------------------------------------------------------------------------------
-# bridge
+# Bridge
 
 predict_{{model}}_bridge <- function(type, model, predictors) {
   predictors <- as.matrix(predictors)
@@ -62,7 +59,7 @@ get_predict_function <- function(type) {
 }
 
 # ------------------------------------------------------------------------------
-# computational implementation
+# Implementation
 
 predict_{{model}}_numeric <- function(model, predictors) {
   predictions <- rep(1L, times = nrow(predictors))

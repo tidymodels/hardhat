@@ -1,7 +1,3 @@
-# ------------------------------------------------------------------------------
-# user interfaces
-
-
 #' Fit a `{{model}}`
 #'
 #' `{{model}}()` fits a model.
@@ -97,7 +93,7 @@
 }
 
 # ------------------------------------------------------------------------------
-# bridge
+# Bridge
 
 {{model}}_bridge <- function(processed, ...) {
   predictors <- processed$predictors
@@ -113,7 +109,7 @@
 
 
 # ------------------------------------------------------------------------------
-# computational implementation
+# Implementation
 
 {{model}}_impl <- function(predictors, outcome) {
   list(coefs = 1)
