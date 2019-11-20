@@ -9,16 +9,20 @@
 \alias{new_blueprint}
 \title{Create a new preprocessing blueprint}
 \usage{
-new_formula_blueprint(mold, forge, intercept = FALSE, ptypes = NULL,
-  formula = NULL, indicators = TRUE, ..., subclass = character())
+new_formula_blueprint(mold, forge, intercept = FALSE,
+  allow_novel_levels = FALSE, ptypes = NULL, formula = NULL,
+  indicators = TRUE, ..., subclass = character())
 
-new_recipe_blueprint(mold, forge, intercept = FALSE, fresh = FALSE,
-  ptypes = NULL, recipe = NULL, ..., subclass = character())
+new_recipe_blueprint(mold, forge, intercept = FALSE,
+  allow_novel_levels = FALSE, fresh = FALSE, ptypes = NULL,
+  recipe = NULL, ..., subclass = character())
 
-new_xy_blueprint(mold, forge, intercept = FALSE, ptypes = NULL, ...,
+new_xy_blueprint(mold, forge, intercept = FALSE,
+  allow_novel_levels = FALSE, ptypes = NULL, ...,
   subclass = character())
 
-new_blueprint(mold, forge, intercept = FALSE, ptypes = NULL, ...,
+new_blueprint(mold, forge, intercept = FALSE,
+  allow_novel_levels = FALSE, ptypes = NULL, ...,
   subclass = character())
 }
 \arguments{
@@ -31,6 +35,10 @@ the \code{\link[=new_blueprint]{new_blueprint()}} section, Forge Functions, for 
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
+
+\item{allow_novel_levels}{A logical. Should novel factor levels be allowed at
+prediction time? This information is used by the \code{clean} function in the
+\code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
 \item{ptypes}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
 and \code{outcomes}, both of which are 0-row tibbles. \code{ptypes} is generated

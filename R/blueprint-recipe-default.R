@@ -106,7 +106,9 @@
 #' forge(test, processed_roles$blueprint)
 #'
 #' @export
-default_recipe_blueprint <- function(intercept = FALSE, fresh = FALSE) {
+default_recipe_blueprint <- function(intercept = FALSE,
+                                     allow_novel_levels = FALSE,
+                                     fresh = FALSE) {
 
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
@@ -115,6 +117,7 @@ default_recipe_blueprint <- function(intercept = FALSE, fresh = FALSE) {
     mold = mold,
     forge = forge,
     intercept = intercept,
+    allow_novel_levels = allow_novel_levels,
     fresh = fresh
   )
 
@@ -130,6 +133,7 @@ default_recipe_blueprint <- function(intercept = FALSE, fresh = FALSE) {
 new_default_recipe_blueprint <- function(mold,
                                          forge,
                                          intercept = FALSE,
+                                         allow_novel_levels = FALSE,
                                          fresh = FALSE,
                                          ptypes = NULL,
                                          recipe = NULL,
@@ -141,6 +145,7 @@ new_default_recipe_blueprint <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
+    allow_novel_levels = allow_novel_levels,
     fresh = fresh,
     ptypes = ptypes,
     recipe = recipe,
@@ -273,10 +278,16 @@ forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
   validate_is_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)
-  predictors <- scream(predictors, blueprint$ptypes$predictors)
+
+  predictors <- scream(
+    predictors,
+    blueprint$ptypes$predictors,
+    allow_novel_levels = blueprint$allow_novel_levels
+  )
 
   if (outcomes) {
     outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    # Never allow novel levels for outcomes
     outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   }
   else {
@@ -289,14 +300,23 @@ forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
 }
 
 forge_recipe_default_clean_extras <- function(blueprint, new_data) {
+  if (is.null(blueprint$extra_role_ptypes)) {
+    extras <- list(roles = NULL)
+    return(extras)
+  }
 
-  if (!is.null(blueprint$extra_role_ptypes)) {
-    extra_role_cols <- map(blueprint$extra_role_ptypes, shrink, data = new_data)
-    extra_role_cols <- map2(extra_role_cols, blueprint$extra_role_ptypes, scream)
-  }
-  else {
-    extra_role_cols <- NULL
-  }
+  extra_role_cols <- map(
+    blueprint$extra_role_ptypes,
+    shrink,
+    data = new_data
+  )
+
+  extra_role_cols <- map2(
+    extra_role_cols,
+    blueprint$extra_role_ptypes,
+    scream,
+    allow_novel_levels = blueprint$allow_novel_levels
+  )
 
   extras <- list(roles = extra_role_cols)
 

@@ -6,7 +6,7 @@
 \alias{mold.matrix}
 \title{Default XY blueprint}
 \usage{
-default_xy_blueprint(intercept = FALSE)
+default_xy_blueprint(intercept = FALSE, allow_novel_levels = FALSE)
 
 \method{mold}{data.frame}(x, y, ..., blueprint = NULL)
 
@@ -16,6 +16,10 @@ default_xy_blueprint(intercept = FALSE)
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
+
+\item{allow_novel_levels}{A logical. Should novel factor levels be allowed at
+prediction time? This information is used by the \code{clean} function in the
+\code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
 \item{x}{A data frame or matrix containing the predictors.}
 

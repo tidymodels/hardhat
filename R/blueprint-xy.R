@@ -3,6 +3,7 @@
 new_xy_blueprint <- function(mold,
                              forge,
                              intercept = FALSE,
+                             allow_novel_levels = FALSE,
                              ptypes = NULL,
                              ...,
                              subclass = character()) {
@@ -18,6 +19,7 @@ new_xy_blueprint <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
+    allow_novel_levels = allow_novel_levels,
     ptypes = ptypes,
     ...,
     subclass = c(subclass, "xy_blueprint")

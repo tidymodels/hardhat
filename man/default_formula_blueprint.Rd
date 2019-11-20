@@ -5,7 +5,8 @@
 \alias{mold.formula}
 \title{Default formula blueprint}
 \usage{
-default_formula_blueprint(intercept = FALSE, indicators = TRUE)
+default_formula_blueprint(intercept = FALSE,
+  allow_novel_levels = FALSE, indicators = TRUE)
 
 \method{mold}{formula}(formula, data, ..., blueprint = NULL)
 }
@@ -13,6 +14,10 @@ default_formula_blueprint(intercept = FALSE, indicators = TRUE)
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
+
+\item{allow_novel_levels}{A logical. Should novel factor levels be allowed at
+prediction time? This information is used by the \code{clean} function in the
+\code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
 \item{indicators}{A logical. Should factors be expanded into dummy variables?}
 

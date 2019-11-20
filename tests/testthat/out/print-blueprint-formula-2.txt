@@ -3,4 +3,5 @@ Formula blueprint:
 # Predictors: 1 
   # Outcomes: 0 
    Intercept: FALSE 
+Novel Levels: FALSE 
   Indicators: TRUE 

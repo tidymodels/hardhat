@@ -118,7 +118,7 @@
 #' forge(test2, processed_vec$blueprint, outcomes = TRUE)
 #'
 #' @export
-default_xy_blueprint <- function(intercept = FALSE) {
+default_xy_blueprint <- function(intercept = FALSE, allow_novel_levels = FALSE) {
 
   mold <- get_mold_xy_default_function_set()
   forge <- get_forge_xy_default_function_set()
@@ -126,7 +126,8 @@ default_xy_blueprint <- function(intercept = FALSE) {
   new_default_xy_blueprint(
     mold = mold,
     forge = forge,
-    intercept = intercept
+    intercept = intercept,
+    allow_novel_levels = allow_novel_levels
   )
 
 }
@@ -147,6 +148,7 @@ default_xy_blueprint <- function(intercept = FALSE) {
 new_default_xy_blueprint <- function(mold,
                                      forge,
                                      intercept = FALSE,
+                                     allow_novel_levels = FALSE,
                                      ptypes = NULL,
                                      ...,
                                      subclass = character()) {
@@ -155,6 +157,7 @@ new_default_xy_blueprint <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
+    allow_novel_levels = allow_novel_levels,
     ptypes = ptypes,
     ...,
     subclass = c(subclass, "default_xy_blueprint")
@@ -243,10 +246,16 @@ forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
   validate_is_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)
-  predictors <- scream(predictors, blueprint$ptypes$predictors)
+
+  predictors <- scream(
+    predictors,
+    blueprint$ptypes$predictors,
+    allow_novel_levels = blueprint$allow_novel_levels
+  )
 
   if (outcomes) {
     outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    # Never allow novel levels for outcomes
     outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   }
   else {
