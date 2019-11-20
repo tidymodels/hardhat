@@ -8,3 +8,5 @@
 ^\.Rproj\.user$
 ^man-roxygen$
 ^graphics$
+^\.github/workflows/R-CMD-check\.yaml$
+^\.github/workflows/pr-commands\.yaml$
