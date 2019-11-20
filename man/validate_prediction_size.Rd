@@ -19,16 +19,14 @@ check_prediction_size(.pred, new_data)
 \description{
 validate - asserts the following:
 \itemize{
-\item The number of rows in \code{.pred} must be the same as the number
-of rows in \code{new_data}.
-\item \code{.pred} must be a data frame.
+\item The size of \code{.pred} must be the same as the size of \code{new_data}.
 }
 
 check - returns the following:
 \itemize{
 \item \code{ok} A logical. Does the check pass?
-\item \code{n_new_data} A single numeric. The number of rows in \code{new_data}.
-\item \code{n_pred} A single numeric. The number of rows in \code{.pred}.
+\item \code{size_new_data} A single numeric. The size of \code{new_data}.
+\item \code{size_pred} A single numeric. The size of \code{.pred}.
 }
 }
 \details{

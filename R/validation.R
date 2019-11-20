@@ -466,18 +466,15 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' validate - asserts the following:
 #'
-#' - The number of rows in `.pred` must be the same as the number
-#' of rows in `new_data`.
-#'
-#' - `.pred` must be a data frame.
+#' - The size of `.pred` must be the same as the size of `new_data`.
 #'
 #' check - returns the following:
 #'
 #' - `ok` A logical. Does the check pass?
 #'
-#' - `n_new_data` A single numeric. The number of rows in `new_data`.
+#' - `size_new_data` A single numeric. The size of `new_data`.
 #'
-#' - `n_pred` A single numeric. The number of rows in `.pred`.
+#' - `size_pred` A single numeric. The size of `.pred`.
 #'
 #' @param .pred A tibble. The predictions to return from any prediction
 #' `type`. This is often created using one of the spruce functions, like
@@ -528,8 +525,8 @@ validate_prediction_size <- function(.pred, new_data) {
 
   if(!check$ok) {
     glubort(
-      "The number of rows in `new_data` ({check$n_new_data}) must match the ",
-      "number of rows in `.pred` ({check$n_pred})."
+      "The size of `new_data` ({check$size_new_data}) must match the ",
+      "size of `.pred` ({check$size_pred})."
     )
   }
 
@@ -539,20 +536,14 @@ validate_prediction_size <- function(.pred, new_data) {
 #' @rdname validate_prediction_size
 #' @export
 check_prediction_size <- function(.pred, new_data) {
-
   new_data <- check_is_data_like(new_data)
 
-  if (!is.data.frame(.pred)) {
-    glubort("`.pred` must be a data.frame.")
-  }
+  size_new_data <- vctrs::vec_size(new_data)
+  size_pred <- vctrs::vec_size(.pred)
 
-  n_new_data <- nrow(new_data)
-  n_pred <- nrow(.pred)
+  ok <- size_pred == size_new_data
 
-  ok <- n_pred == n_new_data
-
-  check_list(ok = ok, n_new_data = n_new_data, n_pred = n_pred)
-
+  check_list(ok = ok, size_new_data = size_new_data, size_pred = size_pred)
 }
 
 # ------------------------------------------------------------------------------
