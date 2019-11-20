@@ -92,3 +92,25 @@
   {{model}}_bridge(processed, ...)
 }
 
+# ------------------------------------------------------------------------------
+# Bridge
+
+{{model}}_bridge <- function(processed, ...) {
+  predictors <- processed$predictors
+  outcome <- processed$outcomes[[1]]
+
+  fit <- {{model}}_impl(predictors, outcome)
+
+  new_{{model}}(
+    coefs = fit$coefs,
+    blueprint = processed$blueprint
+  )
+}
+
+
+# ------------------------------------------------------------------------------
+# Implementation
+
+{{model}}_impl <- function(predictors, outcome) {
+  list(coefs = 1)
+}

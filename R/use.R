@@ -4,25 +4,24 @@
 #'
 #' `create_modeling_package()` will:
 #'    - Call `usethis::create_package()` to set up a new R package.
-#'    - Call `use_modeling_package()` to add a modeling package skeleton to it.
+#'    - Call `use_modeling_deps()`.
+#'    - Call `use_modeling_files()`.
 #'
-#' `use_modeling_package()` will:
-#'    - Add hardhat and rlang to Imports
+#' `use_modeling_deps()` will:
+#'    - Add hardhat, rlang, and stats to Imports
 #'    - Add recipes to Suggests
-#'    - If roxygen2 is available, uses roxygen markdown
-#'    - Add a package documentation file
-#'    - Generate and populate 7 files in `R/`:
-#'       - `constructor.R`
-#'       - `fit-bridge.R`
-#'       - `fit-implementation.R`
-#'       - `fit-interface.R`
-#'       - `predict-bridge.R`
-#'       - `predict-implementation.R`
-#'       - `predict-interface.R`
+#'    - If roxygen2 is available, use roxygen markdown
 #'
-#' @param model A string. The name of the high level modeling function
-#' that users will call. For example, `"linear_regression"`. This will be used
-#' to populate the skeleton.
+#' `use_modeling_files()` will:
+#'    - Add a package documentation file
+#'    - Generate and populate 3 files in `R/`:
+#'       - `{{model}}-constructor.R`
+#'       - `{{model}}-fit.R`
+#'       - `{{model}}-predict.R`
+#'
+#' @param model A string. The name of the high level modeling function that
+#' users will call. For example, `"linear_regression"`. This will be used to
+#' populate the skeleton. Spaces are not allowed.
 #'
 #' @param path A path. If it exists, it is used. If it does not exist,
 #' it is created, provided that the parent path exists.
@@ -36,63 +35,25 @@
 #'   - If on RStudio server, the current RStudio project is activated.
 #'   - Otherwise, the working directory and active project is changed.
 #'
-#' @export
-use_modeling_package <- function(model) {
-  validate_installed("usethis")
-  validate_installed("roxygen2")
-  validate_installed("devtools")
-  validate_installed("recipes")
-
-  if (!is_string(model)) {
-    abort("`model` must be a string.")
-  }
-
-  if (grepl("\\s", model)) {
-    abort("`model` must not contain any spaces.")
-  }
-
-  usethis::ui_info("Adding required packages to the DESCRIPTION")
-  usethis::use_package("hardhat", type = "Imports")
-  usethis::use_package("rlang", type = "Imports")
-  usethis::use_package("stats", type = "Imports")
-  usethis::use_package("recipes", type = "Suggests")
-  ui_blank_line()
-
-  usethis::ui_info("Setting up roxygen")
-  usethis::use_roxygen_md()
-  ui_blank_line()
-
-  data <- list(model = model)
-
-  use_hardhat_template <- function(template) {
-    usethis::use_template(template, data = data, package = "hardhat")
-  }
-
-  usethis::ui_info("Writing skeleton files")
-  usethis::use_package_doc()
-  use_hardhat_template("R/constructor.R")
-  use_hardhat_template("R/fit-bridge.R")
-  use_hardhat_template("R/fit-implementation.R")
-  use_hardhat_template("R/fit-interface.R")
-  use_hardhat_template("R/predict-bridge.R")
-  use_hardhat_template("R/predict-implementation.R")
-  use_hardhat_template("R/predict-interface.R")
-  ui_blank_line()
-
-  invisible(model)
-}
-
-#' @rdname use_modeling_package
+#' @name modeling-package
 #' @export
 create_modeling_package <- function(path,
                                     model,
                                     fields = NULL,
                                     open = interactive()) {
-
   validate_installed("usethis")
   validate_installed("roxygen2")
   validate_installed("devtools")
   validate_installed("recipes")
+
+  # Avoid creating files if a bad model is supplied
+  if (!rlang::is_string(model)) {
+    abort("`model` must be a single string.")
+  }
+
+  if (has_spaces(model)) {
+    abort("`model` must not contain any spaces.")
+  }
 
   usethis::create_package(path, fields, open = FALSE)
 
@@ -101,7 +62,8 @@ create_modeling_package <- function(path,
   on.exit(usethis::proj_set(old_project), add = TRUE)
   ui_blank_line()
 
-  use_modeling_package(model)
+  use_modeling_deps()
+  use_modeling_files_impl(model, prompt_document = FALSE)
 
   # Only auto-document when creating _new_ packages
   # Must explicitly set the pkg path
@@ -119,8 +81,79 @@ create_modeling_package <- function(path,
   invisible(usethis::proj_get())
 }
 
-is_string <- function (x) {
-  length(x) == 1 && is.character(x)
+#' @rdname modeling-package
+#' @export
+use_modeling_deps <- function() {
+  validate_installed("usethis")
+  validate_installed("roxygen2")
+  validate_installed("devtools")
+  validate_installed("recipes")
+
+  usethis::ui_info("Adding required packages to the DESCRIPTION")
+  usethis::use_package("hardhat", type = "Imports")
+  usethis::use_package("rlang", type = "Imports")
+  usethis::use_package("stats", type = "Imports")
+  usethis::use_package("recipes", type = "Suggests")
+  ui_blank_line()
+
+  usethis::ui_info("Setting up roxygen")
+  usethis::use_roxygen_md()
+  ui_blank_line()
+
+  invisible()
+}
+
+#' @rdname modeling-package
+#' @export
+use_modeling_files <- function(model) {
+  use_modeling_files_impl(model)
+}
+
+use_modeling_files_impl <- function(model, prompt_document = TRUE) {
+  validate_installed("usethis")
+
+  if (!rlang::is_string(model)) {
+    abort("`model` must be a string.")
+  }
+
+  if (has_spaces(model)) {
+    abort("`model` must not contain any spaces.")
+  }
+
+  data <- list(model = model)
+
+  use_hardhat_template <- function(template, save_as) {
+    usethis::use_template(
+      template = template,
+      save_as = save_as,
+      data = data,
+      package = "hardhat"
+    )
+  }
+
+  path_constructor <- glue::glue("R/{model}-constructor.R")
+  path_fit <- glue::glue("R/{model}-fit.R")
+  path_predict <- glue::glue("R/{model}-predict.R")
+
+  usethis::ui_info("Writing skeleton files")
+  usethis::use_package_doc()
+  use_hardhat_template("R/constructor.R", path_constructor)
+  use_hardhat_template("R/fit.R", path_fit)
+  use_hardhat_template("R/predict.R", path_predict)
+
+  if (prompt_document) {
+    usethis::ui_todo("Run {usethis::ui_code('devtools::document()')}")
+  } else {
+    ui_blank_line()
+  }
+
+  invisible(model)
+}
+
+# ------------------------------------------------------------------------------
+
+has_spaces <- function(x) {
+  grepl("\\s", x)
 }
 
 validate_installed <- function(pkg) {
