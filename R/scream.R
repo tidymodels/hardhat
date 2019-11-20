@@ -15,7 +15,8 @@
 #'
 #' - _Novel Levels_ - Checks that the factor columns in `data` don't have any
 #' _new_ levels when compared with the `ptype` columns. If there are new
-#' levels, a warning is issued and they are coerced to `NA`.
+#' levels, a warning is issued and they are coerced to `NA`. This check is
+#' optional, and can be turned off with `allow_novel_levels = TRUE`.
 #'
 #' - _Level Recovery_ - Checks that the factor columns in `data` aren't
 #' missing any factor levels when compared with the `ptype` columns. If
@@ -38,6 +39,11 @@
 #' @param ptype A data frame prototype to cast `data` to. This is commonly
 #' a 0-row slice of the training set.
 #'
+#' @param allow_novel_levels Should novel factor levels in `data` be allowed?
+#' The safest approach is the default, which throws a warning when novel levels
+#' are found, and coerces them to `NA` values. Setting this argument to `TRUE`
+#' will ignore all novel levels.
+#'
 #' @return
 #'
 #' A tibble containing the required columns after any required structural
@@ -50,9 +56,6 @@
 #' train <- iris[1:100,]
 #' test <- iris[101:150,]
 #'
-#' # ---------------------------------------------------------------------------
-#' # shrink() / scream()
-#'
 #' # mold() is run at model fit time
 #' # and a formula preprocessing blueprint is recorded
 #' x <- mold(log(Sepal.Width) ~ Species, train)
@@ -61,6 +64,9 @@
 #' # for the predictors and the outcomes
 #' ptype_pred <- x$blueprint$ptypes$predictors
 #' ptype_out <- x$blueprint$ptypes$outcomes
+#'
+#' # ---------------------------------------------------------------------------
+#' # shrink() / scream()
 #'
 #' # Pass the test data, along with a prototype, to
 #' # shrink() to extract the prototype columns
@@ -103,15 +109,49 @@
 #' # scream() recovered the missing levels
 #' levels(test3_fixed$Species)
 #'
+#' # ---------------------------------------------------------------------------
+#' # Novel levels
+#'
+#' # When novel levels with any data are present in `data`, the default
+#' # is to coerce them to `NA` values with a warning.
+#' test4 <- test
+#' test4$Species <- as.character(test4$Species)
+#' test4$Species[1] <- "new_level"
+#'
+#' test4$Species <- factor(
+#'   test4$Species,
+#'   levels = c(levels(test$Species), "new_level")
+#' )
+#'
+#' test4 <- shrink(test4, ptype_pred)
+#'
+#' # Warning is thrown
+#' test4_removed <- scream(test4, ptype_pred)
+#'
+#' # Novel level is removed
+#' levels(test4_removed$Species)
+#'
+#' # No warning is thrown
+#' test4_kept <- scream(test4, ptype_pred, allow_novel_levels = TRUE)
+#'
+#' # Novel level is kept
+#' levels(test4_kept$Species)
+#'
 #' @export
-scream <- function(data, ptype) {
+scream <- function(data, ptype, allow_novel_levels = FALSE) {
+  vctrs::vec_assert(allow_novel_levels, ptype = logical(), size = 1L)
+
   if (is.null(data)) {
     return(NULL)
   }
 
   data <- check_is_data_like(data, "data")
 
-  data <- remove_novel_levels(data, ptype)
+  if (allow_novel_levels) {
+    ptype <- add_novel_levels_to_ptype(ptype, data)
+  } else {
+    data <- remove_novel_levels(data, ptype)
+  }
 
   vctrs::vec_cast(data, ptype)
 }
@@ -195,4 +235,54 @@ warn_novel_levels <- function(levels, column) {
   )
 }
 
+# ------------------------------------------------------------------------------
 
+# There are cases where we want to ignore any novel levels, but otherwise still
+# validate a user's `new_data`. The issue with this is that vec_cast() throws an
+# error for any lossy cast. This means that novel factor levels in the
+# `new_data` throw an error. To handle this, we add the novel levels to the
+# `ptype` to prevent vec_cast() from thinking that it is an error.
+
+add_novel_levels_to_ptype <- function(ptype, data) {
+  ptype_fct_loc <- which(map_lgl(ptype, is.factor))
+
+  if (length(ptype_fct_loc) == 0L) {
+    return(ptype)
+  }
+
+  fct_names <- names(ptype_fct_loc)
+
+  for (fct_name in fct_names) {
+    ptype[[fct_name]] <- add_novel_levels(
+      data[[fct_name]],
+      ptype[[fct_name]]
+    )
+  }
+
+  ptype
+}
+
+add_novel_levels <- function(x, ptype) {
+  UseMethod("add_novel_levels")
+}
+
+# If the matching column in `data` is not a character / factor
+# then we let vctrs handle the incompatible cast issue
+add_novel_levels.default <- function(x, ptype) {
+  ptype
+}
+
+add_novel_levels.factor <- function(x, ptype) {
+  x_lvls <- unique(x)
+  ptype_lvls <- levels(ptype)
+
+  new_ptype_lvls <- union(ptype_lvls, x_lvls)
+
+  factor(
+    as.character(ptype),
+    levels = new_ptype_lvls,
+    ordered = is.ordered(ptype)
+  )
+}
+
+add_novel_levels.character <- add_novel_levels.factor
