@@ -48,7 +48,8 @@ Data Classes - Checks that the class of each column in data is the
 same as the corresponding column in ptype.
 Novel Levels - Checks that the factor columns in data don't have any
 new levels when compared with the ptype columns. If there are new
-levels, a warning is issued and they are coerced to NA.
+levels, a warning is issued and they are coerced to NA. This check is
+optional, and can be turned off with allow_novel_levels = TRUE.
 Level Recovery - Checks that the factor columns in data aren't
 missing any factor levels when compared with the ptype columns. If
 there are missing levels, then they are restored.
@@ -157,7 +158,8 @@ including but not limited to:</p><ul>
 same as the corresponding column in <code>ptype</code>.</p></li>
 <li><p><em>Novel Levels</em> - Checks that the factor columns in <code>data</code> don't have any
 <em>new</em> levels when compared with the <code>ptype</code> columns. If there are new
-levels, a warning is issued and they are coerced to <code>NA</code>.</p></li>
+levels, a warning is issued and they are coerced to <code>NA</code>. This check is
+optional, and can be turned off with <code>allow_novel_levels = TRUE</code>.</p></li>
 <li><p><em>Level Recovery</em> - Checks that the factor columns in <code>data</code> aren't
 missing any factor levels when compared with the <code>ptype</code> columns. If
 there are missing levels, then they are restored.</p></li>
@@ -165,7 +167,7 @@ there are missing levels, then they are restored.</p></li>
 
     </div>
 
-    <pre class="usage"><span class='fu'>scream</span>(<span class='no'>data</span>, <span class='no'>ptype</span>)</pre>
+    <pre class="usage"><span class='fu'>scream</span>(<span class='no'>data</span>, <span class='no'>ptype</span>, <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,6 +181,13 @@ of.</p></td>
       <th>ptype</th>
       <td><p>A data frame prototype to cast <code>data</code> to. This is commonly
 a 0-row slice of the training set.</p></td>
+    </tr>
+    <tr>
+      <th>allow_novel_levels</th>
+      <td><p>Should novel factor levels in <code>data</code> be allowed?
+The safest approach is the default, which throws a warning when novel levels
+are found, and coerces them to <code>NA</code> values. Setting this argument to <code>TRUE</code>
+will ignore all novel levels.</p></td>
     </tr>
     </table>
 
@@ -203,9 +212,6 @@ checks exist in <code><a href='shrink.html'>shrink()</a></code>.</p>
 <span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
 <span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>101</span>:<span class='fl'>150</span>,]
 
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># shrink() / scream()</span>
-
 <span class='co'># mold() is run at model fit time</span>
 <span class='co'># and a formula preprocessing blueprint is recorded</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
@@ -214,6 +220,9 @@ checks exist in <code><a href='shrink.html'>shrink()</a></code>.</p>
 <span class='co'># for the predictors and the outcomes</span>
 <span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>predictors</span>
 <span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>outcomes</span>
+
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># shrink() / scream()</span>
 
 <span class='co'># Pass the test data, along with a prototype, to</span>
 <span class='co'># shrink() to extract the prototype columns</span>
@@ -291,6 +300,31 @@ checks exist in <code><a href='shrink.html'>shrink()</a></code>.</p>
 
 <span class='co'># scream() recovered the missing levels</span>
 <span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test3_fixed</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Novel levels</span>
+
+<span class='co'># When novel levels with any data are present in `data`, the default</span>
+<span class='co'># is to coerce them to `NA` values with a warning.</span>
+<span class='no'>test4</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>
+<span class='no'>test4</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>test4</span>$<span class='no'>Species</span>)
+<span class='no'>test4</span>$<span class='no'>Species</span>[<span class='fl'>1</span>] <span class='kw'>&lt;-</span> <span class='st'>"new_level"</span>
+
+<span class='no'>test4</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(
+  <span class='no'>test4</span>$<span class='no'>Species</span>,
+  <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test</span>$<span class='no'>Species</span>), <span class='st'>"new_level"</span>)
+)
+
+<span class='no'>test4</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>test4</span>, <span class='no'>ptype_pred</span>)
+
+<span class='co'># Warning is thrown</span>
+<span class='no'>test4_removed</span> <span class='kw'>&lt;-</span> <span class='fu'>scream</span>(<span class='no'>test4</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Novel levels found in column 'Species': 'new_level'. The levels have been removed, and values have been coerced to 'NA'.</span></div><div class='input'>
+<span class='co'># Novel level is removed</span>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test4_removed</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
+<span class='co'># No warning is thrown</span>
+<span class='no'>test4_kept</span> <span class='kw'>&lt;-</span> <span class='fu'>scream</span>(<span class='no'>test4</span>, <span class='no'>ptype_pred</span>, <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># Novel level is kept</span>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test4_kept</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica"  "new_level" </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
