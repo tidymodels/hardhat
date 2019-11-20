@@ -177,7 +177,7 @@ test_that("can mold formulas with special terms", {
   )
 })
 
-test_that("formulas with non-existant columns are caught", {
+test_that("formulas with non-existent columns are caught", {
 
   expect_error(
     mold(Species ~ y, iris),

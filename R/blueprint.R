@@ -152,7 +152,7 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #' `blueprint$elem <- new_elem`.
 #'
 #' - The name you are updating _must_ already exist in the blueprint. This prevents
-#' you from accidentally updating non-existant elements.
+#' you from accidentally updating non-existent elements.
 #'
 #' - The constructor for the blueprint is automatically run after the update by
 #' `refresh_blueprint()` to ensure that the blueprint is still valid.
@@ -171,7 +171,7 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #'
 #' update_blueprint(blueprint, intercept = TRUE)
 #'
-#' # Can't update non-existant elements
+#' # Can't update non-existent elements
 #' \dontrun{
 #' update_blueprint(blueprint, intercpt = TRUE)
 #' }

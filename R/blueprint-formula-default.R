@@ -89,7 +89,7 @@
 #'    to [mold()], then they are extracted with [model_offset()].
 #'
 #'    - If `intercept = TRUE` in the original call to [mold()], then an
-#'    intecept column is added.
+#'    intercept column is added.
 #'
 #'    - It coerces the result of the above steps to a tibble.
 #'

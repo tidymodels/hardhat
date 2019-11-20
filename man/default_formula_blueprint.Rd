@@ -99,7 +99,7 @@ and then adds them on afterwards.
 \item If any offsets are present from using \code{offset()} in the original call
 to \code{\link[=mold]{mold()}}, then they are extracted with \code{\link[=model_offset]{model_offset()}}.
 \item If \code{intercept = TRUE} in the original call to \code{\link[=mold]{mold()}}, then an
-intecept column is added.
+intercept column is added.
 \item It coerces the result of the above steps to a tibble.
 }
 \item Outcomes
