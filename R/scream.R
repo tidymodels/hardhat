@@ -276,7 +276,8 @@ add_novel_levels.factor <- function(x, ptype) {
   x_lvls <- unique(x)
   ptype_lvls <- levels(ptype)
 
-  new_ptype_lvls <- union(ptype_lvls, x_lvls)
+  # Ensure that `x_lvls` is first, so order is maintained
+  new_ptype_lvls <- union(x_lvls, ptype_lvls)
 
   factor(
     as.character(ptype),
