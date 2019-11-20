@@ -19,7 +19,7 @@
 #'       - `{{model}}-fit.R`
 #'       - `{{model}}-predict.R`
 #'
-#' @param model A string. The name of the high level modeling functions that
+#' @param model A string. The name of the high level modeling function that
 #' users will call. For example, `"linear_regression"`. This will be used to
 #' populate the skeleton. Spaces are not allowed.
 #'
