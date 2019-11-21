@@ -13,3 +13,4 @@
 ^\.github/workflows/pr-commands\.yaml$
 ^LICENSE\.md$
 ^cran-comments\.md$
+^CRAN-RELEASE$
