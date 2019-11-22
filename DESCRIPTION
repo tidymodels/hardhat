@@ -9,7 +9,7 @@ Maintainer: Davis Vaughan <davis@rstudio.com>
 Description: Provides infrastructure for building new modeling packages, 
     including functionality around preprocessing, predicting, and validating 
     input.
-License: GPL-3
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
