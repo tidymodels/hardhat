@@ -67,7 +67,7 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("tidymodels/hardhat")
 ```
 
-## Vignettes
+## Learning more
 
 To learn about how to use hardhat, check out the vignettes:
 
@@ -79,3 +79,10 @@ To learn about how to use hardhat, check out the vignettes:
 
   - `vignette("package", "hardhat")`: Learn how to use `mold()` and
     `forge()` to help in creating a new modeling package.
+
+You can also watch [Max Kuhn](https://github.com/topepo) discuss how to
+use hardhat to build a new modeling package from scratch at the XI
+Jornadas de Usuarios de R conference
+[here](https://canal.uned.es/video/5dd25b9f5578f275e407dd88).
+
+[![](https://i.imgur.com/XKIZfWd.png)](https://canal.uned.es/video/5dd25b9f5578f275e407dd88)
