@@ -48,7 +48,6 @@ The idea is to reduce the burden of creating a good modeling interface as much a
 You can install the released version of hardhat from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-# no you cannot
 install.packages("hardhat")
 ```
 
