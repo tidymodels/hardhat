@@ -1,3 +1,14 @@
+## Test environments
+* local R installation, R 3.6.0
+* ubuntu 16.04 (on travis-ci), R 3.6.0
+* win-builder (devel)
+
+## R CMD check results
+
+0 errors | 0 warnings | 1 note
+
+* This is a new release.
+
 ## 0.1.0 Resubmission
 
 ### Review 2 - 2019-11-28
@@ -39,14 +50,3 @@ There are no references for the methods in this package.
 
 Removed invalid URL link as requested. It is valid when signed in to GitHub,
 but 404s otherwise.
-
-## Test environments
-* local R installation, R 3.6.0
-* ubuntu 16.04 (on travis-ci), R 3.6.0
-* win-builder (devel)
-
-## R CMD check results
-
-0 errors | 0 warnings | 1 note
-
-* This is a new release.
