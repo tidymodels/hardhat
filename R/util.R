@@ -55,6 +55,9 @@ simplify_terms <- function(x) {
   x
 }
 
+# - RHS `.` should be expanded ahead of time by `expand_formula_dot_notation()`
+# - Can't use `get_all_vars()` because it chokes on formulas with variables with
+#   spaces like ~ `x y`
 get_all_predictors <- function(formula, data) {
   predictor_formula <- rlang::new_formula(
     lhs = NULL,
@@ -62,11 +65,19 @@ get_all_predictors <- function(formula, data) {
     env = rlang::f_env(formula)
   )
 
-  unprocessed_predictor_df <- get_all_vars(predictor_formula, data)
+  predictors <- all.vars(predictor_formula)
 
-  colnames(unprocessed_predictor_df)
+  extra_predictors <- setdiff(predictors, names(data))
+  if (length(extra_predictors) > 0) {
+    extra_predictors <- glue_quote_collapse(extra_predictors)
+    glubort("The following predictors were not found in `data`: {extra_predictors}.")
+  }
+
+  predictors
 }
 
+# LHS `.` are NOT expanded by `expand_formula_dot_notation()`, and should be
+# considered errors
 get_all_outcomes <- function(formula, data) {
   outcome_formula <- rlang::new_formula(
     lhs = rlang::f_lhs(formula),
@@ -74,9 +85,19 @@ get_all_outcomes <- function(formula, data) {
     env = rlang::f_env(formula)
   )
 
-  unprocessed_outcome_df <- get_all_vars(outcome_formula, data)
+  outcomes <- all.vars(outcome_formula)
 
-  colnames(unprocessed_outcome_df)
+  if ("." %in% outcomes) {
+    rlang::abort("The left hand side of the formula cannot contain `.`")
+  }
+
+  extra_outcomes <- setdiff(outcomes, names(data))
+  if (length(extra_outcomes) > 0) {
+    extra_outcomes <- glue_quote_collapse(extra_outcomes)
+    glubort("The following outcomes were not found in `data`: {extra_outcomes}.")
+  }
+
+  outcomes
 }
 
 abort_unknown_mold_class <- function(x) {
