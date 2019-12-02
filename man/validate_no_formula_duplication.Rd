@@ -35,14 +35,14 @@ check - returns the following:
 
 hardhat provides validation functions at two levels.
 \itemize{
-\item \code{check_*()}:  \emph{check a condition, and return a list}. The list
+\item \verb{check_*()}:  \emph{check a condition, and return a list}. The list
 always contains at least one element, \code{ok}, a logical that specifies if the
 check passed. Each check also has check specific elements in the returned
 list that can be used to construct meaningful error messages.
-\item \code{validate_*()}: \emph{check a condition, and error if it does not pass}. These
+\item \verb{validate_*()}: \emph{check a condition, and error if it does not pass}. These
 functions call their corresponding check function, and
 then provide a default error message. If you, as a developer, want a
-different error message, then call the \code{check_*()} function yourself,
+different error message, then call the \verb{check_*()} function yourself,
 and provide your own validation function.
 }
 }
@@ -68,12 +68,13 @@ validate_no_formula_duplication(log(y) ~ log(y))
 
 }
 \seealso{
-Other validation functions: \code{\link{validate_column_names}},
-  \code{\link{validate_outcomes_are_binary}},
-  \code{\link{validate_outcomes_are_factors}},
-  \code{\link{validate_outcomes_are_numeric}},
-  \code{\link{validate_outcomes_are_univariate}},
-  \code{\link{validate_prediction_size}},
-  \code{\link{validate_predictors_are_numeric}}
+Other validation functions: 
+\code{\link{validate_column_names}()},
+\code{\link{validate_outcomes_are_binary}()},
+\code{\link{validate_outcomes_are_factors}()},
+\code{\link{validate_outcomes_are_numeric}()},
+\code{\link{validate_outcomes_are_univariate}()},
+\code{\link{validate_prediction_size}()},
+\code{\link{validate_predictors_are_numeric}()}
 }
 \concept{validation functions}

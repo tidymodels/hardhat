@@ -51,7 +51,7 @@ design matrix). If other non-predictor columns are required, use the
 It is important to always use the results of \code{model_frame()} with
 \code{\link[=model_matrix]{model_matrix()}} rather than \code{\link[stats:model.matrix]{stats::model.matrix()}} because the tibble
 in the result of \code{model_frame()} does \emph{not} have a terms object attached.
-If \code{model.matrix(<terms>, <tibble>)} is called directly, then a call to
+If \verb{model.matrix(<terms>, <tibble>)} is called directly, then a call to
 \code{model.frame()} will be made automatically, which can give faulty results.
 }
 \examples{

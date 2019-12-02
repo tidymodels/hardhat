@@ -15,7 +15,7 @@ refresh_blueprint(blueprint)
 \description{
 \code{refresh_blueprint()} is a developer facing generic function that is called
 at the end of \code{\link[=update_blueprint]{update_blueprint()}}. It simply is a wrapper around the
-method specific \code{new_*_blueprint()} function that runs the updated blueprint
+method specific \verb{new_*_blueprint()} function that runs the updated blueprint
 through the constructor again to ensure that all of the elements of the
 blueprint are still valid after the update.
 }

@@ -5,8 +5,11 @@
 \alias{mold.formula}
 \title{Default formula blueprint}
 \usage{
-default_formula_blueprint(intercept = FALSE,
-  allow_novel_levels = FALSE, indicators = TRUE)
+default_formula_blueprint(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  indicators = TRUE
+)
 
 \method{mold}{formula}(formula, data, ..., blueprint = NULL)
 }
@@ -46,7 +49,7 @@ columns (one-hot encoding).
 
 Offsets can be included in the formula method through the use of the inline
 function \code{\link[stats:offset]{stats::offset()}}. These are returned as a tibble with 1 column
-named \code{".offset"} in the \code{$extras$offset} slot of the return value.
+named \code{".offset"} in the \verb{$extras$offset} slot of the return value.
 }
 \section{Mold}{
 

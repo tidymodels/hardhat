@@ -32,12 +32,12 @@ to \code{predict()}. The column names and number of columns vary based on the
 function used, but are standardized.
 }
 \description{
-The family of \code{spruce_*()} functions convert predictions into a
+The family of \verb{spruce_*()} functions convert predictions into a
 standardized format. They are generally called from a prediction
 implementation function for the specific \code{type} of prediction to return.
 }
 \details{
-After running a \code{spruce_*()} function, you should \emph{always} use the validation
+After running a \verb{spruce_*()} function, you should \emph{always} use the validation
 function \code{validate_prediction_size()} to ensure that the number of rows
 being returned is the same as the number of rows in the input (\code{new_data}).
 }

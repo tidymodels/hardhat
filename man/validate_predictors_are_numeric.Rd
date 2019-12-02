@@ -27,21 +27,21 @@ and the values are the classes of the matching column.
 }
 \details{
 The expected way to use this validation function is to supply it the
-\code{$predictors} element of the result of a call to \code{\link[=mold]{mold()}}.
+\verb{$predictors} element of the result of a call to \code{\link[=mold]{mold()}}.
 }
 \section{Validation}{
 
 
 hardhat provides validation functions at two levels.
 \itemize{
-\item \code{check_*()}:  \emph{check a condition, and return a list}. The list
+\item \verb{check_*()}:  \emph{check a condition, and return a list}. The list
 always contains at least one element, \code{ok}, a logical that specifies if the
 check passed. Each check also has check specific elements in the returned
 list that can be used to construct meaningful error messages.
-\item \code{validate_*()}: \emph{check a condition, and error if it does not pass}. These
+\item \verb{validate_*()}: \emph{check a condition, and error if it does not pass}. These
 functions call their corresponding check function, and
 then provide a default error message. If you, as a developer, want a
-different error message, then call the \code{check_*()} function yourself,
+different error message, then call the \verb{check_*()} function yourself,
 and provide your own validation function.
 }
 }
@@ -60,12 +60,13 @@ validate_predictors_are_numeric(iris)
 
 }
 \seealso{
-Other validation functions: \code{\link{validate_column_names}},
-  \code{\link{validate_no_formula_duplication}},
-  \code{\link{validate_outcomes_are_binary}},
-  \code{\link{validate_outcomes_are_factors}},
-  \code{\link{validate_outcomes_are_numeric}},
-  \code{\link{validate_outcomes_are_univariate}},
-  \code{\link{validate_prediction_size}}
+Other validation functions: 
+\code{\link{validate_column_names}()},
+\code{\link{validate_no_formula_duplication}()},
+\code{\link{validate_outcomes_are_binary}()},
+\code{\link{validate_outcomes_are_factors}()},
+\code{\link{validate_outcomes_are_numeric}()},
+\code{\link{validate_outcomes_are_univariate}()},
+\code{\link{validate_prediction_size}()}
 }
 \concept{validation functions}

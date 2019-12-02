@@ -7,8 +7,7 @@
 \alias{use_modeling_files}
 \title{Create a modeling package}
 \usage{
-create_modeling_package(path, model, fields = NULL,
-  open = interactive())
+create_modeling_package(path, model, fields = NULL, open = interactive())
 
 use_modeling_deps()
 
@@ -51,7 +50,7 @@ how you can set personalized defaults using package options.}
 \code{use_modeling_files()} will:
 \itemize{
 \item Add a package documentation file
-\item Generate and populate 3 files in \code{R/}:
+\item Generate and populate 3 files in \verb{R/}:
 \itemize{
 \item \code{{{model}}-constructor.R}
 \item \code{{{model}}-fit.R}

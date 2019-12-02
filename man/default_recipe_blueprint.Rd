@@ -5,8 +5,11 @@
 \alias{mold.recipe}
 \title{Default recipe blueprint}
 \usage{
-default_recipe_blueprint(intercept = FALSE, allow_novel_levels = FALSE,
-  fresh = FALSE)
+default_recipe_blueprint(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  fresh = FALSE
+)
 
 \method{mold}{recipe}(x, data, ..., blueprint = NULL)
 }
