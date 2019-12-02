@@ -1,5 +1,5 @@
 Package: hardhat
-Title: A Toolkit for the Construction of Modeling Packages
+Title: Construct Modeling Packages
 Version: 0.1.0
 Authors@R: c(
     person("Davis", "Vaughan", , "davis@rstudio.com", c("aut", "cre")),
