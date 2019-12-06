@@ -11,6 +11,15 @@
 
 ## 0.1.0 Resubmission
 
+### Review 3 - 2019-12-06
+
+> You have examples for unexported functions which cannot run in this way.
+Please either add hardhat::: to the function calls in the examples, omit
+these examples or export these functions. e.g. scream(), shrink(), in
+scream.Rd and shrink.Rd
+
+Both `scream()` and `shrink()` are already exported, and their help files do not use any unexported functions.
+
 ### Review 2 - 2019-11-28
 
 > Please omit the redundant 'Toolkit for' from your title.
