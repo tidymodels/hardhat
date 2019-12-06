@@ -74,9 +74,7 @@ check_prediction_size(.pred, new_data)
 
 # An informative error message is thrown
 # if the rows are different
-\dontrun{
-validate_prediction_size(spruce_numeric(1:4), new_data)
-}
+try(validate_prediction_size(spruce_numeric(1:4), new_data))
 
 }
 \seealso{

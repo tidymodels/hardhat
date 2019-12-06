@@ -41,13 +41,9 @@ blueprint_bad <- blueprint
 blueprint_bad$intercept <- 1
 
 # ...because the constructor will catch it
-\dontrun{
-refresh_blueprint(blueprint_bad)
-}
+try(refresh_blueprint(blueprint_bad))
 
 # And update_blueprint() catches this automatically
-\dontrun{
-update_blueprint(blueprint, intercept = 1)
-}
+try(update_blueprint(blueprint, intercept = 1))
 
 }

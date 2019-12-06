@@ -20,6 +20,16 @@ scream.Rd and shrink.Rd
 
 Both `scream()` and `shrink()` are already exported, and their help files do not use any unexported functions.
 
+> \dontrun{} should only be used if the example really cannot be executed
+(e.g. because of missing additional software, missing API keys, ...) by
+the user. That's why wrapping examples in \dontrun{} adds the comment
+("# Not run:") as a warning for the user.
+Does not seem necessary.
+Please unwrap the examples if they are executable in < 5 sec, or replace
+\dontrun{} with \donttest{}.
+
+Removed all uses of `\dontrun{}`.
+
 ### Review 2 - 2019-11-28
 
 > Please omit the redundant 'Toolkit for' from your title.

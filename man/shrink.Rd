@@ -52,9 +52,7 @@ shrink(test, ptype_out)
 # shrink() makes sure that the columns
 # required by `ptype` actually exist in the data
 # and errors nicely when they don't
-\dontrun{
 test2 <- subset(test, select = -Species)
-shrink(test2, ptype_pred)
-}
+try(shrink(test2, ptype_pred))
 
 }

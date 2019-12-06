@@ -54,9 +54,7 @@ check_predictors_are_numeric(mtcars)
 check_predictors_are_numeric(iris)
 
 # This gives an intelligent error message
-\dontrun{
-validate_predictors_are_numeric(iris)
-}
+try(validate_predictors_are_numeric(iris))
 
 }
 \seealso{

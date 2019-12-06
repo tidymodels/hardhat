@@ -49,9 +49,7 @@ and provide your own validation function.
 \examples{
 validate_outcomes_are_univariate(data.frame(x = 1))
 
-\dontrun{
-validate_outcomes_are_univariate(mtcars)
-}
+try(validate_outcomes_are_univariate(mtcars))
 
 }
 \seealso{

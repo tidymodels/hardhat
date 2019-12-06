@@ -198,10 +198,8 @@
 #'
 #' # An informative error is thrown when `indicators = FALSE` and
 #' # factors are present in interaction terms or in inline functions
-#' \dontrun{
-#' mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators)
-#' mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators)
-#' }
+#' try(mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators))
+#' try(mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators))
 #'
 #' # ---------------------------------------------------------------------------
 #' # Multivariate outcomes

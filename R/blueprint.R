@@ -122,14 +122,10 @@ new_blueprint <- function(mold,
 #' blueprint_bad$intercept <- 1
 #'
 #' # ...because the constructor will catch it
-#' \dontrun{
-#' refresh_blueprint(blueprint_bad)
-#' }
+#' try(refresh_blueprint(blueprint_bad))
 #'
 #' # And update_blueprint() catches this automatically
-#' \dontrun{
-#' update_blueprint(blueprint, intercept = 1)
-#' }
+#' try(update_blueprint(blueprint, intercept = 1))
 #'
 #' @export
 refresh_blueprint <- function(blueprint) {
@@ -172,14 +168,10 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #' update_blueprint(blueprint, intercept = TRUE)
 #'
 #' # Can't update non-existent elements
-#' \dontrun{
-#' update_blueprint(blueprint, intercpt = TRUE)
-#' }
+#' try(update_blueprint(blueprint, intercpt = TRUE))
 #'
 #' # Can't add non-valid elements
-#' \dontrun{
-#' update_blueprint(blueprint, intercept = 1)
-#' }
+#' try(update_blueprint(blueprint, intercept = 1))
 #'
 #' @export
 update_blueprint <- function(blueprint, ...) {

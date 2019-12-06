@@ -33,13 +33,9 @@ blueprint
 update_blueprint(blueprint, intercept = TRUE)
 
 # Can't update non-existent elements
-\dontrun{
-update_blueprint(blueprint, intercpt = TRUE)
-}
+try(update_blueprint(blueprint, intercpt = TRUE))
 
 # Can't add non-valid elements
-\dontrun{
-update_blueprint(blueprint, intercept = 1)
-}
+try(update_blueprint(blueprint, intercept = 1))
 
 }

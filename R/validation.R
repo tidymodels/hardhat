@@ -25,9 +25,7 @@
 #' @examples
 #' validate_outcomes_are_univariate(data.frame(x = 1))
 #'
-#' \dontrun{
-#' validate_outcomes_are_univariate(mtcars)
-#' }
+#' try(validate_outcomes_are_univariate(mtcars))
 #'
 #' @family validation functions
 #' @export
@@ -96,9 +94,7 @@ check_outcomes_are_univariate <- function(outcomes) {
 #' check_outcomes_are_numeric(iris)
 #'
 #' # This gives an intelligent error message
-#' \dontrun{
-#' validate_outcomes_are_numeric(iris)
-#' }
+#' try(validate_outcomes_are_numeric(iris))
 #'
 #' @family validation functions
 #' @export
@@ -339,9 +335,7 @@ is_binary <- function(x) {
 #' check_predictors_are_numeric(iris)
 #'
 #' # This gives an intelligent error message
-#' \dontrun{
-#' validate_predictors_are_numeric(iris)
-#' }
+#' try(validate_predictors_are_numeric(iris))
 #'
 #' @family validation functions
 #' @export
@@ -432,10 +426,8 @@ check_predictors_are_numeric <- function(predictors) {
 #' # Missing 2 columns
 #' check_column_names(bad_test, original_names)
 #'
-#' \dontrun{
 #' # Will error
-#' validate_column_names(bad_test, original_names)
-#' }
+#' try(validate_column_names(bad_test, original_names))
 #'
 #' # ---------------------------------------------------------------------------
 #' # Special error when `.outcome` is missing
@@ -458,9 +450,7 @@ check_predictors_are_numeric <- function(predictors) {
 #' # But if the outcome is requested, and `".outcome"`
 #' # is not present in `new_data`, an error is thrown
 #' # with very specific instructions
-#' \dontrun{
-#' forge(test, processed$blueprint, outcomes = TRUE)
-#' }
+#' try(forge(test, processed$blueprint, outcomes = TRUE))
 #'
 #' # To get this to work, just create an .outcome column in new_data
 #' test$.outcome <- test$Species
@@ -591,9 +581,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' # An informative error message is thrown
 #' # if the rows are different
-#' \dontrun{
-#' validate_prediction_size(spruce_numeric(1:4), new_data)
-#' }
+#' try(validate_prediction_size(spruce_numeric(1:4), new_data))
 #'
 #' @family validation functions
 #' @export
@@ -664,10 +652,7 @@ check_prediction_size <- function(.pred, new_data) {
 #' check_no_formula_duplication(y ~ log(y), original = TRUE)
 #'
 #' # This would throw an error
-#' \dontrun{
-#' validate_no_formula_duplication(log(y) ~ log(y))
-#' }
-#'
+#' try(validate_no_formula_duplication(log(y) ~ log(y)))
 #'
 #' @family validation functions
 #' @export

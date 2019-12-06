@@ -67,10 +67,8 @@ check_column_names(test, original_names)
 # Missing 2 columns
 check_column_names(bad_test, original_names)
 
-\dontrun{
 # Will error
-validate_column_names(bad_test, original_names)
-}
+try(validate_column_names(bad_test, original_names))
 
 # ---------------------------------------------------------------------------
 # Special error when `.outcome` is missing
@@ -93,9 +91,7 @@ forge(test, processed$blueprint)
 # But if the outcome is requested, and `".outcome"`
 # is not present in `new_data`, an error is thrown
 # with very specific instructions
-\dontrun{
-forge(test, processed$blueprint, outcomes = TRUE)
-}
+try(forge(test, processed$blueprint, outcomes = TRUE))
 
 # To get this to work, just create an .outcome column in new_data
 test$.outcome <- test$Species

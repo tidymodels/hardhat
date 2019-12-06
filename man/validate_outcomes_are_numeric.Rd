@@ -54,9 +54,7 @@ check_outcomes_are_numeric(mtcars)
 check_outcomes_are_numeric(iris)
 
 # This gives an intelligent error message
-\dontrun{
-validate_outcomes_are_numeric(iris)
-}
+try(validate_outcomes_are_numeric(iris))
 
 }
 \seealso{
