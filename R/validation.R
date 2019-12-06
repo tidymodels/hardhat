@@ -576,7 +576,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' validate - asserts the following:
 #'
-#' - The size of `.pred` must be the same as the size of `new_data`.
+#' - The size of `pred` must be the same as the size of `new_data`.
 #'
 #' check - returns the following:
 #'
@@ -584,9 +584,9 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' - `size_new_data` A single numeric. The size of `new_data`.
 #'
-#' - `size_pred` A single numeric. The size of `.pred`.
+#' - `size_pred` A single numeric. The size of `pred`.
 #'
-#' @param .pred A tibble. The predictions to return from any prediction
+#' @param pred A tibble. The predictions to return from any prediction
 #' `type`. This is often created using one of the spruce functions, like
 #' [spruce_numeric()].
 #'
@@ -594,7 +594,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' @return
 #'
-#' `validate_prediction_size()` returns `.pred` invisibly.
+#' `validate_prediction_size()` returns `pred` invisibly.
 #'
 #' `check_prediction_size()` returns a named list of three components,
 #' `ok`, `size_new_data`, and `size_pred`.
@@ -616,17 +616,17 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' # And somehow you generate predictions
 #' # for those 5 rows
-#' .pred_vec <- 1:5
+#' pred_vec <- 1:5
 #'
 #' # Then you use `spruce_numeric()` to clean
 #' # up these numeric predictions
-#' .pred <- spruce_numeric(.pred_vec)
+#' pred <- spruce_numeric(pred_vec)
 #'
-#' .pred
+#' pred
 #'
 #' # Use this check to ensure that
-#' # the number of rows or .pred match new_data
-#' check_prediction_size(.pred, new_data)
+#' # the number of rows or pred match new_data
+#' check_prediction_size(pred, new_data)
 #'
 #' # An informative error message is thrown
 #' # if the rows are different
@@ -634,27 +634,27 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' @family validation functions
 #' @export
-validate_prediction_size <- function(.pred, new_data) {
+validate_prediction_size <- function(pred, new_data) {
 
-  check <- check_prediction_size(.pred, new_data)
+  check <- check_prediction_size(pred, new_data)
 
   if(!check$ok) {
     glubort(
       "The size of `new_data` ({check$size_new_data}) must match the ",
-      "size of `.pred` ({check$size_pred})."
+      "size of `pred` ({check$size_pred})."
     )
   }
 
-  invisible(.pred)
+  invisible(pred)
 }
 
 #' @rdname validate_prediction_size
 #' @export
-check_prediction_size <- function(.pred, new_data) {
+check_prediction_size <- function(pred, new_data) {
   new_data <- check_is_data_like(new_data)
 
   size_new_data <- vctrs::vec_size(new_data)
-  size_pred <- vctrs::vec_size(.pred)
+  size_pred <- vctrs::vec_size(pred)
 
   ok <- size_pred == size_new_data
 

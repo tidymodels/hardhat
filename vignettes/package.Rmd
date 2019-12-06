@@ -347,9 +347,9 @@ predict_simple_lm_numeric <- function(object, predictors) {
   
   coefs <- object$coefs
   
-  .pred <- as.vector(predictors %*% coefs)
+  pred <- as.vector(predictors %*% coefs)
   
-  out <- spruce_numeric(.pred)
+  out <- spruce_numeric(pred)
   
   out
 }

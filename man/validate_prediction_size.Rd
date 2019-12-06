@@ -5,19 +5,19 @@
 \alias{check_prediction_size}
 \title{Ensure that predictions have the correct number of rows}
 \usage{
-validate_prediction_size(.pred, new_data)
+validate_prediction_size(pred, new_data)
 
-check_prediction_size(.pred, new_data)
+check_prediction_size(pred, new_data)
 }
 \arguments{
-\item{.pred}{A tibble. The predictions to return from any prediction
+\item{pred}{A tibble. The predictions to return from any prediction
 \code{type}. This is often created using one of the spruce functions, like
 \code{\link[=spruce_numeric]{spruce_numeric()}}.}
 
 \item{new_data}{A data frame of new predictors and possibly outcomes.}
 }
 \value{
-\code{validate_prediction_size()} returns \code{.pred} invisibly.
+\code{validate_prediction_size()} returns \code{pred} invisibly.
 
 \code{check_prediction_size()} returns a named list of three components,
 \code{ok}, \code{size_new_data}, and \code{size_pred}.
@@ -25,14 +25,14 @@ check_prediction_size(.pred, new_data)
 \description{
 validate - asserts the following:
 \itemize{
-\item The size of \code{.pred} must be the same as the size of \code{new_data}.
+\item The size of \code{pred} must be the same as the size of \code{new_data}.
 }
 
 check - returns the following:
 \itemize{
 \item \code{ok} A logical. Does the check pass?
 \item \code{size_new_data} A single numeric. The size of \code{new_data}.
-\item \code{size_pred} A single numeric. The size of \code{.pred}.
+\item \code{size_pred} A single numeric. The size of \code{pred}.
 }
 }
 \details{
@@ -66,17 +66,17 @@ new_data <- mtcars[1:5,]
 
 # And somehow you generate predictions
 # for those 5 rows
-.pred_vec <- 1:5
+pred_vec <- 1:5
 
 # Then you use `spruce_numeric()` to clean
 # up these numeric predictions
-.pred <- spruce_numeric(.pred_vec)
+pred <- spruce_numeric(pred_vec)
 
-.pred
+pred
 
 # Use this check to ensure that
-# the number of rows or .pred match new_data
-check_prediction_size(.pred, new_data)
+# the number of rows or pred match new_data
+check_prediction_size(pred, new_data)
 
 # An informative error message is thrown
 # if the rows are different
