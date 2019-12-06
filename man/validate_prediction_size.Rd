@@ -16,6 +16,12 @@ check_prediction_size(.pred, new_data)
 
 \item{new_data}{A data frame of new predictors and possibly outcomes.}
 }
+\value{
+\code{validate_prediction_size()} returns \code{.pred} invisibly.
+
+\code{check_prediction_size()} returns a named list of three components,
+\code{ok}, \code{size_new_data}, and \code{size_pred}.
+}
 \description{
 validate - asserts the following:
 \itemize{

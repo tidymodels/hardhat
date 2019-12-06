@@ -12,6 +12,9 @@ call to \code{model_frame()}.}
 
 \item{data}{A data frame returned from a call to \code{model_frame()}.}
 }
+\value{
+A numeric vector representing the offset.
+}
 \description{
 \code{model_offset()} extracts a numeric offset from a model frame. It is
 inspired by \code{\link[stats:model.offset]{stats::model.offset()}}, but has nicer error messages and

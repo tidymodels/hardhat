@@ -10,6 +10,14 @@
 #'
 #' @param data A data frame or matrix containing the terms of `formula`.
 #'
+#' @return
+#'
+#' A named list with two elements:
+#'
+#' - `"data"`: A tibble containing the model frame.
+#'
+#' - `"terms"`: A terms object containing the terms for the model frame.
+#'
 #' @details
 #'
 #' The following explains the rationale for some of the difference in arguments
@@ -43,14 +51,6 @@
 #' If `model.matrix(<terms>, <tibble>)` is called directly, then a call to
 #' `model.frame()` will be made automatically, which can give faulty results.
 #'
-#' @return
-#'
-#' A named list with two elements:
-#'
-#' - `"data"`: A tibble containing the model frame.
-#'
-#' - `"terms"`: A terms object containing the terms for the model frame.
-#'
 #' @examples
 #' # ---------------------------------------------------------------------------
 #' # Example usage
@@ -74,7 +74,6 @@
 #' nrow(framed2$data) == nrow(iris2)
 #'
 #' @export
-#'
 model_frame <- function(formula, data) {
 
   validate_is_formula(formula)

@@ -18,6 +18,11 @@
 #'
 #' @param class A character vector representing the class of the model.
 #'
+#' @return
+#'
+#' A new scalar model object, represented as a classed list with named elements
+#' specified in `...`.
+#'
 #' @examples
 #' new_model(
 #'   custom_element= "my-elem",

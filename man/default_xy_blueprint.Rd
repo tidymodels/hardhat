@@ -30,6 +30,9 @@ prediction time? This information is used by the \code{clean} function in the
 \item{blueprint}{A preprocessing \code{blueprint}. If left as \code{NULL}, then a
 \code{\link[=default_xy_blueprint]{default_xy_blueprint()}} is used.}
 }
+\value{
+For \code{default_xy_blueprint()}, an XY blueprint.
+}
 \description{
 This pages holds the details for the XY preprocessing blueprint. This
 is the blueprint used by default from \code{mold()} if \code{x} and \code{y} are provided

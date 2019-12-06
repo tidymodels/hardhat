@@ -34,6 +34,9 @@ called?}
 \item{blueprint}{A preprocessing \code{blueprint}. If left as \code{NULL}, then a
 \code{\link[=default_recipe_blueprint]{default_recipe_blueprint()}} is used.}
 }
+\value{
+For \code{default_recipe_blueprint()}, a recipe blueprint.
+}
 \description{
 This pages holds the details for the recipe preprocessing blueprint. This
 is the blueprint used by default from \code{mold()} if \code{x} is a recipe.

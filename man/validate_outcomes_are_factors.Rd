@@ -12,6 +12,12 @@ check_outcomes_are_factors(outcomes)
 \arguments{
 \item{outcomes}{An object to check.}
 }
+\value{
+\code{validate_outcomes_are_factors()} returns \code{outcomes} invisibly.
+
+\code{check_outcomes_are_factors()} returns a named list of two components,
+\code{ok} and \code{bad_classes}.
+}
 \description{
 validate - asserts the following:
 \itemize{

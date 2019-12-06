@@ -12,6 +12,12 @@ check_outcomes_are_univariate(outcomes)
 \arguments{
 \item{outcomes}{An object to check.}
 }
+\value{
+\code{validate_outcomes_are_univariate()} returns \code{outcomes} invisibly.
+
+\code{check_outcomes_are_univariate()} returns a named list of two components,
+\code{ok} and \code{n_cols}.
+}
 \description{
 validate - asserts the following:
 \itemize{

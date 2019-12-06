@@ -17,6 +17,12 @@ the names after processing be used? If \code{FALSE}, \code{y ~ log(y)} is allowe
 because the names are \code{"y"} and \code{"log(y)"}, if \code{TRUE}, \code{y ~ log(y)} is not
 allowed because the original names are both \code{"y"}.}
 }
+\value{
+\code{validate_no_formula_duplication()} returns \code{formula} invisibly.
+
+\code{check_no_formula_duplication()} returns a named list of two components,
+\code{ok} and \code{duplicates}.
+}
 \description{
 validate - asserts the following:
 \itemize{

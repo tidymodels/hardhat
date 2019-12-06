@@ -14,6 +14,10 @@
 #'
 #' @param ... Not used.
 #'
+#' @return
+#'
+#' For `default_formula_blueprint()`, a formula blueprint.
+#'
 #' @details
 #'
 #' While not different from base R, the behavior of expanding factors into

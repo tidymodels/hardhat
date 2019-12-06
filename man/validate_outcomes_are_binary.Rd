@@ -12,6 +12,12 @@ check_outcomes_are_binary(outcomes)
 \arguments{
 \item{outcomes}{An object to check.}
 }
+\value{
+\code{validate_outcomes_are_binary()} returns \code{outcomes} invisibly.
+
+\code{check_outcomes_are_binary()} returns a named list of three components,
+\code{ok}, \code{bad_cols}, and \code{num_levels}.
+}
 \description{
 validate - asserts the following:
 \itemize{

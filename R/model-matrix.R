@@ -76,8 +76,6 @@
 #'   },
 #'   contrasts = global_override
 #' )
-#'
-#'
 #' @export
 model_matrix <- function(terms, data) {
 

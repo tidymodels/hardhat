@@ -15,6 +15,13 @@
 #'
 #' @param outcomes An object to check.
 #'
+#' @return
+#'
+#' `validate_outcomes_are_univariate()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_univariate()` returns a named list of two components,
+#' `ok` and `n_cols`.
+#'
 #' @template section-validation
 #'
 #' @details
@@ -78,6 +85,13 @@ check_outcomes_are_univariate <- function(outcomes) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
+#'
+#' @return
+#'
+#' `validate_outcomes_are_numeric()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_numeric()` returns a named list of two components,
+#' `ok` and `bad_classes`.
 #'
 #' @template section-validation
 #'
@@ -155,6 +169,13 @@ check_outcomes_are_numeric <- function(outcomes) {
 #'
 #' @param outcomes An object to check.
 #'
+#' @return
+#'
+#' `validate_outcomes_are_factors()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_factors()` returns a named list of two components,
+#' `ok` and `bad_classes`.
+#'
 #' @template section-validation
 #'
 #' @details
@@ -231,6 +252,13 @@ check_outcomes_are_factors <- function(outcomes) {
 #' with problems.
 #'
 #' @param outcomes An object to check.
+#'
+#' @return
+#'
+#' `validate_outcomes_are_binary()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_binary()` returns a named list of three components,
+#' `ok`, `bad_cols`, and `num_levels`.
 #'
 #' @template section-validation
 #'
@@ -319,6 +347,13 @@ is_binary <- function(x) {
 #' and the values are the classes of the matching column.
 #'
 #' @param predictors An object to check.
+#'
+#' @return
+#'
+#' `validate_predictors_are_numeric()` returns `predictors` invisibly.
+#'
+#' `check_predictors_are_numeric()` returns a named list of two components,
+#' `ok`, and `bad_classes`.
 #'
 #' @template section-validation
 #'
@@ -409,6 +444,13 @@ check_predictors_are_numeric <- function(predictors) {
 #' @param data A data frame to check.
 #'
 #' @param original_names A character vector. The original column names.
+#'
+#' @return
+#'
+#' `validate_column_names()` returns `data` invisibly.
+#'
+#' `check_column_names()` returns a named list of two components,
+#' `ok`, and `missing_names`.
 #'
 #' @template section-validation
 #'
@@ -550,6 +592,13 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' @param new_data A data frame of new predictors and possibly outcomes.
 #'
+#' @return
+#'
+#' `validate_prediction_size()` returns `.pred` invisibly.
+#'
+#' `check_prediction_size()` returns a named list of three components,
+#' `ok`, `size_new_data`, and `size_pred`.
+#'
 #' @details
 #'
 #' This validation function is one that is more developer focused rather than
@@ -635,6 +684,13 @@ check_prediction_size <- function(.pred, new_data) {
 #' the names after processing be used? If `FALSE`, `y ~ log(y)` is allowed
 #' because the names are `"y"` and `"log(y)"`, if `TRUE`, `y ~ log(y)` is not
 #' allowed because the original names are both `"y"`.
+#'
+#' @return
+#'
+#' `validate_no_formula_duplication()` returns `formula` invisibly.
+#'
+#' `check_no_formula_duplication()` returns a named list of two components,
+#' `ok` and `duplicates`.
 #'
 #' @template section-validation
 #'

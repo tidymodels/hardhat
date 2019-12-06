@@ -12,6 +12,12 @@ check_predictors_are_numeric(predictors)
 \arguments{
 \item{predictors}{An object to check.}
 }
+\value{
+\code{validate_predictors_are_numeric()} returns \code{predictors} invisibly.
+
+\code{check_predictors_are_numeric()} returns a named list of two components,
+\code{ok}, and \code{bad_classes}.
+}
 \description{
 validate - asserts the following:
 \itemize{

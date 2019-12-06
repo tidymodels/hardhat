@@ -63,8 +63,6 @@
 #' )
 #'
 #' forge(test, processed$blueprint, outcomes = TRUE)
-#'
-#'
 #' @export
 forge <- function(new_data, blueprint, ..., outcomes = FALSE) {
   UseMethod("forge")

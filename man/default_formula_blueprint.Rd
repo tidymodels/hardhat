@@ -33,6 +33,9 @@ prediction time? This information is used by the \code{clean} function in the
 \item{blueprint}{A preprocessing \code{blueprint}. If left as \code{NULL}, then a
 \code{\link[=default_formula_blueprint]{default_formula_blueprint()}} is used.}
 }
+\value{
+For \code{default_formula_blueprint()}, a formula blueprint.
+}
 \description{
 This pages holds the details for the formula preprocessing blueprint. This
 is the blueprint used by default from \code{mold()} if \code{x} is a formula.

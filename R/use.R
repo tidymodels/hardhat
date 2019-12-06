@@ -35,6 +35,14 @@
 #'   - If on RStudio server, the current RStudio project is activated.
 #'   - Otherwise, the working directory and active project is changed.
 #'
+#' @return
+#'
+#' `create_modeling_package()` returns the project path invisibly.
+#'
+#' `use_modeling_deps()` returns invisibly.
+#'
+#' `use_modeling_files()` return `model` invisibly.
+#'
 #' @name modeling-package
 #' @export
 create_modeling_package <- function(path,

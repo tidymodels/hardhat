@@ -7,13 +7,14 @@
 #' that first calls [standardize()] on `y`.
 #'
 #' @inheritParams standardize
+#'
 #' @param data A data.frame to extract levels from.
 #'
 #' @return
 #'
-#' A named list with as many elements as there are factor columns in `data`.
-#' The names are the names of the factor columns, and the values are character
-#' vectors of the levels.
+#' A named list with as many elements as there are factor columns in `data`
+#' or `y`. The names are the names of the factor columns, and the values
+#' are character vectors of the levels.
 #'
 #' If there are no factor columns, `NULL` is returned.
 #'

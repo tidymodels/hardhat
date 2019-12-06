@@ -14,6 +14,10 @@
 #'
 #' @param ... Not used.
 #'
+#' @return
+#'
+#' For `default_recipe_blueprint()`, a recipe blueprint.
+#'
 #' @section Mold:
 #'
 #' When `mold()` is used with the default recipe blueprint:

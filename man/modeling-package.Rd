@@ -32,6 +32,13 @@ how you can set personalized defaults using package options.}
 \item Otherwise, the working directory and active project is changed.
 }}
 }
+\value{
+\code{create_modeling_package()} returns the project path invisibly.
+
+\code{use_modeling_deps()} returns invisibly.
+
+\code{use_modeling_files()} return \code{model} invisibly.
+}
 \description{
 \code{create_modeling_package()} will:
 \itemize{

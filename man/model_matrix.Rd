@@ -81,6 +81,4 @@ rlang::with_options(
   },
   contrasts = global_override
 )
-
-
 }

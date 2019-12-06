@@ -6,6 +6,10 @@
 #'
 #' @param terms A terms object.
 #'
+#' @return
+#'
+#' `terms` with the response sections removed.
+#'
 #' @details
 #'
 #' The bug is described here:

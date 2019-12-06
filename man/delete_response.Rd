@@ -9,6 +9,9 @@ delete_response(terms)
 \arguments{
 \item{terms}{A terms object.}
 }
+\value{
+\code{terms} with the response sections removed.
+}
 \description{
 \code{delete_response()} is exactly the same as \code{delete.response()}, except
 that it fixes a long standing bug by also removing the part of the

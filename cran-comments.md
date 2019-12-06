@@ -30,6 +30,16 @@ Please unwrap the examples if they are executable in < 5 sec, or replace
 
 Removed all uses of `\dontrun{}`.
 
+> Please add \value to .Rd files regarding exported methods and explain
+the functions results in the documentation.
+(See: Writing R Extensions
+<https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Documenting-functions>
+)
+If a function does not return a value, please document that too, e.g.
+\value{None}.
+
+Added return value descriptions for all exported functions.
+
 ### Review 2 - 2019-11-28
 
 > Please omit the redundant 'Toolkit for' from your title.

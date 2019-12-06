@@ -23,9 +23,9 @@ get_outcome_levels(y)
 }}
 }
 \value{
-A named list with as many elements as there are factor columns in \code{data}.
-The names are the names of the factor columns, and the values are character
-vectors of the levels.
+A named list with as many elements as there are factor columns in \code{data}
+or \code{y}. The names are the names of the factor columns, and the values
+are character vectors of the levels.
 
 If there are no factor columns, \code{NULL} is returned.
 }

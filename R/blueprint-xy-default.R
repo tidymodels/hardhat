@@ -15,6 +15,10 @@
 #'
 #' @param ... Not used.
 #'
+#' @return
+#'
+#' For `default_xy_blueprint()`, an XY blueprint.
+#'
 #' @details
 #'
 #' As documented in [standardize()], if `y` is a _vector_, then the returned

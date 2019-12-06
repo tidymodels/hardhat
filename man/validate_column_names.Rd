@@ -14,6 +14,12 @@ check_column_names(data, original_names)
 
 \item{original_names}{A character vector. The original column names.}
 }
+\value{
+\code{validate_column_names()} returns \code{data} invisibly.
+
+\code{check_column_names()} returns a named list of two components,
+\code{ok}, and \code{missing_names}.
+}
 \description{
 validate - asserts the following:
 \itemize{

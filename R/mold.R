@@ -160,6 +160,10 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
 #'
 #' @param ... Not used. Required for extensibility.
 #'
+#' @return
+#'
+#' The preprocessed result, as a named list.
+#'
 #' @details
 #'
 #' Because `mold()` has different interfaces (like XY and formula),
