@@ -1,5 +1,8 @@
 destination: docs
 
+development:
+  mode: auto
+
 reference:
   - title: Preprocessing
     contents:
