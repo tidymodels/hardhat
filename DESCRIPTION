@@ -1,6 +1,6 @@
 Package: hardhat
 Title: Construct Modeling Packages
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Davis", "Vaughan", , "davis@rstudio.com", c("aut", "cre")),
     person("Max", "Kuhn", , "max@rstudio.com", c("aut")),
