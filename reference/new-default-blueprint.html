@@ -72,7 +72,7 @@ of the constructors found in the documentation for new_blueprint()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -138,19 +138,41 @@ blueprints already do, but generally you will extend the non-default versions
 of the constructors found in the documentation for <code><a href='new-blueprint.html'>new_blueprint()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_default_formula_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>predictors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>),
-  <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+    <pre class="usage"><span class='fu'>new_default_formula_blueprint</span>(
+  <span class='no'>mold</span>,
+  <span class='no'>forge</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>terms</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>predictors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>),
+  <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)
 
-<span class='fu'>new_default_recipe_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>extra_role_ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
-  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+<span class='fu'>new_default_recipe_blueprint</span>(
+  <span class='no'>mold</span>,
+  <span class='no'>forge</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>fresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>extra_role_ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)
 
-<span class='fu'>new_default_xy_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
-  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())</pre>
+<span class='fu'>new_default_xy_blueprint</span>(
+  <span class='no'>mold</span>,
+  <span class='no'>forge</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

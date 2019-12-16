@@ -70,7 +70,7 @@ the prototype, ptype." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -211,10 +211,8 @@ processing is done.</p>
 <span class='co'># shrink() makes sure that the columns</span>
 <span class='co'># required by `ptype` actually exist in the data</span>
 <span class='co'># and errors nicely when they don't</span>
-<span class='co'># \dontrun{</span>
 <span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>test</span>, <span class='kw'>select</span> <span class='kw'>=</span> -<span class='no'>Species</span>)
-<span class='fu'>shrink</span>(<span class='no'>test2</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The following required columns are missing: 'Species'.</span></div><div class='input'># }
-
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>shrink</span>(<span class='no'>test2</span>, <span class='no'>ptype_pred</span>))</div><div class='output co'>#&gt; Error : The following required columns are missing: 'Species'.</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

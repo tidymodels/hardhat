@@ -71,7 +71,7 @@ implementation function for the specific type of prediction to return." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -136,30 +136,30 @@ standardized format. They are generally called from a prediction
 implementation function for the specific <code>type</code> of prediction to return.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spruce_numeric</span>(<span class='no'>.pred</span>)
+    <pre class="usage"><span class='fu'>spruce_numeric</span>(<span class='no'>pred</span>)
 
-<span class='fu'>spruce_class</span>(<span class='no'>.pred_class</span>)
+<span class='fu'>spruce_class</span>(<span class='no'>pred_class</span>)
 
-<span class='fu'>spruce_prob</span>(<span class='no'>.pred_levels</span>, <span class='no'>.prob_matrix</span>)</pre>
+<span class='fu'>spruce_prob</span>(<span class='no'>pred_levels</span>, <span class='no'>prob_matrix</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.pred</th>
+      <th>pred</th>
       <td><p>(<code>type = "numeric"</code>) A numeric vector of predictions.</p></td>
     </tr>
     <tr>
-      <th>.pred_class</th>
+      <th>pred_class</th>
       <td><p>(<code>type = "class"</code>) A factor of "hard" class predictions.</p></td>
     </tr>
     <tr>
-      <th>.pred_levels, .prob_matrix</th>
+      <th>pred_levels, prob_matrix</th>
       <td><p>(<code>type = "prob"</code>)</p><ul>
-<li><p><code>.pred_levels</code> should be a character vector of the original levels of
+<li><p><code>pred_levels</code> should be a character vector of the original levels of
 the outcome used in training.</p></li>
-<li><p><code>.prob_matrix</code> should be a numeric matrix of class probabilities with
-as many columns as levels in <code>.pred_levels</code>, and in the same order.</p></li>
+<li><p><code>prob_matrix</code> should be a numeric matrix of class probabilities with
+as many columns as levels in <code>pred_levels</code>, and in the same order.</p></li>
 </ul></td>
     </tr>
     </table>

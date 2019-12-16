@@ -70,7 +70,7 @@ is the blueprint used by default from mold() if x is a formula." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -134,8 +134,11 @@ is the blueprint used by default from mold() if x is a formula." />
 is the blueprint used by default from <code><a href='mold.html'>mold()</a></code> if <code>x</code> is a formula.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>default_formula_blueprint</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>default_formula_blueprint</span>(
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
 <span class='co'># S3 method for formula</span>
 <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -178,6 +181,9 @@ prediction time? This information is used by the <code>clean</code> function in 
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>For <code>default_formula_blueprint()</code>, a formula blueprint.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>While not different from base R, the behavior of expanding factors into
@@ -240,7 +246,7 @@ and then adds them on afterwards.</p></li>
 <li><p>If any offsets are present from using <code><a href='https://rdrr.io/r/stats/offset.html'>offset()</a></code> in the original call
 to <code><a href='mold.html'>mold()</a></code>, then they are extracted with <code><a href='model_offset.html'>model_offset()</a></code>.</p></li>
 <li><p>If <code>intercept = TRUE</code> in the original call to <code><a href='mold.html'>mold()</a></code>, then an
-intecept column is added.</p></li>
+intercept column is added.</p></li>
 <li><p>It coerces the result of the above steps to a tibble.</p></li>
 </ul></li>
 <li><p>Outcomes</p><ul>
@@ -396,7 +402,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='fu'><a href='https://rdrr.io/r/base/conditions.html'>tryCatch</a></span>(
   <span class='kw'>expr</span> <span class='kw'>=</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Species</span> ~ <span class='no'>y</span> + <span class='no'>Sepal.Length</span>, <span class='no'>train</span>),
   <span class='kw'>error</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>e</span>) <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>e</span>$<span class='no'>message</span>)
-)</div><div class='output co'>#&gt; [1] "object 'y' not found"</div><div class='input'>
+)</div><div class='output co'>#&gt; The following predictors were not found in `data`: 'y'.</div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Dummy variables and interactions</span>
 
@@ -433,9 +439,7 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; # … with 90 more rows</div><div class='input'>
 <span class='co'># An informative error is thrown when `indicators = FALSE` and</span>
 <span class='co'># factors are present in interaction terms or in inline functions</span>
-<span class='co'># \dontrun{</span>
-<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Interaction terms involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Interactions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'><span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Functions involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Functions involving factors were detected for the following columns: 'Species'.</span></div><div class='input'><span class='co'># }</span>
-
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>))</div><div class='output co'>#&gt; Error : Interaction terms involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Interactions involving factors were detected for the following columns: 'Species'.</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>))</div><div class='output co'>#&gt; Error : Functions involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Functions involving factors were detected for the following columns: 'Species'.</div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Multivariate outcomes</span>
 
@@ -619,6 +623,7 @@ interface standardizes all of that flexibility in one place.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#mold">Mold</a></li>
       <li><a href="#forge">Forge</a></li>

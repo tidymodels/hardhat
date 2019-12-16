@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Delete the response from a terms object — delete_response • hardhat</title>
+<title>MIT License • hardhat</title>
 
 
 <!-- jquery -->
@@ -29,17 +29,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Delete the response from a terms object — delete_response" />
-<meta property="og:description" content="delete_response() is exactly the same as delete.response(), except
-that it fixes a long standing bug by also removing the part of the
-&quot;dataClasses&quot; attribute corresponding to the response, if it exists." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="MIT License" />
 
 
 
@@ -58,7 +54,7 @@ that it fixes a long standing bug by also removing the part of the
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +66,7 @@ that it fixes a long standing bug by also removing the part of the
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">hardhat</a>
+        <a class="navbar-link" href="index.html">hardhat</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -78,13 +74,13 @@ that it fixes a long standing bug by also removing the part of the
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,13 +90,13 @@ that it fixes a long standing bug by also removing the part of the
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/forge.html">Forging data for predictions</a>
+      <a href="articles/forge.html">Forging data for predictions</a>
     </li>
     <li>
-      <a href="../articles/mold.html">Molding data for modeling</a>
+      <a href="articles/mold.html">Molding data for modeling</a>
     </li>
     <li>
-      <a href="../articles/package.html">Creating Modeling Packages With hardhat</a>
+      <a href="articles/package.html">Creating Modeling Packages With hardhat</a>
     </li>
   </ul>
 </li>
@@ -123,59 +119,23 @@ that it fixes a long standing bug by also removing the part of the
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Delete the response from a terms object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/tidymodels/hardhat/blob/master/R/delete-response.R'><code>R/delete-response.R</code></a></small>
-    <div class="hidden name"><code>delete_response.Rd</code></div>
+      <h1>MIT License</h1>
     </div>
 
-    <div class="ref-description">
-    <p><code>delete_response()</code> is exactly the same as <code><a href='https://rdrr.io/r/stats/delete.response.html'>delete.response()</a></code>, except
-that it fixes a long standing bug by also removing the part of the
-<code>"dataClasses"</code> attribute corresponding to the response, if it exists.</p>
-    </div>
+<div id="mit-license" class="section level1">
 
-    <pre class="usage"><span class='fu'>delete_response</span>(<span class='no'>terms</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>terms</th>
-      <td><p>A terms object.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p><code>terms</code> with the response sections removed.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The bug is described here:</p>
-<p><a href='http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html'>http://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html</a></p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='no'>framed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Width</span>, <span class='no'>iris</span>)
-
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/delete.response.html'>delete.response</a></span>(<span class='no'>framed</span>$<span class='no'>terms</span>), <span class='st'>"dataClasses"</span>)</div><div class='output co'>#&gt;     Species Sepal.Width 
-#&gt;    "factor"   "numeric" </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='fu'>delete_response</span>(<span class='no'>framed</span>$<span class='no'>terms</span>), <span class='st'>"dataClasses"</span>)</div><div class='output co'>#&gt; Sepal.Width 
-#&gt;   "numeric" </div><div class='input'>
-</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-  </div>
+<p>Copyright (c) 2019 Davis Vaughan</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </div>
+
+  </div>
+
+</div>
+
 
 
       <footer>

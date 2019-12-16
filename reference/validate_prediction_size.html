@@ -37,13 +37,13 @@
 
 <meta property="og:title" content="Ensure that predictions have the correct number of rows — validate_prediction_size" />
 <meta property="og:description" content="validate - asserts the following:
-The size of .pred must be the same as the size of new_data.
+The size of pred must be the same as the size of new_data.
 
 
 check - returns the following:
 ok A logical. Does the check pass?
 size_new_data A single numeric. The size of new_data.
-size_pred A single numeric. The size of .pred.
+size_pred A single numeric. The size of pred.
 
 " />
 <meta name="twitter:card" content="summary" />
@@ -78,7 +78,7 @@ size_pred A single numeric. The size of .pred.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -139,26 +139,26 @@ size_pred A single numeric. The size of .pred.
 
     <div class="ref-description">
     <p>validate - asserts the following:</p><ul>
-<li><p>The size of <code>.pred</code> must be the same as the size of <code>new_data</code>.</p></li>
+<li><p>The size of <code>pred</code> must be the same as the size of <code>new_data</code>.</p></li>
 </ul>
 
 <p>check - returns the following:</p><ul>
 <li><p><code>ok</code> A logical. Does the check pass?</p></li>
 <li><p><code>size_new_data</code> A single numeric. The size of <code>new_data</code>.</p></li>
-<li><p><code>size_pred</code> A single numeric. The size of <code>.pred</code>.</p></li>
+<li><p><code>size_pred</code> A single numeric. The size of <code>pred</code>.</p></li>
 </ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'>validate_prediction_size</span>(<span class='no'>.pred</span>, <span class='no'>new_data</span>)
+    <pre class="usage"><span class='fu'>validate_prediction_size</span>(<span class='no'>pred</span>, <span class='no'>new_data</span>)
 
-<span class='fu'>check_prediction_size</span>(<span class='no'>.pred</span>, <span class='no'>new_data</span>)</pre>
+<span class='fu'>check_prediction_size</span>(<span class='no'>pred</span>, <span class='no'>new_data</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.pred</th>
+      <th>pred</th>
       <td><p>A tibble. The predictions to return from any prediction
 <code>type</code>. This is often created using one of the spruce functions, like
 <code><a href='spruce.html'>spruce_numeric()</a></code>.</p></td>
@@ -169,6 +169,11 @@ size_pred A single numeric. The size of .pred.
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>validate_prediction_size()</code> returns <code>pred</code> invisibly.</p>
+<p><code>check_prediction_size()</code> returns a named list of three components,
+<code>ok</code>, <code>size_new_data</code>, and <code>size_pred</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This validation function is one that is more developer focused rather than
@@ -196,13 +201,14 @@ and provide your own validation function.</p></li>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other validation functions: <code><a href='validate_column_names.html'>validate_column_names</a></code>,
-  <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code>,
-  <code><a href='validate_outcomes_are_binary.html'>validate_outcomes_are_binary</a></code>,
-  <code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a></code>,
-  <code><a href='validate_outcomes_are_numeric.html'>validate_outcomes_are_numeric</a></code>,
-  <code><a href='validate_outcomes_are_univariate.html'>validate_outcomes_are_univariate</a></code>,
-  <code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a></code></p></div>
+    <div class='dont-index'><p>Other validation functions: 
+<code><a href='validate_column_names.html'>validate_column_names</a>()</code>,
+<code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a>()</code>,
+<code><a href='validate_outcomes_are_binary.html'>validate_outcomes_are_binary</a>()</code>,
+<code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a>()</code>,
+<code><a href='validate_outcomes_are_numeric.html'>validate_outcomes_are_numeric</a>()</code>,
+<code><a href='validate_outcomes_are_univariate.html'>validate_outcomes_are_univariate</a>()</code>,
+<code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Say new_data has 5 rows</span>
@@ -210,13 +216,13 @@ and provide your own validation function.</p></li>
 
 <span class='co'># And somehow you generate predictions</span>
 <span class='co'># for those 5 rows</span>
-<span class='no'>.pred_vec</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>5</span>
+<span class='no'>pred_vec</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>5</span>
 
 <span class='co'># Then you use `spruce_numeric()` to clean</span>
 <span class='co'># up these numeric predictions</span>
-<span class='no'>.pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='no'>.pred_vec</span>)
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='no'>pred_vec</span>)
 
-<span class='no'>.pred</span></div><div class='output co'>#&gt; # A tibble: 5 x 1
+<span class='no'>pred</span></div><div class='output co'>#&gt; # A tibble: 5 x 1
 #&gt;   .pred
 #&gt;   &lt;int&gt;
 #&gt; 1     1
@@ -225,8 +231,8 @@ and provide your own validation function.</p></li>
 #&gt; 4     4
 #&gt; 5     5</div><div class='input'>
 <span class='co'># Use this check to ensure that</span>
-<span class='co'># the number of rows or .pred match new_data</span>
-<span class='fu'>check_prediction_size</span>(<span class='no'>.pred</span>, <span class='no'>new_data</span>)</div><div class='output co'>#&gt; $ok
+<span class='co'># the number of rows or pred match new_data</span>
+<span class='fu'>check_prediction_size</span>(<span class='no'>pred</span>, <span class='no'>new_data</span>)</div><div class='output co'>#&gt; $ok
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $size_new_data
@@ -237,15 +243,14 @@ and provide your own validation function.</p></li>
 #&gt; </div><div class='input'>
 <span class='co'># An informative error message is thrown</span>
 <span class='co'># if the rows are different</span>
-<span class='co'># \dontrun{</span>
-<span class='fu'>validate_prediction_size</span>(<span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>), <span class='no'>new_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The size of `new_data` (5) must match the size of `.pred` (4).</span></div><div class='input'># }
-
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>validate_prediction_size</span>(<span class='fu'><a href='spruce.html'>spruce_numeric</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>), <span class='no'>new_data</span>))</div><div class='output co'>#&gt; Error : The size of `new_data` (5) must match the size of `pred` (4).</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#validation">Validation</a></li>
       <li><a href="#see-also">See also</a></li>

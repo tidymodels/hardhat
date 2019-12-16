@@ -70,7 +70,7 @@ model_matrix() will never drop rows, and the result will be a tibble." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -161,7 +161,7 @@ typically the tibble returned from the corresponding call to
     <p>The following explains the rationale for some of the difference in arguments
 compared to <code><a href='https://rdrr.io/r/stats/model.matrix.html'>stats::model.matrix()</a></code>:</p><ul>
 <li><p><code>contrasts.arg</code>: Set the contrasts argument, <code><a href='https://rdrr.io/r/base/options.html'>options("contrasts")</a></code>
-globally, or assign a contasts to the factor of interest directly using
+globally, or assign a contrast to the factor of interest directly using
 <code><a href='https://rdrr.io/r/stats/contrasts.html'>stats::contrasts()</a></code>. See the examples section.</p></li>
 <li><p><code>xlev</code>: Not allowed because <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code> is never called, so it is
 unnecessary.</p></li>
@@ -249,9 +249,7 @@ weights through, which are handled differently in hardhat.</p></li>
 #&gt;   `(Intercept)`    y1
 #&gt;           &lt;dbl&gt; &lt;dbl&gt;
 #&gt; 1             1     1
-#&gt; 2             1    -1</div><div class='input'>
-
-</div></pre>
+#&gt; 2             1    -1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

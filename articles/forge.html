@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -214,9 +214,9 @@
 </li>
 </ul>
 <p>Almost all of this validation is possible through the use of <code><a href="https://rdrr.io/pkg/vctrs/man/vec_cast.html">vctrs::vec_cast()</a></code>, and is called for you by <code><a href="../reference/forge.html">forge()</a></code>.</p>
-<div id="column-existance" class="section level3">
+<div id="column-existence" class="section level3">
 <h3 class="hasAnchor">
-<a href="#column-existance" class="anchor"></a>Column existance</h3>
+<a href="#column-existence" class="anchor"></a>Column existence</h3>
 <p>The easiest example to demonstrate is missing columns in the testing data. <code><a href="../reference/forge.html">forge()</a></code> won’t let you continue until all of the required predictors used at training are also present in the new data.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">test_missing_column &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(iris_test, <span class="dt">select =</span> <span class="op">-</span>Species)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>

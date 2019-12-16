@@ -76,7 +76,7 @@ you should subclass new_blueprint()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -146,21 +146,49 @@ preprocessing method (i.e. not the formula, xy, or recipe method) then
 you should subclass <code>new_blueprint()</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_formula_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+    <pre class="usage"><span class='fu'>new_formula_blueprint</span>(
+  <span class='no'>mold</span>,
+  <span class='no'>forge</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)
 
-<span class='fu'>new_recipe_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+<span class='fu'>new_recipe_blueprint</span>(
+  <span class='no'>mold</span>,
+  <span class='no'>forge</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>fresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>recipe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)
 
-<span class='fu'>new_xy_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
-  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+<span class='fu'>new_xy_blueprint</span>(
+  <span class='no'>mold</span>,
+  <span class='no'>forge</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)
 
-<span class='fu'>new_blueprint</span>(<span class='no'>mold</span>, <span class='no'>forge</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
-  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())</pre>
+<span class='fu'>new_blueprint</span>(
+  <span class='no'>mold</span>,
+  <span class='no'>forge</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ptypes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>subclass</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>()
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

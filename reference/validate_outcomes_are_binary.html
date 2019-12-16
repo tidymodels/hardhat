@@ -79,7 +79,7 @@ with problems.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -165,6 +165,11 @@ with problems.</p></li>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>validate_outcomes_are_binary()</code> returns <code>outcomes</code> invisibly.</p>
+<p><code>check_outcomes_are_binary()</code> returns a named list of three components,
+<code>ok</code>, <code>bad_cols</code>, and <code>num_levels</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The expected way to use this validation function is to supply it the
@@ -188,13 +193,14 @@ and provide your own validation function.</p></li>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other validation functions: <code><a href='validate_column_names.html'>validate_column_names</a></code>,
-  <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code>,
-  <code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a></code>,
-  <code><a href='validate_outcomes_are_numeric.html'>validate_outcomes_are_numeric</a></code>,
-  <code><a href='validate_outcomes_are_univariate.html'>validate_outcomes_are_univariate</a></code>,
-  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code>,
-  <code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a></code></p></div>
+    <div class='dont-index'><p>Other validation functions: 
+<code><a href='validate_column_names.html'>validate_column_names</a>()</code>,
+<code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a>()</code>,
+<code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a>()</code>,
+<code><a href='validate_outcomes_are_numeric.html'>validate_outcomes_are_numeric</a>()</code>,
+<code><a href='validate_outcomes_are_univariate.html'>validate_outcomes_are_univariate</a>()</code>,
+<code><a href='validate_prediction_size.html'>validate_prediction_size</a>()</code>,
+<code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Not a binary factor. 0 levels</span>
@@ -233,6 +239,7 @@ and provide your own validation function.</p></li>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#validation">Validation</a></li>
       <li><a href="#see-also">See also</a></li>

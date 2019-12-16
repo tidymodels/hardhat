@@ -77,7 +77,7 @@ missing_names A character vector. The missing column names.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -165,6 +165,11 @@ missing_names A character vector. The missing column names.
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>validate_column_names()</code> returns <code>data</code> invisibly.</p>
+<p><code>check_column_names()</code> returns a named list of two components,
+<code>ok</code>, and <code>missing_names</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A special error is thrown if the missing column is named <code>".outcome"</code>. This
@@ -194,13 +199,14 @@ and provide your own validation function.</p></li>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other validation functions: <code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a></code>,
-  <code><a href='validate_outcomes_are_binary.html'>validate_outcomes_are_binary</a></code>,
-  <code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a></code>,
-  <code><a href='validate_outcomes_are_numeric.html'>validate_outcomes_are_numeric</a></code>,
-  <code><a href='validate_outcomes_are_univariate.html'>validate_outcomes_are_univariate</a></code>,
-  <code><a href='validate_prediction_size.html'>validate_prediction_size</a></code>,
-  <code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a></code></p></div>
+    <div class='dont-index'><p>Other validation functions: 
+<code><a href='validate_no_formula_duplication.html'>validate_no_formula_duplication</a>()</code>,
+<code><a href='validate_outcomes_are_binary.html'>validate_outcomes_are_binary</a>()</code>,
+<code><a href='validate_outcomes_are_factors.html'>validate_outcomes_are_factors</a>()</code>,
+<code><a href='validate_outcomes_are_numeric.html'>validate_outcomes_are_numeric</a>()</code>,
+<code><a href='validate_outcomes_are_univariate.html'>validate_outcomes_are_univariate</a>()</code>,
+<code><a href='validate_prediction_size.html'>validate_prediction_size</a>()</code>,
+<code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
@@ -224,10 +230,8 @@ and provide your own validation function.</p></li>
 #&gt; $missing_names
 #&gt; [1] "disp" "hp"  
 #&gt; </div><div class='input'>
-<span class='co'># \dontrun{</span>
 <span class='co'># Will error</span>
-<span class='fu'>validate_column_names</span>(<span class='no'>bad_test</span>, <span class='no'>original_names</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The following required columns are missing: 'disp', 'hp'.</span></div><div class='input'><span class='co'># }</span>
-
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>validate_column_names</span>(<span class='no'>bad_test</span>, <span class='no'>original_names</span>))</div><div class='output co'>#&gt; Error : The following required columns are missing: 'disp', 'hp'.</div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Special error when `.outcome` is missing</span>
 
@@ -281,11 +285,9 @@ and provide your own validation function.</p></li>
 <span class='co'># But if the outcome is requested, and `".outcome"`</span>
 <span class='co'># is not present in `new_data`, an error is thrown</span>
 <span class='co'># with very specific instructions</span>
-<span class='co'># \dontrun{</span>
-<span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The following required columns are missing: '.outcome'.</span>
-#&gt; <span class='error'></span>
-#&gt; <span class='error'>(This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, '.outcome', containing the outcome.)</span></div><div class='input'><span class='co'># }</span>
-
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; Error : The following required columns are missing: '.outcome'.
+#&gt; 
+#&gt; (This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, '.outcome', containing the outcome.)</div><div class='input'>
 <span class='co'># To get this to work, just create an .outcome column in new_data</span>
 <span class='no'>test</span>$<span class='no'>.outcome</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>$<span class='no'>Species</span>
 
@@ -330,6 +332,7 @@ and provide your own validation function.</p></li>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#validation">Validation</a></li>
       <li><a href="#see-also">See also</a></li>

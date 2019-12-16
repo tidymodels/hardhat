@@ -73,7 +73,7 @@ blueprint are still valid after the update." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -181,13 +181,9 @@ and passes through all of the elements of the blueprint to the constructor.</p>
 <span class='no'>blueprint_bad</span>$<span class='no'>intercept</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
 
 <span class='co'># ...because the constructor will catch it</span>
-<span class='co'># \dontrun{</span>
-<span class='fu'>refresh_blueprint</span>(<span class='no'>blueprint_bad</span>)</div><div class='output co'>#&gt; <span class='error'>Error: intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</span></div><div class='input'><span class='co'># }</span>
-
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>refresh_blueprint</span>(<span class='no'>blueprint_bad</span>))</div><div class='output co'>#&gt; Error : intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</div><div class='input'>
 <span class='co'># And update_blueprint() catches this automatically</span>
-<span class='co'># \dontrun{</span>
-<span class='fu'><a href='update_blueprint.html'>update_blueprint</a></span>(<span class='no'>blueprint</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error: intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</span></div><div class='input'># }
-
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='update_blueprint.html'>update_blueprint</a></span>(<span class='no'>blueprint</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>1</span>))</div><div class='output co'>#&gt; Error : intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

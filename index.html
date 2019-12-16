@@ -5,15 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Toolkit for the Construction of Modeling Packages • hardhat</title>
+<title>Construct Modeling Packages • hardhat</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="A Toolkit for the Construction of Modeling Packages">
-<meta property="og:description" content="Provides infrastructure for building new modeling packages, 
-    including functionality around preprocessing, predicting, and validating 
-    input.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Construct Modeling Packages">
+<meta property="og:description" content="Building modeling packages is hard. A large amount of effort
+    generally goes into providing an implementation for a new method that is
+    efficient, fast, and correct, but often less emphasis is put on the user
+    interface. A good interface requires specialized knowledge about S3 methods
+    and formulas, which the average package developer might not have.
+    The goal of hardhat is to reduce the burden around building new modeling
+    packages by providing functionality for preprocessing, predicting, and
+    validating input.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -33,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">hardhat</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -108,21 +113,22 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of hardhat from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># no you cannot</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"hardhat"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"hardhat"</span>)</a></code></pre></div>
 <p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"tidymodels/hardhat"</span>)</a></code></pre></div>
 </div>
-<div id="vignettes" class="section level2">
+<div id="learning-more" class="section level2">
 <h2 class="hasAnchor">
-<a href="#vignettes" class="anchor"></a>Vignettes</h2>
+<a href="#learning-more" class="anchor"></a>Learning more</h2>
 <p>To learn about how to use hardhat, check out the vignettes:</p>
 <ul>
 <li><p><code><a href="articles/mold.html">vignette("mold", "hardhat")</a></code>: Learn how to preprocess data at fit time with <code><a href="reference/mold.html">mold()</a></code>.</p></li>
 <li><p><code><a href="articles/forge.html">vignette("forge", "hardhat")</a></code>: Learn how to preprocess new data at prediction time with <code><a href="reference/forge.html">forge()</a></code>.</p></li>
 <li><p><code><a href="articles/package.html">vignette("package", "hardhat")</a></code>: Learn how to use <code><a href="reference/mold.html">mold()</a></code> and <code><a href="reference/forge.html">forge()</a></code> to help in creating a new modeling package.</p></li>
 </ul>
+<p>You can also watch <a href="https://github.com/topepo">Max Kuhn</a> discuss how to use hardhat to build a new modeling package from scratch at the XI Jornadas de Usuarios de R conference <a href="https://canal.uned.es/video/5dd25b9f5578f275e407dd88">here</a>.</p>
+<p><a href="https://canal.uned.es/video/5dd25b9f5578f275e407dd88"><img src="https://i.imgur.com/XKIZfWd.png"></a></p>
 </div>
 </div>
   </div>
@@ -131,6 +137,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=hardhat">https://​cloud.r-project.org/​package=hardhat</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/tidymodels/hardhat">https://​github.com/​tidymodels/​hardhat</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/tidymodels/hardhat/issues">https://​github.com/​tidymodels/​hardhat/​issues</a>
@@ -140,7 +148,8 @@
 <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 <div class="developers">
@@ -159,7 +168,7 @@
 <li><a href="https://codecov.io/gh/tidymodels/hardhat?branch=master"><img src="https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://cran.r-project.org/package=hardhat"><img src="https://www.r-pkg.org/badges/version/hardhat" alt="CRAN status"></a></li>
-<li><a href="https://github.com/tidymodels/hardhat/actions?workflow=R-CMD-check"><img src="https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://github.com/tidymodels/hardhat"><img src="https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
 </div>
