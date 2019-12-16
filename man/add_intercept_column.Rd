@@ -12,6 +12,9 @@ add_intercept_column(data, name = "(Intercept)")
 \item{name}{The name for the intercept column. Defaults to \code{"(Intercept)"},
 which is the same name that \code{\link[stats:lm]{stats::lm()}} uses.}
 }
+\value{
+\code{data} with an intercept column.
+}
 \description{
 This function adds an integer column of \code{1}'s to \code{data}.
 }

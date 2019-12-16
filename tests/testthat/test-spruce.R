@@ -23,16 +23,16 @@ test_that("spruce - class", {
 
 test_that("spruce - prob", {
 
-  .pred_levels <- letters[1:5]
-  .prob_matrix <- matrix(.5, ncol = 5, nrow = 2)
+  pred_levels <- letters[1:5]
+  prob_matrix <- matrix(.5, ncol = 5, nrow = 2)
 
-  spruced <- spruce_prob(.pred_levels, .prob_matrix)
+  spruced <- spruce_prob(pred_levels, prob_matrix)
 
   expect_is(spruced, "tbl_df")
-  expect_equal(colnames(spruced), paste0(".pred_", .pred_levels))
+  expect_equal(colnames(spruced), paste0(".pred_", pred_levels))
 
-  expect_error(spruce_prob(1, .prob_matrix))
-  expect_error(spruce_prob(.pred_levels, 1))
+  expect_error(spruce_prob(1, prob_matrix))
+  expect_error(spruce_prob(pred_levels, 1))
   expect_error(spruce_prob("a", matrix("a")))
 
   expect_error(

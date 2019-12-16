@@ -14,6 +14,10 @@
 #'
 #' @param ... Not used.
 #'
+#' @return
+#'
+#' For `default_formula_blueprint()`, a formula blueprint.
+#'
 #' @details
 #'
 #' While not different from base R, the behavior of expanding factors into
@@ -89,7 +93,7 @@
 #'    to [mold()], then they are extracted with [model_offset()].
 #'
 #'    - If `intercept = TRUE` in the original call to [mold()], then an
-#'    intecept column is added.
+#'    intercept column is added.
 #'
 #'    - It coerces the result of the above steps to a tibble.
 #'
@@ -198,10 +202,8 @@
 #'
 #' # An informative error is thrown when `indicators = FALSE` and
 #' # factors are present in interaction terms or in inline functions
-#' \dontrun{
-#' mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators)
-#' mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators)
-#' }
+#' try(mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators))
+#' try(mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators))
 #'
 #' # ---------------------------------------------------------------------------
 #' # Multivariate outcomes
@@ -343,16 +345,21 @@ mold_formula_default_clean <- function(blueprint, data) {
 
 # mold - formula - process
 mold_formula_default_process <- function(blueprint, data) {
-
-  c(blueprint, predictors_lst) %<-% mold_formula_default_process_predictors(
+  processed <- mold_formula_default_process_predictors(
     blueprint = blueprint,
     data = data
   )
 
-  c(blueprint, outcomes_lst) %<-% mold_formula_default_process_outcomes(
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
+
+  processed <- mold_formula_default_process_outcomes(
     blueprint = blueprint,
     data = data
   )
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
 
   # nuke formula environment before returning
   formula_empty_env <- nuke_formula_environment(blueprint$formula)
@@ -470,16 +477,21 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
 }
 
 forge_formula_default_process <- function(blueprint, predictors, outcomes, extras) {
-
-  c(blueprint, predictors_lst) %<-% forge_formula_default_process_predictors(
+  processed <- forge_formula_default_process_predictors(
     blueprint = blueprint,
     predictors = predictors
   )
 
-  c(blueprint, outcomes_lst) %<-% forge_formula_default_process_outcomes(
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
+
+  processed <- forge_formula_default_process_outcomes(
     blueprint = blueprint,
     outcomes = outcomes
   )
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
 
   extras <- c(
     extras,

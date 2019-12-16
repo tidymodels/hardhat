@@ -7,11 +7,11 @@
 #' levels that are required to check the structure of new data at prediction
 #' time.
 #'
+#' @param data A data frame or matrix.
+#'
 #' @return
 #'
 #' A 0 row slice of `data` after converting it to a tibble.
-#'
-#' @param data A data frame or matrix.
 #'
 #' @details
 #'

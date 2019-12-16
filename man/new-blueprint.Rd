@@ -9,21 +9,49 @@
 \alias{new_blueprint}
 \title{Create a new preprocessing blueprint}
 \usage{
-new_formula_blueprint(mold, forge, intercept = FALSE,
-  allow_novel_levels = FALSE, ptypes = NULL, formula = NULL,
-  indicators = TRUE, ..., subclass = character())
+new_formula_blueprint(
+  mold,
+  forge,
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  ptypes = NULL,
+  formula = NULL,
+  indicators = TRUE,
+  ...,
+  subclass = character()
+)
 
-new_recipe_blueprint(mold, forge, intercept = FALSE,
-  allow_novel_levels = FALSE, fresh = FALSE, ptypes = NULL,
-  recipe = NULL, ..., subclass = character())
+new_recipe_blueprint(
+  mold,
+  forge,
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  fresh = FALSE,
+  ptypes = NULL,
+  recipe = NULL,
+  ...,
+  subclass = character()
+)
 
-new_xy_blueprint(mold, forge, intercept = FALSE,
-  allow_novel_levels = FALSE, ptypes = NULL, ...,
-  subclass = character())
+new_xy_blueprint(
+  mold,
+  forge,
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  ptypes = NULL,
+  ...,
+  subclass = character()
+)
 
-new_blueprint(mold, forge, intercept = FALSE,
-  allow_novel_levels = FALSE, ptypes = NULL, ...,
-  subclass = character())
+new_blueprint(
+  mold,
+  forge,
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  ptypes = NULL,
+  ...,
+  subclass = character()
+)
 }
 \arguments{
 \item{mold}{A named list with two elements, \code{clean} and \code{process}, see

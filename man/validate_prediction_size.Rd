@@ -5,28 +5,34 @@
 \alias{check_prediction_size}
 \title{Ensure that predictions have the correct number of rows}
 \usage{
-validate_prediction_size(.pred, new_data)
+validate_prediction_size(pred, new_data)
 
-check_prediction_size(.pred, new_data)
+check_prediction_size(pred, new_data)
 }
 \arguments{
-\item{.pred}{A tibble. The predictions to return from any prediction
+\item{pred}{A tibble. The predictions to return from any prediction
 \code{type}. This is often created using one of the spruce functions, like
 \code{\link[=spruce_numeric]{spruce_numeric()}}.}
 
 \item{new_data}{A data frame of new predictors and possibly outcomes.}
 }
+\value{
+\code{validate_prediction_size()} returns \code{pred} invisibly.
+
+\code{check_prediction_size()} returns a named list of three components,
+\code{ok}, \code{size_new_data}, and \code{size_pred}.
+}
 \description{
 validate - asserts the following:
 \itemize{
-\item The size of \code{.pred} must be the same as the size of \code{new_data}.
+\item The size of \code{pred} must be the same as the size of \code{new_data}.
 }
 
 check - returns the following:
 \itemize{
 \item \code{ok} A logical. Does the check pass?
 \item \code{size_new_data} A single numeric. The size of \code{new_data}.
-\item \code{size_pred} A single numeric. The size of \code{.pred}.
+\item \code{size_pred} A single numeric. The size of \code{pred}.
 }
 }
 \details{
@@ -42,14 +48,14 @@ conventions this package tries to promote.
 
 hardhat provides validation functions at two levels.
 \itemize{
-\item \code{check_*()}:  \emph{check a condition, and return a list}. The list
+\item \verb{check_*()}:  \emph{check a condition, and return a list}. The list
 always contains at least one element, \code{ok}, a logical that specifies if the
 check passed. Each check also has check specific elements in the returned
 list that can be used to construct meaningful error messages.
-\item \code{validate_*()}: \emph{check a condition, and error if it does not pass}. These
+\item \verb{validate_*()}: \emph{check a condition, and error if it does not pass}. These
 functions call their corresponding check function, and
 then provide a default error message. If you, as a developer, want a
-different error message, then call the \code{check_*()} function yourself,
+different error message, then call the \verb{check_*()} function yourself,
 and provide your own validation function.
 }
 }
@@ -60,32 +66,31 @@ new_data <- mtcars[1:5,]
 
 # And somehow you generate predictions
 # for those 5 rows
-.pred_vec <- 1:5
+pred_vec <- 1:5
 
 # Then you use `spruce_numeric()` to clean
 # up these numeric predictions
-.pred <- spruce_numeric(.pred_vec)
+pred <- spruce_numeric(pred_vec)
 
-.pred
+pred
 
 # Use this check to ensure that
-# the number of rows or .pred match new_data
-check_prediction_size(.pred, new_data)
+# the number of rows or pred match new_data
+check_prediction_size(pred, new_data)
 
 # An informative error message is thrown
 # if the rows are different
-\dontrun{
-validate_prediction_size(spruce_numeric(1:4), new_data)
-}
+try(validate_prediction_size(spruce_numeric(1:4), new_data))
 
 }
 \seealso{
-Other validation functions: \code{\link{validate_column_names}},
-  \code{\link{validate_no_formula_duplication}},
-  \code{\link{validate_outcomes_are_binary}},
-  \code{\link{validate_outcomes_are_factors}},
-  \code{\link{validate_outcomes_are_numeric}},
-  \code{\link{validate_outcomes_are_univariate}},
-  \code{\link{validate_predictors_are_numeric}}
+Other validation functions: 
+\code{\link{validate_column_names}()},
+\code{\link{validate_no_formula_duplication}()},
+\code{\link{validate_outcomes_are_binary}()},
+\code{\link{validate_outcomes_are_factors}()},
+\code{\link{validate_outcomes_are_numeric}()},
+\code{\link{validate_outcomes_are_univariate}()},
+\code{\link{validate_predictors_are_numeric}()}
 }
 \concept{validation functions}

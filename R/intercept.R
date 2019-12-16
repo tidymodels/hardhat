@@ -6,8 +6,13 @@
 #' unchanged and a warning is issued.
 #'
 #' @param data A data frame or matrix.
+#'
 #' @param name The name for the intercept column. Defaults to `"(Intercept)"`,
 #' which is the same name that [stats::lm()] uses.
+#'
+#' @return
+#'
+#' `data` with an intercept column.
 #'
 #' @examples
 #' add_intercept_column(mtcars)

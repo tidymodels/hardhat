@@ -65,6 +65,4 @@ processed <- mold(
 )
 
 forge(test, processed$blueprint, outcomes = TRUE)
-
-
 }

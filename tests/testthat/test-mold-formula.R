@@ -177,25 +177,26 @@ test_that("can mold formulas with special terms", {
   )
 })
 
-test_that("formulas with non-existant columns are caught", {
-
+test_that("formulas with non-existent columns are caught", {
   expect_error(
-    mold(Species ~ y, iris),
-    "object 'y' not found"
+    mold(Species ~ y + z, iris),
+    "predictors were not found in `data`: 'y', 'z'"
   )
 
+  expect_error(
+    mold(y + z ~ Species, iris),
+    "outcomes were not found in `data`: 'y', 'z'"
+  )
 })
 
 test_that("global environment variables cannot be used", {
-
   expect_error(
     {
       y <- 1
       mold(Species ~ y, iris)
     },
-    "object 'y' not found"
+    "predictors were not found in `data`: 'y'"
   )
-
 })
 
 test_that("cannot manually remove intercept in the formula itself", {
@@ -383,15 +384,14 @@ test_that("`.` notation works as expected", {
 
 })
 
+# `expand_formula_dot_notation()` does not expand LHS dots, and we check
+# for them in `get_all_outcomes()`. That calls `all.vars()`, which returns
+# the `"."` as a variable.
 test_that("`.` notation fails on the LHS", {
-
-  # Get this for free from base R
-  # get_all_vars() does not like `.` on the LHS
   expect_error(
     mold(. ~ Species, iris),
-    "object '.' not found"
+    "The left hand side of the formula cannot contain `.`"
   )
-
 })
 
 test_that("`.` notation with variable as predictor and outcome", {

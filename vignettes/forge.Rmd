@@ -91,7 +91,7 @@ One of the most useful things about `forge()` is its robustness against malforme
 
 Almost all of this validation is possible through the use of `vctrs::vec_cast()`, and is called for you by `forge()`.
 
-### Column existance
+### Column existence
 
 The easiest example to demonstrate is missing columns in the testing data. `forge()` won't let you continue until all of the required predictors used at training are also present in the new data.
 

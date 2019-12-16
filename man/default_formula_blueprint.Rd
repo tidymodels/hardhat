@@ -5,8 +5,11 @@
 \alias{mold.formula}
 \title{Default formula blueprint}
 \usage{
-default_formula_blueprint(intercept = FALSE,
-  allow_novel_levels = FALSE, indicators = TRUE)
+default_formula_blueprint(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  indicators = TRUE
+)
 
 \method{mold}{formula}(formula, data, ..., blueprint = NULL)
 }
@@ -30,6 +33,9 @@ prediction time? This information is used by the \code{clean} function in the
 \item{blueprint}{A preprocessing \code{blueprint}. If left as \code{NULL}, then a
 \code{\link[=default_formula_blueprint]{default_formula_blueprint()}} is used.}
 }
+\value{
+For \code{default_formula_blueprint()}, a formula blueprint.
+}
 \description{
 This pages holds the details for the formula preprocessing blueprint. This
 is the blueprint used by default from \code{mold()} if \code{x} is a formula.
@@ -46,7 +52,7 @@ columns (one-hot encoding).
 
 Offsets can be included in the formula method through the use of the inline
 function \code{\link[stats:offset]{stats::offset()}}. These are returned as a tibble with 1 column
-named \code{".offset"} in the \code{$extras$offset} slot of the return value.
+named \code{".offset"} in the \verb{$extras$offset} slot of the return value.
 }
 \section{Mold}{
 
@@ -99,7 +105,7 @@ and then adds them on afterwards.
 \item If any offsets are present from using \code{offset()} in the original call
 to \code{\link[=mold]{mold()}}, then they are extracted with \code{\link[=model_offset]{model_offset()}}.
 \item If \code{intercept = TRUE} in the original call to \code{\link[=mold]{mold()}}, then an
-intecept column is added.
+intercept column is added.
 \item It coerces the result of the above steps to a tibble.
 }
 \item Outcomes
@@ -211,10 +217,8 @@ processed$predictors
 
 # An informative error is thrown when `indicators = FALSE` and
 # factors are present in interaction terms or in inline functions
-\dontrun{
-mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators)
-mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators)
-}
+try(mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators))
+try(mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators))
 
 # ---------------------------------------------------------------------------
 # Multivariate outcomes

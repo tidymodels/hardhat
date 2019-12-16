@@ -14,6 +14,12 @@ check_column_names(data, original_names)
 
 \item{original_names}{A character vector. The original column names.}
 }
+\value{
+\code{validate_column_names()} returns \code{data} invisibly.
+
+\code{check_column_names()} returns a named list of two components,
+\code{ok}, and \code{missing_names}.
+}
 \description{
 validate - asserts the following:
 \itemize{
@@ -41,14 +47,14 @@ a special error is thrown telling them what to do. See the examples!
 
 hardhat provides validation functions at two levels.
 \itemize{
-\item \code{check_*()}:  \emph{check a condition, and return a list}. The list
+\item \verb{check_*()}:  \emph{check a condition, and return a list}. The list
 always contains at least one element, \code{ok}, a logical that specifies if the
 check passed. Each check also has check specific elements in the returned
 list that can be used to construct meaningful error messages.
-\item \code{validate_*()}: \emph{check a condition, and error if it does not pass}. These
+\item \verb{validate_*()}: \emph{check a condition, and error if it does not pass}. These
 functions call their corresponding check function, and
 then provide a default error message. If you, as a developer, want a
-different error message, then call the \code{check_*()} function yourself,
+different error message, then call the \verb{check_*()} function yourself,
 and provide your own validation function.
 }
 }
@@ -67,10 +73,8 @@ check_column_names(test, original_names)
 # Missing 2 columns
 check_column_names(bad_test, original_names)
 
-\dontrun{
 # Will error
-validate_column_names(bad_test, original_names)
-}
+try(validate_column_names(bad_test, original_names))
 
 # ---------------------------------------------------------------------------
 # Special error when `.outcome` is missing
@@ -93,9 +97,7 @@ forge(test, processed$blueprint)
 # But if the outcome is requested, and `".outcome"`
 # is not present in `new_data`, an error is thrown
 # with very specific instructions
-\dontrun{
-forge(test, processed$blueprint, outcomes = TRUE)
-}
+try(forge(test, processed$blueprint, outcomes = TRUE))
 
 # To get this to work, just create an .outcome column in new_data
 test$.outcome <- test$Species
@@ -104,12 +106,13 @@ forge(test, processed$blueprint, outcomes = TRUE)
 
 }
 \seealso{
-Other validation functions: \code{\link{validate_no_formula_duplication}},
-  \code{\link{validate_outcomes_are_binary}},
-  \code{\link{validate_outcomes_are_factors}},
-  \code{\link{validate_outcomes_are_numeric}},
-  \code{\link{validate_outcomes_are_univariate}},
-  \code{\link{validate_prediction_size}},
-  \code{\link{validate_predictors_are_numeric}}
+Other validation functions: 
+\code{\link{validate_no_formula_duplication}()},
+\code{\link{validate_outcomes_are_binary}()},
+\code{\link{validate_outcomes_are_factors}()},
+\code{\link{validate_outcomes_are_numeric}()},
+\code{\link{validate_outcomes_are_univariate}()},
+\code{\link{validate_prediction_size}()},
+\code{\link{validate_predictors_are_numeric}()}
 }
 \concept{validation functions}

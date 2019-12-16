@@ -11,6 +11,9 @@ run_mold(blueprint, ...)
 
 \item{...}{Not used. Required for extensibility.}
 }
+\value{
+The preprocessed result, as a named list.
+}
 \description{
 This is a purely developer facing function, that is \emph{only} used if you are
 creating a completely new blueprint inheriting only from \code{\link[=new_blueprint]{new_blueprint()}}, and

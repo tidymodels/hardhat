@@ -9,6 +9,10 @@
 #'
 #' @param data A data frame returned from a call to `model_frame()`.
 #'
+#' @return
+#'
+#' A numeric vector representing the offset.
+#'
 #' @details
 #'
 #' If a column that has been tagged as an offset is not numeric, a nice error

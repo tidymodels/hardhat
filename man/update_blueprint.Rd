@@ -18,7 +18,7 @@ be updated.}
 \code{blueprint$elem <- new_elem}.
 \itemize{
 \item The name you are updating \emph{must} already exist in the blueprint. This prevents
-you from accidentally updating non-existant elements.
+you from accidentally updating non-existent elements.
 \item The constructor for the blueprint is automatically run after the update by
 \code{refresh_blueprint()} to ensure that the blueprint is still valid.
 }
@@ -32,14 +32,10 @@ blueprint
 
 update_blueprint(blueprint, intercept = TRUE)
 
-# Can't update non-existant elements
-\dontrun{
-update_blueprint(blueprint, intercpt = TRUE)
-}
+# Can't update non-existent elements
+try(update_blueprint(blueprint, intercpt = TRUE))
 
 # Can't add non-valid elements
-\dontrun{
-update_blueprint(blueprint, intercept = 1)
-}
+try(update_blueprint(blueprint, intercept = 1))
 
 }

@@ -17,7 +17,7 @@
 #' compared to [stats::model.matrix()]:
 #'
 #' - `contrasts.arg`: Set the contrasts argument, `options("contrasts")`
-#' globally, or assign a contasts to the factor of interest directly using
+#' globally, or assign a contrast to the factor of interest directly using
 #' [stats::contrasts()]. See the examples section.
 #'
 #' - `xlev`: Not allowed because `model.frame()` is never called, so it is
@@ -76,8 +76,6 @@
 #'   },
 #'   contrasts = global_override
 #' )
-#'
-#'
 #' @export
 model_matrix <- function(terms, data) {
 

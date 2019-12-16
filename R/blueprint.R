@@ -122,14 +122,10 @@ new_blueprint <- function(mold,
 #' blueprint_bad$intercept <- 1
 #'
 #' # ...because the constructor will catch it
-#' \dontrun{
-#' refresh_blueprint(blueprint_bad)
-#' }
+#' try(refresh_blueprint(blueprint_bad))
 #'
 #' # And update_blueprint() catches this automatically
-#' \dontrun{
-#' update_blueprint(blueprint, intercept = 1)
-#' }
+#' try(update_blueprint(blueprint, intercept = 1))
 #'
 #' @export
 refresh_blueprint <- function(blueprint) {
@@ -152,7 +148,7 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #' `blueprint$elem <- new_elem`.
 #'
 #' - The name you are updating _must_ already exist in the blueprint. This prevents
-#' you from accidentally updating non-existant elements.
+#' you from accidentally updating non-existent elements.
 #'
 #' - The constructor for the blueprint is automatically run after the update by
 #' `refresh_blueprint()` to ensure that the blueprint is still valid.
@@ -171,15 +167,11 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #'
 #' update_blueprint(blueprint, intercept = TRUE)
 #'
-#' # Can't update non-existant elements
-#' \dontrun{
-#' update_blueprint(blueprint, intercpt = TRUE)
-#' }
+#' # Can't update non-existent elements
+#' try(update_blueprint(blueprint, intercpt = TRUE))
 #'
 #' # Can't add non-valid elements
-#' \dontrun{
-#' update_blueprint(blueprint, intercept = 1)
-#' }
+#' try(update_blueprint(blueprint, intercept = 1))
 #'
 #' @export
 update_blueprint <- function(blueprint, ...) {

@@ -1,7 +1,6 @@
 #' @importFrom rlang abort is_missing arg_match := %||%
 #' @importFrom glue glue
 #' @importFrom tibble tibble
-#' @importFrom zeallot %<-%
 NULL
 
 # stats related imports
@@ -28,18 +27,3 @@ NULL
 #' @importFrom vctrs vec_cast.POSIXlt
 #' @importFrom vctrs vec_cast.vctrs_list_of
 NULL
-
-# for zeallot
-utils::globalVariables(
-  c(
-    ".predictors",
-    ".outcomes",
-    "predictors",
-    "outcomes",
-    "ptypes",
-    "ptype",
-    "extras",
-    "predictors_lst",
-    "outcomes_lst"
-  )
-)

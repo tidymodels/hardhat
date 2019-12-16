@@ -27,7 +27,7 @@ The following explains the rationale for some of the difference in arguments
 compared to \code{\link[stats:model.matrix]{stats::model.matrix()}}:
 \itemize{
 \item \code{contrasts.arg}: Set the contrasts argument, \code{options("contrasts")}
-globally, or assign a contasts to the factor of interest directly using
+globally, or assign a contrast to the factor of interest directly using
 \code{\link[stats:contrasts]{stats::contrasts()}}. See the examples section.
 \item \code{xlev}: Not allowed because \code{model.frame()} is never called, so it is
 unnecessary.
@@ -81,6 +81,4 @@ rlang::with_options(
   },
   contrasts = global_override
 )
-
-
 }

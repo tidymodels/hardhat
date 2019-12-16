@@ -5,8 +5,11 @@
 \alias{mold.recipe}
 \title{Default recipe blueprint}
 \usage{
-default_recipe_blueprint(intercept = FALSE, allow_novel_levels = FALSE,
-  fresh = FALSE)
+default_recipe_blueprint(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  fresh = FALSE
+)
 
 \method{mold}{recipe}(x, data, ..., blueprint = NULL)
 }
@@ -30,6 +33,9 @@ called?}
 
 \item{blueprint}{A preprocessing \code{blueprint}. If left as \code{NULL}, then a
 \code{\link[=default_recipe_blueprint]{default_recipe_blueprint()}} is used.}
+}
+\value{
+For \code{default_recipe_blueprint()}, a recipe blueprint.
 }
 \description{
 This pages holds the details for the recipe preprocessing blueprint. This

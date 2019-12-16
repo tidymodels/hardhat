@@ -15,6 +15,13 @@
 #'
 #' @param outcomes An object to check.
 #'
+#' @return
+#'
+#' `validate_outcomes_are_univariate()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_univariate()` returns a named list of two components,
+#' `ok` and `n_cols`.
+#'
 #' @template section-validation
 #'
 #' @details
@@ -25,9 +32,7 @@
 #' @examples
 #' validate_outcomes_are_univariate(data.frame(x = 1))
 #'
-#' \dontrun{
-#' validate_outcomes_are_univariate(mtcars)
-#' }
+#' try(validate_outcomes_are_univariate(mtcars))
 #'
 #' @family validation functions
 #' @export
@@ -81,6 +86,13 @@ check_outcomes_are_univariate <- function(outcomes) {
 #'
 #' @param outcomes An object to check.
 #'
+#' @return
+#'
+#' `validate_outcomes_are_numeric()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_numeric()` returns a named list of two components,
+#' `ok` and `bad_classes`.
+#'
 #' @template section-validation
 #'
 #' @details
@@ -96,9 +108,7 @@ check_outcomes_are_univariate <- function(outcomes) {
 #' check_outcomes_are_numeric(iris)
 #'
 #' # This gives an intelligent error message
-#' \dontrun{
-#' validate_outcomes_are_numeric(iris)
-#' }
+#' try(validate_outcomes_are_numeric(iris))
 #'
 #' @family validation functions
 #' @export
@@ -158,6 +168,13 @@ check_outcomes_are_numeric <- function(outcomes) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
+#'
+#' @return
+#'
+#' `validate_outcomes_are_factors()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_factors()` returns a named list of two components,
+#' `ok` and `bad_classes`.
 #'
 #' @template section-validation
 #'
@@ -235,6 +252,13 @@ check_outcomes_are_factors <- function(outcomes) {
 #' with problems.
 #'
 #' @param outcomes An object to check.
+#'
+#' @return
+#'
+#' `validate_outcomes_are_binary()` returns `outcomes` invisibly.
+#'
+#' `check_outcomes_are_binary()` returns a named list of three components,
+#' `ok`, `bad_cols`, and `num_levels`.
 #'
 #' @template section-validation
 #'
@@ -324,6 +348,13 @@ is_binary <- function(x) {
 #'
 #' @param predictors An object to check.
 #'
+#' @return
+#'
+#' `validate_predictors_are_numeric()` returns `predictors` invisibly.
+#'
+#' `check_predictors_are_numeric()` returns a named list of two components,
+#' `ok`, and `bad_classes`.
+#'
 #' @template section-validation
 #'
 #' @details
@@ -339,9 +370,7 @@ is_binary <- function(x) {
 #' check_predictors_are_numeric(iris)
 #'
 #' # This gives an intelligent error message
-#' \dontrun{
-#' validate_predictors_are_numeric(iris)
-#' }
+#' try(validate_predictors_are_numeric(iris))
 #'
 #' @family validation functions
 #' @export
@@ -416,6 +445,13 @@ check_predictors_are_numeric <- function(predictors) {
 #'
 #' @param original_names A character vector. The original column names.
 #'
+#' @return
+#'
+#' `validate_column_names()` returns `data` invisibly.
+#'
+#' `check_column_names()` returns a named list of two components,
+#' `ok`, and `missing_names`.
+#'
 #' @template section-validation
 #'
 #' @examples
@@ -432,10 +468,8 @@ check_predictors_are_numeric <- function(predictors) {
 #' # Missing 2 columns
 #' check_column_names(bad_test, original_names)
 #'
-#' \dontrun{
 #' # Will error
-#' validate_column_names(bad_test, original_names)
-#' }
+#' try(validate_column_names(bad_test, original_names))
 #'
 #' # ---------------------------------------------------------------------------
 #' # Special error when `.outcome` is missing
@@ -458,9 +492,7 @@ check_predictors_are_numeric <- function(predictors) {
 #' # But if the outcome is requested, and `".outcome"`
 #' # is not present in `new_data`, an error is thrown
 #' # with very specific instructions
-#' \dontrun{
-#' forge(test, processed$blueprint, outcomes = TRUE)
-#' }
+#' try(forge(test, processed$blueprint, outcomes = TRUE))
 #'
 #' # To get this to work, just create an .outcome column in new_data
 #' test$.outcome <- test$Species
@@ -544,7 +576,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' validate - asserts the following:
 #'
-#' - The size of `.pred` must be the same as the size of `new_data`.
+#' - The size of `pred` must be the same as the size of `new_data`.
 #'
 #' check - returns the following:
 #'
@@ -552,13 +584,20 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' - `size_new_data` A single numeric. The size of `new_data`.
 #'
-#' - `size_pred` A single numeric. The size of `.pred`.
+#' - `size_pred` A single numeric. The size of `pred`.
 #'
-#' @param .pred A tibble. The predictions to return from any prediction
+#' @param pred A tibble. The predictions to return from any prediction
 #' `type`. This is often created using one of the spruce functions, like
 #' [spruce_numeric()].
 #'
 #' @param new_data A data frame of new predictors and possibly outcomes.
+#'
+#' @return
+#'
+#' `validate_prediction_size()` returns `pred` invisibly.
+#'
+#' `check_prediction_size()` returns a named list of three components,
+#' `ok`, `size_new_data`, and `size_pred`.
 #'
 #' @details
 #'
@@ -577,47 +616,45 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' # And somehow you generate predictions
 #' # for those 5 rows
-#' .pred_vec <- 1:5
+#' pred_vec <- 1:5
 #'
 #' # Then you use `spruce_numeric()` to clean
 #' # up these numeric predictions
-#' .pred <- spruce_numeric(.pred_vec)
+#' pred <- spruce_numeric(pred_vec)
 #'
-#' .pred
+#' pred
 #'
 #' # Use this check to ensure that
-#' # the number of rows or .pred match new_data
-#' check_prediction_size(.pred, new_data)
+#' # the number of rows or pred match new_data
+#' check_prediction_size(pred, new_data)
 #'
 #' # An informative error message is thrown
 #' # if the rows are different
-#' \dontrun{
-#' validate_prediction_size(spruce_numeric(1:4), new_data)
-#' }
+#' try(validate_prediction_size(spruce_numeric(1:4), new_data))
 #'
 #' @family validation functions
 #' @export
-validate_prediction_size <- function(.pred, new_data) {
+validate_prediction_size <- function(pred, new_data) {
 
-  check <- check_prediction_size(.pred, new_data)
+  check <- check_prediction_size(pred, new_data)
 
   if(!check$ok) {
     glubort(
       "The size of `new_data` ({check$size_new_data}) must match the ",
-      "size of `.pred` ({check$size_pred})."
+      "size of `pred` ({check$size_pred})."
     )
   }
 
-  invisible(.pred)
+  invisible(pred)
 }
 
 #' @rdname validate_prediction_size
 #' @export
-check_prediction_size <- function(.pred, new_data) {
+check_prediction_size <- function(pred, new_data) {
   new_data <- check_is_data_like(new_data)
 
   size_new_data <- vctrs::vec_size(new_data)
-  size_pred <- vctrs::vec_size(.pred)
+  size_pred <- vctrs::vec_size(pred)
 
   ok <- size_pred == size_new_data
 
@@ -648,6 +685,13 @@ check_prediction_size <- function(.pred, new_data) {
 #' because the names are `"y"` and `"log(y)"`, if `TRUE`, `y ~ log(y)` is not
 #' allowed because the original names are both `"y"`.
 #'
+#' @return
+#'
+#' `validate_no_formula_duplication()` returns `formula` invisibly.
+#'
+#' `check_no_formula_duplication()` returns a named list of two components,
+#' `ok` and `duplicates`.
+#'
 #' @template section-validation
 #'
 #' @examples
@@ -664,10 +708,7 @@ check_prediction_size <- function(.pred, new_data) {
 #' check_no_formula_duplication(y ~ log(y), original = TRUE)
 #'
 #' # This would throw an error
-#' \dontrun{
-#' validate_no_formula_duplication(log(y) ~ log(y))
-#' }
-#'
+#' try(validate_no_formula_duplication(log(y) ~ log(y)))
 #'
 #' @family validation functions
 #' @export

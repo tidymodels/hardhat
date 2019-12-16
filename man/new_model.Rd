@@ -14,6 +14,10 @@ new_model(..., blueprint = default_xy_blueprint(), class = character())
 
 \item{class}{A character vector representing the class of the model.}
 }
+\value{
+A new scalar model object, represented as a classed list with named elements
+specified in \code{...}.
+}
 \description{
 A \strong{model} is a \emph{scalar object}, as classified in
 \href{https://adv-r.hadley.nz/s3.html#object-styles}{Advanced R}. As such, it

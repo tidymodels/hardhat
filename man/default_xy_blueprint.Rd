@@ -30,6 +30,9 @@ prediction time? This information is used by the \code{clean} function in the
 \item{blueprint}{A preprocessing \code{blueprint}. If left as \code{NULL}, then a
 \code{\link[=default_xy_blueprint]{default_xy_blueprint()}} is used.}
 }
+\value{
+For \code{default_xy_blueprint()}, an XY blueprint.
+}
 \description{
 This pages holds the details for the XY preprocessing blueprint. This
 is the blueprint used by default from \code{mold()} if \code{x} and \code{y} are provided
@@ -109,9 +112,7 @@ forge(test_x, processed$blueprint)
 processed <- mold(train_x, train_y)
 
 # Can't do this!
-\dontrun{
-forge(test_x, processed$blueprint, outcomes = TRUE)
-}
+try(forge(test_x, processed$blueprint, outcomes = TRUE))
 
 # Need to use the full test set, including `y`
 forge(test, processed$blueprint, outcomes = TRUE)
@@ -127,9 +128,7 @@ processed_vec <- mold(train_x, y_vec)
 
 # This throws an informative error that tell you
 # to include an `".outcome"` column in `new_data`.
-\dontrun{
-forge(iris, processed_vec$blueprint, outcomes = TRUE)
-}
+try(forge(iris, processed_vec$blueprint, outcomes = TRUE))
 
 test2 <- test
 test2$.outcome <- test2$Species

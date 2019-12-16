@@ -7,23 +7,23 @@
 \alias{spruce_prob}
 \title{Spruce up predictions}
 \usage{
-spruce_numeric(.pred)
+spruce_numeric(pred)
 
-spruce_class(.pred_class)
+spruce_class(pred_class)
 
-spruce_prob(.pred_levels, .prob_matrix)
+spruce_prob(pred_levels, prob_matrix)
 }
 \arguments{
-\item{.pred}{(\code{type = "numeric"}) A numeric vector of predictions.}
+\item{pred}{(\code{type = "numeric"}) A numeric vector of predictions.}
 
-\item{.pred_class}{(\code{type = "class"}) A factor of "hard" class predictions.}
+\item{pred_class}{(\code{type = "class"}) A factor of "hard" class predictions.}
 
-\item{.pred_levels, .prob_matrix}{(\code{type = "prob"})
+\item{pred_levels, prob_matrix}{(\code{type = "prob"})
 \itemize{
-\item \code{.pred_levels} should be a character vector of the original levels of
+\item \code{pred_levels} should be a character vector of the original levels of
 the outcome used in training.
-\item \code{.prob_matrix} should be a numeric matrix of class probabilities with
-as many columns as levels in \code{.pred_levels}, and in the same order.
+\item \code{prob_matrix} should be a numeric matrix of class probabilities with
+as many columns as levels in \code{pred_levels}, and in the same order.
 }}
 }
 \value{
@@ -32,12 +32,12 @@ to \code{predict()}. The column names and number of columns vary based on the
 function used, but are standardized.
 }
 \description{
-The family of \code{spruce_*()} functions convert predictions into a
+The family of \verb{spruce_*()} functions convert predictions into a
 standardized format. They are generally called from a prediction
 implementation function for the specific \code{type} of prediction to return.
 }
 \details{
-After running a \code{spruce_*()} function, you should \emph{always} use the validation
+After running a \verb{spruce_*()} function, you should \emph{always} use the validation
 function \code{validate_prediction_size()} to ensure that the number of rows
 being returned is the same as the number of rows in the input (\code{new_data}).
 }

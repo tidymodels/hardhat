@@ -15,6 +15,10 @@
 #'
 #' @param ... Not used.
 #'
+#' @return
+#'
+#' For `default_xy_blueprint()`, an XY blueprint.
+#'
 #' @details
 #'
 #' As documented in [standardize()], if `y` is a _vector_, then the returned
@@ -88,9 +92,7 @@
 #' processed <- mold(train_x, train_y)
 #'
 #' # Can't do this!
-#' \dontrun{
-#' forge(test_x, processed$blueprint, outcomes = TRUE)
-#' }
+#' try(forge(test_x, processed$blueprint, outcomes = TRUE))
 #'
 #' # Need to use the full test set, including `y`
 #' forge(test, processed$blueprint, outcomes = TRUE)
@@ -106,9 +108,7 @@
 #'
 #' # This throws an informative error that tell you
 #' # to include an `".outcome"` column in `new_data`.
-#' \dontrun{
-#' forge(iris, processed_vec$blueprint, outcomes = TRUE)
-#' }
+#' try(forge(iris, processed_vec$blueprint, outcomes = TRUE))
 #'
 #' test2 <- test
 #' test2$.outcome <- test2$Species
@@ -178,14 +178,20 @@ get_mold_xy_default_function_set <- function() {
 
 # mold - xy - clean
 mold_xy_default_clean <- function(blueprint, x, y) {
-  c(blueprint, x) %<-% mold_xy_default_clean_predictors(blueprint, x)
+  cleaned <- mold_xy_default_clean_predictors(blueprint, x)
+
+  blueprint <- cleaned$blueprint
+  x <- cleaned$x
 
   # Special case `y = NULL` as a 0 column variation on `x`
   if (is.null(y)) {
     y <- x[, 0L, drop = FALSE]
   }
 
-  c(blueprint, y) %<-% mold_xy_default_clean_outcomes(blueprint, y)
+  cleaned <- mold_xy_default_clean_outcomes(blueprint, y)
+
+  blueprint <- cleaned$blueprint
+  y <- cleaned$y
 
   out$mold$clean_xy(blueprint, x, y)
 }
@@ -202,9 +208,15 @@ mold_xy_default_clean_outcomes <- function(blueprint, y) {
 
 # mold - xy - process
 mold_xy_default_process <- function(blueprint, x, y) {
+  processed <- mold_xy_default_process_predictors(blueprint, x)
 
-  c(blueprint, predictors_lst) %<-% mold_xy_default_process_predictors(blueprint, x)
-  c(blueprint, outcomes_lst) %<-% mold_xy_default_process_outcomes(blueprint, y)
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
+
+  processed <- mold_xy_default_process_outcomes(blueprint, y)
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
 
   ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
@@ -266,9 +278,15 @@ forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
 }
 
 forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
+  processed <- forge_xy_default_process_predictors(blueprint, predictors)
 
-  c(blueprint, predictors_lst) %<-% forge_xy_default_process_predictors(blueprint, predictors)
-  c(blueprint, outcomes_lst) %<-% forge_xy_default_process_outcomes(blueprint, outcomes)
+  blueprint <- processed$blueprint
+  predictors_lst <- processed$terms_lst
+
+  processed <- forge_xy_default_process_outcomes(blueprint, outcomes)
+
+  blueprint <- processed$blueprint
+  outcomes_lst <- processed$terms_lst
 
   extras <- c(
     extras,

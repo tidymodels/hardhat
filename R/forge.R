@@ -63,8 +63,6 @@
 #' )
 #'
 #' forge(test, processed$blueprint, outcomes = TRUE)
-#'
-#'
 #' @export
 forge <- function(new_data, blueprint, ..., outcomes = FALSE) {
   UseMethod("forge")
@@ -81,18 +79,27 @@ forge.data.frame <- function(new_data, blueprint, ..., outcomes = FALSE) {
   validate_empty_dots(...)
   validate_is_blueprint(blueprint)
 
-  c(blueprint, predictors, outcomes, extras) %<-% blueprint$forge$clean(
+  cleaned <- blueprint$forge$clean(
     blueprint = blueprint,
     new_data = new_data,
     outcomes = outcomes
   )
 
-  c(predictors, outcomes, extras) %<-% blueprint$forge$process(
+  blueprint <- cleaned$blueprint
+  predictors <- cleaned$predictors
+  outcomes <- cleaned$outcomes
+  extras <- cleaned$extras
+
+  processed <- blueprint$forge$process(
     blueprint = blueprint,
     predictors = predictors,
     outcomes = outcomes,
     extras = extras
   )
+
+  predictors <- processed$predictors
+  outcomes <- processed$outcomes
+  extras <- processed$extras
 
   out$forge$final(predictors, outcomes, extras)
 }

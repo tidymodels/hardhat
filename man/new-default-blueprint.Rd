@@ -8,19 +8,41 @@
 \alias{new_default_xy_blueprint}
 \title{Create a new default blueprint}
 \usage{
-new_default_formula_blueprint(mold, forge, intercept = FALSE,
-  allow_novel_levels = FALSE, ptypes = NULL, formula = NULL,
-  indicators = TRUE, terms = list(predictors = NULL, outcomes = NULL),
-  ..., subclass = character())
+new_default_formula_blueprint(
+  mold,
+  forge,
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  ptypes = NULL,
+  formula = NULL,
+  indicators = TRUE,
+  terms = list(predictors = NULL, outcomes = NULL),
+  ...,
+  subclass = character()
+)
 
-new_default_recipe_blueprint(mold, forge, intercept = FALSE,
-  allow_novel_levels = FALSE, fresh = FALSE, ptypes = NULL,
-  recipe = NULL, extra_role_ptypes = NULL, ...,
-  subclass = character())
+new_default_recipe_blueprint(
+  mold,
+  forge,
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  fresh = FALSE,
+  ptypes = NULL,
+  recipe = NULL,
+  extra_role_ptypes = NULL,
+  ...,
+  subclass = character()
+)
 
-new_default_xy_blueprint(mold, forge, intercept = FALSE,
-  allow_novel_levels = FALSE, ptypes = NULL, ...,
-  subclass = character())
+new_default_xy_blueprint(
+  mold,
+  forge,
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  ptypes = NULL,
+  ...,
+  subclass = character()
+)
 }
 \arguments{
 \item{mold}{A named list with two elements, \code{clean} and \code{process}, see
