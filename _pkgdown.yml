@@ -9,6 +9,18 @@ destination: docs
 development:
   mode: auto
 
+navbar:
+  components:
+    news:
+      text: News
+      menu:
+      - text: "Release notes"
+      - text: "Version 0.1.0"
+        href: https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/
+      - text: "------------------"
+      - text: "Change log"
+        href: news/index.html
+
 reference:
   - title: Preprocessing
     contents:
