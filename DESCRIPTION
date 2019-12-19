@@ -17,7 +17,7 @@ Description: Building modeling packages is hard. A large amount of effort
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
     recipes (>= 0.1.8),
