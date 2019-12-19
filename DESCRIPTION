@@ -20,7 +20,7 @@ LazyData: true
 RoxygenNote: 7.0.1
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    recipes,
+    recipes (>= 0.1.8),
     testthat (>= 2.1.0),
     covr,
     knitr,
