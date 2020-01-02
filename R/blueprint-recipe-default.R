@@ -336,11 +336,25 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   roles <- rec$term_info$role
   vars <- rec$term_info$variable
 
+  # Minimal name repair in case a predictor has multiple roles
+  # We just want to include it once, but without any name repair
+  new_data <- vctrs::vec_cbind(
+    predictors,
+    outcomes,
+    !!! unname(extras$roles),
+    .name_repair = "minimal"
+  )
+
+  new_data_names <- names(new_data)
+  unique_names <- unique(new_data_names)
+
+  new_data <- new_data[, unique_names, drop = FALSE]
+
   # Can't move this inside core functions
   # predictors and outcomes both must be present
   baked_data <- recipes::bake(
     object = rec,
-    new_data = vctrs::vec_cbind(predictors, outcomes, !!!unname(extras$roles))
+    new_data = new_data
   )
 
   processed_predictor_names <- vars[strict_equal(roles, "predictor")]

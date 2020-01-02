@@ -347,3 +347,17 @@ test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
   expect_equal(nrow(outcomes), 150)
   expect_equal(ncol(outcomes), 0)
 })
+
+test_that("Predictors with multiple roles are only included once before baking (#120)", {
+  rec <- recipe(Species ~ ., iris) # Implict "predictor" role too
+  rec <- add_role(rec, Sepal.Length, new_role = "test1")
+  rec <- add_role(rec, Sepal.Length, new_role = "test2")
+
+  x <- mold(rec, iris)
+
+  forged <- forge(iris, x$blueprint)
+
+  expect_true("Sepal.Length" %in% colnames(forged$predictors))
+  expect_true("Sepal.Length" %in% colnames(forged$extras$roles$test1))
+  expect_true("Sepal.Length" %in% colnames(forged$extras$roles$test2))
+})
