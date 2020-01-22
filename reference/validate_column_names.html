@@ -87,7 +87,7 @@ missing_names A character vector. The missing column names.
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
         </div>
       </div>
     </div>
@@ -120,8 +120,22 @@ missing_names A character vector. The missing column names.
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Release notes</li>
+    <li>
+      <a href="https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/">Version 0.1.0</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Change log</a>
+    </li>
+  </ul>
 </li>
         <li>
   <a href="https://github.com/tidymodels/hardhat">
@@ -274,7 +288,7 @@ and provide your own validation function.</p></li>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 4
 #&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width
-#&gt;           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+#&gt;  *        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
 #&gt;  1          6.3         3.3          6           2.5
 #&gt;  2          5.8         2.7          5.1         1.9
 #&gt;  3          7.1         3            5.9         2.1
@@ -305,7 +319,7 @@ and provide your own validation function.</p></li>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
 #&gt; # A tibble: 50 x 4
 #&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width
-#&gt;           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+#&gt;  *        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
 #&gt;  1          6.3         3.3          6           2.5
 #&gt;  2          5.8         2.7          5.1         1.9
 #&gt;  3          7.1         3            5.9         2.1
@@ -321,7 +335,7 @@ and provide your own validation function.</p></li>
 #&gt; $outcomes
 #&gt; # A tibble: 50 x 1
 #&gt;    .outcome 
-#&gt;    &lt;fct&gt;    
+#&gt;  * &lt;fct&gt;    
 #&gt;  1 virginica
 #&gt;  2 virginica
 #&gt;  3 virginica
