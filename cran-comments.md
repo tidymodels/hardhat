@@ -5,9 +5,11 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-* This is a new release.
+## 0.1.1 Submission
+
+This submission fixes the test error from the new recipes 0.1.8 update.
 
 ## 0.1.0 Resubmission
 
