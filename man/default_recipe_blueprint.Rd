@@ -8,7 +8,7 @@
 default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  fresh = FALSE
+  fresh = TRUE
 )
 
 \method{mold}{recipe}(x, data, ..., blueprint = NULL)
