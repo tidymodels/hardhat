@@ -98,8 +98,15 @@ model_matrix <- function(terms, data) {
 }
 
 strip_model_matrix <- function(x) {
-  attr(x, "assign") <- NULL
-  attr(x, "dimnames") <- list(NULL, dimnames(x)[[2]])
+  colnames <- colnames(x)
+  dimnames <- list(NULL, colnames)
+
+  dim <- dim(x)
+
+  attrs <- list(dim = dim, dimnames = dimnames)
+
+  attributes(x) <- attrs
+
   x
 }
 

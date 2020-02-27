@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* `model_matrix()` now correctly strips all attributes from the result of the
+  internal call to `model.matrix()`.
+
 # hardhat 0.1.1
 
 * `forge()` now works correctly when used with a recipe that has a predictor
