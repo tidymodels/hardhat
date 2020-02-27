@@ -10,13 +10,13 @@
 |collate  |en_US.UTF-8                  |
 |ctype    |en_US.UTF-8                  |
 |tz       |America/New_York             |
-|date     |2020-01-02                   |
+|date     |2020-02-27                   |
 
 # Dependencies
 
-|package |old   |new   |Δ  |
-|:-------|:-----|:-----|:--|
-|hardhat |0.1.0 |0.1.1 |*  |
+|package |old   |new        |Δ  |
+|:-------|:-----|:----------|:--|
+|hardhat |0.1.1 |0.1.1.9000 |*  |
 
 # Revdeps
 
