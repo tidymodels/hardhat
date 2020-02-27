@@ -7,6 +7,10 @@
 
 0 errors | 0 warnings | 0 notes
 
+## 0.1.2 Submission
+
+This submission fixes a `stringsAsFactors` note and slightly tweaks how recipes are preprocessed.
+
 ## 0.1.1 Submission
 
 This submission fixes the test error from the new recipes 0.1.8 update.
