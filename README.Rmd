@@ -20,7 +20,6 @@ options(rlang__backtrace_on_error = "reminder")
 # hardhat
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/tidymodels/hardhat.svg?branch=master)](https://travis-ci.org/tidymodels/hardhat)
 [![Codecov test coverage](https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=master)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
