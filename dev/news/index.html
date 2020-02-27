@@ -155,8 +155,8 @@
 <a href="#hardhat-development-version" class="anchor"></a>hardhat (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li>
-<code><a href="../reference/model_matrix.html">model_matrix()</a></code> now correctly strips all attributes from the result of the internal call to <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code>.</li>
+<li><p><code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> now defaults to prepping recipes with <code>fresh = TRUE</code>. This is a safer default, and guards the user against accidentally skipping this preprocessing step when tuning (<a href='https://github.com/tidymodels/hardhat/issues/122'>#122</a>).</p></li>
+<li><p><code><a href="../reference/model_matrix.html">model_matrix()</a></code> now correctly strips all attributes from the result of the internal call to <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code>.</p></li>
 </ul>
 </div>
     <div id="hardhat-0-1-1" class="section level1">
