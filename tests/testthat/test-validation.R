@@ -27,7 +27,7 @@ test_that("validate_outcomes_are_numeric()", {
   )
 
   date <- as.POSIXct(as.POSIXlt(as.Date("2019-01-01")))
-  x <- data.frame(x = date, y = "hi")
+  x <- data.frame(x = date, y = factor("hi"))
 
   expect_error(
     validate_outcomes_are_numeric(x),
@@ -113,7 +113,7 @@ test_that("validate_predictors_are_numeric()", {
   )
 
   date <- as.POSIXct(as.POSIXlt(as.Date("2019-01-01")))
-  x <- data.frame(x = date, y = "hi")
+  x <- data.frame(x = date, y = factor("hi"))
 
   expect_error(
     validate_predictors_are_numeric(x),
