@@ -26,7 +26,7 @@ new_default_recipe_blueprint(
   forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  fresh = FALSE,
+  fresh = TRUE,
   ptypes = NULL,
   recipe = NULL,
   extra_role_ptypes = NULL,

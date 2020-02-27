@@ -112,7 +112,7 @@
 #' @export
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
-                                     fresh = FALSE) {
+                                     fresh = TRUE) {
 
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
@@ -138,7 +138,7 @@ new_default_recipe_blueprint <- function(mold,
                                          forge,
                                          intercept = FALSE,
                                          allow_novel_levels = FALSE,
-                                         fresh = FALSE,
+                                         fresh = TRUE,
                                          ptypes = NULL,
                                          recipe = NULL,
                                          extra_role_ptypes = NULL,
