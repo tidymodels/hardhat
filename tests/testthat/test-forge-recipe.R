@@ -33,7 +33,7 @@ test_that("asking for the outcome works", {
 
   expect_equal(
     xx$outcomes,
-    data.frame(Species = iris$Species)
+    tibble::tibble(Species = iris$Species)
   )
 })
 
