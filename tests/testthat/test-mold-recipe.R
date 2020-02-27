@@ -52,6 +52,24 @@ test_that("can pass `fresh` through to `prep()`", {
   expect_equal(mold_fresh_mean, fresh_mean)
 })
 
+test_that("`fresh` defaults to `TRUE`", {
+  iris1 <- iris[1:50,]
+  iris2 <- iris[51:100,]
+
+  rec <- recipe(Species ~ Sepal.Length, data = iris1)
+  rec <- step_center(rec, Sepal.Length)
+
+  prepped_rec <- prep(rec, iris1)
+  non_fresh_mean <- prepped_rec$steps[[1]]$means
+  fresh_mean <- c(Sepal.Length = mean(iris2$Sepal.Length))
+
+  x <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint())
+  mold_fresh_mean <- x$blueprint$recipe$steps[[1]]$means
+
+  expect_false(identical(non_fresh_mean, mold_fresh_mean))
+  expect_identical(mold_fresh_mean, fresh_mean)
+})
+
 test_that("`data` is validated", {
 
   expect_error(
