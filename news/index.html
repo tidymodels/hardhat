@@ -77,7 +77,7 @@
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
         </div>
       </div>
     </div>
@@ -150,18 +150,27 @@
       <small>Source: <a href='https://github.com/tidymodels/hardhat/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hardhat-0-1-1" class="section level1">
+    <div id="hardhat-012" class="section level1">
 <h1 class="page-header">
-<a href="#hardhat-0-1-1" class="anchor"></a>hardhat 0.1.1<small> 2020-01-08 </small>
+<a href="#hardhat-012" class="anchor"></a>hardhat 0.1.2<small> 2020-02-28 </small>
+</h1>
+<ul>
+<li><p><code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> now defaults to prepping recipes with <code>fresh = TRUE</code>. This is a safer default, and guards the user against accidentally skipping this preprocessing step when tuning (<a href='https://github.com/tidymodels/hardhat/issues/122'>#122</a>).</p></li>
+<li><p><code><a href="../reference/model_matrix.html">model_matrix()</a></code> now correctly strips all attributes from the result of the internal call to <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code>.</p></li>
+</ul>
+</div>
+    <div id="hardhat-011" class="section level1">
+<h1 class="page-header">
+<a href="#hardhat-011" class="anchor"></a>hardhat 0.1.1<small> 2020-01-08 </small>
 </h1>
 <ul>
 <li><p><code><a href="../reference/forge.html">forge()</a></code> now works correctly when used with a recipe that has a predictor with multiple roles (<a href='https://github.com/tidymodels/hardhat/issues/120'>#120</a>).</p></li>
 <li><p>Require recipes 0.1.8 to incorporate an important bug fix with <code>juice()</code> and 0-column selections.</p></li>
 </ul>
 </div>
-    <div id="hardhat-0-1-0" class="section level1">
+    <div id="hardhat-010" class="section level1">
 <h1 class="page-header">
-<a href="#hardhat-0-1-0" class="anchor"></a>hardhat 0.1.0<small> 2019-12-16 </small>
+<a href="#hardhat-010" class="anchor"></a>hardhat 0.1.0<small> 2019-12-16 </small>
 </h1>
 <ul>
 <li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
@@ -169,12 +178,13 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#hardhat-0-1-1">0.1.1</a></li>
-        <li><a href="#hardhat-0-1-0">0.1.0</a></li>
+        <li><a href="#hardhat-012">0.1.2</a></li>
+        <li><a href="#hardhat-011">0.1.1</a></li>
+        <li><a href="#hardhat-010">0.1.0</a></li>
       </ul>
     </div>
   </div>

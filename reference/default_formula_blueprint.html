@@ -80,7 +80,7 @@ is the blueprint used by default from mold() if x is a formula." />
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
         </div>
       </div>
     </div>
@@ -326,20 +326,20 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Then, call forge() with the blueprint and the test data</span>
 <span class='co'># to have it preprocess the test data in the same way</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>)</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 50 x 4
+#&gt; <span style='color: #555555;'># A tibble: 50 x 4</span><span>
 #&gt;    `(Intercept)` Sepal.Length Speciesversicolor Speciesvirginica
-#&gt;            &lt;dbl&gt;        &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-#&gt;  1             1          6.3                 0                1
-#&gt;  2             1          5.8                 0                1
-#&gt;  3             1          7.1                 0                1
-#&gt;  4             1          6.3                 0                1
-#&gt;  5             1          6.5                 0                1
-#&gt;  6             1          7.6                 0                1
-#&gt;  7             1          4.9                 0                1
-#&gt;  8             1          7.3                 0                1
-#&gt;  9             1          6.7                 0                1
-#&gt; 10             1          7.2                 0                1
-#&gt; # … with 40 more rows
+#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>             1          6.3                 0                1
+#&gt; </span><span style='color: #555555;'> 2</span><span>             1          5.8                 0                1
+#&gt; </span><span style='color: #555555;'> 3</span><span>             1          7.1                 0                1
+#&gt; </span><span style='color: #555555;'> 4</span><span>             1          6.3                 0                1
+#&gt; </span><span style='color: #555555;'> 5</span><span>             1          6.5                 0                1
+#&gt; </span><span style='color: #555555;'> 6</span><span>             1          7.6                 0                1
+#&gt; </span><span style='color: #555555;'> 7</span><span>             1          4.9                 0                1
+#&gt; </span><span style='color: #555555;'> 8</span><span>             1          7.3                 0                1
+#&gt; </span><span style='color: #555555;'> 9</span><span>             1          6.7                 0                1
+#&gt; </span><span style='color: #555555;'>10</span><span>             1          7.2                 0                1
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
 #&gt; 
 #&gt; $outcomes
 #&gt; NULL
@@ -351,36 +351,36 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; </div><div class='input'>
 <span class='co'># Use `outcomes = TRUE` to also extract the preprocessed outcome</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 50 x 4
+#&gt; </span><span style='color: #555555;'># A tibble: 50 x 4</span><span>
 #&gt;    `(Intercept)` Sepal.Length Speciesversicolor Speciesvirginica
-#&gt;            &lt;dbl&gt;        &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-#&gt;  1             1          6.3                 0                1
-#&gt;  2             1          5.8                 0                1
-#&gt;  3             1          7.1                 0                1
-#&gt;  4             1          6.3                 0                1
-#&gt;  5             1          6.5                 0                1
-#&gt;  6             1          7.6                 0                1
-#&gt;  7             1          4.9                 0                1
-#&gt;  8             1          7.3                 0                1
-#&gt;  9             1          6.7                 0                1
-#&gt; 10             1          7.2                 0                1
-#&gt; # … with 40 more rows
+#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>             1          6.3                 0                1
+#&gt; </span><span style='color: #555555;'> 2</span><span>             1          5.8                 0                1
+#&gt; </span><span style='color: #555555;'> 3</span><span>             1          7.1                 0                1
+#&gt; </span><span style='color: #555555;'> 4</span><span>             1          6.3                 0                1
+#&gt; </span><span style='color: #555555;'> 5</span><span>             1          6.5                 0                1
+#&gt; </span><span style='color: #555555;'> 6</span><span>             1          7.6                 0                1
+#&gt; </span><span style='color: #555555;'> 7</span><span>             1          4.9                 0                1
+#&gt; </span><span style='color: #555555;'> 8</span><span>             1          7.3                 0                1
+#&gt; </span><span style='color: #555555;'> 9</span><span>             1          6.7                 0                1
+#&gt; </span><span style='color: #555555;'>10</span><span>             1          7.2                 0                1
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
 #&gt; 
 #&gt; $outcomes
-#&gt; # A tibble: 50 x 1
+#&gt; </span><span style='color: #555555;'># A tibble: 50 x 1</span><span>
 #&gt;    `log(Sepal.Width)`
-#&gt;                 &lt;dbl&gt;
-#&gt;  1              1.19 
-#&gt;  2              0.993
-#&gt;  3              1.10 
-#&gt;  4              1.06 
-#&gt;  5              1.10 
-#&gt;  6              1.10 
-#&gt;  7              0.916
-#&gt;  8              1.06 
-#&gt;  9              0.916
-#&gt; 10              1.28 
-#&gt; # … with 40 more rows
+#&gt;                 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>              1.19 
+#&gt; </span><span style='color: #555555;'> 2</span><span>              0.993
+#&gt; </span><span style='color: #555555;'> 3</span><span>              1.10 
+#&gt; </span><span style='color: #555555;'> 4</span><span>              1.06 
+#&gt; </span><span style='color: #555555;'> 5</span><span>              1.10 
+#&gt; </span><span style='color: #555555;'> 6</span><span>              1.10 
+#&gt; </span><span style='color: #555555;'> 7</span><span>              0.916
+#&gt; </span><span style='color: #555555;'> 8</span><span>              1.06 
+#&gt; </span><span style='color: #555555;'> 9</span><span>              0.916
+#&gt; </span><span style='color: #555555;'>10</span><span>              1.28 
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
@@ -395,20 +395,20 @@ interface standardizes all of that flexibility in one place.</p>
 
 <span class='co'># So factor columns are completely expanded</span>
 <span class='co'># into all `K` columns (the number of levels)</span>
-<span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; # A tibble: 100 x 3
+<span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 100 x 3</span><span>
 #&gt;    Speciessetosa Speciesversicolor Speciesvirginica
-#&gt;            &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-#&gt;  1             1                 0                0
-#&gt;  2             1                 0                0
-#&gt;  3             1                 0                0
-#&gt;  4             1                 0                0
-#&gt;  5             1                 0                0
-#&gt;  6             1                 0                0
-#&gt;  7             1                 0                0
-#&gt;  8             1                 0                0
-#&gt;  9             1                 0                0
-#&gt; 10             1                 0                0
-#&gt; # … with 90 more rows</div><div class='input'>
+#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 2</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 3</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 4</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 5</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 6</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 7</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 8</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'> 9</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'>10</span><span>             1                 0                0
+#&gt; </span><span style='color: #555555;'># … with 90 more rows</span><span></div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Global variables</span>
 
@@ -448,20 +448,20 @@ interface standardizes all of that flexibility in one place.</p>
   <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>
 )
 
-<span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; # A tibble: 100 x 2
+<span class='no'>processed</span>$<span class='no'>predictors</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 100 x 2</span><span>
 #&gt;    `Sepal.Width:Sepal.Length` Species
-#&gt;                         &lt;dbl&gt; &lt;fct&gt;  
-#&gt;  1                       17.8 setosa 
-#&gt;  2                       14.7 setosa 
-#&gt;  3                       15.0 setosa 
-#&gt;  4                       14.3 setosa 
-#&gt;  5                       18   setosa 
-#&gt;  6                       21.1 setosa 
-#&gt;  7                       15.6 setosa 
-#&gt;  8                       17   setosa 
-#&gt;  9                       12.8 setosa 
-#&gt; 10                       15.2 setosa 
-#&gt; # … with 90 more rows</div><div class='input'>
+#&gt;                         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  
+#&gt; </span><span style='color: #555555;'> 1</span><span>                       17.8 setosa 
+#&gt; </span><span style='color: #555555;'> 2</span><span>                       14.7 setosa 
+#&gt; </span><span style='color: #555555;'> 3</span><span>                       15.0 setosa 
+#&gt; </span><span style='color: #555555;'> 4</span><span>                       14.3 setosa 
+#&gt; </span><span style='color: #555555;'> 5</span><span>                       18   setosa 
+#&gt; </span><span style='color: #555555;'> 6</span><span>                       21.1 setosa 
+#&gt; </span><span style='color: #555555;'> 7</span><span>                       15.6 setosa 
+#&gt; </span><span style='color: #555555;'> 8</span><span>                       17   setosa 
+#&gt; </span><span style='color: #555555;'> 9</span><span>                       12.8 setosa 
+#&gt; </span><span style='color: #555555;'>10</span><span>                       15.2 setosa 
+#&gt; </span><span style='color: #555555;'># … with 90 more rows</span><span></div><div class='input'>
 <span class='co'># An informative error is thrown when `indicators = FALSE` and</span>
 <span class='co'># factors are present in interaction terms or in inline functions</span>
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Sepal.Length</span>:<span class='no'>Species</span>, <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>))</div><div class='output co'>#&gt; Error : Interaction terms involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Interactions involving factors were detected for the following columns: 'Species'.</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>Species</span>), <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='no'>blueprint_no_indicators</span>))</div><div class='output co'>#&gt; Error : Functions involving factors have been detected on the RHS of `formula`. These are not allowed when `indicators = FALSE`. Functions involving factors were detected for the following columns: 'Species'.</div><div class='input'>
@@ -470,74 +470,74 @@ interface standardizes all of that flexibility in one place.</p>
 
 <span class='co'># Multivariate formulas can be specified easily</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> + <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>Sepal.Length</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
-<span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; # A tibble: 100 x 2
+<span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 100 x 2</span><span>
 #&gt;    Sepal.Width `log(Sepal.Length)`
-#&gt;          &lt;dbl&gt;               &lt;dbl&gt;
-#&gt;  1         3.5                1.63
-#&gt;  2         3                  1.59
-#&gt;  3         3.2                1.55
-#&gt;  4         3.1                1.53
-#&gt;  5         3.6                1.61
-#&gt;  6         3.9                1.69
-#&gt;  7         3.4                1.53
-#&gt;  8         3.4                1.61
-#&gt;  9         2.9                1.48
-#&gt; 10         3.1                1.59
-#&gt; # … with 90 more rows</div><div class='input'>
+#&gt;          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>               </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>         3.5                1.63
+#&gt; </span><span style='color: #555555;'> 2</span><span>         3                  1.59
+#&gt; </span><span style='color: #555555;'> 3</span><span>         3.2                1.55
+#&gt; </span><span style='color: #555555;'> 4</span><span>         3.1                1.53
+#&gt; </span><span style='color: #555555;'> 5</span><span>         3.6                1.61
+#&gt; </span><span style='color: #555555;'> 6</span><span>         3.9                1.69
+#&gt; </span><span style='color: #555555;'> 7</span><span>         3.4                1.53
+#&gt; </span><span style='color: #555555;'> 8</span><span>         3.4                1.61
+#&gt; </span><span style='color: #555555;'> 9</span><span>         2.9                1.48
+#&gt; </span><span style='color: #555555;'>10</span><span>         3.1                1.59
+#&gt; </span><span style='color: #555555;'># … with 90 more rows</span><span></div><div class='input'>
 <span class='co'># Inline functions on the LHS are run, but any matrix</span>
 <span class='co'># output is flattened (like what happens in `model.matrix()`)</span>
 <span class='co'># (essentially this means you don't wind up with columns</span>
 <span class='co'># in the tibble that are matrices)</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span>(<span class='no'>Sepal.Length</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>2</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
-<span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; # A tibble: 100 x 2
+<span class='no'>processed</span>$<span class='no'>outcomes</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 100 x 2</span><span>
 #&gt;    `poly(Sepal.Length, degree = 2).1` `poly(Sepal.Length, degree = 2).2`
-#&gt;                                 &lt;dbl&gt;                              &lt;dbl&gt;
-#&gt;  1                            -0.0581                            -0.0377
-#&gt;  2                            -0.0894                             0.0147
-#&gt;  3                            -0.121                              0.0846
-#&gt;  4                            -0.136                              0.126 
-#&gt;  5                            -0.0738                            -0.0137
-#&gt;  6                            -0.0111                            -0.0837
-#&gt;  7                            -0.136                              0.126 
-#&gt;  8                            -0.0738                            -0.0137
-#&gt;  9                            -0.168                              0.222 
-#&gt; 10                            -0.0894                             0.0147
-#&gt; # … with 90 more rows</div><div class='input'>
+#&gt;                                 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>                              </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>                            -</span><span style='color: #BB0000;'>0.058</span><span style='color: #BB0000;text-decoration: underline;'>1</span><span>                            -</span><span style='color: #BB0000;'>0.037</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 2</span><span>                            -</span><span style='color: #BB0000;'>0.089</span><span style='color: #BB0000;text-decoration: underline;'>4</span><span>                             0.014</span><span style='text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 3</span><span>                            -</span><span style='color: #BB0000;'>0.121</span><span>                              0.084</span><span style='text-decoration: underline;'>6</span><span>
+#&gt; </span><span style='color: #555555;'> 4</span><span>                            -</span><span style='color: #BB0000;'>0.136</span><span>                              0.126 
+#&gt; </span><span style='color: #555555;'> 5</span><span>                            -</span><span style='color: #BB0000;'>0.073</span><span style='color: #BB0000;text-decoration: underline;'>8</span><span>                            -</span><span style='color: #BB0000;'>0.013</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 6</span><span>                            -</span><span style='color: #BB0000;'>0.011</span><span style='color: #BB0000;text-decoration: underline;'>1</span><span>                            -</span><span style='color: #BB0000;'>0.083</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 7</span><span>                            -</span><span style='color: #BB0000;'>0.136</span><span>                              0.126 
+#&gt; </span><span style='color: #555555;'> 8</span><span>                            -</span><span style='color: #BB0000;'>0.073</span><span style='color: #BB0000;text-decoration: underline;'>8</span><span>                            -</span><span style='color: #BB0000;'>0.013</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 9</span><span>                            -</span><span style='color: #BB0000;'>0.168</span><span>                              0.222 
+#&gt; </span><span style='color: #555555;'>10</span><span>                            -</span><span style='color: #BB0000;'>0.089</span><span style='color: #BB0000;text-decoration: underline;'>4</span><span>                             0.014</span><span style='text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'># … with 90 more rows</span><span></div><div class='input'>
 <span class='co'># TRUE</span>
 <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>processed</span>$<span class='no'>outcomes</span>) <span class='kw'>==</span> <span class='fl'>2</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Multivariate formulas specified in mold()</span>
 <span class='co'># carry over into forge()</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 50 x 3
+#&gt; </span><span style='color: #555555;'># A tibble: 50 x 3</span><span>
 #&gt;    Speciessetosa Speciesversicolor Speciesvirginica
-#&gt;            &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-#&gt;  1             0                 0                1
-#&gt;  2             0                 0                1
-#&gt;  3             0                 0                1
-#&gt;  4             0                 0                1
-#&gt;  5             0                 0                1
-#&gt;  6             0                 0                1
-#&gt;  7             0                 0                1
-#&gt;  8             0                 0                1
-#&gt;  9             0                 0                1
-#&gt; 10             0                 0                1
-#&gt; # … with 40 more rows
+#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 2</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 3</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 4</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 5</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 6</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 7</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 8</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'> 9</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'>10</span><span>             0                 0                1
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
 #&gt; 
 #&gt; $outcomes
-#&gt; # A tibble: 50 x 2
+#&gt; </span><span style='color: #555555;'># A tibble: 50 x 2</span><span>
 #&gt;    `poly(Sepal.Length, degree = 2).1` `poly(Sepal.Length, degree = 2).2`
-#&gt;                                 &lt;dbl&gt;                              &lt;dbl&gt;
-#&gt;  1                             0.130                              0.0137
-#&gt;  2                             0.0515                            -0.0839
-#&gt;  3                             0.255                              0.397 
-#&gt;  4                             0.130                              0.0137
-#&gt;  5                             0.161                              0.0833
-#&gt;  6                             0.333                              0.777 
-#&gt;  7                            -0.0894                             0.0147
-#&gt;  8                             0.286                              0.536 
-#&gt;  9                             0.192                              0.170 
-#&gt; 10                             0.271                              0.464 
-#&gt; # … with 40 more rows
+#&gt;                                 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>                              </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>                             0.130                              0.013</span><span style='text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 2</span><span>                             0.051</span><span style='text-decoration: underline;'>5</span><span>                            -</span><span style='color: #BB0000;'>0.083</span><span style='color: #BB0000;text-decoration: underline;'>9</span><span>
+#&gt; </span><span style='color: #555555;'> 3</span><span>                             0.255                              0.397 
+#&gt; </span><span style='color: #555555;'> 4</span><span>                             0.130                              0.013</span><span style='text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 5</span><span>                             0.161                              0.083</span><span style='text-decoration: underline;'>3</span><span>
+#&gt; </span><span style='color: #555555;'> 6</span><span>                             0.333                              0.777 
+#&gt; </span><span style='color: #555555;'> 7</span><span>                            -</span><span style='color: #BB0000;'>0.089</span><span style='color: #BB0000;text-decoration: underline;'>4</span><span>                             0.014</span><span style='text-decoration: underline;'>7</span><span>
+#&gt; </span><span style='color: #555555;'> 8</span><span>                             0.286                              0.536 
+#&gt; </span><span style='color: #555555;'> 9</span><span>                             0.192                              0.170 
+#&gt; </span><span style='color: #555555;'>10</span><span>                             0.271                              0.464 
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
@@ -552,20 +552,20 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># offset()</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='no'>Species</span>, <span class='no'>train</span>)
 
-<span class='no'>processed</span>$<span class='no'>extras</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; # A tibble: 100 x 1
+<span class='no'>processed</span>$<span class='no'>extras</span>$<span class='no'>offset</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 100 x 1</span><span>
 #&gt;    .offset
-#&gt;      &lt;dbl&gt;
-#&gt;  1     5.1
-#&gt;  2     4.9
-#&gt;  3     4.7
-#&gt;  4     4.6
-#&gt;  5     5  
-#&gt;  6     5.4
-#&gt;  7     4.6
-#&gt;  8     5  
-#&gt;  9     4.4
-#&gt; 10     4.9
-#&gt; # … with 90 more rows</div><div class='input'>
+#&gt;      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>     5.1
+#&gt; </span><span style='color: #555555;'> 2</span><span>     4.9
+#&gt; </span><span style='color: #555555;'> 3</span><span>     4.7
+#&gt; </span><span style='color: #555555;'> 4</span><span>     4.6
+#&gt; </span><span style='color: #555555;'> 5</span><span>     5  
+#&gt; </span><span style='color: #555555;'> 6</span><span>     5.4
+#&gt; </span><span style='color: #555555;'> 7</span><span>     4.6
+#&gt; </span><span style='color: #555555;'> 8</span><span>     5  
+#&gt; </span><span style='color: #555555;'> 9</span><span>     4.4
+#&gt; </span><span style='color: #555555;'>10</span><span>     4.9
+#&gt; </span><span style='color: #555555;'># … with 90 more rows</span><span></div><div class='input'>
 <span class='co'># Multiple offsets can be included, and they get added together</span>
 <span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
   <span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Sepal.Length</span>) + <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Petal.Width</span>),
@@ -579,27 +579,27 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Forging test data will also require</span>
 <span class='co'># and include the offset</span>
 <span class='fu'><a href='forge.html'>forge</a></span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>)</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 50 x 0
+#&gt; </span><span style='color: #555555;'># A tibble: 50 x 0</span><span>
 #&gt; 
 #&gt; $outcomes
 #&gt; NULL
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
-#&gt; # A tibble: 50 x 1
+#&gt; </span><span style='color: #555555;'># A tibble: 50 x 1</span><span>
 #&gt;    .offset
-#&gt;      &lt;dbl&gt;
-#&gt;  1     8.8
-#&gt;  2     7.7
-#&gt;  3     9.2
-#&gt;  4     8.1
-#&gt;  5     8.7
-#&gt;  6     9.7
-#&gt;  7     6.6
-#&gt;  8     9.1
-#&gt;  9     8.5
-#&gt; 10     9.7
-#&gt; # … with 40 more rows
+#&gt;      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>     8.8
+#&gt; </span><span style='color: #555555;'> 2</span><span>     7.7
+#&gt; </span><span style='color: #555555;'> 3</span><span>     9.2
+#&gt; </span><span style='color: #555555;'> 4</span><span>     8.1
+#&gt; </span><span style='color: #555555;'> 5</span><span>     8.7
+#&gt; </span><span style='color: #555555;'> 6</span><span>     9.7
+#&gt; </span><span style='color: #555555;'> 7</span><span>     6.6
+#&gt; </span><span style='color: #555555;'> 8</span><span>     9.1
+#&gt; </span><span style='color: #555555;'> 9</span><span>     8.5
+#&gt; </span><span style='color: #555555;'>10</span><span>     9.7
+#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
 #&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
@@ -610,23 +610,23 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># `intercept` argument of the blueprint. To use an intercept</span>
 <span class='co'># only formula, you should supply `NULL` on the RHS of the formula.</span>
 <span class='fu'><a href='mold.html'>mold</a></span>(~ <span class='kw'>NULL</span>, <span class='no'>train</span>, <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='fu'>default_formula_blueprint</span>(<span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; $predictors
-#&gt; # A tibble: 100 x 1
+#&gt; </span><span style='color: #555555;'># A tibble: 100 x 1</span><span>
 #&gt;    `(Intercept)`
-#&gt;            &lt;dbl&gt;
-#&gt;  1             1
-#&gt;  2             1
-#&gt;  3             1
-#&gt;  4             1
-#&gt;  5             1
-#&gt;  6             1
-#&gt;  7             1
-#&gt;  8             1
-#&gt;  9             1
-#&gt; 10             1
-#&gt; # … with 90 more rows
+#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>             1
+#&gt; </span><span style='color: #555555;'> 2</span><span>             1
+#&gt; </span><span style='color: #555555;'> 3</span><span>             1
+#&gt; </span><span style='color: #555555;'> 4</span><span>             1
+#&gt; </span><span style='color: #555555;'> 5</span><span>             1
+#&gt; </span><span style='color: #555555;'> 6</span><span>             1
+#&gt; </span><span style='color: #555555;'> 7</span><span>             1
+#&gt; </span><span style='color: #555555;'> 8</span><span>             1
+#&gt; </span><span style='color: #555555;'> 9</span><span>             1
+#&gt; </span><span style='color: #555555;'>10</span><span>             1
+#&gt; </span><span style='color: #555555;'># … with 90 more rows</span><span>
 #&gt; 
 #&gt; $outcomes
-#&gt; # A tibble: 100 x 0
+#&gt; </span><span style='color: #555555;'># A tibble: 100 x 0</span><span>
 #&gt; 
 #&gt; $blueprint
 #&gt; Formula blueprint: 
@@ -642,9 +642,9 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; NULL
 #&gt; 
 #&gt; </div><div class='input'>
-</div></pre>
+</div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
