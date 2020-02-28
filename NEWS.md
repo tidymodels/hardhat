@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 0.1.2
 
 * `default_recipe_blueprint()` now defaults to prepping recipes with
   `fresh = TRUE`. This is a safer default, and guards the user against

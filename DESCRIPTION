@@ -1,6 +1,6 @@
 Package: hardhat
 Title: Construct Modeling Packages
-Version: 0.1.1.9000
+Version: 0.1.2
 Authors@R: c(
     person("Davis", "Vaughan", , "davis@rstudio.com", c("aut", "cre")),
     person("Max", "Kuhn", , "max@rstudio.com", c("aut")),
@@ -32,7 +32,7 @@ Imports:
     glue,
     rlang (>= 0.4.1),
     tibble,
-    vctrs (>= 0.2.0)
+    vctrs (>= 0.2.3)
 URL: https://github.com/tidymodels/hardhat
 BugReports: https://github.com/tidymodels/hardhat/issues
 VignetteBuilder: knitr
