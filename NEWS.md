@@ -1,3 +1,5 @@
+# hardhat (development version)
+
 # hardhat 0.1.2
 
 * `default_recipe_blueprint()` now defaults to prepping recipes with
