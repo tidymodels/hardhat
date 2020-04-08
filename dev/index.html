@@ -33,7 +33,7 @@
   gtag('config', 'UA-115082821-1');
 </script>
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -100,7 +100,7 @@
   </ul>
 </li>
         <li>
-  <a href="https://github.com/tidymodels/hardhat">
+  <a href="https://github.com/tidymodels/hardhat/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -133,16 +133,16 @@
 <li><p>Provide extra utility functions for additional common tasks, such as adding intercept columns, standardizing <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> output, and extracting valuable class and factor level information from the predictors.</p></li>
 <li><p>Reimagine the base R preprocessing infrastructure of <code><a href="https://rdrr.io/r/stats/model.matrix.html">stats::model.matrix()</a></code> and <code><a href="https://rdrr.io/r/stats/model.frame.html">stats::model.frame()</a></code> using the stricter approaches found in <code><a href="reference/model_matrix.html">model_matrix()</a></code> and <code><a href="reference/model_frame.html">model_frame()</a></code>.</p></li>
 </ul>
-<p>The idea is to reduce the burden of creating a good modeling interface as much as possible, and instead let the package developer focus on writing the core implementation of their new model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of “expectations” around what any modeling function should return, and how they should interact with it.</p>
+<p>The idea is to reduce the burden of creating a good modeling interface as much as possible, and instead let the package developer focus on writing the core implementation of their new model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of âexpectationsâ around what any modeling function should return, and how they should interact with it.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of hardhat from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"hardhat"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"hardhat"</span>)</pre></div>
 <p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># install.packages("devtools")</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>devtools<span class="op">::</span><span class="kw"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"tidymodels/hardhat"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("devtools")</span>
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"tidymodels/hardhat"</span>)</pre></div>
 </div>
 <div id="learning-more" class="section level2">
 <h2 class="hasAnchor">
@@ -165,7 +165,7 @@
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=hardhat">https://​cloud.r-project.org/​package=hardhat</a>
 </li>
-<li>Browse source code at <br><a href="https://github.com/tidymodels/hardhat">https://​github.com/​tidymodels/​hardhat</a>
+<li>Browse source code at <br><a href="https://github.com/tidymodels/hardhat/">https://​github.com/​tidymodels/​hardhat/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/tidymodels/hardhat/issues">https://​github.com/​tidymodels/​hardhat/​issues</a>
 </li>
