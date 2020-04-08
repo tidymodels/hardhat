@@ -49,6 +49,6 @@ test_that("ignoring novel levels still passes through incompatible classes", {
 
   expect_error(
     scream(new, ptype, allow_novel_levels = TRUE),
-    class = "vctrs_error_incompatible_cast"
+    class = "vctrs_error_incompatible_type"
   )
 })
