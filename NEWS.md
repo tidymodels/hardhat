@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 0.1.3
 
 * Updated to stay current with the latest vctrs 0.3.0 conventions.
 

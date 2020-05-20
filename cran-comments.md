@@ -7,6 +7,18 @@
 
 0 errors | 0 warnings | 0 notes
 
+## revdepcheck results
+
+We checked 3 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
+
+## 0.1.3 Submission
+
+This submission keeps hardhat up to date with vctrs 0.3.0 and fixes a few bugs
+regarding novel factor levels.
+
 ## 0.1.2 Submission
 
 This submission fixes a `stringsAsFactors` note and slightly tweaks how recipes are preprocessed.
