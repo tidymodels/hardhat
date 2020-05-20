@@ -33,6 +33,19 @@
 #' that all of the required column names actually exist in `data`. Those
 #' checks exist in `shrink()`.
 #'
+#' @section Factor Levels:
+#'
+#' `scream()` tries to be helpful by recovering missing factor levels and
+#' warning about novel levels. The following graphic outlines how `scream()`
+#' handles factor levels when coercing _from_ a column in `data` _to_ a
+#' column in `ptype`.
+#'
+#' \figure{factor-handling.png}
+#'
+#' Note that ordered factor handing is much stricter than factor handling.
+#' Ordered factors in `data` must have _exactly_ the same levels as ordered
+#' factors in `ptype`.
+#'
 #' @param data A data frame containing the new data to check the structure
 #' of.
 #'
@@ -42,7 +55,9 @@
 #' @param allow_novel_levels Should novel factor levels in `data` be allowed?
 #' The safest approach is the default, which throws a warning when novel levels
 #' are found, and coerces them to `NA` values. Setting this argument to `TRUE`
-#' will ignore all novel levels.
+#' will ignore all novel levels. This argument does not apply to ordered
+#' factors. Novel levels are not allowed in ordered factors because the
+#' level ordering is a critical part of the type.
 #'
 #' @return
 #'
@@ -165,13 +180,14 @@ scream <- function(data, ptype, allow_novel_levels = FALSE) {
 # are no novel levels.
 
 remove_novel_levels <- function(data, ptype) {
-  ptype_fct_loc <- which(map_lgl(ptype, is.factor))
+  ptype_fct_indicator <- map_lgl(ptype, is_bare_factor)
+  ptype_fct_locs <- which(ptype_fct_indicator)
 
-  if (length(ptype_fct_loc) == 0L) {
+  if (length(ptype_fct_locs) == 0L) {
     return(data)
   }
 
-  fct_names <- names(ptype_fct_loc)
+  fct_names <- names(ptype_fct_locs)
 
   for (fct_name in fct_names) {
     data[[fct_name]] <- check_novel_levels(
@@ -185,18 +201,20 @@ remove_novel_levels <- function(data, ptype) {
 }
 
 check_novel_levels <- function(x, ptype, column) {
-  UseMethod("check_novel_levels", x)
-}
+  # Allow characters, consider them factors
+  if (is.character(x)) {
+    x <- factor(x, levels = unique(x))
+  }
 
-# If the matching column in `data` is not a character / factor
-# then we let vctrs handle the incompatible cast issue
-check_novel_levels.default <- function(x, ptype, column) {
-  x
-}
+  # If not a bare factor, then let `vec_cast()` throw an error later.
+  # Ordered factors are stricter and do not allow novel levels in any way.
+  if (!is_bare_factor(x)) {
+    return(x)
+  }
 
-check_novel_levels.factor <- function(x, ptype, column) {
-  x_lvls <- unique(x)
-  new_lvls <- setdiff(x_lvls, levels(ptype))
+  x_lvls <- levels(x)
+  ptype_lvls <- levels(ptype)
+  new_lvls <- setdiff(x_lvls, ptype_lvls)
 
   # All good
   if (length(new_lvls) == 0L) {
@@ -216,10 +234,8 @@ check_novel_levels.factor <- function(x, ptype, column) {
 
   warn_novel_levels(new_lvls, column)
 
-  factor(as.character(x), levels = old_lvls, ordered = is.ordered(x))
+  factor(as.character(x), levels = old_lvls)
 }
-
-check_novel_levels.character <- check_novel_levels.factor
 
 warn_novel_levels <- function(levels, column) {
   message <- glue(
@@ -244,13 +260,14 @@ warn_novel_levels <- function(levels, column) {
 # `ptype` to prevent vec_cast() from thinking that it is an error.
 
 add_novel_levels_to_ptype <- function(ptype, data) {
-  ptype_fct_loc <- which(map_lgl(ptype, is.factor))
+  ptype_fct_indicator <- map_lgl(ptype, is_bare_factor)
+  ptype_fct_locs <- which(ptype_fct_indicator)
 
-  if (length(ptype_fct_loc) == 0L) {
+  if (length(ptype_fct_locs) == 0L) {
     return(ptype)
   }
 
-  fct_names <- names(ptype_fct_loc)
+  fct_names <- names(ptype_fct_locs)
 
   for (fct_name in fct_names) {
     ptype[[fct_name]] <- add_novel_levels(
@@ -263,17 +280,18 @@ add_novel_levels_to_ptype <- function(ptype, data) {
 }
 
 add_novel_levels <- function(x, ptype) {
-  UseMethod("add_novel_levels")
-}
+  # Allow characters, consider them factors
+  if (is.character(x)) {
+    x <- factor(x, levels = unique(x))
+  }
 
-# If the matching column in `data` is not a character / factor
-# then we let vctrs handle the incompatible cast issue
-add_novel_levels.default <- function(x, ptype) {
-  ptype
-}
+  # If not a bare factor, then let `vec_cast()` throw an error later.
+  # Ordered factors are stricter and do not allow novel levels in any way.
+  if (!is_bare_factor(x)) {
+    return(ptype)
+  }
 
-add_novel_levels.factor <- function(x, ptype) {
-  x_lvls <- unique(x)
+  x_lvls <- levels(x)
   ptype_lvls <- levels(ptype)
 
   # Ensure that `x_lvls` is first, so order is maintained
@@ -281,9 +299,12 @@ add_novel_levels.factor <- function(x, ptype) {
 
   factor(
     as.character(ptype),
-    levels = new_ptype_lvls,
-    ordered = is.ordered(ptype)
+    levels = new_ptype_lvls
   )
 }
 
-add_novel_levels.character <- add_novel_levels.factor
+# ------------------------------------------------------------------------------
+
+is_bare_factor <- function(x) {
+  rlang::inherits_only(x, "factor")
+}

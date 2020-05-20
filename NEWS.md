@@ -1,5 +1,13 @@
 # hardhat (development version)
 
+* `scream()` is now stricter when checking ordered factor levels in new data
+  against the `ptype` used at training time. Ordered factors must now have
+  _exactly_ the same set of levels at training and prediction time. See
+  `?scream` for a new graphic outlining how factor levels are handled (#132).
+
+* The novel factor level check in `scream()` no longer throws a novel level
+  warning on `NA` values (#131).
+
 # hardhat 0.1.2
 
 * `default_recipe_blueprint()` now defaults to prepping recipes with

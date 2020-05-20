@@ -16,7 +16,9 @@ a 0-row slice of the training set.}
 \item{allow_novel_levels}{Should novel factor levels in \code{data} be allowed?
 The safest approach is the default, which throws a warning when novel levels
 are found, and coerces them to \code{NA} values. Setting this argument to \code{TRUE}
-will ignore all novel levels.}
+will ignore all novel levels. This argument does not apply to ordered
+factors. Novel levels are not allowed in ordered factors because the
+level ordering is a critical part of the type.}
 }
 \value{
 A tibble containing the required columns after any required structural
@@ -52,6 +54,21 @@ If \code{scream()} is used as a standalone function, it is good practice to call
 that all of the required column names actually exist in \code{data}. Those
 checks exist in \code{shrink()}.
 }
+\section{Factor Levels}{
+
+
+\code{scream()} tries to be helpful by recovering missing factor levels and
+warning about novel levels. The following graphic outlines how \code{scream()}
+handles factor levels when coercing \emph{from} a column in \code{data} \emph{to} a
+column in \code{ptype}.
+
+\figure{factor-handling.png}
+
+Note that ordered factor handing is much stricter than factor handling.
+Ordered factors in \code{data} must have \emph{exactly} the same levels as ordered
+factors in \code{ptype}.
+}
+
 \examples{
 # ---------------------------------------------------------------------------
 # Setup
