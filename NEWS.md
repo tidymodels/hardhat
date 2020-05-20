@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* Updated to stay current with the latest vctrs 0.3.0 conventions.
+
 * `scream()` is now stricter when checking ordered factor levels in new data
   against the `ptype` used at training time. Ordered factors must now have
   _exactly_ the same set of levels at training and prediction time. See
