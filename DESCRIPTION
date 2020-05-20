@@ -32,9 +32,7 @@ Imports:
     glue,
     rlang (>= 0.4.1),
     tibble,
-    vctrs (>= 0.2.99.9011)
+    vctrs (>= 0.3.0)
 URL: https://github.com/tidymodels/hardhat
 BugReports: https://github.com/tidymodels/hardhat/issues
 VignetteBuilder: knitr
-Remotes:
-    r-lib/vctrs

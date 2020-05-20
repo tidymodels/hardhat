@@ -235,7 +235,7 @@ test_that("novel predictor levels without any data are silently removed", {
 
 })
 
-test_that("novel predictor levels without any data still dropped even if novel levels are ignored", {
+test_that("novel predictor levels without any data are kept when novel levels are ignored", {
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -259,7 +259,7 @@ test_that("novel predictor levels without any data still dropped even if novel l
 
   expect_equal(
     colnames(xx$predictors),
-    colnames(x$predictors)
+    c(colnames(x$predictors), "fe")
   )
 })
 
@@ -297,6 +297,34 @@ test_that("novel levels are handled correctly when the new column is a character
 
 })
 
+test_that("novel levels are handled correctly when the new column is a character and the original is ordered", {
+  dat <- data.frame(
+    y = 1:4,
+    f = ordered(letters[1:4])
+  )
+
+  new <- data.frame(
+    y = 1:5,
+    f = letters[1:5], # character!
+    stringsAsFactors = FALSE
+  )
+
+  x <- mold(y ~ f, dat)
+
+  expect_error(
+    forge(new, x$blueprint),
+    class = "vctrs_error_cast_lossy"
+  )
+
+  # The 'e' level exists, but there is no data for it!
+  new2 <- new[1:4,]
+
+  # silently coerces to factor, and silently removes novel level
+  expect_silent(
+    xx <- forge(new2, x$blueprint)
+  )
+})
+
 test_that("novel levels are ignored correctly when the new column is a character", {
   dat <- data.frame(
     y = 1:4,
@@ -305,7 +333,8 @@ test_that("novel levels are ignored correctly when the new column is a character
 
   new <- data.frame(
     y = 1:5,
-    f = letters[1:5] # character!
+    f = letters[1:5], # character!
+    stringsAsFactors = FALSE
   )
 
   blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
@@ -336,8 +365,7 @@ test_that("novel levels are ignored correctly when the new column is a character
   )
 })
 
-test_that("novel ordered factor predictor levels have order maintained", {
-
+test_that("novel ordered factor predictor levels are never allowed", {
   dat <- data.frame(
     y = 1:4,
     f = ordered(letters[1:4])
@@ -345,56 +373,49 @@ test_that("novel ordered factor predictor levels have order maintained", {
 
   new <- data.frame(
     y = 1:5,
-    f = ordered(letters[c(1:2, 5, 3:4)], levels = letters[c(1:2, 5, 3:4)])
+    f = ordered(letters[1:5])
   )
 
-  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = FALSE))
+  bp1 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = FALSE)
+  bp2 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
 
-  expect_warning(
-    xx <- forge(new, x$blueprint),
-    "Novel levels found in column 'f': 'e'"
+  x1 <- mold(y ~ f, dat, blueprint = bp1)
+  x2 <- mold(y ~ f, dat, blueprint = bp2)
+
+  expect_error(
+    forge(new, x1$blueprint),
+    class = "vctrs_error_incompatible_type"
   )
-
-  expect_equal(
-    levels(xx$predictors$f),
-    levels(dat$f)
+  expect_error(
+    forge(new, x2$blueprint),
+    class = "vctrs_error_incompatible_type"
   )
-
-  expect_is(
-    xx$predictors$f,
-    "ordered"
-  )
-
 })
 
-test_that("novel ordered factor predictor levels have order maintained when they are ignored", {
+test_that("ordered factor predictors with different level ordering is an error", {
   dat <- data.frame(
     y = 1:4,
     f = ordered(letters[1:4])
   )
 
   new <- data.frame(
-    y = 1:5,
-    f = ordered(letters[c(1:2, 5, 3:4)], levels = letters[c(1:2, 5, 3:4)])
+    y = 1:4,
+    f = ordered(letters[1:4], levels = letters[c(1:2, 4, 3)])
   )
 
-  blueprint <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = FALSE)
+  bp2 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
 
-  x <- mold(y ~ f, dat, blueprint = blueprint)
+  x1 <- mold(y ~ f, dat, blueprint = bp1)
+  x2 <- mold(y ~ f, dat, blueprint = bp2)
 
-  expect_warning(
-    xx <- forge(new, x$blueprint),
-    NA
+  expect_error(
+    forge(new, x1$blueprint),
+    class = "vctrs_error_incompatible_type"
   )
-
-  expect_equal(
-    levels(xx$predictors$f),
-    levels(new$f)
-  )
-
-  expect_is(
-    xx$predictors$f,
-    "ordered"
+  expect_error(
+    forge(new, x2$blueprint),
+    class = "vctrs_error_incompatible_type"
   )
 })
 
@@ -491,50 +512,31 @@ test_that("missing predictor levels are restored silently", {
 
 })
 
-test_that("missing ordered factor levels are handled correctly", {
-
+test_that("missing ordered factor levels are an error", {
   dat <- data.frame(
     y = 1:4,
     f = ordered(letters[1:4])
   )
 
-  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = FALSE))
+  bp1 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = FALSE)
+  bp2 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
 
-  # Ordered - strictly wrong order
-  # Silently recover order!
+  x1 <- mold(y ~ f, dat, blueprint = bp1)
+  x2 <- mold(y ~ f, dat, blueprint = bp2)
+
   new <- data.frame(
-    y = 1:2,
-    f = ordered(letters[1:4], levels = rev(letters[1:4]))
-  )
-
-  expect_warning(
-    xx <- forge(new, x$blueprint),
-    NA
-  )
-
-  # Order is restored
-  expect_equal(
-    levels(xx$predictors$f),
-    letters[1:4]
-  )
-
-  # Ordered - missing levels
-  new2 <- data.frame(
     y = 1:3,
-    f = ordered(letters[1:3], levels = rev(letters[1:3]))
+    f = ordered(letters[1:3])
   )
 
-  # Silently recover missing levels in the right order
-  expect_warning(
-    xx2 <- forge(new2, x$blueprint),
-    NA
+  expect_error(
+    forge(new, x1$blueprint),
+    class = "vctrs_error_incompatible_type"
   )
-
-  expect_equal(
-    levels(xx2$predictors$f),
-    letters[1:4]
+  expect_error(
+    forge(new, x2$blueprint),
+    class = "vctrs_error_incompatible_type"
   )
-
 })
 
 test_that("can be both missing levels and have new levels", {
@@ -588,6 +590,32 @@ test_that("can be both missing levels and have new levels that get ignored", {
   expect_equal(
     levels(xx$predictors$f),
     union(levels(new$f), levels(dat$f))
+  )
+})
+
+test_that("`NA` factor data never triggers a novel level warning (#131)", {
+  dat <- data.frame(
+    y = 1:2,
+    f = factor(c("x", "y"))
+  )
+
+  new <- data.frame(
+    y = 1:3,
+    f = factor(c("y", NA, "x"))
+  )
+
+  blueprint <- default_formula_blueprint(indicators = FALSE)
+
+  x <- mold(y ~ f, dat, blueprint = blueprint)
+
+  expect_warning(
+    xx <- forge(new, x$blueprint),
+    NA
+  )
+
+  expect_identical(
+    xx$predictors$f,
+    new$f
   )
 })
 
