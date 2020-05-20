@@ -7,6 +7,11 @@
 
 0 errors | 0 warnings | 0 notes
 
+## 0.1.3 Submission
+
+This submission keeps hardhat up to date with vctrs 0.3.0 and fixes a few bugs
+regarding novel factor levels.
+
 ## 0.1.2 Submission
 
 This submission fixes a `stringsAsFactors` note and slightly tweaks how recipes are preprocessed.
