@@ -305,7 +305,8 @@ test_that("novel levels are handled correctly when the new column is a character
 
   new <- data.frame(
     y = 1:5,
-    f = letters[1:5] # character!
+    f = letters[1:5], # character!
+    stringsAsFactors = FALSE
   )
 
   x <- mold(y ~ f, dat)
@@ -332,7 +333,8 @@ test_that("novel levels are ignored correctly when the new column is a character
 
   new <- data.frame(
     y = 1:5,
-    f = letters[1:5] # character!
+    f = letters[1:5], # character!
+    stringsAsFactors = FALSE
   )
 
   blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
