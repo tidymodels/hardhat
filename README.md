@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
 [![R build
-status](https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/hardhat)
+status](https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/hardhat/actions)
 <!-- badges: end -->
 
 ## Introduction
