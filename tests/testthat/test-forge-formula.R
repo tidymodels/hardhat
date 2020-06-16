@@ -202,7 +202,7 @@ test_that("novel predictor levels can be ignored", {
   )
 
   expect_equal(
-    xx$predictors[[5,5]],
+    xx$predictors[[5,4]],
     1
   )
 })
@@ -347,7 +347,7 @@ test_that("novel levels are ignored correctly when the new column is a character
   )
 
   expect_equal(
-    xx$predictors[[5,5]],
+    xx$predictors[[5,4]],
     1
   )
 
@@ -361,7 +361,7 @@ test_that("novel levels are ignored correctly when the new column is a character
 
   expect_equal(
     colnames(yy$predictors),
-    colnames(xx$predictors)[-5L]
+    colnames(xx$predictors)[-4L]
   )
 })
 
@@ -497,7 +497,7 @@ test_that("missing predictor levels are restored silently", {
 
   expect_equal(
     colnames(x_new$predictors),
-    c("fa", "fb", "fc", "fd")
+    c("fb", "fc", "fd")
   )
 
   expect_warning(
@@ -507,7 +507,7 @@ test_that("missing predictor levels are restored silently", {
 
   expect_equal(
     colnames(x_new2$predictors),
-    c("fa", "fb", "fc", "fd")
+    c("fb", "fc", "fd")
   )
 
 })

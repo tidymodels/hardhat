@@ -32,8 +32,10 @@ test_that("can mold multivariate formulas", {
 
 test_that("factor predictors with no intercept are fully expanded", {
 
-  x <- mold(Sepal.Length ~ Species, iris, blueprint = default_formula_blueprint(intercept = TRUE))
-  xx <- mold(Sepal.Length ~ Species, iris, blueprint = default_formula_blueprint(intercept = FALSE))
+  x  <- mold(Sepal.Length ~ Species, iris,
+             blueprint = default_formula_blueprint(intercept = TRUE))
+  xx <- mold(Sepal.Length ~ Species, iris,
+             blueprint = default_formula_blueprint(intercept = FALSE, one_hot = TRUE))
 
   expect_equal(
     colnames(x$predictors),
@@ -432,7 +434,7 @@ test_that("`.` notation with no outcome works fine", {
   # Sepal.Length IS a predictor
   expect_equal(
     ncol(x$predictors),
-    7
+    6
   )
 
   expect_equal(
