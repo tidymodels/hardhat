@@ -209,9 +209,11 @@ check_intercept <- function(data, intercept) {
   has_int <- any(nms == "(Intercept)")
   if (intercept) {
     if (!has_int) {
-      data <-
-        tibble::tibble(`(Intercept)` = rep(1, nrow(data))) %>%
-        dplyr::bind_cols(data)
+      data <- vctrs::vec_cbind(
+        tibble::tibble(`(Intercept)` = rep(1, nrow(data))),
+        data,
+        .name_repair = "minimal"
+      )
     }
   } else {
     if (has_int) {
