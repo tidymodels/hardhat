@@ -5,3 +5,4 @@ Formula blueprint:
    Intercept: FALSE 
 Novel Levels: FALSE 
   Indicators: TRUE 
+  One-hot:    FALSE 
