@@ -1,5 +1,16 @@
 # hardhat (development version)
 
+## Breaking changes
+
+* For `indicators = TRUE`, the full set of dummy variables are not created; the
+  more traditional `C - 1` set, where `C` is the number of factor levels, is
+  used.
+  
+## Other changes
+
+* To create the complete set of dummy variables, a new argument (`one_hot`) can
+  be set to `TRUE`. 
+
 # hardhat 0.1.3
 
 * Updated to stay current with the latest vctrs 0.3.0 conventions.
