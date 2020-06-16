@@ -201,3 +201,22 @@ check_is_data_like <- function(.x, .x_nm) {
 
   tibble::as_tibble(.x)
 }
+
+## -----------------------------------------------------------------------------
+
+check_intercept <- function(data, intercept) {
+  nms <- names(data)
+  has_int <- any(nms == "(Intercept)")
+  if (intercept) {
+    if (!has_int) {
+      data <-
+        tibble::tibble(`(Intercept)` = rep(1, nrow(data))) %>%
+        dplyr::bind_cols(data)
+    }
+  } else {
+    if (has_int) {
+      data <- data[, names(data) != "(Intercept)"]
+    }
+  }
+  data
+}
