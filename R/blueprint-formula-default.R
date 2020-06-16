@@ -263,7 +263,8 @@
 #' @export
 default_formula_blueprint <- function(intercept = FALSE,
                                       allow_novel_levels = FALSE,
-                                      indicators = TRUE) {
+                                      indicators = TRUE,
+                                      one_hot = FALSE) {
 
   mold <- get_mold_formula_default_function_set()
   forge <- get_forge_formula_default_function_set()
@@ -272,6 +273,7 @@ default_formula_blueprint <- function(intercept = FALSE,
     mold = mold,
     forge = forge,
     intercept = intercept,
+    one_hot = one_hot,
     allow_novel_levels = allow_novel_levels,
     indicators = indicators
   )
@@ -291,6 +293,7 @@ new_default_formula_blueprint <- function(mold,
                                           ptypes = NULL,
                                           formula = NULL,
                                           indicators = TRUE,
+                                          one_hot = FALSE,
                                           terms = list(
                                             predictors = NULL,
                                             outcomes = NULL
@@ -304,6 +307,7 @@ new_default_formula_blueprint <- function(mold,
     mold = mold,
     forge = forge,
     intercept = intercept,
+    one_hot = one_hot,
     allow_novel_levels = allow_novel_levels,
     ptypes = ptypes,
     formula = formula,
@@ -335,7 +339,9 @@ mold_formula_default_clean <- function(blueprint, data) {
   # put a non-intercept-containing formula back in
   validate_formula_has_intercept(blueprint$formula)
 
-  formula <- remove_formula_intercept(blueprint$formula, blueprint$intercept)
+  formula <- remove_formula_intercept(blueprint$formula,
+                                      blueprint$intercept,
+                                      blueprint$one_hot)
   formula <- alter_formula_environment(formula)
 
   blueprint <- update_blueprint(blueprint, formula = formula)
@@ -399,6 +405,8 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   if (!blueprint$indicators) {
     predictors <- reattach_factor_columns(predictors, data, factor_names)
   }
+
+  predictors <- check_intercept(predictors, blueprint$intercept)
 
   terms <- simplify_terms(framed$terms)
 
@@ -519,6 +527,8 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   }
 
   .offset <- extract_offset(framed$terms, framed$data)
+
+  data <- check_intercept(data, blueprint$intercept)
 
   predictors_lst <- out$forge$process_terms_lst(
     data = data,
@@ -886,6 +896,6 @@ get_outcomes_formula <- function(formula) {
     env = rlang::f_env(formula)
   )
 
-  remove_formula_intercept(new_formula, intercept = FALSE)
+  remove_formula_intercept(new_formula, intercept = FALSE, one_hot = FALSE)
 }
 
