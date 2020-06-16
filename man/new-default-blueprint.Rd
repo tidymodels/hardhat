@@ -16,6 +16,7 @@ new_default_formula_blueprint(
   ptypes = NULL,
   formula = NULL,
   indicators = TRUE,
+  one_hot = FALSE,
   terms = list(predictors = NULL, outcomes = NULL),
   ...,
   subclass = character()
@@ -70,6 +71,8 @@ predictors and outcomes should be preprocessed. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
 
 \item{indicators}{A logical. Should factors be expanded into dummy variables?}
+
+\item{one_hot}{A logical. Should the complete set of dummy variables be generated?}
 
 \item{terms}{A named list of two elements, \code{predictors} and \code{outcomes}. Both
 elements are \code{terms} objects that describe the terms for the outcomes and

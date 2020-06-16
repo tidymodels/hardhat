@@ -4,6 +4,8 @@
 #'
 #' @param indicators A logical. Should factors be expanded into dummy variables?
 #'
+#' @param one_hot A logical. Should the complete set of dummy variables be generated?
+#'
 #' @rdname new-blueprint
 #' @export
 new_formula_blueprint <- function(mold,
@@ -13,6 +15,7 @@ new_formula_blueprint <- function(mold,
                                   ptypes = NULL,
                                   formula = NULL,
                                   indicators = TRUE,
+                                  one_hot = FALSE,
                                   ...,
                                   subclass = character()) {
 
@@ -25,6 +28,11 @@ new_formula_blueprint <- function(mold,
 
   validate_is_formula_or_null(formula)
   validate_is_bool(indicators)
+  validate_is_bool(one_hot)
+
+  if (!indicators & one_hot) {
+    rlang::abort("'one_hot' should be FALSE if 'indicators' is FALSE.")
+  }
 
   new_blueprint(
     mold = mold,
@@ -34,6 +42,7 @@ new_formula_blueprint <- function(mold,
     ptypes = ptypes,
     formula = formula,
     indicators = indicators,
+    one_hot = one_hot,
     ...,
     subclass = c(subclass, "formula_blueprint")
   )

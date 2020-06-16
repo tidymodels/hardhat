@@ -8,7 +8,8 @@
 default_formula_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  indicators = TRUE
+  indicators = TRUE,
+  one_hot = FALSE
 )
 
 \method{mold}{formula}(formula, data, ..., blueprint = NULL)
@@ -23,6 +24,8 @@ prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
 \item{indicators}{A logical. Should factors be expanded into dummy variables?}
+
+\item{one_hot}{A logical. Should the complete set of dummy variables be generated?}
 
 \item{formula}{A formula specifying the predictors and the outcomes.}
 

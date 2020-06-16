@@ -17,6 +17,7 @@ new_formula_blueprint(
   ptypes = NULL,
   formula = NULL,
   indicators = TRUE,
+  one_hot = FALSE,
   ...,
   subclass = character()
 )
@@ -79,6 +80,8 @@ predictors and outcomes should be preprocessed. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
 
 \item{indicators}{A logical. Should factors be expanded into dummy variables?}
+
+\item{one_hot}{A logical. Should the complete set of dummy variables be generated?}
 
 \item{...}{Name-value pairs for additional elements of blueprints that
 subclass this blueprint.}
