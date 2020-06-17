@@ -36,3 +36,5 @@ Imports:
 URL: https://github.com/tidymodels/hardhat
 BugReports: https://github.com/tidymodels/hardhat/issues
 VignetteBuilder: knitr
+Remotes:
+    rstudio/rmarkdown
