@@ -397,6 +397,14 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   framed <- model_frame(formula, data)
   offset <- extract_offset(framed$terms, framed$data)
 
+  if (blueprint$one_hot) {
+    old_contr <- options("contrasts")$contrasts
+    on.exit(options(contrasts = old_contr))
+    new_contr <- old_contr
+    new_contr["unordered"] <- "contr_one_hot"
+    options(contrasts = new_contr)
+  }
+
   predictors <- model_matrix(
     terms = framed$terms,
     data = framed$data
@@ -515,6 +523,14 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   terms <- alter_terms_environment(terms)
 
   framed <- model_frame(terms, predictors)
+
+  if (blueprint$one_hot) {
+    old_contr <- options("contrasts")$contrasts
+    on.exit(options(contrasts = old_contr))
+    new_contr <- old_contr
+    new_contr["unordered"] <- "contr_one_hot"
+    options(contrasts = new_contr)
+  }
 
   data <- model_matrix(
     terms = framed$terms,
@@ -896,6 +912,6 @@ get_outcomes_formula <- function(formula) {
     env = rlang::f_env(formula)
   )
 
-  remove_formula_intercept(new_formula, intercept = FALSE, one_hot = FALSE)
+  remove_formula_intercept(new_formula, intercept = FALSE, one_hot = TRUE)
 }
 
