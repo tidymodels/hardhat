@@ -17,14 +17,14 @@ A numeric vector representing the offset.
 }
 \description{
 \code{model_offset()} extracts a numeric offset from a model frame. It is
-inspired by \code{\link[stats:model.offset]{stats::model.offset()}}, but has nicer error messages and
+inspired by \code{\link[stats:model.extract]{stats::model.offset()}}, but has nicer error messages and
 is slightly stricter.
 }
 \details{
 If a column that has been tagged as an offset is not numeric, a nice error
 message is thrown telling you exactly which column was problematic.
 
-\code{\link[stats:model.offset]{stats::model.offset()}} also allows for a column named \code{"(offset)"} to be
+\code{\link[stats:model.extract]{stats::model.offset()}} also allows for a column named \code{"(offset)"} to be
 considered an offset along with any others that have been tagged by
 \code{\link[stats:offset]{stats::offset()}}. However, \code{\link[stats:model.matrix]{stats::model.matrix()}} does not recognize
 these columns as offsets (so it doesn't remove them as it should). Because
