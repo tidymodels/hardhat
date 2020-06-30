@@ -20,6 +20,21 @@
 #'
 #' @details
 #'
+#' While not different from base R, the behavior of expanding factors into
+#' dummy variables when `indicators = "traditional"` and an intercept is _not_
+#' present is not always intuitive and should be documented.
+#'
+#' - When an intercept is present, factors are expanded into `K-1` new columns,
+#' where `K` is the number of levels in the factor.
+#'
+#' - When an intercept is _not_ present, the first factor is expanded into
+#' all `K` columns (one-hot encoding), and the remaining factors are expanded
+#' into `K-1` columns. This behavior ensures that meaningful predictions can
+#' be made for the reference level of the first factor, but is not the exact
+#' "no intercept" model that was requested. Without this behavior, predictions
+#' for the reference level of the first factor would always be forced to `0`
+#' when there is no intercept.
+#'
 #' Offsets can be included in the formula method through the use of the inline
 #' function [stats::offset()]. These are returned as a tibble with 1 column
 #' named `".offset"` in the `$extras$offset` slot of the return value.
@@ -35,14 +50,14 @@
 #'
 #'    - Runs [stats::model.frame()] on the RHS formula and uses `data`.
 #'
-#'    - If `indicators = 'traditional'`, it then runs [stats::model.matrix()] on the
-#'    result.
+#'    - If `indicators = "traditional"`, it then runs [stats::model.matrix()]
+#'    on the result.
 #'
-#'    - If `indicators = 'none'`, factors are removed before `model.matrix()`
+#'    - If `indicators = "none"`, factors are removed before `model.matrix()`
 #'    is run, and then added back afterwards. No interactions or inline
 #'    functions involving factors are allowed.
 #'
-#'    - If `indicators = 'one-hot'`, it then runs [stats::model.matrix()] on the
+#'    - If `indicators = "one-hot"`, it then runs [stats::model.matrix()] on the
 #'    result using a contrast function that creates indicator columns for all
 #'    levels of all factors.
 #'
@@ -77,14 +92,14 @@
 #'    - It runs [stats::model.frame()] on `new_data` using the stored terms
 #'    object corresponding to the _predictors_.
 #'
-#'    - If, in the original [mold()] call, `indicators = "traditional'` was set, it
-#'    then runs [stats::model.matrix()] on the result.
+#'    - If, in the original [mold()] call, `indicators = "traditional"` was
+#'    set, it then runs [stats::model.matrix()] on the result.
 #'
-#'    - If, in the original [mold()] call, `indicators = 'none'` was set, it
+#'    - If, in the original [mold()] call, `indicators = "none"` was set, it
 #'    runs [stats::model.matrix()] on the result without the factor columns,
 #'    and then adds them on afterwards.
 #'
-#'    - If, in the original [mold()] call, `indicators = 'one-hot'` was set, it
+#'    - If, in the original [mold()] call, `indicators = "one-hot"` was set, it
 #'    runs [stats::model.matrix()] on the result with a contrast function that
 #'    includes indicators for all levels of all factor columns.
 #'
@@ -154,14 +169,32 @@
 #' # Factors without an intercept
 #'
 #' # No intercept is added by default
-#' processed <- mold(num_1 ~ fac_1, example_train)
+#' processed <- mold(num_1 ~ fac_1 + fac_2, example_train)
 #'
-#' # So factor columns are completely expanded
-#' # into all `K` columns (the number of levels)
+#' # So, for factor columns, the first factor is completely expanded into all
+#' # `K` columns (the number of levels), and the subsequent factors are expanded
+#' # into `K - 1` columns.
 #' processed$predictors
 #'
-#' # **Note** this is only true when there is one factor predictor. See the
-#' # examples at the end for the other cases.
+#' # In the above example, `fac_1` is expanded into all three columns,
+#' # `fac_2` is not. This behavior comes from `model.matrix()`, and is somewhat
+#' # known in the R community, but can lead to a model that is difficult to
+#' # interpret since the corresponding p-values are testing wildly different
+#' # hypotheses.
+#'
+#' # To get all indicators for all columns (irrespective of the intercept),
+#' # use the `indicators = "one-hot"` option
+#' processed <- mold(
+#'   num_1 ~ fac_1 + fac_2,
+#'   example_train,
+#'   blueprint = default_formula_blueprint(indicators = "one-hot")
+#' )
+#'
+#' processed$predictors
+#'
+#' # It is not possible to construct a no-intercept model that expands all
+#' # factors into `K - 1` columns using the formula method. If required, a
+#' # recipe could be used to construct this model.
 #'
 #' # ---------------------------------------------------------------------------
 #' # Global variables
@@ -173,37 +206,34 @@
 #' head(frame)
 #'
 #' # mold() does not allow them, and throws an error
-#'tryCatch(
-#'   expr = mold(fac_1 ~ y + num_2, example_train),
-#'  error = function(e) print(e$message)
-#')
+#' try(mold(fac_1 ~ y + num_2, example_train))
 #'
 #'# ---------------------------------------------------------------------------
 #' #' Dummy variables and interactions
 #'
 #' # By default, factor columns are expanded
 #' # and interactions are created, both by
-#' # calling model.matrix(). Some models (like
+#' # calling `model.matrix()`. Some models (like
 #' # tree based models) can take factors directly
 #' # but still might want to use the formula method.
-#' # In those cases, set `indicators = 'none'` to not
-#' # run model.matrix() on factor columns. Interactions
+#' # In those cases, set `indicators = "none"` to not
+#' # run `model.matrix()` on factor columns. Interactions
 #' # are still allowed and are run on numeric columns.
 #'
-#' blueprint_no_indicators <- default_formula_blueprint(indicators = 'none')
+#' bp_no_indicators <- default_formula_blueprint(indicators = "none")
 #'
 #' processed <- mold(
 #'   ~ fac_1 + num_1:num_2,
 #'   example_train,
-#'   blueprint = blueprint_no_indicators
+#'   blueprint = bp_no_indicators
 #' )
 #'
 #' processed$predictors
 #'
-#' # An informative error is thrown when `indicators = 'none'` and
+#' # An informative error is thrown when `indicators = "none"` and
 #' # factors are present in interaction terms or in inline functions
-#' try(mold(num_1 ~ num_2:fac_1,   example_train, blueprint = blueprint_no_indicators))
-#' try(mold(num_1 ~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators))
+#' try(mold(num_1 ~ num_2:fac_1, example_train, blueprint = bp_no_indicators))
+#' try(mold(num_1 ~ paste0(fac_1), example_train, blueprint = bp_no_indicators))
 #'
 #' # ---------------------------------------------------------------------------
 #' # Multivariate outcomes
@@ -231,7 +261,7 @@
 #'
 #' # Offsets are handled specially in base R, so they deserve special
 #' # treatment here as well. You can add offsets using the inline function
-#' # offset()
+#' # `offset()`
 #' processed <- mold(num_1 ~ offset(num_2) + fac_1, example_train)
 #'
 #' processed$extras$offset
@@ -255,31 +285,14 @@
 #' # Intercept only
 #'
 #' # Because `1` and `0` are intercept modifying terms, they are
-#' # not allowed in the formula and are controlled by the
+#' # not allowed in the formula and are instead controlled by the
 #' # `intercept` argument of the blueprint. To use an intercept
 #' # only formula, you should supply `NULL` on the RHS of the formula.
-#' mold(~ NULL, example_train, blueprint = default_formula_blueprint(intercept = TRUE))
-#'
-#' # ---------------------------------------------------------------------------
-#' # Getting all indicator columns for all factor columns
-#'
-#' # The example above shows how all indicator columns are produced with no intercept.
-#' # When there are multiple factors, an odd hybrid encoding is used:
-#'
-#' # No intercept is added by default
-#' processed <- mold(num_1 ~ fac_1 + fac_2, example_train,
-#'                   blueprint = default_formula_blueprint(intercept = FALSE))
-#' processed$predictors
-#'
-#' # `fac_1` has all three columns, `fac_2` does not. This can lead to a model that
-#' # is difficult to interpret since the corresponding p-values are testing wildly
-#' # different hypotheses.
-#'
-#' # To get all indicators for all columns (irrespective of the intercept):
-#' processed <- mold(num_1 ~ fac_1 + fac_2, example_train,
-#'                   blueprint = default_formula_blueprint(indicators = "one-hot"))
-#' processed$predictors
-#'
+#' mold(
+#'   ~ NULL,
+#'   example_train,
+#'   blueprint = default_formula_blueprint(intercept = TRUE)
+#' )
 #' @export
 default_formula_blueprint <- function(intercept = FALSE,
                                       allow_novel_levels = FALSE,
