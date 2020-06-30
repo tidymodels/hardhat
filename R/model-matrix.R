@@ -97,6 +97,21 @@ model_matrix <- function(terms, data) {
   tibble::as_tibble(predictors)
 }
 
+model_matrix_one_hot <- function(terms, data) {
+  # In case the option is somehow unset
+  default_contrast <- c(unordered = "contr.treatment", ordered = "contr.poly")
+
+  contrasts <- getOption("contrasts", default = default_contrast)
+
+  # Use custom contrast function as the default for unordered factors
+  contrasts["unordered"] <- "contr_one_hot"
+
+  rlang::with_options(
+    model_matrix(terms = terms, data = data),
+    contrasts = contrasts
+  )
+}
+
 strip_model_matrix <- function(x) {
   colnames <- colnames(x)
   dimnames <- list(NULL, colnames)

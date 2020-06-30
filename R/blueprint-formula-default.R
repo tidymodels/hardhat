@@ -413,7 +413,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
 
   ptype <- extract_ptype(original_data)
 
-  if (blueprint$indicators == "none") {
+  if (identical(blueprint$indicators, "none")) {
     factor_names <- extract_original_factor_names(ptype)
     validate_no_factors_in_functions(formula, factor_names)
     validate_no_factors_in_interactions(formula, factor_names)
@@ -423,20 +423,19 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   framed <- model_frame(formula, data)
   offset <- extract_offset(framed$terms, framed$data)
 
-  if (blueprint$indicators == "one-hot") {
-    old_contr <- options("contrasts")$contrasts
-    on.exit(options(contrasts = old_contr))
-    new_contr <- old_contr
-    new_contr["unordered"] <- "contr_one_hot"
-    options(contrasts = new_contr)
+  if (identical(blueprint$indicators, "one-hot")) {
+    predictors <- model_matrix_one_hot(
+      terms = framed$terms,
+      data = framed$data
+    )
+  } else {
+    predictors <- model_matrix(
+      terms = framed$terms,
+      data = framed$data
+    )
   }
 
-  predictors <- model_matrix(
-    terms = framed$terms,
-    data = framed$data
-  )
-
-  if (blueprint$indicators == "none") {
+  if (identical(blueprint$indicators, "none")) {
     predictors <- reattach_factor_columns(predictors, data, factor_names)
   }
 
@@ -550,20 +549,19 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
 
   framed <- model_frame(terms, predictors)
 
-  if (blueprint$indicators == "one-hot") {
-    old_contr <- options("contrasts")$contrasts
-    on.exit(options(contrasts = old_contr))
-    new_contr <- old_contr
-    new_contr["unordered"] <- "contr_one_hot"
-    options(contrasts = new_contr)
+  if (identical(blueprint$indicators, "one-hot")) {
+    data <- model_matrix_one_hot(
+      terms = framed$terms,
+      data = framed$data
+    )
+  } else {
+    data <- model_matrix(
+      terms = framed$terms,
+      data = framed$data
+    )
   }
 
-  data <- model_matrix(
-    terms = framed$terms,
-    data = framed$data
-  )
-
-  if (blueprint$indicators == "none") {
+  if (identical(blueprint$indicators, "none")) {
     factor_names <- extract_original_factor_names(blueprint$ptypes$predictors)
     data <- reattach_factor_columns(data, predictors, factor_names)
   }
