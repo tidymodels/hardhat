@@ -12,7 +12,7 @@
 new_formula_blueprint(
   mold,
   forge,
-  intercept = TRUE,
+  intercept = FALSE,
   allow_novel_levels = FALSE,
   ptypes = NULL,
   formula = NULL,
