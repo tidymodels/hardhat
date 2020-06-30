@@ -12,12 +12,11 @@
 new_formula_blueprint(
   mold,
   forge,
-  intercept = FALSE,
+  intercept = TRUE,
   allow_novel_levels = FALSE,
   ptypes = NULL,
   formula = NULL,
-  indicators = TRUE,
-  one_hot = FALSE,
+  indicators = "traditional",
   ...,
   subclass = character()
 )
@@ -79,9 +78,9 @@ prediction time. At \code{\link[=mold]{mold()}} time, the information found in
 predictors and outcomes should be preprocessed. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
 
-\item{indicators}{A logical. Should factors be expanded into dummy variables?}
-
-\item{one_hot}{A logical. Should the complete set of dummy variables be generated?}
+\item{indicators}{A character string with possible values "none" (no dummy
+variables), "traditional" (create dummy variables using the usual methods),
+or "one-hot" (create dummy variables for all levels).}
 
 \item{...}{Name-value pairs for additional elements of blueprints that
 subclass this blueprint.}

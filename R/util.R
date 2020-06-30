@@ -109,9 +109,9 @@ abort_unknown_mold_class <- function(x) {
   )
 }
 
-remove_formula_intercept <- function(formula, intercept, one_hot) {
+remove_formula_intercept <- function(formula, intercept) {
 
-  if (!one_hot) {
+  if (intercept) {
     return(formula)
   }
 

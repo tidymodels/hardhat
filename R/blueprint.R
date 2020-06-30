@@ -325,6 +325,17 @@ validate_is_character <- function(.x, .x_nm) {
   )
 }
 
+validate_has_value <- function(.x, .vals) {
+  if (!(.x %in% .vals)) {
+    cl <- match.call()
+    chr_name <- rlang::expr_text(cl$.x)
+    .vals <- paste0("'", .vals, "'", collapse = ", ")
+    glubort("{chr_name} should be one of: {.vals}.")
+  }
+  invisible(.x)
+}
+
+
 validate_forge_args <- function(forge) {
 
   required_clean_args <- c("blueprint", "new_data", "outcomes")

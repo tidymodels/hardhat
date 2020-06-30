@@ -18,7 +18,7 @@ dat_te <-
 
 check_y <- function(dat, bp) {
   y_cols <- sum(grepl("^y", names(dat)))
-  if (bp$one_hot) {
+  if (bp$indicators == "one-hot") {
     good <- y_cols == 3
   } else {
     good <- y_cols == 2
@@ -28,7 +28,7 @@ check_y <- function(dat, bp) {
 
 check_z <- function(dat, bp) {
   y_cols <- sum(grepl("^z", names(dat)))
-  if (bp$one_hot) {
+  if (bp$indicators == "one-hot") {
     good <- y_cols == 2
   } else {
     good <- y_cols == 1
@@ -52,12 +52,12 @@ test_that("defaults: regular encoding and no intercept", {
   res <- mold(x ~ y + z, dat_tr)
   res_te <- forge(dat_te, res$blueprint)
 
-  expect_true(check_y(res$predictors,   bp = res$blueprint))
-  expect_true(check_z(res$predictors,   bp = res$blueprint))
+  expect_true(sum(grepl("^y", names(res$predictors))) == 3)
+  expect_true(sum(grepl("^z", names(res$predictors))) == 1)
   expect_true(check_int(res$predictors, bp = res$blueprint))
 
-  expect_true(check_y(res_te$predictors,   bp = res$blueprint))
-  expect_true(check_z(res_te$predictors,   bp = res$blueprint))
+  expect_true(sum(grepl("^y", names(res_te$predictors))) == 3)
+  expect_true(sum(grepl("^z", names(res_te$predictors))) == 1)
   expect_true(check_int(res_te$predictors, bp = res$blueprint))
 })
 
@@ -68,8 +68,7 @@ test_that("regular encoding and intercept", {
   bp <-
     default_formula_blueprint(
       intercept = TRUE,
-      indicators = TRUE,
-      one_hot = FALSE
+      indicators = "traditional"
     )
   res <- mold(x ~ y + z, dat_tr, blueprint = bp)
   res_te <- forge(dat_te, res$blueprint)
@@ -90,8 +89,7 @@ test_that("one-hot encoding and no intercept", {
   bp <-
     default_formula_blueprint(
       intercept = FALSE,
-      indicators = TRUE,
-      one_hot = TRUE
+      indicators = "one-hot"
     )
   res <- mold(x ~ y + z, dat_tr, blueprint = bp)
   res_te <- forge(dat_te, res$blueprint)
@@ -112,18 +110,17 @@ test_that("one-hot encoding and intercept", {
   bp <-
     default_formula_blueprint(
       intercept = TRUE,
-      indicators = TRUE,
-      one_hot = TRUE
+      indicators = "one-hot"
     )
   res <- mold(x ~ y + z, dat_tr, blueprint = bp)
   res_te <- forge(dat_te, res$blueprint)
 
-  expect_true(check_y(res$predictors,   bp = res$blueprint))
-  expect_true(check_z(res$predictors,   bp = res$blueprint))
+  expect_true(sum(grepl("^y", names(res$predictors))) == 3)
+  expect_true(sum(grepl("^z", names(res$predictors))) == 2)
   expect_true(check_int(res$predictors, bp = res$blueprint))
 
-  expect_true(check_y(res_te$predictors,   bp = res$blueprint))
-  expect_true(check_z(res_te$predictors,   bp = res$blueprint))
+  expect_true(sum(grepl("^y", names(res_te$predictors))) == 3)
+  expect_true(sum(grepl("^z", names(res_te$predictors))) == 2)
   expect_true(check_int(res_te$predictors, bp = res$blueprint))
 })
 

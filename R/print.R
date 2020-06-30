@@ -22,9 +22,6 @@ print.hardhat_blueprint <- function(x, ...) {
 print.formula_blueprint <- function(x, ...) {
   NextMethod()
   cat_line("  Indicators: {x$indicators}")
-  if (x$indicators) {
-    cat_line("  One-hot:    {x$one_hot}")
-  }
   invisible(x)
 }
 

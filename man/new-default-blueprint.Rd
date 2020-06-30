@@ -15,8 +15,7 @@ new_default_formula_blueprint(
   allow_novel_levels = FALSE,
   ptypes = NULL,
   formula = NULL,
-  indicators = TRUE,
-  one_hot = FALSE,
+  indicators = "traditional",
   terms = list(predictors = NULL, outcomes = NULL),
   ...,
   subclass = character()
@@ -70,9 +69,9 @@ prediction time. At \code{\link[=mold]{mold()}} time, the information found in
 predictors and outcomes should be preprocessed. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
 
-\item{indicators}{A logical. Should factors be expanded into dummy variables?}
-
-\item{one_hot}{A logical. Should the complete set of dummy variables be generated?}
+\item{indicators}{A character string with possible values "none" (no dummy
+variables), "traditional" (create dummy variables using the usual methods),
+or "one-hot" (create dummy variables for all levels).}
 
 \item{terms}{A named list of two elements, \code{predictors} and \code{outcomes}. Both
 elements are \code{terms} objects that describe the terms for the outcomes and
