@@ -715,7 +715,7 @@ validate_no_factors_in_functions <- function(.formula, .factor_names) {
 
     glubort(
       "Functions involving factors have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = 'none'`. ",
+      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
       "Functions involving factors were detected for the following columns: ",
       "{bad_original_cols}."
     )
@@ -775,7 +775,7 @@ validate_no_factors_in_interactions <- function(.formula, .factor_names) {
 
     glubort(
       "Interaction terms involving factors have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = 'none'`. ",
+      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
       "Interactions involving factors were detected for the following columns: ",
       "{bad_original_cols}."
     )
@@ -807,7 +807,7 @@ detect_factors_in_interactions <- function(.terms, .factor_names) {
   # Something like Species, rather than paste0(Species)
   bare_factor_names <- .factor_names[.factor_names %in% row.names(terms_matrix)]
 
-  # Something like mold(~ paste0(Species), iris, indicators = 'none')
+  # Something like mold(~ paste0(Species), iris, indicators = "none")
   no_bare_factors_used <- length(bare_factor_names) == 0L
   if (no_bare_factors_used) {
     return(character(0))
