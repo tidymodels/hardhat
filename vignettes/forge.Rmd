@@ -20,6 +20,10 @@ options(rlang_backtrace_on_error = "none")
 
 ```{r setup}
 library(hardhat)
+library(modeldata)
+
+data(penguins)
+penguins <- na.omit(penguins)
 ```
 
 ## Introduction
@@ -33,11 +37,7 @@ Like `mold()`, `forge()` is not intended to be used interactively. Instead, it s
 When `mold()` is used, one of the returned objects is an `blueprint`. This is the key to preprocessing new data with `forge()`. For instance, assume you've called `mold()` like so:
 
 ```{r}
-library(modeldata)
-data(penguins)
-penguins <- na.omit(penguins)
-
-penguin_train <- penguins[  1:300 ,]
+penguin_train <- penguins[1:300,]
 penguin_test  <- penguins[-(1:300),]
 ```
 
@@ -45,7 +45,7 @@ penguin_test  <- penguins[-(1:300),]
 penguin_form <- mold(
   log(body_mass_g) ~ species + bill_length_mm, 
   penguin_train, 
-  blueprint = default_formula_blueprint(indicators = 'none')
+  blueprint = default_formula_blueprint(indicators = "none")
 )
 
 formula_eng <- penguin_form$blueprint
@@ -53,7 +53,7 @@ formula_eng <- penguin_form$blueprint
 formula_eng
 ```
 
-A formula blueprint is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don't want to expand `species` into dummy variables by setting `indicators = 'none'`.
+A formula blueprint is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don't want to expand `species` into dummy variables by setting `indicators = "none"`.
 
 When it is time to `predict()` on new data, that data is passed on to `forge()` along with the `blueprint` we just created.
 

@@ -20,6 +20,10 @@ options(rlang_backtrace_on_error = "none")
 
 ```{r setup}
 library(hardhat)
+library(modeldata)
+
+data(penguins)
+penguins <- na.omit(penguins)
 ```
 
 ## Introduction
@@ -37,10 +41,6 @@ The intended use of `mold()` is to be called from your user facing modeling func
 The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: `outcomes ~ predictors`. Generally, as a developer, you have to then call `model.frame()` and `model.matrix()` on this result to coerce it into the right format for ingestion into your model. `mold()` handles all of that for you.
 
 ```{r}
-library(modeldata)
-data(penguins)
-penguins <- na.omit(penguins)
-
 penguin_form <- mold(body_mass_g ~ log(bill_length_mm), penguins)
 
 names(penguin_form)
@@ -125,13 +125,13 @@ expanded_dummies$predictors
 ```{r}
 non_expanded_dummies <- mold(
   ~ body_mass_g + species, penguins, 
-  blueprint = default_formula_blueprint(indicators = 'none')
+  blueprint = default_formula_blueprint(indicators = "none")
 )
 
 non_expanded_dummies$predictors
 ```
 
-_Note:_ It's worth mentioning that when an intercept is not present, base R expands factors columns completely (also known as one hot encoding) into `K` columns corresponding to the `K` levels present in the _first_ factor and `K-1` for the rest. When an intercept is present, only `K-1` columns are generated for all factor predictors.
+_Note:_ It's worth mentioning that when an intercept is not present, base R expands the first factor completely into `K` indicator columns corresponding to the `K` levels present in that factor (also known as one-hot encoding). Subsequent columns are expanded into the more traditional `K - 1` columns. When an intercept is present, `K - 1` columns are generated for all factor predictors.
 
 ```{r}
 k_cols <- mold(~ species, penguins)

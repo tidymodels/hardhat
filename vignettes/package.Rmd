@@ -21,6 +21,10 @@ options(rlang_backtrace_on_error = "none")
 ```{r setup}
 library(hardhat)
 library(tibble)
+library(modeldata)
+
+data(penguins)
+penguins <- na.omit(penguins)
 ```
 
 # Introduction
@@ -156,10 +160,6 @@ simple_lm_impl <- function(predictors, outcomes) {
 This simple linear regression implementation just calls `lm.fit()` with `x = predictors` and `y = outcomes`. `lm.fit()` expects a matrix of predictors and a vector of outcomes (at least for univariate regression). In a moment we will discuss how to create those.
 
 ```{r}
-library(modeldata)
-data(penguins)
-penguins <- na.omit(penguins)
-
 predictors <- as.matrix(subset(penguins, select = bill_length_mm))
 outcomes <- penguins$body_mass_g
 
