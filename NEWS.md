@@ -1,15 +1,20 @@
 # hardhat (development version)
 
-## Breaking changes
-
-* For `indicators = TRUE`, the full set of dummy variables are not created; the
-  more traditional `C - 1` set, where `C` is the number of factor levels, is
-  used.
+* The `indicators` argument of `default_formula_blueprint()` now takes character
+  input rather than logical. To update:
   
-## Other changes
-
-* To create the complete set of dummy variables, a new argument (`one_hot`) can
-  be set to `TRUE`. 
+  ```
+  indicators = TRUE  -> indicators = "traditional"
+  
+  indicators = FALSE -> indicators = "none"
+  ```
+  
+  Logical input for `indicators` will continue to work, with a warning, until
+  hardhat 0.1.6, where it will be formally deprecated.
+  
+  There is also a new `indicators = "one-hot"` option which expands all factor
+  columns into `K` dummy variable columns corresponding to the `K` levels of
+  that factor, rather than the more traditional `K - 1` expansion.
 
 # hardhat 0.1.3
 
