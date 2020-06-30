@@ -27,7 +27,8 @@ Suggests:
     rmarkdown,
     usethis,
     roxygen2,
-    devtools
+    devtools,
+    modeldata (>= 0.0.2)
 Imports: 
     glue,
     rlang (>= 0.4.1),
@@ -38,3 +39,5 @@ BugReports: https://github.com/tidymodels/hardhat/issues
 VignetteBuilder: knitr
 Remotes:
     rstudio/rmarkdown
+Depends: 
+    R (>= 2.10)
