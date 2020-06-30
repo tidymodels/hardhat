@@ -8,7 +8,7 @@
 default_formula_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  indicators = TRUE
+  indicators = "traditional"
 )
 
 \method{mold}{formula}(formula, data, ..., blueprint = NULL)
@@ -22,7 +22,18 @@ in the \code{mold} and \code{forge} function list.}
 prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
-\item{indicators}{A logical. Should factors be expanded into dummy variables?}
+\item{indicators}{A single character string. Control how factors are
+expanded into dummy variable indicator columns. One of:
+\itemize{
+\item \code{"traditional"} - The default. Create dummy variables using the
+traditional \code{\link[=model.matrix]{model.matrix()}} infrastructure. Generally this creates
+\code{K - 1} indicator columns for each factor, where \code{K} is the number of
+levels in that factor.
+\item \code{"none"} - Leave factor variables alone. No expansion is done.
+\item \code{"one-hot"} - Create dummy variables using a one-hot encoding approach
+that expands unordered factors into all \code{K} indicator columns, rather than
+\code{K - 1}.
+}}
 
 \item{formula}{A formula specifying the predictors and the outcomes.}
 
@@ -42,12 +53,18 @@ is the blueprint used by default from \code{mold()} if \code{x} is a formula.
 }
 \details{
 While not different from base R, the behavior of expanding factors into
-dummy variables when an intercept is \emph{not} present should be documented.
+dummy variables when \code{indicators = "traditional"} and an intercept is \emph{not}
+present is not always intuitive and should be documented.
 \itemize{
 \item When an intercept is present, factors are expanded into \code{K-1} new columns,
 where \code{K} is the number of levels in the factor.
-\item When an intercept is \emph{not} present, factors are expanded into all \code{K}
-columns (one-hot encoding).
+\item When an intercept is \emph{not} present, the first factor is expanded into
+all \code{K} columns (one-hot encoding), and the remaining factors are expanded
+into \code{K-1} columns. This behavior ensures that meaningful predictions can
+be made for the reference level of the first factor, but is not the exact
+"no intercept" model that was requested. Without this behavior, predictions
+for the reference level of the first factor would always be forced to \code{0}
+when there is no intercept.
 }
 
 Offsets can be included in the formula method through the use of the inline
@@ -64,11 +81,14 @@ When \code{mold()} is used with the default formula blueprint:
 \item The RHS of the \code{formula} is isolated, and converted to its own
 1 sided formula: \code{~ RHS}.
 \item Runs \code{\link[stats:model.frame]{stats::model.frame()}} on the RHS formula and uses \code{data}.
-\item If \code{indicators = TRUE}, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the
-result.
-\item If \code{indicators = FALSE}, factors are removed before \code{model.matrix()}
+\item If \code{indicators = "traditional"}, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}}
+on the result.
+\item If \code{indicators = "none"}, factors are removed before \code{model.matrix()}
 is run, and then added back afterwards. No interactions or inline
 functions involving factors are allowed.
+\item If \code{indicators = "one-hot"}, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the
+result using a contrast function that creates indicator columns for all
+levels of all factors.
 \item If any offsets are present from using \code{offset()}, then they are
 extracted with \code{\link[=model_offset]{model_offset()}}.
 \item If \code{intercept = TRUE}, adds an intercept column.
@@ -97,11 +117,14 @@ of \code{new_data}.
 \itemize{
 \item It runs \code{\link[stats:model.frame]{stats::model.frame()}} on \code{new_data} using the stored terms
 object corresponding to the \emph{predictors}.
-\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = TRUE} was set, it
-then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the result.
-\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = FALSE} was set, it
+\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = "traditional"} was
+set, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the result.
+\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = "none"} was set, it
 runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the result without the factor columns,
 and then adds them on afterwards.
+\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = "one-hot"} was set, it
+runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the result with a contrast function that
+includes indicators for all levels of all factor columns.
 \item If any offsets are present from using \code{offset()} in the original call
 to \code{\link[=mold]{mold()}}, then they are extracted with \code{\link[=model_offset]{model_offset()}}.
 \item If \code{intercept = TRUE} in the original call to \code{\link[=mold]{mold()}}, then an
@@ -146,92 +169,108 @@ interface standardizes all of that flexibility in one place.
 
 \examples{
 # ---------------------------------------------------------------------------
-# Setup
 
-train <- iris[1:100,]
-test <- iris[101:150,]
+data("hardhat-example-data")
 
 # ---------------------------------------------------------------------------
 # Formula Example
 
 # Call mold() with the training data
 processed <- mold(
-  log(Sepal.Width) ~ Sepal.Length + Species,
-  train,
+  log(num_1) ~ num_2 + fac_1,
+  example_train,
   blueprint = default_formula_blueprint(intercept = TRUE)
 )
 
 # Then, call forge() with the blueprint and the test data
 # to have it preprocess the test data in the same way
-forge(test, processed$blueprint)
+forge(example_test, processed$blueprint)
 
 # Use `outcomes = TRUE` to also extract the preprocessed outcome
-forge(test, processed$blueprint, outcomes = TRUE)
+forge(example_test, processed$blueprint, outcomes = TRUE)
 
 # ---------------------------------------------------------------------------
 # Factors without an intercept
 
 # No intercept is added by default
-processed <- mold(Sepal.Width ~ Species, train)
+processed <- mold(num_1 ~ fac_1 + fac_2, example_train)
 
-# So factor columns are completely expanded
-# into all `K` columns (the number of levels)
+# So, for factor columns, the first factor is completely expanded into all
+# `K` columns (the number of levels), and the subsequent factors are expanded
+# into `K - 1` columns.
 processed$predictors
+
+# In the above example, `fac_1` is expanded into all three columns,
+# `fac_2` is not. This behavior comes from `model.matrix()`, and is somewhat
+# known in the R community, but can lead to a model that is difficult to
+# interpret since the corresponding p-values are testing wildly different
+# hypotheses.
+
+# To get all indicators for all columns (irrespective of the intercept),
+# use the `indicators = "one-hot"` option
+processed <- mold(
+  num_1 ~ fac_1 + fac_2,
+  example_train,
+  blueprint = default_formula_blueprint(indicators = "one-hot")
+)
+
+processed$predictors
+
+# It is not possible to construct a no-intercept model that expands all
+# factors into `K - 1` columns using the formula method. If required, a
+# recipe could be used to construct this model.
 
 # ---------------------------------------------------------------------------
 # Global variables
 
-y <- rep(1, times = nrow(train))
+y <- rep(1, times = nrow(example_train))
 
 # In base R, global variables are allowed in a model formula
-frame <- model.frame(Species ~ y + Sepal.Length, train)
+frame <- model.frame(fac_1 ~ y + num_2, example_train)
 head(frame)
 
 # mold() does not allow them, and throws an error
-tryCatch(
-  expr = mold(Species ~ y + Sepal.Length, train),
-  error = function(e) print(e$message)
-)
+try(mold(fac_1 ~ y + num_2, example_train))
 
 # ---------------------------------------------------------------------------
 # Dummy variables and interactions
 
 # By default, factor columns are expanded
 # and interactions are created, both by
-# calling model.matrix(). Some models (like
+# calling `model.matrix()`. Some models (like
 # tree based models) can take factors directly
 # but still might want to use the formula method.
-# In those cases, set `indicators = FALSE` to not
-# run model.matrix() on factor columns. Interactions
+# In those cases, set `indicators = "none"` to not
+# run `model.matrix()` on factor columns. Interactions
 # are still allowed and are run on numeric columns.
 
-blueprint_no_indicators <- default_formula_blueprint(indicators = FALSE)
+bp_no_indicators <- default_formula_blueprint(indicators = "none")
 
 processed <- mold(
-  ~ Species + Sepal.Width:Sepal.Length,
-  train,
-  blueprint = blueprint_no_indicators
+  ~ fac_1 + num_1:num_2,
+  example_train,
+  blueprint = bp_no_indicators
 )
 
 processed$predictors
 
-# An informative error is thrown when `indicators = FALSE` and
+# An informative error is thrown when `indicators = "none"` and
 # factors are present in interaction terms or in inline functions
-try(mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators))
-try(mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators))
+try(mold(num_1 ~ num_2:fac_1, example_train, blueprint = bp_no_indicators))
+try(mold(num_1 ~ paste0(fac_1), example_train, blueprint = bp_no_indicators))
 
 # ---------------------------------------------------------------------------
 # Multivariate outcomes
 
 # Multivariate formulas can be specified easily
-processed <- mold(Sepal.Width + log(Sepal.Length) ~ Species, train)
+processed <- mold(num_1 + log(num_2) ~ fac_1, example_train)
 processed$outcomes
 
 # Inline functions on the LHS are run, but any matrix
 # output is flattened (like what happens in `model.matrix()`)
 # (essentially this means you don't wind up with columns
 # in the tibble that are matrices)
-processed <- mold(poly(Sepal.Length, degree = 2) ~ Species, train)
+processed <- mold(poly(num_2, degree = 2) ~ fac_1, example_train)
 processed$outcomes
 
 # TRUE
@@ -239,40 +278,43 @@ ncol(processed$outcomes) == 2
 
 # Multivariate formulas specified in mold()
 # carry over into forge()
-forge(test, processed$blueprint, outcomes = TRUE)
+forge(example_test, processed$blueprint, outcomes = TRUE)
 
 # ---------------------------------------------------------------------------
 # Offsets
 
 # Offsets are handled specially in base R, so they deserve special
 # treatment here as well. You can add offsets using the inline function
-# offset()
-processed <- mold(Sepal.Width ~ offset(Sepal.Length) + Species, train)
+# `offset()`
+processed <- mold(num_1 ~ offset(num_2) + fac_1, example_train)
 
 processed$extras$offset
 
 # Multiple offsets can be included, and they get added together
 processed <- mold(
-  Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width),
-  train
+  num_1 ~ offset(num_2) + offset(num_3),
+  example_train
 )
 
 identical(
   processed$extras$offset$.offset,
-  train$Sepal.Length + train$Petal.Width
+  example_train$num_2 + example_train$num_3
 )
 
 # Forging test data will also require
 # and include the offset
-forge(test, processed$blueprint)
+forge(example_test, processed$blueprint)
 
 # ---------------------------------------------------------------------------
 # Intercept only
 
 # Because `1` and `0` are intercept modifying terms, they are
-# not allowed in the formula and are controlled by the
+# not allowed in the formula and are instead controlled by the
 # `intercept` argument of the blueprint. To use an intercept
 # only formula, you should supply `NULL` on the RHS of the formula.
-mold(~ NULL, train, blueprint = default_formula_blueprint(intercept = TRUE))
-
+mold(
+  ~ NULL,
+  example_train,
+  blueprint = default_formula_blueprint(intercept = TRUE)
+)
 }

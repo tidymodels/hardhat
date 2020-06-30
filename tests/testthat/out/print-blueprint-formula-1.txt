@@ -4,4 +4,4 @@ Formula blueprint:
   # Outcomes: 1 
    Intercept: FALSE 
 Novel Levels: FALSE 
-  Indicators: TRUE 
+  Indicators: traditional 

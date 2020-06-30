@@ -21,13 +21,19 @@
 #' @details
 #'
 #' While not different from base R, the behavior of expanding factors into
-#' dummy variables when an intercept is _not_ present should be documented.
+#' dummy variables when `indicators = "traditional"` and an intercept is _not_
+#' present is not always intuitive and should be documented.
 #'
 #' - When an intercept is present, factors are expanded into `K-1` new columns,
 #' where `K` is the number of levels in the factor.
 #'
-#' - When an intercept is _not_ present, factors are expanded into all `K`
-#' columns (one-hot encoding).
+#' - When an intercept is _not_ present, the first factor is expanded into
+#' all `K` columns (one-hot encoding), and the remaining factors are expanded
+#' into `K-1` columns. This behavior ensures that meaningful predictions can
+#' be made for the reference level of the first factor, but is not the exact
+#' "no intercept" model that was requested. Without this behavior, predictions
+#' for the reference level of the first factor would always be forced to `0`
+#' when there is no intercept.
 #'
 #' Offsets can be included in the formula method through the use of the inline
 #' function [stats::offset()]. These are returned as a tibble with 1 column
@@ -44,12 +50,16 @@
 #'
 #'    - Runs [stats::model.frame()] on the RHS formula and uses `data`.
 #'
-#'    - If `indicators = TRUE`, it then runs [stats::model.matrix()] on the
-#'    result.
+#'    - If `indicators = "traditional"`, it then runs [stats::model.matrix()]
+#'    on the result.
 #'
-#'    - If `indicators = FALSE`, factors are removed before `model.matrix()`
+#'    - If `indicators = "none"`, factors are removed before `model.matrix()`
 #'    is run, and then added back afterwards. No interactions or inline
 #'    functions involving factors are allowed.
+#'
+#'    - If `indicators = "one-hot"`, it then runs [stats::model.matrix()] on the
+#'    result using a contrast function that creates indicator columns for all
+#'    levels of all factors.
 #'
 #'    - If any offsets are present from using `offset()`, then they are
 #'    extracted with [model_offset()].
@@ -82,12 +92,16 @@
 #'    - It runs [stats::model.frame()] on `new_data` using the stored terms
 #'    object corresponding to the _predictors_.
 #'
-#'    - If, in the original [mold()] call, `indicators = TRUE` was set, it
-#'    then runs [stats::model.matrix()] on the result.
+#'    - If, in the original [mold()] call, `indicators = "traditional"` was
+#'    set, it then runs [stats::model.matrix()] on the result.
 #'
-#'    - If, in the original [mold()] call, `indicators = FALSE` was set, it
+#'    - If, in the original [mold()] call, `indicators = "none"` was set, it
 #'    runs [stats::model.matrix()] on the result without the factor columns,
 #'    and then adds them on afterwards.
+#'
+#'    - If, in the original [mold()] call, `indicators = "one-hot"` was set, it
+#'    runs [stats::model.matrix()] on the result with a contrast function that
+#'    includes indicators for all levels of all factor columns.
 #'
 #'    - If any offsets are present from using `offset()` in the original call
 #'    to [mold()], then they are extracted with [model_offset()].
@@ -131,92 +145,108 @@
 #'
 #' @examples
 #' # ---------------------------------------------------------------------------
-#' # Setup
 #'
-#' train <- iris[1:100,]
-#' test <- iris[101:150,]
+#' data("hardhat-example-data")
 #'
 #' # ---------------------------------------------------------------------------
 #' # Formula Example
 #'
 #' # Call mold() with the training data
 #' processed <- mold(
-#'   log(Sepal.Width) ~ Sepal.Length + Species,
-#'   train,
+#'   log(num_1) ~ num_2 + fac_1,
+#'   example_train,
 #'   blueprint = default_formula_blueprint(intercept = TRUE)
 #' )
 #'
 #' # Then, call forge() with the blueprint and the test data
 #' # to have it preprocess the test data in the same way
-#' forge(test, processed$blueprint)
+#' forge(example_test, processed$blueprint)
 #'
 #' # Use `outcomes = TRUE` to also extract the preprocessed outcome
-#' forge(test, processed$blueprint, outcomes = TRUE)
+#' forge(example_test, processed$blueprint, outcomes = TRUE)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Factors without an intercept
 #'
 #' # No intercept is added by default
-#' processed <- mold(Sepal.Width ~ Species, train)
+#' processed <- mold(num_1 ~ fac_1 + fac_2, example_train)
 #'
-#' # So factor columns are completely expanded
-#' # into all `K` columns (the number of levels)
+#' # So, for factor columns, the first factor is completely expanded into all
+#' # `K` columns (the number of levels), and the subsequent factors are expanded
+#' # into `K - 1` columns.
 #' processed$predictors
+#'
+#' # In the above example, `fac_1` is expanded into all three columns,
+#' # `fac_2` is not. This behavior comes from `model.matrix()`, and is somewhat
+#' # known in the R community, but can lead to a model that is difficult to
+#' # interpret since the corresponding p-values are testing wildly different
+#' # hypotheses.
+#'
+#' # To get all indicators for all columns (irrespective of the intercept),
+#' # use the `indicators = "one-hot"` option
+#' processed <- mold(
+#'   num_1 ~ fac_1 + fac_2,
+#'   example_train,
+#'   blueprint = default_formula_blueprint(indicators = "one-hot")
+#' )
+#'
+#' processed$predictors
+#'
+#' # It is not possible to construct a no-intercept model that expands all
+#' # factors into `K - 1` columns using the formula method. If required, a
+#' # recipe could be used to construct this model.
 #'
 #' # ---------------------------------------------------------------------------
 #' # Global variables
 #'
-#' y <- rep(1, times = nrow(train))
+#' y <- rep(1, times = nrow(example_train))
 #'
 #' # In base R, global variables are allowed in a model formula
-#' frame <- model.frame(Species ~ y + Sepal.Length, train)
+#' frame <- model.frame(fac_1 ~ y + num_2, example_train)
 #' head(frame)
 #'
 #' # mold() does not allow them, and throws an error
-#' tryCatch(
-#'   expr = mold(Species ~ y + Sepal.Length, train),
-#'   error = function(e) print(e$message)
-#' )
+#' try(mold(fac_1 ~ y + num_2, example_train))
 #'
 #' # ---------------------------------------------------------------------------
 #' # Dummy variables and interactions
 #'
 #' # By default, factor columns are expanded
 #' # and interactions are created, both by
-#' # calling model.matrix(). Some models (like
+#' # calling `model.matrix()`. Some models (like
 #' # tree based models) can take factors directly
 #' # but still might want to use the formula method.
-#' # In those cases, set `indicators = FALSE` to not
-#' # run model.matrix() on factor columns. Interactions
+#' # In those cases, set `indicators = "none"` to not
+#' # run `model.matrix()` on factor columns. Interactions
 #' # are still allowed and are run on numeric columns.
 #'
-#' blueprint_no_indicators <- default_formula_blueprint(indicators = FALSE)
+#' bp_no_indicators <- default_formula_blueprint(indicators = "none")
 #'
 #' processed <- mold(
-#'   ~ Species + Sepal.Width:Sepal.Length,
-#'   train,
-#'   blueprint = blueprint_no_indicators
+#'   ~ fac_1 + num_1:num_2,
+#'   example_train,
+#'   blueprint = bp_no_indicators
 #' )
 #'
 #' processed$predictors
 #'
-#' # An informative error is thrown when `indicators = FALSE` and
+#' # An informative error is thrown when `indicators = "none"` and
 #' # factors are present in interaction terms or in inline functions
-#' try(mold(Sepal.Width ~ Sepal.Length:Species, train, blueprint = blueprint_no_indicators))
-#' try(mold(Sepal.Width ~ paste0(Species), train, blueprint = blueprint_no_indicators))
+#' try(mold(num_1 ~ num_2:fac_1, example_train, blueprint = bp_no_indicators))
+#' try(mold(num_1 ~ paste0(fac_1), example_train, blueprint = bp_no_indicators))
 #'
 #' # ---------------------------------------------------------------------------
 #' # Multivariate outcomes
 #'
 #' # Multivariate formulas can be specified easily
-#' processed <- mold(Sepal.Width + log(Sepal.Length) ~ Species, train)
+#' processed <- mold(num_1 + log(num_2) ~ fac_1, example_train)
 #' processed$outcomes
 #'
 #' # Inline functions on the LHS are run, but any matrix
 #' # output is flattened (like what happens in `model.matrix()`)
 #' # (essentially this means you don't wind up with columns
 #' # in the tibble that are matrices)
-#' processed <- mold(poly(Sepal.Length, degree = 2) ~ Species, train)
+#' processed <- mold(poly(num_2, degree = 2) ~ fac_1, example_train)
 #' processed$outcomes
 #'
 #' # TRUE
@@ -224,47 +254,49 @@
 #'
 #' # Multivariate formulas specified in mold()
 #' # carry over into forge()
-#' forge(test, processed$blueprint, outcomes = TRUE)
+#' forge(example_test, processed$blueprint, outcomes = TRUE)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Offsets
 #'
 #' # Offsets are handled specially in base R, so they deserve special
 #' # treatment here as well. You can add offsets using the inline function
-#' # offset()
-#' processed <- mold(Sepal.Width ~ offset(Sepal.Length) + Species, train)
+#' # `offset()`
+#' processed <- mold(num_1 ~ offset(num_2) + fac_1, example_train)
 #'
 #' processed$extras$offset
 #'
 #' # Multiple offsets can be included, and they get added together
 #' processed <- mold(
-#'   Sepal.Width ~ offset(Sepal.Length) + offset(Petal.Width),
-#'   train
+#'   num_1 ~ offset(num_2) + offset(num_3),
+#'   example_train
 #' )
 #'
 #' identical(
 #'   processed$extras$offset$.offset,
-#'   train$Sepal.Length + train$Petal.Width
+#'   example_train$num_2 + example_train$num_3
 #' )
 #'
 #' # Forging test data will also require
 #' # and include the offset
-#' forge(test, processed$blueprint)
+#' forge(example_test, processed$blueprint)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Intercept only
 #'
 #' # Because `1` and `0` are intercept modifying terms, they are
-#' # not allowed in the formula and are controlled by the
+#' # not allowed in the formula and are instead controlled by the
 #' # `intercept` argument of the blueprint. To use an intercept
 #' # only formula, you should supply `NULL` on the RHS of the formula.
-#' mold(~ NULL, train, blueprint = default_formula_blueprint(intercept = TRUE))
-#'
+#' mold(
+#'   ~ NULL,
+#'   example_train,
+#'   blueprint = default_formula_blueprint(intercept = TRUE)
+#' )
 #' @export
 default_formula_blueprint <- function(intercept = FALSE,
                                       allow_novel_levels = FALSE,
-                                      indicators = TRUE) {
-
+                                      indicators = "traditional") {
   mold <- get_mold_formula_default_function_set()
   forge <- get_forge_formula_default_function_set()
 
@@ -290,7 +322,7 @@ new_default_formula_blueprint <- function(mold,
                                           allow_novel_levels = FALSE,
                                           ptypes = NULL,
                                           formula = NULL,
-                                          indicators = TRUE,
+                                          indicators = "traditional",
                                           terms = list(
                                             predictors = NULL,
                                             outcomes = NULL
@@ -381,7 +413,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
 
   ptype <- extract_ptype(original_data)
 
-  if (!blueprint$indicators) {
+  if (identical(blueprint$indicators, "none")) {
     factor_names <- extract_original_factor_names(ptype)
     validate_no_factors_in_functions(formula, factor_names)
     validate_no_factors_in_interactions(formula, factor_names)
@@ -391,12 +423,19 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   framed <- model_frame(formula, data)
   offset <- extract_offset(framed$terms, framed$data)
 
-  predictors <- model_matrix(
-    terms = framed$terms,
-    data = framed$data
-  )
+  if (identical(blueprint$indicators, "one-hot")) {
+    predictors <- model_matrix_one_hot(
+      terms = framed$terms,
+      data = framed$data
+    )
+  } else {
+    predictors <- model_matrix(
+      terms = framed$terms,
+      data = framed$data
+    )
+  }
 
-  if (!blueprint$indicators) {
+  if (identical(blueprint$indicators, "none")) {
     predictors <- reattach_factor_columns(predictors, data, factor_names)
   }
 
@@ -508,12 +547,19 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
 
   framed <- model_frame(terms, predictors)
 
-  data <- model_matrix(
-    terms = framed$terms,
-    data = framed$data
-  )
+  if (identical(blueprint$indicators, "one-hot")) {
+    data <- model_matrix_one_hot(
+      terms = framed$terms,
+      data = framed$data
+    )
+  } else {
+    data <- model_matrix(
+      terms = framed$terms,
+      data = framed$data
+    )
+  }
 
-  if (!blueprint$indicators) {
+  if (identical(blueprint$indicators, "none")) {
     factor_names <- extract_original_factor_names(blueprint$ptypes$predictors)
     data <- reattach_factor_columns(data, predictors, factor_names)
   }
@@ -669,7 +715,7 @@ validate_no_factors_in_functions <- function(.formula, .factor_names) {
 
     glubort(
       "Functions involving factors have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = FALSE`. ",
+      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
       "Functions involving factors were detected for the following columns: ",
       "{bad_original_cols}."
     )
@@ -729,7 +775,7 @@ validate_no_factors_in_interactions <- function(.formula, .factor_names) {
 
     glubort(
       "Interaction terms involving factors have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = FALSE`. ",
+      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
       "Interactions involving factors were detected for the following columns: ",
       "{bad_original_cols}."
     )
@@ -761,7 +807,7 @@ detect_factors_in_interactions <- function(.terms, .factor_names) {
   # Something like Species, rather than paste0(Species)
   bare_factor_names <- .factor_names[.factor_names %in% row.names(terms_matrix)]
 
-  # Something like mold(~ paste0(Species), iris, indicators = FALSE)
+  # Something like mold(~ paste0(Species), iris, indicators = "none")
   no_bare_factors_used <- length(bare_factor_names) == 0L
   if (no_bare_factors_used) {
     return(character(0))

@@ -1,12 +1,12 @@
 context("test-forge-formula")
 
 test_that("simple forge works", {
-  x <- mold(Species ~ Sepal.Length, iris)
-  xx <- forge(iris, x$blueprint)
+  x <- mold(fac_1 ~ num_1, example_train)
+  xx <- forge(example_train, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
-    "Sepal.Length"
+    "num_1"
   )
 
   expect_equal(
@@ -17,21 +17,21 @@ test_that("simple forge works", {
 
 test_that("can forge multivariate formulas", {
 
-  x <- mold(Sepal.Length + Sepal.Width ~ Petal.Length, iris)
-  xx <- forge(iris, x$blueprint, outcomes = TRUE)
+  x <- mold(num_1 + num_2 ~ num_3, example_train)
+  xx <- forge(example_train, x$blueprint, outcomes = TRUE)
 
   expect_is(xx$outcomes, "tbl_df")
-  expect_equal(colnames(xx$outcomes), c("Sepal.Length", "Sepal.Width"))
+  expect_equal(colnames(xx$outcomes), c("num_1", "num_2"))
 
-  y <- mold(log(Sepal.Width) + poly(Sepal.Width, degree = 2) ~ Species, iris)
-  yy <- forge(iris, y$blueprint, outcomes = TRUE)
+  y <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train)
+  yy <- forge(example_train, y$blueprint, outcomes = TRUE)
 
   expect_equal(
     colnames(yy$outcomes),
     c(
-      "log(Sepal.Width)",
-      "poly(Sepal.Width, degree = 2).1",
-      "poly(Sepal.Width, degree = 2).2"
+      "log(num_2)",
+      "poly(num_2, degree = 2).1",
+      "poly(num_2, degree = 2).2"
     )
   )
 
@@ -39,63 +39,72 @@ test_that("can forge multivariate formulas", {
 
 test_that("can forge new data without expanding factors into dummies", {
 
-  x <- mold(Sepal.Length ~ Species, iris, blueprint = default_formula_blueprint(indicators = FALSE))
-  xx <- forge(iris, x$blueprint)
+  x <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
+
+  xx <- forge(example_train, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
-    "Species"
+    "fac_1"
   )
 
   expect_is(
-    xx$predictors$Species,
+    xx$predictors$fac_1,
     "factor"
   )
 
 })
 
-test_that("forging with `indicators = FALSE` works with numeric interactions", {
+test_that("forging with `indicators = 'none'` works with numeric interactions", {
+  x <- mold(
+    fac_1 ~ num_2:num_1,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
 
-  x <- mold(Species ~ Sepal.Width:Sepal.Length, iris, blueprint = default_formula_blueprint(indicators = FALSE))
-  xx <- forge(iris, x$blueprint)
+  xx <- forge(example_train, x$blueprint)
 
   expect_equal(
     colnames(xx$predictors),
-    "Sepal.Width:Sepal.Length"
+    "num_2:num_1"
   )
 
 })
 
 test_that("asking for the outcome works", {
-  x <- mold(Species ~ Sepal.Length, iris)
-  xx <- forge(iris, x$blueprint, outcomes = TRUE)
+  x <- mold(fac_1 ~ num_1, example_train)
+  xx <- forge(example_train, x$blueprint, outcomes = TRUE)
 
   expect_equal(
     xx$outcomes,
-    tibble::tibble(Species = iris$Species)
+    tibble::tibble(fac_1 = example_train$fac_1)
   )
 })
 
 test_that("asking for the outcome when it isn't there fails", {
-  x <- mold(Species ~ Sepal.Length, iris)
-  iris2 <- iris
-  iris2$Species <- NULL
+  x <- mold(fac_1 ~ num_1, example_train)
+  example_train2 <- example_train
+  example_train2$fac_1 <- NULL
 
   expect_error(
-    forge(iris2, x$blueprint, outcomes = TRUE),
+    forge(example_train2, x$blueprint, outcomes = TRUE),
     "The following required columns"
   )
 })
 
 test_that("can use special inline functions", {
-  x <- mold(log(Sepal.Length) ~ poly(Sepal.Length, degree = 2), iris)
-  xx <- forge(iris, x$blueprint, outcomes = TRUE)
+  x <- mold(log(num_1) ~ poly(num_1, degree = 2), example_train)
+  xx <- forge(example_train, x$blueprint, outcomes = TRUE)
 
   # manually create poly df
-  x_poly <- stats::poly(iris$Sepal.Length, degree = 2)
+  x_poly <- stats::poly(example_train$num_1, degree = 2)
   poly_df <- tibble::tibble(
-    `poly(Sepal.Length, degree = 2)1` = x_poly[,1],
-    `poly(Sepal.Length, degree = 2)2` = x_poly[,2]
+    `poly(num_1, degree = 2)1` = x_poly[,1],
+    `poly(num_1, degree = 2)2` = x_poly[,2]
   )
 
   # coerce to df for tolerance..tibbles don't have good tolerance
@@ -106,22 +115,22 @@ test_that("can use special inline functions", {
 
   expect_equal(
     xx$outcomes,
-    tibble::tibble(`log(Sepal.Length)` = log(iris$Sepal.Length))
+    tibble::tibble(`log(num_1)` = log(example_train$num_1))
   )
 
 })
 
 test_that("new_data can be a matrix", {
-  x <- mold(Species ~ Sepal.Length, iris)
-  iris_mat <- as.matrix(iris[,"Sepal.Length", drop = FALSE])
+  x <- mold(fac_1 ~ num_1, example_train)
+  example_train_mat <- as.matrix(example_train[,"num_1", drop = FALSE])
 
   expect_error(
-    xx <- forge(iris_mat, x$blueprint),
+    xx <- forge(example_train_mat, x$blueprint),
     NA
   )
 
-  sep_len <- iris$Sepal.Length
-  pred_tbl <- tibble::tibble(Sepal.Length = sep_len)
+  sep_len <- example_train$num_1
+  pred_tbl <- tibble::tibble(num_1 = sep_len)
 
   expect_equal(
     xx$predictors,
@@ -131,7 +140,7 @@ test_that("new_data can be a matrix", {
 })
 
 test_that("new_data can only be a data frame / matrix", {
-  x <- mold(Species ~ Sepal.Length, iris)
+  x <- mold(fac_1 ~ num_1, example_train)
 
   expect_error(
     forge("hi", x$blueprint),
@@ -141,16 +150,16 @@ test_that("new_data can only be a data frame / matrix", {
 })
 
 test_that("missing predictor columns fail appropriately", {
-  x <- mold(Species ~ Sepal.Length + Sepal.Width, iris)
+  x <- mold(fac_1 ~ num_1 + num_2, example_train)
 
   expect_error(
-    forge(iris[,1, drop = FALSE], x$blueprint),
-    "Sepal.Width"
+    forge(example_train[,1, drop = FALSE], x$blueprint),
+    "num_2"
   )
 
   expect_error(
-    forge(iris[,3, drop = FALSE], x$blueprint),
-    "'Sepal.Length', 'Sepal.Width'"
+    forge(example_train[,3, drop = FALSE], x$blueprint),
+    "'num_1', 'num_2'"
   )
 
 })
@@ -376,8 +385,8 @@ test_that("novel ordered factor predictor levels are never allowed", {
     f = ordered(letters[1:5])
   )
 
-  bp1 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = FALSE)
-  bp2 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(indicators = "none", allow_novel_levels = FALSE)
+  bp2 <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -403,8 +412,8 @@ test_that("ordered factor predictors with different level ordering is an error",
     f = ordered(letters[1:4], levels = letters[c(1:2, 4, 3)])
   )
 
-  bp1 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = FALSE)
-  bp2 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(indicators = "none", allow_novel_levels = FALSE)
+  bp2 <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -518,8 +527,8 @@ test_that("missing ordered factor levels are an error", {
     f = ordered(letters[1:4])
   )
 
-  bp1 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = FALSE)
-  bp2 <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(indicators = "none", allow_novel_levels = FALSE)
+  bp2 <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -551,7 +560,7 @@ test_that("can be both missing levels and have new levels", {
     f = factor(letters[c(1:3, 5)])
   )
 
-  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = FALSE))
+  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = "none"))
 
   # Warning for the extra level
   expect_warning(
@@ -577,7 +586,7 @@ test_that("can be both missing levels and have new levels that get ignored", {
     f = factor(letters[c(1:3, 5)])
   )
 
-  blueprint <- default_formula_blueprint(indicators = FALSE, allow_novel_levels = TRUE)
+  blueprint <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
 
   x <- mold(y ~ f, dat, blueprint = blueprint)
 
@@ -604,7 +613,7 @@ test_that("`NA` factor data never triggers a novel level warning (#131)", {
     f = factor(c("y", NA, "x"))
   )
 
-  blueprint <- default_formula_blueprint(indicators = FALSE)
+  blueprint <- default_formula_blueprint(indicators = "none")
 
   x <- mold(y ~ f, dat, blueprint = blueprint)
 
@@ -621,31 +630,31 @@ test_that("`NA` factor data never triggers a novel level warning (#131)", {
 
 test_that("new data classes are caught", {
 
-  iris2 <- iris
-  iris2$Species <- as.character(iris2$Species)
+  example_train2 <- example_train
+  example_train2$fac_1 <- as.character(example_train2$fac_1)
 
-  x <- mold(Sepal.Length ~ Species, iris, blueprint = default_formula_blueprint(indicators = FALSE))
+  x <- mold(num_1 ~ fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none"))
 
   # Silently recover character -> factor
   expect_error(
-    x_iris2 <- forge(iris2, x$blueprint),
+    x_example_train2 <- forge(example_train2, x$blueprint),
     NA
   )
 
   expect_is(
-    x_iris2$predictors$Species,
+    x_example_train2$predictors$fac_1,
     "factor"
   )
 
-  xx <- mold(Species ~ Sepal.Length, iris)
+  xx <- mold(fac_1 ~ num_1, example_train)
 
   expect_error(
-    xx_iris2 <- forge(iris2, xx$blueprint, outcomes = TRUE),
+    xx_example_train2 <- forge(example_train2, xx$blueprint, outcomes = TRUE),
     NA
   )
 
   expect_is(
-    xx_iris2$outcomes$Species,
+    xx_example_train2$outcomes$fac_1,
     "factor"
   )
 
@@ -653,20 +662,20 @@ test_that("new data classes are caught", {
 
 test_that("new data classes can interchange integer/numeric", {
 
-  iris2 <- iris
-  iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
+  example_train2 <- example_train
+  example_train2$num_1 <- as.integer(example_train2$num_1)
 
-  x <- mold(Species ~ Sepal.Length, iris)
+  x <- mold(fac_1 ~ num_1, example_train)
 
   expect_error(
-    forge(iris2, x$blueprint),
+    forge(example_train2, x$blueprint),
     NA
   )
 
-  xx <- mold(Sepal.Length ~ Species, iris)
+  xx <- mold(num_1 ~ fac_1, example_train)
 
   expect_error(
-    forge(iris2, xx$blueprint, outcomes = TRUE),
+    forge(example_train2, xx$blueprint, outcomes = TRUE),
     NA
   )
 
@@ -674,31 +683,118 @@ test_that("new data classes can interchange integer/numeric", {
 
 test_that("intercepts can still be forged on when not using indicators (i.e. model.matrix())", {
 
-  x <- mold(Sepal.Width ~ Species, iris, blueprint = default_formula_blueprint(intercept = TRUE, indicators = FALSE))
-  xx <- forge(iris, x$blueprint)
+  x <- mold(num_2 ~ fac_1, example_train, blueprint = default_formula_blueprint(intercept = TRUE, indicators = "none"))
+  xx <- forge(example_train, x$blueprint)
 
   expect_true(
     "(Intercept)" %in% colnames(xx$predictors)
   )
 
   expect_is(
-    xx$predictors$Species,
+    xx$predictors$fac_1,
     "factor"
   )
 
 })
 
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
-  x <- mold(~ Sepal.Width, iris)
-  expect_equal(forge(iris, x$blueprint)$outcomes, NULL)
+  x <- mold(~ num_2, example_train)
+  expect_equal(forge(example_train, x$blueprint)$outcomes, NULL)
 })
 
 test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
-  x <- mold(~ Sepal.Width, iris)
+  x <- mold(~ num_2, example_train)
 
-  forged <- forge(iris, x$blueprint, outcomes = TRUE)
+  forged <- forge(example_train, x$blueprint, outcomes = TRUE)
   outcomes <- forged$outcomes
 
-  expect_equal(nrow(outcomes), 150)
+  expect_equal(nrow(outcomes), 12)
   expect_equal(ncol(outcomes), 0)
+})
+
+# ------------------------------------------------------------------------------
+# Factor encodings
+
+test_that("traditional encoding and no intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "traditional"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("ya", "yb", "yc", "zB")
+  )
+})
+
+test_that("traditional encoding and intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "traditional"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("(Intercept)", "yb", "yc", "zB")
+  )
+})
+
+test_that("one-hot encoding and no intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "one-hot"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("ya", "yb", "yc", "zA", "zB")
+  )
+})
+
+test_that("one-hot encoding and intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "one-hot"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("(Intercept)", "ya", "yb", "yc", "zA", "zB")
+  )
 })

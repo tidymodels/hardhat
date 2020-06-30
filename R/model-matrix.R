@@ -122,3 +122,83 @@ validate_is_terms <- function(.x, .x_nm) {
 
   validate_is(.x, is_terms, "terms object", .x_nm)
 }
+
+# ------------------------------------------------------------------------------
+
+model_matrix_one_hot <- function(terms, data) {
+  validate_is_terms(terms)
+  data <- check_is_data_like(data)
+
+  # Locate unordered factors only
+  indicator_unordered_factors <- vapply(data, is_unordered_factor, logical(1))
+
+  names <- names(data)
+  names <- names[indicator_unordered_factors]
+
+  # Pre-assign the `contrasts<-` of each unordered factor using
+  # `contr_one_hot()` so `model.matrix()` doesn't overwrite them with the
+  # default that comes from `getOption("contrasts")`
+  for (name in names) {
+    col <- data[[name]]
+    lvls <- levels(col)
+    n <- length(lvls)
+    contrasts <- contr_one_hot(lvls)
+    data[[name]] <- assign_contrasts(col, n, contrasts)
+  }
+
+  model_matrix(terms, data)
+}
+
+#' Contrast function for one-hot encodings
+#'
+#' This contrast function produces a model matrix that has indicator columns for
+#' each level of each factor.
+#'
+#' @param n A vector of character factor levels or the number of unique levels.
+#' @param contrasts This argument is for backwards compatibility and only the
+#'   default of `TRUE` is supported.
+#' @param sparse This argument is for backwards compatibility and only the
+#'   default of `FALSE` is supported.
+#'
+#' @return A diagonal matrix that is `n`-by-`n`.
+#'
+#' @keywords internal
+contr_one_hot <- function(n, contrasts = TRUE, sparse = FALSE) {
+  if (sparse) {
+    rlang::warn("`sparse = TRUE` not implemented for `contr_one_hot()`.")
+  }
+
+  if (!contrasts) {
+    rlang::warn("`contrasts = FALSE` not implemented for `contr_one_hot()`.")
+  }
+
+  if (is.character(n)) {
+    names <- n
+    n <- length(names)
+  } else if (is.numeric(n)) {
+    n <- as.integer(n)
+
+    if (length(n) != 1L) {
+      rlang::abort("`n` must have length 1 when an integer is provided.")
+    }
+
+    names <- as.character(seq_len(n))
+  } else {
+    rlang::abort("`n` must be a character vector or an integer of size 1.")
+  }
+
+  out <- diag(n)
+
+  rownames(out) <- names
+  colnames(out) <- names
+
+  out
+}
+
+is_unordered_factor <- function(x) {
+  inherits(x, "factor") && !inherits(x, "ordered")
+}
+
+assign_contrasts <- function(x, how_many, value) {
+  stats::`contrasts<-`(x, how_many, value)
+}

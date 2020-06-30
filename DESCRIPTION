@@ -1,38 +1,50 @@
 Package: hardhat
 Title: Construct Modeling Packages
 Version: 0.1.3.9000
-Authors@R: c(
-    person("Davis", "Vaughan", , "davis@rstudio.com", c("aut", "cre")),
-    person("Max", "Kuhn", , "max@rstudio.com", c("aut")),
-    person("RStudio", role = "cph"))
+Authors@R: 
+    c(person(given = "Davis",
+             family = "Vaughan",
+             role = c("aut", "cre"),
+             email = "davis@rstudio.com"),
+      person(given = "Max",
+             family = "Kuhn",
+             role = "aut",
+             email = "max@rstudio.com"),
+      person(given = "RStudio",
+             role = "cph"))
 Maintainer: Davis Vaughan <davis@rstudio.com>
-Description: Building modeling packages is hard. A large amount of effort
-    generally goes into providing an implementation for a new method that is
-    efficient, fast, and correct, but often less emphasis is put on the user
-    interface. A good interface requires specialized knowledge about S3 methods
-    and formulas, which the average package developer might not have.
-    The goal of 'hardhat' is to reduce the burden around building new modeling
-    packages by providing functionality for preprocessing, predicting, and
-    validating input.
+Description: Building modeling packages is hard. A large amount
+    of effort generally goes into providing an implementation for a new
+    method that is efficient, fast, and correct, but often less emphasis
+    is put on the user interface. A good interface requires specialized
+    knowledge about S3 methods and formulas, which the average package
+    developer might not have.  The goal of 'hardhat' is to reduce the
+    burden around building new modeling packages by providing
+    functionality for preprocessing, predicting, and validating input.
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.1
-Roxygen: list(markdown = TRUE)
-Suggests: 
-    recipes (>= 0.1.8),
-    testthat (>= 2.1.0),
-    covr,
-    knitr,
-    rmarkdown,
-    usethis,
-    roxygen2,
-    devtools
+URL: https://github.com/tidymodels/hardhat
+BugReports: https://github.com/tidymodels/hardhat/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
     glue,
     rlang (>= 0.4.1),
     tibble,
     vctrs (>= 0.3.0)
-URL: https://github.com/tidymodels/hardhat
-BugReports: https://github.com/tidymodels/hardhat/issues
-VignetteBuilder: knitr
+Suggests: 
+    covr,
+    crayon,
+    devtools,
+    knitr,
+    modeldata (>= 0.0.2),
+    recipes (>= 0.1.8),
+    rmarkdown (>= 2.3),
+    roxygen2,
+    testthat (>= 2.1.0),
+    usethis
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

@@ -61,7 +61,7 @@ test <- iris[101:150,]
 processed <- mold(
   log(Sepal.Width) ~ Species,
   train,
-  blueprint = default_formula_blueprint(indicators = FALSE)
+  blueprint = default_formula_blueprint(indicators = "none")
 )
 
 forge(test, processed$blueprint, outcomes = TRUE)
