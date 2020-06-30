@@ -131,7 +131,6 @@ model_matrix_one_hot <- function(terms, data) {
 
   # Locate unordered factors only
   indicator_unordered_factors <- vapply(data, is_unordered_factor, logical(1))
-  n_factors <- sum(indicator_unordered_factors)
 
   names <- names(data)
   names <- names[indicator_unordered_factors]
