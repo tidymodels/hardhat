@@ -22,9 +22,18 @@ in the \code{mold} and \code{forge} function list.}
 prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
-\item{indicators}{A character string with possible values "none" (no dummy
-variables), "traditional" (create dummy variables using the usual methods),
-or "one-hot" (create dummy variables for all levels).}
+\item{indicators}{A single character string. Control how factors are
+expanded into dummy variable indicator columns. One of:
+\itemize{
+\item \code{"traditional"} - The default. Create dummy variables using the
+traditional \code{\link[=model.matrix]{model.matrix()}} infrastructure. Generally this creates
+\code{K - 1} indicator columns for each factor, where \code{K} is the number of
+levels in that factor.
+\item \code{"none"} - Leave factor variables alone. No expansion is done.
+\item \code{"one-hot"} - Create dummy variables using a one-hot encoding approach
+that expands unordered factors into all \code{K} indicator columns, rather than
+\code{K - 1}.
+}}
 
 \item{formula}{A formula specifying the predictors and the outcomes.}
 

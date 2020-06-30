@@ -69,9 +69,18 @@ prediction time. At \code{\link[=mold]{mold()}} time, the information found in
 predictors and outcomes should be preprocessed. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
 
-\item{indicators}{A character string with possible values "none" (no dummy
-variables), "traditional" (create dummy variables using the usual methods),
-or "one-hot" (create dummy variables for all levels).}
+\item{indicators}{A single character string. Control how factors are
+expanded into dummy variable indicator columns. One of:
+\itemize{
+\item \code{"traditional"} - The default. Create dummy variables using the
+traditional \code{\link[=model.matrix]{model.matrix()}} infrastructure. Generally this creates
+\code{K - 1} indicator columns for each factor, where \code{K} is the number of
+levels in that factor.
+\item \code{"none"} - Leave factor variables alone. No expansion is done.
+\item \code{"one-hot"} - Create dummy variables using a one-hot encoding approach
+that expands unordered factors into all \code{K} indicator columns, rather than
+\code{K - 1}.
+}}
 
 \item{terms}{A named list of two elements, \code{predictors} and \code{outcomes}. Both
 elements are \code{terms} objects that describe the terms for the outcomes and
