@@ -439,8 +439,6 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
     predictors <- reattach_factor_columns(predictors, data, factor_names)
   }
 
-  predictors <- check_intercept(predictors, blueprint$intercept)
-
   terms <- simplify_terms(framed$terms)
 
   blueprint_terms <- blueprint$terms
@@ -567,8 +565,6 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   }
 
   .offset <- extract_offset(framed$terms, framed$data)
-
-  data <- check_intercept(data, blueprint$intercept)
 
   predictors_lst <- out$forge$process_terms_lst(
     data = data,

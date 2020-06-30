@@ -201,24 +201,3 @@ check_is_data_like <- function(.x, .x_nm) {
 
   tibble::as_tibble(.x)
 }
-
-## -----------------------------------------------------------------------------
-
-check_intercept <- function(data, intercept) {
-  nms <- names(data)
-  has_int <- any(nms == "(Intercept)")
-  if (intercept) {
-    if (!has_int) {
-      data <- vctrs::vec_cbind(
-        tibble::tibble(`(Intercept)` = rep(1, nrow(data))),
-        data,
-        .name_repair = "minimal"
-      )
-    }
-  } else {
-    if (has_int) {
-      data <- data[, names(data) != "(Intercept)"]
-    }
-  }
-  data
-}
