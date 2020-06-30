@@ -92,8 +92,11 @@ test_that("intercepts and offsets can be intermingled", {
 # from the model.frame() result, but with indicators = "none" we don't run
 # that so we have to handle it specially ourselves.
 test_that("offsets columns are removed from predictors with `indicators = 'none'`", {
-
-  x <- mold(Species ~ offset(Sepal.Length), iris, blueprint = default_formula_blueprint(indicators = "none"))
+  x <- mold(
+    Species ~ offset(Sepal.Length),
+    iris,
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
 
   expect_equal(
     ncol(x$predictors),

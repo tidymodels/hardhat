@@ -41,8 +41,12 @@ test_that("can forge multivariate formulas", {
 
 test_that("can forge new data without expanding factors into dummies", {
 
-  x <- mold(num_1 ~ fac_1, example_train,
-            blueprint = default_formula_blueprint(indicators = "none"))
+  x <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
+
   xx <- forge(example_train, x$blueprint)
 
   expect_equal(
@@ -58,8 +62,12 @@ test_that("can forge new data without expanding factors into dummies", {
 })
 
 test_that("forging with `indicators = 'none'` works with numeric interactions", {
+  x <- mold(
+    fac_1 ~ num_2:num_1,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
 
-  x <- mold(fac_1 ~ num_2:num_1, example_train, blueprint = default_formula_blueprint(indicators = "none"))
   xx <- forge(example_train, x$blueprint)
 
   expect_equal(

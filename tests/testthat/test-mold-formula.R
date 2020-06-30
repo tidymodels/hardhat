@@ -1,7 +1,5 @@
 context("test-mold-formulas")
 
-data("hardhat-example-data")
-
 test_that("can mold simple formulas", {
 
   x <- mold(fac_1 ~ num_1, example_train)
@@ -34,10 +32,17 @@ test_that("can mold multivariate formulas", {
 
 test_that("factor predictors with no intercept are fully expanded", {
 
-  x  <- mold(num_1 ~ fac_1, example_train,
-             blueprint = default_formula_blueprint(intercept = TRUE))
-  xx <- mold(num_1 ~ fac_1, example_train,
-             blueprint = default_formula_blueprint(intercept = FALSE, indicators = "one-hot"))
+  x  <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(intercept = TRUE)
+  )
+
+  xx <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(intercept = FALSE, indicators = "one-hot")
+  )
 
   expect_equal(
     colnames(x$predictors),
@@ -53,50 +58,68 @@ test_that("factor predictors with no intercept are fully expanded", {
 
 test_that("can mold and not expand dummies", {
 
-  x <- mold(num_1 ~ fac_1, example_train,
-            blueprint = default_formula_blueprint(indicators = 'none'))
+  x <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
 
   expect_equal(colnames(x$predictors), "fac_1")
   expect_is(x$predictors$fac_1, "factor")
-  expect_equal(x$blueprint$indicators, 'none')
+  expect_equal(x$blueprint$indicators, "none")
 })
 
 test_that("errors are thrown if `indicator = FALSE` and factor interactions exist", {
 
   expect_error(
-    mold(~ fac_1, example_train, blueprint = default_formula_blueprint(indicators = 'none')),
+    mold(~ fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none")),
     NA
   )
 
   expect_error(
-    mold(num_1 ~ fac_1:num_2, example_train,
-         blueprint = default_formula_blueprint(indicators = 'none')),
+    mold(
+      num_1 ~ fac_1:num_2,
+      example_train,
+      blueprint = default_formula_blueprint(indicators = "none")
+    ),
     "Interaction terms involving factors"
   )
 
   # Checking various types of generated interactions
 
   expect_error(
-    mold(num_1 ~ fac_1:num_2, example_train,
-         blueprint = default_formula_blueprint(indicators = 'none')),
+    mold(
+      num_1 ~ fac_1:num_2,
+      example_train,
+      blueprint = default_formula_blueprint(indicators = "none")
+    ),
     "'fac_1'"
   )
 
   expect_error(
-    mold(num_1 ~ fac_1 * num_2, example_train,
-         blueprint = default_formula_blueprint(indicators = 'none')),
+    mold(
+      num_1 ~ fac_1 * num_2,
+      example_train,
+      blueprint = default_formula_blueprint(indicators = "none")
+    ),
     "'fac_1'"
   )
 
   expect_error(
-    mold(num_1 ~ (fac_1 + num_2) ^ 2, example_train,
-         blueprint = default_formula_blueprint(indicators = 'none')),
+    mold(
+      num_1 ~ (fac_1 + num_2) ^ 2,
+      example_train,
+      blueprint = default_formula_blueprint(indicators = "none")
+    ),
     "'fac_1'"
   )
 
   expect_error(
-    mold(num_1 ~ fac_1 %in% num_2, example_train,
-         blueprint = default_formula_blueprint(indicators = 'none')),
+    mold(
+      num_1 ~ fac_1 %in% num_2,
+      example_train,
+      blueprint = default_formula_blueprint(indicators = "none")
+    ),
     "'fac_1'"
   )
 
@@ -106,8 +129,11 @@ test_that("errors are thrown if `indicator = FALSE` and factor interactions exis
   example_train2$fac_12 <- example_train2$fac_1
 
   expect_error(
-    mold(~ fac_1:fac_12, example_train2,
-         blueprint = default_formula_blueprint(indicators = 'none')),
+    mold(
+      ~ fac_1:fac_12,
+      example_train2,
+      blueprint = default_formula_blueprint(indicators = "none")
+    ),
     "'fac_1', 'fac_12'."
   )
 
@@ -115,7 +141,7 @@ test_that("errors are thrown if `indicator = FALSE` and factor interactions exis
 
 test_that("errors are thrown if `indicator = FALSE` and factors are used in inline functions", {
 
-  blueprint_no_indicators <- default_formula_blueprint(indicators = 'none')
+  blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
 
   expect_error(
     mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators),
@@ -148,8 +174,11 @@ test_that("errors are thrown if `indicator = FALSE` and factors are used in inli
 
 test_that("`indicators = 'none'` works fine in strange formulas", {
 
-  x <- mold(~ NULL, example_train,
-            blueprint = default_formula_blueprint(indicators = 'none', intercept = TRUE))
+  x <- mold(
+    ~ NULL,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none", intercept = TRUE)
+  )
 
   expect_equal(
     colnames(x$predictors),
@@ -270,8 +299,11 @@ test_that("`NULL` can be used to represent empty RHS formulas", {
 
 test_that("intercepts can still be added when not using indicators (i.e. model.matrix())", {
 
-  x <- mold(num_2 ~ fac_1, example_train,
-            blueprint = default_formula_blueprint(intercept = TRUE, indicators = 'none'))
+  x <- mold(
+    num_2 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(intercept = TRUE, indicators = "none")
+  )
 
   expect_true(
     "(Intercept)" %in% colnames(x$predictors)
@@ -326,7 +358,7 @@ test_that("full interaction syntax is supported", {
 test_that("`indicators = 'none'` runs numeric interactions", {
 
   x <- mold(~ num_1:num_2, example_train,
-            blueprint = default_formula_blueprint(indicators = 'none'))
+            blueprint = default_formula_blueprint(indicators = "none"))
 
   expect_equal(
     colnames(x$predictors),
@@ -496,6 +528,8 @@ test_that("Missing y value still has outcome `terms` present", {
     rlang::expr(NULL + 0)
   )
 })
+
+# ------------------------------------------------------------------------------
 
 test_that("soft-deprecation of logical `indicators`", {
   local_lifecycle_warnings()
