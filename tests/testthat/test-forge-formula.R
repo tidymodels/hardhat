@@ -1,6 +1,6 @@
 context("test-forge-formula")
 
-data("hardhat_examples")
+data("hardhat-example-data")
 
 test_that("simple forge works", {
   x <- mold(fac_1 ~ num_1, example_train)

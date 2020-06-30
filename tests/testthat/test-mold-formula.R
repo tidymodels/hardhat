@@ -1,6 +1,6 @@
 context("test-mold-formulas")
 
-data("hardhat_examples")
+data("hardhat-example-data")
 
 test_that("can mold simple formulas", {
 

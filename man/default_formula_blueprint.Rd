@@ -170,7 +170,7 @@ interface standardizes all of that flexibility in one place.
 \examples{
 # ---------------------------------------------------------------------------
 
-data("hardhat_examples")
+data("hardhat-example-data")
 
 # ---------------------------------------------------------------------------
 # Formula Example
