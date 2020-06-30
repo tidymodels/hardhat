@@ -530,6 +530,98 @@ test_that("Missing y value still has outcome `terms` present", {
 })
 
 # ------------------------------------------------------------------------------
+# Factor encodings
+
+test_that("traditional encoding and no intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "traditional"
+  )
+
+  x <- mold(x ~ y + z, df, blueprint = bp)
+
+  expect_identical(
+    names(x$predictors),
+    c("ya", "yb", "yc", "zB")
+  )
+
+  expect_false(x$blueprint$intercept)
+})
+
+test_that("traditional encoding and intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "traditional"
+  )
+
+  x <- mold(x ~ y + z, df, blueprint = bp)
+
+  expect_identical(
+    names(x$predictors),
+    c("(Intercept)", "yb", "yc", "zB")
+  )
+
+  expect_true(x$blueprint$intercept)
+})
+
+test_that("one-hot encoding and no intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "one-hot"
+  )
+
+  x <- mold(x ~ y + z, df, blueprint = bp)
+
+  expect_identical(
+    names(x$predictors),
+    c("ya", "yb", "yc", "zA", "zB")
+  )
+
+  expect_false(x$blueprint$intercept)
+})
+
+test_that("one-hot encoding and intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "one-hot"
+  )
+
+  x <- mold(x ~ y + z, df, blueprint = bp)
+
+  expect_identical(
+    names(x$predictors),
+    c("(Intercept)", "ya", "yb", "yc", "zA", "zB")
+  )
+
+  expect_true(x$blueprint$intercept)
+})
+
+# ------------------------------------------------------------------------------
+# Deprecation
 
 test_that("soft-deprecation of logical `indicators`", {
   local_lifecycle_warnings()

@@ -1,7 +1,5 @@
 context("test-forge-formula")
 
-data("hardhat-example-data")
-
 test_that("simple forge works", {
   x <- mold(fac_1 ~ num_1, example_train)
   xx <- forge(example_train, x$blueprint)
@@ -712,4 +710,91 @@ test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
 
   expect_equal(nrow(outcomes), 12)
   expect_equal(ncol(outcomes), 0)
+})
+
+# ------------------------------------------------------------------------------
+# Factor encodings
+
+test_that("traditional encoding and no intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "traditional"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("ya", "yb", "yc", "zB")
+  )
+})
+
+test_that("traditional encoding and intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "traditional"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("(Intercept)", "yb", "yc", "zB")
+  )
+})
+
+test_that("one-hot encoding and no intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "one-hot"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("ya", "yb", "yc", "zA", "zB")
+  )
+})
+
+test_that("one-hot encoding and intercept", {
+  df <- data.frame(
+    x = 1:12,
+    y = factor(rep(letters[1:3], each = 4)),
+    z = factor(rep(LETTERS[1:2], 6))
+  )
+
+  bp <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "one-hot"
+  )
+
+  res <- mold(x ~ y + z, df, blueprint = bp)
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    names(x$predictors),
+    c("(Intercept)", "ya", "yb", "yc", "zA", "zB")
+  )
 })
