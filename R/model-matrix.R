@@ -126,18 +126,27 @@ validate_is_terms <- function(.x, .x_nm) {
 # ------------------------------------------------------------------------------
 
 model_matrix_one_hot <- function(terms, data) {
-  # In case the option is somehow unset
-  default_contrast <- c(unordered = "contr.treatment", ordered = "contr.poly")
+  validate_is_terms(terms)
+  data <- check_is_data_like(data)
 
-  contrasts <- getOption("contrasts", default = default_contrast)
+  # Locate unordered factors only
+  indicator_unordered_factors <- vapply(data, is_unordered_factor, logical(1))
+  n_factors <- sum(indicator_unordered_factors)
 
-  # Use custom contrast function as the default for unordered factors
-  contrasts["unordered"] <- "contr_one_hot"
+  names <- names(data)
+  names <- names[indicator_unordered_factors]
 
-  rlang::with_options(
-    model_matrix(terms = terms, data = data),
-    contrasts = contrasts
-  )
+  # Pre-assign the `contrasts<-` of each unordered factor using
+  # `contr_one_hot()` so `model.matrix()` doesn't overwrite them with the
+  # default that comes from `getOption("contrasts")`
+  for (name in names) {
+    col <- data[[name]]
+    n <- length(levels(col))
+    contrasts <- contr_one_hot(n)
+    data[[name]] <- assign_contrasts(col, n, contrasts)
+  }
+
+  model_matrix(terms, data)
 }
 
 #' Contrast function for one-hot encodings
@@ -184,4 +193,12 @@ contr_one_hot <- function(n, contrasts = TRUE, sparse = FALSE) {
   colnames(out) <- names
 
   out
+}
+
+is_unordered_factor <- function(x) {
+  inherits(x, "factor") && !inherits(x, "ordered")
+}
+
+assign_contrasts <- function(x, how_many, value) {
+  stats::`contrasts<-`(x, how_many, value)
 }
