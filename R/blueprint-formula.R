@@ -27,8 +27,8 @@ new_formula_blueprint <- function(mold,
   )
 
   validate_is_formula_or_null(formula)
-  validate_is_character(indicators)
-  validate_has_value(indicators, c("none", "traditional", "one-hot"))
+
+  indicators <- validate_indicators(indicators)
 
   new_blueprint(
     mold = mold,
@@ -61,4 +61,41 @@ validate_is_formula_blueprint <- function(blueprint) {
 
 validate_is_formula_or_null <- function(formula) {
   validate_is_or_null(formula, rlang::is_formula, "formula")
+}
+
+# ------------------------------------------------------------------------------
+
+validate_indicators <- function(indicators) {
+  indicators <- compat_indicators(indicators)
+  validate_is_character(indicators, "indicators")
+
+  n_indicators <- length(indicators)
+  if (n_indicators != 1L) {
+    glubort("`indicators` must have size 1, not {n_indicators}.")
+  }
+
+  rlang::arg_match(indicators, c("traditional", "none", "one-hot"))
+}
+
+# TODO: Deprecate in hardhat 0.1.6
+compat_indicators <- function(indicators) {
+  if (!is.logical(indicators)) {
+    return(indicators)
+  }
+
+  msg <- paste0(
+    "`indicators` now requires a character argument as of hardhat '0.1.4'.\n",
+    "This warning will become an error in hardhat '0.1.6'.\n",
+    "Update with:\n",
+    "- `indicators = TRUE`  -> `indicators = \"traditional\"`\n",
+    "- `indicators = FALSE` -> `indicators = \"none\"`\n"
+  )
+
+  signal_soft_deprecated(msg)
+
+  if (rlang::is_true(indicators)) {
+    "traditional"
+  } else {
+    "none"
+  }
 }

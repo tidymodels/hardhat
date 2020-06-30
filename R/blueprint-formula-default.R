@@ -297,18 +297,6 @@
 default_formula_blueprint <- function(intercept = FALSE,
                                       allow_novel_levels = FALSE,
                                       indicators = "traditional") {
-
-  if (is.logical(indicators)) {
-    rlang::warn(
-      "`indicators` now requires a character value. See ?default_formula_blueprint"
-      )
-    if (indicators) {
-      indicators <- "traditional"
-    } else {
-      indicators <- "none"
-    }
-  }
-
   mold <- get_mold_formula_default_function_set()
   forge <- get_forge_formula_default_function_set()
 
