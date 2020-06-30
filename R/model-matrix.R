@@ -129,6 +129,18 @@ model_matrix_one_hot <- function(terms, data) {
   validate_is_terms(terms)
   data <- check_is_data_like(data)
 
+  n_cols <- length(data)
+
+  # Convert character to factor ahead of time
+  # so we can apply the one hot contrast
+  for (i in seq_len(n_cols)) {
+    col <- data[[i]]
+
+    if (is.character(col)) {
+      data[[i]] <- factor(col)
+    }
+  }
+
   # Locate unordered factors only
   indicator_unordered_factors <- vapply(data, is_unordered_factor, logical(1))
 

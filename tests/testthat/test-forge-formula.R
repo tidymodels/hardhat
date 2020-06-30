@@ -713,6 +713,102 @@ test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
 })
 
 # ------------------------------------------------------------------------------
+# Character predictors
+
+test_that("character predictors are treated as factors when `indicators` is not 'none'", {
+  df <- data.frame(
+    y = 1:2,
+    x = c("a", "b"),
+    z = c("c", "d"),
+    stringsAsFactors = FALSE
+  )
+
+  bp1 <- default_formula_blueprint(indicators = "traditional")
+  bp2 <- default_formula_blueprint(indicators = "one-hot")
+
+  res1 <- mold(y ~ x + z, df, blueprint = bp1)
+  res2 <- mold(y ~ x + z, df, blueprint = bp2)
+
+  x1 <- forge(df, res1$blueprint)
+  x2 <- forge(df, res2$blueprint)
+
+  expect_identical(
+    colnames(x1$predictors),
+    c("xa", "xb", "zd")
+  )
+
+  expect_identical(
+    colnames(x2$predictors),
+    c("xa", "xb", "zc", "zd")
+  )
+})
+
+test_that("character predictors are left as characters when `indicators` is 'none'", {
+  df <- data.frame(
+    y = 1:2,
+    x = c("a", "b"),
+    z = c("c", "d"),
+    stringsAsFactors = FALSE
+  )
+
+  bp <- default_formula_blueprint(indicators = "none")
+
+  res <- mold(y ~ x + z, df, blueprint = bp)
+
+  x <- forge(df, res$blueprint)
+
+  expect_identical(
+    colnames(x$predictors),
+    c("x", "z")
+  )
+
+  expect_true(is.character(x$predictors$x))
+  expect_true(is.character(x$predictors$z))
+})
+
+test_that("`new_data` can be converted losslessly from factor to character", {
+  df <- data.frame(
+    y = 1:2,
+    x = c("a", "b"),
+    z = c("c", "d"),
+    stringsAsFactors = FALSE
+  )
+
+  new_df <- df
+  new_df$x <- factor(new_df$x)
+
+  bp1 <- default_formula_blueprint(indicators = "none")
+  bp2 <- default_formula_blueprint(indicators = "traditional")
+  bp3 <- default_formula_blueprint(indicators = "one-hot")
+
+  res1 <- mold(y ~ x + z, df, blueprint = bp1)
+  res2 <- mold(y ~ x + z, df, blueprint = bp2)
+  res3 <- mold(y ~ x + z, df, blueprint = bp3)
+
+  x1 <- forge(new_df, res1$blueprint)
+  x2 <- forge(new_df, res2$blueprint)
+  x3 <- forge(new_df, res3$blueprint)
+
+  expect_identical(
+    colnames(x1$predictors),
+    c("x", "z")
+  )
+
+  expect_true(is.character(x1$predictors$x))
+  expect_true(is.character(x1$predictors$z))
+
+  expect_identical(
+    colnames(x2$predictors),
+    c("xa", "xb", "zd")
+  )
+
+  expect_identical(
+    colnames(x3$predictors),
+    c("xa", "xb", "zc", "zd")
+  )
+})
+
+# ------------------------------------------------------------------------------
 # Factor encodings
 
 test_that("traditional encoding and no intercept", {
