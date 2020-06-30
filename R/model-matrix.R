@@ -141,8 +141,9 @@ model_matrix_one_hot <- function(terms, data) {
   # default that comes from `getOption("contrasts")`
   for (name in names) {
     col <- data[[name]]
-    n <- length(levels(col))
-    contrasts <- contr_one_hot(n)
+    lvls <- levels(col)
+    n <- length(lvls)
+    contrasts <- contr_one_hot(lvls)
     data[[name]] <- assign_contrasts(col, n, contrasts)
   }
 
