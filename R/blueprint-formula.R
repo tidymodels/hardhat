@@ -100,7 +100,18 @@ compat_indicators <- function(indicators) {
     "- `indicators = FALSE` -> `indicators = \"none\"`\n"
   )
 
-  signal_soft_deprecated(msg)
+  # Number of frames up to mimic being called from `default_formula_blueprint()`
+  # Not too worried about this not always being perfectly correct since it will
+  # be removed upon deprecation of logical `compat_indicators()`
+  # 1) Global
+  # 2) default_formula_blueprint
+  # 3) new_default_formula_blueprint
+  # 4) new_formula_blueprint
+  # 5) validate_indicators
+  # 6) compat_indicators
+  # From 6), look back up 5 frames
+  env <- rlang::caller_env(5)
+  signal_soft_deprecated(msg, env = env)
 
   if (rlang::is_true(indicators)) {
     "traditional"
