@@ -12,7 +12,7 @@
 #'
 #'   - `"none"` - Leave factor variables alone. No expansion is done.
 #'
-#'   - `"one-hot"` - Create dummy variables using a one-hot encoding approach
+#'   - `"one_hot"` - Create dummy variables using a one-hot encoding approach
 #'   that expands unordered factors into all `K` indicator columns, rather than
 #'   `K - 1`.
 #'
@@ -83,7 +83,7 @@ validate_indicators <- function(indicators) {
     glubort("`indicators` must have size 1, not {n_indicators}.")
   }
 
-  rlang::arg_match(indicators, c("traditional", "none", "one-hot"))
+  rlang::arg_match(indicators, c("traditional", "none", "one_hot"))
 }
 
 # TODO: Deprecate in hardhat 0.1.6
