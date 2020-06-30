@@ -5,12 +5,12 @@
 \alias{hardhat-example-data}
 \alias{example_train}
 \alias{example_test}
-\title{Examples for hardhat}
+\title{Example data for hardhat}
 \value{
 \item{example_train,example_test}{tibbles}
 }
 \description{
-Examples for hardhat
+Example data for hardhat
 }
 \details{
 Data objects for a training and test set with the same variables:

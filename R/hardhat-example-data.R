@@ -1,8 +1,7 @@
-#' Examples for hardhat
+#' Example data for hardhat
 #'
 #' @details Data objects for a training and test set with the same variables:
 #' three numeric and two factor columns.
-#'
 #'
 #' @name hardhat-example-data
 #' @aliases example_train example_test
