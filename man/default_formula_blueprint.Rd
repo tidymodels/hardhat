@@ -233,7 +233,7 @@ head(frame)
 try(mold(fac_1 ~ y + num_2, example_train))
 
 # ---------------------------------------------------------------------------
-Dummy variables and interactions
+# Dummy variables and interactions
 
 # By default, factor columns are expanded
 # and interactions are created, both by
