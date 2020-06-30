@@ -497,30 +497,21 @@ test_that("Missing y value still has outcome `terms` present", {
   )
 })
 
+test_that("soft-deprecation of logical `indicators`", {
+  local_lifecycle_warnings()
 
-test_that("soft-deprecation of `indicators`", {
-  x <- mold(num_1 ~ fac_1, example_train,
-             blueprint = default_formula_blueprint(intercept = TRUE,
-                                                   indicators = "traditional"))
   expect_warning(
-    y <- mold(num_1 ~ fac_1, example_train,
-              blueprint = default_formula_blueprint(intercept = TRUE,
-                                                    indicators = TRUE)),
-    "`indicators` now requires a character value"
+    x <- default_formula_blueprint(indicators = TRUE),
+    "`indicators` now requires"
   )
-  expect_equal(x, y)
+
+  expect_identical(x$indicators, "traditional")
 
 
-  x <- mold(num_1 ~ fac_1, example_train,
-            blueprint = default_formula_blueprint(intercept = TRUE,
-                                                  indicators = "none"))
   expect_warning(
-    y <- mold(num_1 ~ fac_1, example_train,
-              blueprint = default_formula_blueprint(intercept = TRUE,
-                                                    indicators = FALSE)),
-    "`indicators` now requires a character value"
+    x <- default_formula_blueprint(indicators = FALSE),
+    "`indicators` now requires"
   )
-  expect_equal(x, y)
 
+  expect_identical(x$indicators, "none")
 })
-
