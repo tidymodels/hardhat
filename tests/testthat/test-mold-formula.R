@@ -41,7 +41,7 @@ test_that("factor predictors with no intercept are fully expanded", {
   xx <- mold(
     num_1 ~ fac_1,
     example_train,
-    blueprint = default_formula_blueprint(intercept = FALSE, indicators = "one-hot")
+    blueprint = default_formula_blueprint(intercept = FALSE, indicators = "one_hot")
   )
 
   expect_equal(
@@ -541,7 +541,7 @@ test_that("character predictors are treated as factors when `indicators` is not 
   )
 
   bp1 <- default_formula_blueprint(indicators = "traditional")
-  bp2 <- default_formula_blueprint(indicators = "one-hot")
+  bp2 <- default_formula_blueprint(indicators = "one_hot")
 
   x1 <- mold(y ~ x + z, df, blueprint = bp1)
   x2 <- mold(y ~ x + z, df, blueprint = bp2)
@@ -637,7 +637,7 @@ test_that("one-hot encoding and no intercept", {
 
   bp <- default_formula_blueprint(
     intercept = FALSE,
-    indicators = "one-hot"
+    indicators = "one_hot"
   )
 
   x <- mold(x ~ y + z, df, blueprint = bp)
@@ -659,7 +659,7 @@ test_that("one-hot encoding and intercept", {
 
   bp <- default_formula_blueprint(
     intercept = TRUE,
-    indicators = "one-hot"
+    indicators = "one_hot"
   )
 
   x <- mold(x ~ y + z, df, blueprint = bp)

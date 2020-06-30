@@ -77,7 +77,7 @@ traditional \code{\link[=model.matrix]{model.matrix()}} infrastructure. Generall
 \code{K - 1} indicator columns for each factor, where \code{K} is the number of
 levels in that factor.
 \item \code{"none"} - Leave factor variables alone. No expansion is done.
-\item \code{"one-hot"} - Create dummy variables using a one-hot encoding approach
+\item \code{"one_hot"} - Create dummy variables using a one-hot encoding approach
 that expands unordered factors into all \code{K} indicator columns, rather than
 \code{K - 1}.
 }}

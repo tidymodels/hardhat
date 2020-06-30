@@ -30,7 +30,7 @@ traditional \code{\link[=model.matrix]{model.matrix()}} infrastructure. Generall
 \code{K - 1} indicator columns for each factor, where \code{K} is the number of
 levels in that factor.
 \item \code{"none"} - Leave factor variables alone. No expansion is done.
-\item \code{"one-hot"} - Create dummy variables using a one-hot encoding approach
+\item \code{"one_hot"} - Create dummy variables using a one-hot encoding approach
 that expands unordered factors into all \code{K} indicator columns, rather than
 \code{K - 1}.
 }}
@@ -86,7 +86,7 @@ on the result.
 \item If \code{indicators = "none"}, factors are removed before \code{model.matrix()}
 is run, and then added back afterwards. No interactions or inline
 functions involving factors are allowed.
-\item If \code{indicators = "one-hot"}, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the
+\item If \code{indicators = "one_hot"}, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the
 result using a contrast function that creates indicator columns for all
 levels of all factors.
 \item If any offsets are present from using \code{offset()}, then they are
@@ -122,7 +122,7 @@ set, it then runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the
 \item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = "none"} was set, it
 runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the result without the factor columns,
 and then adds them on afterwards.
-\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = "one-hot"} was set, it
+\item If, in the original \code{\link[=mold]{mold()}} call, \code{indicators = "one_hot"} was set, it
 runs \code{\link[stats:model.matrix]{stats::model.matrix()}} on the result with a contrast function that
 includes indicators for all levels of all factor columns.
 \item If any offsets are present from using \code{offset()} in the original call
@@ -207,11 +207,11 @@ processed$predictors
 # hypotheses.
 
 # To get all indicators for all columns (irrespective of the intercept),
-# use the `indicators = "one-hot"` option
+# use the `indicators = "one_hot"` option
 processed <- mold(
   num_1 ~ fac_1 + fac_2,
   example_train,
-  blueprint = default_formula_blueprint(indicators = "one-hot")
+  blueprint = default_formula_blueprint(indicators = "one_hot")
 )
 
 processed$predictors

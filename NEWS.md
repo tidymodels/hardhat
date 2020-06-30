@@ -3,7 +3,7 @@
 * Setting `indicators = "none"` in `default_formula_blueprint()` no longer
   accidentally expands character columns into dummy variable columns. They
   are now left completely untouched and pass through as characters. When
-  `indicators = "traditional"` or `indicators = "one-hot"`, character columns
+  `indicators = "traditional"` or `indicators = "one_hot"`, character columns
   are treated as unordered factors (#139).
 
 * The `indicators` argument of `default_formula_blueprint()` now takes character
@@ -18,7 +18,7 @@
   Logical input for `indicators` will continue to work, with a warning, until
   hardhat 0.1.6, where it will be formally deprecated.
   
-  There is also a new `indicators = "one-hot"` option which expands all factor
+  There is also a new `indicators = "one_hot"` option which expands all factor
   columns into `K` dummy variable columns corresponding to the `K` levels of
   that factor, rather than the more traditional `K - 1` expansion.
 

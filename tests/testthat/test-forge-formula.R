@@ -724,7 +724,7 @@ test_that("character predictors are treated as factors when `indicators` is not 
   )
 
   bp1 <- default_formula_blueprint(indicators = "traditional")
-  bp2 <- default_formula_blueprint(indicators = "one-hot")
+  bp2 <- default_formula_blueprint(indicators = "one_hot")
 
   res1 <- mold(y ~ x + z, df, blueprint = bp1)
   res2 <- mold(y ~ x + z, df, blueprint = bp2)
@@ -779,7 +779,7 @@ test_that("`new_data` can be converted losslessly from factor to character", {
 
   bp1 <- default_formula_blueprint(indicators = "none")
   bp2 <- default_formula_blueprint(indicators = "traditional")
-  bp3 <- default_formula_blueprint(indicators = "one-hot")
+  bp3 <- default_formula_blueprint(indicators = "one_hot")
 
   res1 <- mold(y ~ x + z, df, blueprint = bp1)
   res2 <- mold(y ~ x + z, df, blueprint = bp2)
@@ -862,7 +862,7 @@ test_that("one-hot encoding and no intercept", {
 
   bp <- default_formula_blueprint(
     intercept = FALSE,
-    indicators = "one-hot"
+    indicators = "one_hot"
   )
 
   res <- mold(x ~ y + z, df, blueprint = bp)
@@ -883,7 +883,7 @@ test_that("one-hot encoding and intercept", {
 
   bp <- default_formula_blueprint(
     intercept = TRUE,
-    indicators = "one-hot"
+    indicators = "one_hot"
   )
 
   res <- mold(x ~ y + z, df, blueprint = bp)

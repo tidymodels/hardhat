@@ -57,7 +57,7 @@
 #'    is run, and then added back afterwards. No interactions or inline
 #'    functions involving factors are allowed.
 #'
-#'    - If `indicators = "one-hot"`, it then runs [stats::model.matrix()] on the
+#'    - If `indicators = "one_hot"`, it then runs [stats::model.matrix()] on the
 #'    result using a contrast function that creates indicator columns for all
 #'    levels of all factors.
 #'
@@ -99,7 +99,7 @@
 #'    runs [stats::model.matrix()] on the result without the factor columns,
 #'    and then adds them on afterwards.
 #'
-#'    - If, in the original [mold()] call, `indicators = "one-hot"` was set, it
+#'    - If, in the original [mold()] call, `indicators = "one_hot"` was set, it
 #'    runs [stats::model.matrix()] on the result with a contrast function that
 #'    includes indicators for all levels of all factor columns.
 #'
@@ -183,11 +183,11 @@
 #' # hypotheses.
 #'
 #' # To get all indicators for all columns (irrespective of the intercept),
-#' # use the `indicators = "one-hot"` option
+#' # use the `indicators = "one_hot"` option
 #' processed <- mold(
 #'   num_1 ~ fac_1 + fac_2,
 #'   example_train,
-#'   blueprint = default_formula_blueprint(indicators = "one-hot")
+#'   blueprint = default_formula_blueprint(indicators = "one_hot")
 #' )
 #'
 #' processed$predictors
@@ -423,7 +423,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   framed <- model_frame(formula, data)
   offset <- extract_offset(framed$terms, framed$data)
 
-  if (identical(blueprint$indicators, "one-hot")) {
+  if (identical(blueprint$indicators, "one_hot")) {
     predictors <- model_matrix_one_hot(
       terms = framed$terms,
       data = framed$data
@@ -547,7 +547,7 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
 
   framed <- model_frame(terms, predictors)
 
-  if (identical(blueprint$indicators, "one-hot")) {
+  if (identical(blueprint$indicators, "one_hot")) {
     data <- model_matrix_one_hot(
       terms = framed$terms,
       data = framed$data
