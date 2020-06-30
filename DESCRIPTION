@@ -24,7 +24,7 @@ Suggests:
     testthat (>= 2.1.0),
     covr,
     knitr,
-    rmarkdown,
+    rmarkdown (>= 2.3),
     usethis,
     roxygen2,
     devtools,
@@ -37,7 +37,5 @@ Imports:
 URL: https://github.com/tidymodels/hardhat
 BugReports: https://github.com/tidymodels/hardhat/issues
 VignetteBuilder: knitr
-Remotes:
-    rstudio/rmarkdown
 Depends: 
     R (>= 2.10)
