@@ -530,6 +530,58 @@ test_that("Missing y value still has outcome `terms` present", {
 })
 
 # ------------------------------------------------------------------------------
+# Character predictors
+
+test_that("character predictors are treated as factors when `indicators` is not 'none'", {
+  df <- data.frame(
+    y = 1:2,
+    x = c("a", "b"),
+    z = c("c", "d"),
+    stringsAsFactors = FALSE
+  )
+
+  bp1 <- default_formula_blueprint(indicators = "traditional")
+  bp2 <- default_formula_blueprint(indicators = "one-hot")
+
+  x1 <- mold(y ~ x + z, df, blueprint = bp1)
+  x2 <- mold(y ~ x + z, df, blueprint = bp2)
+
+  expect_identical(
+    colnames(x1$predictors),
+    c("xa", "xb", "zd")
+  )
+
+  expect_identical(
+    colnames(x2$predictors),
+    c("xa", "xb", "zc", "zd")
+  )
+})
+
+test_that("character predictors are left as characters when `indicators` is 'none'", {
+  df <- data.frame(
+    y = 1:2,
+    x = c("a", "b"),
+    z = c("c", "d"),
+    stringsAsFactors = FALSE
+  )
+
+  bp <- default_formula_blueprint(indicators = "none")
+
+  x <- mold(y ~ x + z, df, blueprint = bp)
+
+  expect_identical(
+    colnames(x$predictors),
+    c("x", "z")
+  )
+
+  expect_true(is.character(x$predictors$x))
+  expect_true(is.character(x$predictors$z))
+
+  expect_true(is.character(x$blueprint$ptypes$predictors$x))
+  expect_true(is.character(x$blueprint$ptypes$predictors$z))
+})
+
+# ------------------------------------------------------------------------------
 # Factor encodings
 
 test_that("traditional encoding and no intercept", {

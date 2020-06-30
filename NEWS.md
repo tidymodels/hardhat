@@ -1,5 +1,11 @@
 # hardhat (development version)
 
+* Setting `indicators = "none"` in `default_formula_blueprint()` no longer
+  accidentally expands character columns into dummy variable columns. They
+  are now left completely untouched and pass through as characters. When
+  `indicators = "traditional"` or `indicators = "one-hot"`, character columns
+  are treated as unordered factors (#139).
+
 * The `indicators` argument of `default_formula_blueprint()` now takes character
   input rather than logical. To update:
   

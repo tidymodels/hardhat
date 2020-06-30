@@ -414,10 +414,10 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   ptype <- extract_ptype(original_data)
 
   if (identical(blueprint$indicators, "none")) {
-    factor_names <- extract_original_factor_names(ptype)
-    validate_no_factors_in_functions(formula, factor_names)
-    validate_no_factors_in_interactions(formula, factor_names)
-    formula <- remove_factors_from_formula(formula, factor_names)
+    factorish_names <- extract_original_factorish_names(ptype)
+    validate_no_factorish_in_functions(formula, factorish_names)
+    validate_no_factorish_in_interactions(formula, factorish_names)
+    formula <- remove_factorish_from_formula(formula, factorish_names)
   }
 
   framed <- model_frame(formula, data)
@@ -436,7 +436,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   }
 
   if (identical(blueprint$indicators, "none")) {
-    predictors <- reattach_factor_columns(predictors, data, factor_names)
+    predictors <- reattach_factorish_columns(predictors, data, factorish_names)
   }
 
   terms <- simplify_terms(framed$terms)
@@ -560,8 +560,8 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   }
 
   if (identical(blueprint$indicators, "none")) {
-    factor_names <- extract_original_factor_names(blueprint$ptypes$predictors)
-    data <- reattach_factor_columns(data, predictors, factor_names)
+    factorish_names <- extract_original_factorish_names(blueprint$ptypes$predictors)
+    data <- reattach_factorish_columns(data, predictors, factorish_names)
   }
 
   .offset <- extract_offset(framed$terms, framed$data)
@@ -701,11 +701,11 @@ flatten_embedded_columns <- function(data) {
   tibble::as_tibble(data)
 }
 
-validate_no_factors_in_functions <- function(.formula, .factor_names) {
+validate_no_factorish_in_functions <- function(.formula, .factorish_names) {
 
   .terms <- terms(.formula)
 
-  bad_original_cols <- detect_factors_in_functions(.terms, .factor_names)
+  bad_original_cols <- detect_factorish_in_functions(.terms, .factorish_names)
 
   ok <- length(bad_original_cols) == 0L
 
@@ -714,7 +714,7 @@ validate_no_factors_in_functions <- function(.formula, .factor_names) {
     bad_original_cols <- glue_quote_collapse(bad_original_cols)
 
     glubort(
-      "Functions involving factors have been detected on the ",
+      "Functions involving factors or characters have been detected on the ",
       "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
       "Functions involving factors were detected for the following columns: ",
       "{bad_original_cols}."
@@ -729,7 +729,7 @@ validate_no_factors_in_functions <- function(.formula, .factor_names) {
 # are present in an inline function
 # The row.names() of the factors matrix contains all of the
 # non-interaction expressions that are used in the formula
-detect_factors_in_functions <- function(.terms, .factor_names) {
+detect_factorish_in_functions <- function(.terms, .factorish_names) {
 
   terms_matrix <- attr(.terms, "factors")
 
@@ -740,32 +740,32 @@ detect_factors_in_functions <- function(.terms, .factor_names) {
 
   all_terms_exprs <- row.names(terms_matrix)
 
-  # Remove bare factor names
-  exprs_no_bare_factors <- all_terms_exprs[!(all_terms_exprs %in% .factor_names)]
+  # Remove bare factor / character names
+  exprs_no_bare_factors <- all_terms_exprs[!(all_terms_exprs %in% .factorish_names)]
 
   if (length(exprs_no_bare_factors) == 0L) {
     return(character(0))
   }
 
-  .factor_name_is_in_a_fn <- vapply(
-    .factor_names,
+  .factorish_name_is_in_a_fn <- vapply(
+    .factorish_names,
     function(nm) {
       any(grepl(nm, exprs_no_bare_factors))
     },
     logical(1)
   )
 
-  bad_cols <- .factor_names[.factor_name_is_in_a_fn]
+  bad_cols <- .factorish_names[.factorish_name_is_in_a_fn]
 
   bad_cols
 }
 
-validate_no_factors_in_interactions <- function(.formula, .factor_names) {
+validate_no_factorish_in_interactions <- function(.formula, .factorish_names) {
 
   # Call terms on a standard formula to generate the terms interaction matrix
   .terms <- terms(.formula)
 
-  bad_original_cols <- detect_factors_in_interactions(.terms, .factor_names)
+  bad_original_cols <- detect_factorish_in_interactions(.terms, .factorish_names)
 
   ok <- length(bad_original_cols) == 0L
 
@@ -774,7 +774,7 @@ validate_no_factors_in_interactions <- function(.formula, .factor_names) {
     bad_original_cols <- glue_quote_collapse(bad_original_cols)
 
     glubort(
-      "Interaction terms involving factors have been detected on the ",
+      "Interaction terms involving factors or characters have been detected on the ",
       "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
       "Interactions involving factors were detected for the following columns: ",
       "{bad_original_cols}."
@@ -786,9 +786,9 @@ validate_no_factors_in_interactions <- function(.formula, .factor_names) {
 }
 
 # Returns the _original_ column names
-# of any factor columns that are present
+# of any factor / character columns that are present
 # in any interaction terms (from : or * or %in% or ^)
-detect_factors_in_interactions <- function(.terms, .factor_names) {
+detect_factorish_in_interactions <- function(.terms, .factorish_names) {
 
   terms_matrix <- attr(.terms, "factors")
 
@@ -797,7 +797,7 @@ detect_factors_in_interactions <- function(.terms, .factor_names) {
     return(character(0))
   }
 
-  other_cols <- setdiff(colnames(terms_matrix), .factor_names)
+  other_cols <- setdiff(colnames(terms_matrix), .factorish_names)
 
   no_other_cols <- length(other_cols) == 0L
   if (no_other_cols) {
@@ -805,32 +805,33 @@ detect_factors_in_interactions <- function(.terms, .factor_names) {
   }
 
   # Something like Species, rather than paste0(Species)
-  bare_factor_names <- .factor_names[.factor_names %in% row.names(terms_matrix)]
+  indicator_bare_factorish <- .factorish_names %in% row.names(terms_matrix)
+  bare_factorish_names <- .factorish_names[indicator_bare_factorish]
 
   # Something like mold(~ paste0(Species), iris, indicators = "none")
-  no_bare_factors_used <- length(bare_factor_names) == 0L
-  if (no_bare_factors_used) {
+  no_bare_factorish_used <- length(bare_factorish_names) == 0L
+  if (no_bare_factorish_used) {
     return(character(0))
   }
 
-  factor_rows <- terms_matrix[bare_factor_names, , drop = FALSE]
-  factor_rows <- factor_rows[, other_cols, drop = FALSE]
+  factorish_rows <- terms_matrix[bare_factorish_names, , drop = FALSE]
+  factorish_rows <- factorish_rows[, other_cols, drop = FALSE]
 
   # In the factor matrix, only `:` is present to represent interactions,
   # even if something like * or ^ or %in% was used to generate it
-  where_interactions <- grepl(":", colnames(factor_rows))
+  where_interactions <- grepl(":", colnames(factorish_rows))
 
   none_have_interactions <- !any(where_interactions)
   if (none_have_interactions) {
     return(character(0))
   }
 
-  interaction_cols <- factor_rows[, where_interactions, drop = FALSE]
+  interaction_cols <- factorish_rows[, where_interactions, drop = FALSE]
 
-  factor_is_bad_if_gt_0 <- rowSums(interaction_cols)
-  bad_factor_vals <- factor_is_bad_if_gt_0[factor_is_bad_if_gt_0 > 0]
+  factorish_is_bad_if_gt_0 <- rowSums(interaction_cols)
+  bad_factorish_vals <- factorish_is_bad_if_gt_0[factorish_is_bad_if_gt_0 > 0]
 
-  bad_cols <- names(bad_factor_vals)
+  bad_cols <- names(bad_factorish_vals)
 
   bad_cols
 }
@@ -881,27 +882,30 @@ detect_interactions <- function(.formula) {
   bad_terms
 }
 
-extract_original_factor_names <- function(ptype) {
+extract_original_factorish_names <- function(ptype) {
+  where_factorish <- vapply(ptype, is_factorish, logical(1))
 
-  where_factor <- vapply(ptype, is.factor, logical(1))
+  original_factorish_columns <- colnames(ptype)[where_factorish]
 
-  original_factor_columns <- colnames(ptype)[where_factor]
-
-  original_factor_columns
+  original_factorish_columns
 }
 
-remove_factors_from_formula <- function(.formula, .factor_names) {
+is_factorish <- function(x) {
+  is.factor(x) || is.character(x)
+}
 
-  if (length(.factor_names) == 0L) {
+remove_factorish_from_formula <- function(.formula, .factorish_names) {
+
+  if (length(.factorish_names) == 0L) {
     return(.formula)
   }
 
-  .factor_syms <- rlang::syms(.factor_names)
+  .factorish_syms <- rlang::syms(.factorish_names)
 
   .f_rhs <- rlang::f_rhs(.formula)
 
-  for (.factor_sym in .factor_syms) {
-    .f_rhs <- rlang::expr(!! .f_rhs - !! .factor_sym)
+  for (.factorish_sym in .factorish_syms) {
+    .f_rhs <- rlang::expr(!! .f_rhs - !! .factorish_sym)
   }
 
   rlang::new_formula(
@@ -911,9 +915,9 @@ remove_factors_from_formula <- function(.formula, .factor_names) {
   )
 }
 
-reattach_factor_columns <- function(predictors, data, .factor_names) {
-  data_factor_cols <- data[, .factor_names, drop = FALSE]
-  tibble::add_column(predictors, !!! data_factor_cols)
+reattach_factorish_columns <- function(predictors, data, factorish_names) {
+  data_factorish_cols <- data[, factorish_names, drop = FALSE]
+  tibble::add_column(predictors, !!! data_factorish_cols)
 }
 
 get_predictors_formula <- function(formula) {
