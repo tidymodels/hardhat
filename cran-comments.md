@@ -14,6 +14,10 @@ We checked 3 reverse dependencies, comparing R CMD check results across CRAN and
  * We saw 0 new problems
  * We failed to check 0 packages
 
+## 0.1.4 Submission
+
+This submission tweaks the `indicators` argument of `default_formula_blueprint()` to allow for one hot encoding. It also fixes a small bug with character columns.
+
 ## 0.1.3 Submission
 
 This submission keeps hardhat up to date with vctrs 0.3.0 and fixes a few bugs
