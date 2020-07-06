@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 options(rlang__backtrace_on_error = "reminder")
 ```
 
-# hardhat
+# hardhat <a href='https://hardhat.tidymodels.org'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=master)
