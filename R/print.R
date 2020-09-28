@@ -15,6 +15,7 @@ print.hardhat_blueprint <- function(x, ...) {
   cat_line("  # Outcomes: {n_blueprint_outcomes(x)}")
   cat_line("   Intercept: {x$intercept}")
   cat_line("Novel Levels: {x$allow_novel_levels}")
+  cat_line(" Composition: {x$composition}")
   invisible(x)
 }
 

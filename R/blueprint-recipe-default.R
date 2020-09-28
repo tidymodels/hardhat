@@ -112,6 +112,7 @@
 #' @export
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
+                                     composition = "tibble",
                                      fresh = TRUE) {
 
   mold <- get_mold_recipe_default_function_set()
@@ -122,6 +123,7 @@ default_recipe_blueprint <- function(intercept = FALSE,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
+    composition = composition,
     fresh = fresh
   )
 
@@ -138,6 +140,7 @@ new_default_recipe_blueprint <- function(mold,
                                          forge,
                                          intercept = FALSE,
                                          allow_novel_levels = FALSE,
+                                         composition = "tibble",
                                          fresh = TRUE,
                                          ptypes = NULL,
                                          recipe = NULL,
@@ -150,6 +153,7 @@ new_default_recipe_blueprint <- function(mold,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
+    composition = composition,
     fresh = fresh,
     ptypes = ptypes,
     recipe = recipe,
@@ -332,6 +336,7 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data) {
 
 forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras) {
 
+  comp <- blueprint$composition
   rec <- blueprint$recipe
   roles <- rec$term_info$role
   vars <- rec$term_info$variable
@@ -354,7 +359,8 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   # predictors and outcomes both must be present
   baked_data <- recipes::bake(
     object = rec,
-    new_data = new_data
+    new_data = new_data,
+    composition = comp
   )
 
   processed_predictor_names <- vars[strict_equal(roles, "predictor")]

@@ -8,6 +8,7 @@
 default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
+  composition = "tibble",
   fresh = TRUE
 )
 
@@ -21,6 +22,9 @@ in the \code{mold} and \code{forge} function list.}
 \item{allow_novel_levels}{A logical. Should novel factor levels be allowed at
 prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
+
+\item{composition}{Either "tibble", "matrix", "data.frame", or "dgCMatrix"
+for the format of the processed data set.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}

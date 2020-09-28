@@ -26,6 +26,7 @@ new_recipe_blueprint(
   forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
+  composition = "tibble",
   fresh = TRUE,
   ptypes = NULL,
   recipe = NULL,
@@ -95,6 +96,9 @@ that expands unordered factors into all \code{K} indicator columns, rather than
 subclass this blueprint.}
 
 \item{subclass}{A character vector. The subclasses of this blueprint.}
+
+\item{composition}{Either "tibble", "matrix", "data.frame", or "dgCMatrix"
+for the format of the processed data set.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
