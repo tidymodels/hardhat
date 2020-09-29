@@ -109,6 +109,17 @@
 #'
 #' forge(test, processed_roles$blueprint)
 #'
+#' # ---------------------------------------------------------------------------
+#' # Matrix output for predictors
+#'
+#' # You can change the `composition` of the predictor data set
+#' processed <- mold(rec, train, blueprint = default_recipe_blueprint(composition = "dgCMatrix"))
+#'
+#' # The outcome is still a tibble
+#' forge(test, processed$blueprint, outcomes = TRUE)
+#'
+#'
+#'
 #' @export
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
@@ -359,12 +370,23 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   # predictors and outcomes both must be present
   baked_data <- recipes::bake(
     object = rec,
-    new_data = new_data,
-    composition = comp
+    new_data = new_data
   )
 
   processed_predictor_names <- vars[strict_equal(roles, "predictor")]
-  predictors <- baked_data[, processed_predictor_names, drop = FALSE]
+  if (comp %in% c("matrix", "dgCMatrix")) {
+
+    baked_preds <- recipes::bake(
+      object = rec,
+      new_data = new_data,
+      recipes::all_predictors(),
+      composition = comp
+    )
+    predictors <- baked_preds[, processed_predictor_names, drop = FALSE]
+
+  } else {
+    predictors <- baked_data[, processed_predictor_names, drop = FALSE]
+  }
 
   if (!is.null(outcomes)) {
     processed_outcome_names <- vars[strict_equal(roles, "outcome")]

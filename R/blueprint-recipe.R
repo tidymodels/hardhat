@@ -4,8 +4,8 @@
 #' @param fresh Should already trained operations be re-trained when `prep()` is
 #' called?
 #'
-#' @param composition Either "tibble", "matrix", "data.frame", or "dgCMatrix"
-#' for the format of the processed data set.
+#' @param composition Either "tibble", "matrix", or "dgCMatrix" for the format
+#' of the processed predictors.
 #'
 #' @rdname new-blueprint
 #' @export
@@ -13,7 +13,7 @@ new_recipe_blueprint <- function(mold,
                                  forge,
                                  intercept = FALSE,
                                  allow_novel_levels = FALSE,
-                                 composition = "tibble",
+                                 composition = c("tibble", "matrix", "dgCMatrix"),
                                  fresh = TRUE,
                                  ptypes = NULL,
                                  recipe = NULL,
@@ -32,6 +32,7 @@ new_recipe_blueprint <- function(mold,
   validate_is_recipe_or_null(recipe)
 
   validate_is_bool(fresh)
+  composition <- match.arg(composition)
 
   new_blueprint(
     mold = mold,

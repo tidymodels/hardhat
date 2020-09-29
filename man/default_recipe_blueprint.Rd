@@ -23,8 +23,8 @@ in the \code{mold} and \code{forge} function list.}
 prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
-\item{composition}{Either "tibble", "matrix", "data.frame", or "dgCMatrix"
-for the format of the processed data set.}
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
@@ -136,5 +136,16 @@ processed_roles <- mold(rec_roles, train)
 processed_roles$extras
 
 forge(test, processed_roles$blueprint)
+
+# ---------------------------------------------------------------------------
+# Matrix output for predictors
+
+# You can change the `composition` of the predictor data set
+processed <- mold(rec, train, blueprint = default_recipe_blueprint(composition = "dgCMatrix"))
+
+# The outcome is still a tibble
+forge(test, processed$blueprint, outcomes = TRUE)
+
+
 
 }

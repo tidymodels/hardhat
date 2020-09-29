@@ -92,8 +92,8 @@ subclass this blueprint.}
 
 \item{subclass}{A character vector. The subclasses of this blueprint.}
 
-\item{composition}{Either "tibble", "matrix", "data.frame", or "dgCMatrix"
-for the format of the processed data set.}
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
