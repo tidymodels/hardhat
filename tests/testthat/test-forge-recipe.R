@@ -8,7 +8,7 @@ matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
 test_that("simple forge works", {
 
-  rec <- recipe(Species ~ Sepal.Length, data = iris)
+  rec <- recipe(Species ~ Sepal.Length, data = iris) %>% step_normalize(Sepal.Length)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
   x3 <- mold(rec, iris, blueprint = matrix_bp)
@@ -60,7 +60,7 @@ test_that("simple forge works", {
 
 test_that("asking for the outcome works", {
 
-  rec <- recipe(Species ~ Sepal.Length, data = iris)
+  rec <- recipe(Species ~ Sepal.Length, data = iris) %>% step_normalize(Sepal.Length)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
   x3 <- mold(rec, iris, blueprint = matrix_bp)
@@ -463,7 +463,7 @@ test_that("an `extras` slot exists for `roles`", {
 
 test_that("only original non standard role columns are required", {
 
-  # columns created by step_bs() shouldnt be required,
+  # columns created by step_bs() shouldn't be required,
   # but are returned in `extras`
   x1 <- recipe(Species ~ ., iris) %>%
     step_bs(Sepal.Length, role = "dummy", deg_free = 3) %>%
