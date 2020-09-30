@@ -24,7 +24,7 @@
 #' @export
 add_intercept_column <- function(data, name = "(Intercept)") {
 
-  ok <- is.data.frame(data) || is.matrix(data) || inherits(data, "dgCMatrix")
+  ok <- is.data.frame(data) || is.matrix(data)
 
   if (!ok) {
     glubort(
@@ -45,7 +45,7 @@ add_intercept_column <- function(data, name = "(Intercept)") {
     return(data)
   }
 
-  if (is.matrix(data) || inherits(data, "dgCMatrix")) {
+  if (is.matrix(data)) {
 
     new_col <- matrix(
       data = 1L,
