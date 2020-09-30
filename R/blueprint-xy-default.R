@@ -117,6 +117,14 @@
 #' # This works, and returns a tibble in the $outcomes slot
 #' forge(test2, processed_vec$blueprint, outcomes = TRUE)
 #'
+#' # ---------------------------------------------------------------------------
+#' # Matrix output for predictors
+#'
+#' # You can change the `composition` of the predictor data set
+#' bp <- default_xy_blueprint(composition = "dgCMatrix")
+#' processed <- mold(train_x, train_y, blueprint = bp)
+#' class(processed$predictors)
+#'
 #' @export
 default_xy_blueprint <- function(intercept = FALSE,
                                  allow_novel_levels = FALSE,

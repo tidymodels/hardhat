@@ -113,12 +113,9 @@
 #' # Matrix output for predictors
 #'
 #' # You can change the `composition` of the predictor data set
-#' processed <- mold(rec, train, blueprint = default_recipe_blueprint(composition = "dgCMatrix"))
-#'
-#' # The outcome is still a tibble
-#' forge(test, processed$blueprint, outcomes = TRUE)
-#'
-#'
+#' bp <- default_recipe_blueprint(composition = "dgCMatrix")
+#' processed <- mold(rec, train, blueprint = bp)
+#' class(processed$predictors)
 #'
 #' @export
 default_recipe_blueprint <- function(intercept = FALSE,

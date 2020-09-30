@@ -293,6 +293,15 @@
 #'   example_train,
 #'   blueprint = default_formula_blueprint(intercept = TRUE)
 #' )
+#'
+#' # ---------------------------------------------------------------------------
+#' # Matrix output for predictors
+#'
+#' # You can change the `composition` of the predictor data set
+#' bp <- default_formula_blueprint(composition = "dgCMatrix")
+#' processed <- mold(log(num_1) ~ num_2 + fac_1, example_train, blueprint = bp)
+#' class(processed$predictors)
+#'
 #' @export
 default_formula_blueprint <- function(intercept = FALSE,
                                       allow_novel_levels = FALSE,
