@@ -4,4 +4,3 @@ XY blueprint:
   # Outcomes: 1 
    Intercept: FALSE 
 Novel Levels: FALSE 
- 
