@@ -2,44 +2,93 @@ context("test-forge-xy")
 
 test_that("simple forge works", {
 
-  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-  xx <- forge(iris, x$blueprint)
+  sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_xy_blueprint(composition = "matrix")
 
-  expect_equal(
-    colnames(xx$predictors),
-    "Sepal.Length"
-  )
+  x1 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  x2 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = sparse_bp)
+  x3 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = matrix_bp)
+  xx1 <- forge(iris, x1$blueprint)
+  xx2 <- forge(iris, x2$blueprint)
+  xx3 <- forge(iris, x3$blueprint)
 
-  expect_equal(
-    xx$outcomes,
-    NULL
-  )
+  expect_is(xx1$predictors, "tbl_df")
+  expect_is(xx2$predictors, "dgCMatrix")
+  expect_is(xx3$predictors, "matrix")
+
+  expect_equal(colnames(xx1$predictors), "Sepal.Length")
+  expect_equal(colnames(xx2$predictors), "Sepal.Length")
+  expect_equal(colnames(xx3$predictors), "Sepal.Length")
+
+  expect_equal(xx1$outcomes, NULL)
+  expect_equal(xx2$outcomes, NULL)
+  expect_equal(xx3$outcomes, NULL)
 })
 
 test_that("asking for the outcome works", {
-  x <- mold(
+
+  sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_xy_blueprint(composition = "matrix")
+
+  x1 <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris[, "Species", drop = FALSE]
   )
+  x2 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris[, "Species", drop = FALSE],
+    blueprint = sparse_bp
+  )
+  x3 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris[, "Species", drop = FALSE],
+    blueprint = matrix_bp
+  )
 
-  xx <- forge(iris, x$blueprint, outcomes = TRUE)
+  xx1 <- forge(iris, x1$blueprint, outcomes = TRUE)
+  xx2 <- forge(iris, x2$blueprint, outcomes = TRUE)
+  xx3 <- forge(iris, x3$blueprint, outcomes = TRUE)
 
   expect_equal(
-    xx$outcomes,
+    xx1$outcomes,
     tibble::tibble(Species = iris$Species)
   )
+  expect_equal(xx1$outcomes, xx3$outcomes)
+  expect_equal(xx1$outcomes, xx3$outcomes)
+
 
 })
 
 test_that("asking for the outcome is special cased for vector `y` values", {
 
-  x <- mold(
+  sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_xy_blueprint(composition = "matrix")
+
+  x1 <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris$Species
   )
+  x2 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = sparse_bp
+  )
+  x3 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = matrix_bp
+  )
 
   expect_equal(
-    colnames(x$blueprint$ptypes$outcomes),
+    colnames(x1$blueprint$ptypes$outcomes),
+    ".outcome"
+  )
+  expect_equal(
+    colnames(x2$blueprint$ptypes$outcomes),
+    ".outcome"
+  )
+  expect_equal(
+    colnames(x3$blueprint$ptypes$outcomes),
     ".outcome"
   )
 
@@ -47,22 +96,34 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   iris2$.outcome <- iris2$Species
   iris2$Species <- NULL
 
-  xx <- forge(iris2, x$blueprint, outcomes = TRUE)
+  xx1 <- forge(iris2, x1$blueprint, outcomes = TRUE)
+  xx2 <- forge(iris2, x2$blueprint, outcomes = TRUE)
+  xx3 <- forge(iris2, x3$blueprint, outcomes = TRUE)
 
   expect_equal(
-    xx$outcomes,
+    xx1$outcomes,
     tibble::tibble(.outcome = iris2$.outcome)
   )
+  expect_equal(xx1$outcomes, xx3$outcomes)
+  expect_equal(xx1$outcomes, xx3$outcomes)
 
   # standard message
   expect_error(
-    forge(iris, x$blueprint, outcomes = TRUE),
+    forge(iris, x1$blueprint, outcomes = TRUE),
+    "The following required columns"
+  )
+  expect_error(
+    forge(iris, x2$blueprint, outcomes = TRUE),
     "The following required columns"
   )
 
   # but also more detail
   expect_error(
-    forge(iris, x$blueprint, outcomes = TRUE),
+    forge(iris, x1$blueprint, outcomes = TRUE),
+    "`new_data` must include a column with the automatically generated name, '.outcome'"
+  )
+  expect_error(
+    forge(iris, x3$blueprint, outcomes = TRUE),
     "`new_data` must include a column with the automatically generated name, '.outcome'"
   )
 
@@ -89,25 +150,51 @@ test_that("new_data can be a matrix", {
 })
 
 test_that("new_data can only be a data frame / matrix", {
-  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_xy_blueprint(composition = "matrix")
+
+  x1 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  x2 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = sparse_bp)
+  x3 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = matrix_bp)
 
   expect_error(
-    forge("hi", x$blueprint),
+    forge("hi", x1$blueprint),
+    "The class of `new_data`, 'character'"
+  )
+  expect_error(
+    forge("hi", x2$blueprint),
+    "The class of `new_data`, 'character'"
+  )
+  expect_error(
+    forge("hi", x3$blueprint),
     "The class of `new_data`, 'character'"
   )
 
 })
 
 test_that("missing predictor columns fail appropriately", {
-  x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+  bp <- default_xy_blueprint(composition = "dgCMatrix")
+  x1 <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+  x2 <- mold(
+    iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE],
+    iris$Species,
+    blueprint = bp)
 
   expect_error(
-    forge(iris[,1, drop = FALSE], x$blueprint),
+    forge(iris[,1, drop = FALSE], x1$blueprint),
+    "Sepal.Width"
+  )
+  expect_error(
+    forge(iris[,1, drop = FALSE], x2$blueprint),
     "Sepal.Width"
   )
 
   expect_error(
-    forge(iris[,3, drop = FALSE], x$blueprint),
+    forge(iris[,3, drop = FALSE], x1$blueprint),
+    "'Sepal.Length', 'Sepal.Width'"
+  )
+  expect_error(
+    forge(iris[,3, drop = FALSE], x2$blueprint),
     "'Sepal.Length', 'Sepal.Width'"
   )
 
@@ -205,18 +292,32 @@ test_that("novel outcome levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- mold(
+  bp <- default_xy_blueprint(composition = "dgCMatrix")
+  x1 <- mold(
     x = dat[, "y", drop = FALSE],
     y = dat[, "f", drop = FALSE]
   )
+  x2 <- mold(
+    x = dat[, "y", drop = FALSE],
+    y = dat[, "f", drop = FALSE],
+    blueprint = bp
+  )
 
   expect_warning(
-    xx <- forge(new, x$blueprint, outcomes = TRUE),
+    xx1 <- forge(new, x1$blueprint, outcomes = TRUE),
+    "Novel levels found in column 'f': 'e'"
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint, outcomes = TRUE),
     "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
-    xx$outcomes[[5,1]],
+    xx1$outcomes[[5,1]],
+    factor(NA_real_, c("a", "b", "c", "d"))
+  )
+  expect_equal(
+    xx2$outcomes[[5,1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
 
@@ -224,15 +325,32 @@ test_that("novel outcome levels are caught", {
 
 test_that("original predictor and outcome classes are recorded", {
 
-  x <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+  bp <- default_xy_blueprint(composition = "dgCMatrix")
+  x1 <- mold(
+    iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE],
+    iris$Species
+  )
+  x2 <- mold(
+    iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE],
+    iris$Species,
+    blueprint = bp
+  )
 
   expect_equal(
-    get_data_classes(x$blueprint$ptypes$predictors),
+    get_data_classes(x1$blueprint$ptypes$predictors),
+    list(Sepal.Length = "numeric", Sepal.Width = "numeric")
+  )
+  expect_equal(
+    get_data_classes(x2$blueprint$ptypes$predictors),
     list(Sepal.Length = "numeric", Sepal.Width = "numeric")
   )
 
   expect_equal(
-    get_data_classes(x$blueprint$ptypes$outcomes),
+    get_data_classes(x1$blueprint$ptypes$outcomes),
+    list(.outcome = "factor")
+  )
+  expect_equal(
+    get_data_classes(x2$blueprint$ptypes$outcomes),
     list(.outcome = "factor")
   )
 
@@ -279,10 +397,23 @@ test_that("new data classes can interchange integer/numeric", {
   iris2 <- iris
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
 
-  x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
+  bp <- default_xy_blueprint(composition = "dgCMatrix")
+  x1 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species
+  )
+  x2 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = bp
+  )
 
   expect_error(
-    forge(iris2, x$blueprint),
+    forge(iris2, x1$blueprint),
+    NA
+  )
+  expect_error(
+    forge(iris2, x2$blueprint),
     NA
   )
 
@@ -290,35 +421,51 @@ test_that("new data classes can interchange integer/numeric", {
 
 test_that("intercept is not included as a predictor", {
 
-  x <- mold(
+  x1 <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris[, "Species", drop = FALSE],
     blueprint = default_xy_blueprint(intercept = TRUE)
   )
+  x2 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris[, "Species", drop = FALSE],
+    blueprint = default_xy_blueprint(intercept = TRUE, composition = "matrix")
+  )
 
   expect_false(
-    "(Intercept)" %in% colnames(x$blueprint$ptypes$predictors)
+    "(Intercept)" %in% colnames(x1$blueprint$ptypes$predictors)
+  )
+  expect_false(
+    "(Intercept)" %in% colnames(x2$blueprint$ptypes$predictors)
   )
 
   expect_error(
-    xx <- forge(iris, x$blueprint),
+    xx1 <- forge(iris, x1$blueprint),
+    NA
+  )
+  expect_error(
+    xx2 <- forge(iris, x2$blueprint),
     NA
   )
 
   expect_equal(
-    colnames(xx$predictors),
+    colnames(xx1$predictors),
+    c("(Intercept)", "Sepal.Length")
+  )
+  expect_equal(
+    colnames(xx2$predictors),
     c("(Intercept)", "Sepal.Length")
   )
 
   # again, with matrices
-  xx <- mold(
+  y <- mold(
     as.matrix(iris[, "Sepal.Length", drop = FALSE]),
     iris$Sepal.Width,
     blueprint = default_xy_blueprint(intercept = TRUE)
   )
 
   expect_false(
-    "(Intercept)" %in% colnames(xx$blueprint$ptypes$predictors)
+    "(Intercept)" %in% colnames(y$blueprint$ptypes$predictors)
   )
 
 })
