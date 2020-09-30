@@ -233,7 +233,9 @@ mold_recipe_default_process_predictors <- function(blueprint, data) {
 
   all_predictors <- recipes::all_predictors
 
-  predictors <- recipes::juice(blueprint$recipe, all_predictors())
+  comp <- blueprint$composition
+
+  predictors <- recipes::juice(blueprint$recipe, all_predictors(), composition = comp)
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
