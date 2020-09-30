@@ -15,7 +15,6 @@ print.hardhat_blueprint <- function(x, ...) {
   cat_line("  # Outcomes: {n_blueprint_outcomes(x)}")
   cat_line("   Intercept: {x$intercept}")
   cat_line("Novel Levels: {x$allow_novel_levels}")
-  cat_line(" Composition: {x$composition}")
   invisible(x)
 }
 
@@ -23,6 +22,13 @@ print.hardhat_blueprint <- function(x, ...) {
 print.formula_blueprint <- function(x, ...) {
   NextMethod()
   cat_line("  Indicators: {x$indicators}")
+  invisible(x)
+}
+
+#' @export
+print.recipe_blueprint <- function(x, ...) {
+  NextMethod()
+  cat_line(" Composition: {x$composition}")
   invisible(x)
 }
 
