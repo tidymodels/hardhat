@@ -123,8 +123,8 @@
 #' @export
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
-                                     composition = "tibble",
-                                     fresh = TRUE) {
+                                     fresh = TRUE,
+                                     composition = "tibble") {
 
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
@@ -134,8 +134,8 @@ default_recipe_blueprint <- function(intercept = FALSE,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
-    composition = composition,
-    fresh = fresh
+    fresh = fresh,
+    composition = composition
   )
 
 }
@@ -151,8 +151,8 @@ new_default_recipe_blueprint <- function(mold,
                                          forge,
                                          intercept = FALSE,
                                          allow_novel_levels = FALSE,
-                                         composition = "tibble",
                                          fresh = TRUE,
+                                         composition = "tibble",
                                          ptypes = NULL,
                                          recipe = NULL,
                                          extra_role_ptypes = NULL,
@@ -164,8 +164,8 @@ new_default_recipe_blueprint <- function(mold,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
-    composition = composition,
     fresh = fresh,
+    composition = composition,
     ptypes = ptypes,
     recipe = recipe,
     extra_role_ptypes = extra_role_ptypes,

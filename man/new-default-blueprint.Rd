@@ -26,8 +26,8 @@ new_default_recipe_blueprint(
   forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  composition = "tibble",
   fresh = TRUE,
+  composition = "tibble",
   ptypes = NULL,
   recipe = NULL,
   extra_role_ptypes = NULL,
@@ -92,11 +92,11 @@ subclass this blueprint.}
 
 \item{subclass}{A character vector. The subclasses of this blueprint.}
 
-\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
-of the processed predictors.}
-
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors.}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}

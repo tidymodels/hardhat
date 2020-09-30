@@ -8,8 +8,8 @@
 default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  composition = "tibble",
-  fresh = TRUE
+  fresh = TRUE,
+  composition = "tibble"
 )
 
 \method{mold}{recipe}(x, data, ..., blueprint = NULL)
@@ -23,11 +23,11 @@ in the \code{mold} and \code{forge} function list.}
 prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
-\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
-of the processed predictors.}
-
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors.}
 
 \item{x}{An unprepped recipe created from \code{\link[recipes:recipe]{recipes::recipe()}}.}
 
