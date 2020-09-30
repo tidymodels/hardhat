@@ -296,7 +296,8 @@
 #' @export
 default_formula_blueprint <- function(intercept = FALSE,
                                       allow_novel_levels = FALSE,
-                                      indicators = "traditional") {
+                                      indicators = "traditional",
+                                      composition = "tibble") {
   mold <- get_mold_formula_default_function_set()
   forge <- get_forge_formula_default_function_set()
 
@@ -305,7 +306,8 @@ default_formula_blueprint <- function(intercept = FALSE,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
-    indicators = indicators
+    indicators = indicators,
+    composition = composition
   )
 
 }
@@ -323,6 +325,7 @@ new_default_formula_blueprint <- function(mold,
                                           ptypes = NULL,
                                           formula = NULL,
                                           indicators = "traditional",
+                                          composition = "tibble",
                                           terms = list(
                                             predictors = NULL,
                                             outcomes = NULL
@@ -340,6 +343,7 @@ new_default_formula_blueprint <- function(mold,
     ptypes = ptypes,
     formula = formula,
     indicators = indicators,
+    composition = composition,
     terms = terms,
     ...,
     subclass = c(subclass, "default_formula_blueprint")
@@ -440,6 +444,8 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   }
 
   terms <- simplify_terms(framed$terms)
+
+  predictors <- recompose(predictors, blueprint$composition)
 
   blueprint_terms <- blueprint$terms
   blueprint_terms$predictors <- terms
@@ -563,6 +569,8 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
     factorish_names <- extract_original_factorish_names(blueprint$ptypes$predictors)
     data <- reattach_factorish_columns(data, predictors, factorish_names)
   }
+
+  data <- recompose(data, blueprint$composition)
 
   .offset <- extract_offset(framed$terms, framed$data)
 

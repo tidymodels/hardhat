@@ -25,6 +25,7 @@ new_formula_blueprint <- function(mold,
                                   ptypes = NULL,
                                   formula = NULL,
                                   indicators = "traditional",
+                                  composition = "tibble",
                                   ...,
                                   subclass = character()) {
 
@@ -47,6 +48,7 @@ new_formula_blueprint <- function(mold,
     ptypes = ptypes,
     formula = formula,
     indicators = indicators,
+    composition = composition,
     ...,
     subclass = c(subclass, "formula_blueprint")
   )

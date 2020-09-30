@@ -233,11 +233,11 @@ mold_recipe_default_process_predictors <- function(blueprint, data) {
 
   all_predictors <- recipes::all_predictors
 
-  comp <- blueprint$composition
-
-  predictors <- recipes::juice(blueprint$recipe, all_predictors(), composition = comp)
+  predictors <- recipes::juice(blueprint$recipe, all_predictors())
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+
+  predictors <- recompose(predictors, blueprint$composition)
 
   ptype <- get_original_predictor_ptype(blueprint$recipe, data)
 
@@ -349,7 +349,6 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data) {
 
 forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras) {
 
-  comp <- blueprint$composition
   rec <- blueprint$recipe
   roles <- rec$term_info$role
   vars <- rec$term_info$variable
@@ -362,41 +361,25 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
     !!! unname(extras$roles),
     .name_repair = "minimal"
   )
+
   new_data_names <- names(new_data)
   unique_names <- unique(new_data_names)
+
   new_data <- new_data[, unique_names, drop = FALSE]
 
+  # Can't move this inside core functions
+  # predictors and outcomes both must be present
+  baked_data <- recipes::bake(
+    object = rec,
+    new_data = new_data
+  )
+
   processed_predictor_names <- vars[strict_equal(roles, "predictor")]
-  processed_outcome_names   <- vars[strict_equal(roles, "outcome")]
-  processed_not_outcomes    <- vars[!strict_equal(roles, "outcome")]
+  predictors <- baked_data[, processed_predictor_names, drop = FALSE]
 
-  if (comp %in% c("matrix", "dgCMatrix")) {
-
-    baked_data <- recipes::bake(
-      object = rec,
-      new_data = new_data,
-      !!! processed_not_outcomes,
-      composition = comp
-    )
-    predictors <- baked_data[, processed_predictor_names, drop = FALSE]
-    if (!is.null(outcomes) & !is_empty(processed_outcome_names)) {
-      outcomes <- recipes::bake(
-        object = rec,
-        new_data = new_data,
-        !!! processed_outcome_names
-      )
-    }
-
-  } else {
-
-    baked_data <- recipes::bake(
-      object = rec,
-      new_data = new_data
-    )
-    predictors <- baked_data[, processed_predictor_names, drop = FALSE]
-    if (!is.null(outcomes)) {
-      outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
-    }
+  if (!is.null(outcomes)) {
+    processed_outcome_names <- vars[strict_equal(roles, "outcome")]
+    outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
   }
 
   processed <- forge_recipe_default_process_predictors(
@@ -429,6 +412,8 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 forge_recipe_default_process_predictors <- function(blueprint, predictors) {
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+
+  predictors <- recompose(predictors, blueprint$composition)
 
   predictors_lst <- out$forge$process_terms_lst(data = predictors)
 

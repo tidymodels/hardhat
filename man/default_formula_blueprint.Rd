@@ -8,7 +8,8 @@
 default_formula_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  indicators = "traditional"
+  indicators = "traditional",
+  composition = "tibble"
 )
 
 \method{mold}{formula}(formula, data, ..., blueprint = NULL)
@@ -34,6 +35,9 @@ levels in that factor.
 that expands unordered factors into all \code{K} indicator columns, rather than
 \code{K - 1}.
 }}
+
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors.}
 
 \item{formula}{A formula specifying the predictors and the outcomes.}
 

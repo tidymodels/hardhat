@@ -4,9 +4,6 @@
 #' @param fresh Should already trained operations be re-trained when `prep()` is
 #' called?
 #'
-#' @param composition Either "tibble", "matrix", or "dgCMatrix" for the format
-#' of the processed predictors.
-#'
 #' @rdname new-blueprint
 #' @export
 new_recipe_blueprint <- function(mold,
@@ -30,7 +27,6 @@ new_recipe_blueprint <- function(mold,
   )
 
   validate_is_bool(fresh)
-  validate_composition(composition)
 
   validate_is_recipe_or_null(recipe)
 
@@ -70,12 +66,4 @@ is_recipe <- function(x) {
 
 validate_is_recipe_or_null <- function(recipe) {
   validate_is_or_null(recipe, is_recipe, "recipe")
-}
-
-validate_composition <- function(composition) {
-  rlang::arg_match0(
-    arg = composition,
-    values = c("tibble", "matrix", "dgCMatrix"),
-    arg_nm = "composition"
-  )
 }

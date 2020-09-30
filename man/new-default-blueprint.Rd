@@ -16,6 +16,7 @@ new_default_formula_blueprint(
   ptypes = NULL,
   formula = NULL,
   indicators = "traditional",
+  composition = "tibble",
   terms = list(predictors = NULL, outcomes = NULL),
   ...,
   subclass = character()
@@ -40,6 +41,7 @@ new_default_xy_blueprint(
   forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
+  composition = "tibble",
   ptypes = NULL,
   ...,
   subclass = character()
@@ -83,6 +85,9 @@ that expands unordered factors into all \code{K} indicator columns, rather than
 \code{K - 1}.
 }}
 
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors.}
+
 \item{terms}{A named list of two elements, \code{predictors} and \code{outcomes}. Both
 elements are \code{terms} objects that describe the terms for the outcomes and
 predictors separately. This argument is set automatically at \code{\link[=mold]{mold()}} time.}
@@ -94,9 +99,6 @@ subclass this blueprint.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
-
-\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
-of the processed predictors.}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
