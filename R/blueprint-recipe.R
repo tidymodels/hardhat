@@ -14,7 +14,7 @@ new_recipe_blueprint <- function(mold,
                                  intercept = FALSE,
                                  allow_novel_levels = FALSE,
                                  fresh = TRUE,
-                                 composition = c("tibble", "matrix", "dgCMatrix"),
+                                 composition = "tibble",
                                  ptypes = NULL,
                                  recipe = NULL,
                                  ...,
@@ -29,10 +29,10 @@ new_recipe_blueprint <- function(mold,
     required_process_args = c("blueprint", "data")
   )
 
-  validate_is_recipe_or_null(recipe)
-
   validate_is_bool(fresh)
-  composition <- match.arg(composition)
+  validate_composition(composition)
+
+  validate_is_recipe_or_null(recipe)
 
   new_blueprint(
     mold = mold,
@@ -70,4 +70,12 @@ is_recipe <- function(x) {
 
 validate_is_recipe_or_null <- function(recipe) {
   validate_is_or_null(recipe, is_recipe, "recipe")
+}
+
+validate_composition <- function(composition) {
+  rlang::arg_match0(
+    arg = composition,
+    values = c("tibble", "matrix", "dgCMatrix"),
+    arg_nm = "composition"
+  )
 }

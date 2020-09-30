@@ -27,7 +27,7 @@ new_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
-  composition = c("tibble", "matrix", "dgCMatrix"),
+  composition = "tibble",
   ptypes = NULL,
   recipe = NULL,
   ...,
