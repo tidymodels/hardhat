@@ -2,11 +2,10 @@ context("test-forge-recipe")
 
 library(recipes)
 
-sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
-matrix_bp <- default_recipe_blueprint(composition = "matrix")
-
-
 test_that("simple forge works", {
+
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
   rec <- recipe(Species ~ Sepal.Length, data = iris) %>% step_normalize(Sepal.Length)
   x1 <- mold(rec, iris)
@@ -60,6 +59,9 @@ test_that("simple forge works", {
 
 test_that("asking for the outcome works", {
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_recipe_blueprint(composition = "matrix")
+
   rec <- recipe(Species ~ Sepal.Length, data = iris) %>% step_normalize(Sepal.Length)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -85,6 +87,7 @@ test_that("asking for the outcome works", {
 
 test_that("asking for the outcome when it isn't there fails", {
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipe(Species ~ Sepal.Length, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -106,6 +109,7 @@ test_that("asking for the outcome when it isn't there fails", {
 
 test_that("outcomes steps get processed", {
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipe(Sepal.Width ~ Sepal.Length, data = iris) %>%
     step_log(Sepal.Width)
 
@@ -146,6 +150,8 @@ test_that("missing predictor columns fail appropriately", {
 })
 
 test_that("novel predictor levels are caught", {
+
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   dat <- data.frame(
     y = 1:4,
@@ -197,10 +203,11 @@ test_that("novel predictor levels can be ignored and handled by recipes", {
 
   rec1 <- recipe(y ~ f, dat)
   rec2 <- step_novel(rec1, f)
+  rec3 <- step_dummy(rec2, f)
 
   x1 <- mold(rec1, dat, blueprint = bp1)
   x2 <- mold(rec2, dat, blueprint = bp1)
-  x3 <- mold(step_dummy(rec2, f), dat, blueprint = bp2)
+  x3 <- mold(rec3, dat, blueprint = bp2)
 
   # Recipes will silently handle the novel level
   expect_warning(
@@ -236,6 +243,8 @@ test_that("novel predictor levels can be ignored and handled by recipes", {
 })
 
 test_that("novel predictor levels without any data are silently removed", {
+
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   dat <- data.frame(
     y = 1:4,
@@ -276,6 +285,8 @@ test_that("novel predictor levels without any data are silently removed", {
 
 test_that("novel outcome levels are caught", {
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
+
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -313,6 +324,8 @@ test_that("novel outcome levels are caught", {
 })
 
 test_that("original predictor and outcome classes / names are recorded", {
+
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   rec <- recipe(Sepal.Length ~ Species, data = iris) %>%
     step_dummy(Species)
@@ -360,6 +373,7 @@ test_that("original predictor and outcome classes / names are recorded", {
 
 test_that("new data classes are caught", {
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
   rec <- recipe(Sepal.Length ~ Species, iris)
@@ -411,6 +425,7 @@ test_that("new data classes are caught", {
 
 test_that("new data classes can interchange integer/numeric", {
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   iris2 <- iris
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
 
@@ -443,6 +458,7 @@ test_that("new data classes can interchange integer/numeric", {
 
 test_that("an `extras` slot exists for `roles`", {
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipe(Species ~ Sepal.Length, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -479,6 +495,8 @@ test_that("only original non standard role columns are required", {
     paste("Sepal.Length", c("1", "2", "3"), sep = "_bs_")
   )
 
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
+
   x2 <- recipe(Species ~ ., iris) %>%
     step_bs(Sepal.Length, role = "dummy", deg_free = 3) %>%
     mold(iris, blueprint = sparse_bp)
@@ -496,6 +514,7 @@ test_that("only original non standard role columns are required", {
 })
 
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipe(~ Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -504,6 +523,7 @@ test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
 })
 
 test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipe(~ Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -518,6 +538,7 @@ test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
 })
 
 test_that("Predictors with multiple roles are only included once before baking (#120)", {
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipe(Species ~ ., iris) # Implicit "predictor" role too
   rec <- add_role(rec, Sepal.Length, new_role = "test1")
   rec <- add_role(rec, Sepal.Length, new_role = "test2")
