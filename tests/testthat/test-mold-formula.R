@@ -2,55 +2,101 @@ context("test-mold-formulas")
 
 test_that("can mold simple formulas", {
 
-  x <- mold(fac_1 ~ num_1, example_train)
+  sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_formula_blueprint(composition = "matrix")
 
-  expect_equal(colnames(x$predictors), "num_1")
-  expect_is(x$outcomes, "tbl_df")
-  expect_equal(colnames(x$outcomes), "fac_1")
-  expect_is(x$blueprint, "default_formula_blueprint")
+  x1 <- mold(fac_1 ~ num_1, example_train)
+  x2 <- mold(fac_1 ~ num_1, example_train, blueprint = sparse_bp)
+  x3 <- mold(fac_1 ~ num_1, example_train, blueprint = matrix_bp)
+
+  expect_is(x1$predictors, "tbl_df")
+  expect_is(x2$predictors, "dgCMatrix")
+  expect_is(x3$predictors, "matrix")
+
+  expect_equal(colnames(x1$predictors), "num_1")
+  expect_equal(colnames(x2$predictors), "num_1")
+  expect_equal(colnames(x3$predictors), "num_1")
+  expect_is(x1$outcomes, "tbl_df")
+  expect_is(x2$outcomes, "tbl_df")
+  expect_is(x3$outcomes, "tbl_df")
+  expect_equal(colnames(x1$outcomes), "fac_1")
+  expect_equal(x1$outcomes, x2$outcomes)
+  expect_equal(x1$outcomes, x3$outcomes)
+  expect_is(x1$blueprint, "default_formula_blueprint")
 })
 
 test_that("can mold multivariate formulas", {
 
-  x <- mold(num_1 + num_2 ~ num_3, example_train)
+  sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_formula_blueprint(composition = "matrix")
 
-  expect_is(x$outcomes, "tbl_df")
-  expect_equal(colnames(x$outcomes), c("num_1", "num_2"))
+  x1 <- mold(num_1 + num_2 ~ num_3, example_train)
+  x2 <- mold(num_1 + num_2 ~ num_3, example_train, blueprint = sparse_bp)
+  x3 <- mold(num_1 + num_2 ~ num_3, example_train, blueprint = matrix_bp)
 
-  xx <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train)
+  expect_is(x1$outcomes, "tbl_df")
+  expect_equal(colnames(x1$outcomes), c("num_1", "num_2"))
+  expect_equal(x1$outcomes, x2$outcomes)
+  expect_equal(x1$outcomes, x3$outcomes)
+
+  y1 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train)
+  y2 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = sparse_bp)
+  y3 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = matrix_bp)
 
   expect_equal(
-    colnames(xx$outcomes),
+    colnames(y1$outcomes),
     c(
       "log(num_2)",
       "poly(num_2, degree = 2).1",
       "poly(num_2, degree = 2).2"
     )
   )
+  expect_equal(y1$outcomes, y2$outcomes)
+  expect_equal(y1$outcomes, y3$outcomes)
 
 })
 
 test_that("factor predictors with no intercept are fully expanded", {
 
-  x  <- mold(
+  x1  <- mold(
     num_1 ~ fac_1,
     example_train,
     blueprint = default_formula_blueprint(intercept = TRUE)
   )
+  x2  <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(intercept = TRUE, composition = "matrix")
+  )
 
-  xx <- mold(
+  y1 <- mold(
     num_1 ~ fac_1,
     example_train,
     blueprint = default_formula_blueprint(intercept = FALSE, indicators = "one_hot")
   )
+  y2 <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(intercept = FALSE,
+                                          indicators = "one_hot",
+                                          composition = "matrix")
+  )
 
   expect_equal(
-    colnames(x$predictors),
+    colnames(x1$predictors),
+    c("(Intercept)", "fac_1b", "fac_1c")
+  )
+  expect_equal(
+    colnames(x2$predictors),
     c("(Intercept)", "fac_1b", "fac_1c")
   )
 
   expect_equal(
-    colnames(xx$predictors),
+    colnames(y1$predictors),
+    c("fac_1a", "fac_1b", "fac_1c")
+  )
+  expect_equal(
+    colnames(y2$predictors),
     c("fac_1a", "fac_1b", "fac_1c")
   )
 
@@ -189,43 +235,71 @@ test_that("`indicators = 'none'` works fine in strange formulas", {
 
 test_that("formula intercepts can be added", {
 
-  x <- mold(
+  x1 <- mold(
     fac_1 ~ num_1,
     example_train,
     blueprint = default_formula_blueprint(intercept = TRUE)
   )
+  x2 <- mold(
+    fac_1 ~ num_1,
+    example_train,
+    blueprint = default_formula_blueprint(intercept = TRUE, composition = "dgCMatrix")
+  )
 
-  expect_true("(Intercept)" %in% colnames(x$predictors))
-  expect_equal(attr(x$blueprint$terms$predictors, "intercept"), 1)
+  expect_true("(Intercept)" %in% colnames(x1$predictors))
+  expect_true("(Intercept)" %in% colnames(x2$predictors))
+  expect_equal(attr(x1$blueprint$terms$predictors, "intercept"), 1)
+  expect_equal(attr(x2$blueprint$terms$predictors, "intercept"), 1)
 
   # Don't want intercept in original predictors
-  expect_false("(Intercept)" %in% colnames(x$blueprint$ptypes$predictors))
+  expect_false("(Intercept)" %in% colnames(x1$blueprint$ptypes$predictors))
+  expect_false("(Intercept)" %in% colnames(x2$blueprint$ptypes$predictors))
 })
 
 test_that("can mold formulas with special terms", {
 
-  x <- mold(fac_1 ~ num_1:num_2 + I(num_1^2), example_train)
-  y <- mold(fac_1 ~ poly(num_1, degree = 2), example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(fac_1 ~ num_1:num_2 + I(num_1^2), example_train)
+  x2 <- mold(fac_1 ~ num_1:num_2 + I(num_1^2), example_train, blueprint = bp)
+  y1 <- mold(fac_1 ~ poly(num_1, degree = 2), example_train)
+  y2 <- mold(fac_1 ~ poly(num_1, degree = 2), example_train, blueprint = bp)
 
   expect_equal(
-    colnames(x$predictors),
+    colnames(x1$predictors),
+    c("I(num_1^2)", "num_1:num_2")
+  )
+  expect_equal(
+    colnames(x2$predictors),
     c("I(num_1^2)", "num_1:num_2")
   )
 
   expect_equal(
-    colnames(x$blueprint$ptypes$predictors),
+    colnames(x1$blueprint$ptypes$predictors),
+    c("num_1", "num_2")
+  )
+  expect_equal(
+    colnames(x2$blueprint$ptypes$predictors),
     c("num_1", "num_2")
   )
 })
 
 test_that("formulas with non-existent columns are caught", {
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
   expect_error(
     mold(fac_1 ~ y + z, example_train),
+    "predictors were not found in `data`: 'y', 'z'"
+  )
+  expect_error(
+    mold(fac_1 ~ y + z, example_train, blueprint = bp),
     "predictors were not found in `data`: 'y', 'z'"
   )
 
   expect_error(
     mold(y + z ~ fac_1, example_train),
+    "outcomes were not found in `data`: 'y', 'z'"
+  )
+  expect_error(
+    mold(y + z ~ fac_1, example_train, blueprint = bp),
     "outcomes were not found in `data`: 'y', 'z'"
   )
 })
@@ -242,8 +316,13 @@ test_that("global environment variables cannot be used", {
 
 test_that("cannot manually remove intercept in the formula itself", {
 
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
   expect_error(
     mold(fac_1 ~ y + 0, example_train),
+    "`formula` must not contain"
+  )
+  expect_error(
+    mold(fac_1 ~ y + 0, example_train, blueprint = bp),
     "`formula` must not contain"
   )
 
@@ -261,8 +340,14 @@ test_that("cannot manually remove intercept in the formula itself", {
 
 test_that("RHS with _only_ intercept related terms are caught", {
 
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+
   expect_error(
     mold(~ 0, example_train),
+    "`formula` must not contain the intercept removal term"
+  )
+  expect_error(
+    mold(~ 0, example_train, blueprint = bp),
     "`formula` must not contain the intercept removal term"
   )
 
@@ -280,20 +365,37 @@ test_that("RHS with _only_ intercept related terms are caught", {
 
 test_that("`NULL` can be used to represent empty RHS formulas", {
 
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+
   expect_error(
-    x <- mold(~NULL, example_train),
+    mold(~ 0, example_train),
+    "`formula` must not contain the intercept removal term"
+  )
+  expect_error(
+    mold(~ 0, example_train, blueprint = bp),
+    "`formula` must not contain the intercept removal term"
+  )
+
+  expect_error(
+    x1 <- mold(~NULL, example_train),
+    NA
+  )
+  expect_error(
+    x2 <- mold(~NULL, example_train, blueprint = bp),
     NA
   )
 
-  expect_equal(nrow(x$predictors), 12)
-  expect_equal(nrow(x$outcomes), 12)
+  expect_equal(nrow(x1$predictors), 12)
+  expect_equal(nrow(x1$outcomes), 12)
+  expect_equal(nrow(x2$predictors), 12)
+  expect_equal(nrow(x2$outcomes), 12)
 
   expect_error(
-    x2 <- mold(~NULL, example_train, blueprint = default_formula_blueprint(intercept = TRUE)),
+    y <- mold(~NULL, example_train, blueprint = default_formula_blueprint(intercept = TRUE)),
     NA
   )
 
-  expect_equal(colnames(x2$predictors), "(Intercept)")
+  expect_equal(colnames(y$predictors), "(Intercept)")
 
 })
 
@@ -318,8 +420,13 @@ test_that("intercepts can still be added when not using indicators (i.e. model.m
 
 test_that("`data` is validated", {
 
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
   expect_error(
     mold(fac_1 ~ num_2, 1),
+    "`data` must be a data.frame or a matrix"
+  )
+  expect_error(
+    mold(fac_1 ~ num_2, 1, blueprint = bp),
     "`data` must be a data.frame or a matrix"
   )
 
@@ -398,15 +505,25 @@ test_that("LHS of the formula cannot contain interactions", {
 
 test_that("original predictor and outcome classes are recorded", {
 
-  x <- mold(log(num_1) ~ log(num_2), example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(log(num_1) ~ log(num_2), example_train)
+  x2 <- mold(log(num_1) ~ log(num_2), example_train, blueprint = bp)
 
   expect_equal(
-    get_data_classes(x$blueprint$ptypes$predictors),
+    get_data_classes(x1$blueprint$ptypes$predictors),
+    list(num_2 = "numeric")
+  )
+  expect_equal(
+    get_data_classes(x2$blueprint$ptypes$predictors),
     list(num_2 = "numeric")
   )
 
   expect_equal(
-    get_data_classes(x$blueprint$ptypes$outcomes),
+    get_data_classes(x1$blueprint$ptypes$outcomes),
+    list(num_1 = "integer")
+  )
+  expect_equal(
+    get_data_classes(x2$blueprint$ptypes$outcomes),
     list(num_1 = "integer")
   )
 
@@ -414,17 +531,27 @@ test_that("original predictor and outcome classes are recorded", {
 
 test_that("`.` notation works as expected", {
 
-  x <- mold(fac_1 ~ ., example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(fac_1 ~ ., example_train)
+  x2 <- mold(fac_1 ~ ., example_train, blueprint = bp)
 
   # no fac_1 columns in predictors
   expect_equal(
-    colnames(x$blueprint$ptypes$predictors),
+    colnames(x1$blueprint$ptypes$predictors),
+    c("num_1", "num_2", "num_3", "fac_2")
+  )
+  expect_equal(
+    colnames(x2$blueprint$ptypes$predictors),
     c("num_1", "num_2", "num_3", "fac_2")
   )
 
   # fac_1 is the outcome
   expect_equal(
-    colnames(x$blueprint$ptypes$outcomes),
+    colnames(x1$blueprint$ptypes$outcomes),
+    "fac_1"
+  )
+  expect_equal(
+    colnames(x2$blueprint$ptypes$outcomes),
     "fac_1"
   )
 
@@ -434,37 +561,59 @@ test_that("`.` notation works as expected", {
 # for them in `get_all_outcomes()`. That calls `all.vars()`, which returns
 # the `"."` as a variable.
 test_that("`.` notation fails on the LHS", {
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
   expect_error(
     mold(. ~ fac_1, example_train),
+    "The left hand side of the formula cannot contain `.`"
+  )
+  expect_error(
+    mold(. ~ fac_1, example_train, blueprint = bp),
     "The left hand side of the formula cannot contain `.`"
   )
 })
 
 test_that("`.` notation with variable as predictor and outcome", {
 
-  x <- mold(num_2 ~ . + num_2, example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(num_2 ~ . + num_2, example_train)
+  x2 <- mold(num_2 ~ . + num_2, example_train)
 
   # num_2 IS a predictor
   expect_true(
-    "num_2" %in% colnames(x$blueprint$ptypes$predictors)
+    "num_2" %in% colnames(x1$blueprint$ptypes$predictors)
+  )
+  expect_true(
+    "num_2" %in% colnames(x2$blueprint$ptypes$predictors)
   )
 
   # num_2 IS the outcome
   expect_equal(
-    colnames(x$blueprint$ptypes$outcomes),
+    colnames(x1$blueprint$ptypes$outcomes),
+    "num_2"
+  )
+  expect_equal(
+    colnames(x2$blueprint$ptypes$outcomes),
     "num_2"
   )
 
-  xx <- mold(num_2 ~ . + log(num_2), example_train)
+  y1 <- mold(num_2 ~ . + log(num_2), example_train)
+  y2 <- mold(num_2 ~ . + log(num_2), example_train, blueprint = bp)
 
   # num_2 IS a predictor
   expect_true(
-    "num_2" %in% colnames(x$blueprint$ptypes$predictors)
+    "num_2" %in% colnames(y1$blueprint$ptypes$predictors)
+  )
+  expect_true(
+    "num_2" %in% colnames(y2$blueprint$ptypes$predictors)
   )
 
   # num_2 IS the outcome
   expect_equal(
-    colnames(x$blueprint$ptypes$outcomes),
+    colnames(y1$blueprint$ptypes$outcomes),
+    "num_2"
+  )
+  expect_equal(
+    colnames(y2$blueprint$ptypes$outcomes),
     "num_2"
   )
 
@@ -472,17 +621,26 @@ test_that("`.` notation with variable as predictor and outcome", {
 
 test_that("`.` notation with no outcome works fine", {
 
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
   # Uses all columns of example_train
-  x <- mold(~ ., example_train)
+  x1 <- mold(~ ., example_train)
+  x2 <- mold(~ ., example_train, blueprint = bp)
 
-  # num_1 IS a predictor
   expect_equal(
-    ncol(x$predictors),
+    ncol(x1$predictors),
+    7
+  )
+  expect_equal(
+    ncol(x2$predictors),
     7
   )
 
   expect_equal(
-    colnames(x$blueprint$ptypes$predictors),
+    colnames(x1$blueprint$ptypes$predictors),
+    c("num_1", "num_2", "num_3", "fac_1", "fac_2")
+  )
+  expect_equal(
+    colnames(x2$blueprint$ptypes$predictors),
     c("num_1", "num_2", "num_3", "fac_1", "fac_2")
   )
 
@@ -501,23 +659,27 @@ test_that("`-var` still registers var as a predictor", {
 })
 
 test_that("Missing y value returns a 0 column tibble for `outcomes`", {
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
   x1 <- mold(~ num_2, example_train)
   x2 <- mold(NULL ~ num_2, example_train)
+  x3 <- mold(~ num_2, example_train, blueprint = bp)
+  x4 <- mold(NULL ~ num_2, example_train, blueprint = bp)
 
-  outcomes1 <- x1$outcomes
-  outcomes2 <- x2$outcomes
+  expect_equal(nrow(x1$outcomes), 12)
+  expect_equal(ncol(x1$outcomes), 0)
 
-  expect_equal(nrow(outcomes1), 12)
-  expect_equal(ncol(outcomes1), 0)
-
-  expect_equal(nrow(outcomes2), 12)
-  expect_equal(ncol(outcomes2), 0)
+  expect_equal(x1$outcomes, x2$outcomes)
+  expect_equal(x1$outcomes, x3$outcomes)
+  expect_equal(x1$outcomes, x4$outcomes)
 })
 
 
 test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
-  x <- mold(~ num_2, example_train)
-  expect_equal(x$blueprint$ptypes$outcomes, tibble())
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(~ num_2, example_train)
+  x2 <- mold(~ num_2, example_train, blueprint = bp)
+  expect_equal(x1$blueprint$ptypes$outcomes, tibble())
+  expect_equal(x2$blueprint$ptypes$outcomes, tibble())
 })
 
 test_that("Missing y value still has outcome `terms` present", {
@@ -542,17 +704,29 @@ test_that("character predictors are treated as factors when `indicators` is not 
 
   bp1 <- default_formula_blueprint(indicators = "traditional")
   bp2 <- default_formula_blueprint(indicators = "one_hot")
+  bp3 <- default_formula_blueprint(indicators = "traditional", composition = "matrix")
+  bp4 <- default_formula_blueprint(indicators = "one_hot", composition = "matrix")
 
   x1 <- mold(y ~ x + z, df, blueprint = bp1)
   x2 <- mold(y ~ x + z, df, blueprint = bp2)
+  x3 <- mold(y ~ x + z, df, blueprint = bp3)
+  x4 <- mold(y ~ x + z, df, blueprint = bp4)
 
   expect_identical(
     colnames(x1$predictors),
     c("xa", "xb", "zd")
   )
+  expect_identical(
+    colnames(x3$predictors),
+    c("xa", "xb", "zd")
+  )
 
   expect_identical(
     colnames(x2$predictors),
+    c("xa", "xb", "zc", "zd")
+  )
+  expect_identical(
+    colnames(x4$predictors),
     c("xa", "xb", "zc", "zd")
   )
 })
@@ -591,19 +765,30 @@ test_that("traditional encoding and no intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = FALSE,
     indicators = "traditional"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "traditional",
+    composition = "matrix"
+  )
 
-  x <- mold(x ~ y + z, df, blueprint = bp)
+  x1 <- mold(x ~ y + z, df, blueprint = bp1)
+  x2 <- mold(x ~ y + z, df, blueprint = bp2)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("ya", "yb", "yc", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("ya", "yb", "yc", "zB")
   )
 
-  expect_false(x$blueprint$intercept)
+  expect_false(x1$blueprint$intercept)
+  expect_false(x2$blueprint$intercept)
 })
 
 test_that("traditional encoding and intercept", {
@@ -613,19 +798,30 @@ test_that("traditional encoding and intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = TRUE,
     indicators = "traditional"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "traditional",
+    composition = "matrix"
+  )
 
-  x <- mold(x ~ y + z, df, blueprint = bp)
+  x1 <- mold(x ~ y + z, df, blueprint = bp1)
+  x2 <- mold(x ~ y + z, df, blueprint = bp2)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("(Intercept)", "yb", "yc", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("(Intercept)", "yb", "yc", "zB")
   )
 
-  expect_true(x$blueprint$intercept)
+  expect_true(x1$blueprint$intercept)
+  expect_true(x2$blueprint$intercept)
 })
 
 test_that("one-hot encoding and no intercept", {
@@ -635,19 +831,30 @@ test_that("one-hot encoding and no intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = FALSE,
     indicators = "one_hot"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "one_hot",
+    composition = "matrix"
+  )
 
-  x <- mold(x ~ y + z, df, blueprint = bp)
+  x1 <- mold(x ~ y + z, df, blueprint = bp1)
+  x2 <- mold(x ~ y + z, df, blueprint = bp2)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("ya", "yb", "yc", "zA", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("ya", "yb", "yc", "zA", "zB")
   )
 
-  expect_false(x$blueprint$intercept)
+  expect_false(x1$blueprint$intercept)
+  expect_false(x2$blueprint$intercept)
 })
 
 test_that("one-hot encoding and intercept", {
@@ -657,19 +864,30 @@ test_that("one-hot encoding and intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = TRUE,
     indicators = "one_hot"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "one_hot",
+    composition = "matrix"
+  )
 
-  x <- mold(x ~ y + z, df, blueprint = bp)
+  x1 <- mold(x ~ y + z, df, blueprint = bp1)
+  x2 <- mold(x ~ y + z, df, blueprint = bp2)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("(Intercept)", "ya", "yb", "yc", "zA", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("(Intercept)", "ya", "yb", "yc", "zA", "zB")
   )
 
-  expect_true(x$blueprint$intercept)
+  expect_true(x1$blueprint$intercept)
+  expect_true(x2$blueprint$intercept)
 })
 
 # ------------------------------------------------------------------------------
