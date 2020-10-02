@@ -27,7 +27,9 @@ prediction time? This information is used by the \code{clean} function in the
 called?}
 
 \item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
-of the processed predictors.}
+of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+the predictors must be numeric after the preprocessing method has been
+applied; otherwise an error is thrown.}
 
 \item{x}{An unprepped recipe created from \code{\link[recipes:recipe]{recipes::recipe()}}.}
 

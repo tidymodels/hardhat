@@ -26,7 +26,9 @@ prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
 
 \item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
-of the processed predictors.}
+of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+the predictors must be numeric after the preprocessing method has been
+applied; otherwise an error is thrown.}
 
 \item{x}{A data frame or matrix containing the predictors.}
 

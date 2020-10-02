@@ -27,7 +27,9 @@
 #' `forge` function list, and is passed on to [scream()].
 #'
 #' @param composition Either "tibble", "matrix", or "dgCMatrix" for the format
-#' of the processed predictors.
+#' of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+#' the predictors must be numeric after the preprocessing method has been
+#' applied; otherwise an error is thrown.
 #'
 #' @param ptypes Either `NULL`, or a named list with 2 elements, `predictors`
 #' and `outcomes`, both of which are 0-row tibbles. `ptypes` is generated
