@@ -1,14 +1,15 @@
 # This is the same as the "recomposition" at the end of recipes::bake()
 
 recompose <- function(data, composition) {
-  if (composition == "tibble") {
-    return(data)
-  } else if (composition == "dgCMatrix") {
-    data <- convert_matrix(data, sparse = TRUE)
-  } else if (composition == "matrix") {
-    data <- convert_matrix(data, sparse = FALSE)
+  if (identical(composition, "tibble")) {
+    data
+  } else if (identical(composition, "dgCMatrix")) {
+    convert_matrix(data, sparse = TRUE)
+  } else if (identical(composition, "matrix")) {
+    convert_matrix(data, sparse = FALSE)
+  } else {
+    abort("Internal error: Unknown `composition` type.")
   }
-  data
 }
 
 convert_matrix <- function(x, sparse = TRUE) {
