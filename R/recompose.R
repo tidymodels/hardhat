@@ -39,6 +39,9 @@ convert_matrix <- function(x, sparse = TRUE) {
   res <- as.matrix(x)
 
   if (sparse) {
+    if (!is_installed("Matrix")) {
+      abort("The Matrix package must be installed to use a 'dgCMatrix' `composition`")
+    }
     res <- Matrix::Matrix(res, sparse = TRUE)
   }
 
