@@ -202,7 +202,7 @@ test_that("new_data can be a matrix", {
   )
   expect_equal(
     unname(xx2$predictors),
-    as.matrix(sep_len, drop = FALSE)
+    as.matrix(sep_len)
   )
 
 })
