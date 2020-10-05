@@ -6,14 +6,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forging data for predictions • hardhat</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="../tidyverse.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../tidyverse-2.css" rel="stylesheet">
+<!--optional theme--><link href="../tidymodels.css" rel="stylesheet">
 <meta property="og:title" content="Forging data for predictions">
 <meta property="og:description" content="hardhat">
+<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png">
 <meta name="twitter:card" content="summary">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -43,18 +51,12 @@
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.4.9000</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -109,7 +111,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="forge_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Forging data for predictions</h1>
@@ -122,7 +124,12 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">hardhat</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat">hardhat</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org">modeldata</a></span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span>
+<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></pre></div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
@@ -133,50 +140,54 @@
 <h2 class="hasAnchor">
 <a href="#connection-with-mold" class="anchor"></a>Connection with mold()</h2>
 <p>When <code><a href="../reference/mold.html">mold()</a></code> is used, one of the returned objects is an <code>blueprint</code>. This is the key to preprocessing new data with <code><a href="../reference/forge.html">forge()</a></code>. For instance, assume you’ve called <code><a href="../reference/mold.html">mold()</a></code> like so:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">iris_train</span> <span class="kw">&lt;-</span> <span class="no">iris</span>[<span class="fl">1</span>:<span class="fl">100</span>,]
-<span class="no">iris_test</span> <span class="kw">&lt;-</span> <span class="no">iris</span>[<span class="fl">101</span>:<span class="fl">150</span>,]</pre></body></html></div>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">iris_form</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span>(
-  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="no">Sepal.Length</span>) ~ <span class="no">Species</span> + <span class="no">Petal.Width</span>,
-  <span class="no">iris_train</span>,
-  <span class="kw">blueprint</span> <span class="kw">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span>(<span class="kw">indicators</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-)
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="va">penguin_train</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">300</span>,<span class="op">]</span>
+<span class="va">penguin_test</span>  <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">300</span><span class="op">)</span>,<span class="op">]</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="va">penguin_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">body_mass_g</span><span class="op">)</span> <span class="op">~</span> <span class="va">species</span> <span class="op">+</span> <span class="va">bill_length_mm</span>, 
+  <span class="va">penguin_train</span>, 
+  blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span>indicators <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
+<span class="op">)</span>
 
-<span class="no">formula_eng</span> <span class="kw">&lt;-</span> <span class="no">iris_form</span>$<span class="no">blueprint</span>
+<span class="va">formula_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_form</span><span class="op">$</span><span class="va">blueprint</span>
 
-<span class="no">formula_eng</span>
+<span class="va">formula_eng</span>
 <span class="co">#&gt; Formula blueprint: </span>
 <span class="co">#&gt;  </span>
 <span class="co">#&gt; # Predictors: 2 </span>
 <span class="co">#&gt;   # Outcomes: 1 </span>
 <span class="co">#&gt;    Intercept: FALSE </span>
 <span class="co">#&gt; Novel Levels: FALSE </span>
-<span class="co">#&gt;   Indicators: FALSE</span></pre></body></html></div>
-<p>A formula blueprint is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don’t want to expand <code>Species</code> into dummy variables by setting <code>indicators = FALSE</code>.</p>
+<span class="co">#&gt;  Composition: tibble </span>
+<span class="co">#&gt;   Indicators: none</span></pre></div>
+<p>A formula blueprint is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don’t want to expand <code>species</code> into dummy variables by setting <code>indicators = "none"</code>.</p>
 <p>When it is time to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> on new data, that data is passed on to <code><a href="../reference/forge.html">forge()</a></code> along with the <code>blueprint</code> we just created.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">iris_test</span>, <span class="no">formula_eng</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 50 x 2</span>
-<span class="co">#&gt;    Petal.Width Species  </span>
-<span class="co">#&gt;          &lt;dbl&gt; &lt;fct&gt;    </span>
-<span class="co">#&gt;  1         2.5 virginica</span>
-<span class="co">#&gt;  2         1.9 virginica</span>
-<span class="co">#&gt;  3         2.1 virginica</span>
-<span class="co">#&gt;  4         1.8 virginica</span>
-<span class="co">#&gt;  5         2.2 virginica</span>
-<span class="co">#&gt;  6         2.1 virginica</span>
-<span class="co">#&gt;  7         1.7 virginica</span>
-<span class="co">#&gt;  8         1.8 virginica</span>
-<span class="co">#&gt;  9         1.8 virginica</span>
-<span class="co">#&gt; 10         2.5 virginica</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt;    bill_length_mm species  </span>
+<span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
+<span class="co">#&gt;  1           47.5 Chinstrap</span>
+<span class="co">#&gt;  2           47.6 Chinstrap</span>
+<span class="co">#&gt;  3           52   Chinstrap</span>
+<span class="co">#&gt;  4           46.9 Chinstrap</span>
+<span class="co">#&gt;  5           53.5 Chinstrap</span>
+<span class="co">#&gt;  6           49   Chinstrap</span>
+<span class="co">#&gt;  7           46.2 Chinstrap</span>
+<span class="co">#&gt;  8           50.9 Chinstrap</span>
+<span class="co">#&gt;  9           45.5 Chinstrap</span>
+<span class="co">#&gt; 10           50.9 Chinstrap</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outcomes</span>
 <span class="co">#&gt; NULL</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $extras</span>
 <span class="co">#&gt; $extras$offset</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
-<p>Note that in <code>predictors</code>, <code>Species</code> was not expanded because the <code>blueprint</code> knew about the preprocessing options that were set when <code><a href="../reference/mold.html">mold()</a></code> was called.</p>
+<span class="co">#&gt; NULL</span></pre></div>
+<p>Note that in <code>predictors</code>, <code>species</code> was not expanded because the <code>blueprint</code> knew about the preprocessing options that were set when <code><a href="../reference/mold.html">mold()</a></code> was called.</p>
 <p><code><a href="../reference/forge.html">forge()</a></code> always returns three things, and they should look familiar to you if you have used <code><a href="../reference/mold.html">mold()</a></code>.</p>
 <ul>
 <li><p><code>predictors</code> holds a tibble of the predictors.</p></li>
@@ -189,42 +200,43 @@
 <a href="#outcomes" class="anchor"></a>Outcomes</h2>
 <p>Generally when generating predictions you only need to know about the new predictors. However, when performing resampling you will need to have the processed outcomes as well so you can compute cross validated performance statistics and decide between multiple models, or choose between hyperparameters.</p>
 <p>You can easily request the outcomes as well with <code>outcomes = TRUE</code>. Just like with the predictors, these get processed using the same steps as done to the outcomes at fit time.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">iris_test</span>, <span class="no">formula_eng</span>, <span class="kw">outcomes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 50 x 2</span>
-<span class="co">#&gt;    Petal.Width Species  </span>
-<span class="co">#&gt;          &lt;dbl&gt; &lt;fct&gt;    </span>
-<span class="co">#&gt;  1         2.5 virginica</span>
-<span class="co">#&gt;  2         1.9 virginica</span>
-<span class="co">#&gt;  3         2.1 virginica</span>
-<span class="co">#&gt;  4         1.8 virginica</span>
-<span class="co">#&gt;  5         2.2 virginica</span>
-<span class="co">#&gt;  6         2.1 virginica</span>
-<span class="co">#&gt;  7         1.7 virginica</span>
-<span class="co">#&gt;  8         1.8 virginica</span>
-<span class="co">#&gt;  9         1.8 virginica</span>
-<span class="co">#&gt; 10         2.5 virginica</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt;    bill_length_mm species  </span>
+<span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
+<span class="co">#&gt;  1           47.5 Chinstrap</span>
+<span class="co">#&gt;  2           47.6 Chinstrap</span>
+<span class="co">#&gt;  3           52   Chinstrap</span>
+<span class="co">#&gt;  4           46.9 Chinstrap</span>
+<span class="co">#&gt;  5           53.5 Chinstrap</span>
+<span class="co">#&gt;  6           49   Chinstrap</span>
+<span class="co">#&gt;  7           46.2 Chinstrap</span>
+<span class="co">#&gt;  8           50.9 Chinstrap</span>
+<span class="co">#&gt;  9           45.5 Chinstrap</span>
+<span class="co">#&gt; 10           50.9 Chinstrap</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; # A tibble: 50 x 1</span>
-<span class="co">#&gt;    `log(Sepal.Length)`</span>
-<span class="co">#&gt;                  &lt;dbl&gt;</span>
-<span class="co">#&gt;  1                1.84</span>
-<span class="co">#&gt;  2                1.76</span>
-<span class="co">#&gt;  3                1.96</span>
-<span class="co">#&gt;  4                1.84</span>
-<span class="co">#&gt;  5                1.87</span>
-<span class="co">#&gt;  6                2.03</span>
-<span class="co">#&gt;  7                1.59</span>
-<span class="co">#&gt;  8                1.99</span>
-<span class="co">#&gt;  9                1.90</span>
-<span class="co">#&gt; 10                1.97</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<span class="co">#&gt; # A tibble: 33 x 1</span>
+<span class="co">#&gt;    `log(body_mass_g)`</span>
+<span class="co">#&gt;                 &lt;dbl&gt;</span>
+<span class="co">#&gt;  1               8.27</span>
+<span class="co">#&gt;  2               8.26</span>
+<span class="co">#&gt;  3               8.48</span>
+<span class="co">#&gt;  4               7.90</span>
+<span class="co">#&gt;  5               8.41</span>
+<span class="co">#&gt;  6               8.28</span>
+<span class="co">#&gt;  7               8.20</span>
+<span class="co">#&gt;  8               8.17</span>
+<span class="co">#&gt;  9               8.16</span>
+<span class="co">#&gt; 10               8.21</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $extras</span>
 <span class="co">#&gt; $extras$offset</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<span class="co">#&gt; NULL</span></pre></div>
 </div>
 <div id="validation" class="section level2">
 <h2 class="hasAnchor">
@@ -245,81 +257,85 @@
 <h3 class="hasAnchor">
 <a href="#column-existence" class="anchor"></a>Column existence</h3>
 <p>The easiest example to demonstrate is missing columns in the testing data. <code><a href="../reference/forge.html">forge()</a></code> won’t let you continue until all of the required predictors used at training are also present in the new data.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">test_missing_column</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">iris_test</span>, <span class="kw">select</span> <span class="kw">=</span> -<span class="no">Species</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="va">test_missing_column</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">species</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">test_missing_column</span>, <span class="no">formula_eng</span>)
-<span class="co">#&gt; Error: The following required columns are missing: 'Species'.</span></pre></body></html></div>
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_missing_column</span>, <span class="va">formula_eng</span><span class="op">)</span>
+<span class="co">#&gt; Error: The following required columns are missing: 'species'.</span></pre></div>
 </div>
 <div id="column-types" class="section level3">
 <h3 class="hasAnchor">
 <a href="#column-types" class="anchor"></a>Column types</h3>
-<p>After an initial scan for the column names is done, a deeper scan of each column is performed, checking the type of that column. For instance, what happens if the new <code>Species</code> column was a double, not a factor?</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">test_species_double</span> <span class="kw">&lt;-</span> <span class="no">iris_test</span>
-<span class="no">test_species_double</span>$<span class="no">Species</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html">as.double</a></span>(<span class="no">test_species_double</span>$<span class="no">Species</span>)
+<p>After an initial scan for the column names is done, a deeper scan of each column is performed, checking the type of that column. For instance, what happens if the new <code>species</code> column was a double, not a factor?</p>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="va">test_species_double</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span>
+<span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html">as.double</a></span><span class="op">(</span><span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">test_species_double</span>, <span class="no">formula_eng</span>)
-<span class="co">#&gt; Error: Can't convert `Species` &lt;double&gt; to match type of `Species` &lt;factor&lt;12d60&gt;&gt;.</span></pre></body></html></div>
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_double</span>, <span class="va">formula_eng</span><span class="op">)</span>
+<span class="co">#&gt; Error: Can't convert `species` &lt;double&gt; to match type of `species` &lt;factor&lt;600db&gt;&gt;.</span></pre></div>
 <p>An error is thrown, indicating that a double can’t be cast to a factor.</p>
 </div>
 <div id="lossless-conversion" class="section level3">
 <h3 class="hasAnchor">
 <a href="#lossless-conversion" class="anchor"></a>Lossless conversion</h3>
-<p>The error message above suggests that in some cases you <em>can</em> automatically cast from one type to another, and in fact that is true! Rather than being a double, what if <code>Species</code> was just a character?</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">test_species_character</span> <span class="kw">&lt;-</span> <span class="no">iris_test</span>
-<span class="no">test_species_character</span>$<span class="no">Species</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">test_species_character</span>$<span class="no">Species</span>)
+<p>The error message above suggests that in some cases you <em>can</em> automatically cast from one type to another, and in fact that is true! Rather than being a double, what if <code>species</code> was just a character?</p>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="va">test_species_character</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span>
+<span class="va">test_species_character</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">test_species_character</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
 
-<span class="no">forged_char</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">test_species_character</span>, <span class="no">formula_eng</span>)
+<span class="va">forged_char</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_character</span>, <span class="va">formula_eng</span><span class="op">)</span>
 
-<span class="no">forged_char</span>$<span class="no">predictors</span>
-<span class="co">#&gt; # A tibble: 50 x 2</span>
-<span class="co">#&gt;    Petal.Width Species  </span>
-<span class="co">#&gt;          &lt;dbl&gt; &lt;fct&gt;    </span>
-<span class="co">#&gt;  1         2.5 virginica</span>
-<span class="co">#&gt;  2         1.9 virginica</span>
-<span class="co">#&gt;  3         2.1 virginica</span>
-<span class="co">#&gt;  4         1.8 virginica</span>
-<span class="co">#&gt;  5         2.2 virginica</span>
-<span class="co">#&gt;  6         2.1 virginica</span>
-<span class="co">#&gt;  7         1.7 virginica</span>
-<span class="co">#&gt;  8         1.8 virginica</span>
-<span class="co">#&gt;  9         1.8 virginica</span>
-<span class="co">#&gt; 10         2.5 virginica</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span>
+<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt;    bill_length_mm species  </span>
+<span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
+<span class="co">#&gt;  1           47.5 Chinstrap</span>
+<span class="co">#&gt;  2           47.6 Chinstrap</span>
+<span class="co">#&gt;  3           52   Chinstrap</span>
+<span class="co">#&gt;  4           46.9 Chinstrap</span>
+<span class="co">#&gt;  5           53.5 Chinstrap</span>
+<span class="co">#&gt;  6           49   Chinstrap</span>
+<span class="co">#&gt;  7           46.2 Chinstrap</span>
+<span class="co">#&gt;  8           50.9 Chinstrap</span>
+<span class="co">#&gt;  9           45.5 Chinstrap</span>
+<span class="co">#&gt; 10           50.9 Chinstrap</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">forged_char</span>$<span class="no">predictors</span>$<span class="no">Species</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
 <span class="co">#&gt; [1] "factor"</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">forged_char</span>$<span class="no">predictors</span>$<span class="no">Species</span>)
-<span class="co">#&gt; [1] "setosa"     "versicolor" "virginica"</span></pre></body></html></div>
-<p>Interesting, so in this case we can actually convert to a factor, and the class and even the levels are all restored. The key here is that this was a <em>lossless</em> conversion. We lost no information when converting the character <code>Species</code> to a factor because the unique character values were a subset of the original levels.</p>
-<p>An example of a conversion that would be lossy is if the character <code>Species</code> column had a value that was <em>not</em> a level in the training data.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">test_species_lossy</span> <span class="kw">&lt;-</span> <span class="no">iris_test</span>
-<span class="no">test_species_lossy</span>$<span class="no">Species</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">test_species_lossy</span>$<span class="no">Species</span>)
-<span class="no">test_species_lossy</span>$<span class="no">Species</span>[<span class="fl">2</span>] <span class="kw">&lt;-</span> <span class="st">"im new!"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Adelie"    "Chinstrap" "Gentoo"</span></pre></div>
+<p>Interesting, so in this case we can actually convert to a factor, and the class and even the levels are all restored. The key here is that this was a <em>lossless</em> conversion. We lost no information when converting the character <code>species</code> to a factor because the unique character values were a subset of the original levels.</p>
+<p>An example of a conversion that would be lossy is if the character <code>species</code> column had a value that was <em>not</em> a level in the training data.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="va">test_species_lossy</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span>
+<span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
+<span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"im new!"</span>
 
-<span class="no">forged_lossy</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">test_species_lossy</span>, <span class="no">formula_eng</span>)
-<span class="co">#&gt; Warning: Novel levels found in column 'Species': 'im new!'. The levels have been</span>
+<span class="va">forged_lossy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_lossy</span>, <span class="va">formula_eng</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Novel levels found in column 'species': 'im new!'. The levels have been</span>
 <span class="co">#&gt; removed, and values have been coerced to 'NA'.</span>
 
-<span class="no">forged_lossy</span>$<span class="no">predictors</span>
-<span class="co">#&gt; # A tibble: 50 x 2</span>
-<span class="co">#&gt;    Petal.Width Species  </span>
-<span class="co">#&gt;          &lt;dbl&gt; &lt;fct&gt;    </span>
-<span class="co">#&gt;  1         2.5 virginica</span>
-<span class="co">#&gt;  2         1.9 &lt;NA&gt;     </span>
-<span class="co">#&gt;  3         2.1 virginica</span>
-<span class="co">#&gt;  4         1.8 virginica</span>
-<span class="co">#&gt;  5         2.2 virginica</span>
-<span class="co">#&gt;  6         2.1 virginica</span>
-<span class="co">#&gt;  7         1.7 virginica</span>
-<span class="co">#&gt;  8         1.8 virginica</span>
-<span class="co">#&gt;  9         1.8 virginica</span>
-<span class="co">#&gt; 10         2.5 virginica</span>
-<span class="co">#&gt; # … with 40 more rows</span></pre></body></html></div>
+<span class="va">forged_lossy</span><span class="op">$</span><span class="va">predictors</span>
+<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt;    bill_length_mm species  </span>
+<span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
+<span class="co">#&gt;  1           47.5 Chinstrap</span>
+<span class="co">#&gt;  2           47.6 &lt;NA&gt;     </span>
+<span class="co">#&gt;  3           52   Chinstrap</span>
+<span class="co">#&gt;  4           46.9 Chinstrap</span>
+<span class="co">#&gt;  5           53.5 Chinstrap</span>
+<span class="co">#&gt;  6           49   Chinstrap</span>
+<span class="co">#&gt;  7           46.2 Chinstrap</span>
+<span class="co">#&gt;  8           50.9 Chinstrap</span>
+<span class="co">#&gt;  9           45.5 Chinstrap</span>
+<span class="co">#&gt; 10           50.9 Chinstrap</span>
+<span class="co">#&gt; # … with 23 more rows</span></pre></div>
 <p>In this case:</p>
 <ul>
 <li><p>A lossy warning is thrown</p></li>
-<li><p>The <code>Species</code> column is still converted to a factor with the right levels</p></li>
+<li><p>The <code>species</code> column is still converted to a factor with the right levels</p></li>
 <li><p>The novel level is removed and its value is set to <code>NA</code></p></li>
 </ul>
 </div>
@@ -327,165 +343,159 @@
 <div id="recipes-and-forge" class="section level2">
 <h2 class="hasAnchor">
 <a href="#recipes-and-forge" class="anchor"></a>Recipes and forge()</h2>
-<p>Just like with the formula method, a recipe can be used as the preprocessor at fit and prediction time. <code>hardhat</code> handles calling <code><a href="https://rdrr.io/pkg/recipes/man/prep.html">prep()</a></code>, <code><a href="https://rdrr.io/pkg/recipes/man/juice.html">juice()</a></code>, and <code><a href="https://rdrr.io/pkg/recipes/man/bake.html">bake()</a></code> for you at the right times. For instance, say we have a recipe that just creates dummy variables out of <code>Species</code>.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">recipes</span>)
-<span class="co">#&gt; Loading required package: dplyr</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'recipes'</span>
-<span class="co">#&gt; The following object is masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     step</span>
+<p>Just like with the formula method, a recipe can be used as the preprocessor at fit and prediction time. <code>hardhat</code> handles calling <code><a href="https://recipes.tidymodels.org/reference/prep.html">prep()</a></code>, <code><a href="https://recipes.tidymodels.org/reference/juice.html">juice()</a></code>, and <code><a href="https://recipes.tidymodels.org/reference/bake.html">bake()</a></code> for you at the right times. For instance, say we have a recipe that just creates dummy variables out of <code>species</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span>
 
-<span class="no">rec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/recipe.html">recipe</a></span>(<span class="no">Sepal.Width</span> ~ <span class="no">Sepal.Length</span> + <span class="no">Species</span>, <span class="no">iris_train</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/step_dummy.html">step_dummy</a></span>(<span class="no">Species</span>)
+<span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span>
 
-<span class="no">iris_recipe</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span>(<span class="no">rec</span>, <span class="no">iris_train</span>)
+<span class="va">penguin_recipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguin_train</span><span class="op">)</span>
 
-<span class="no">iris_recipe</span>$<span class="no">predictors</span>
-<span class="co">#&gt; # A tibble: 100 x 3</span>
-<span class="co">#&gt;    Sepal.Length Species_versicolor Species_virginica</span>
-<span class="co">#&gt;           &lt;dbl&gt;              &lt;dbl&gt;             &lt;dbl&gt;</span>
-<span class="co">#&gt;  1          5.1                  0                 0</span>
-<span class="co">#&gt;  2          4.9                  0                 0</span>
-<span class="co">#&gt;  3          4.7                  0                 0</span>
-<span class="co">#&gt;  4          4.6                  0                 0</span>
-<span class="co">#&gt;  5          5                    0                 0</span>
-<span class="co">#&gt;  6          5.4                  0                 0</span>
-<span class="co">#&gt;  7          4.6                  0                 0</span>
-<span class="co">#&gt;  8          5                    0                 0</span>
-<span class="co">#&gt;  9          4.4                  0                 0</span>
-<span class="co">#&gt; 10          4.9                  0                 0</span>
-<span class="co">#&gt; # … with 90 more rows</span></pre></body></html></div>
+<span class="va">penguin_recipe</span><span class="op">$</span><span class="va">predictors</span>
+<span class="co">#&gt; # A tibble: 300 x 3</span>
+<span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
+<span class="co">#&gt;          &lt;int&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt;  1        3750                 0              0</span>
+<span class="co">#&gt;  2        3800                 0              0</span>
+<span class="co">#&gt;  3        3250                 0              0</span>
+<span class="co">#&gt;  4        3450                 0              0</span>
+<span class="co">#&gt;  5        3650                 0              0</span>
+<span class="co">#&gt;  6        3625                 0              0</span>
+<span class="co">#&gt;  7        4675                 0              0</span>
+<span class="co">#&gt;  8        3200                 0              0</span>
+<span class="co">#&gt;  9        3800                 0              0</span>
+<span class="co">#&gt; 10        4400                 0              0</span>
+<span class="co">#&gt; # … with 290 more rows</span></pre></div>
 <p>The blueprint is a <code>recipe</code> blueprint.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">recipe_eng</span> <span class="kw">&lt;-</span> <span class="no">iris_recipe</span>$<span class="no">blueprint</span>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="va">recipe_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">blueprint</span>
 
-<span class="no">recipe_eng</span>
+<span class="va">recipe_eng</span>
 <span class="co">#&gt; Recipe blueprint: </span>
 <span class="co">#&gt;  </span>
 <span class="co">#&gt; # Predictors: 2 </span>
 <span class="co">#&gt;   # Outcomes: 1 </span>
 <span class="co">#&gt;    Intercept: FALSE </span>
-<span class="co">#&gt; Novel Levels: FALSE</span></pre></body></html></div>
+<span class="co">#&gt; Novel Levels: FALSE </span>
+<span class="co">#&gt;  Composition: tibble</span></pre></div>
 <p>When we <code><a href="../reference/forge.html">forge()</a></code>, we can request <code>outcomes</code> to have the predictors and outcomes separated like with the formula method.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">iris_test</span>, <span class="no">recipe_eng</span>, <span class="kw">outcomes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 50 x 3</span>
-<span class="co">#&gt;    Sepal.Length Species_versicolor Species_virginica</span>
-<span class="co">#&gt;           &lt;dbl&gt;              &lt;dbl&gt;             &lt;dbl&gt;</span>
-<span class="co">#&gt;  1          6.3                  0                 1</span>
-<span class="co">#&gt;  2          5.8                  0                 1</span>
-<span class="co">#&gt;  3          7.1                  0                 1</span>
-<span class="co">#&gt;  4          6.3                  0                 1</span>
-<span class="co">#&gt;  5          6.5                  0                 1</span>
-<span class="co">#&gt;  6          7.6                  0                 1</span>
-<span class="co">#&gt;  7          4.9                  0                 1</span>
-<span class="co">#&gt;  8          7.3                  0                 1</span>
-<span class="co">#&gt;  9          6.7                  0                 1</span>
-<span class="co">#&gt; 10          7.2                  0                 1</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<span class="co">#&gt; # A tibble: 33 x 3</span>
+<span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
+<span class="co">#&gt;          &lt;int&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt;  1        3900                 1              0</span>
+<span class="co">#&gt;  2        3850                 1              0</span>
+<span class="co">#&gt;  3        4800                 1              0</span>
+<span class="co">#&gt;  4        2700                 1              0</span>
+<span class="co">#&gt;  5        4500                 1              0</span>
+<span class="co">#&gt;  6        3950                 1              0</span>
+<span class="co">#&gt;  7        3650                 1              0</span>
+<span class="co">#&gt;  8        3550                 1              0</span>
+<span class="co">#&gt;  9        3500                 1              0</span>
+<span class="co">#&gt; 10        3675                 1              0</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; # A tibble: 50 x 1</span>
-<span class="co">#&gt;    Sepal.Width</span>
-<span class="co">#&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1         3.3</span>
-<span class="co">#&gt;  2         2.7</span>
-<span class="co">#&gt;  3         3  </span>
-<span class="co">#&gt;  4         2.9</span>
-<span class="co">#&gt;  5         3  </span>
-<span class="co">#&gt;  6         3  </span>
-<span class="co">#&gt;  7         2.5</span>
-<span class="co">#&gt;  8         2.9</span>
-<span class="co">#&gt;  9         2.5</span>
-<span class="co">#&gt; 10         3.6</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<span class="co">#&gt; # A tibble: 33 x 1</span>
+<span class="co">#&gt;    bill_length_mm</span>
+<span class="co">#&gt;             &lt;dbl&gt;</span>
+<span class="co">#&gt;  1           47.5</span>
+<span class="co">#&gt;  2           47.6</span>
+<span class="co">#&gt;  3           52  </span>
+<span class="co">#&gt;  4           46.9</span>
+<span class="co">#&gt;  5           53.5</span>
+<span class="co">#&gt;  6           49  </span>
+<span class="co">#&gt;  7           46.2</span>
+<span class="co">#&gt;  8           50.9</span>
+<span class="co">#&gt;  9           45.5</span>
+<span class="co">#&gt; 10           50.9</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $extras</span>
 <span class="co">#&gt; $extras$roles</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<span class="co">#&gt; NULL</span></pre></div>
 <div id="a-note-on-recipes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#a-note-on-recipes" class="anchor"></a>A note on recipes</h3>
-<p>One complication with <code>recipes</code> is that, in the <code><a href="https://rdrr.io/pkg/recipes/man/bake.html">bake()</a></code> step, the processing happens to the predictors and the outcomes all together. This means that you might run into the situation where the outcomes seem to be required to <code><a href="../reference/forge.html">forge()</a></code>, even if you aren’t requesting them.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">rec2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/recipe.html">recipe</a></span>(<span class="no">Sepal.Width</span> ~ <span class="no">Sepal.Length</span> + <span class="no">Species</span>, <span class="no">iris_train</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/step_dummy.html">step_dummy</a></span>(<span class="no">Species</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/step_center.html">step_center</a></span>(<span class="no">Sepal.Width</span>) <span class="co"># Here we modify the outcome</span>
+<p>One complication with <code>recipes</code> is that, in the <code><a href="https://recipes.tidymodels.org/reference/bake.html">bake()</a></code> step, the processing happens to the predictors and the outcomes all together. This means that you might run into the situation where the outcomes seem to be required to <code><a href="../reference/forge.html">forge()</a></code>, even if you aren’t requesting them.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="va">rec2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html">step_center</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="co"># Here we modify the outcome</span>
 
-<span class="no">iris_recipe2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span>(<span class="no">rec2</span>, <span class="no">iris_train</span>)
+<span class="va">penguin_recipe2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec2</span>, <span class="va">penguin_train</span><span class="op">)</span>
 
-<span class="no">recipe_eng_log_outcome</span> <span class="kw">&lt;-</span> <span class="no">iris_recipe2</span>$<span class="no">blueprint</span></pre></body></html></div>
+<span class="va">recipe_eng_log_outcome</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe2</span><span class="op">$</span><span class="va">blueprint</span></pre></div>
 <p>If our <code>new_data</code> doesn’t have the outcome, baking this recipe will fail even if we don’t request that the outcomes are returned by <code><a href="../reference/forge.html">forge()</a></code>.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">iris_test_no_outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">iris_test</span>, <span class="kw">select</span> <span class="kw">=</span> -<span class="no">Sepal.Width</span>)
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="va">penguin_test_no_outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">bill_length_mm</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">iris_test_no_outcome</span>, <span class="no">recipe_eng_log_outcome</span>)
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_log_outcome</span><span class="op">)</span>
 <span class="co">#&gt; Error: Can't subset columns that don't exist.</span>
-<span class="co">#&gt; ✖ Column `Sepal.Width` doesn't exist.</span></pre></body></html></div>
-<p>The way around this is to use the built-in recipe argument, <code>skip</code>, on the step containing the outcome. This skips the processing of that step at <code><a href="https://rdrr.io/pkg/recipes/man/bake.html">bake()</a></code> time.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">rec3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/recipe.html">recipe</a></span>(<span class="no">Sepal.Width</span> ~ <span class="no">Sepal.Length</span> + <span class="no">Species</span>, <span class="no">iris_train</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/step_dummy.html">step_dummy</a></span>(<span class="no">Species</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/step_center.html">step_center</a></span>(<span class="no">Sepal.Width</span>, <span class="kw">skip</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; ✖ Column `bill_length_mm` doesn't exist.</span></pre></div>
+<p>The way around this is to use the built-in recipe argument, <code>skip</code>, on the step containing the outcome. This skips the processing of that step at <code><a href="https://recipes.tidymodels.org/reference/bake.html">bake()</a></code> time.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="va">rec3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html">step_center</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, skip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="no">iris_recipe3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span>(<span class="no">rec3</span>, <span class="no">iris_train</span>)
+<span class="va">penguin_recipe3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec3</span>, <span class="va">penguin_train</span><span class="op">)</span>
 
-<span class="no">recipe_eng_skip_outcome</span> <span class="kw">&lt;-</span> <span class="no">iris_recipe3</span>$<span class="no">blueprint</span>
+<span class="va">recipe_eng_skip_outcome</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe3</span><span class="op">$</span><span class="va">blueprint</span>
 
-<span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">iris_test_no_outcome</span>, <span class="no">recipe_eng_skip_outcome</span>)
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_skip_outcome</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 50 x 3</span>
-<span class="co">#&gt;    Sepal.Length Species_versicolor Species_virginica</span>
-<span class="co">#&gt;           &lt;dbl&gt;              &lt;dbl&gt;             &lt;dbl&gt;</span>
-<span class="co">#&gt;  1          6.3                  0                 1</span>
-<span class="co">#&gt;  2          5.8                  0                 1</span>
-<span class="co">#&gt;  3          7.1                  0                 1</span>
-<span class="co">#&gt;  4          6.3                  0                 1</span>
-<span class="co">#&gt;  5          6.5                  0                 1</span>
-<span class="co">#&gt;  6          7.6                  0                 1</span>
-<span class="co">#&gt;  7          4.9                  0                 1</span>
-<span class="co">#&gt;  8          7.3                  0                 1</span>
-<span class="co">#&gt;  9          6.7                  0                 1</span>
-<span class="co">#&gt; 10          7.2                  0                 1</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<span class="co">#&gt; # A tibble: 33 x 3</span>
+<span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
+<span class="co">#&gt;          &lt;int&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt;  1        3900                 1              0</span>
+<span class="co">#&gt;  2        3850                 1              0</span>
+<span class="co">#&gt;  3        4800                 1              0</span>
+<span class="co">#&gt;  4        2700                 1              0</span>
+<span class="co">#&gt;  5        4500                 1              0</span>
+<span class="co">#&gt;  6        3950                 1              0</span>
+<span class="co">#&gt;  7        3650                 1              0</span>
+<span class="co">#&gt;  8        3550                 1              0</span>
+<span class="co">#&gt;  9        3500                 1              0</span>
+<span class="co">#&gt; 10        3675                 1              0</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outcomes</span>
 <span class="co">#&gt; NULL</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $extras</span>
 <span class="co">#&gt; $extras$roles</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<span class="co">#&gt; NULL</span></pre></div>
 <p>There is a tradeoff here that you need to be aware of.</p>
 <ul>
 <li><p>If you are just interested in generating predictions on completely new data, you can safely use <code>skip = TRUE</code> because you will almost never have access to the corresponding true outcomes to preprocess and compare against.</p></li>
 <li><p>If you know you need to do resampling, you will likely have access to the outcomes during the resampling step so you can cross-validate the performance. In this case, you can’t set <code>skip = TRUE</code> because then the outcomes won’t be processed, but since you have access to them, you shouldn’t need to.</p></li>
 </ul>
-<p>For example, if we used <code>iris_test</code> with the above recipe (which has the outcome), <code>Sepal.Width</code> wouldn’t get centered when <code><a href="../reference/forge.html">forge()</a></code> is called. But we probably would not have skipped that step if we knew that our test data would have the outcome.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/forge.html">forge</a></span>(<span class="no">iris_test</span>, <span class="no">recipe_eng_skip_outcome</span>, <span class="kw">outcomes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)$<span class="no">outcomes</span>
-<span class="co">#&gt; # A tibble: 50 x 1</span>
-<span class="co">#&gt;    Sepal.Width</span>
-<span class="co">#&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1         3.3</span>
-<span class="co">#&gt;  2         2.7</span>
-<span class="co">#&gt;  3         3  </span>
-<span class="co">#&gt;  4         2.9</span>
-<span class="co">#&gt;  5         3  </span>
-<span class="co">#&gt;  6         3  </span>
-<span class="co">#&gt;  7         2.5</span>
-<span class="co">#&gt;  8         2.9</span>
-<span class="co">#&gt;  9         2.5</span>
-<span class="co">#&gt; 10         3.6</span>
-<span class="co">#&gt; # … with 40 more rows</span>
+<p>For example, if we used <code>penguin_test</code> with the above recipe (which has the outcome), <code>bill_length_mm</code> wouldn’t get centered when <code><a href="../reference/forge.html">forge()</a></code> is called. But we probably would not have skipped that step if we knew that our test data would have the outcome.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit">
+<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng_skip_outcome</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span>
+<span class="co">#&gt; # A tibble: 33 x 1</span>
+<span class="co">#&gt;    bill_length_mm</span>
+<span class="co">#&gt;             &lt;dbl&gt;</span>
+<span class="co">#&gt;  1           47.5</span>
+<span class="co">#&gt;  2           47.6</span>
+<span class="co">#&gt;  3           52  </span>
+<span class="co">#&gt;  4           46.9</span>
+<span class="co">#&gt;  5           53.5</span>
+<span class="co">#&gt;  6           49  </span>
+<span class="co">#&gt;  7           46.2</span>
+<span class="co">#&gt;  8           50.9</span>
+<span class="co">#&gt;  9           45.5</span>
+<span class="co">#&gt; 10           50.9</span>
+<span class="co">#&gt; # … with 23 more rows</span>
 
 <span class="co"># Notice that the `outcome` values haven't been centered</span>
 <span class="co"># and are the same as before</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">iris_test</span>$<span class="no">Sepal.Width</span>)
-<span class="co">#&gt; [1] 3.3 2.7 3.0 2.9 3.0 3.0</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">penguin_test</span><span class="op">$</span><span class="va">bill_length_mm</span><span class="op">)</span>
+<span class="co">#&gt; [1] 47.5 47.6 52.0 46.9 53.5 49.0</span></pre></div>
 </div>
 </div>
   </div>
@@ -501,7 +511,7 @@
 
 
       <footer><div class="tidyverse">
-  <p><code>hardhat</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>hardhat is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

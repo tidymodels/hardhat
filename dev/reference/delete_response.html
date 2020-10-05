@@ -8,6 +8,13 @@
 
 <title>Delete the response from a terms object — delete_response • hardhat</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -36,12 +43,17 @@
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
 
+<!--optional theme-->
+<link href="../tidymodels.css" rel="stylesheet">
+
+
 
 
 <meta property="og:title" content="Delete the response from a terms object — delete_response" />
 <meta property="og:description" content="delete_response() is exactly the same as delete.response(), except
 that it fixes a long standing bug by also removing the part of the
 &quot;dataClasses&quot; attribute corresponding to the response, if it exists." />
+<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -85,19 +97,13 @@ that it fixes a long standing bug by also removing the part of the
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.4.9000</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -165,7 +171,7 @@ that it fixes a long standing bug by also removing the part of the
 <code>"dataClasses"</code> attribute corresponding to the response, if it exists.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>delete_response</span>(<span class='no'>terms</span>)</pre>
+    <pre class="usage"><span class='fu'>delete_response</span><span class='op'>(</span><span class='va'>terms</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,11 +192,13 @@ that it fixes a long standing bug by also removing the part of the
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>framed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Width</span>, <span class='no'>iris</span>)
+<span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/delete.response.html'>delete.response</a></span>(<span class='no'>framed</span>$<span class='no'>terms</span>), <span class='st'>"dataClasses"</span>)</div><div class='output co'>#&gt;     Species Sepal.Width 
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/delete.response.html'>delete.response</a></span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span><span class='op'>)</span>, <span class='st'>"dataClasses"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     Species Sepal.Width 
 #&gt;    "factor"   "numeric" </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='fu'>delete_response</span>(<span class='no'>framed</span>$<span class='no'>terms</span>), <span class='st'>"dataClasses"</span>)</div><div class='output co'>#&gt; Sepal.Width 
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='fu'>delete_response</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span><span class='op'>)</span>, <span class='st'>"dataClasses"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Sepal.Width 
 #&gt;   "numeric" </div><div class='input'>
 </div></pre>
   </div>
@@ -204,7 +212,7 @@ that it fixes a long standing bug by also removing the part of the
 
       <footer>
       <div class="tidyverse">
-  <p><code>hardhat</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>hardhat is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

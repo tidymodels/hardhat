@@ -8,6 +8,13 @@
 
 <title>Construct a model frame — model_frame • hardhat</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -36,6 +43,10 @@
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
 
+<!--optional theme-->
+<link href="../tidymodels.css" rel="stylesheet">
+
+
 
 
 <meta property="og:title" content="Construct a model frame — model_frame" />
@@ -43,6 +54,7 @@
 a number of differences, with the main being that rows are never dropped
 and the return value is a list with the frame and terms separated into
 two distinct objects." />
+<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -86,19 +98,13 @@ two distinct objects." />
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.4.9000</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -167,7 +173,7 @@ and the return value is a list with the frame and terms separated into
 two distinct objects.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>model_frame</span>(<span class='no'>formula</span>, <span class='no'>data</span>)</pre>
+    <pre class="usage"><span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>formula</span>, <span class='va'>data</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -223,9 +229,10 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
     <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Example usage</span>
 
-<span class='no'>framed</span> <span class='kw'>&lt;-</span> <span class='fu'>model_frame</span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Width</span>, <span class='no'>iris</span>)
+<span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
 
-<span class='no'>framed</span>$<span class='no'>data</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 150 x 2</span><span>
+<span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 150 x 2</span><span>
 #&gt;    Species Sepal.Width
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'> 1</span><span> setosa          3.5
@@ -239,7 +246,8 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; </span><span style='color: #555555;'> 9</span><span> setosa          2.9
 #&gt; </span><span style='color: #555555;'>10</span><span> setosa          3.1
 #&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span></div><div class='input'>
-<span class='no'>framed</span>$<span class='no'>terms</span></div><div class='output co'>#&gt; Species ~ Sepal.Width
+<span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>
+</div><div class='output co'>#&gt; Species ~ Sepal.Width
 #&gt; attr(,"variables")
 #&gt; list(Species, Sepal.Width)
 #&gt; attr(,"factors")
@@ -255,7 +263,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; attr(,"response")
 #&gt; [1] 1
 #&gt; attr(,".Environment")
-#&gt; &lt;environment: 0x7ff1cd7af890&gt;
+#&gt; &lt;environment: 0x7f8d7d74a940&gt;
 #&gt; attr(,"predvars")
 #&gt; list(Species, Sepal.Width)
 #&gt; attr(,"dataClasses")
@@ -264,12 +272,13 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Missing values never result in dropped rows</span>
 
-<span class='no'>iris2</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
-<span class='no'>iris2</span>$<span class='no'>Sepal.Width</span>[<span class='fl'>1</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
+<span class='va'>iris2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span>
+<span class='va'>iris2</span><span class='op'>$</span><span class='va'>Sepal.Width</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
 
-<span class='no'>framed2</span> <span class='kw'>&lt;-</span> <span class='fu'>model_frame</span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Width</span>, <span class='no'>iris2</span>)
+<span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris2</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>framed2</span>$<span class='no'>data</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 2</span><span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 2</span><span>
 #&gt;   Species Sepal.Width
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span> setosa         </span><span style='color: #BB0000;'>NA</span><span>  
@@ -278,7 +287,8 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; </span><span style='color: #555555;'>4</span><span> setosa          3.1
 #&gt; </span><span style='color: #555555;'>5</span><span> setosa          3.6
 #&gt; </span><span style='color: #555555;'>6</span><span> setosa          3.9</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>framed2</span>$<span class='no'>data</span>) <span class='kw'>==</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>iris2</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span> <span class='op'>==</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>iris2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -291,7 +301,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 
       <footer>
       <div class="tidyverse">
-  <p><code>hardhat</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>hardhat is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

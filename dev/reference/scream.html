@@ -9,6 +9,13 @@
 <title>😱
  Scream. — scream • hardhat</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -37,6 +44,10 @@
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
 
+<!--optional theme-->
+<link href="../tidymodels.css" rel="stylesheet">
+
+
 
 
 <meta property="og:title" content="😱
@@ -58,6 +69,7 @@ missing any factor levels when compared with the ptype columns. If
 there are missing levels, then they are restored.
 
 " />
+<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -101,19 +113,13 @@ there are missing levels, then they are restored.
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.4.9000</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -196,7 +202,7 @@ there are missing levels, then they are restored.</p></li>
 
     </div>
 
-    <pre class="usage"><span class='fu'>scream</span>(<span class='no'>data</span>, <span class='no'>ptype</span>, <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>scream</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>ptype</span>, allow_novel_levels <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -253,29 +259,30 @@ factors in <code>ptype</code>.</p>
     <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Setup</span>
 
-<span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
-<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>101</span>:<span class='fl'>150</span>,]
+<span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span>
+<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span>
 
 <span class='co'># mold() is run at model fit time</span>
 <span class='co'># and a formula preprocessing blueprint is recorded</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>, <span class='no'>train</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>train</span><span class='op'>)</span>
 
 <span class='co'># Inside the result of mold() are the prototype tibbles</span>
 <span class='co'># for the predictors and the outcomes</span>
-<span class='no'>ptype_pred</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>predictors</span>
-<span class='no'>ptype_out</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>blueprint</span>$<span class='no'>ptypes</span>$<span class='no'>outcomes</span>
+<span class='va'>ptype_pred</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>$</span><span class='va'>ptypes</span><span class='op'>$</span><span class='va'>predictors</span>
+<span class='va'>ptype_out</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>$</span><span class='va'>ptypes</span><span class='op'>$</span><span class='va'>outcomes</span>
 
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># shrink() / scream()</span>
 
 <span class='co'># Pass the test data, along with a prototype, to</span>
 <span class='co'># shrink() to extract the prototype columns</span>
-<span class='no'>test_shrunk</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>test</span>, <span class='no'>ptype_pred</span>)
+<span class='va'>test_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
 
 <span class='co'># Now pass that to scream() to perform validation checks</span>
 <span class='co'># If no warnings / errors are thrown, the checks were</span>
 <span class='co'># successful!</span>
-<span class='fu'>scream</span>(<span class='no'>test_shrunk</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 50 x 1</span><span>
+<span class='fu'>scream</span><span class='op'>(</span><span class='va'>test_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 50 x 1</span><span>
 #&gt;    Species  
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>    
 #&gt; </span><span style='color: #555555;'> 1</span><span> virginica
@@ -293,8 +300,9 @@ factors in <code>ptype</code>.</p>
 <span class='co'># Outcomes</span>
 
 <span class='co'># To also extract the outcomes, use the outcome prototype</span>
-<span class='no'>test_outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>test</span>, <span class='no'>ptype_out</span>)
-<span class='fu'>scream</span>(<span class='no'>test_outcome</span>, <span class='no'>ptype_out</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 50 x 1</span><span>
+<span class='va'>test_outcome</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>ptype_out</span><span class='op'>)</span>
+<span class='fu'>scream</span><span class='op'>(</span><span class='va'>test_outcome</span>, <span class='va'>ptype_out</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 50 x 1</span><span>
 #&gt;    Sepal.Width
 #&gt;          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'> 1</span><span>         3.3
@@ -315,11 +323,12 @@ factors in <code>ptype</code>.</p>
 <span class='co'># new data to the prototype automatically. This means</span>
 <span class='co'># it can automatically perform certain conversions, like</span>
 <span class='co'># coercing character columns to factors.</span>
-<span class='no'>test2</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>
-<span class='no'>test2</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>test2</span>$<span class='no'>Species</span>)
+<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>test</span>
+<span class='va'>test2</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>test2</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
 
-<span class='no'>test2_shrunk</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>test2</span>, <span class='no'>ptype_pred</span>)
-<span class='fu'>scream</span>(<span class='no'>test2_shrunk</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 50 x 1</span><span>
+<span class='va'>test2_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
+<span class='fu'>scream</span><span class='op'>(</span><span class='va'>test2_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 50 x 1</span><span>
 #&gt;    Species  
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>    
 #&gt; </span><span style='color: #555555;'> 1</span><span> virginica
@@ -336,39 +345,43 @@ factors in <code>ptype</code>.</p>
 <span class='co'># It can also recover missing factor levels.</span>
 <span class='co'># For example, it is plausible that the test data only had the</span>
 <span class='co'># "virginica" level</span>
-<span class='no'>test3</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>
-<span class='no'>test3</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>test3</span>$<span class='no'>Species</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='st'>"virginica"</span>)
+<span class='va'>test3</span> <span class='op'>&lt;-</span> <span class='va'>test</span>
+<span class='va'>test3</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>test3</span><span class='op'>$</span><span class='va'>Species</span>, levels <span class='op'>=</span> <span class='st'>"virginica"</span><span class='op'>)</span>
 
-<span class='no'>test3_shrunk</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>test3</span>, <span class='no'>ptype_pred</span>)
-<span class='no'>test3_fixed</span> <span class='kw'>&lt;-</span> <span class='fu'>scream</span>(<span class='no'>test3_shrunk</span>, <span class='no'>ptype_pred</span>)
+<span class='va'>test3_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test3</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
+<span class='va'>test3_fixed</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test3_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
 
 <span class='co'># scream() recovered the missing levels</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test3_fixed</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test3_fixed</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Novel levels</span>
 
 <span class='co'># When novel levels with any data are present in `data`, the default</span>
 <span class='co'># is to coerce them to `NA` values with a warning.</span>
-<span class='no'>test4</span> <span class='kw'>&lt;-</span> <span class='no'>test</span>
-<span class='no'>test4</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>test4</span>$<span class='no'>Species</span>)
-<span class='no'>test4</span>$<span class='no'>Species</span>[<span class='fl'>1</span>] <span class='kw'>&lt;-</span> <span class='st'>"new_level"</span>
+<span class='va'>test4</span> <span class='op'>&lt;-</span> <span class='va'>test</span>
+<span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
+<span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"new_level"</span>
 
-<span class='no'>test4</span>$<span class='no'>Species</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(
-  <span class='no'>test4</span>$<span class='no'>Species</span>,
-  <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test</span>$<span class='no'>Species</span>), <span class='st'>"new_level"</span>)
-)
+<span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span>
+  <span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span>,
+  levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>, <span class='st'>"new_level"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='no'>test4</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span>(<span class='no'>test4</span>, <span class='no'>ptype_pred</span>)
+<span class='va'>test4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
 
 <span class='co'># Warning is thrown</span>
-<span class='no'>test4_removed</span> <span class='kw'>&lt;-</span> <span class='fu'>scream</span>(<span class='no'>test4</span>, <span class='no'>ptype_pred</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Novel levels found in column 'Species': 'new_level'. The levels have been removed, and values have been coerced to 'NA'.</span></div><div class='input'>
+<span class='va'>test4_removed</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Novel levels found in column 'Species': 'new_level'. The levels have been removed, and values have been coerced to 'NA'.</span></div><div class='input'>
 <span class='co'># Novel level is removed</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test4_removed</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test4_removed</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
 <span class='co'># No warning is thrown</span>
-<span class='no'>test4_kept</span> <span class='kw'>&lt;-</span> <span class='fu'>scream</span>(<span class='no'>test4</span>, <span class='no'>ptype_pred</span>, <span class='kw'>allow_novel_levels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>test4_kept</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span>, allow_novel_levels <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># Novel level is kept</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>test4_kept</span>$<span class='no'>Species</span>)</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica"  "new_level" </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test4_kept</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica"  "new_level" </div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -381,7 +394,7 @@ factors in <code>ptype</code>.</p>
 
       <footer>
       <div class="tidyverse">
-  <p><code>hardhat</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>hardhat is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">
