@@ -62,3 +62,7 @@ reference:
   - title: Information
     contents:
     - contains("get_")
+
+  - title: Data
+    contents:
+    - hardhat-example-data
