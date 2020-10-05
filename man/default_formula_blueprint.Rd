@@ -8,7 +8,8 @@
 default_formula_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  indicators = "traditional"
+  indicators = "traditional",
+  composition = "tibble"
 )
 
 \method{mold}{formula}(formula, data, ..., blueprint = NULL)
@@ -34,6 +35,11 @@ levels in that factor.
 that expands unordered factors into all \code{K} indicator columns, rather than
 \code{K - 1}.
 }}
+
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+the predictors must be numeric after the preprocessing method has been
+applied; otherwise an error is thrown.}
 
 \item{formula}{A formula specifying the predictors and the outcomes.}
 
@@ -317,4 +323,13 @@ mold(
   example_train,
   blueprint = default_formula_blueprint(intercept = TRUE)
 )
+
+# ---------------------------------------------------------------------------
+# Matrix output for predictors
+
+# You can change the `composition` of the predictor data set
+bp <- default_formula_blueprint(composition = "dgCMatrix")
+processed <- mold(log(num_1) ~ num_2 + fac_1, example_train, blueprint = bp)
+class(processed$predictors)
+
 }

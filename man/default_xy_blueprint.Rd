@@ -6,7 +6,11 @@
 \alias{mold.matrix}
 \title{Default XY blueprint}
 \usage{
-default_xy_blueprint(intercept = FALSE, allow_novel_levels = FALSE)
+default_xy_blueprint(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  composition = "tibble"
+)
 
 \method{mold}{data.frame}(x, y, ..., blueprint = NULL)
 
@@ -20,6 +24,11 @@ in the \code{mold} and \code{forge} function list.}
 \item{allow_novel_levels}{A logical. Should novel factor levels be allowed at
 prediction time? This information is used by the \code{clean} function in the
 \code{forge} function list, and is passed on to \code{\link[=scream]{scream()}}.}
+
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+the predictors must be numeric after the preprocessing method has been
+applied; otherwise an error is thrown.}
 
 \item{x}{A data frame or matrix containing the predictors.}
 
@@ -136,5 +145,13 @@ test2$Species <- NULL
 
 # This works, and returns a tibble in the $outcomes slot
 forge(test2, processed_vec$blueprint, outcomes = TRUE)
+
+# ---------------------------------------------------------------------------
+# Matrix output for predictors
+
+# You can change the `composition` of the predictor data set
+bp <- default_xy_blueprint(composition = "dgCMatrix")
+processed <- mold(train_x, train_y, blueprint = bp)
+class(processed$predictors)
 
 }

@@ -117,8 +117,18 @@
 #' # This works, and returns a tibble in the $outcomes slot
 #' forge(test2, processed_vec$blueprint, outcomes = TRUE)
 #'
+#' # ---------------------------------------------------------------------------
+#' # Matrix output for predictors
+#'
+#' # You can change the `composition` of the predictor data set
+#' bp <- default_xy_blueprint(composition = "dgCMatrix")
+#' processed <- mold(train_x, train_y, blueprint = bp)
+#' class(processed$predictors)
+#'
 #' @export
-default_xy_blueprint <- function(intercept = FALSE, allow_novel_levels = FALSE) {
+default_xy_blueprint <- function(intercept = FALSE,
+                                 allow_novel_levels = FALSE,
+                                 composition = "tibble") {
 
   mold <- get_mold_xy_default_function_set()
   forge <- get_forge_xy_default_function_set()
@@ -127,7 +137,8 @@ default_xy_blueprint <- function(intercept = FALSE, allow_novel_levels = FALSE) 
     mold = mold,
     forge = forge,
     intercept = intercept,
-    allow_novel_levels = allow_novel_levels
+    allow_novel_levels = allow_novel_levels,
+    composition = composition
   )
 
 }
@@ -149,6 +160,7 @@ new_default_xy_blueprint <- function(mold,
                                      forge,
                                      intercept = FALSE,
                                      allow_novel_levels = FALSE,
+                                     composition = "tibble",
                                      ptypes = NULL,
                                      ...,
                                      subclass = character()) {
@@ -158,6 +170,7 @@ new_default_xy_blueprint <- function(mold,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
+    composition = composition,
     ptypes = ptypes,
     ...,
     subclass = c(subclass, "default_xy_blueprint")
@@ -231,6 +244,8 @@ mold_xy_default_process_predictors <- function(blueprint, x) {
 
   x <- maybe_add_intercept_column(x, blueprint$intercept)
 
+  x <- recompose(x, blueprint$composition)
+
   predictors_lst <- out$mold$process_terms_lst(data = x, ptype)
 
   out$mold$process_terms(blueprint, predictors_lst)
@@ -299,6 +314,8 @@ forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
 forge_xy_default_process_predictors <- function(blueprint, predictors) {
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+
+  predictors <- recompose(predictors, blueprint$composition)
 
   predictors_lst <- out$forge$process_terms_lst(data = predictors)
 

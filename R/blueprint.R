@@ -26,6 +26,11 @@
 #' prediction time? This information is used by the `clean` function in the
 #' `forge` function list, and is passed on to [scream()].
 #'
+#' @param composition Either "tibble", "matrix", or "dgCMatrix" for the format
+#' of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+#' the predictors must be numeric after the preprocessing method has been
+#' applied; otherwise an error is thrown.
+#'
 #' @param ptypes Either `NULL`, or a named list with 2 elements, `predictors`
 #' and `outcomes`, both of which are 0-row tibbles. `ptypes` is generated
 #' automatically at [mold()] time and is used to validate `new_data` at
@@ -52,6 +57,7 @@ new_blueprint <- function(mold,
                           forge,
                           intercept = FALSE,
                           allow_novel_levels = FALSE,
+                          composition = "tibble",
                           ptypes = NULL,
                           ...,
                           subclass = character()) {
@@ -60,6 +66,7 @@ new_blueprint <- function(mold,
   validate_is_function_set(forge)
   validate_is_bool(intercept)
   validate_is_bool(allow_novel_levels)
+  validate_composition(composition)
   validate_is_ptype_list_or_null(ptypes)
   validate_is_character(subclass, "subclass")
 
@@ -72,6 +79,7 @@ new_blueprint <- function(mold,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
+    composition = composition,
     ptypes = ptypes
   )
 

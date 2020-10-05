@@ -36,6 +36,7 @@ Suggests:
     crayon,
     devtools,
     knitr,
+    Matrix,
     modeldata (>= 0.0.2),
     recipes (>= 0.1.8),
     rmarkdown (>= 2.3),

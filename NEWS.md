@@ -1,5 +1,9 @@
 # hardhat (development version)
 
+* All preprocessors can now `mold()` and `forge()` predictors to one of three 
+  output formats (either tibble, matrix, or `dgCMatrix` sparse matrix) via the
+  `composition` argument of a blueprint (#100, #150).
+
 # hardhat 0.1.4
 
 * Setting `indicators = "none"` in `default_formula_blueprint()` no longer

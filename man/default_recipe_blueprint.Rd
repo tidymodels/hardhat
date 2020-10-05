@@ -8,7 +8,8 @@
 default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
-  fresh = TRUE
+  fresh = TRUE,
+  composition = "tibble"
 )
 
 \method{mold}{recipe}(x, data, ..., blueprint = NULL)
@@ -24,6 +25,11 @@ prediction time? This information is used by the \code{clean} function in the
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+the predictors must be numeric after the preprocessing method has been
+applied; otherwise an error is thrown.}
 
 \item{x}{An unprepped recipe created from \code{\link[recipes:recipe]{recipes::recipe()}}.}
 
@@ -132,5 +138,13 @@ processed_roles <- mold(rec_roles, train)
 processed_roles$extras
 
 forge(test, processed_roles$blueprint)
+
+# ---------------------------------------------------------------------------
+# Matrix output for predictors
+
+# You can change the `composition` of the predictor data set
+bp <- default_recipe_blueprint(composition = "dgCMatrix")
+processed <- mold(rec, train, blueprint = bp)
+class(processed$predictors)
 
 }

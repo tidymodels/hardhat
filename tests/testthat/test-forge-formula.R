@@ -1,39 +1,63 @@
 context("test-forge-formula")
 
 test_that("simple forge works", {
-  x <- mold(fac_1 ~ num_1, example_train)
-  xx <- forge(example_train, x$blueprint)
+  sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_formula_blueprint(composition = "matrix")
 
-  expect_equal(
-    colnames(xx$predictors),
-    "num_1"
-  )
+  x1 <- mold(fac_1 ~ num_1, example_train)
+  x2 <- mold(fac_1 ~ num_1, example_train, blueprint = sparse_bp)
+  x3 <- mold(fac_1 ~ num_1, example_train, blueprint = matrix_bp)
+  xx1 <- forge(example_train, x1$blueprint)
+  xx2 <- forge(example_train, x2$blueprint)
+  xx3 <- forge(example_train, x3$blueprint)
 
-  expect_equal(
-    xx$outcomes,
-    NULL
-  )
+  expect_is(xx1$predictors, "tbl_df")
+  expect_is(xx2$predictors, "dgCMatrix")
+  expect_is(xx3$predictors, "matrix")
+
+  expect_equal(colnames(xx1$predictors), "num_1")
+  expect_equal(colnames(xx2$predictors), "num_1")
+  expect_equal(colnames(xx3$predictors), "num_1")
+
+  expect_equal(xx1$outcomes, NULL)
+  expect_equal(xx2$outcomes, NULL)
+  expect_equal(xx3$outcomes, NULL)
 })
 
 test_that("can forge multivariate formulas", {
 
-  x <- mold(num_1 + num_2 ~ num_3, example_train)
-  xx <- forge(example_train, x$blueprint, outcomes = TRUE)
+  sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_formula_blueprint(composition = "matrix")
 
-  expect_is(xx$outcomes, "tbl_df")
-  expect_equal(colnames(xx$outcomes), c("num_1", "num_2"))
+  x1 <- mold(num_1 + num_2 ~ num_3, example_train)
+  x2 <- mold(num_1 + num_2 ~ num_3, example_train, blueprint = sparse_bp)
+  x3 <- mold(num_1 + num_2 ~ num_3, example_train, blueprint = matrix_bp)
+  xx1 <- forge(example_train, x1$blueprint, outcomes = TRUE)
+  xx2 <- forge(example_train, x2$blueprint, outcomes = TRUE)
+  xx3 <- forge(example_train, x3$blueprint, outcomes = TRUE)
 
-  y <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train)
-  yy <- forge(example_train, y$blueprint, outcomes = TRUE)
+  expect_is(xx1$outcomes, "tbl_df")
+  expect_equal(colnames(xx1$outcomes), c("num_1", "num_2"))
+  expect_equal(xx1$outcomes, xx3$outcomes)
+  expect_equal(xx1$outcomes, xx3$outcomes)
+
+  y1 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train)
+  y2 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = sparse_bp)
+  y3 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = matrix_bp)
+  yy1 <- forge(example_train, y1$blueprint, outcomes = TRUE)
+  yy2 <- forge(example_train, y2$blueprint, outcomes = TRUE)
+  yy3 <- forge(example_train, y3$blueprint, outcomes = TRUE)
 
   expect_equal(
-    colnames(yy$outcomes),
+    colnames(yy1$outcomes),
     c(
       "log(num_2)",
       "poly(num_2, degree = 2).1",
       "poly(num_2, degree = 2).2"
     )
   )
+  expect_equal(yy1$outcomes, yy2$outcomes)
+  expect_equal(yy1$outcomes, yy3$outcomes)
 
 })
 
@@ -60,45 +84,75 @@ test_that("can forge new data without expanding factors into dummies", {
 })
 
 test_that("forging with `indicators = 'none'` works with numeric interactions", {
-  x <- mold(
+  x1 <- mold(
     fac_1 ~ num_2:num_1,
     example_train,
     blueprint = default_formula_blueprint(indicators = "none")
   )
 
-  xx <- forge(example_train, x$blueprint)
+  xx1 <- forge(example_train, x1$blueprint)
 
   expect_equal(
-    colnames(xx$predictors),
+    colnames(xx1$predictors),
     "num_2:num_1"
   )
 
-})
+  x2 <- mold(
+    fac_1 ~ num_2:num_1,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none", composition = "dgCMatrix")
+  )
 
-test_that("asking for the outcome works", {
-  x <- mold(fac_1 ~ num_1, example_train)
-  xx <- forge(example_train, x$blueprint, outcomes = TRUE)
+  xx2 <- forge(example_train, x2$blueprint)
 
   expect_equal(
-    xx$outcomes,
-    tibble::tibble(fac_1 = example_train$fac_1)
+    colnames(xx2$predictors),
+    "num_2:num_1"
   )
 })
 
+test_that("asking for the outcome works", {
+  sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
+  matrix_bp <- default_formula_blueprint(composition = "matrix")
+
+  x1 <- mold(fac_1 ~ num_1, example_train)
+  x2 <- mold(fac_1 ~ num_1, example_train, blueprint = sparse_bp)
+  x3 <- mold(fac_1 ~ num_1, example_train, blueprint = matrix_bp)
+  xx1 <- forge(example_train, x1$blueprint, outcomes = TRUE)
+  xx2 <- forge(example_train, x2$blueprint, outcomes = TRUE)
+  xx3 <- forge(example_train, x3$blueprint, outcomes = TRUE)
+
+  expect_equal(
+    xx1$outcomes,
+    tibble::tibble(fac_1 = example_train$fac_1)
+  )
+  expect_equal(xx1$outcomes, xx2$outcomes)
+  expect_equal(xx1$outcomes, xx3$outcomes)
+})
+
 test_that("asking for the outcome when it isn't there fails", {
-  x <- mold(fac_1 ~ num_1, example_train)
+  sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(fac_1 ~ num_1, example_train)
+  x2 <- mold(fac_1 ~ num_1, example_train, blueprint = sparse_bp)
   example_train2 <- example_train
   example_train2$fac_1 <- NULL
 
   expect_error(
-    forge(example_train2, x$blueprint, outcomes = TRUE),
+    forge(example_train2, x1$blueprint, outcomes = TRUE),
+    "The following required columns"
+  )
+  expect_error(
+    forge(example_train2, x2$blueprint, outcomes = TRUE),
     "The following required columns"
   )
 })
 
 test_that("can use special inline functions", {
-  x <- mold(log(num_1) ~ poly(num_1, degree = 2), example_train)
-  xx <- forge(example_train, x$blueprint, outcomes = TRUE)
+  bp <- default_formula_blueprint(composition = "matrix")
+  x1 <- mold(log(num_1) ~ poly(num_1, degree = 2), example_train)
+  x2 <- mold(log(num_1) ~ poly(num_1, degree = 2), example_train, blueprint = bp)
+  xx1 <- forge(example_train, x1$blueprint, outcomes = TRUE)
+  xx2 <- forge(example_train, x2$blueprint, outcomes = TRUE)
 
   # manually create poly df
   x_poly <- stats::poly(example_train$num_1, degree = 2)
@@ -109,58 +163,89 @@ test_that("can use special inline functions", {
 
   # coerce to df for tolerance..tibbles don't have good tolerance
   expect_equal(
-    as.data.frame(xx$predictors),
+    as.data.frame(xx1$predictors),
     as.data.frame(poly_df)
+  )
+  expect_equal(
+    xx2$predictors,
+    as.matrix(poly_df)
   )
 
   expect_equal(
-    xx$outcomes,
+    xx1$outcomes,
     tibble::tibble(`log(num_1)` = log(example_train$num_1))
   )
+  expect_equal(xx1$outcomes, xx2$outcomes)
 
 })
 
 test_that("new_data can be a matrix", {
-  x <- mold(fac_1 ~ num_1, example_train)
+  bp <- default_formula_blueprint(composition = "matrix")
+  x1 <- mold(fac_1 ~ num_1, example_train)
+  x2 <- mold(fac_1 ~ num_1, example_train, blueprint = bp)
   example_train_mat <- as.matrix(example_train[,"num_1", drop = FALSE])
 
   expect_error(
-    xx <- forge(example_train_mat, x$blueprint),
+    xx1 <- forge(example_train_mat, x1$blueprint),
+    NA
+  )
+  expect_error(
+    xx2 <- forge(example_train_mat, x2$blueprint),
     NA
   )
 
   sep_len <- example_train$num_1
-  pred_tbl <- tibble::tibble(num_1 = sep_len)
 
   expect_equal(
-    xx$predictors,
-    pred_tbl
+    xx1$predictors,
+    tibble::tibble(num_1 = sep_len)
+  )
+  expect_equal(
+    unname(xx2$predictors),
+    as.matrix(sep_len)
   )
 
 })
 
 test_that("new_data can only be a data frame / matrix", {
-  x <- mold(fac_1 ~ num_1, example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(fac_1 ~ num_1, example_train)
+  x2 <- mold(fac_1 ~ num_1, example_train, blueprint = bp)
 
   expect_error(
-    forge("hi", x$blueprint),
+    forge("hi", x1$blueprint),
+    "The class of `new_data`, 'character'"
+  )
+  expect_error(
+    forge("hi", x2$blueprint),
     "The class of `new_data`, 'character'"
   )
 
 })
 
 test_that("missing predictor columns fail appropriately", {
-  x <- mold(fac_1 ~ num_1 + num_2, example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(fac_1 ~ num_1 + num_2, example_train)
+  x2 <- mold(fac_1 ~ num_1 + num_2, example_train, blueprint = bp)
 
   expect_error(
-    forge(example_train[,1, drop = FALSE], x$blueprint),
+    forge(example_train[,1, drop = FALSE], x1$blueprint),
+    "num_2"
+  )
+  expect_error(
+    forge(example_train[,1, drop = FALSE], x2$blueprint),
     "num_2"
   )
 
   expect_error(
-    forge(example_train[,3, drop = FALSE], x$blueprint),
+    forge(example_train[,3, drop = FALSE], x1$blueprint),
     "'num_1', 'num_2'"
   )
+  expect_error(
+    forge(example_train[,3, drop = FALSE], x2$blueprint),
+    "'num_1', 'num_2'"
+  )
+
 
 })
 
@@ -176,21 +261,33 @@ test_that("novel predictor levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- mold(y ~ f, dat)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(y ~ f, dat)
+  x2 <- mold(y ~ f, dat, blueprint = bp)
+
 
   expect_warning(
-    xx <- forge(new, x$blueprint),
+    xx1 <- forge(new, x1$blueprint),
+    "Novel levels found in column 'f': 'e'"
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint),
     "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
-    xx$predictors[[5,1]],
+    xx1$predictors[[5,1]],
+    NA_real_
+  )
+  expect_equal(
+    unname(xx2$predictors[5,1]),
     NA_real_
   )
 
 })
 
 test_that("novel predictor levels can be ignored", {
+
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -201,23 +298,35 @@ test_that("novel predictor levels can be ignored", {
     f = factor(letters[1:5])
   )
 
-  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
 
-  x <- mold(y ~ f, dat, blueprint = blueprint)
+  x1 <- mold(y ~ f, dat, blueprint = bp1)
+  x2 <- mold(y ~ f, dat, blueprint = bp2)
 
   expect_warning(
-    xx <- forge(new, x$blueprint),
+    xx1 <- forge(new, x1$blueprint),
+    NA
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint),
     NA
   )
 
   expect_equal(
-    xx$predictors[[5,5]],
+    xx1$predictors[[5,5]],
+    1
+  )
+  expect_equal(
+    unname(xx2$predictors[5,5]),
     1
   )
 })
 
 test_that("novel predictor levels without any data are silently removed", {
 
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -231,20 +340,29 @@ test_that("novel predictor levels without any data are silently removed", {
   # The 'e' level exists, but there is no data for it!
   new <- new[1:4,]
 
-  x <- mold(y ~ f, dat)
+  x1 <- mold(y ~ f, dat)
+  x2 <- mold(y ~ f, dat, blueprint = bp)
 
   expect_silent(
-    xx <- forge(new, x$blueprint)
+    xx1 <- forge(new, x1$blueprint)
+  )
+  expect_silent(
+    xx2 <- forge(new, x2$blueprint)
   )
 
   expect_equal(
-    colnames(xx$predictors),
-    colnames(x$predictors)
+    colnames(xx1$predictors),
+    colnames(x1$predictors)
+  )
+  expect_equal(
+    colnames(xx2$predictors),
+    colnames(x2$predictors)
   )
 
 })
 
 test_that("novel predictor levels without any data are kept when novel levels are ignored", {
+
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -258,17 +376,26 @@ test_that("novel predictor levels without any data are kept when novel levels ar
   # The 'e' level exists, but there is no data for it!
   new <- new[1:4,]
 
-  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
 
-  x <- mold(y ~ f, dat, blueprint = blueprint)
+  x1 <- mold(y ~ f, dat, blueprint = bp1)
+  x2 <- mold(y ~ f, dat, blueprint = bp2)
 
   expect_silent(
-    xx <- forge(new, x$blueprint)
+    xx1 <- forge(new, x1$blueprint)
+  )
+  expect_silent(
+    xx2 <- forge(new, x2$blueprint)
   )
 
   expect_equal(
-    colnames(xx$predictors),
-    c(colnames(x$predictors), "fe")
+    colnames(xx1$predictors),
+    c(colnames(x1$predictors), "fe")
+  )
+  expect_equal(
+    colnames(xx2$predictors),
+    c(colnames(x2$predictors), "fe")
   )
 })
 
@@ -284,15 +411,25 @@ test_that("novel levels are handled correctly when the new column is a character
     f = letters[1:5] # character!
   )
 
-  x <- mold(y ~ f, dat)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(y ~ f, dat)
+  x2 <- mold(y ~ f, dat, blueprint = bp)
 
   expect_warning(
-    xx <- forge(new, x$blueprint),
+    xx1 <- forge(new, x1$blueprint),
+    "Novel levels found in column 'f': 'e'"
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint),
     "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
-    xx$predictors[[5,1]],
+    xx1$predictors[[5,1]],
+    NA_real_
+  )
+  expect_equal(
+    unname(xx2$predictors[5,1]),
     NA_real_
   )
 
@@ -301,7 +438,10 @@ test_that("novel levels are handled correctly when the new column is a character
 
   # silently coerces to factor, and silently removes novel level
   expect_silent(
-    xx <- forge(new2, x$blueprint)
+    xx1 <- forge(new2, x1$blueprint)
+  )
+  expect_silent(
+    xx2 <- forge(new2, x2$blueprint)
   )
 
 })
@@ -318,10 +458,16 @@ test_that("novel levels are handled correctly when the new column is a character
     stringsAsFactors = FALSE
   )
 
-  x <- mold(y ~ f, dat)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(y ~ f, dat)
+  x2 <- mold(y ~ f, dat, blueprint = bp)
 
   expect_error(
-    forge(new, x$blueprint),
+    forge(new, x1$blueprint),
+    class = "vctrs_error_cast_lossy"
+  )
+  expect_error(
+    forge(new, x2$blueprint),
     class = "vctrs_error_cast_lossy"
   )
 
@@ -330,7 +476,10 @@ test_that("novel levels are handled correctly when the new column is a character
 
   # silently coerces to factor, and silently removes novel level
   expect_silent(
-    xx <- forge(new2, x$blueprint)
+    xx <- forge(new2, x1$blueprint)
+  )
+  expect_silent(
+    xx <- forge(new2, x2$blueprint)
   )
 })
 
@@ -346,17 +495,27 @@ test_that("novel levels are ignored correctly when the new column is a character
     stringsAsFactors = FALSE
   )
 
-  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
 
-  x <- mold(y ~ f, dat, blueprint = blueprint)
+  x1 <- mold(y ~ f, dat, blueprint = bp1)
+  x2 <- mold(y ~ f, dat, blueprint = bp2)
 
   expect_warning(
-    xx <- forge(new, x$blueprint),
+    xx1 <- forge(new, x1$blueprint),
+    NA
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint),
     NA
   )
 
   expect_equal(
-    xx$predictors[[5,5]],
+    xx1$predictors[[5,5]],
+    1
+  )
+  expect_equal(
+    unname(xx2$predictors[5,5]),
     1
   )
 
@@ -365,12 +524,19 @@ test_that("novel levels are ignored correctly when the new column is a character
 
   # silently coerces to factor, and silently removes novel level
   expect_silent(
-    yy <- forge(new2, x$blueprint)
+    yy1 <- forge(new2, x1$blueprint)
+  )
+  expect_silent(
+    yy2 <- forge(new2, x2$blueprint)
   )
 
   expect_equal(
-    colnames(yy$predictors),
-    colnames(xx$predictors)[-5L]
+    colnames(yy1$predictors),
+    colnames(xx1$predictors)[-5L]
+  )
+  expect_equal(
+    colnames(yy2$predictors),
+    colnames(xx2$predictors)[-5L]
   )
 })
 
@@ -439,15 +605,25 @@ test_that("novel outcome levels are caught", {
     f = factor(letters[1:5])
   )
 
-  x <- mold(f ~ y, dat)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(f ~ y, dat)
+  x2 <- mold(f ~ y, dat, blueprint = bp)
 
   expect_warning(
-    xx <- forge(new, x$blueprint, outcomes = TRUE),
+    xx1 <- forge(new, x1$blueprint, outcomes = TRUE),
+    "Novel levels found in column 'f': 'e'"
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint, outcomes = TRUE),
     "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
-    xx$outcomes[[5,1]],
+    xx1$outcomes[[5,1]],
+    factor(NA_real_, c("a", "b", "c", "d"))
+  )
+  expect_equal(
+    xx2$outcomes[[5,1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
 })
@@ -463,17 +639,27 @@ test_that("novel outcome levels are always caught, even if `allow_novel_levels =
     f = factor(letters[1:5])
   )
 
-  blueprint <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
+  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "matrix")
 
-  x <- mold(f ~ y, dat, blueprint = blueprint)
+  x1 <- mold(f ~ y, dat, blueprint = bp1)
+  x2 <- mold(f ~ y, dat, blueprint = bp2)
 
   expect_warning(
-    xx <- forge(new, x$blueprint, outcomes = TRUE),
+    xx1 <- forge(new, x1$blueprint, outcomes = TRUE),
+    "Novel levels found in column 'f': 'e'"
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint, outcomes = TRUE),
     "Novel levels found in column 'f': 'e'"
   )
 
   expect_equal(
-    xx$outcomes[[5,1]],
+    xx1$outcomes[[5,1]],
+    factor(NA_real_, c("a", "b", "c", "d"))
+  )
+  expect_equal(
+    xx2$outcomes[[5,1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
 })
@@ -497,25 +683,43 @@ test_that("missing predictor levels are restored silently", {
     f = factor(letters[1:2])
   )
 
-  x <- mold(y ~ f, dat)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(y ~ f, dat)
+  x2 <- mold(y ~ f, dat, blueprint = bp)
 
   expect_warning(
-    x_new <- forge(new, x$blueprint),
+    xx1 <- forge(new, x1$blueprint),
+    NA
+  )
+  expect_warning(
+    xx2 <- forge(new, x2$blueprint),
     NA
   )
 
   expect_equal(
-    colnames(x_new$predictors),
+    colnames(xx1$predictors),
+    c("fa", "fb", "fc", "fd")
+  )
+  expect_equal(
+    colnames(xx2$predictors),
     c("fa", "fb", "fc", "fd")
   )
 
   expect_warning(
-    x_new2 <- forge(new2, x$blueprint),
+    yy1 <- forge(new2, x1$blueprint),
+    NA
+  )
+  expect_warning(
+    yy2 <- forge(new2, x2$blueprint),
     NA
   )
 
   expect_equal(
-    colnames(x_new2$predictors),
+    colnames(yy1$predictors),
+    c("fa", "fb", "fc", "fd")
+  )
+  expect_equal(
+    colnames(yy2$predictors),
     c("fa", "fb", "fc", "fd")
   )
 
@@ -560,11 +764,17 @@ test_that("can be both missing levels and have new levels", {
     f = factor(letters[c(1:3, 5)])
   )
 
-  x <- mold(y ~ f, dat, blueprint = default_formula_blueprint(indicators = "none"))
+  bp1 = default_formula_blueprint(indicators = "none")
+  bp2 = default_formula_blueprint(indicators = "none", composition = "matrix")
+  x1 <- mold(y ~ f, dat, blueprint = bp1)
+  expect_error(
+    x2 <- mold(y ~ f, dat, blueprint = bp2),
+    "cannot convert to matrix"
+  )
 
   # Warning for the extra level
   expect_warning(
-    xx <- forge(new, x$blueprint),
+    xx <- forge(new, x1$blueprint),
     "Novel levels found in column 'f': 'e'"
   )
 
@@ -665,17 +875,28 @@ test_that("new data classes can interchange integer/numeric", {
   example_train2 <- example_train
   example_train2$num_1 <- as.integer(example_train2$num_1)
 
-  x <- mold(fac_1 ~ num_1, example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(fac_1 ~ num_1, example_train)
+  x2 <- mold(fac_1 ~ num_1, example_train, blueprint = bp)
 
   expect_error(
-    forge(example_train2, x$blueprint),
+    forge(example_train2, x1$blueprint),
+    NA
+  )
+  expect_error(
+    forge(example_train2, x2$blueprint),
     NA
   )
 
-  xx <- mold(num_1 ~ fac_1, example_train)
+  x3 <- mold(num_1 ~ fac_1, example_train)
+  x4 <- mold(num_1 ~ fac_1, example_train, blueprint = bp)
 
   expect_error(
-    forge(example_train2, xx$blueprint, outcomes = TRUE),
+    forge(example_train2, x3$blueprint, outcomes = TRUE),
+    NA
+  )
+  expect_error(
+    forge(example_train2, x4$blueprint, outcomes = TRUE),
     NA
   )
 
@@ -698,18 +919,24 @@ test_that("intercepts can still be forged on when not using indicators (i.e. mod
 })
 
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
-  x <- mold(~ num_2, example_train)
-  expect_equal(forge(example_train, x$blueprint)$outcomes, NULL)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(~ num_2, example_train)
+  x2 <- mold(~ num_2, example_train, blueprint = bp)
+  expect_equal(forge(example_train, x1$blueprint)$outcomes, NULL)
+  expect_equal(forge(example_train, x2$blueprint)$outcomes, NULL)
 })
 
 test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
-  x <- mold(~ num_2, example_train)
+  bp <- default_formula_blueprint(composition = "dgCMatrix")
+  x1 <- mold(~ num_2, example_train)
+  x2 <- mold(~ num_2, example_train, blueprint = bp)
 
-  forged <- forge(example_train, x$blueprint, outcomes = TRUE)
-  outcomes <- forged$outcomes
+  xx1 <- forge(example_train, x1$blueprint, outcomes = TRUE)
+  xx2 <- forge(example_train, x2$blueprint, outcomes = TRUE)
 
-  expect_equal(nrow(outcomes), 12)
-  expect_equal(ncol(outcomes), 0)
+  expect_equal(nrow(xx1$outcomes), 12)
+  expect_equal(ncol(xx1$outcomes), 0)
+  expect_equal(xx1$outcomes, xx2$outcomes)
 })
 
 # ------------------------------------------------------------------------------
@@ -725,20 +952,34 @@ test_that("character predictors are treated as factors when `indicators` is not 
 
   bp1 <- default_formula_blueprint(indicators = "traditional")
   bp2 <- default_formula_blueprint(indicators = "one_hot")
+  bp3 <- default_formula_blueprint(indicators = "traditional", composition = "matrix")
+  bp4 <- default_formula_blueprint(indicators = "one_hot", composition = "matrix")
 
   res1 <- mold(y ~ x + z, df, blueprint = bp1)
   res2 <- mold(y ~ x + z, df, blueprint = bp2)
+  res3 <- mold(y ~ x + z, df, blueprint = bp3)
+  res4 <- mold(y ~ x + z, df, blueprint = bp4)
 
   x1 <- forge(df, res1$blueprint)
   x2 <- forge(df, res2$blueprint)
+  x3 <- forge(df, res3$blueprint)
+  x4 <- forge(df, res4$blueprint)
 
   expect_identical(
     colnames(x1$predictors),
     c("xa", "xb", "zd")
   )
+  expect_identical(
+    colnames(x3$predictors),
+    c("xa", "xb", "zd")
+  )
 
   expect_identical(
     colnames(x2$predictors),
+    c("xa", "xb", "zc", "zd")
+  )
+  expect_identical(
+    colnames(x4$predictors),
     c("xa", "xb", "zc", "zd")
   )
 })
@@ -780,14 +1021,20 @@ test_that("`new_data` can be converted losslessly from factor to character", {
   bp1 <- default_formula_blueprint(indicators = "none")
   bp2 <- default_formula_blueprint(indicators = "traditional")
   bp3 <- default_formula_blueprint(indicators = "one_hot")
+  bp4 <- default_formula_blueprint(indicators = "traditional", composition = "matrix")
+  bp5 <- default_formula_blueprint(indicators = "one_hot", composition = "matrix")
 
   res1 <- mold(y ~ x + z, df, blueprint = bp1)
   res2 <- mold(y ~ x + z, df, blueprint = bp2)
   res3 <- mold(y ~ x + z, df, blueprint = bp3)
+  res4 <- mold(y ~ x + z, df, blueprint = bp4)
+  res5 <- mold(y ~ x + z, df, blueprint = bp5)
 
   x1 <- forge(new_df, res1$blueprint)
   x2 <- forge(new_df, res2$blueprint)
   x3 <- forge(new_df, res3$blueprint)
+  x4 <- forge(new_df, res4$blueprint)
+  x5 <- forge(new_df, res5$blueprint)
 
   expect_identical(
     colnames(x1$predictors),
@@ -801,9 +1048,17 @@ test_that("`new_data` can be converted losslessly from factor to character", {
     colnames(x2$predictors),
     c("xa", "xb", "zd")
   )
+  expect_identical(
+    colnames(x4$predictors),
+    c("xa", "xb", "zd")
+  )
 
   expect_identical(
     colnames(x3$predictors),
+    c("xa", "xb", "zc", "zd")
+  )
+  expect_identical(
+    colnames(x5$predictors),
     c("xa", "xb", "zc", "zd")
   )
 })
@@ -818,16 +1073,27 @@ test_that("traditional encoding and no intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = FALSE,
     indicators = "traditional"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "traditional",
+    composition = "dgCMatrix"
+  )
 
-  res <- mold(x ~ y + z, df, blueprint = bp)
-  x <- forge(df, res$blueprint)
+  res1 <- mold(x ~ y + z, df, blueprint = bp1)
+  res2 <- mold(x ~ y + z, df, blueprint = bp2)
+  x1 <- forge(df, res1$blueprint)
+  x2 <- forge(df, res2$blueprint)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("ya", "yb", "yc", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("ya", "yb", "yc", "zB")
   )
 })
@@ -839,16 +1105,27 @@ test_that("traditional encoding and intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = TRUE,
     indicators = "traditional"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "traditional",
+    composition = "dgCMatrix"
+  )
 
-  res <- mold(x ~ y + z, df, blueprint = bp)
-  x <- forge(df, res$blueprint)
+  res1 <- mold(x ~ y + z, df, blueprint = bp1)
+  res2 <- mold(x ~ y + z, df, blueprint = bp2)
+  x1 <- forge(df, res1$blueprint)
+  x2 <- forge(df, res2$blueprint)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("(Intercept)", "yb", "yc", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("(Intercept)", "yb", "yc", "zB")
   )
 })
@@ -860,16 +1137,27 @@ test_that("one-hot encoding and no intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = FALSE,
     indicators = "one_hot"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = FALSE,
+    indicators = "one_hot",
+    composition = "dgCMatrix"
+  )
 
-  res <- mold(x ~ y + z, df, blueprint = bp)
-  x <- forge(df, res$blueprint)
+  res1 <- mold(x ~ y + z, df, blueprint = bp1)
+  res2 <- mold(x ~ y + z, df, blueprint = bp2)
+  x1 <- forge(df, res1$blueprint)
+  x2 <- forge(df, res2$blueprint)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("ya", "yb", "yc", "zA", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("ya", "yb", "yc", "zA", "zB")
   )
 })
@@ -881,16 +1169,27 @@ test_that("one-hot encoding and intercept", {
     z = factor(rep(LETTERS[1:2], 6))
   )
 
-  bp <- default_formula_blueprint(
+  bp1 <- default_formula_blueprint(
     intercept = TRUE,
     indicators = "one_hot"
   )
+  bp2 <- default_formula_blueprint(
+    intercept = TRUE,
+    indicators = "one_hot",
+    composition = "dgCMatrix"
+  )
 
-  res <- mold(x ~ y + z, df, blueprint = bp)
-  x <- forge(df, res$blueprint)
+  res1 <- mold(x ~ y + z, df, blueprint = bp1)
+  res2 <- mold(x ~ y + z, df, blueprint = bp2)
+  x1 <- forge(df, res1$blueprint)
+  x2 <- forge(df, res2$blueprint)
 
   expect_identical(
-    names(x$predictors),
+    colnames(x1$predictors),
+    c("(Intercept)", "ya", "yb", "yc", "zA", "zB")
+  )
+  expect_identical(
+    colnames(x2$predictors),
     c("(Intercept)", "ya", "yb", "yc", "zA", "zB")
   )
 })

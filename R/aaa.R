@@ -1,4 +1,4 @@
-#' @importFrom rlang abort is_missing arg_match := %||%
+#' @importFrom rlang abort is_missing is_installed arg_match := %||%
 #' @importFrom glue glue
 #' @importFrom tibble tibble
 NULL

@@ -16,6 +16,7 @@ new_default_formula_blueprint(
   ptypes = NULL,
   formula = NULL,
   indicators = "traditional",
+  composition = "tibble",
   terms = list(predictors = NULL, outcomes = NULL),
   ...,
   subclass = character()
@@ -27,6 +28,7 @@ new_default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
+  composition = "tibble",
   ptypes = NULL,
   recipe = NULL,
   extra_role_ptypes = NULL,
@@ -39,6 +41,7 @@ new_default_xy_blueprint(
   forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
+  composition = "tibble",
   ptypes = NULL,
   ...,
   subclass = character()
@@ -81,6 +84,11 @@ levels in that factor.
 that expands unordered factors into all \code{K} indicator columns, rather than
 \code{K - 1}.
 }}
+
+\item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
+of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
+the predictors must be numeric after the preprocessing method has been
+applied; otherwise an error is thrown.}
 
 \item{terms}{A named list of two elements, \code{predictors} and \code{outcomes}. Both
 elements are \code{terms} objects that describe the terms for the outcomes and

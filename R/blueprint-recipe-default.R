@@ -109,10 +109,19 @@
 #'
 #' forge(test, processed_roles$blueprint)
 #'
+#' # ---------------------------------------------------------------------------
+#' # Matrix output for predictors
+#'
+#' # You can change the `composition` of the predictor data set
+#' bp <- default_recipe_blueprint(composition = "dgCMatrix")
+#' processed <- mold(rec, train, blueprint = bp)
+#' class(processed$predictors)
+#'
 #' @export
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
-                                     fresh = TRUE) {
+                                     fresh = TRUE,
+                                     composition = "tibble") {
 
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
@@ -122,7 +131,8 @@ default_recipe_blueprint <- function(intercept = FALSE,
     forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
-    fresh = fresh
+    fresh = fresh,
+    composition = composition
   )
 
 }
@@ -139,6 +149,7 @@ new_default_recipe_blueprint <- function(mold,
                                          intercept = FALSE,
                                          allow_novel_levels = FALSE,
                                          fresh = TRUE,
+                                         composition = "tibble",
                                          ptypes = NULL,
                                          recipe = NULL,
                                          extra_role_ptypes = NULL,
@@ -151,6 +162,7 @@ new_default_recipe_blueprint <- function(mold,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
+    composition = composition,
     ptypes = ptypes,
     recipe = recipe,
     extra_role_ptypes = extra_role_ptypes,
@@ -221,6 +233,8 @@ mold_recipe_default_process_predictors <- function(blueprint, data) {
   predictors <- recipes::juice(blueprint$recipe, all_predictors())
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+
+  predictors <- recompose(predictors, blueprint$composition)
 
   ptype <- get_original_predictor_ptype(blueprint$recipe, data)
 
@@ -395,6 +409,8 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 forge_recipe_default_process_predictors <- function(blueprint, predictors) {
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+
+  predictors <- recompose(predictors, blueprint$composition)
 
   predictors_lst <- out$forge$process_terms_lst(data = predictors)
 
