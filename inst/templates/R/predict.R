@@ -29,11 +29,11 @@
 #' @export
 predict.{{model}} <- function(object, new_data, type = "numeric", ...) {
   forged <- hardhat::forge(new_data, object$blueprint)
-  rlang::arg_match(type, valid_predict_types())
+  rlang::arg_match(type, valid_{{model}}_predict_types())
   predict_{{model}}_bridge(type, object, forged$predictors)
 }
 
-valid_predict_types <- function() {
+valid_{{model}}_predict_types <- function() {
   c("numeric")
 }
 
@@ -43,7 +43,7 @@ valid_predict_types <- function() {
 predict_{{model}}_bridge <- function(type, model, predictors) {
   predictors <- as.matrix(predictors)
 
-  predict_function <- get_predict_function(type)
+  predict_function <- get_{{model}}_predict_function(type)
   predictions <- predict_function(model, predictors)
 
   hardhat::validate_prediction_size(predictions, predictors)
@@ -51,7 +51,7 @@ predict_{{model}}_bridge <- function(type, model, predictors) {
   predictions
 }
 
-get_predict_function <- function(type) {
+get_{{model}}_predict_function <- function(type) {
   switch(
     type,
     numeric = predict_{{model}}_numeric

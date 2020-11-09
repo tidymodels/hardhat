@@ -1,5 +1,9 @@
 # hardhat (development version)
 
+* `use_modeling_files()` (and therefore, `create_modeling_package()`) now
+  ensures that all generated functions are templated on the model name. This
+  makes it easier to add multiple models to the same package (#152).
+
 * All preprocessors can now `mold()` and `forge()` predictors to one of three 
   output formats (either tibble, matrix, or `dgCMatrix` sparse matrix) via the
   `composition` argument of a blueprint (#100, #150).
