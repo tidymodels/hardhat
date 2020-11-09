@@ -9,10 +9,14 @@
 
 ## revdepcheck results
 
-We checked 5 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 6 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
+
+## 0.1.5 Submission
+
+This submission adds limited support for sparse matrix output.
 
 ## 0.1.4 Submission
 
