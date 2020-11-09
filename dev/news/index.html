@@ -166,7 +166,8 @@
 <a href="#hardhat-development-version" class="anchor"></a>hardhat (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li>All preprocessors can now <code><a href="../reference/mold.html">mold()</a></code> and <code><a href="../reference/forge.html">forge()</a></code> predictors to one of three output formats (either tibble, matrix, or <code>dgCMatrix</code> sparse matrix) via the <code>composition</code> argument of a blueprint (<a href='https://github.com/tidymodels/hardhat/issues/100'>#100</a>, <a href='https://github.com/tidymodels/hardhat/issues/150'>#150</a>).</li>
+<li><p><code><a href="../reference/modeling-package.html">use_modeling_files()</a></code> (and therefore, <code><a href="../reference/modeling-package.html">create_modeling_package()</a></code>) now ensures that all generated functions are templated on the model name. This makes it easier to add multiple models to the same package (<a href='https://github.com/tidymodels/hardhat/issues/152'>#152</a>).</p></li>
+<li><p>All preprocessors can now <code><a href="../reference/mold.html">mold()</a></code> and <code><a href="../reference/forge.html">forge()</a></code> predictors to one of three output formats (either tibble, matrix, or <code>dgCMatrix</code> sparse matrix) via the <code>composition</code> argument of a blueprint (<a href='https://github.com/tidymodels/hardhat/issues/100'>#100</a>, <a href='https://github.com/tidymodels/hardhat/issues/150'>#150</a>).</p></li>
 </ul>
 </div>
     <div id="hardhat-014" class="section level1">

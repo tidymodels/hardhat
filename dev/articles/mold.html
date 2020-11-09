@@ -124,12 +124,12 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat">hardhat</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat">hardhat</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org">modeldata</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span>
-<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></pre></div>
+<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
@@ -142,14 +142,14 @@
 <h2 class="hasAnchor">
 <a href="#a-first-example" class="anchor"></a>A First Example</h2>
 <p>The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: <code>outcomes ~ predictors</code>. Generally, as a developer, you have to then call <code><a href="https://rdrr.io/r/stats/model.frame.html">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> on this result to coerce it into the right format for ingestion into your model. <code><a href="../reference/mold.html">mold()</a></code> handles all of that for you.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">penguin_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">penguin_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">penguin_form</span><span class="op">)</span>
-<span class="co">#&gt; [1] "predictors" "outcomes"   "blueprint"  "extras"</span></pre></div>
+<span class="co">#&gt; [1] "predictors" "outcomes"   "blueprint"  "extras"</span></code></pre></div>
 <p><code><a href="../reference/mold.html">mold()</a></code> returns four things. Two of them are immediately useful, and are almost always applicable to the modeling implementation you have created. The first is the <code>predictors</code>, returned as a tibble. All of the required processing has been done for you, so you just have to focus on the modeling implementation.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">penguin_form</span><span class="op">$</span><span class="va">predictors</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">penguin_form</span><span class="op">$</span><span class="va">predictors</span>
 <span class="co">#&gt; # A tibble: 333 x 1</span>
 <span class="co">#&gt;    `log(bill_length_mm)`</span>
 <span class="co">#&gt;                    &lt;dbl&gt;</span>
@@ -163,10 +163,10 @@
 <span class="co">#&gt;  8                  3.72</span>
 <span class="co">#&gt;  9                  3.65</span>
 <span class="co">#&gt; 10                  3.54</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p>Second is the <code>outcomes</code>, also returned as a tibble. While not used here, any processing on the outcome that was specified in the formula would also be done here.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">penguin_form</span><span class="op">$</span><span class="va">outcomes</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">penguin_form</span><span class="op">$</span><span class="va">outcomes</span>
 <span class="co">#&gt; # A tibble: 333 x 1</span>
 <span class="co">#&gt;    body_mass_g</span>
 <span class="co">#&gt;          &lt;int&gt;</span>
@@ -180,10 +180,10 @@
 <span class="co">#&gt;  8        3200</span>
 <span class="co">#&gt;  9        3800</span>
 <span class="co">#&gt; 10        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p>Beyond these two elements, <code><a href="../reference/mold.html">mold()</a></code> also returns a slot for any <code>extras</code> that might have been generated during preprocessing, but aren’t specifically predictors or outcomes. For example, an <code><a href="https://rdrr.io/r/stats/offset.html">offset()</a></code> can be specified directly in the formula, but isn’t technically a predictor.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="va">bill_depth_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="va">bill_depth_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span>
 <span class="co">#&gt; $offset</span>
 <span class="co">#&gt; # A tibble: 333 x 1</span>
 <span class="co">#&gt;    .offset</span>
@@ -198,19 +198,19 @@
 <span class="co">#&gt;  8    17.6</span>
 <span class="co">#&gt;  9    21.2</span>
 <span class="co">#&gt; 10    21.1</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p>Lastly, <code><a href="../reference/mold.html">mold()</a></code> returns a very important object, the <code>blueprint</code>. This is responsible for knowing how to preprocess both the training data, and any new data at prediction time. As a developer, you should attach the <code>blueprint</code> to your model object before returning it to the user. For more information about this, see the package development vignette, <code><a href="../articles/package.html">vignette("package", "hardhat")</a></code>.</p>
 </div>
 <div id="blueprints" class="section level2">
 <h2 class="hasAnchor">
 <a href="#blueprints" class="anchor"></a>blueprints</h2>
 <p>As mentioned above, one of the objects that <code><a href="../reference/mold.html">mold()</a></code> returns is an <code>blueprint</code> responsible for controlling the preprocessing. There are multiple blueprints available in <code>hardhat</code>, but when you call <code><a href="../reference/mold.html">mold()</a></code> one is selected automatically for you. The following two calls generate the same result, using the default formula blueprint.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span><span class="op">)</span>, 
   <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span>, blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; [1] TRUE</span></pre></div>
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
 <p>Each blueprint can be tweaked to change how the processing for that interface occurs, and the options vary per blueprint. To understand why you’d ever want to do this, read on!</p>
 </div>
 <div id="formulas" class="section level2">
@@ -222,8 +222,8 @@
 <a href="#intercepts" class="anchor"></a>Intercepts</h3>
 <p>One challenge with the standard formula interface is that, by default, intercepts are always implicitly present and are added to your data set automatically. This works great for the simple regression case. However, other models might either always require or never allow an intercept, but still use the formula interface because of its convenience (for example, <code>earth</code>). This has led to many ad hoc solutions that prevent the user from removing or adding an intercept.</p>
 <p>To get around this, <code><a href="../reference/mold.html">mold()</a></code> will never add an intercept by default. Instead, the addition of an intercept is completely controlled by the formula blueprint argument, <code>intercept</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">no_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">no_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">no_intercept</span><span class="op">$</span><span class="va">predictors</span>
 <span class="co">#&gt; # A tibble: 333 x 1</span>
@@ -239,9 +239,9 @@
 <span class="co">#&gt;  8        3200</span>
 <span class="co">#&gt;  9        3800</span>
 <span class="co">#&gt; 10        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
   <span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span>, 
   blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">)</span>
@@ -260,21 +260,21 @@
 <span class="co">#&gt;  8             1        3200</span>
 <span class="co">#&gt;  9             1        3800</span>
 <span class="co">#&gt; 10             1        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p>An error is thrown if an intercept removal term is specified:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">penguins</span><span class="op">)</span>
 <span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `- 1`.</span>
 
 <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="fl">0</span>, <span class="va">penguins</span><span class="op">)</span>
-<span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></pre></div>
+<span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></code></pre></div>
 </div>
 <div id="dummy-variables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dummy-variables" class="anchor"></a>Dummy variables</h3>
 <p>One of the nice things about the formula interface is that it expands factors into dummy variable columns for you. Like intercepts, this is great…until it isn’t. For example, <code>ranger</code> fits a random forest, which can take factors directly, but still uses the formula notation. In this case, it would be great if the factor columns specified as predictors <em>weren’t</em> expanded. This is the job of the blueprint argument, <code>indicators</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">expanded_dummies</span><span class="op">$</span><span class="va">predictors</span>
 <span class="co">#&gt; # A tibble: 333 x 4</span>
@@ -290,9 +290,9 @@
 <span class="co">#&gt;  8        3200             1                0             0</span>
 <span class="co">#&gt;  9        3800             1                0             0</span>
 <span class="co">#&gt; 10        4400             1                0             0</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">non_expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">non_expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
   <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span>, 
   blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span>indicators <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
 <span class="op">)</span>
@@ -311,10 +311,10 @@
 <span class="co">#&gt;  8        3200 Adelie </span>
 <span class="co">#&gt;  9        3800 Adelie </span>
 <span class="co">#&gt; 10        4400 Adelie </span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p><em>Note:</em> It’s worth mentioning that when an intercept is not present, base R expands the first factor completely into <code>K</code> indicator columns corresponding to the <code>K</code> levels present in that factor (also known as one-hot encoding). Subsequent columns are expanded into the more traditional <code>K - 1</code> columns. When an intercept is present, <code>K - 1</code> columns are generated for all factor predictors.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="va">k_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">k_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">k_minus_one_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
   <span class="op">~</span> <span class="va">species</span>, <span class="va">penguins</span>, 
@@ -325,14 +325,14 @@
 <span class="co">#&gt; [1] "speciesAdelie"    "speciesChinstrap" "speciesGentoo"</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">k_minus_one_cols</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span>
-<span class="co">#&gt; [1] "(Intercept)"      "speciesChinstrap" "speciesGentoo"</span></pre></div>
+<span class="co">#&gt; [1] "(Intercept)"      "speciesChinstrap" "speciesGentoo"</span></code></pre></div>
 </div>
 <div id="multivariate-outcomes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#multivariate-outcomes" class="anchor"></a>Multivariate outcomes</h3>
 <p>One of the other frustrating things about working with the formula method is that multivariate outcomes are a bit clunky to specify.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">.f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">body_mass_g</span>, <span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">.f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">body_mass_g</span>, <span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>
 
 <span class="va">frame</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html">model.frame</a></span><span class="op">(</span><span class="va">.f</span>, <span class="va">penguins</span><span class="op">)</span>
 
@@ -350,10 +350,10 @@
 <span class="co">#&gt; 3                                              40.3          18.0</span>
 <span class="co">#&gt; 4                                              36.7          19.3</span>
 <span class="co">#&gt; 5                                              39.3          20.6</span>
-<span class="co">#&gt; 6                                              38.9          17.8</span></pre></div>
+<span class="co">#&gt; 6                                              38.9          17.8</span></code></pre></div>
 <p>This might look like 3 columns, but it is actually 2, where the first column is named <code><a href="https://rdrr.io/r/base/cbind.html">cbind(body_mass_g, bill_length_mm)</a></code>, and it is actually a matrix with 2 columns, <code>body_mass_g</code> and <code>bill_length_mm</code> inside it.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">frame</span><span class="op">)</span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">frame</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">`cbind(body_mass_g, bill_length_mm)`</span><span class="op">)</span>
@@ -366,10 +366,10 @@
 <span class="co">#&gt; [3,]        3250           40.3</span>
 <span class="co">#&gt; [4,]        3450           36.7</span>
 <span class="co">#&gt; [5,]        3650           39.3</span>
-<span class="co">#&gt; [6,]        3625           38.9</span></pre></div>
+<span class="co">#&gt; [6,]        3625           38.9</span></code></pre></div>
 <p>The default formula blueprint used with <code><a href="../reference/mold.html">mold()</a></code> allows you to specify multiple outcomes like you specify multiple predictors. You can even do inline transformations of each outcome, although if you are doing very much of that, I’d advise using a recipe instead. <code>outcomes</code> then holds the two outcomes columns.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="va">multivariate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">multivariate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">multivariate</span><span class="op">$</span><span class="va">outcomes</span>
 <span class="co">#&gt; # A tibble: 333 x 2</span>
@@ -385,15 +385,15 @@
 <span class="co">#&gt;  8        3200                  3.72</span>
 <span class="co">#&gt;  9        3800                  3.65</span>
 <span class="co">#&gt; 10        4400                  3.54</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 </div>
 </div>
 <div id="xy" class="section level2">
 <h2 class="hasAnchor">
 <a href="#xy" class="anchor"></a>XY</h2>
 <p>The second interface is the XY interface, useful when the predictors and outcomes are specified separately.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">body_mass_g</span><span class="op">)</span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">body_mass_g</span><span class="op">)</span>
 <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span>  <span class="va">body_mass_g</span><span class="op">)</span>
 
 <span class="va">penguin_xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
@@ -428,10 +428,10 @@
 <span class="co">#&gt;  8        3200</span>
 <span class="co">#&gt;  9        3800</span>
 <span class="co">#&gt; 10        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p>This interface doesn’t do too much in the way of preprocessing, but it does let you specify an <code>intercept</code> in the blueprint specific arguments. Rather than <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code>, this uses the <code><a href="../reference/default_xy_blueprint.html">default_xy_blueprint()</a></code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="va">xy_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">xy_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">xy_with_intercept</span><span class="op">$</span><span class="va">predictors</span>
 <span class="co">#&gt; # A tibble: 333 x 7</span>
@@ -447,13 +447,13 @@
 <span class="co">#&gt;  8             1 Adelie  Torge…           41.1          17.6              182</span>
 <span class="co">#&gt;  9             1 Adelie  Torge…           38.6          21.2              191</span>
 <span class="co">#&gt; 10             1 Adelie  Torge…           34.6          21.1              198</span>
-<span class="co">#&gt; # … with 323 more rows, and 1 more variable: sex &lt;fct&gt;</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows, and 1 more variable: sex &lt;fct&gt;</span></code></pre></div>
 <div id="vector-outcomes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#vector-outcomes" class="anchor"></a>Vector outcomes</h3>
 <p><code>y</code> is a bit special in the XY interface, because in the univariate case users might expect to be able to pass a vector, a 1 column data frame, or a matrix. <code><a href="../reference/mold.html">mold()</a></code> is prepared for all of those cases, but the vector case requires special attention. To be consistent with all of the other <code><a href="../reference/mold.html">mold()</a></code> interfaces, the <code>outcomes</code> slot of the return value should be a tibble. To achieve this when <code>y</code> is supplied as a vector, a default column name is created, <code>".outcome"</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit">
-<span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">$</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">$</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span>
 <span class="co">#&gt; # A tibble: 333 x 1</span>
 <span class="co">#&gt;    .outcome</span>
 <span class="co">#&gt;       &lt;int&gt;</span>
@@ -467,15 +467,15 @@
 <span class="co">#&gt;  8     3200</span>
 <span class="co">#&gt;  9     3800</span>
 <span class="co">#&gt; 10     4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 </div>
 </div>
 <div id="recipe" class="section level2">
 <h2 class="hasAnchor">
 <a href="#recipe" class="anchor"></a>Recipe</h2>
 <p>The last of the three interfaces is the relatively new recipes interface. The <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> knows how to <code><a href="https://recipes.tidymodels.org/reference/prep.html">prep()</a></code> your recipe, and <code><a href="https://recipes.tidymodels.org/reference/juice.html">juice()</a></code> it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span>
 
 <span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">species</span> <span class="op">+</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html">step_log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -513,10 +513,10 @@
 <span class="co">#&gt;  8           3.72</span>
 <span class="co">#&gt;  9           3.65</span>
 <span class="co">#&gt; 10           3.54</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p>The only special thing you can tweak with the recipe blueprint is whether or not an intercept is added.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
-<span class="va">recipe_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">recipe_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
   <span class="va">rec</span>, <span class="va">penguins</span>, 
   blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">)</span>
@@ -535,7 +535,7 @@
 <span class="co">#&gt;  8             1          17.6                 0              0</span>
 <span class="co">#&gt;  9             1          21.2                 0              0</span>
 <span class="co">#&gt; 10             1          21.1                 0              0</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 </div>
   </div>
 

@@ -124,13 +124,13 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat">hardhat</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat">hardhat</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org">modeldata</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span>
-<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></pre></div>
+<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -189,8 +189,8 @@
 <li><p>Pass the named elements on to <code><a href="../reference/new_model.html">new_model()</a></code> along with setting the class to <code>"&lt;model_class&gt;"</code>.</p></li>
 </ul>
 <p>If you want to learn more about the details of constructors and creating S3 classes, take a look at the S3 section in <a href="https://adv-r.hadley.nz/s3.html#s3-constructor">Advanced R</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">new_simple_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">coefs</span>, <span class="va">coef_names</span>, <span class="va">blueprint</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">new_simple_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">coefs</span>, <span class="va">coef_names</span>, <span class="va">blueprint</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">is.numeric</a></span><span class="op">(</span><span class="va">coefs</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
     <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"`coefs` should be a numeric vector."</span>, call. <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -210,11 +210,11 @@
     blueprint <span class="op">=</span> <span class="va">blueprint</span>, 
     class <span class="op">=</span> <span class="st">"simple_lm"</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>A <code>"simple_lm"</code> object has just enough information to make numeric predictions on new data, but you can store other things here as well to enable your model object to work with extra post-fitting functionality.</p>
 <p>We can test this by manually generating a model object. Along with the custom class we provided, this object also has a <code>"hardhat_model"</code> class. There is a very simple print method for objects of this type. Specifically, it prints the name of the class at the top, and only prints out the custom elements (i.e. not the <code>blueprint</code>).</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">manual_model</span> <span class="op">&lt;-</span> <span class="fu">new_simple_lm</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"my_coef"</span>, <span class="fu"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">manual_model</span> <span class="op">&lt;-</span> <span class="fu">new_simple_lm</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"my_coef"</span>, <span class="fu"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">manual_model</span>
 <span class="co">#&gt; &lt;simple_lm&gt; </span>
@@ -234,14 +234,14 @@
 <span class="co">#&gt;   # Outcomes: 0 </span>
 <span class="co">#&gt;    Intercept: FALSE </span>
 <span class="co">#&gt; Novel Levels: FALSE </span>
-<span class="co">#&gt;  Composition: tibble</span></pre></div>
+<span class="co">#&gt;  Composition: tibble</span></code></pre></div>
 </div>
 <div id="model-fitting-implementation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#model-fitting-implementation" class="anchor"></a>Model Fitting Implementation</h2>
 <p>The implementation function is where the hard work is done. I generally recommend naming it <code>&lt;model_class&gt;_impl()</code>. It should accept predictors and outcomes in whatever form is required for the algorithm, run the algorithm, and return a named list of the new elements you added to the model constructor. You might also have arguments for extra options that can be used to tweak the internal algorithm.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">simple_lm_impl</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">predictors</span>, <span class="va">outcomes</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">simple_lm_impl</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">predictors</span>, <span class="va">outcomes</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lmfit.html">lm.fit</a></span><span class="op">(</span><span class="va">predictors</span>, <span class="va">outcomes</span><span class="op">)</span>
   
   <span class="va">coefs</span> <span class="op">&lt;-</span> <span class="va">lm_fit</span><span class="op">$</span><span class="va">coefficients</span>
@@ -253,10 +253,10 @@
     coefs <span class="op">=</span> <span class="va">coefs</span>,
     coef_names <span class="op">=</span> <span class="va">coef_names</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>This simple linear regression implementation just calls <code><a href="https://rdrr.io/r/stats/lmfit.html">lm.fit()</a></code> with <code>x = predictors</code> and <code>y = outcomes</code>. <code><a href="https://rdrr.io/r/stats/lmfit.html">lm.fit()</a></code> expects a matrix of predictors and a vector of outcomes (at least for univariate regression). In a moment we will discuss how to create those.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">predictors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">predictors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span>
 <span class="va">outcomes</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">$</span><span class="va">body_mass_g</span>
 
 <span class="fu">simple_lm_impl</span><span class="op">(</span><span class="va">predictors</span>, <span class="va">outcomes</span><span class="op">)</span>
@@ -264,7 +264,7 @@
 <span class="co">#&gt; [1] 95.49649</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $coef_names</span>
-<span class="co">#&gt; [1] "bill_length_mm"</span></pre></div>
+<span class="co">#&gt; [1] "bill_length_mm"</span></code></pre></div>
 </div>
 <div id="model-fitting-bridge" class="section level2">
 <h2 class="hasAnchor">
@@ -272,8 +272,8 @@
 <p>Now that we have our constructor and our implementation function, we can create a common function that will be used in all of our top level methods (for data frames, matrices, formulas, and recipes). It will call the implementation function, and then use that information along with the blueprint to create a new instance of our model. It should have an argument for the output from a call to <code><a href="../reference/mold.html">mold()</a></code>, here I’ve called that <code>processed</code>. In that object will be (at a minimum) the predictors, outcomes, and blueprint. You might also have arguments for additional options to pass on to the implementation function.</p>
 <p>The bridge function should take the standardized predictors and outcomes and convert them to the lower level types that the implementation function requires. The <code>predictors</code> and <code>outcomes</code> that are returned from <code><a href="../reference/mold.html">mold()</a></code> will <em>always</em> be data frames, so in this case we can convert them to matrices and vectors directly for use in the lower level function.</p>
 <p>This is also a good place to use some of hardhat’s validation functions. In this case, we always expect the outcome to have a single column since this is a univariate model, so we can use <code>validate_outcomes_is_univariate()</code> to enforce that.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">simple_lm_bridge</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">processed</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">simple_lm_bridge</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">processed</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="fu"><a href="../reference/validate_outcomes_are_univariate.html">validate_outcomes_are_univariate</a></span><span class="op">(</span><span class="va">processed</span><span class="op">$</span><span class="va">outcomes</span><span class="op">)</span>
   
@@ -287,10 +287,10 @@
     coef_names <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">coef_names</span>,
     blueprint <span class="op">=</span> <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>At this point, we can simulate user input and pass it on to our bridge to run a model.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co"># Simulate formula interface</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Simulate formula interface</span>
 <span class="va">processed_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="co"># Simulate xy interface</span>
@@ -310,20 +310,20 @@
 <span class="co">#&gt; [1] 0.01022951</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $coef_names</span>
-<span class="co">#&gt; [1] "body_mass_g"</span></pre></div>
+<span class="co">#&gt; [1] "body_mass_g"</span></code></pre></div>
 <p>Multiple outcomes are an error:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">multi_outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">+</span> <span class="va">bill_depth_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">multi_outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">+</span> <span class="va">bill_depth_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="fu">simple_lm_bridge</span><span class="op">(</span><span class="va">multi_outcome</span><span class="op">)</span>
-<span class="co">#&gt; Error: The outcome must be univariate, but 2 columns were found.</span></pre></div>
+<span class="co">#&gt; Error: The outcome must be univariate, but 2 columns were found.</span></code></pre></div>
 </div>
 <div id="user-facing-fitting-function" class="section level2">
 <h2 class="hasAnchor">
 <a href="#user-facing-fitting-function" class="anchor"></a>User Facing Fitting Function</h2>
 <p>With all of the pieces in place, we have everything we need to create our high level modeling interface. This should be a generic function, generally with methods for data frames, matrices, formulas, and recipes. Each method should call <code><a href="../reference/mold.html">mold()</a></code> with the method specific inputs to run the preprocessing, and then pass off to the bridge function to run the actual model. It is also good practice to provide a default method with a nice error message for unknown types.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="co"># Generic</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Generic</span>
 <span class="va">simple_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html">UseMethod</a></span><span class="op">(</span><span class="st">"simple_lm"</span><span class="op">)</span>
 <span class="op">}</span>
@@ -358,10 +358,10 @@
 <span class="va">simple_lm.recipe</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span><span class="op">)</span>
   <span class="fu">simple_lm_bridge</span><span class="op">(</span><span class="va">processed</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>Let’s give it a try:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">predictors</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span><span class="op">)</span><span class="op">]</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">predictors</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span><span class="op">)</span><span class="op">]</span>
 <span class="va">outcomes_vec</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">$</span><span class="va">body_mass_g</span>
 <span class="va">outcomes_df</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="st">"body_mass_g"</span><span class="op">]</span>
 
@@ -390,10 +390,10 @@
 <span class="co">#&gt; [1] 110.88151 -40.16918</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $coef_names</span>
-<span class="co">#&gt; [1] "bill_length_mm" "bill_depth_mm"</span></pre></div>
+<span class="co">#&gt; [1] "bill_length_mm" "bill_depth_mm"</span></code></pre></div>
 <p>We can use preprocessing as well, and it is handled by <code><a href="../reference/mold.html">mold()</a></code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span>
 
 <span class="co"># - Log a predictor</span>
 <span class="co"># - Generate dummy variables for factors</span>
@@ -418,13 +418,13 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $coef_names</span>
 <span class="co">#&gt; [1] "bill_length_mm"    "species_Adelie"    "species_Chinstrap"</span>
-<span class="co">#&gt; [4] "species_Gentoo"</span></pre></div>
+<span class="co">#&gt; [4] "species_Gentoo"</span></code></pre></div>
 <div id="adding-an-intercept-option" class="section level3">
 <h3 class="hasAnchor">
 <a href="#adding-an-intercept-option" class="anchor"></a>Adding an Intercept Option</h3>
 <p>You might have noticed that our linear regression isn’t adding an intercept. Generally, with linear regression models we will want a default intercept added on. To accomplish this, we can add an <code>intercept</code> argument to our user facing function, and then use that to tweak the blueprint that would otherwise be created for you automatically.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="va">simple_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">simple_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/UseMethod.html">UseMethod</a></span><span class="op">(</span><span class="st">"simple_lm"</span><span class="op">)</span>
 <span class="op">}</span>
 
@@ -450,9 +450,9 @@
   <span class="va">blueprint</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="va">intercept</span><span class="op">)</span>
   <span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, blueprint <span class="op">=</span> <span class="va">blueprint</span><span class="op">)</span>
   <span class="fu">simple_lm_bridge</span><span class="op">(</span><span class="va">processed</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="co"># By default an intercept is included</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># By default an intercept is included</span>
 <span class="fu">simple_lm</span><span class="op">(</span><span class="va">predictors</span>, <span class="va">outcomes_df</span><span class="op">)</span>
 <span class="co">#&gt; &lt;simple_lm&gt; </span>
 <span class="co">#&gt; $coefs</span>
@@ -469,7 +469,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $coef_names</span>
 <span class="co">#&gt; [1] "log(bill_length_mm)" "speciesAdelie"       "speciesChinstrap"   </span>
-<span class="co">#&gt; [4] "speciesGentoo"</span></pre></div>
+<span class="co">#&gt; [4] "speciesGentoo"</span></code></pre></div>
 <p>Note that even the formula method respects this <code>intercept</code> argument. To recap, by default <code><a href="../reference/mold.html">mold()</a></code> will <em>not</em> automatically add an intercept for any method, including the formula method.</p>
 </div>
 </div>
@@ -483,8 +483,8 @@
 <p>On the prediction side, we need implementation functions like for fitting our model. These vary based on the <code>"type"</code> argument to <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>. The <code>"type"</code> might be <code>"numeric"</code> for numeric predictions as we will use here, or it could be <code>"class"</code> for hard class predictions, <code>"prob"</code> for class probabilities, and more. A set of recommended names for <code>"type"</code> can be found in the <a href="https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data">Model Predictions</a> section of the implementation principles.</p>
 <p>For our model, we will focus on only returning numeric predictions. I generally like to name these prediction implementation functions <code>predict_&lt;model_class&gt;_&lt;type&gt;()</code>. The arguments for the implementation functions should include the model object and the predictors in the form that your prediction algorithm expects (here, a matrix).</p>
 <p>Also used here is another hardhat function for standardizing prediction output, <code><a href="../reference/spruce.html">spruce_numeric()</a></code>. This function tidies up the numeric response output, and automatically standardizes it to match the recommendations in the principles guide. The output is always a tibble, and for the <code>"numeric"</code> type it has 1 column, <code>.pred</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="va">predict_simple_lm_numeric</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">predictors</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">predict_simple_lm_numeric</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">predictors</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="va">coefs</span> <span class="op">&lt;-</span> <span class="va">object</span><span class="op">$</span><span class="va">coefs</span>
   
@@ -493,10 +493,10 @@
   <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spruce.html">spruce_numeric</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span>
   
   <span class="va">out</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>To test it, we will have to run a model and call <code><a href="../reference/forge.html">forge()</a></code> on the output manually. The higher level user facing function will do this automatically.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">simple_lm</span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">simple_lm</span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">predictors</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguins</span>, <span class="va">model</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">$</span><span class="va">predictors</span>
 <span class="va">predictors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">predictors</span><span class="op">)</span>
@@ -515,7 +515,7 @@
 <span class="co">#&gt;  8  36.9</span>
 <span class="co">#&gt;  9  39.2</span>
 <span class="co">#&gt; 10  41.4</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 </div>
 <div id="prediction-bridge" class="section level2">
 <h2 class="hasAnchor">
@@ -523,8 +523,8 @@
 <p>A prediction bridge converts the standardized <code>predictors</code> into the lower level type that the prediction implementation functions expect. <code>predictors</code> here is always a data frame, and is part of the return value of a call to <code><a href="../reference/forge.html">forge()</a></code>. Since the prediction implementation function takes a matrix, we convert it to that here.</p>
 <p>Additionally, it should <code><a href="https://rdrr.io/r/base/switch.html">switch()</a></code> on the <code>type</code> argument to decide which of the prediction implementation functions to call. Here, when <code>type == "numeric"</code>, <code>predict_simple_lm_numeric()</code> is called.</p>
 <p>I also like using <code><a href="https://rlang.r-lib.org/reference/arg_match.html">rlang::arg_match()</a></code> to validate that <code>type</code> is one of the accepted prediction types. This has an advantage over <code><a href="https://rdrr.io/r/base/match.arg.html">match.arg()</a></code> in that partial matches are not allowed, and the error messages are a bit nicer.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="va">predict_simple_lm_bridge</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">type</span>, <span class="va">object</span>, <span class="va">predictors</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">predict_simple_lm_bridge</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">type</span>, <span class="va">object</span>, <span class="va">predictors</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="va">type</span> <span class="op">&lt;-</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/arg_match.html">arg_match</a></span><span class="op">(</span><span class="va">type</span>, <span class="st">"numeric"</span><span class="op">)</span>
   
@@ -534,10 +534,10 @@
     <span class="va">type</span>,
     numeric <span class="op">=</span> <span class="fu">predict_simple_lm_numeric</span><span class="op">(</span><span class="va">object</span>, <span class="va">predictors</span><span class="op">)</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>Let’s test:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">simple_lm</span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">simple_lm</span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="co"># Pass in the data frame</span>
 <span class="va">predictors</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguins</span>, <span class="va">model</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">$</span><span class="va">predictors</span>
@@ -561,7 +561,7 @@
 <span class="co"># Partial matches are an error</span>
 <span class="fu">predict_simple_lm_bridge</span><span class="op">(</span><span class="st">"numer"</span>, <span class="va">model</span>, <span class="va">predictors</span><span class="op">)</span>
 <span class="co">#&gt; Error: `type` must be one of "numeric".</span>
-<span class="co">#&gt; Did you mean "numeric"?</span></pre></div>
+<span class="co">#&gt; Did you mean "numeric"?</span></code></pre></div>
 </div>
 <div id="user-facing-prediction-function" class="section level2">
 <h2 class="hasAnchor">
@@ -570,8 +570,8 @@
 <p>The first thing that the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> method should do is call <code><a href="../reference/forge.html">forge()</a></code> with the <code>new_data</code> and the <code>blueprint</code> that we attached to our <code>simple_lm</code> model at fit time. This performs the required preprocessing on the new data, and checks that the <em>type</em> of the data frame supplied to <code>new_data</code> matches the type of data frame supplied at fit time. This is one of the most valuable features of <code><a href="../reference/forge.html">forge()</a></code>, as it adds a large amount of robustness to your <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>ion function. You will see some examples of this at the end of the vignette.</p>
 <p>After calling <code><a href="../reference/forge.html">forge()</a></code>, it should pass off to the bridge function to call the correct prediction function based on the type.</p>
 <p>Finally, it is good practice to call the hardhat function, <code><a href="../reference/validate_prediction_size.html">validate_prediction_size()</a></code>, with the return value and the original <code>new_data</code> to ensure that the number of rows in the output are the same as the number of rows of the input. If a prediction cannot be made for a row of <code>new_data</code>, an <code>NA</code> value should be placed there instead. Mainly, this validation function is a check on the model developer to ensure that you always return output with a sane length.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit">
-<span class="va">predict.simple_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">new_data</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">"numeric"</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">predict.simple_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">new_data</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">"numeric"</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="co"># Enforces column order, type, column names, etc</span>
   <span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">new_data</span>, <span class="va">object</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span>
@@ -581,15 +581,15 @@
   <span class="fu"><a href="../reference/validate_prediction_size.html">validate_prediction_size</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">new_data</span><span class="op">)</span>
   
   <span class="va">out</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 </div>
 </div>
 <div id="final-testing" class="section level1">
 <h1 class="hasAnchor">
 <a href="#final-testing" class="anchor"></a>Final Testing</h1>
 <p>Finally, we can test out our top level modeling function along with its corresponding <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> method.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">simple_lm</span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">body_mass_g</span><span class="op">)</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">simple_lm</span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">body_mass_g</span><span class="op">)</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">penguins</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 333 x 1</span>
@@ -605,10 +605,10 @@
 <span class="co">#&gt;  8  36.7</span>
 <span class="co">#&gt;  9  39.3</span>
 <span class="co">#&gt; 10  41.5</span>
-<span class="co">#&gt; # … with 323 more rows</span></pre></div>
+<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
 <p>By using <code><a href="../reference/forge.html">forge()</a></code>, you automatically get powerful type checking to ensure that the <code>new_data</code> is in a form that you expect.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
-<span class="co"># `new_data` isn't a data frame</span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># `new_data` isn't a data frame</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">penguins</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
 <span class="co">#&gt; Error: The class of `new_data`, 'factor', is not recognized.</span>
 
@@ -669,7 +669,7 @@
 <span class="va">penguins_dbl_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span><span class="op">(</span><span class="va">penguins</span>, species <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">penguins_dbl_species</span><span class="op">)</span>
-<span class="co">#&gt; Error: Can't convert `species` &lt;double&gt; to match type of `species` &lt;factor&lt;600db&gt;&gt;.</span></pre></div>
+<span class="co">#&gt; Error: Can't convert `species` &lt;double&gt; to match type of `species` &lt;factor&lt;600db&gt;&gt;.</span></code></pre></div>
 </div>
   </div>
 
