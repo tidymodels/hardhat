@@ -8,6 +8,13 @@
 
 <title>Extract a model offset — model_offset • hardhat</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -36,12 +43,17 @@
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
 
+<!--optional theme-->
+<link href="../tidymodels.css" rel="stylesheet">
+
+
 
 
 <meta property="og:title" content="Extract a model offset — model_offset" />
 <meta property="og:description" content="model_offset() extracts a numeric offset from a model frame. It is
 inspired by stats::model.offset(), but has nicer error messages and
 is slightly stricter." />
+<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -85,19 +97,13 @@ is slightly stricter." />
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -165,7 +171,7 @@ inspired by <code><a href='https://rdrr.io/r/stats/model.extract.html'>stats::mo
 is slightly stricter.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>model_offset</span>(<span class='no'>terms</span>, <span class='no'>data</span>)</pre>
+    <pre class="usage"><span class='fu'>model_offset</span><span class='op'>(</span><span class='va'>terms</span>, <span class='va'>data</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,9 +203,10 @@ by <code>model_offset()</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span>(<span class='no'>Species</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Sepal.Width</span>), <span class='no'>iris</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
 
-<span class='fu'>model_offset</span>(<span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span>(<span class='no'>x</span>), <span class='no'>x</span>)</div><div class='output co'>#&gt;   [1] 3.5 3.0 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 3.7 3.4 3.0 3.0 4.0 4.4 3.9 3.5
+<span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] 3.5 3.0 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 3.7 3.4 3.0 3.0 4.0 4.4 3.9 3.5
 #&gt;  [19] 3.8 3.8 3.4 3.7 3.6 3.3 3.4 3.0 3.4 3.5 3.4 3.2 3.1 3.4 4.1 4.2 3.1 3.2
 #&gt;  [37] 3.5 3.6 3.0 3.4 3.5 2.3 3.2 3.5 3.8 3.0 3.8 3.2 3.7 3.3 3.2 3.2 3.1 2.3
 #&gt;  [55] 2.8 2.8 3.3 2.4 2.9 2.7 2.0 3.0 2.2 2.9 2.9 3.1 3.0 2.7 2.2 2.5 3.2 2.8
@@ -208,9 +215,10 @@ by <code>model_offset()</code>.</p>
 #&gt; [109] 2.5 3.6 3.2 2.7 3.0 2.5 2.8 3.2 3.0 3.8 2.6 2.2 3.2 2.8 2.8 2.7 3.3 3.2
 #&gt; [127] 2.8 3.0 2.8 3.0 2.8 3.8 2.8 2.8 2.6 3.0 3.4 3.1 3.0 3.1 3.1 3.1 2.7 3.2
 #&gt; [145] 3.3 3.0 2.5 3.0 3.4 3.0</div><div class='input'>
-<span class='no'>xx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span>(<span class='no'>Species</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Sepal.Width</span>) + <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Sepal.Length</span>), <span class='no'>iris</span>)
+<span class='va'>xx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
 
-<span class='fu'>model_offset</span>(<span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span>(<span class='no'>xx</span>), <span class='no'>xx</span>)</div><div class='output co'>#&gt;   [1]  8.6  7.9  7.9  7.7  8.6  9.3  8.0  8.4  7.3  8.0  9.1  8.2  7.8  7.3  9.8
+<span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>xx</span><span class='op'>)</span>, <span class='va'>xx</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1]  8.6  7.9  7.9  7.7  8.6  9.3  8.0  8.4  7.3  8.0  9.1  8.2  7.8  7.3  9.8
 #&gt;  [16] 10.1  9.3  8.6  9.5  8.9  8.8  8.8  8.2  8.4  8.2  8.0  8.4  8.7  8.6  7.9
 #&gt;  [31]  7.9  8.8  9.3  9.7  8.0  8.2  9.0  8.5  7.4  8.5  8.5  6.8  7.6  8.5  8.9
 #&gt;  [46]  7.8  8.9  7.8  9.0  8.3 10.2  9.6 10.0  7.8  9.3  8.5  9.6  7.3  9.5  7.9
@@ -221,15 +229,16 @@ by <code>model_offset()</code>.</p>
 #&gt; [121] 10.1  8.4 10.5  9.0 10.0 10.4  9.0  9.1  9.2 10.2 10.2 11.7  9.2  9.1  8.7
 #&gt; [136] 10.7  9.7  9.5  9.0 10.0  9.8 10.0  8.5 10.0 10.0  9.7  8.8  9.5  9.6  8.9</div><div class='input'>
 <span class='co'># Problematic columns are caught with intuitive errors</span>
-<span class='fu'><a href='https://rdrr.io/r/base/conditions.html'>tryCatch</a></span>(
-  <span class='kw'>expr</span> <span class='kw'>=</span> {
-    <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span>(~ <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span>(<span class='no'>Species</span>), <span class='no'>iris</span>)
-    <span class='fu'>model_offset</span>(<span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span>(<span class='no'>x</span>), <span class='no'>x</span>)
-  },
-  <span class='kw'>error</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>e</span>) {
-    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>e</span>$<span class='no'>message</span>)
-  }
-)</div><div class='output co'>#&gt; Column, 'offset(Species)', is tagged as an offset, but is not numeric. All offsets must be numeric.</div><div class='input'>
+<span class='kw'><a href='https://rdrr.io/r/base/conditions.html'>tryCatch</a></span><span class='op'>(</span>
+  expr <span class='op'>=</span> <span class='op'>{</span>
+    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Species</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
+    <span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='va'>x</span><span class='op'>)</span>
+  <span class='op'>}</span>,
+  error <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>e</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>e</span><span class='op'>$</span><span class='va'>message</span><span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; Column, 'offset(Species)', is tagged as an offset, but is not numeric. All offsets must be numeric.</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -242,7 +251,7 @@ by <code>model_offset()</code>.</p>
 
       <footer>
       <div class="tidyverse">
-  <p><code>hardhat</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>hardhat is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

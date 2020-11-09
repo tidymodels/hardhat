@@ -6,8 +6,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Call <code>mold$clean()</code> and <code>mold$process()</code> — run_mold • hardhat</title>
+<title>Call mold$clean() and mold$process() — run_mold • hardhat</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -36,13 +43,18 @@
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
 
+<!--optional theme-->
+<link href="../tidymodels.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Call <code>mold$clean()</code> and <code>mold$process()</code> — run_mold" />
+
+
+<meta property="og:title" content="Call mold$clean() and mold$process() — run_mold" />
 <meta property="og:description" content="This is a purely developer facing function, that is only used if you are
 creating a completely new blueprint inheriting only from new_blueprint(), and
 not from one of the more common: new_xy_blueprint(), new_recipe_blueprint(),
 new_formula_blueprint()." />
+<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -86,19 +98,13 @@ new_formula_blueprint()." />
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -162,12 +168,12 @@ new_formula_blueprint()." />
 
     <div class="ref-description">
     <p>This is a purely developer facing function, that is <em>only</em> used if you are
-creating a completely new blueprint inheriting only from <code><a href='new-blueprint.html'>new_blueprint()</a></code>, and
-not from one of the more common: <code><a href='new-blueprint.html'>new_xy_blueprint()</a></code>, <code><a href='new-blueprint.html'>new_recipe_blueprint()</a></code>,
-<code><a href='new-blueprint.html'>new_formula_blueprint()</a></code>.</p>
+creating a completely new blueprint inheriting only from <code><a href='new_formula_blueprint.html'>new_blueprint()</a></code>, and
+not from one of the more common: <code><a href='new_formula_blueprint.html'>new_xy_blueprint()</a></code>, <code><a href='new_formula_blueprint.html'>new_recipe_blueprint()</a></code>,
+<code><a href='new_formula_blueprint.html'>new_formula_blueprint()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>run_mold</span>(<span class='no'>blueprint</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>run_mold</span><span class='op'>(</span><span class='va'>blueprint</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,7 +200,7 @@ corresponding blueprints also have different arguments for the
 job of <code>run_mold()</code> is simply to call these two functions with the right
 arguments.</p>
 <p>The only time you need to implement a method for <code>run_mold()</code> is if you
-are creating a <code><a href='new-blueprint.html'>new_blueprint()</a></code> that does not follow one of the three core
+are creating a <code><a href='new_formula_blueprint.html'>new_blueprint()</a></code> that does not follow one of the three core
 blueprint types. In that special case, create a method for <code>run_mold()</code> with
 your blueprint type, and pass through whatever arguments are necessary to call
 your blueprint specific <code>clean()</code> and <code>process()</code> functions.</p>
@@ -215,7 +221,7 @@ for your blueprint.</p>
 
       <footer>
       <div class="tidyverse">
-  <p><code>hardhat</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>hardhat is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

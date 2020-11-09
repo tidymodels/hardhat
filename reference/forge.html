@@ -8,6 +8,13 @@
 
 <title>Forge prediction-ready data — forge • hardhat</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -36,6 +43,10 @@
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
 
+<!--optional theme-->
+<link href="../tidymodels.css" rel="stylesheet">
+
+
 
 
 <meta property="og:title" content="Forge prediction-ready data — forge" />
@@ -50,6 +61,7 @@ Formula Method - default_formula_blueprint()
 Recipes Method - default_recipe_blueprint()
 
 " />
+<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -93,19 +105,13 @@ Recipes Method - default_recipe_blueprint()
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -181,7 +187,7 @@ how to use each one in conjunction with <code>forge()</code>.</p><ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'>forge</span>(<span class='no'>new_data</span>, <span class='no'>blueprint</span>, <span class='no'>...</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>forge</span><span class='op'>(</span><span class='va'>new_data</span>, <span class='va'>blueprint</span>, <span class='va'>...</span>, outcomes <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -230,17 +236,18 @@ performance.</p>
 <span class='co'># for various ways to call forge with different</span>
 <span class='co'># blueprints.</span>
 
-<span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,]
-<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='fl'>101</span>:<span class='fl'>150</span>,]
+<span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span>
+<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span>
 
 <span class='co'># Formula</span>
-<span class='no'>processed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>Sepal.Width</span>) ~ <span class='no'>Species</span>,
-  <span class='no'>train</span>,
-  <span class='kw'>blueprint</span> <span class='kw'>=</span> <span class='fu'><a href='default_formula_blueprint.html'>default_formula_blueprint</a></span>(<span class='kw'>indicators</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-)
+<span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Species</span>,
+  <span class='va'>train</span>,
+  blueprint <span class='op'>=</span> <span class='fu'><a href='default_formula_blueprint.html'>default_formula_blueprint</a></span><span class='op'>(</span>indicators <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>forge</span>(<span class='no'>test</span>, <span class='no'>processed</span>$<span class='no'>blueprint</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $predictors
+<span class='fu'>forge</span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $predictors
 #&gt; <span style='color: #555555;'># A tibble: 50 x 1</span><span>
 #&gt;    Species  
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>    
@@ -288,7 +295,7 @@ performance.</p>
 
       <footer>
       <div class="tidyverse">
-  <p><code>hardhat</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>hardhat is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">
