@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 0.1.5
 
 * `use_modeling_files()` (and therefore, `create_modeling_package()`) now
   ensures that all generated functions are templated on the model name. This
