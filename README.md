@@ -25,19 +25,19 @@ Packages](https://tidymodels.github.io/model-implementation-principles/).
 
 hardhat has four main goals:
 
-  - Easily, consistently, and robustly preprocess data at fit time and
+-   Easily, consistently, and robustly preprocess data at fit time and
     prediction time with `mold()` and `forge()`.
 
-  - Provide one source of truth for common input validation functions,
+-   Provide one source of truth for common input validation functions,
     such as checking if new data at prediction time contains the same
     required columns used at fit time.
 
-  - Provide extra utility functions for additional common tasks, such as
+-   Provide extra utility functions for additional common tasks, such as
     adding intercept columns, standardizing `predict()` output, and
     extracting valuable class and factor level information from the
     predictors.
 
-  - Reimagine the base R preprocessing infrastructure of
+-   Reimagine the base R preprocessing infrastructure of
     `stats::model.matrix()` and `stats::model.frame()` using the
     stricter approaches found in `model_matrix()` and `model_frame()`.
 
@@ -69,13 +69,13 @@ devtools::install_github("tidymodels/hardhat")
 
 To learn about how to use hardhat, check out the vignettes:
 
-  - `vignette("mold", "hardhat")`: Learn how to preprocess data at fit
+-   `vignette("mold", "hardhat")`: Learn how to preprocess data at fit
     time with `mold()`.
 
-  - `vignette("forge", "hardhat")`: Learn how to preprocess new data at
+-   `vignette("forge", "hardhat")`: Learn how to preprocess new data at
     prediction time with `forge()`.
 
-  - `vignette("package", "hardhat")`: Learn how to use `mold()` and
+-   `vignette("package", "hardhat")`: Learn how to use `mold()` and
     `forge()` to help in creating a new modeling package.
 
 You can also watch [Max Kuhn](https://github.com/topepo) discuss how to
@@ -91,17 +91,17 @@ This project is released with a [Contributor Code of
 Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
-  - For questions and discussions about tidymodels packages, modeling,
+-   For questions and discussions about tidymodels packages, modeling,
     and machine learning, please [post on RStudio
     Community](https://rstd.io/tidymodels-community).
 
-  - If you think you have encountered a bug, please [submit an
+-   If you think you have encountered a bug, please [submit an
     issue](https://github.com/tidymodels/hardhat/issues).
 
-  - Either way, learn how to create and share a
+-   Either way, learn how to create and share a
     [reprex](https://rstd.io/reprex) (a minimal, reproducible example),
     to clearly communicate about your code.
 
-  - Check out further details on [contributing guidelines for tidymodels
+-   Check out further details on [contributing guidelines for tidymodels
     packages](https://www.tidymodels.org/contribute/) and [how to get
     help](https://www.tidymodels.org/help/).
