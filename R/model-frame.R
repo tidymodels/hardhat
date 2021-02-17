@@ -97,6 +97,10 @@ model_frame <- function(formula, data) {
 
 }
 
+terms.data.frame <- function (x, ...) {
+  attr(x, "terms")
+}
+
 validate_is_formula <- function(formula) {
   validate_is(formula, rlang::is_formula, "formula")
 }
