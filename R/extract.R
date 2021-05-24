@@ -14,7 +14,9 @@
 #' - `extract_parsnip_fit()` returns a parsnip model fit.
 #'
 #' - `extract_engine_fit()` returns the engine specific fit embedded within
-#'   a parsnip model fit.
+#'   a parsnip model fit. For example, when using `parsnip::linear_reg()`
+#'   with the `"lm"` engine, this would return the underlying lm object.
+#'
 #'
 #' @param x An object.
 #'

@@ -34,7 +34,8 @@ workflows, and workflowsets, but the returned object is always the same.
 \item \code{extract_parsnip_spec()} returns a parsnip model specification.
 \item \code{extract_parsnip_fit()} returns a parsnip model fit.
 \item \code{extract_engine_fit()} returns the engine specific fit embedded within
-a parsnip model fit.
+a parsnip model fit. For example, when using \code{parsnip::linear_reg()}
+with the \code{"lm"} engine, this would return the underlying lm object.
 }
 }
 \examples{
