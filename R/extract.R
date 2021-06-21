@@ -11,11 +11,11 @@
 #'
 #' - `extract_parsnip_spec()` returns a parsnip model specification.
 #'
-#' - `extract_parsnip_fit()` returns a parsnip model fit.
+#' - `extract_fit_parsnip()` returns a parsnip model fit.
 #'
-#' - `extract_engine_fit()` returns the engine specific fit embedded within
-#'   a parsnip model fit. For example, when using `parsnip::linear_reg()`
-#'   with the `"lm"` engine, this would return the underlying lm object.
+#' - `extract_fit_engine()` returns the engine specific fit embedded within
+#'   a parsnip model fit. For example, when using [parsnip::linear_reg()]
+#'   with the `"lm"` engine, this would return the underlying `lm` object.
 #'
 #'
 #' @param x An object.
@@ -48,12 +48,12 @@ extract_parsnip_spec <- function(x, ...) {
 
 #' @rdname hardhat-extract
 #' @export
-extract_parsnip_fit <- function(x, ...) {
-  UseMethod("extract_parsnip_fit")
+extract_fit_parsnip <- function(x, ...) {
+  UseMethod("extract_fit_parsnip")
 }
 
 #' @rdname hardhat-extract
 #' @export
-extract_engine_fit <- function(x, ...) {
-  UseMethod("extract_engine_fit")
+extract_fit_engine <- function(x, ...) {
+  UseMethod("extract_fit_engine")
 }

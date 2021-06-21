@@ -5,8 +5,8 @@
 \alias{extract_workflow}
 \alias{extract_recipe}
 \alias{extract_parsnip_spec}
-\alias{extract_parsnip_fit}
-\alias{extract_engine_fit}
+\alias{extract_fit_parsnip}
+\alias{extract_fit_engine}
 \title{Generics for object extraction}
 \usage{
 extract_workflow(x, ...)
@@ -15,9 +15,9 @@ extract_recipe(x, ...)
 
 extract_parsnip_spec(x, ...)
 
-extract_parsnip_fit(x, ...)
+extract_fit_parsnip(x, ...)
 
-extract_engine_fit(x, ...)
+extract_fit_engine(x, ...)
 }
 \arguments{
 \item{x}{An object.}
@@ -32,9 +32,9 @@ workflows, and workflowsets, but the returned object is always the same.
 \item \code{extract_workflow()} returns a workflow, possibly fit.
 \item \code{extract_recipe()} returns a recipe, possibly prepped.
 \item \code{extract_parsnip_spec()} returns a parsnip model specification.
-\item \code{extract_parsnip_fit()} returns a parsnip model fit.
-\item \code{extract_engine_fit()} returns the engine specific fit embedded within
-a parsnip model fit. For example, when using \code{parsnip::linear_reg()}
+\item \code{extract_fit_parsnip()} returns a parsnip model fit.
+\item \code{extract_fit_engine()} returns the engine specific fit embedded within
+a parsnip model fit. For example, when using \code{\link[parsnip:linear_reg]{parsnip::linear_reg()}}
 with the \code{"lm"} engine, this would return the underlying lm object.
 }
 }
