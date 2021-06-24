@@ -16,7 +16,7 @@
 #'   including either the prepped recipe, the formula terms object, or
 #'   variable selectors.
 #'
-#' - `extract_parsnip_spec()` returns a parsnip model specification.
+#' - `extract_spec_parsnip()` returns a parsnip model specification.
 #'
 #' - `extract_preprocessor()` returns the formula, recipe, or variable
 #'   expressions used for preprocessing.
@@ -50,8 +50,8 @@ extract_recipe <- function(x, ...) {
 
 #' @rdname hardhat-extract
 #' @export
-extract_parsnip_spec <- function(x, ...) {
-  UseMethod("extract_parsnip_spec")
+extract_spec_parsnip <- function(x, ...) {
+  UseMethod("extract_spec_parsnip")
 }
 
 #' @rdname hardhat-extract

@@ -4,7 +4,7 @@
 \alias{hardhat-extract}
 \alias{extract_workflow}
 \alias{extract_recipe}
-\alias{extract_parsnip_spec}
+\alias{extract_spec_parsnip}
 \alias{extract_fit_parsnip}
 \alias{extract_fit_engine}
 \alias{extract_mold}
@@ -15,7 +15,7 @@ extract_workflow(x, ...)
 
 extract_recipe(x, ...)
 
-extract_parsnip_spec(x, ...)
+extract_spec_parsnip(x, ...)
 
 extract_fit_parsnip(x, ...)
 
@@ -43,7 +43,7 @@ with the \code{"lm"} engine, this would return the underlying \code{lm} object.
 from \code{\link[=mold]{mold()}}. It contains information about the preprocessing,
 including either the prepped recipe, the formula terms object, or
 variable selectors.
-\item \code{extract_parsnip_spec()} returns a parsnip model specification.
+\item \code{extract_spec_parsnip()} returns a parsnip model specification.
 \item \code{extract_preprocessor()} returns the formula, recipe, or variable
 expressions used for preprocessing.
 \item \code{extract_recipe()} returns a recipe, possibly estimated.
