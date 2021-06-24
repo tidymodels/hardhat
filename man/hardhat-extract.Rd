@@ -7,6 +7,8 @@
 \alias{extract_parsnip_spec}
 \alias{extract_fit_parsnip}
 \alias{extract_fit_engine}
+\alias{extract_mold}
+\alias{extract_preprocessor}
 \title{Generics for object extraction}
 \usage{
 extract_workflow(x, ...)
@@ -18,6 +20,10 @@ extract_parsnip_spec(x, ...)
 extract_fit_parsnip(x, ...)
 
 extract_fit_engine(x, ...)
+
+extract_mold(x, ...)
+
+extract_preprocessor(x, ...)
 }
 \arguments{
 \item{x}{An object.}
@@ -29,15 +35,22 @@ These generics are used to extract elements from various model
 objects. Methods are defined in other packages, such as tune,
 workflows, and workflowsets, but the returned object is always the same.
 \itemize{
-\item \code{extract_workflow()} returns a workflow, possibly fit.
-\item \code{extract_recipe()} returns a recipe, possibly prepped.
-\item \code{extract_parsnip_spec()} returns a parsnip model specification.
-\item \code{extract_fit_parsnip()} returns a parsnip model fit.
 \item \code{extract_fit_engine()} returns the engine specific fit embedded within
 a parsnip model fit. For example, when using \code{\link[parsnip:linear_reg]{parsnip::linear_reg()}}
-with the \code{"lm"} engine, this would return the underlying lm object.
+with the \code{"lm"} engine, this would return the underlying \code{lm} object.
+\item \code{extract_fit_parsnip()} returns a parsnip model fit.
+\item \code{extract_mold()} returns returns the preprocessed "mold" object returned
+from \code{\link[=mold]{mold()}}. It contains information about the preprocessing,
+including either the prepped recipe, the formula terms object, or
+variable selectors.
+\item \code{extract_parsnip_spec()} returns a parsnip model specification.
+\item \code{extract_preprocessor()} returns the formula, recipe, or variable
+expressions used for preprocessing.
+\item \code{extract_recipe()} returns a recipe, possibly estimated.
+\item \code{extract_workflow()} returns a workflow, possibly fit.
 }
 }
 \examples{
-# See packages where methods are defined for examples.
+# See packages where methods are defined for examples, such as `parsnip` or
+# `workflows`.
 }
