@@ -11,8 +11,7 @@ coverage](https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
-[![R build
-status](https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/hardhat/actions)
+[![R-CMD-check](https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/hardhat/actions)
 <!-- badges: end -->
 
 ## Introduction
