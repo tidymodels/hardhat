@@ -112,6 +112,12 @@ Recipes Method - default_recipe_blueprint()
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -151,7 +157,7 @@ Recipes Method - default_recipe_blueprint()
 </li>
         <li>
   <a href="https://github.com/tidymodels/hardhat/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -248,42 +254,42 @@ performance.</p>
 
 <span class='fu'>forge</span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #555555;'># A tibble: 50 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
 #&gt;    Species  
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>    
-#&gt; </span><span style='color: #555555;'> 1</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 2</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 3</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 4</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 5</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 6</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 7</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 8</span><span> virginica
-#&gt; </span><span style='color: #555555;'> 9</span><span> virginica
-#&gt; </span><span style='color: #555555;'>10</span><span> virginica
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
+#&gt; <span style='color: #BCBCBC;'> 1</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 2</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 3</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 4</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 5</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 6</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 7</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 8</span> virginica
+#&gt; <span style='color: #BCBCBC;'> 9</span> virginica
+#&gt; <span style='color: #BCBCBC;'>10</span> virginica
+#&gt; <span style='color: #949494;'># … with 40 more rows</span>
 #&gt; 
 #&gt; $outcomes
-#&gt; </span><span style='color: #555555;'># A tibble: 50 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
 #&gt;    `log(Sepal.Width)`
-#&gt;                 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>              1.19 
-#&gt; </span><span style='color: #555555;'> 2</span><span>              0.993
-#&gt; </span><span style='color: #555555;'> 3</span><span>              1.10 
-#&gt; </span><span style='color: #555555;'> 4</span><span>              1.06 
-#&gt; </span><span style='color: #555555;'> 5</span><span>              1.10 
-#&gt; </span><span style='color: #555555;'> 6</span><span>              1.10 
-#&gt; </span><span style='color: #555555;'> 7</span><span>              0.916
-#&gt; </span><span style='color: #555555;'> 8</span><span>              1.06 
-#&gt; </span><span style='color: #555555;'> 9</span><span>              0.916
-#&gt; </span><span style='color: #555555;'>10</span><span>              1.28 
-#&gt; </span><span style='color: #555555;'># … with 40 more rows</span><span>
+#&gt;                 <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>              1.19 
+#&gt; <span style='color: #BCBCBC;'> 2</span>              0.993
+#&gt; <span style='color: #BCBCBC;'> 3</span>              1.10 
+#&gt; <span style='color: #BCBCBC;'> 4</span>              1.06 
+#&gt; <span style='color: #BCBCBC;'> 5</span>              1.10 
+#&gt; <span style='color: #BCBCBC;'> 6</span>              1.10 
+#&gt; <span style='color: #BCBCBC;'> 7</span>              0.916
+#&gt; <span style='color: #BCBCBC;'> 8</span>              1.06 
+#&gt; <span style='color: #BCBCBC;'> 9</span>              0.916
+#&gt; <span style='color: #BCBCBC;'>10</span>              1.28 
+#&gt; <span style='color: #949494;'># … with 40 more rows</span>
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
 #&gt; NULL
 #&gt; 
-#&gt; </div></span></pre>
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -105,6 +105,12 @@ two distinct objects." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -144,7 +150,7 @@ two distinct objects." />
 </li>
         <li>
   <a href="https://github.com/tidymodels/hardhat/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -232,20 +238,20 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 <span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
 
 <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span>
-</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 150 x 2</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 x 2</span>
 #&gt;    Species Sepal.Width
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> setosa          3.5
-#&gt; </span><span style='color: #555555;'> 2</span><span> setosa          3  
-#&gt; </span><span style='color: #555555;'> 3</span><span> setosa          3.2
-#&gt; </span><span style='color: #555555;'> 4</span><span> setosa          3.1
-#&gt; </span><span style='color: #555555;'> 5</span><span> setosa          3.6
-#&gt; </span><span style='color: #555555;'> 6</span><span> setosa          3.9
-#&gt; </span><span style='color: #555555;'> 7</span><span> setosa          3.4
-#&gt; </span><span style='color: #555555;'> 8</span><span> setosa          3.4
-#&gt; </span><span style='color: #555555;'> 9</span><span> setosa          2.9
-#&gt; </span><span style='color: #555555;'>10</span><span> setosa          3.1
-#&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span></div><div class='input'>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> setosa          3.5
+#&gt; <span style='color: #BCBCBC;'> 2</span> setosa          3  
+#&gt; <span style='color: #BCBCBC;'> 3</span> setosa          3.2
+#&gt; <span style='color: #BCBCBC;'> 4</span> setosa          3.1
+#&gt; <span style='color: #BCBCBC;'> 5</span> setosa          3.6
+#&gt; <span style='color: #BCBCBC;'> 6</span> setosa          3.9
+#&gt; <span style='color: #BCBCBC;'> 7</span> setosa          3.4
+#&gt; <span style='color: #BCBCBC;'> 8</span> setosa          3.4
+#&gt; <span style='color: #BCBCBC;'> 9</span> setosa          2.9
+#&gt; <span style='color: #BCBCBC;'>10</span> setosa          3.1
+#&gt; <span style='color: #949494;'># … with 140 more rows</span></div><div class='input'>
 <span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>
 </div><div class='output co'>#&gt; Species ~ Sepal.Width
 #&gt; attr(,"variables")
@@ -263,7 +269,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; attr(,"response")
 #&gt; [1] 1
 #&gt; attr(,".Environment")
-#&gt; &lt;environment: 0x7fe9353e9e78&gt;
+#&gt; &lt;environment: 0x55783182fd20&gt;
 #&gt; attr(,"predvars")
 #&gt; list(Species, Sepal.Width)
 #&gt; attr(,"dataClasses")
@@ -278,18 +284,18 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 <span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris2</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 2</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 2</span>
 #&gt;   Species Sepal.Width
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> setosa         </span><span style='color: #BB0000;'>NA</span><span>  
-#&gt; </span><span style='color: #555555;'>2</span><span> setosa          3  
-#&gt; </span><span style='color: #555555;'>3</span><span> setosa          3.2
-#&gt; </span><span style='color: #555555;'>4</span><span> setosa          3.1
-#&gt; </span><span style='color: #555555;'>5</span><span> setosa          3.6
-#&gt; </span><span style='color: #555555;'>6</span><span> setosa          3.9</div><div class='input'>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> setosa         <span style='color: #BB0000;'>NA</span>  
+#&gt; <span style='color: #BCBCBC;'>2</span> setosa          3  
+#&gt; <span style='color: #BCBCBC;'>3</span> setosa          3.2
+#&gt; <span style='color: #BCBCBC;'>4</span> setosa          3.1
+#&gt; <span style='color: #BCBCBC;'>5</span> setosa          3.6
+#&gt; <span style='color: #BCBCBC;'>6</span> setosa          3.9</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span> <span class='op'>==</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>iris2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
