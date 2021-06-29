@@ -43,6 +43,8 @@ Suggests:
     roxygen2,
     testthat (>= 2.1.0),
     usethis
+Config/Needs/website:
+    tidyverse/tidytemplate
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
