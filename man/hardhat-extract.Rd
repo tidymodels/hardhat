@@ -37,9 +37,9 @@ workflows, and workflowsets, but the returned object is always the same.
 \itemize{
 \item \code{extract_fit_engine()} returns the engine specific fit embedded within
 a parsnip model fit. For example, when using \code{\link[parsnip:linear_reg]{parsnip::linear_reg()}}
-with the \code{"lm"} engine, this would return the underlying \code{lm} object.
+with the \code{"lm"} engine, this returns the underlying \code{lm} object.
 \item \code{extract_fit_parsnip()} returns a parsnip model fit.
-\item \code{extract_mold()} returns returns the preprocessed "mold" object returned
+\item \code{extract_mold()} returns the preprocessed "mold" object returned
 from \code{\link[=mold]{mold()}}. It contains information about the preprocessing,
 including either the prepped recipe, the formula terms object, or
 variable selectors.
