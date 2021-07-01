@@ -1,5 +1,11 @@
 # hardhat (development version)
 
+* Added a new family of `extract_*()` S3 generics for extracting important
+  components from various tidymodels objects. S3 methods will be defined in
+  other tidymodels packages. For example, tune will register an
+  `extract_workflow()` method to easily extract the workflow embedded within the
+  result of `tune::last_fit()`.
+
 # hardhat 0.1.5
 
 * `use_modeling_files()` (and therefore, `create_modeling_package()`) now
