@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • hardhat</title>
+<title>Generics for object extraction — hardhat-extract • hardhat</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -49,7 +49,25 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Generics for object extraction — hardhat-extract" />
+<meta property="og:description" content="These generics are used to extract elements from various model
+objects. Methods are defined in other packages, such as tune,
+workflows, and workflowsets, but the returned object is always the same.
+extract_fit_engine() returns the engine specific fit embedded within
+a parsnip model fit. For example, when using parsnip::linear_reg()
+with the &quot;lm&quot; engine, this returns the underlying lm object.
+extract_fit_parsnip() returns a parsnip model fit.
+extract_mold() returns the preprocessed &quot;mold&quot; object returned
+from mold(). It contains information about the preprocessing,
+including either the prepped recipe, the formula terms object, or
+variable selectors.
+extract_spec_parsnip() returns a parsnip model specification.
+extract_preprocessor() returns the formula, recipe, or variable
+expressions used for preprocessing.
+extract_recipe() returns a recipe, possibly estimated.
+extract_workflow() returns a workflow, possibly fit.
+
+" />
 <meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -78,7 +96,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -163,87 +181,70 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/tidymodels/hardhat/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Generics for object extraction</h1>
+    <small class="dont-index">Source: <a href='https://github.com/tidymodels/hardhat/blob/master/R/extract.R'><code>R/extract.R</code></a></small>
+    <div class="hidden name"><code>hardhat-extract.Rd</code></div>
     </div>
 
-    <div id="hardhat-development-version" class="section level1">
-<h1 class="page-header" data-toc-text="development version">
-<a href="#hardhat-development-version" class="anchor"></a>hardhat (development version)<small> Unreleased </small>
-</h1>
-<ul>
-<li>Added a new family of <code>extract_*()</code> S3 generics for extracting important components from various tidymodels objects. S3 methods will be defined in other tidymodels packages. For example, tune will register an <code><a href="../reference/hardhat-extract.html">extract_workflow()</a></code> method to easily extract the workflow embedded within the result of <code>tune::last_fit()</code>.</li>
+    <div class="ref-description">
+    <p>These generics are used to extract elements from various model
+objects. Methods are defined in other packages, such as tune,
+workflows, and workflowsets, but the returned object is always the same.</p><ul>
+<li><p><code>extract_fit_engine()</code> returns the engine specific fit embedded within
+a parsnip model fit. For example, when using <code>parsnip::linear_reg()</code>
+with the <code>"lm"</code> engine, this returns the underlying <code>lm</code> object.</p></li>
+<li><p><code>extract_fit_parsnip()</code> returns a parsnip model fit.</p></li>
+<li><p><code>extract_mold()</code> returns the preprocessed "mold" object returned
+from <code><a href='mold.html'>mold()</a></code>. It contains information about the preprocessing,
+including either the prepped recipe, the formula terms object, or
+variable selectors.</p></li>
+<li><p><code>extract_spec_parsnip()</code> returns a parsnip model specification.</p></li>
+<li><p><code>extract_preprocessor()</code> returns the formula, recipe, or variable
+expressions used for preprocessing.</p></li>
+<li><p><code>extract_recipe()</code> returns a recipe, possibly estimated.</p></li>
+<li><p><code>extract_workflow()</code> returns a workflow, possibly fit.</p></li>
 </ul>
-</div>
-    <div id="hardhat-015" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.5">
-<a href="#hardhat-015" class="anchor"></a>hardhat 0.1.5<small> 2020-11-09 </small>
-</h1>
-<ul>
-<li><p><code><a href="../reference/modeling-package.html">use_modeling_files()</a></code> (and therefore, <code><a href="../reference/modeling-package.html">create_modeling_package()</a></code>) now ensures that all generated functions are templated on the model name. This makes it easier to add multiple models to the same package (<a href='https://github.com/tidymodels/hardhat/issues/152'>#152</a>).</p></li>
-<li><p>All preprocessors can now <code><a href="../reference/mold.html">mold()</a></code> and <code><a href="../reference/forge.html">forge()</a></code> predictors to one of three output formats (either tibble, matrix, or <code>dgCMatrix</code> sparse matrix) via the <code>composition</code> argument of a blueprint (<a href='https://github.com/tidymodels/hardhat/issues/100'>#100</a>, <a href='https://github.com/tidymodels/hardhat/issues/150'>#150</a>).</p></li>
-</ul>
-</div>
-    <div id="hardhat-014" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.4">
-<a href="#hardhat-014" class="anchor"></a>hardhat 0.1.4<small> 2020-07-02 </small>
-</h1>
-<ul>
-<li><p>Setting <code>indicators = "none"</code> in <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code> no longer accidentally expands character columns into dummy variable columns. They are now left completely untouched and pass through as characters. When <code>indicators = "traditional"</code> or <code>indicators = "one_hot"</code>, character columns are treated as unordered factors (<a href='https://github.com/tidymodels/hardhat/issues/139'>#139</a>).</p></li>
-<li>
-<p>The <code>indicators</code> argument of <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code> now takes character input rather than logical. To update:</p>
-<pre><code>indicators = TRUE  -&gt; indicators = "traditional"
 
-indicators = FALSE -&gt; indicators = "none"</code></pre>
-<p>Logical input for <code>indicators</code> will continue to work, with a warning, until hardhat 0.1.6, where it will be formally deprecated.</p>
-<p>There is also a new <code>indicators = "one_hot"</code> option which expands all factor columns into <code>K</code> dummy variable columns corresponding to the <code>K</code> levels of that factor, rather than the more traditional <code>K - 1</code> expansion.</p>
-</li>
-</ul>
-</div>
-    <div id="hardhat-013" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.3">
-<a href="#hardhat-013" class="anchor"></a>hardhat 0.1.3<small> 2020-05-20 </small>
-</h1>
-<ul>
-<li><p>Updated to stay current with the latest vctrs 0.3.0 conventions.</p></li>
-<li><p><code><a href="../reference/scream.html">scream()</a></code> is now stricter when checking ordered factor levels in new data against the <code>ptype</code> used at training time. Ordered factors must now have <em>exactly</em> the same set of levels at training and prediction time. See <code><a href="../reference/scream.html">?scream</a></code> for a new graphic outlining how factor levels are handled (<a href='https://github.com/tidymodels/hardhat/issues/132'>#132</a>).</p></li>
-<li><p>The novel factor level check in <code><a href="../reference/scream.html">scream()</a></code> no longer throws a novel level warning on <code>NA</code> values (<a href='https://github.com/tidymodels/hardhat/issues/131'>#131</a>).</p></li>
-</ul>
-</div>
-    <div id="hardhat-012" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.2">
-<a href="#hardhat-012" class="anchor"></a>hardhat 0.1.2<small> 2020-02-28 </small>
-</h1>
-<ul>
-<li><p><code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> now defaults to prepping recipes with <code>fresh = TRUE</code>. This is a safer default, and guards the user against accidentally skipping this preprocessing step when tuning (<a href='https://github.com/tidymodels/hardhat/issues/122'>#122</a>).</p></li>
-<li><p><code><a href="../reference/model_matrix.html">model_matrix()</a></code> now correctly strips all attributes from the result of the internal call to <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code>.</p></li>
-</ul>
-</div>
-    <div id="hardhat-011" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.1">
-<a href="#hardhat-011" class="anchor"></a>hardhat 0.1.1<small> 2020-01-08 </small>
-</h1>
-<ul>
-<li><p><code><a href="../reference/forge.html">forge()</a></code> now works correctly when used with a recipe that has a predictor with multiple roles (<a href='https://github.com/tidymodels/hardhat/issues/120'>#120</a>).</p></li>
-<li><p>Require recipes 0.1.8 to incorporate an important bug fix with <code><a href="https://recipes.tidymodels.org/reference/juice.html">juice()</a></code> and 0-column selections.</p></li>
-</ul>
-</div>
-    <div id="hardhat-010" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#hardhat-010" class="anchor"></a>hardhat 0.1.0<small> 2019-12-16 </small>
-</h1>
-<ul>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-</ul>
-</div>
+    </div>
+
+    <pre class="usage"><span class='fu'>extract_workflow</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_recipe</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_spec_parsnip</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_fit_parsnip</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_fit_engine</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_mold</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_preprocessor</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>An object.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Extra arguments passed on to methods.</p></td>
+    </tr>
+    </table>
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># See packages where methods are defined for examples, such as `parsnip` or</span>
+<span class='co'># `workflows`.</span>
+</div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 
