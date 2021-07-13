@@ -889,25 +889,3 @@ test_that("one-hot encoding and intercept", {
   expect_true(x1$blueprint$intercept)
   expect_true(x2$blueprint$intercept)
 })
-
-# ------------------------------------------------------------------------------
-# Deprecation
-
-test_that("soft-deprecation of logical `indicators`", {
-  local_lifecycle_warnings()
-
-  expect_warning(
-    x <- default_formula_blueprint(indicators = TRUE),
-    "`indicators` now requires"
-  )
-
-  expect_identical(x$indicators, "traditional")
-
-
-  expect_warning(
-    x <- default_formula_blueprint(indicators = FALSE),
-    "`indicators` now requires"
-  )
-
-  expect_identical(x$indicators, "none")
-})

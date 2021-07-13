@@ -77,7 +77,6 @@ validate_is_formula_or_null <- function(formula) {
 # ------------------------------------------------------------------------------
 
 validate_indicators <- function(indicators) {
-  indicators <- compat_indicators(indicators)
   validate_is_character(indicators, "indicators")
 
   n_indicators <- length(indicators)
@@ -86,38 +85,4 @@ validate_indicators <- function(indicators) {
   }
 
   rlang::arg_match(indicators, c("traditional", "none", "one_hot"))
-}
-
-# TODO: Deprecate in hardhat 0.1.6
-compat_indicators <- function(indicators) {
-  if (!is.logical(indicators)) {
-    return(indicators)
-  }
-
-  msg <- paste0(
-    "`indicators` now requires a character argument as of hardhat '0.1.4'.\n",
-    "This warning will become an error in hardhat '0.1.6'.\n",
-    "Update with:\n",
-    "- `indicators = TRUE`  -> `indicators = \"traditional\"`\n",
-    "- `indicators = FALSE` -> `indicators = \"none\"`\n"
-  )
-
-  # Number of frames up to mimic being called from `default_formula_blueprint()`
-  # Not too worried about this not always being perfectly correct since it will
-  # be removed upon deprecation of logical `compat_indicators()`
-  # 1) Global
-  # 2) default_formula_blueprint
-  # 3) new_default_formula_blueprint
-  # 4) new_formula_blueprint
-  # 5) validate_indicators
-  # 6) compat_indicators
-  # From 6), look back up 5 frames
-  env <- rlang::caller_env(5)
-  signal_soft_deprecated(msg, env = env)
-
-  if (rlang::is_true(indicators)) {
-    "traditional"
-  } else {
-    "none"
-  }
 }
