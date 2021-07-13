@@ -5,6 +5,10 @@
   other tidymodels packages. For example, tune will register an
   `extract_workflow()` method to easily extract the workflow embedded within the
   result of `tune::last_fit()`.
+  
+* A logical `indicators` argument is no longer allowed in
+  `default_formula_blueprint()`. This was soft-deprecated in hardhat 0.1.4,
+  but will now result in an error (#144).
 
 # hardhat 0.1.5
 
