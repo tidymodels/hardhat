@@ -28,7 +28,7 @@ Depends:
     R (>= 2.10)
 Imports: 
     glue,
-    rlang (>= 0.4.1),
+    rlang (>= 0.4.2),
     tibble,
     vctrs (>= 0.3.0)
 Suggests: 

@@ -245,7 +245,7 @@ warn_novel_levels <- function(levels, column) {
 
   rlang::warn(
     message,
-    .subclass = "hardhat_warn_novel_levels",
+    class = "hardhat_warn_novel_levels",
     levels = levels,
     column = column
   )
