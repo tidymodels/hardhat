@@ -172,7 +172,8 @@
 <a href="#hardhat-development-version" class="anchor"></a>hardhat (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li>Added a new family of <code>extract_*()</code> S3 generics for extracting important components from various tidymodels objects. S3 methods will be defined in other tidymodels packages. For example, tune will register an <code><a href="../reference/hardhat-extract.html">extract_workflow()</a></code> method to easily extract the workflow embedded within the result of <code>tune::last_fit()</code>.</li>
+<li><p>Added a new family of <code>extract_*()</code> S3 generics for extracting important components from various tidymodels objects. S3 methods will be defined in other tidymodels packages. For example, tune will register an <code><a href="../reference/hardhat-extract.html">extract_workflow()</a></code> method to easily extract the workflow embedded within the result of <code>tune::last_fit()</code>.</p></li>
+<li><p>A logical <code>indicators</code> argument is no longer allowed in <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code>. This was soft-deprecated in hardhat 0.1.4, but will now result in an error (<a href='https://github.com/tidymodels/hardhat/issues/144'>#144</a>).</p></li>
 </ul>
 </div>
     <div id="hardhat-015" class="section level1">
