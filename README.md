@@ -8,7 +8,7 @@
 [![Codecov test
 coverage](https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=master)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
 [![R-CMD-check](https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/hardhat/actions)
@@ -92,14 +92,15 @@ By contributing to this project, you agree to abide by its terms.
 
 -   For questions and discussions about tidymodels packages, modeling,
     and machine learning, please [post on RStudio
-    Community](https://rstd.io/tidymodels-community).
+    Community](https://community.rstudio.com/new-topic?category_id=15&tags=tidymodels,question).
 
 -   If you think you have encountered a bug, please [submit an
     issue](https://github.com/tidymodels/hardhat/issues).
 
 -   Either way, learn how to create and share a
-    [reprex](https://rstd.io/reprex) (a minimal, reproducible example),
-    to clearly communicate about your code.
+    [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+    (a minimal, reproducible example), to clearly communicate about your
+    code.
 
 -   Check out further details on [contributing guidelines for tidymodels
     packages](https://www.tidymodels.org/contribute/) and [how to get
