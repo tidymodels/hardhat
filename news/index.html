@@ -94,13 +94,19 @@
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -140,7 +146,7 @@
 </li>
         <li>
   <a href="https://github.com/tidymodels/hardhat/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -161,9 +167,18 @@
       <small>Source: <a href='https://github.com/tidymodels/hardhat/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="hardhat-016" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.6">
+<a href="#hardhat-016" class="anchor"></a>hardhat 0.1.6<small> 2021-07-14 </small>
+</h1>
+<ul>
+<li><p>Added a new family of <code>extract_*()</code> S3 generics for extracting important components from various tidymodels objects. S3 methods will be defined in other tidymodels packages. For example, tune will register an <code><a href="../reference/hardhat-extract.html">extract_workflow()</a></code> method to easily extract the workflow embedded within the result of <code>tune::last_fit()</code>.</p></li>
+<li><p>A logical <code>indicators</code> argument is no longer allowed in <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code>. This was soft-deprecated in hardhat 0.1.4, but will now result in an error (<a href='https://github.com/tidymodels/hardhat/issues/144'>#144</a>).</p></li>
+</ul>
+</div>
     <div id="hardhat-015" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.5">
-<a href="#hardhat-015" class="anchor"></a>hardhat 0.1.5<small> Unreleased </small>
+<a href="#hardhat-015" class="anchor"></a>hardhat 0.1.5<small> 2020-11-09 </small>
 </h1>
 <ul>
 <li><p><code><a href="../reference/modeling-package.html">use_modeling_files()</a></code> (and therefore, <code><a href="../reference/modeling-package.html">create_modeling_package()</a></code>) now ensures that all generated functions are templated on the model name. This makes it easier to add multiple models to the same package (<a href='https://github.com/tidymodels/hardhat/issues/152'>#152</a>).</p></li>

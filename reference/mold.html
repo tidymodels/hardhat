@@ -106,13 +106,19 @@ Recipes Method - default_recipe_blueprint()
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -152,7 +158,7 @@ Recipes Method - default_recipe_blueprint()
 </li>
         <li>
   <a href="https://github.com/tidymodels/hardhat/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -226,36 +232,36 @@ or a named list containing the extra information.</p></li>
 <span class='co'># XY</span>
 <span class='fu'>mold</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span>, <span class='st'>"Sepal.Width"</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>, <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #555555;'># A tibble: 150 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 150 x 1</span>
 #&gt;    Sepal.Width
-#&gt;          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>         3.5
-#&gt; </span><span style='color: #555555;'> 2</span><span>         3  
-#&gt; </span><span style='color: #555555;'> 3</span><span>         3.2
-#&gt; </span><span style='color: #555555;'> 4</span><span>         3.1
-#&gt; </span><span style='color: #555555;'> 5</span><span>         3.6
-#&gt; </span><span style='color: #555555;'> 6</span><span>         3.9
-#&gt; </span><span style='color: #555555;'> 7</span><span>         3.4
-#&gt; </span><span style='color: #555555;'> 8</span><span>         3.4
-#&gt; </span><span style='color: #555555;'> 9</span><span>         2.9
-#&gt; </span><span style='color: #555555;'>10</span><span>         3.1
-#&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span>
+#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>         3.5
+#&gt; <span style='color: #BCBCBC;'> 2</span>         3  
+#&gt; <span style='color: #BCBCBC;'> 3</span>         3.2
+#&gt; <span style='color: #BCBCBC;'> 4</span>         3.1
+#&gt; <span style='color: #BCBCBC;'> 5</span>         3.6
+#&gt; <span style='color: #BCBCBC;'> 6</span>         3.9
+#&gt; <span style='color: #BCBCBC;'> 7</span>         3.4
+#&gt; <span style='color: #BCBCBC;'> 8</span>         3.4
+#&gt; <span style='color: #BCBCBC;'> 9</span>         2.9
+#&gt; <span style='color: #BCBCBC;'>10</span>         3.1
+#&gt; <span style='color: #949494;'># … with 140 more rows</span>
 #&gt; 
 #&gt; $outcomes
-#&gt; </span><span style='color: #555555;'># A tibble: 150 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 150 x 1</span>
 #&gt;    .outcome
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   
-#&gt; </span><span style='color: #555555;'> 1</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 2</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 3</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 4</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 5</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 6</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 7</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 8</span><span> setosa  
-#&gt; </span><span style='color: #555555;'> 9</span><span> setosa  
-#&gt; </span><span style='color: #555555;'>10</span><span> setosa  
-#&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   
+#&gt; <span style='color: #BCBCBC;'> 1</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 2</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 3</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 4</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 5</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 6</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 7</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 8</span> setosa  
+#&gt; <span style='color: #BCBCBC;'> 9</span> setosa  
+#&gt; <span style='color: #BCBCBC;'>10</span> setosa  
+#&gt; <span style='color: #949494;'># … with 140 more rows</span>
 #&gt; 
 #&gt; $blueprint
 #&gt; XY blueprint: 
@@ -272,36 +278,36 @@ or a named list containing the extra information.</p></li>
 <span class='co'># Formula</span>
 <span class='fu'>mold</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; </span><span style='color: #555555;'># A tibble: 150 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 150 x 1</span>
 #&gt;    Sepal.Width
-#&gt;          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>         3.5
-#&gt; </span><span style='color: #555555;'> 2</span><span>         3  
-#&gt; </span><span style='color: #555555;'> 3</span><span>         3.2
-#&gt; </span><span style='color: #555555;'> 4</span><span>         3.1
-#&gt; </span><span style='color: #555555;'> 5</span><span>         3.6
-#&gt; </span><span style='color: #555555;'> 6</span><span>         3.9
-#&gt; </span><span style='color: #555555;'> 7</span><span>         3.4
-#&gt; </span><span style='color: #555555;'> 8</span><span>         3.4
-#&gt; </span><span style='color: #555555;'> 9</span><span>         2.9
-#&gt; </span><span style='color: #555555;'>10</span><span>         3.1
-#&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span>
+#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>         3.5
+#&gt; <span style='color: #BCBCBC;'> 2</span>         3  
+#&gt; <span style='color: #BCBCBC;'> 3</span>         3.2
+#&gt; <span style='color: #BCBCBC;'> 4</span>         3.1
+#&gt; <span style='color: #BCBCBC;'> 5</span>         3.6
+#&gt; <span style='color: #BCBCBC;'> 6</span>         3.9
+#&gt; <span style='color: #BCBCBC;'> 7</span>         3.4
+#&gt; <span style='color: #BCBCBC;'> 8</span>         3.4
+#&gt; <span style='color: #BCBCBC;'> 9</span>         2.9
+#&gt; <span style='color: #BCBCBC;'>10</span>         3.1
+#&gt; <span style='color: #949494;'># … with 140 more rows</span>
 #&gt; 
 #&gt; $outcomes
-#&gt; </span><span style='color: #555555;'># A tibble: 150 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 150 x 1</span>
 #&gt;    Species
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  
-#&gt; </span><span style='color: #555555;'> 1</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 2</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 3</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 4</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 5</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 6</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 7</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 8</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 9</span><span> setosa 
-#&gt; </span><span style='color: #555555;'>10</span><span> setosa 
-#&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>  
+#&gt; <span style='color: #BCBCBC;'> 1</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 2</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 3</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 4</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 5</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 6</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 7</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 8</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 9</span> setosa 
+#&gt; <span style='color: #BCBCBC;'>10</span> setosa 
+#&gt; <span style='color: #949494;'># … with 140 more rows</span>
 #&gt; 
 #&gt; $blueprint
 #&gt; Formula blueprint: 
@@ -322,36 +328,36 @@ or a named list containing the extra information.</p></li>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tidymodels/recipes'>recipes</a></span><span class='op'>)</span>
 <span class='fu'>mold</span><span class='op'>(</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; </span><span style='color: #555555;'># A tibble: 150 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 150 x 1</span>
 #&gt;    Sepal.Width
-#&gt;          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>         3.5
-#&gt; </span><span style='color: #555555;'> 2</span><span>         3  
-#&gt; </span><span style='color: #555555;'> 3</span><span>         3.2
-#&gt; </span><span style='color: #555555;'> 4</span><span>         3.1
-#&gt; </span><span style='color: #555555;'> 5</span><span>         3.6
-#&gt; </span><span style='color: #555555;'> 6</span><span>         3.9
-#&gt; </span><span style='color: #555555;'> 7</span><span>         3.4
-#&gt; </span><span style='color: #555555;'> 8</span><span>         3.4
-#&gt; </span><span style='color: #555555;'> 9</span><span>         2.9
-#&gt; </span><span style='color: #555555;'>10</span><span>         3.1
-#&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span>
+#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>         3.5
+#&gt; <span style='color: #BCBCBC;'> 2</span>         3  
+#&gt; <span style='color: #BCBCBC;'> 3</span>         3.2
+#&gt; <span style='color: #BCBCBC;'> 4</span>         3.1
+#&gt; <span style='color: #BCBCBC;'> 5</span>         3.6
+#&gt; <span style='color: #BCBCBC;'> 6</span>         3.9
+#&gt; <span style='color: #BCBCBC;'> 7</span>         3.4
+#&gt; <span style='color: #BCBCBC;'> 8</span>         3.4
+#&gt; <span style='color: #BCBCBC;'> 9</span>         2.9
+#&gt; <span style='color: #BCBCBC;'>10</span>         3.1
+#&gt; <span style='color: #949494;'># … with 140 more rows</span>
 #&gt; 
 #&gt; $outcomes
-#&gt; </span><span style='color: #555555;'># A tibble: 150 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 150 x 1</span>
 #&gt;    Species
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  
-#&gt; </span><span style='color: #555555;'> 1</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 2</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 3</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 4</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 5</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 6</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 7</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 8</span><span> setosa 
-#&gt; </span><span style='color: #555555;'> 9</span><span> setosa 
-#&gt; </span><span style='color: #555555;'>10</span><span> setosa 
-#&gt; </span><span style='color: #555555;'># … with 140 more rows</span><span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>  
+#&gt; <span style='color: #BCBCBC;'> 1</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 2</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 3</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 4</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 5</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 6</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 7</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 8</span> setosa 
+#&gt; <span style='color: #BCBCBC;'> 9</span> setosa 
+#&gt; <span style='color: #BCBCBC;'>10</span> setosa 
+#&gt; <span style='color: #949494;'># … with 140 more rows</span>
 #&gt; 
 #&gt; $blueprint
 #&gt; Recipe blueprint: 
@@ -367,7 +373,7 @@ or a named list containing the extra information.</p></li>
 #&gt; NULL
 #&gt; 
 #&gt; </div><div class='input'>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

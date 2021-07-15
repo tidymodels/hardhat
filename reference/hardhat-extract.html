@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Delete the response from a terms object — delete_response • hardhat</title>
+<title>Generics for object extraction — hardhat-extract • hardhat</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -49,10 +49,25 @@
 
 
 
-<meta property="og:title" content="Delete the response from a terms object — delete_response" />
-<meta property="og:description" content="delete_response() is exactly the same as delete.response(), except
-that it fixes a long standing bug by also removing the part of the
-&quot;dataClasses&quot; attribute corresponding to the response, if it exists." />
+<meta property="og:title" content="Generics for object extraction — hardhat-extract" />
+<meta property="og:description" content="These generics are used to extract elements from various model
+objects. Methods are defined in other packages, such as tune,
+workflows, and workflowsets, but the returned object is always the same.
+extract_fit_engine() returns the engine specific fit embedded within
+a parsnip model fit. For example, when using parsnip::linear_reg()
+with the &quot;lm&quot; engine, this returns the underlying lm object.
+extract_fit_parsnip() returns a parsnip model fit.
+extract_mold() returns the preprocessed &quot;mold&quot; object returned
+from mold(). It contains information about the preprocessing,
+including either the prepped recipe, the formula terms object, or
+variable selectors.
+extract_spec_parsnip() returns a parsnip model specification.
+extract_preprocessor() returns the formula, recipe, or variable
+expressions used for preprocessing.
+extract_recipe() returns a recipe, possibly estimated.
+extract_workflow() returns a workflow, possibly fit.
+
+" />
 <meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -166,46 +181,63 @@ that it fixes a long standing bug by also removing the part of the
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Delete the response from a terms object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/tidymodels/hardhat/blob/master/R/delete-response.R'><code>R/delete-response.R</code></a></small>
-    <div class="hidden name"><code>delete_response.Rd</code></div>
+    <h1>Generics for object extraction</h1>
+    <small class="dont-index">Source: <a href='https://github.com/tidymodels/hardhat/blob/master/R/extract.R'><code>R/extract.R</code></a></small>
+    <div class="hidden name"><code>hardhat-extract.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>delete_response()</code> is exactly the same as <code><a href='https://rdrr.io/r/stats/delete.response.html'>delete.response()</a></code>, except
-that it fixes a long standing bug by also removing the part of the
-<code>"dataClasses"</code> attribute corresponding to the response, if it exists.</p>
+    <p>These generics are used to extract elements from various model
+objects. Methods are defined in other packages, such as tune,
+workflows, and workflowsets, but the returned object is always the same.</p><ul>
+<li><p><code>extract_fit_engine()</code> returns the engine specific fit embedded within
+a parsnip model fit. For example, when using <code>parsnip::linear_reg()</code>
+with the <code>"lm"</code> engine, this returns the underlying <code>lm</code> object.</p></li>
+<li><p><code>extract_fit_parsnip()</code> returns a parsnip model fit.</p></li>
+<li><p><code>extract_mold()</code> returns the preprocessed "mold" object returned
+from <code><a href='mold.html'>mold()</a></code>. It contains information about the preprocessing,
+including either the prepped recipe, the formula terms object, or
+variable selectors.</p></li>
+<li><p><code>extract_spec_parsnip()</code> returns a parsnip model specification.</p></li>
+<li><p><code>extract_preprocessor()</code> returns the formula, recipe, or variable
+expressions used for preprocessing.</p></li>
+<li><p><code>extract_recipe()</code> returns a recipe, possibly estimated.</p></li>
+<li><p><code>extract_workflow()</code> returns a workflow, possibly fit.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>delete_response</span><span class='op'>(</span><span class='va'>terms</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>extract_workflow</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_recipe</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_spec_parsnip</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_fit_parsnip</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_fit_engine</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_mold</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_preprocessor</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>terms</th>
-      <td><p>A terms object.</p></td>
+      <th>x</th>
+      <td><p>An object.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Extra arguments passed on to methods.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p><code>terms</code> with the response sections removed.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The bug is described here:</p>
-<p><a href='https://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html'>https://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/delete.response.html'>delete.response</a></span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span><span class='op'>)</span>, <span class='st'>"dataClasses"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Species Sepal.Width 
-#&gt;    "factor"   "numeric" </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='fu'>delete_response</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span><span class='op'>)</span>, <span class='st'>"dataClasses"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Sepal.Width 
-#&gt;   "numeric" </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># See packages where methods are defined for examples, such as `parsnip` or</span>
+<span class='co'># `workflows`.</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

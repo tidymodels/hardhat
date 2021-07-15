@@ -96,13 +96,19 @@ is the blueprint used by default from mold() if x is a formula." />
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -142,7 +148,7 @@ is the blueprint used by default from mold() if x is a formula." />
 </li>
         <li>
   <a href="https://github.com/tidymodels/hardhat/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -365,11 +371,11 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># to have it preprocess the test data in the same way</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #555555;'># A tibble: 2 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span>
 #&gt;   `(Intercept)` num_2 fac_1b fac_1c
-#&gt;           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>             1 0.967      0      0
-#&gt; </span><span style='color: #555555;'>2</span><span>             1 0.761      0      1
+#&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>             1 0.967      0      0
+#&gt; <span style='color: #BCBCBC;'>2</span>             1 0.761      0      1
 #&gt; 
 #&gt; $outcomes
 #&gt; NULL
@@ -382,18 +388,18 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Use `outcomes = TRUE` to also extract the preprocessed outcome</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; </span><span style='color: #555555;'># A tibble: 2 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span>
 #&gt;   `(Intercept)` num_2 fac_1b fac_1c
-#&gt;           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>             1 0.967      0      0
-#&gt; </span><span style='color: #555555;'>2</span><span>             1 0.761      0      1
+#&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>             1 0.967      0      0
+#&gt; <span style='color: #BCBCBC;'>2</span>             1 0.761      0      1
 #&gt; 
 #&gt; $outcomes
-#&gt; </span><span style='color: #555555;'># A tibble: 2 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 2 x 1</span>
 #&gt;   `log(num_1)`
-#&gt;          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>         3.00
-#&gt; </span><span style='color: #555555;'>2</span><span>         3.04
+#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>         3.00
+#&gt; <span style='color: #BCBCBC;'>2</span>         3.04
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
@@ -410,21 +416,21 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># `K` columns (the number of levels), and the subsequent factors are expanded</span>
 <span class='co'># into `K - 1` columns.</span>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 4</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 4</span>
 #&gt;    fac_1a fac_1b fac_1c fac_2B
-#&gt;     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>      1      0      0      0
-#&gt; </span><span style='color: #555555;'> 2</span><span>      1      0      0      1
-#&gt; </span><span style='color: #555555;'> 3</span><span>      1      0      0      0
-#&gt; </span><span style='color: #555555;'> 4</span><span>      1      0      0      1
-#&gt; </span><span style='color: #555555;'> 5</span><span>      0      1      0      0
-#&gt; </span><span style='color: #555555;'> 6</span><span>      0      1      0      1
-#&gt; </span><span style='color: #555555;'> 7</span><span>      0      1      0      0
-#&gt; </span><span style='color: #555555;'> 8</span><span>      0      1      0      1
-#&gt; </span><span style='color: #555555;'> 9</span><span>      0      0      1      0
-#&gt; </span><span style='color: #555555;'>10</span><span>      0      0      1      1
-#&gt; </span><span style='color: #555555;'>11</span><span>      0      0      1      0
-#&gt; </span><span style='color: #555555;'>12</span><span>      0      0      1      1</div><div class='input'>
+#&gt;     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>      1      0      0      0
+#&gt; <span style='color: #BCBCBC;'> 2</span>      1      0      0      1
+#&gt; <span style='color: #BCBCBC;'> 3</span>      1      0      0      0
+#&gt; <span style='color: #BCBCBC;'> 4</span>      1      0      0      1
+#&gt; <span style='color: #BCBCBC;'> 5</span>      0      1      0      0
+#&gt; <span style='color: #BCBCBC;'> 6</span>      0      1      0      1
+#&gt; <span style='color: #BCBCBC;'> 7</span>      0      1      0      0
+#&gt; <span style='color: #BCBCBC;'> 8</span>      0      1      0      1
+#&gt; <span style='color: #BCBCBC;'> 9</span>      0      0      1      0
+#&gt; <span style='color: #BCBCBC;'>10</span>      0      0      1      1
+#&gt; <span style='color: #BCBCBC;'>11</span>      0      0      1      0
+#&gt; <span style='color: #BCBCBC;'>12</span>      0      0      1      1</div><div class='input'>
 <span class='co'># In the above example, `fac_1` is expanded into all three columns,</span>
 <span class='co'># `fac_2` is not. This behavior comes from `model.matrix()`, and is somewhat</span>
 <span class='co'># known in the R community, but can lead to a model that is difficult to</span>
@@ -440,21 +446,21 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='op'>)</span>
 
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 5</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 5</span>
 #&gt;    fac_1a fac_1b fac_1c fac_2A fac_2B
-#&gt;     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>      1      0      0      1      0
-#&gt; </span><span style='color: #555555;'> 2</span><span>      1      0      0      0      1
-#&gt; </span><span style='color: #555555;'> 3</span><span>      1      0      0      1      0
-#&gt; </span><span style='color: #555555;'> 4</span><span>      1      0      0      0      1
-#&gt; </span><span style='color: #555555;'> 5</span><span>      0      1      0      1      0
-#&gt; </span><span style='color: #555555;'> 6</span><span>      0      1      0      0      1
-#&gt; </span><span style='color: #555555;'> 7</span><span>      0      1      0      1      0
-#&gt; </span><span style='color: #555555;'> 8</span><span>      0      1      0      0      1
-#&gt; </span><span style='color: #555555;'> 9</span><span>      0      0      1      1      0
-#&gt; </span><span style='color: #555555;'>10</span><span>      0      0      1      0      1
-#&gt; </span><span style='color: #555555;'>11</span><span>      0      0      1      1      0
-#&gt; </span><span style='color: #555555;'>12</span><span>      0      0      1      0      1</div><div class='input'>
+#&gt;     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>      1      0      0      1      0
+#&gt; <span style='color: #BCBCBC;'> 2</span>      1      0      0      0      1
+#&gt; <span style='color: #BCBCBC;'> 3</span>      1      0      0      1      0
+#&gt; <span style='color: #BCBCBC;'> 4</span>      1      0      0      0      1
+#&gt; <span style='color: #BCBCBC;'> 5</span>      0      1      0      1      0
+#&gt; <span style='color: #BCBCBC;'> 6</span>      0      1      0      0      1
+#&gt; <span style='color: #BCBCBC;'> 7</span>      0      1      0      1      0
+#&gt; <span style='color: #BCBCBC;'> 8</span>      0      1      0      0      1
+#&gt; <span style='color: #BCBCBC;'> 9</span>      0      0      1      1      0
+#&gt; <span style='color: #BCBCBC;'>10</span>      0      0      1      0      1
+#&gt; <span style='color: #BCBCBC;'>11</span>      0      0      1      1      0
+#&gt; <span style='color: #BCBCBC;'>12</span>      0      0      1      0      1</div><div class='input'>
 <span class='co'># It is not possible to construct a no-intercept model that expands all</span>
 <span class='co'># factors into `K - 1` columns using the formula method. If required, a</span>
 <span class='co'># recipe could be used to construct this model.</span>
@@ -498,21 +504,21 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='op'>)</span>
 
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 2</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 2</span>
 #&gt;    `num_1:num_2` fac_1
-#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>         0.579 a    
-#&gt; </span><span style='color: #555555;'> 2</span><span>         0.676 a    
-#&gt; </span><span style='color: #555555;'> 3</span><span>         0.618 a    
-#&gt; </span><span style='color: #555555;'> 4</span><span>         2.18  a    
-#&gt; </span><span style='color: #555555;'> 5</span><span>         4.82  b    
-#&gt; </span><span style='color: #555555;'> 6</span><span>         3.79  b    
-#&gt; </span><span style='color: #555555;'> 7</span><span>         5.66  b    
-#&gt; </span><span style='color: #555555;'> 8</span><span>         1.66  b    
-#&gt; </span><span style='color: #555555;'> 9</span><span>         2.84  c    
-#&gt; </span><span style='color: #555555;'>10</span><span>         0.83  c    
-#&gt; </span><span style='color: #555555;'>11</span><span>         6.81  c    
-#&gt; </span><span style='color: #555555;'>12</span><span>         7.42  c    </div><div class='input'>
+#&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>         0.579 a    
+#&gt; <span style='color: #BCBCBC;'> 2</span>         0.676 a    
+#&gt; <span style='color: #BCBCBC;'> 3</span>         0.618 a    
+#&gt; <span style='color: #BCBCBC;'> 4</span>         2.18  a    
+#&gt; <span style='color: #BCBCBC;'> 5</span>         4.82  b    
+#&gt; <span style='color: #BCBCBC;'> 6</span>         3.79  b    
+#&gt; <span style='color: #BCBCBC;'> 7</span>         5.66  b    
+#&gt; <span style='color: #BCBCBC;'> 8</span>         1.66  b    
+#&gt; <span style='color: #BCBCBC;'> 9</span>         2.84  c    
+#&gt; <span style='color: #BCBCBC;'>10</span>         0.83  c    
+#&gt; <span style='color: #BCBCBC;'>11</span>         6.81  c    
+#&gt; <span style='color: #BCBCBC;'>12</span>         7.42  c    </div><div class='input'>
 <span class='co'># An informative error is thrown when `indicators = "none"` and</span>
 <span class='co'># factors are present in interaction terms or in inline functions</span>
 <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>num_1</span> <span class='op'>~</span> <span class='va'>num_2</span><span class='op'>:</span><span class='va'>fac_1</span>, <span class='va'>example_train</span>, blueprint <span class='op'>=</span> <span class='va'>bp_no_indicators</span><span class='op'>)</span><span class='op'>)</span>
@@ -524,42 +530,42 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Multivariate formulas can be specified easily</span>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>num_1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>num_2</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>fac_1</span>, <span class='va'>example_train</span><span class='op'>)</span>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 2</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 2</span>
 #&gt;    num_1 `log(num_2)`
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>     1      -</span><span style='color: #BB0000;'>0.546</span><span> 
-#&gt; </span><span style='color: #555555;'> 2</span><span>     2      -</span><span style='color: #BB0000;'>1.08</span><span>  
-#&gt; </span><span style='color: #555555;'> 3</span><span>     3      -</span><span style='color: #BB0000;'>1.58</span><span>  
-#&gt; </span><span style='color: #555555;'> 4</span><span>     4      -</span><span style='color: #BB0000;'>0.605</span><span> 
-#&gt; </span><span style='color: #555555;'> 5</span><span>     5      -</span><span style='color: #BB0000;'>0.036</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>
-#&gt; </span><span style='color: #555555;'> 6</span><span>     6      -</span><span style='color: #BB0000;'>0.460</span><span> 
-#&gt; </span><span style='color: #555555;'> 7</span><span>     7      -</span><span style='color: #BB0000;'>0.213</span><span> 
-#&gt; </span><span style='color: #555555;'> 8</span><span>     8      -</span><span style='color: #BB0000;'>1.57</span><span>  
-#&gt; </span><span style='color: #555555;'> 9</span><span>     9      -</span><span style='color: #BB0000;'>1.15</span><span>  
-#&gt; </span><span style='color: #555555;'>10</span><span>    10      -</span><span style='color: #BB0000;'>2.49</span><span>  
-#&gt; </span><span style='color: #555555;'>11</span><span>    11      -</span><span style='color: #BB0000;'>0.480</span><span> 
-#&gt; </span><span style='color: #555555;'>12</span><span>    12      -</span><span style='color: #BB0000;'>0.481</span><span> </div><div class='input'>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>     1      -<span style='color: #BB0000;'>0.546</span> 
+#&gt; <span style='color: #BCBCBC;'> 2</span>     2      -<span style='color: #BB0000;'>1.08</span>  
+#&gt; <span style='color: #BCBCBC;'> 3</span>     3      -<span style='color: #BB0000;'>1.58</span>  
+#&gt; <span style='color: #BCBCBC;'> 4</span>     4      -<span style='color: #BB0000;'>0.605</span> 
+#&gt; <span style='color: #BCBCBC;'> 5</span>     5      -<span style='color: #BB0000;'>0.036</span><span style='color: #BB0000; text-decoration: underline;'>7</span>
+#&gt; <span style='color: #BCBCBC;'> 6</span>     6      -<span style='color: #BB0000;'>0.460</span> 
+#&gt; <span style='color: #BCBCBC;'> 7</span>     7      -<span style='color: #BB0000;'>0.213</span> 
+#&gt; <span style='color: #BCBCBC;'> 8</span>     8      -<span style='color: #BB0000;'>1.57</span>  
+#&gt; <span style='color: #BCBCBC;'> 9</span>     9      -<span style='color: #BB0000;'>1.15</span>  
+#&gt; <span style='color: #BCBCBC;'>10</span>    10      -<span style='color: #BB0000;'>2.49</span>  
+#&gt; <span style='color: #BCBCBC;'>11</span>    11      -<span style='color: #BB0000;'>0.480</span> 
+#&gt; <span style='color: #BCBCBC;'>12</span>    12      -<span style='color: #BB0000;'>0.481</span> </div><div class='input'>
 <span class='co'># Inline functions on the LHS are run, but any matrix</span>
 <span class='co'># output is flattened (like what happens in `model.matrix()`)</span>
 <span class='co'># (essentially this means you don't wind up with columns</span>
 <span class='co'># in the tibble that are matrices)</span>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span><span class='op'>(</span><span class='va'>num_2</span>, degree <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>fac_1</span>, <span class='va'>example_train</span><span class='op'>)</span>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 2</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 2</span>
 #&gt;    `poly(num_2, degree = 2).1` `poly(num_2, degree = 2).2`
-#&gt;                          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>                       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>                      0.098</span><span style='text-decoration: underline;'>1</span><span>                      -</span><span style='color: #BB0000;'>0.254</span><span>
-#&gt; </span><span style='color: #555555;'> 2</span><span>                     -</span><span style='color: #BB0000;'>0.177</span><span>                       -</span><span style='color: #BB0000;'>0.157</span><span>
-#&gt; </span><span style='color: #555555;'> 3</span><span>                     -</span><span style='color: #BB0000;'>0.327</span><span>                        0.108
-#&gt; </span><span style='color: #555555;'> 4</span><span>                      0.060</span><span style='text-decoration: underline;'>4</span><span>                      -</span><span style='color: #BB0000;'>0.270</span><span>
-#&gt; </span><span style='color: #555555;'> 5</span><span>                      0.537                        0.634
-#&gt; </span><span style='color: #555555;'> 6</span><span>                      0.157                       -</span><span style='color: #BB0000;'>0.209</span><span>
-#&gt; </span><span style='color: #555555;'> 7</span><span>                      0.359                        0.120
-#&gt; </span><span style='color: #555555;'> 8</span><span>                     -</span><span style='color: #BB0000;'>0.325</span><span>                        0.103
-#&gt; </span><span style='color: #555555;'> 9</span><span>                     -</span><span style='color: #BB0000;'>0.202</span><span>                       -</span><span style='color: #BB0000;'>0.124</span><span>
-#&gt; </span><span style='color: #555555;'>10</span><span>                     -</span><span style='color: #BB0000;'>0.468</span><span>                        0.492
-#&gt; </span><span style='color: #555555;'>11</span><span>                      0.144                       -</span><span style='color: #BB0000;'>0.221</span><span>
-#&gt; </span><span style='color: #555555;'>12</span><span>                      0.143                       -</span><span style='color: #BB0000;'>0.222</span><span></div><div class='input'>
+#&gt;                          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>                      0.098<span style='text-decoration: underline;'>1</span>                      -<span style='color: #BB0000;'>0.254</span>
+#&gt; <span style='color: #BCBCBC;'> 2</span>                     -<span style='color: #BB0000;'>0.177</span>                       -<span style='color: #BB0000;'>0.157</span>
+#&gt; <span style='color: #BCBCBC;'> 3</span>                     -<span style='color: #BB0000;'>0.327</span>                        0.108
+#&gt; <span style='color: #BCBCBC;'> 4</span>                      0.060<span style='text-decoration: underline;'>4</span>                      -<span style='color: #BB0000;'>0.270</span>
+#&gt; <span style='color: #BCBCBC;'> 5</span>                      0.537                        0.634
+#&gt; <span style='color: #BCBCBC;'> 6</span>                      0.157                       -<span style='color: #BB0000;'>0.209</span>
+#&gt; <span style='color: #BCBCBC;'> 7</span>                      0.359                        0.120
+#&gt; <span style='color: #BCBCBC;'> 8</span>                     -<span style='color: #BB0000;'>0.325</span>                        0.103
+#&gt; <span style='color: #BCBCBC;'> 9</span>                     -<span style='color: #BB0000;'>0.202</span>                       -<span style='color: #BB0000;'>0.124</span>
+#&gt; <span style='color: #BCBCBC;'>10</span>                     -<span style='color: #BB0000;'>0.468</span>                        0.492
+#&gt; <span style='color: #BCBCBC;'>11</span>                      0.144                       -<span style='color: #BB0000;'>0.221</span>
+#&gt; <span style='color: #BCBCBC;'>12</span>                      0.143                       -<span style='color: #BB0000;'>0.222</span></div><div class='input'>
 <span class='co'># TRUE</span>
 <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span><span class='op'>)</span> <span class='op'>==</span> <span class='fl'>2</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
@@ -567,18 +573,18 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># carry over into forge()</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; </span><span style='color: #555555;'># A tibble: 2 x 3</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 2 x 3</span>
 #&gt;   fac_1a fac_1b fac_1c
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>      1      0      0
-#&gt; </span><span style='color: #555555;'>2</span><span>      0      0      1
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>      1      0      0
+#&gt; <span style='color: #BCBCBC;'>2</span>      0      0      1
 #&gt; 
 #&gt; $outcomes
-#&gt; </span><span style='color: #555555;'># A tibble: 2 x 2</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 2 x 2</span>
 #&gt;   `poly(num_2, degree = 2).1` `poly(num_2, degree = 2).2`
-#&gt;                         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>                       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>                       0.541                     0.646  
-#&gt; </span><span style='color: #555555;'>2</span><span>                       0.306                     0.006</span><span style='text-decoration: underline;'>19</span><span>
+#&gt;                         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>                       0.541                     0.646  
+#&gt; <span style='color: #BCBCBC;'>2</span>                       0.306                     0.006<span style='text-decoration: underline;'>19</span>
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
@@ -594,21 +600,21 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>num_1</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>num_2</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>fac_1</span>, <span class='va'>example_train</span><span class='op'>)</span>
 
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>extras</span><span class='op'>$</span><span class='va'>offset</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 1</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 1</span>
 #&gt;    .offset
-#&gt;      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>   0.579
-#&gt; </span><span style='color: #555555;'> 2</span><span>   0.338
-#&gt; </span><span style='color: #555555;'> 3</span><span>   0.206
-#&gt; </span><span style='color: #555555;'> 4</span><span>   0.546
-#&gt; </span><span style='color: #555555;'> 5</span><span>   0.964
-#&gt; </span><span style='color: #555555;'> 6</span><span>   0.631
-#&gt; </span><span style='color: #555555;'> 7</span><span>   0.808
-#&gt; </span><span style='color: #555555;'> 8</span><span>   0.208
-#&gt; </span><span style='color: #555555;'> 9</span><span>   0.316
-#&gt; </span><span style='color: #555555;'>10</span><span>   0.083
-#&gt; </span><span style='color: #555555;'>11</span><span>   0.619
-#&gt; </span><span style='color: #555555;'>12</span><span>   0.618</div><div class='input'>
+#&gt;      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>   0.579
+#&gt; <span style='color: #BCBCBC;'> 2</span>   0.338
+#&gt; <span style='color: #BCBCBC;'> 3</span>   0.206
+#&gt; <span style='color: #BCBCBC;'> 4</span>   0.546
+#&gt; <span style='color: #BCBCBC;'> 5</span>   0.964
+#&gt; <span style='color: #BCBCBC;'> 6</span>   0.631
+#&gt; <span style='color: #BCBCBC;'> 7</span>   0.808
+#&gt; <span style='color: #BCBCBC;'> 8</span>   0.208
+#&gt; <span style='color: #BCBCBC;'> 9</span>   0.316
+#&gt; <span style='color: #BCBCBC;'>10</span>   0.083
+#&gt; <span style='color: #BCBCBC;'>11</span>   0.619
+#&gt; <span style='color: #BCBCBC;'>12</span>   0.618</div><div class='input'>
 <span class='co'># Multiple offsets can be included, and they get added together</span>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span>
   <span class='va'>num_1</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>num_2</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>num_3</span><span class='op'>)</span>,
@@ -624,18 +630,18 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># and include the offset</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; </span><span style='color: #555555;'># A tibble: 2 x 0</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 2 x 0</span>
 #&gt; 
 #&gt; $outcomes
 #&gt; NULL
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
-#&gt; </span><span style='color: #555555;'># A tibble: 2 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 2 x 1</span>
 #&gt;   .offset
-#&gt;     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>   1.06 
-#&gt; </span><span style='color: #555555;'>2</span><span>   0.802
+#&gt;     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>   1.06 
+#&gt; <span style='color: #BCBCBC;'>2</span>   0.802
 #&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
@@ -651,24 +657,24 @@ interface standardizes all of that flexibility in one place.</p>
   blueprint <span class='op'>=</span> <span class='fu'>default_formula_blueprint</span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; </span><span style='color: #555555;'># A tibble: 12 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 12 x 1</span>
 #&gt;    `(Intercept)`
-#&gt;            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>             1
-#&gt; </span><span style='color: #555555;'> 2</span><span>             1
-#&gt; </span><span style='color: #555555;'> 3</span><span>             1
-#&gt; </span><span style='color: #555555;'> 4</span><span>             1
-#&gt; </span><span style='color: #555555;'> 5</span><span>             1
-#&gt; </span><span style='color: #555555;'> 6</span><span>             1
-#&gt; </span><span style='color: #555555;'> 7</span><span>             1
-#&gt; </span><span style='color: #555555;'> 8</span><span>             1
-#&gt; </span><span style='color: #555555;'> 9</span><span>             1
-#&gt; </span><span style='color: #555555;'>10</span><span>             1
-#&gt; </span><span style='color: #555555;'>11</span><span>             1
-#&gt; </span><span style='color: #555555;'>12</span><span>             1
+#&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>             1
+#&gt; <span style='color: #BCBCBC;'> 2</span>             1
+#&gt; <span style='color: #BCBCBC;'> 3</span>             1
+#&gt; <span style='color: #BCBCBC;'> 4</span>             1
+#&gt; <span style='color: #BCBCBC;'> 5</span>             1
+#&gt; <span style='color: #BCBCBC;'> 6</span>             1
+#&gt; <span style='color: #BCBCBC;'> 7</span>             1
+#&gt; <span style='color: #BCBCBC;'> 8</span>             1
+#&gt; <span style='color: #BCBCBC;'> 9</span>             1
+#&gt; <span style='color: #BCBCBC;'>10</span>             1
+#&gt; <span style='color: #BCBCBC;'>11</span>             1
+#&gt; <span style='color: #BCBCBC;'>12</span>             1
 #&gt; 
 #&gt; $outcomes
-#&gt; </span><span style='color: #555555;'># A tibble: 12 x 0</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 12 x 0</span>
 #&gt; 
 #&gt; $blueprint
 #&gt; Formula blueprint: 
@@ -695,7 +701,7 @@ interface standardizes all of that flexibility in one place.</p>
 </div><div class='output co'>#&gt; [1] "dgCMatrix"
 #&gt; attr(,"package")
 #&gt; [1] "Matrix"</div><div class='input'>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
