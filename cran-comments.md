@@ -1,18 +1,17 @@
-## Test environments
-* local R installation, R 3.6.0
-* ubuntu 16.04 (on travis-ci), R 3.6.0
-* win-builder (devel)
-
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
 ## revdepcheck results
 
-We checked 6 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 7 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
+
+## 0.1.6 Submission
+
+This submission adds a new family of `extract_*()` generics for usage in other tidymodels packages. It also formally removes support for logical `indicators` in `default_formula_blueprint()`, which has been soft deprecated for awhile now.
 
 ## 0.1.5 Submission
 
