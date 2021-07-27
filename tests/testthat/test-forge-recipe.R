@@ -494,6 +494,37 @@ test_that("only original non standard role columns are required", {
   )
 })
 
+test_that("`prep_specific_roles` should not be required in `forge()`, and won't be returned", {
+  rec <- recipe(Species ~ ., iris) %>%
+    update_role(Sepal.Width, new_role = "dummy1") %>%
+    update_role(Sepal.Length, new_role = "dummy2")
+
+  bp <- default_recipe_blueprint(prep_specific_roles = "dummy1")
+
+  x <- mold(rec, iris, blueprint = bp)
+  xx <- forge(iris, x$blueprint)
+
+  expect_named(xx$predictors, c("Petal.Length", "Petal.Width"))
+  expect_null(xx$outcomes)
+
+  expect_identical(
+    xx$extras$roles,
+    list(dummy2 = tibble::tibble(Sepal.Length = iris$Sepal.Length))
+  )
+})
+
+test_that("recipes should error if `prep_specific_roles` are not truly prep specific", {
+  rec <- recipe(Species ~ ., iris) %>%
+    update_role(Sepal.Width, new_role = "dummy1") %>%
+    step_log(Sepal.Width)
+
+  bp <- default_recipe_blueprint(prep_specific_roles = "dummy1")
+
+  x <- mold(rec, iris, blueprint = bp)
+
+  expect_error(forge(iris, x$blueprint))
+})
+
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(~Sepal.Width, data = iris)

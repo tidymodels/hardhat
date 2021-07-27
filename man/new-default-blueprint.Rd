@@ -28,6 +28,7 @@ new_default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
+  prep_specific_roles = character(),
   composition = "tibble",
   ptypes = NULL,
   recipe = NULL,
@@ -101,6 +102,16 @@ subclass this blueprint.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{prep_specific_roles}{A character vector of recipes "roles"
+corresponding to columns that are only required at \code{prep()} time, and are
+not required at \code{bake()} time. These columns are excluded from checks done
+in \code{\link[=forge]{forge()}} to validate the column structure of \code{new_data}, will not be
+passed to \code{bake()} even if they existed in \code{new_data}, and will not be
+returned in the \code{forge()$extras$roles} slot. Any custom role can be
+specified (such as \code{"case_weights"}), but \code{"outcome"} and \code{"predictor"}
+roles are not allowed. See the documentation of \code{\link[recipes:roles]{recipes::add_role()}} for
+more information about roles.}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}

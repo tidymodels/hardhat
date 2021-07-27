@@ -1,5 +1,17 @@
 # hardhat (development version)
 
+* `default_recipe_blueprint()` has gained a new `prep_specific_roles` argument,
+  which allows you to specify a character vector of recipes "roles"
+  corresponding to columns that are required at `recipes::prep()` time, but
+  are not required at `recipes::bake()` time. For example, you might have a
+  custom `"case_weights"` role that is required for computing case-weighted
+  estimates at prep time, but isn't required when baking against new data
+  (since the estimates have already been pre-computed and stored). Columns
+  with roles matching `prep_specific_roles` will be included in the `$extras`
+  slot of the result of `mold()`, but will not be included in the `$extras`
+  slot of the result of `forge()`, and will be excluded from the structural
+  checks done by `forge()`.
+
 * `use_modeling_files()` and `create_modeling_package()` no longer open the
   package documentation file in the current RStudio session (#192).
 

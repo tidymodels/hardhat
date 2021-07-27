@@ -299,6 +299,35 @@ test_that("`NA` roles are skipped over", {
   )
 })
 
+test_that("`prep_specific_roles` are not retained as `extra_role_ptype`, but are in the mold result", {
+  rec <- recipe(Species ~ ., iris) %>%
+    update_role(Sepal.Width, new_role = "dummy1") %>%
+    update_role(Sepal.Length, new_role = "dummy2")
+
+  bp <- default_recipe_blueprint(prep_specific_roles = "dummy1")
+  x <- mold(rec, iris, blueprint = bp)
+
+  expect_equal(
+    x$blueprint$extra_role_ptypes,
+    list(dummy2 = tibble::tibble(Sepal.Length = double()))
+  )
+
+  expect_equal(
+    x$extras$roles$dummy1,
+    tibble::tibble(Sepal.Width = iris$Sepal.Width)
+  )
+  expect_equal(
+    x$extras$roles$dummy2,
+    tibble::tibble(Sepal.Length = iris$Sepal.Length)
+  )
+})
+
+test_that("`prep_specific_roles` is validated", {
+  expect_error(default_recipe_blueprint(prep_specific_roles = 1), "should be a character, not a numeric")
+  expect_error(default_recipe_blueprint(prep_specific_roles = c("outcome", "x")), "can't be 'outcome' or 'predictor'")
+  expect_error(default_recipe_blueprint(prep_specific_roles = c("predictor", "x")), "can't be 'outcome' or 'predictor'")
+})
+
 test_that("Missing y value returns a 0 column tibble for `outcomes`", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(~Sepal.Width, data = iris)

@@ -9,6 +9,7 @@ default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
+  prep_specific_roles = character(),
   composition = "tibble"
 )
 
@@ -25,6 +26,16 @@ prediction time? This information is used by the \code{clean} function in the
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{prep_specific_roles}{A character vector of recipes "roles"
+corresponding to columns that are only required at \code{prep()} time, and are
+not required at \code{bake()} time. These columns are excluded from checks done
+in \code{\link[=forge]{forge()}} to validate the column structure of \code{new_data}, will not be
+passed to \code{bake()} even if they existed in \code{new_data}, and will not be
+returned in the \code{forge()$extras$roles} slot. Any custom role can be
+specified (such as \code{"case_weights"}), but \code{"outcome"} and \code{"predictor"}
+roles are not allowed. See the documentation of \code{\link[recipes:roles]{recipes::add_role()}} for
+more information about roles.}
 
 \item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
 of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
@@ -138,6 +149,25 @@ processed_roles <- mold(rec_roles, train)
 processed_roles$extras
 
 forge(test, processed_roles$blueprint)
+
+# Occasionally, you might have a custom role that is only required at
+# `prep()` time, but not at `bake()` time. To handle this, you'll want
+# `forge()` to ignore columns with that role when it does structural checks
+# on `new_data`. You can specify these types of roles with the
+# `prep_specific_roles` argument to `default_recipe_blueprint()`.
+bp <- default_recipe_blueprint(prep_specific_roles = "custom_role")
+
+processed_roles <- mold(rec_roles, train, blueprint = bp)
+
+# The `"custom_role"` will still be in the `mold()` result
+processed_roles$extras$roles$custom_role
+
+# But it won't be required in `forge()`,
+# and will be excluded from the result there
+test2 <- test
+test2$Sepal.Length <- NULL
+
+forge(test2, processed_roles$blueprint)
 
 # ---------------------------------------------------------------------------
 # Matrix output for predictors

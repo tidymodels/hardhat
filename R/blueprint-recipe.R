@@ -1,8 +1,18 @@
 #' @param recipe Either `NULL`, or an unprepped recipe. This argument is set
-#' automatically at [mold()] time.
+#'   automatically at [mold()] time.
 #'
 #' @param fresh Should already trained operations be re-trained when `prep()` is
-#' called?
+#'   called?
+#'
+#' @param prep_specific_roles A character vector of recipes "roles"
+#'   corresponding to columns that are only required at `prep()` time, and are
+#'   not required at `bake()` time. These columns are excluded from checks done
+#'   in [forge()] to validate the column structure of `new_data`, will not be
+#'   passed to `bake()` even if they existed in `new_data`, and will not be
+#'   returned in the `forge()$extras$roles` slot. Any custom role can be
+#'   specified (such as `"case_weights"`), but `"outcome"` and `"predictor"`
+#'   roles are not allowed. See the documentation of [recipes::add_role()] for
+#'   more information about roles.
 #'
 #' @rdname new-blueprint
 #' @export
@@ -11,6 +21,7 @@ new_recipe_blueprint <- function(mold,
                                  intercept = FALSE,
                                  allow_novel_levels = FALSE,
                                  fresh = TRUE,
+                                 prep_specific_roles = character(),
                                  composition = "tibble",
                                  ptypes = NULL,
                                  recipe = NULL,
@@ -26,6 +37,7 @@ new_recipe_blueprint <- function(mold,
   )
 
   validate_is_bool(fresh)
+  validate_prep_specific_roles(prep_specific_roles)
 
   validate_is_recipe_or_null(recipe)
 
@@ -35,6 +47,7 @@ new_recipe_blueprint <- function(mold,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
+    prep_specific_roles = prep_specific_roles,
     composition = composition,
     ptypes = ptypes,
     recipe = recipe,
@@ -64,4 +77,18 @@ is_recipe <- function(x) {
 
 validate_is_recipe_or_null <- function(recipe) {
   validate_is_or_null(recipe, is_recipe, "recipe")
+}
+
+validate_prep_specific_roles <- function(prep_specific_roles) {
+  validate_is_character(prep_specific_roles, "prep_specific_roles")
+
+  if (anyNA(prep_specific_roles)) {
+    abort("`prep_specific_roles` can't contain missing values.")
+  }
+
+  if (any(prep_specific_roles %in% c("outcome", "predictor"))) {
+    abort("`prep_specific_roles` can't be 'outcome' or 'predictor'.")
+  }
+
+  invisible(prep_specific_roles)
 }
