@@ -1,16 +1,19 @@
 # hardhat (development version)
 
-* `default_recipe_blueprint()` has gained a new `prep_specific_roles` argument,
-  which allows you to specify a character vector of recipes "roles"
-  corresponding to columns that are required at `recipes::prep()` time, but
-  are not required at `recipes::bake()` time. For example, you might have a
-  custom `"case_weights"` role that is required for computing case-weighted
-  estimates at prep time, but isn't required when baking against new data
-  (since the estimates have already been pre-computed and stored). Columns
-  with roles matching `prep_specific_roles` will be included in the `$extras`
-  slot of the result of `mold()`, but will not be included in the `$extras`
-  slot of the result of `forge()`, and will be excluded from the structural
-  checks done by `forge()`.
+* Recipe preprocessors now ignore non-standard recipe roles (i.e. not
+  `"outcome"` or `"predictor"`) by default when calling `forge()`. Previously,
+  it was assumed that all non-standard role columns present in the original
+  training data were also required in the test data when `forge()` is called.
+  It seems to be more often the case that those columns are actually not
+  required to `bake()` new data, and often won't even be present when making
+  predictions on new data. For example, a custom `"case_weights"` role might be
+  required for computing case-weighted estimates at `prep()` time, but won't
+  be necessary at `bake()` time (since the estimates have already been
+  pre-computed and stored). To account for the case when you do require a
+  specific non-standard role to be present at `bake()` time,
+  `default_recipe_blueprint()` has gained a new argument,
+  `bake_dependent_roles`, which can be set to a character vector of
+  non-standard roles that are required.
 
 * `use_modeling_files()` and `create_modeling_package()` no longer open the
   package documentation file in the current RStudio session (#192).
