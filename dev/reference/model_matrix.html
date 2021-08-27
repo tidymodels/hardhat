@@ -219,7 +219,7 @@ weights through, which are handled differently in hardhat.</p></li>
 <span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>iris</span><span class='op'>)</span>
 
 <span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 x 3</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 × 3</span>
 #&gt;    `(Intercept)` Speciesversicolor Speciesvirginica
 #&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>             1                 0                0
@@ -242,7 +242,7 @@ weights through, which are handled differently in hardhat.</p></li>
 <span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>iris2</span><span class='op'>)</span>
 
 <span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 x 3</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 × 3</span>
 #&gt;    `(Intercept)` Speciesversicolor Speciesvirginica
 #&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>             1                <span style='color: #BB0000;'>NA</span>               <span style='color: #BB0000;'>NA</span>
@@ -272,12 +272,12 @@ weights through, which are handled differently in hardhat.</p></li>
 
 <span class='co'># Compare!</span>
 <span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 × 2</span>
 #&gt;   `(Intercept)`    yb
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>             1     0
 #&gt; <span style='color: #BCBCBC;'>2</span>             1     1</div><div class='input'><span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 × 2</span>
 #&gt;   `(Intercept)`    y1
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>             1     1
@@ -291,7 +291,7 @@ weights through, which are handled differently in hardhat.</p></li>
   <span class='op'>}</span>,
   contrasts <span class='op'>=</span> <span class='va'>global_override</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 × 2</span>
 #&gt;   `(Intercept)`    y1
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>             1     1

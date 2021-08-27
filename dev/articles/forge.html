@@ -172,7 +172,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt; # A tibble: 33 × 2</span>
 <span class="co">#&gt;    bill_length_mm species  </span>
 <span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
 <span class="co">#&gt;  1           47.5 Chinstrap</span>
@@ -209,7 +209,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt; # A tibble: 33 × 2</span>
 <span class="co">#&gt;    bill_length_mm species  </span>
 <span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
 <span class="co">#&gt;  1           47.5 Chinstrap</span>
@@ -225,7 +225,7 @@
 <span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; # A tibble: 33 x 1</span>
+<span class="co">#&gt; # A tibble: 33 × 1</span>
 <span class="co">#&gt;    `log(body_mass_g)`</span>
 <span class="co">#&gt;                 &lt;dbl&gt;</span>
 <span class="co">#&gt;  1               8.27</span>
@@ -292,7 +292,7 @@
 <span class="va">forged_char</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_character</span>, <span class="va">formula_eng</span><span class="op">)</span>
 
 <span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt; # A tibble: 33 × 2</span>
 <span class="co">#&gt;    bill_length_mm species  </span>
 <span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
 <span class="co">#&gt;  1           47.5 Chinstrap</span>
@@ -324,7 +324,7 @@
 <span class="co">#&gt; removed, and values have been coerced to 'NA'.</span>
 
 <span class="va">forged_lossy</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 33 x 2</span>
+<span class="co">#&gt; # A tibble: 33 × 2</span>
 <span class="co">#&gt;    bill_length_mm species  </span>
 <span class="co">#&gt;             &lt;dbl&gt; &lt;fct&gt;    </span>
 <span class="co">#&gt;  1           47.5 Chinstrap</span>
@@ -359,7 +359,7 @@
 <span class="va">penguin_recipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguin_train</span><span class="op">)</span>
 
 <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 300 x 3</span>
+<span class="co">#&gt; # A tibble: 300 × 3</span>
 <span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
 <span class="co">#&gt;          &lt;int&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
 <span class="co">#&gt;  1        3750                 0              0</span>
@@ -389,7 +389,7 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 33 x 3</span>
+<span class="co">#&gt; # A tibble: 33 × 3</span>
 <span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
 <span class="co">#&gt;          &lt;int&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
 <span class="co">#&gt;  1        3900                 1              0</span>
@@ -405,7 +405,7 @@
 <span class="co">#&gt; # … with 23 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; # A tibble: 33 x 1</span>
+<span class="co">#&gt; # A tibble: 33 × 1</span>
 <span class="co">#&gt;    bill_length_mm</span>
 <span class="co">#&gt;             &lt;dbl&gt;</span>
 <span class="co">#&gt;  1           47.5</span>
@@ -454,7 +454,7 @@
 
 <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_skip_outcome</span><span class="op">)</span>
 <span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; # A tibble: 33 x 3</span>
+<span class="co">#&gt; # A tibble: 33 × 3</span>
 <span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
 <span class="co">#&gt;          &lt;int&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
 <span class="co">#&gt;  1        3900                 1              0</span>
@@ -483,7 +483,7 @@
 <p>For example, if we used <code>penguin_test</code> with the above recipe (which has the outcome), <code>bill_length_mm</code> wouldn’t get centered when <code><a href="../reference/forge.html">forge()</a></code> is called. But we probably would not have skipped that step if we knew that our test data would have the outcome.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng_skip_outcome</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 33 x 1</span>
+<span class="co">#&gt; # A tibble: 33 × 1</span>
 <span class="co">#&gt;    bill_length_mm</span>
 <span class="co">#&gt;             &lt;dbl&gt;</span>
 <span class="co">#&gt;  1           47.5</span>

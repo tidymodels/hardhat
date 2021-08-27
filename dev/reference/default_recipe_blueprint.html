@@ -290,7 +290,7 @@ used during training.</p></li>
 
 <span class='co'># Sepal.Length has been logged</span>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 100 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 100 × 2</span>
 #&gt;    Sepal.Length Sepal.Width
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>         1.63         3.5
@@ -305,7 +305,7 @@ used during training.</p></li>
 #&gt; <span style='color: #BCBCBC;'>10</span>         1.59         3.1
 #&gt; <span style='color: #949494;'># … with 90 more rows</span></div><div class='input'>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 100 x 1</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 100 × 1</span>
 #&gt;    Species
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>  
 #&gt; <span style='color: #BCBCBC;'> 1</span> setosa 
@@ -338,7 +338,7 @@ used during training.</p></li>
 <span class='co'># to have it preprocess the test data in the same way</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 x 2</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 2</span>
 #&gt;    Sepal.Length Sepal.Width
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>         1.84         3.3
@@ -365,7 +365,7 @@ used during training.</p></li>
 <span class='co'># This logged the Sepal.Length column of `new_data`</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 x 2</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 2</span>
 #&gt;    Sepal.Length Sepal.Width
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>         1.84         3.3
@@ -381,7 +381,7 @@ used during training.</p></li>
 #&gt; <span style='color: #949494;'># … with 40 more rows</span>
 #&gt; 
 #&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Species  
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
 #&gt; <span style='color: #BCBCBC;'> 1</span> virginica
@@ -408,7 +408,7 @@ used during training.</p></li>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>rec</span>, <span class='va'>train</span>, blueprint <span class='op'>=</span> <span class='fu'>default_recipe_blueprint</span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 100 x 3</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 100 × 3</span>
 #&gt;    `(Intercept)` Sepal.Length Sepal.Width
 #&gt;            <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>             1         1.63         3.5
@@ -426,7 +426,7 @@ used during training.</p></li>
 <span class='va'>rec2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/step_intercept.html'>step_intercept</a></span><span class='op'>(</span><span class='va'>rec</span><span class='op'>)</span>
 
 <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>rec2</span>, <span class='va'>iris</span><span class='op'>)</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 x 3</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 × 3</span>
 #&gt;    intercept Sepal.Length Sepal.Width
 #&gt;        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>         1         1.63         3.5
@@ -457,7 +457,7 @@ used during training.</p></li>
 <span class='va'>processed_roles</span><span class='op'>$</span><span class='va'>extras</span>
 </div><div class='output co'>#&gt; $roles
 #&gt; $roles$custom_role
-#&gt; <span style='color: #949494;'># A tibble: 100 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 100 × 1</span>
 #&gt;    Sepal.Length
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>          5.1
@@ -473,7 +473,7 @@ used during training.</p></li>
 #&gt; <span style='color: #949494;'># … with 90 more rows</span>
 #&gt; 
 #&gt; $roles$custom_role2
-#&gt; <span style='color: #949494;'># A tibble: 100 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 100 × 1</span>
 #&gt;    Petal.Length
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>          1.4
@@ -491,7 +491,7 @@ used during training.</p></li>
 #&gt; </div><div class='input'>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed_roles</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Sepal.Width
 #&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>         3.3
@@ -512,7 +512,7 @@ used during training.</p></li>
 #&gt; $extras
 #&gt; $extras$roles
 #&gt; $extras$roles$custom_role
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Sepal.Length
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>          6.3
@@ -528,7 +528,7 @@ used during training.</p></li>
 #&gt; <span style='color: #949494;'># … with 40 more rows</span>
 #&gt; 
 #&gt; $extras$roles$custom_role2
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Petal.Length
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>          6  

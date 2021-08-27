@@ -371,7 +371,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># to have it preprocess the test data in the same way</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span>
+#&gt; <span style='color: #949494;'># A tibble: 2 × 4</span>
 #&gt;   `(Intercept)` num_2 fac_1b fac_1c
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>             1 0.967      0      0
@@ -388,14 +388,14 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Use `outcomes = TRUE` to also extract the preprocessed outcome</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span>
+#&gt; <span style='color: #949494;'># A tibble: 2 × 4</span>
 #&gt;   `(Intercept)` num_2 fac_1b fac_1c
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>             1 0.967      0      0
 #&gt; <span style='color: #BCBCBC;'>2</span>             1 0.761      0      1
 #&gt; 
 #&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 2 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 2 × 1</span>
 #&gt;   `log(num_1)`
 #&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>         3.00
@@ -416,7 +416,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># `K` columns (the number of levels), and the subsequent factors are expanded</span>
 <span class='co'># into `K - 1` columns.</span>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 4</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 4</span>
 #&gt;    fac_1a fac_1b fac_1c fac_2B
 #&gt;     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>      1      0      0      0
@@ -446,7 +446,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='op'>)</span>
 
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 5</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 5</span>
 #&gt;    fac_1a fac_1b fac_1c fac_2A fac_2B
 #&gt;     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>      1      0      0      1      0
@@ -504,7 +504,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='op'>)</span>
 
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>predictors</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 2</span>
 #&gt;    `num_1:num_2` fac_1
 #&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>         0.579 a    
@@ -530,7 +530,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># Multivariate formulas can be specified easily</span>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>num_1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>num_2</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>fac_1</span>, <span class='va'>example_train</span><span class='op'>)</span>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 2</span>
 #&gt;    num_1 `log(num_2)`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>     1      -<span style='color: #BB0000;'>0.546</span> 
@@ -551,7 +551,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># in the tibble that are matrices)</span>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span><span class='op'>(</span><span class='va'>num_2</span>, degree <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>fac_1</span>, <span class='va'>example_train</span><span class='op'>)</span>
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 2</span>
 #&gt;    `poly(num_2, degree = 2).1` `poly(num_2, degree = 2).2`
 #&gt;                          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>                      0.098<span style='text-decoration: underline;'>1</span>                      -<span style='color: #BB0000;'>0.254</span>
@@ -573,14 +573,14 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># carry over into forge()</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 2 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 2 × 3</span>
 #&gt;   fac_1a fac_1b fac_1c
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>      1      0      0
 #&gt; <span style='color: #BCBCBC;'>2</span>      0      0      1
 #&gt; 
 #&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 2 x 2</span>
+#&gt; <span style='color: #949494;'># A tibble: 2 × 2</span>
 #&gt;   `poly(num_2, degree = 2).1` `poly(num_2, degree = 2).2`
 #&gt;                         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>                       0.541                     0.646  
@@ -600,7 +600,7 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>num_1</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>num_2</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>fac_1</span>, <span class='va'>example_train</span><span class='op'>)</span>
 
 <span class='va'>processed</span><span class='op'>$</span><span class='va'>extras</span><span class='op'>$</span><span class='va'>offset</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 1</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 1</span>
 #&gt;    .offset
 #&gt;      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>   0.579
@@ -630,14 +630,14 @@ interface standardizes all of that flexibility in one place.</p>
 <span class='co'># and include the offset</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>example_test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 2 x 0</span>
+#&gt; <span style='color: #949494;'># A tibble: 2 × 0</span>
 #&gt; 
 #&gt; $outcomes
 #&gt; NULL
 #&gt; 
 #&gt; $extras
 #&gt; $extras$offset
-#&gt; <span style='color: #949494;'># A tibble: 2 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 2 × 1</span>
 #&gt;   .offset
 #&gt;     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span>   1.06 
@@ -657,7 +657,7 @@ interface standardizes all of that flexibility in one place.</p>
   blueprint <span class='op'>=</span> <span class='fu'>default_formula_blueprint</span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 12 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 12 × 1</span>
 #&gt;    `(Intercept)`
 #&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>             1
@@ -674,7 +674,7 @@ interface standardizes all of that flexibility in one place.</p>
 #&gt; <span style='color: #BCBCBC;'>12</span>             1
 #&gt; 
 #&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 12 x 0</span>
+#&gt; <span style='color: #949494;'># A tibble: 12 × 0</span>
 #&gt; 
 #&gt; $blueprint
 #&gt; Formula blueprint: 

@@ -156,7 +156,7 @@
 <p><code><a href="../reference/mold.html">mold()</a></code> returns four things. Two of them are immediately useful, and are almost always applicable to the modeling implementation you have created. The first is the <code>predictors</code>, returned as a tibble. All of the required processing has been done for you, so you just have to focus on the modeling implementation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">penguin_form</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; # A tibble: 333 × 1</span>
 <span class="co">#&gt;    `log(bill_length_mm)`</span>
 <span class="co">#&gt;                    &lt;dbl&gt;</span>
 <span class="co">#&gt;  1                  3.67</span>
@@ -173,7 +173,7 @@
 <p>Second is the <code>outcomes</code>, also returned as a tibble. While not used here, any processing on the outcome that was specified in the formula would also be done here.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">penguin_form</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; # A tibble: 333 × 1</span>
 <span class="co">#&gt;    body_mass_g</span>
 <span class="co">#&gt;          &lt;int&gt;</span>
 <span class="co">#&gt;  1        3750</span>
@@ -191,7 +191,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="va">bill_depth_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span>
 <span class="co">#&gt; $offset</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; # A tibble: 333 × 1</span>
 <span class="co">#&gt;    .offset</span>
 <span class="co">#&gt;      &lt;dbl&gt;</span>
 <span class="co">#&gt;  1    18.7</span>
@@ -232,7 +232,7 @@
 <code class="sourceCode R"><span class="va">no_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">no_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; # A tibble: 333 × 1</span>
 <span class="co">#&gt;    body_mass_g</span>
 <span class="co">#&gt;          &lt;dbl&gt;</span>
 <span class="co">#&gt;  1        3750</span>
@@ -253,7 +253,7 @@
 <span class="op">)</span>
 
 <span class="va">with_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 2</span>
+<span class="co">#&gt; # A tibble: 333 × 2</span>
 <span class="co">#&gt;    `(Intercept)` body_mass_g</span>
 <span class="co">#&gt;            &lt;dbl&gt;       &lt;dbl&gt;</span>
 <span class="co">#&gt;  1             1        3750</span>
@@ -283,7 +283,7 @@
 <code class="sourceCode R"><span class="va">expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">expanded_dummies</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 4</span>
+<span class="co">#&gt; # A tibble: 333 × 4</span>
 <span class="co">#&gt;    body_mass_g speciesAdelie speciesChinstrap speciesGentoo</span>
 <span class="co">#&gt;          &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;</span>
 <span class="co">#&gt;  1        3750             1                0             0</span>
@@ -304,7 +304,7 @@
 <span class="op">)</span>
 
 <span class="va">non_expanded_dummies</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 2</span>
+<span class="co">#&gt; # A tibble: 333 × 2</span>
 <span class="co">#&gt;    body_mass_g species</span>
 <span class="co">#&gt;          &lt;dbl&gt; &lt;fct&gt;  </span>
 <span class="co">#&gt;  1        3750 Adelie </span>
@@ -378,7 +378,7 @@
 <code class="sourceCode R"><span class="va">multivariate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">multivariate</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 2</span>
+<span class="co">#&gt; # A tibble: 333 × 2</span>
 <span class="co">#&gt;    body_mass_g `log(bill_length_mm)`</span>
 <span class="co">#&gt;          &lt;int&gt;                 &lt;dbl&gt;</span>
 <span class="co">#&gt;  1        3750                  3.67</span>
@@ -405,7 +405,7 @@
 <span class="va">penguin_xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 
 <span class="va">penguin_xy</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 6</span>
+<span class="co">#&gt; # A tibble: 333 × 6</span>
 <span class="co">#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm sex   </span>
 <span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt; &lt;fct&gt; </span>
 <span class="co">#&gt;  1 Adelie  Torgersen           39.1          18.7               181 male  </span>
@@ -421,7 +421,7 @@
 <span class="co">#&gt; # … with 323 more rows</span>
 
 <span class="va">penguin_xy</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; # A tibble: 333 × 1</span>
 <span class="co">#&gt;    body_mass_g</span>
 <span class="co">#&gt;          &lt;int&gt;</span>
 <span class="co">#&gt;  1        3750</span>
@@ -440,7 +440,7 @@
 <code class="sourceCode R"><span class="va">xy_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">xy_with_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 7</span>
+<span class="co">#&gt; # A tibble: 333 × 7</span>
 <span class="co">#&gt;    `(Intercept)` species island    bill_length_mm bill_depth_mm flipper_length_…</span>
 <span class="co">#&gt;            &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;</span>
 <span class="co">#&gt;  1             1 Adelie  Torgersen           39.1          18.7              181</span>
@@ -460,7 +460,7 @@
 <p><code>y</code> is a bit special in the XY interface, because in the univariate case users might expect to be able to pass a vector, a 1 column data frame, or a matrix. <code><a href="../reference/mold.html">mold()</a></code> is prepared for all of those cases, but the vector case requires special attention. To be consistent with all of the other <code><a href="../reference/mold.html">mold()</a></code> interfaces, the <code>outcomes</code> slot of the return value should be a tibble. To achieve this when <code>y</code> is supplied as a vector, a default column name is created, <code>".outcome"</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">$</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; # A tibble: 333 × 1</span>
 <span class="co">#&gt;    .outcome</span>
 <span class="co">#&gt;       &lt;int&gt;</span>
 <span class="co">#&gt;  1     3750</span>
@@ -490,7 +490,7 @@
 <span class="va">penguin_recipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 3</span>
+<span class="co">#&gt; # A tibble: 333 × 3</span>
 <span class="co">#&gt;    bill_depth_mm species_Chinstrap species_Gentoo</span>
 <span class="co">#&gt;            &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
 <span class="co">#&gt;  1          18.7                 0              0</span>
@@ -506,7 +506,7 @@
 <span class="co">#&gt; # … with 323 more rows</span>
 
 <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; # A tibble: 333 × 1</span>
 <span class="co">#&gt;    bill_length_mm</span>
 <span class="co">#&gt;             &lt;dbl&gt;</span>
 <span class="co">#&gt;  1           3.67</span>
@@ -528,7 +528,7 @@
 <span class="op">)</span>
 
 <span class="va">recipe_with_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 4</span>
+<span class="co">#&gt; # A tibble: 333 × 4</span>
 <span class="co">#&gt;    `(Intercept)` bill_depth_mm species_Chinstrap species_Gentoo</span>
 <span class="co">#&gt;            &lt;int&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
 <span class="co">#&gt;  1             1          18.7                 0              0</span>

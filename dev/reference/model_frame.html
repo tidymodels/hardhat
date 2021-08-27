@@ -238,7 +238,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 <span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
 
 <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 × 2</span>
 #&gt;    Species Sepal.Width
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> setosa          3.5
@@ -269,7 +269,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 #&gt; attr(,"response")
 #&gt; [1] 1
 #&gt; attr(,".Environment")
-#&gt; &lt;environment: 0x55d5602e5728&gt;
+#&gt; &lt;environment: 0x5595c95d7a90&gt;
 #&gt; attr(,"predvars")
 #&gt; list(Species, Sepal.Width)
 #&gt; attr(,"dataClasses")
@@ -284,7 +284,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 <span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris2</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 2</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 × 2</span>
 #&gt;   Species Sepal.Width
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> setosa         <span style='color: #BB0000;'>NA</span>  

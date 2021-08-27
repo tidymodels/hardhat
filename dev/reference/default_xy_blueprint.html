@@ -291,7 +291,7 @@ of <code>new_data</code>.</p></li>
 <span class='co'># to have it preprocess the test data in the same way</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test_x</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Sepal.Length
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>          6.3
@@ -319,7 +319,7 @@ of <code>new_data</code>.</p></li>
 
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test_x</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 x 2</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 2</span>
 #&gt;    `(Intercept)` Sepal.Length
 #&gt;            <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>             1          6.3
@@ -354,7 +354,7 @@ of <code>new_data</code>.</p></li>
 <span class='co'># Need to use the full test set, including `y`</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Sepal.Length
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>          6.3
@@ -370,7 +370,7 @@ of <code>new_data</code>.</p></li>
 #&gt; <span style='color: #949494;'># … with 40 more rows</span>
 #&gt; 
 #&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Species  
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
 #&gt; <span style='color: #BCBCBC;'> 1</span> virginica
@@ -410,7 +410,7 @@ of <code>new_data</code>.</p></li>
 <span class='co'># This works, and returns a tibble in the $outcomes slot</span>
 <span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='va'>processed_vec</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    Sepal.Length
 #&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>          6.3
@@ -426,7 +426,7 @@ of <code>new_data</code>.</p></li>
 #&gt; <span style='color: #949494;'># … with 40 more rows</span>
 #&gt; 
 #&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 50 x 1</span>
+#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
 #&gt;    .outcome 
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
 #&gt; <span style='color: #BCBCBC;'> 1</span> virginica
