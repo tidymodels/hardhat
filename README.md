@@ -7,8 +7,7 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=master)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
 [![R-CMD-check](https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/hardhat/actions)
