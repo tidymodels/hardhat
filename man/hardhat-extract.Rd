@@ -9,6 +9,8 @@
 \alias{extract_fit_engine}
 \alias{extract_mold}
 \alias{extract_preprocessor}
+\alias{extract_parameter_dials}
+\alias{extract_parameter_set_dials}
 \title{Generics for object extraction}
 \usage{
 extract_workflow(x, ...)
@@ -24,6 +26,10 @@ extract_fit_engine(x, ...)
 extract_mold(x, ...)
 
 extract_preprocessor(x, ...)
+
+extract_parameter_dials(x, ...)
+
+extract_parameter_set_dials(x, ...)
 }
 \arguments{
 \item{x}{An object.}
@@ -48,6 +54,8 @@ variable selectors.
 expressions used for preprocessing.
 \item \code{extract_recipe()} returns a recipe, possibly estimated.
 \item \code{extract_workflow()} returns a workflow, possibly fit.
+\item \code{extract_dials_parameter()} returns a single dials parameter object.
+\item \code{extract_dials_parameter_set()} returns a set of dials parameter objects.
 }
 }
 \examples{

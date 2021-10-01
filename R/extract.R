@@ -25,6 +25,10 @@
 #'
 #' - `extract_workflow()` returns a workflow, possibly fit.
 #'
+#' - `extract_dials_parameter()` returns a single dials parameter object.
+#'
+#' - `extract_dials_parameter_set()` returns a set of dials parameter objects.
+#'
 #' @param x An object.
 #'
 #' @param ... Extra arguments passed on to methods.
@@ -77,4 +81,16 @@ extract_mold <- function(x, ...) {
 #' @export
 extract_preprocessor <- function(x, ...) {
   UseMethod("extract_preprocessor")
+}
+
+#' @rdname hardhat-extract
+#' @export
+extract_parameter_dials <- function(x, ...) {
+  UseMethod("extract_parameter_dials")
+}
+
+#' @rdname hardhat-extract
+#' @export
+extract_parameter_set_dials <- function(x, ...) {
+  UseMethod("extract_parameter_set_dials")
 }
