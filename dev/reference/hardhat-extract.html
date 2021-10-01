@@ -66,6 +66,8 @@ extract_preprocessor() returns the formula, recipe, or variable
 expressions used for preprocessing.
 extract_recipe() returns a recipe, possibly estimated.
 extract_workflow() returns a workflow, possibly fit.
+extract_parameter_dials() returns a single dials parameter object.
+extract_parameter_set_dials() returns a set of dials parameter objects.
 
 " />
 <meta property="og:image" content="https://hardhat.tidymodels.org/logo.png" />
@@ -203,6 +205,8 @@ variable selectors.</p></li>
 expressions used for preprocessing.</p></li>
 <li><p><code>extract_recipe()</code> returns a recipe, possibly estimated.</p></li>
 <li><p><code>extract_workflow()</code> returns a workflow, possibly fit.</p></li>
+<li><p><code>extract_parameter_dials()</code> returns a single dials parameter object.</p></li>
+<li><p><code>extract_parameter_set_dials()</code> returns a set of dials parameter objects.</p></li>
 </ul>
 
     </div>
@@ -219,7 +223,11 @@ expressions used for preprocessing.</p></li>
 
 <span class='fu'>extract_mold</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>extract_preprocessor</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>extract_preprocessor</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_parameter_dials</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>extract_parameter_set_dials</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
