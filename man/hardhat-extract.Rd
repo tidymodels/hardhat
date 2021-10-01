@@ -54,8 +54,8 @@ variable selectors.
 expressions used for preprocessing.
 \item \code{extract_recipe()} returns a recipe, possibly estimated.
 \item \code{extract_workflow()} returns a workflow, possibly fit.
-\item \code{extract_dials_parameter()} returns a single dials parameter object.
-\item \code{extract_dials_parameter_set()} returns a set of dials parameter objects.
+\item \code{extract_parameter_dials()} returns a single dials parameter object.
+\item \code{extract_parameter_set_dials()} returns a set of dials parameter objects.
 }
 }
 \examples{

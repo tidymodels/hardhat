@@ -25,9 +25,9 @@
 #'
 #' - `extract_workflow()` returns a workflow, possibly fit.
 #'
-#' - `extract_dials_parameter()` returns a single dials parameter object.
+#' - `extract_parameter_dials()` returns a single dials parameter object.
 #'
-#' - `extract_dials_parameter_set()` returns a set of dials parameter objects.
+#' - `extract_parameter_set_dials()` returns a set of dials parameter objects.
 #'
 #' @param x An object.
 #'
