@@ -20,7 +20,7 @@ options(rlang__backtrace_on_error = "reminder")
 # hardhat <a href='https://hardhat.tidymodels.org'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/tidymodels/hardhat/branch/main/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=main)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)
 [![R-CMD-check](https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/hardhat/actions)
