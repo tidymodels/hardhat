@@ -886,7 +886,7 @@ detect_interactions <- function(.formula) {
   terms_nms <- colnames(terms_matrix)
 
   # All interactions (*, ^, %in%) will be expanded to `:`
-  has_interactions <- grepl(":", terms_nms)
+  has_interactions <- grepl("(?<!:):(?!:)", terms_nms, perl = TRUE)
 
   has_any_interactions <- any(has_interactions)
 
