@@ -883,10 +883,11 @@ detect_interactions <- function(.formula) {
     return(character(0))
   }
 
-  terms_nms <- colnames(terms_matrix)
+  terms_names <- colnames(terms_matrix)
 
   # All interactions (*, ^, %in%) will be expanded to `:`
-  has_interactions <- grepl(":", terms_nms)
+  terms_exprs <- rlang::parse_exprs(terms_names)
+  has_interactions <- map_lgl(terms_exprs, expr_contains, what = as.name(":"))
 
   has_any_interactions <- any(has_interactions)
 
@@ -894,9 +895,28 @@ detect_interactions <- function(.formula) {
     return(character(0))
   }
 
-  bad_terms <- terms_nms[has_interactions]
+  bad_terms <- terms_names[has_interactions]
 
   bad_terms
+}
+
+expr_contains <- function(expr, what) {
+  if (!rlang::is_expression(expr)) {
+    rlang::abort("`expr` must be an expression.")
+  }
+  if (!rlang::is_symbol(what)) {
+    rlang::abort("`what` must be a symbol.")
+  }
+
+  expr_contains_recurse(expr, what)
+}
+expr_contains_recurse <- function(expr, what) {
+  switch (
+    typeof(expr),
+    symbol = identical(expr, what),
+    language = any(map_lgl(expr, expr_contains_recurse, what = what)),
+    FALSE
+  )
 }
 
 extract_original_factorish_names <- function(ptype) {

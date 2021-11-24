@@ -503,6 +503,11 @@ test_that("LHS of the formula cannot contain interactions", {
 
 })
 
+test_that("LHS of the formula won't misinterpret `::` as an interaction (#174)", {
+  out <- mold(base::cbind(num_1, num_2) ~ num_3, example_train)
+  expect_identical(ncol(out$outcomes), 2L)
+})
+
 test_that("original predictor and outcome classes are recorded", {
 
   bp <- default_formula_blueprint(composition = "dgCMatrix")
