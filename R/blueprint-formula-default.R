@@ -836,14 +836,16 @@ detect_factorish_in_interactions <- function(.terms, .factorish_names) {
 
   # In the factor matrix, only `:` is present to represent interactions,
   # even if something like * or ^ or %in% was used to generate it
-  where_interactions <- grepl(":", colnames(factorish_rows))
+  terms_names <- colnames(factorish_rows)
+  terms_exprs <- rlang::parse_exprs(terms_names)
+  has_interactions <- map_lgl(terms_exprs, expr_contains, what = as.name(":"))
 
-  none_have_interactions <- !any(where_interactions)
+  none_have_interactions <- !any(has_interactions)
   if (none_have_interactions) {
     return(character(0))
   }
 
-  interaction_cols <- factorish_rows[, where_interactions, drop = FALSE]
+  interaction_cols <- factorish_rows[, has_interactions, drop = FALSE]
 
   factorish_is_bad_if_gt_0 <- rowSums(interaction_cols)
   bad_factorish_vals <- factorish_is_bad_if_gt_0[factorish_is_bad_if_gt_0 > 0]
