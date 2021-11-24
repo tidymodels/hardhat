@@ -232,70 +232,74 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code> will be made automatically, which can give faulty results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Example usage</span>
-
-<span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
-
-<span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 × 2</span>
-#&gt;    Species Sepal.Width
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> setosa          3.5
-#&gt; <span style='color: #BCBCBC;'> 2</span> setosa          3  
-#&gt; <span style='color: #BCBCBC;'> 3</span> setosa          3.2
-#&gt; <span style='color: #BCBCBC;'> 4</span> setosa          3.1
-#&gt; <span style='color: #BCBCBC;'> 5</span> setosa          3.6
-#&gt; <span style='color: #BCBCBC;'> 6</span> setosa          3.9
-#&gt; <span style='color: #BCBCBC;'> 7</span> setosa          3.4
-#&gt; <span style='color: #BCBCBC;'> 8</span> setosa          3.4
-#&gt; <span style='color: #BCBCBC;'> 9</span> setosa          2.9
-#&gt; <span style='color: #BCBCBC;'>10</span> setosa          3.1
-#&gt; <span style='color: #949494;'># … with 140 more rows</span></div><div class='input'>
-<span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>
-</div><div class='output co'>#&gt; Species ~ Sepal.Width
-#&gt; attr(,"variables")
-#&gt; list(Species, Sepal.Width)
-#&gt; attr(,"factors")
-#&gt;             Sepal.Width
-#&gt; Species               0
-#&gt; Sepal.Width           1
-#&gt; attr(,"term.labels")
-#&gt; [1] "Sepal.Width"
-#&gt; attr(,"order")
-#&gt; [1] 1
-#&gt; attr(,"intercept")
-#&gt; [1] 1
-#&gt; attr(,"response")
-#&gt; [1] 1
-#&gt; attr(,".Environment")
-#&gt; &lt;environment: 0x564efa470990&gt;
-#&gt; attr(,"predvars")
-#&gt; list(Species, Sepal.Width)
-#&gt; attr(,"dataClasses")
-#&gt;     Species Sepal.Width 
-#&gt;    "factor"   "numeric" </div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Missing values never result in dropped rows</span>
-
-<span class='va'>iris2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span>
-<span class='va'>iris2</span><span class='op'>$</span><span class='va'>Sepal.Width</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
-
-<span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris2</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 × 2</span>
-#&gt;   Species Sepal.Width
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> setosa         <span style='color: #BB0000;'>NA</span>  
-#&gt; <span style='color: #BCBCBC;'>2</span> setosa          3  
-#&gt; <span style='color: #BCBCBC;'>3</span> setosa          3.2
-#&gt; <span style='color: #BCBCBC;'>4</span> setosa          3.1
-#&gt; <span style='color: #BCBCBC;'>5</span> setosa          3.6
-#&gt; <span style='color: #BCBCBC;'>6</span> setosa          3.9</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span> <span class='op'>==</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>iris2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Example usage</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> setosa          3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> setosa          3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> setosa          3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> setosa          3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> setosa          3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> setosa          3.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> setosa          3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> setosa          3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> setosa          2.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> setosa          3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Species ~ Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"variables")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> list(Species, Sepal.Width)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"factors")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Species               0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width           1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"term.labels")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Sepal.Width"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"order")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"intercept")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"response")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,".Environment")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x563977d1a2f8&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"predvars")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> list(Species, Sepal.Width)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"dataClasses")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Species Sepal.Width </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    "factor"   "numeric" </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Missing values never result in dropped rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>iris2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span></span>
+<span class='r-in'><span class='va'>iris2</span><span class='op'>$</span><span class='va'>Sepal.Width</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'>model_frame</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 6 × 2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Species Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> setosa         <span style='color: #BB0000;'>NA</span>  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> setosa          3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> setosa          3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> setosa          3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span> setosa          3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span> setosa          3.9</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span> <span class='op'>==</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>iris2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

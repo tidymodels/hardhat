@@ -201,7 +201,7 @@ typically the tibble returned from the corresponding call to
 
     <p>The following explains the rationale for some of the difference in arguments
 compared to <code><a href='https://rdrr.io/r/stats/model.matrix.html'>stats::model.matrix()</a></code>:</p><ul>
-<li><p><code>contrasts.arg</code>: Set the contrasts argument, <code><a href='https://rdrr.io/r/base/options.html'>options("contrasts")</a></code>
+<li><p><code>contrasts.arg</code>: Set the contrasts argument, <code>options("contrasts")</code>
 globally, or assign a contrast to the factor of interest directly using
 <code><a href='https://rdrr.io/r/stats/contrasts.html'>stats::contrasts()</a></code>. See the examples section.</p></li>
 <li><p><code>xlev</code>: Not allowed because <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code> is never called, so it is
@@ -213,89 +213,94 @@ weights through, which are handled differently in hardhat.</p></li>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Example usage</span>
-
-<span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>iris</span><span class='op'>)</span>
-
-<span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 × 3</span>
-#&gt;    `(Intercept)` Speciesversicolor Speciesvirginica
-#&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 2</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 3</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 4</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 5</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 6</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 7</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 8</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 9</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'>10</span>             1                 0                0
-#&gt; <span style='color: #949494;'># … with 140 more rows</span></div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Missing values never result in dropped rows</span>
-
-<span class='va'>iris2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span>
-<span class='va'>iris2</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
-
-<span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>iris2</span><span class='op'>)</span>
-
-<span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 150 × 3</span>
-#&gt;    `(Intercept)` Speciesversicolor Speciesvirginica
-#&gt;            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>             1                <span style='color: #BB0000;'>NA</span>               <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #BCBCBC;'> 2</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 3</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 4</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 5</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 6</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 7</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 8</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'> 9</span>             1                 0                0
-#&gt; <span style='color: #BCBCBC;'>10</span>             1                 0                0
-#&gt; <span style='color: #949494;'># … with 140 more rows</span></div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Contrasts</span>
-
-<span class='co'># Default contrasts</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>y</span><span class='op'>)</span>
-<span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>y</span>, <span class='va'>x</span><span class='op'>)</span>
-
-<span class='co'># Setting contrasts directly</span>
-<span class='va'>y_with_contrast</span> <span class='op'>&lt;-</span> <span class='va'>y</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/contrasts.html'>contrasts</a></span><span class='op'>(</span><span class='va'>y_with_contrast</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/contrast.html'>contr.sum</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span>
-<span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>y_with_contrast</span><span class='op'>)</span>
-<span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>y</span>, <span class='va'>x2</span><span class='op'>)</span>
-
-<span class='co'># Compare!</span>
-<span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 × 2</span>
-#&gt;   `(Intercept)`    yb
-#&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>             1     0
-#&gt; <span style='color: #BCBCBC;'>2</span>             1     1</div><div class='input'><span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 × 2</span>
-#&gt;   `(Intercept)`    y1
-#&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>             1     1
-#&gt; <span style='color: #BCBCBC;'>2</span>             1    -<span style='color: #BB0000;'>1</span></div><div class='input'>
-<span class='co'># Also, can set the contrasts globally</span>
-<span class='va'>global_override</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>unordered <span class='op'>=</span> <span class='st'>"contr.sum"</span>, ordered <span class='op'>=</span> <span class='st'>"contr.poly"</span><span class='op'>)</span>
-
-<span class='fu'>rlang</span><span class='fu'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/local_options.html'>with_options</a></span><span class='op'>(</span>
-  .expr <span class='op'>=</span> <span class='op'>{</span>
-    <span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
-  <span class='op'>}</span>,
-  contrasts <span class='op'>=</span> <span class='va'>global_override</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 × 2</span>
-#&gt;   `(Intercept)`    y1
-#&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>             1     1
-#&gt; <span style='color: #BCBCBC;'>2</span>             1    -<span style='color: #BB0000;'>1</span></div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Example usage</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 3</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    `(Intercept)` Speciesversicolor Speciesvirginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Missing values never result in dropped rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>iris2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span></span>
+<span class='r-in'><span class='va'>iris2</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>iris2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 3</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    `(Intercept)` Speciesversicolor Speciesvirginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>             1                <span style='color: #BB0000;'>NA</span>               <span style='color: #BB0000;'>NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>             1                 0                0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Contrasts</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Default contrasts</span></span>
+<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>y</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>framed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>y</span>, <span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Setting contrasts directly</span></span>
+<span class='r-in'><span class='va'>y_with_contrast</span> <span class='op'>&lt;-</span> <span class='va'>y</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/contrasts.html'>contrasts</a></span><span class='op'>(</span><span class='va'>y_with_contrast</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/contrast.html'>contr.sum</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>y_with_contrast</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>framed2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_frame.html'>model_frame</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>y</span>, <span class='va'>x2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Compare!</span></span>
+<span class='r-in'><span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 2 × 2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   `(Intercept)`    yb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>             1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>             1     1</span>
+<span class='r-in'><span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed2</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed2</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 2 × 2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   `(Intercept)`    y1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>             1     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>             1    -<span style='color: #BB0000;'>1</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Also, can set the contrasts globally</span></span>
+<span class='r-in'><span class='va'>global_override</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>unordered <span class='op'>=</span> <span class='st'>"contr.sum"</span>, ordered <span class='op'>=</span> <span class='st'>"contr.poly"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>rlang</span><span class='fu'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/local_options.html'>with_options</a></span><span class='op'>(</span></span>
+<span class='r-in'>  .expr <span class='op'>=</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'>model_matrix</span><span class='op'>(</span><span class='va'>framed</span><span class='op'>$</span><span class='va'>terms</span>, <span class='va'>framed</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span>,</span>
+<span class='r-in'>  contrasts <span class='op'>=</span> <span class='va'>global_override</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 2 × 2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   `(Intercept)`    y1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>             1     1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>             1    -<span style='color: #BB0000;'>1</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -242,29 +242,32 @@ and provide your own validation function.</p></li>
 <code><a href='validate_prediction_size.html'>validate_prediction_size</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># All good</span>
-<span class='fu'>check_predictors_are_numeric</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $ok
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $bad_classes
-#&gt; list()
-#&gt; </div><div class='input'>
-<span class='co'># Species is not numeric</span>
-<span class='fu'>check_predictors_are_numeric</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $ok
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $bad_classes
-#&gt; $bad_classes$Species
-#&gt; [1] "factor"
-#&gt; 
-#&gt; </div><div class='input'>
-<span class='co'># This gives an intelligent error message</span>
-<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>validate_predictors_are_numeric</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Error : All predictors must be numeric, but the following are not:
-#&gt; 'Species': 'factor'</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># All good</span></span>
+<span class='r-in'><span class='fu'>check_predictors_are_numeric</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ok</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bad_classes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> list()</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Species is not numeric</span></span>
+<span class='r-in'><span class='fu'>check_predictors_are_numeric</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ok</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bad_classes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $bad_classes$Species</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "factor"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># This gives an intelligent error message</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>validate_predictors_are_numeric</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Error : All predictors must be numeric, but the following are not:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'Species': 'factor'</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

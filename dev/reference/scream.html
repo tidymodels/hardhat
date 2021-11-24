@@ -262,133 +262,140 @@ Ordered factors in <code>data</code> must have <em>exactly</em> the same levels 
 factors in <code>ptype</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Setup</span>
-
-<span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span>
-<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span>
-
-<span class='co'># mold() is run at model fit time</span>
-<span class='co'># and a formula preprocessing blueprint is recorded</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>train</span><span class='op'>)</span>
-
-<span class='co'># Inside the result of mold() are the prototype tibbles</span>
-<span class='co'># for the predictors and the outcomes</span>
-<span class='va'>ptype_pred</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>$</span><span class='va'>ptypes</span><span class='op'>$</span><span class='va'>predictors</span>
-<span class='va'>ptype_out</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>$</span><span class='va'>ptypes</span><span class='op'>$</span><span class='va'>outcomes</span>
-
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># shrink() / scream()</span>
-
-<span class='co'># Pass the test data, along with a prototype, to</span>
-<span class='co'># shrink() to extract the prototype columns</span>
-<span class='va'>test_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-
-<span class='co'># Now pass that to scream() to perform validation checks</span>
-<span class='co'># If no warnings / errors are thrown, the checks were</span>
-<span class='co'># successful!</span>
-<span class='fu'>scream</span><span class='op'>(</span><span class='va'>test_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
-#&gt;    Species  
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
-#&gt; <span style='color: #BCBCBC;'> 1</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 2</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 3</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 4</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 5</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 6</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 7</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 8</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 9</span> virginica
-#&gt; <span style='color: #BCBCBC;'>10</span> virginica
-#&gt; <span style='color: #949494;'># … with 40 more rows</span></div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Outcomes</span>
-
-<span class='co'># To also extract the outcomes, use the outcome prototype</span>
-<span class='va'>test_outcome</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>ptype_out</span><span class='op'>)</span>
-<span class='fu'>scream</span><span class='op'>(</span><span class='va'>test_outcome</span>, <span class='va'>ptype_out</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
-#&gt;    Sepal.Width
-#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>         3.3
-#&gt; <span style='color: #BCBCBC;'> 2</span>         2.7
-#&gt; <span style='color: #BCBCBC;'> 3</span>         3  
-#&gt; <span style='color: #BCBCBC;'> 4</span>         2.9
-#&gt; <span style='color: #BCBCBC;'> 5</span>         3  
-#&gt; <span style='color: #BCBCBC;'> 6</span>         3  
-#&gt; <span style='color: #BCBCBC;'> 7</span>         2.5
-#&gt; <span style='color: #BCBCBC;'> 8</span>         2.9
-#&gt; <span style='color: #BCBCBC;'> 9</span>         2.5
-#&gt; <span style='color: #BCBCBC;'>10</span>         3.6
-#&gt; <span style='color: #949494;'># … with 40 more rows</span></div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Casting</span>
-
-<span class='co'># scream() uses vctrs::vec_cast() to intelligently convert</span>
-<span class='co'># new data to the prototype automatically. This means</span>
-<span class='co'># it can automatically perform certain conversions, like</span>
-<span class='co'># coercing character columns to factors.</span>
-<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>test</span>
-<span class='va'>test2</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>test2</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-
-<span class='va'>test2_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-<span class='fu'>scream</span><span class='op'>(</span><span class='va'>test2_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
-#&gt;    Species  
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
-#&gt; <span style='color: #BCBCBC;'> 1</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 2</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 3</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 4</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 5</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 6</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 7</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 8</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 9</span> virginica
-#&gt; <span style='color: #BCBCBC;'>10</span> virginica
-#&gt; <span style='color: #949494;'># … with 40 more rows</span></div><div class='input'>
-<span class='co'># It can also recover missing factor levels.</span>
-<span class='co'># For example, it is plausible that the test data only had the</span>
-<span class='co'># "virginica" level</span>
-<span class='va'>test3</span> <span class='op'>&lt;-</span> <span class='va'>test</span>
-<span class='va'>test3</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>test3</span><span class='op'>$</span><span class='va'>Species</span>, levels <span class='op'>=</span> <span class='st'>"virginica"</span><span class='op'>)</span>
-
-<span class='va'>test3_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test3</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-<span class='va'>test3_fixed</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test3_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-
-<span class='co'># scream() recovered the missing levels</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test3_fixed</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Novel levels</span>
-
-<span class='co'># When novel levels with any data are present in `data`, the default</span>
-<span class='co'># is to coerce them to `NA` values with a warning.</span>
-<span class='va'>test4</span> <span class='op'>&lt;-</span> <span class='va'>test</span>
-<span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-<span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"new_level"</span>
-
-<span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span>
-  <span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span>,
-  levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>, <span class='st'>"new_level"</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='va'>test4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-
-<span class='co'># Warning is thrown</span>
-<span class='va'>test4_removed</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Novel levels found in column 'Species': 'new_level'. The levels have been removed, and values have been coerced to 'NA'.</span></div><div class='input'>
-<span class='co'># Novel level is removed</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test4_removed</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'>
-<span class='co'># No warning is thrown</span>
-<span class='va'>test4_kept</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span>, allow_novel_levels <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># Novel level is kept</span>
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test4_kept</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica"  "new_level" </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Setup</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span></span>
+<span class='r-in'><span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># mold() is run at model fit time</span></span>
+<span class='r-in'><span class='co'># and a formula preprocessing blueprint is recorded</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Species</span>, <span class='va'>train</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Inside the result of mold() are the prototype tibbles</span></span>
+<span class='r-in'><span class='co'># for the predictors and the outcomes</span></span>
+<span class='r-in'><span class='va'>ptype_pred</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>$</span><span class='va'>ptypes</span><span class='op'>$</span><span class='va'>predictors</span></span>
+<span class='r-in'><span class='va'>ptype_out</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>$</span><span class='va'>ptypes</span><span class='op'>$</span><span class='va'>outcomes</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># shrink() / scream()</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Pass the test data, along with a prototype, to</span></span>
+<span class='r-in'><span class='co'># shrink() to extract the prototype columns</span></span>
+<span class='r-in'><span class='va'>test_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Now pass that to scream() to perform validation checks</span></span>
+<span class='r-in'><span class='co'># If no warnings / errors are thrown, the checks were</span></span>
+<span class='r-in'><span class='co'># successful!</span></span>
+<span class='r-in'><span class='fu'>scream</span><span class='op'>(</span><span class='va'>test_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Outcomes</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># To also extract the outcomes, use the outcome prototype</span></span>
+<span class='r-in'><span class='va'>test_outcome</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>ptype_out</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>scream</span><span class='op'>(</span><span class='va'>test_outcome</span>, <span class='va'>ptype_out</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>         3.3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>         2.7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>         3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>         2.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>         3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>         3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>         2.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Casting</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># scream() uses vctrs::vec_cast() to intelligently convert</span></span>
+<span class='r-in'><span class='co'># new data to the prototype automatically. This means</span></span>
+<span class='r-in'><span class='co'># it can automatically perform certain conversions, like</span></span>
+<span class='r-in'><span class='co'># coercing character columns to factors.</span></span>
+<span class='r-in'><span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>test</span></span>
+<span class='r-in'><span class='va'>test2</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>test2</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>test2_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>scream</span><span class='op'>(</span><span class='va'>test2_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># It can also recover missing factor levels.</span></span>
+<span class='r-in'><span class='co'># For example, it is plausible that the test data only had the</span></span>
+<span class='r-in'><span class='co'># "virginica" level</span></span>
+<span class='r-in'><span class='va'>test3</span> <span class='op'>&lt;-</span> <span class='va'>test</span></span>
+<span class='r-in'><span class='va'>test3</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>test3</span><span class='op'>$</span><span class='va'>Species</span>, levels <span class='op'>=</span> <span class='st'>"virginica"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>test3_shrunk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test3</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>test3_fixed</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test3_shrunk</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># scream() recovered the missing levels</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test3_fixed</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "setosa"     "versicolor" "virginica" </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Novel levels</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># When novel levels with any data are present in `data`, the default</span></span>
+<span class='r-in'><span class='co'># is to coerce them to `NA` values with a warning.</span></span>
+<span class='r-in'><span class='va'>test4</span> <span class='op'>&lt;-</span> <span class='va'>test</span></span>
+<span class='r-in'><span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"new_level"</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>test4</span><span class='op'>$</span><span class='va'>Species</span>,</span>
+<span class='r-in'>  levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>, <span class='st'>"new_level"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>test4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='shrink.html'>shrink</a></span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Warning is thrown</span></span>
+<span class='r-in'><span class='va'>test4_removed</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Novel levels found in column 'Species': 'new_level'. The levels have been removed, and values have been coerced to 'NA'.</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Novel level is removed</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test4_removed</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "setosa"     "versicolor" "virginica" </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># No warning is thrown</span></span>
+<span class='r-in'><span class='va'>test4_kept</span> <span class='op'>&lt;-</span> <span class='fu'>scream</span><span class='op'>(</span><span class='va'>test4</span>, <span class='va'>ptype_pred</span>, allow_novel_levels <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Novel level is kept</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>test4_kept</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "setosa"     "versicolor" "virginica"  "new_level" </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

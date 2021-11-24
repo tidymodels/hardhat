@@ -218,7 +218,7 @@ only happens in the case where <code><a href='mold.html'>mold()</a></code> is ca
 a <em>vector</em> <code>y</code> value is supplied rather than a data frame or matrix. In that
 case, <code>y</code> is coerced to a data frame, and the automatic name <code>".outcome"</code> is
 added, and this is what is looked for in <code><a href='forge.html'>forge()</a></code>. If this happens, and the
-user tries to request outcomes using <code><a href='forge.html'>forge(..., outcomes = TRUE)</a></code> but
+user tries to request outcomes using <code>forge(..., outcomes = TRUE)</code> but
 the supplied <code>new_data</code> does not contain the required <code>".outcome"</code> column,
 a special error is thrown telling them what to do. See the examples!</p>
     <h2 class="hasAnchor" id="validation"><a class="anchor" href="#validation"></a>Validation</h2>
@@ -250,131 +250,138 @@ and provide your own validation function.</p></li>
 <code><a href='validate_predictors_are_numeric.html'>validate_predictors_are_numeric</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># ---------------------------------------------------------------------------</span>
-
-<span class='va'>original_names</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-
-<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
-<span class='va'>bad_test</span> <span class='op'>&lt;-</span> <span class='va'>test</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>]</span>
-
-<span class='co'># All good</span>
-<span class='fu'>check_column_names</span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>original_names</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $ok
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $missing_names
-#&gt; character(0)
-#&gt; </div><div class='input'>
-<span class='co'># Missing 2 columns</span>
-<span class='fu'>check_column_names</span><span class='op'>(</span><span class='va'>bad_test</span>, <span class='va'>original_names</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $ok
-#&gt; [1] FALSE
-#&gt; 
-#&gt; $missing_names
-#&gt; [1] "disp" "hp"  
-#&gt; </div><div class='input'>
-<span class='co'># Will error</span>
-<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>validate_column_names</span><span class='op'>(</span><span class='va'>bad_test</span>, <span class='va'>original_names</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Error : The following required columns are missing: 'disp', 'hp'.</div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Special error when `.outcome` is missing</span>
-
-<span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span>
-<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span>
-
-<span class='va'>train_x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>train</span>, select <span class='op'>=</span> <span class='op'>-</span><span class='va'>Species</span><span class='op'>)</span>
-<span class='va'>train_y</span> <span class='op'>&lt;-</span> <span class='va'>train</span><span class='op'>$</span><span class='va'>Species</span>
-
-<span class='co'># Here, y is a vector</span>
-<span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>train_x</span>, <span class='va'>train_y</span><span class='op'>)</span>
-
-<span class='co'># So the default column name is `".outcome"`</span>
-<span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 100 × 1</span>
-#&gt;    .outcome
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   
-#&gt; <span style='color: #BCBCBC;'> 1</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 2</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 3</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 4</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 5</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 6</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 7</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 8</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 9</span> setosa  
-#&gt; <span style='color: #BCBCBC;'>10</span> setosa  
-#&gt; <span style='color: #949494;'># … with 90 more rows</span></div><div class='input'>
-<span class='co'># It doesn't affect forge() normally</span>
-<span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 × 4</span>
-#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width
-#&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>          6.3         3.3          6           2.5
-#&gt; <span style='color: #BCBCBC;'> 2</span>          5.8         2.7          5.1         1.9
-#&gt; <span style='color: #BCBCBC;'> 3</span>          7.1         3            5.9         2.1
-#&gt; <span style='color: #BCBCBC;'> 4</span>          6.3         2.9          5.6         1.8
-#&gt; <span style='color: #BCBCBC;'> 5</span>          6.5         3            5.8         2.2
-#&gt; <span style='color: #BCBCBC;'> 6</span>          7.6         3            6.6         2.1
-#&gt; <span style='color: #BCBCBC;'> 7</span>          4.9         2.5          4.5         1.7
-#&gt; <span style='color: #BCBCBC;'> 8</span>          7.3         2.9          6.3         1.8
-#&gt; <span style='color: #BCBCBC;'> 9</span>          6.7         2.5          5.8         1.8
-#&gt; <span style='color: #BCBCBC;'>10</span>          7.2         3.6          6.1         2.5
-#&gt; <span style='color: #949494;'># … with 40 more rows</span>
-#&gt; 
-#&gt; $outcomes
-#&gt; NULL
-#&gt; 
-#&gt; $extras
-#&gt; NULL
-#&gt; </div><div class='input'>
-<span class='co'># But if the outcome is requested, and `".outcome"`</span>
-<span class='co'># is not present in `new_data`, an error is thrown</span>
-<span class='co'># with very specific instructions</span>
-<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Error : The following required columns are missing: '.outcome'.
-#&gt; 
-#&gt; (This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, '.outcome', containing the outcome.)</div><div class='input'>
-<span class='co'># To get this to work, just create an .outcome column in new_data</span>
-<span class='va'>test</span><span class='op'>$</span><span class='va'>.outcome</span> <span class='op'>&lt;-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>Species</span>
-
-<span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 × 4</span>
-#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width
-#&gt;           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>          6.3         3.3          6           2.5
-#&gt; <span style='color: #BCBCBC;'> 2</span>          5.8         2.7          5.1         1.9
-#&gt; <span style='color: #BCBCBC;'> 3</span>          7.1         3            5.9         2.1
-#&gt; <span style='color: #BCBCBC;'> 4</span>          6.3         2.9          5.6         1.8
-#&gt; <span style='color: #BCBCBC;'> 5</span>          6.5         3            5.8         2.2
-#&gt; <span style='color: #BCBCBC;'> 6</span>          7.6         3            6.6         2.1
-#&gt; <span style='color: #BCBCBC;'> 7</span>          4.9         2.5          4.5         1.7
-#&gt; <span style='color: #BCBCBC;'> 8</span>          7.3         2.9          6.3         1.8
-#&gt; <span style='color: #BCBCBC;'> 9</span>          6.7         2.5          5.8         1.8
-#&gt; <span style='color: #BCBCBC;'>10</span>          7.2         3.6          6.1         2.5
-#&gt; <span style='color: #949494;'># … with 40 more rows</span>
-#&gt; 
-#&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
-#&gt;    .outcome 
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
-#&gt; <span style='color: #BCBCBC;'> 1</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 2</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 3</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 4</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 5</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 6</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 7</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 8</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 9</span> virginica
-#&gt; <span style='color: #BCBCBC;'>10</span> virginica
-#&gt; <span style='color: #949494;'># … with 40 more rows</span>
-#&gt; 
-#&gt; $extras
-#&gt; NULL
-#&gt; </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>original_names</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span></span>
+<span class='r-in'><span class='va'>bad_test</span> <span class='op'>&lt;-</span> <span class='va'>test</span><span class='op'>[</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># All good</span></span>
+<span class='r-in'><span class='fu'>check_column_names</span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>original_names</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ok</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $missing_names</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> character(0)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Missing 2 columns</span></span>
+<span class='r-in'><span class='fu'>check_column_names</span><span class='op'>(</span><span class='va'>bad_test</span>, <span class='va'>original_names</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ok</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $missing_names</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "disp" "hp"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Will error</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>validate_column_names</span><span class='op'>(</span><span class='va'>bad_test</span>, <span class='va'>original_names</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Error : The following required columns are missing: 'disp', 'hp'.</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ---------------------------------------------------------------------------</span></span>
+<span class='r-in'><span class='co'># Special error when `.outcome` is missing</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span></span>
+<span class='r-in'><span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>train_x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>train</span>, select <span class='op'>=</span> <span class='op'>-</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>train_y</span> <span class='op'>&lt;-</span> <span class='va'>train</span><span class='op'>$</span><span class='va'>Species</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Here, y is a vector</span></span>
+<span class='r-in'><span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span><span class='va'>train_x</span>, <span class='va'>train_y</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># So the default column name is `".outcome"`</span></span>
+<span class='r-in'><span class='va'>processed</span><span class='op'>$</span><span class='va'>outcomes</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 100 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    .outcome</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 90 more rows</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># It doesn't affect forge() normally</span></span>
+<span class='r-in'><span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $predictors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>          6.3         3.3          6           2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>          5.8         2.7          5.1         1.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>          7.1         3            5.9         2.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>          6.3         2.9          5.6         1.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>          6.5         3            5.8         2.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>          7.6         3            6.6         2.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>          4.9         2.5          4.5         1.7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>          7.3         2.9          6.3         1.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>          6.7         2.5          5.8         1.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>          7.2         3.6          6.1         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outcomes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># But if the outcome is requested, and `".outcome"`</span></span>
+<span class='r-in'><span class='co'># is not present in `new_data`, an error is thrown</span></span>
+<span class='r-in'><span class='co'># with very specific instructions</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Error : The following required columns are missing: '.outcome'.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, '.outcome', containing the outcome.)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># To get this to work, just create an .outcome column in new_data</span></span>
+<span class='r-in'><span class='va'>test</span><span class='op'>$</span><span class='va'>.outcome</span> <span class='op'>&lt;-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>Species</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='forge.html'>forge</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $predictors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>          6.3         3.3          6           2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>          5.8         2.7          5.1         1.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>          7.1         3            5.9         2.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>          6.3         2.9          5.6         1.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>          6.5         3            5.8         2.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>          7.6         3            6.6         2.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>          4.9         2.5          4.5         1.7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>          7.3         2.9          6.3         1.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>          6.7         2.5          5.8         1.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>          7.2         3.6          6.1         2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outcomes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    .outcome </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

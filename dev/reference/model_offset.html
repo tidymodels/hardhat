@@ -208,44 +208,47 @@ of this inconsistency, columns named <code>"(offset)"</code> are <em>not</em> tr
 by <code>model_offset()</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
-
-<span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] 3.5 3.0 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 3.7 3.4 3.0 3.0 4.0 4.4 3.9 3.5
-#&gt;  [19] 3.8 3.8 3.4 3.7 3.6 3.3 3.4 3.0 3.4 3.5 3.4 3.2 3.1 3.4 4.1 4.2 3.1 3.2
-#&gt;  [37] 3.5 3.6 3.0 3.4 3.5 2.3 3.2 3.5 3.8 3.0 3.8 3.2 3.7 3.3 3.2 3.2 3.1 2.3
-#&gt;  [55] 2.8 2.8 3.3 2.4 2.9 2.7 2.0 3.0 2.2 2.9 2.9 3.1 3.0 2.7 2.2 2.5 3.2 2.8
-#&gt;  [73] 2.5 2.8 2.9 3.0 2.8 3.0 2.9 2.6 2.4 2.4 2.7 2.7 3.0 3.4 3.1 2.3 3.0 2.5
-#&gt;  [91] 2.6 3.0 2.6 2.3 2.7 3.0 2.9 2.9 2.5 2.8 3.3 2.7 3.0 2.9 3.0 3.0 2.5 2.9
-#&gt; [109] 2.5 3.6 3.2 2.7 3.0 2.5 2.8 3.2 3.0 3.8 2.6 2.2 3.2 2.8 2.8 2.7 3.3 3.2
-#&gt; [127] 2.8 3.0 2.8 3.0 2.8 3.8 2.8 2.8 2.6 3.0 3.4 3.1 3.0 3.1 3.1 3.1 2.7 3.2
-#&gt; [145] 3.3 3.0 2.5 3.0 3.4 3.0</div><div class='input'>
-<span class='va'>xx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
-
-<span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>xx</span><span class='op'>)</span>, <span class='va'>xx</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1]  8.6  7.9  7.9  7.7  8.6  9.3  8.0  8.4  7.3  8.0  9.1  8.2  7.8  7.3  9.8
-#&gt;  [16] 10.1  9.3  8.6  9.5  8.9  8.8  8.8  8.2  8.4  8.2  8.0  8.4  8.7  8.6  7.9
-#&gt;  [31]  7.9  8.8  9.3  9.7  8.0  8.2  9.0  8.5  7.4  8.5  8.5  6.8  7.6  8.5  8.9
-#&gt;  [46]  7.8  8.9  7.8  9.0  8.3 10.2  9.6 10.0  7.8  9.3  8.5  9.6  7.3  9.5  7.9
-#&gt;  [61]  7.0  8.9  8.2  9.0  8.5  9.8  8.6  8.5  8.4  8.1  9.1  8.9  8.8  8.9  9.3
-#&gt;  [76]  9.6  9.6  9.7  8.9  8.3  7.9  7.9  8.5  8.7  8.4  9.4  9.8  8.6  8.6  8.0
-#&gt;  [91]  8.1  9.1  8.4  7.3  8.3  8.7  8.6  9.1  7.6  8.5  9.6  8.5 10.1  9.2  9.5
-#&gt; [106] 10.6  7.4 10.2  9.2 10.8  9.7  9.1  9.8  8.2  8.6  9.6  9.5 11.5 10.3  8.2
-#&gt; [121] 10.1  8.4 10.5  9.0 10.0 10.4  9.0  9.1  9.2 10.2 10.2 11.7  9.2  9.1  8.7
-#&gt; [136] 10.7  9.7  9.5  9.0 10.0  9.8 10.0  8.5 10.0 10.0  9.7  8.8  9.5  9.6  8.9</div><div class='input'>
-<span class='co'># Problematic columns are caught with intuitive errors</span>
-<span class='kw'><a href='https://rdrr.io/r/base/conditions.html'>tryCatch</a></span><span class='op'>(</span>
-  expr <span class='op'>=</span> <span class='op'>{</span>
-    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Species</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
-    <span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='va'>x</span><span class='op'>)</span>
-  <span class='op'>}</span>,
-  error <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>e</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>e</span><span class='op'>$</span><span class='va'>message</span><span class='op'>)</span>
-  <span class='op'>}</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; Column, 'offset(Species)', is tagged as an offset, but is not numeric. All offsets must be numeric.</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   [1] 3.5 3.0 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 3.7 3.4 3.0 3.0 4.0 4.4 3.9 3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [19] 3.8 3.8 3.4 3.7 3.6 3.3 3.4 3.0 3.4 3.5 3.4 3.2 3.1 3.4 4.1 4.2 3.1 3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [37] 3.5 3.6 3.0 3.4 3.5 2.3 3.2 3.5 3.8 3.0 3.8 3.2 3.7 3.3 3.2 3.2 3.1 2.3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [55] 2.8 2.8 3.3 2.4 2.9 2.7 2.0 3.0 2.2 2.9 2.9 3.1 3.0 2.7 2.2 2.5 3.2 2.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [73] 2.5 2.8 2.9 3.0 2.8 3.0 2.9 2.6 2.4 2.4 2.7 2.7 3.0 3.4 3.1 2.3 3.0 2.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [91] 2.6 3.0 2.6 2.3 2.7 3.0 2.9 2.9 2.5 2.8 3.3 2.7 3.0 2.9 3.0 3.0 2.5 2.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [109] 2.5 3.6 3.2 2.7 3.0 2.5 2.8 3.2 3.0 3.8 2.6 2.2 3.2 2.8 2.8 2.7 3.3 3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [127] 2.8 3.0 2.8 3.0 2.8 3.8 2.8 2.8 2.6 3.0 3.4 3.1 3.0 3.1 3.1 3.1 2.7 3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [145] 3.3 3.0 2.5 3.0 3.4 3.0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>xx</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>xx</span><span class='op'>)</span>, <span class='va'>xx</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   [1]  8.6  7.9  7.9  7.7  8.6  9.3  8.0  8.4  7.3  8.0  9.1  8.2  7.8  7.3  9.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [16] 10.1  9.3  8.6  9.5  8.9  8.8  8.8  8.2  8.4  8.2  8.0  8.4  8.7  8.6  7.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [31]  7.9  8.8  9.3  9.7  8.0  8.2  9.0  8.5  7.4  8.5  8.5  6.8  7.6  8.5  8.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [46]  7.8  8.9  7.8  9.0  8.3 10.2  9.6 10.0  7.8  9.3  8.5  9.6  7.3  9.5  7.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [61]  7.0  8.9  8.2  9.0  8.5  9.8  8.6  8.5  8.4  8.1  9.1  8.9  8.8  8.9  9.3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [76]  9.6  9.6  9.7  8.9  8.3  7.9  7.9  8.5  8.7  8.4  9.4  9.8  8.6  8.6  8.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [91]  8.1  9.1  8.4  7.3  8.3  8.7  8.6  9.1  7.6  8.5  9.6  8.5 10.1  9.2  9.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [106] 10.6  7.4 10.2  9.2 10.8  9.7  9.1  9.8  8.2  8.6  9.6  9.5 11.5 10.3  8.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [121] 10.1  8.4 10.5  9.0 10.0 10.4  9.0  9.1  9.2 10.2 10.2 11.7  9.2  9.1  8.7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [136] 10.7  9.7  9.5  9.0 10.0  9.8 10.0  8.5 10.0 10.0  9.7  8.8  9.5  9.6  8.9</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Problematic columns are caught with intuitive errors</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/conditions.html'>tryCatch</a></span><span class='op'>(</span></span>
+<span class='r-in'>  expr <span class='op'>=</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame</a></span><span class='op'>(</span><span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/offset.html'>offset</a></span><span class='op'>(</span><span class='va'>Species</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'>model_offset</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/terms.html'>terms</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span>,</span>
+<span class='r-in'>  error <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>e</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>e</span><span class='op'>$</span><span class='va'>message</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Column, 'offset(Species)', is tagged as an offset, but is not numeric. All offsets must be numeric.</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

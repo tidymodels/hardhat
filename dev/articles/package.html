@@ -413,8 +413,8 @@
 <span class="co">#&gt; [4] "speciesGentoo"</span>
 
 <span class="co"># Same, but with a recipe</span>
-<span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">bill_length_mm</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html">step_log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">bill_length_mm</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html">step_log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html">step_dummy</a></span><span class="op">(</span><span class="va">species</span>, one_hot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu">simple_lm</span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguins</span><span class="op">)</span>
@@ -494,7 +494,7 @@
   
   <span class="va">coefs</span> <span class="op">&lt;-</span> <span class="va">object</span><span class="op">$</span><span class="va">coefs</span>
   
-  <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">predictors</span> <span class="op">%*%</span> <span class="va">coefs</span><span class="op">)</span>
+  <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">predictors</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">coefs</span><span class="op">)</span>
   
   <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spruce.html">spruce_numeric</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span>
   

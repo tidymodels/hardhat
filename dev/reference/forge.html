@@ -238,58 +238,59 @@ you need to preprocess the outcomes of a test set before computing
 performance.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># See the blueprint specific documentation linked above</span>
-<span class='co'># for various ways to call forge with different</span>
-<span class='co'># blueprints.</span>
-
-<span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span>
-<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span>
-
-<span class='co'># Formula</span>
-<span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Species</span>,
-  <span class='va'>train</span>,
-  blueprint <span class='op'>=</span> <span class='fu'><a href='default_formula_blueprint.html'>default_formula_blueprint</a></span><span class='op'>(</span>indicators <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='fu'>forge</span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
-#&gt;    Species  
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    
-#&gt; <span style='color: #BCBCBC;'> 1</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 2</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 3</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 4</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 5</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 6</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 7</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 8</span> virginica
-#&gt; <span style='color: #BCBCBC;'> 9</span> virginica
-#&gt; <span style='color: #BCBCBC;'>10</span> virginica
-#&gt; <span style='color: #949494;'># … with 40 more rows</span>
-#&gt; 
-#&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 50 × 1</span>
-#&gt;    `log(Sepal.Width)`
-#&gt;                 <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>              1.19 
-#&gt; <span style='color: #BCBCBC;'> 2</span>              0.993
-#&gt; <span style='color: #BCBCBC;'> 3</span>              1.10 
-#&gt; <span style='color: #BCBCBC;'> 4</span>              1.06 
-#&gt; <span style='color: #BCBCBC;'> 5</span>              1.10 
-#&gt; <span style='color: #BCBCBC;'> 6</span>              1.10 
-#&gt; <span style='color: #BCBCBC;'> 7</span>              0.916
-#&gt; <span style='color: #BCBCBC;'> 8</span>              1.06 
-#&gt; <span style='color: #BCBCBC;'> 9</span>              0.916
-#&gt; <span style='color: #BCBCBC;'>10</span>              1.28 
-#&gt; <span style='color: #949494;'># … with 40 more rows</span>
-#&gt; 
-#&gt; $extras
-#&gt; $extras$offset
-#&gt; NULL
-#&gt; 
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># See the blueprint specific documentation linked above</span></span>
+<span class='r-in'><span class='co'># for various ways to call forge with different</span></span>
+<span class='r-in'><span class='co'># blueprints.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>,<span class='op'>]</span></span>
+<span class='r-in'><span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='fl'>101</span><span class='op'>:</span><span class='fl'>150</span>,<span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Formula</span></span>
+<span class='r-in'><span class='va'>processed</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mold.html'>mold</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Species</span>,</span>
+<span class='r-in'>  <span class='va'>train</span>,</span>
+<span class='r-in'>  blueprint <span class='op'>=</span> <span class='fu'><a href='default_formula_blueprint.html'>default_formula_blueprint</a></span><span class='op'>(</span>indicators <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>forge</span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>processed</span><span class='op'>$</span><span class='va'>blueprint</span>, outcomes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $predictors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> virginica</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outcomes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 50 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    `log(Sepal.Width)`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>              1.19 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>              0.993</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>              1.10 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>              1.06 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>              1.10 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>              1.10 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>              0.916</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>              1.06 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>              0.916</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>              1.28 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 40 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras$offset</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

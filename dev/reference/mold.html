@@ -226,154 +226,157 @@ or a named list containing the extra information.</p></li>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># See the method specific documentation linked in Description</span>
-<span class='co'># for the details of each blueprint, and more examples.</span>
-
-<span class='co'># XY</span>
-<span class='fu'>mold</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span>, <span class='st'>"Sepal.Width"</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>, <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 150 × 1</span>
-#&gt;    Sepal.Width
-#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>         3.5
-#&gt; <span style='color: #BCBCBC;'> 2</span>         3  
-#&gt; <span style='color: #BCBCBC;'> 3</span>         3.2
-#&gt; <span style='color: #BCBCBC;'> 4</span>         3.1
-#&gt; <span style='color: #BCBCBC;'> 5</span>         3.6
-#&gt; <span style='color: #BCBCBC;'> 6</span>         3.9
-#&gt; <span style='color: #BCBCBC;'> 7</span>         3.4
-#&gt; <span style='color: #BCBCBC;'> 8</span>         3.4
-#&gt; <span style='color: #BCBCBC;'> 9</span>         2.9
-#&gt; <span style='color: #BCBCBC;'>10</span>         3.1
-#&gt; <span style='color: #949494;'># … with 140 more rows</span>
-#&gt; 
-#&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 150 × 1</span>
-#&gt;    .outcome
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   
-#&gt; <span style='color: #BCBCBC;'> 1</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 2</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 3</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 4</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 5</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 6</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 7</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 8</span> setosa  
-#&gt; <span style='color: #BCBCBC;'> 9</span> setosa  
-#&gt; <span style='color: #BCBCBC;'>10</span> setosa  
-#&gt; <span style='color: #949494;'># … with 140 more rows</span>
-#&gt; 
-#&gt; $blueprint
-#&gt; XY blueprint: 
-#&gt;  
-#&gt; # Predictors: 1 
-#&gt;   # Outcomes: 1 
-#&gt;    Intercept: FALSE 
-#&gt; Novel Levels: FALSE 
-#&gt;  Composition: tibble 
-#&gt; 
-#&gt; $extras
-#&gt; NULL
-#&gt; </div><div class='input'>
-<span class='co'># Formula</span>
-<span class='fu'>mold</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 150 × 1</span>
-#&gt;    Sepal.Width
-#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>         3.5
-#&gt; <span style='color: #BCBCBC;'> 2</span>         3  
-#&gt; <span style='color: #BCBCBC;'> 3</span>         3.2
-#&gt; <span style='color: #BCBCBC;'> 4</span>         3.1
-#&gt; <span style='color: #BCBCBC;'> 5</span>         3.6
-#&gt; <span style='color: #BCBCBC;'> 6</span>         3.9
-#&gt; <span style='color: #BCBCBC;'> 7</span>         3.4
-#&gt; <span style='color: #BCBCBC;'> 8</span>         3.4
-#&gt; <span style='color: #BCBCBC;'> 9</span>         2.9
-#&gt; <span style='color: #BCBCBC;'>10</span>         3.1
-#&gt; <span style='color: #949494;'># … with 140 more rows</span>
-#&gt; 
-#&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 150 × 1</span>
-#&gt;    Species
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>  
-#&gt; <span style='color: #BCBCBC;'> 1</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 2</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 3</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 4</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 5</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 6</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 7</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 8</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 9</span> setosa 
-#&gt; <span style='color: #BCBCBC;'>10</span> setosa 
-#&gt; <span style='color: #949494;'># … with 140 more rows</span>
-#&gt; 
-#&gt; $blueprint
-#&gt; Formula blueprint: 
-#&gt;  
-#&gt; # Predictors: 1 
-#&gt;   # Outcomes: 1 
-#&gt;    Intercept: FALSE 
-#&gt; Novel Levels: FALSE 
-#&gt;  Composition: tibble 
-#&gt;   Indicators: traditional 
-#&gt; 
-#&gt; $extras
-#&gt; $extras$offset
-#&gt; NULL
-#&gt; 
-#&gt; </div><div class='input'>
-<span class='co'># Recipe</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tidymodels/recipes'>recipes</a></span><span class='op'>)</span>
-<span class='fu'>mold</span><span class='op'>(</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $predictors
-#&gt; <span style='color: #949494;'># A tibble: 150 × 1</span>
-#&gt;    Sepal.Width
-#&gt;          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span>         3.5
-#&gt; <span style='color: #BCBCBC;'> 2</span>         3  
-#&gt; <span style='color: #BCBCBC;'> 3</span>         3.2
-#&gt; <span style='color: #BCBCBC;'> 4</span>         3.1
-#&gt; <span style='color: #BCBCBC;'> 5</span>         3.6
-#&gt; <span style='color: #BCBCBC;'> 6</span>         3.9
-#&gt; <span style='color: #BCBCBC;'> 7</span>         3.4
-#&gt; <span style='color: #BCBCBC;'> 8</span>         3.4
-#&gt; <span style='color: #BCBCBC;'> 9</span>         2.9
-#&gt; <span style='color: #BCBCBC;'>10</span>         3.1
-#&gt; <span style='color: #949494;'># … with 140 more rows</span>
-#&gt; 
-#&gt; $outcomes
-#&gt; <span style='color: #949494;'># A tibble: 150 × 1</span>
-#&gt;    Species
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>  
-#&gt; <span style='color: #BCBCBC;'> 1</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 2</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 3</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 4</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 5</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 6</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 7</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 8</span> setosa 
-#&gt; <span style='color: #BCBCBC;'> 9</span> setosa 
-#&gt; <span style='color: #BCBCBC;'>10</span> setosa 
-#&gt; <span style='color: #949494;'># … with 140 more rows</span>
-#&gt; 
-#&gt; $blueprint
-#&gt; Recipe blueprint: 
-#&gt;  
-#&gt; # Predictors: 1 
-#&gt;   # Outcomes: 1 
-#&gt;    Intercept: FALSE 
-#&gt; Novel Levels: FALSE 
-#&gt;  Composition: tibble 
-#&gt; 
-#&gt; $extras
-#&gt; $extras$roles
-#&gt; NULL
-#&gt; 
-#&gt; </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># See the method specific documentation linked in Description</span></span>
+<span class='r-in'><span class='co'># for the details of each blueprint, and more examples.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># XY</span></span>
+<span class='r-in'><span class='fu'>mold</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span>, <span class='st'>"Sepal.Width"</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>, <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $predictors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>         3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>         3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>         3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>         3.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>         2.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outcomes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    .outcome</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> setosa  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $blueprint</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> XY blueprint: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> # Predictors: 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   # Outcomes: 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Intercept: FALSE </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Novel Levels: FALSE </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Composition: tibble </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Formula</span></span>
+<span class='r-in'><span class='fu'>mold</span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $predictors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>         3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>         3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>         3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>         3.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>         2.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outcomes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $blueprint</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Formula blueprint: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> # Predictors: 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   # Outcomes: 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Intercept: FALSE </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Novel Levels: FALSE </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Composition: tibble </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Indicators: traditional </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras$offset</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Recipe</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tidymodels/recipes'>recipes</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>mold</span><span class='op'>(</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span>, <span class='va'>iris</span><span class='op'>)</span>, <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $predictors</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Sepal.Width</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span>         3.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span>         3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span>         3.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span>         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span>         3.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span>         3.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span>         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span>         3.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span>         2.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span>         3.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $outcomes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 150 × 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Species</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> setosa </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 140 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $blueprint</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Recipe blueprint: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> # Predictors: 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   # Outcomes: 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Intercept: FALSE </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Novel Levels: FALSE </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Composition: tibble </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $extras$roles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
