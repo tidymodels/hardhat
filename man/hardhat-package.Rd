@@ -8,14 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Building modeling packages is hard. A large amount
-    of effort generally goes into providing an implementation for a new
-    method that is efficient, fast, and correct, but often less emphasis
-    is put on the user interface. A good interface requires specialized
-    knowledge about S3 methods and formulas, which the average package
-    developer might not have.  The goal of 'hardhat' is to reduce the
-    burden around building new modeling packages by providing
-    functionality for preprocessing, predicting, and validating input.
+Building modeling packages is hard. A large amount of effort generally goes into providing an implementation for a new method that is efficient, fast, and correct, but often less emphasis is put on the user interface. A good interface requires specialized knowledge about S3 methods and formulas, which the average package developer might not have. The goal of 'hardhat' is to reduce the burden around building new modeling packages by providing functionality for preprocessing, predicting, and validating input.
 }
 \seealso{
 Useful links:
