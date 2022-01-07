@@ -5,6 +5,8 @@
 * Added `extract_parameter_dials()` and `extract_parameter_set_dials()` generics
   to extend the family of `extract_*()` generics.
 
+* Moved `tune()` from tune to hardhat.
+
 # hardhat 0.1.6
 
 * Added a new family of `extract_*()` S3 generics for extracting important
