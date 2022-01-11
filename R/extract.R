@@ -6,13 +6,13 @@
 #' workflows, and workflowsets, but the returned object is always the same.
 #'
 #' - `extract_fit_engine()` returns the engine specific fit embedded within
-#'   a parsnip model fit. For example, when using [parsnip::linear_reg()]
+#'   a parsnip model fit. For example, when using `parsnip::linear_reg()`
 #'   with the `"lm"` engine, this returns the underlying `lm` object.
 #'
 #' - `extract_fit_parsnip()` returns a parsnip model fit.
 #'
 #' - `extract_mold()` returns the preprocessed "mold" object returned
-#'   from [hardhat::mold()]. It contains information about the preprocessing,
+#'   from [mold()]. It contains information about the preprocessing,
 #'   including either the prepped recipe, the formula terms object, or
 #'   variable selectors.
 #'

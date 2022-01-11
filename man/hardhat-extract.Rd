@@ -42,7 +42,7 @@ objects. Methods are defined in other packages, such as tune,
 workflows, and workflowsets, but the returned object is always the same.
 \itemize{
 \item \code{extract_fit_engine()} returns the engine specific fit embedded within
-a parsnip model fit. For example, when using \code{\link[parsnip:linear_reg]{parsnip::linear_reg()}}
+a parsnip model fit. For example, when using \code{parsnip::linear_reg()}
 with the \code{"lm"} engine, this returns the underlying \code{lm} object.
 \item \code{extract_fit_parsnip()} returns a parsnip model fit.
 \item \code{extract_mold()} returns the preprocessed "mold" object returned
