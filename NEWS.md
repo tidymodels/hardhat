@@ -1,11 +1,11 @@
 # hardhat (development version)
 
+* Moved `tune()` from tune to hardhat (#181).
+
 * `mold()` no longer misinterprets `::` as an interaction term (#174).
 
 * Added `extract_parameter_dials()` and `extract_parameter_set_dials()` generics
   to extend the family of `extract_*()` generics.
-
-* Moved `tune()` from tune to hardhat.
 
 # hardhat 0.1.6
 
