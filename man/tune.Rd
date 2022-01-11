@@ -2,33 +2,34 @@
 % Please edit documentation in R/tune.R
 \name{tune}
 \alias{tune}
-\title{A placeholder function for argument values that are to be tuned.}
+\title{Mark arguments for tuning}
 \usage{
 tune(id = "")
 }
 \arguments{
 \item{id}{A single character value that can be used to differentiate
 parameters that are used in multiple places but have the same name, or if
-the user wants a note associated with the parameter.}
+the user wants to add a note to the specified parameter.}
 }
 \value{
-A call object that echos the user input.
+A call object that echos the user's input.
 }
 \description{
-\code{\link[=tune]{tune()}} is used when a parameter will be specified at a later date.
+\code{tune()} is an argument placeholder to be used with the recipes, parsnip, and
+tune packages. It marks recipes step and parsnip model arguments for tuning.
 }
 \examples{
 tune()
-class(tune())
 tune("your name here")
 
-# How `tune()` is used in practice:
-
+# In practice, `tune()` is used alongside recipes or parsnip to mark
+# specific arguments for tuning
 library(recipes)
+
 recipe(mpg ~ ., data = mtcars) \%>\%
   step_normalize(all_numeric_predictors()) \%>\%
   step_pca(all_numeric_predictors, num_comp = tune())
 }
 \seealso{
-\code{\link[tune:tune_grid]{tune::tune_grid()}}, \code{\link[tune:tune_bayes]{tune::tune_bayes()}}
+\code{tune::tune_grid()}, \code{tune::tune_bayes()}
 }
