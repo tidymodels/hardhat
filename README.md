@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Codecov test
-coverage](https://codecov.io/gh/tidymodels/hardhat/branch/main/graph/badge.svg)](https://codecov.io/gh/tidymodels/hardhat?branch=main)
+coverage](https://codecov.io/gh/tidymodels/hardhat/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/hardhat?branch=main)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/hardhat)](https://cran.r-project.org/package=hardhat)

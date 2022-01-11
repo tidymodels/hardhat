@@ -14,7 +14,7 @@
 #'
 #' The bug is described here:
 #'
-#' \url{https://r.789695.n4.nabble.com/delete-response-leaves-response-in-attribute-dataClasses-td4266902.html}
+#' \url{https://stat.ethz.ch/pipermail/r-devel/2012-January/062942.html}
 #'
 #' @examples
 #'
