@@ -162,7 +162,13 @@ required on the outcomes, then you are better off
 using a \code{\link[recipes:recipe]{recipes::recipe()}}.
 
 Global variables are \emph{not} allowed in the formula. An error will be thrown
-if they are included. All terms in the formula should come from \code{data}.
+if they are included. All terms in the formula should come from \code{data}. If
+you need to use inline functions in the formula, the safest way to do so is
+to prefix them with their package name, like \code{pkg::fn()}. This ensures that
+the function will always be available at \code{mold()} (fit) and \code{forge()}
+(prediction) time. That said, if the package is \emph{attached}
+(i.e. with \code{library()}), then you should be able to use the inline function
+without the prefix.
 
 By default, intercepts are \emph{not} included in the predictor output from the
 formula. To include an intercept, set

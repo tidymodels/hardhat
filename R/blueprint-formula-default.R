@@ -133,7 +133,13 @@
 #' using a [recipes::recipe()].
 #'
 #' Global variables are _not_ allowed in the formula. An error will be thrown
-#' if they are included. All terms in the formula should come from `data`.
+#' if they are included. All terms in the formula should come from `data`. If
+#' you need to use inline functions in the formula, the safest way to do so is
+#' to prefix them with their package name, like `pkg::fn()`. This ensures that
+#' the function will always be available at `mold()` (fit) and `forge()`
+#' (prediction) time. That said, if the package is _attached_
+#' (i.e. with `library()`), then you should be able to use the inline function
+#' without the prefix.
 #'
 #' By default, intercepts are _not_ included in the predictor output from the
 #' formula. To include an intercept, set
