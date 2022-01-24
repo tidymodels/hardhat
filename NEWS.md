@@ -1,15 +1,15 @@
 # hardhat (development version)
 
-* When `indicators = "none"`, `mold()` no longer misinterprets factor columns
-  as being part of an inline function if there is a similarly named non-factor
-  column also present (#182).
-
 * Moved `tune()` from tune to hardhat (#181).
-
-* `mold()` no longer misinterprets `::` as an interaction term (#174).
 
 * Added `extract_parameter_dials()` and `extract_parameter_set_dials()` generics
   to extend the family of `extract_*()` generics.
+
+* `mold()` no longer misinterprets `::` as an interaction term (#174).
+
+* When `indicators = "none"`, `mold()` no longer misinterprets factor columns
+  as being part of an inline function if there is a similarly named non-factor
+  column also present (#182).
 
 # hardhat 0.1.6
 
