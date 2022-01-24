@@ -115,7 +115,7 @@ test_that("can mold and not expand dummies", {
   expect_equal(x$blueprint$indicators, "none")
 })
 
-test_that("errors are thrown if `indicator = FALSE` and factor interactions exist", {
+test_that("errors are thrown if `indicator = 'none'` and factor interactions exist", {
 
   expect_error(
     mold(~ fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none")),
@@ -185,7 +185,7 @@ test_that("errors are thrown if `indicator = FALSE` and factor interactions exis
 
 })
 
-test_that("errors are thrown if `indicator = FALSE` and factors are used in inline functions", {
+test_that("errors are thrown if `indicator = 'none'` and factors are used in inline functions", {
 
   blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
 
@@ -216,6 +216,28 @@ test_that("errors are thrown if `indicator = FALSE` and factors are used in inli
     "'fac_1', 'fac_12'."
   )
 
+})
+
+test_that("`indicators = 'none'` doesn't error if a non-factor name regex-matches a factor name (#182)", {
+  df <- vctrs::data_frame(y = 1:2, x = factor(c("a", "b")), x2 = c(2, 3))
+
+  blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
+
+  out <- mold(y ~ x + x2, df, blueprint = blueprint_no_indicators)
+
+  expect_identical(out$predictors$x, df$x)
+  expect_identical(out$predictors$x2, df$x2)
+})
+
+test_that("`indicators = 'none'` doesn't error if an inline function regex-matches a factor name (#182)", {
+  df <- vctrs::data_frame(y = 1:2, identity = factor(c("a", "b")), x2 = c(2, 3))
+
+  blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
+
+  out <- mold(y ~ identity + identity(x2), df, blueprint = blueprint_no_indicators)
+
+  expect_identical(out$predictors$`identity(x2)`, df$x2)
+  expect_identical(out$predictors$identity, df$identity)
 })
 
 test_that("`indicators = 'none'` works fine in strange formulas", {
