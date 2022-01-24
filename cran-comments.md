@@ -4,6 +4,10 @@ We checked 15 reverse dependencies, comparing R CMD check results across CRAN an
 
  * We saw 0 new problems
  * We failed to check 0 packages
+ 
+## 0.2.0 Submission
+
+This submission adds a few more `extract_*()` generics, moves `tune()` to hardhat from tune, and fixes a few bugs.
 
 ## 0.1.6 Submission
 
