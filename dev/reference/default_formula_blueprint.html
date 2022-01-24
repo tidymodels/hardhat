@@ -233,7 +233,13 @@ possible, it is not recommended, and if a large amount of preprocessing is
 required on the outcomes, then you are better off
 using a <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code>.</p>
 <p>Global variables are <em>not</em> allowed in the formula. An error will be thrown
-if they are included. All terms in the formula should come from <code>data</code>.</p>
+if they are included. All terms in the formula should come from <code>data</code>. If
+you need to use inline functions in the formula, the safest way to do so is
+to prefix them with their package name, like <code>pkg::fn()</code>. This ensures that
+the function will always be available at <code><a href="mold.html">mold()</a></code> (fit) and <code><a href="forge.html">forge()</a></code>
+(prediction) time. That said, if the package is <em>attached</em>
+(i.e. with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>), then you should be able to use the inline function
+without the prefix.</p>
 <p>By default, intercepts are <em>not</em> included in the predictor output from the
 formula. To include an intercept, set
 <code>blueprint = default_formula_blueprint(intercept = TRUE)</code>. The rationale
