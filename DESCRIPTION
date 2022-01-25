@@ -1,26 +1,20 @@
 Package: hardhat
 Title: Construct Modeling Packages
 Version: 0.2.0.9000
-Authors@R: 
-    c(person(given = "Davis",
-             family = "Vaughan",
-             role = c("aut", "cre"),
-             email = "davis@rstudio.com"),
-      person(given = "Max",
-             family = "Kuhn",
-             role = "aut",
-             email = "max@rstudio.com"),
-      person(given = "RStudio",
-             role = c("cph", "fnd")))
+Authors@R: c(
+    person("Davis", "Vaughan", , "davis@rstudio.com", role = c("aut", "cre")),
+    person("Max", "Kuhn", , "max@rstudio.com", role = "aut"),
+    person("RStudio", role = c("cph", "fnd"))
+  )
 Maintainer: Davis Vaughan <davis@rstudio.com>
-Description: Building modeling packages is hard. A large amount
-    of effort generally goes into providing an implementation for a new
-    method that is efficient, fast, and correct, but often less emphasis
-    is put on the user interface. A good interface requires specialized
-    knowledge about S3 methods and formulas, which the average package
-    developer might not have.  The goal of 'hardhat' is to reduce the
-    burden around building new modeling packages by providing
-    functionality for preprocessing, predicting, and validating input.
+Description: Building modeling packages is hard. A large amount of effort
+    generally goes into providing an implementation for a new method that
+    is efficient, fast, and correct, but often less emphasis is put on the
+    user interface. A good interface requires specialized knowledge about
+    S3 methods and formulas, which the average package developer might not
+    have.  The goal of 'hardhat' is to reduce the burden around building
+    new modeling packages by providing functionality for preprocessing,
+    predicting, and validating input.
 License: MIT + file LICENSE
 URL: https://github.com/tidymodels/hardhat
 BugReports: https://github.com/tidymodels/hardhat/issues
@@ -43,10 +37,9 @@ Suggests:
     roxygen2,
     testthat (>= 2.1.0),
     usethis
-Config/Needs/website:
-    tidyverse/tidytemplate
 VignetteBuilder: 
     knitr
+Config/Needs/website: tidyverse/tidytemplate
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
