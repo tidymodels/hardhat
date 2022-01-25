@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 0.2.0
 
 * Moved `tune()` from tune to hardhat (#181).
 
