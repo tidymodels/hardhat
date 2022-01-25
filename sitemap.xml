@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://hardhat.tidymodels.org/404.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/articles/forge.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/articles/mold.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/articles/package.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/authors.html</loc>
+  </url>
+  <url>
     <loc>https://hardhat.tidymodels.org/index.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/news/index.html</loc>
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/reference/add_intercept_column.html</loc>
@@ -41,6 +74,9 @@
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/reference/hardhat-package.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/reference/index.html</loc>
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/reference/is_blueprint.html</loc>
@@ -88,6 +124,9 @@
     <loc>https://hardhat.tidymodels.org/reference/standardize.html</loc>
   </url>
   <url>
+    <loc>https://hardhat.tidymodels.org/reference/tune.html</loc>
+  </url>
+  <url>
     <loc>https://hardhat.tidymodels.org/reference/update_blueprint.html</loc>
   </url>
   <url>
@@ -113,14 +152,5 @@
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/reference/validate_predictors_are_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/articles/forge.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/articles/mold.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/articles/package.html</loc>
   </url>
 </urlset>

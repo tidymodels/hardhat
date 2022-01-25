@@ -35,6 +35,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -49,19 +51,13 @@
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
-          <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+          <span class="partof">part of <a href="https://github.com/tidymodels" class="external-link">tidymodels</a></span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -92,16 +88,17 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Release notes</li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/">Version 0.1.0</a>
+      <a href="https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/" class="external-link">Version 0.1.0</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="../news/index.html">Change log</a>
     </li>
   </ul>
 </li>
         <li>
-  <a href="https://github.com/tidymodels/hardhat/">
+  <a href="https://github.com/tidymodels/hardhat/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -116,13 +113,13 @@
 
       
 
-      </header><script src="mold_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Molding data for modeling</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/hardhat/blob/master/vignettes/mold.Rmd"><code>vignettes/mold.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/hardhat/blob/HEAD/vignettes/mold.Rmd" class="external-link"><code>vignettes/mold.Rmd</code></a></small>
       <div class="hidden name"><code>mold.Rmd</code></div>
 
     </div>
@@ -130,121 +127,121 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat">hardhat</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org">modeldata</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat" class="external-link">hardhat</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org" class="external-link">modeldata</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span>
-<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></code></pre></div>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>For most modeling functions, data must be accepted from the user in some format where the <em>outcomes</em> and <em>predictors</em> are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used, R provides some infrastructure for preprocessing the user input through the <code><a href="https://rdrr.io/r/stats/model.frame.html">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> functions.</p>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span>
+<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>For most modeling functions, data must be accepted from the user in some format where the <em>outcomes</em> and <em>predictors</em> are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used, R provides some infrastructure for preprocessing the user input through the <code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> functions.</p>
 <p>But the formula method is not the only way to specify modeling terms. There is also an XY method, where <code>x</code> and <code>y</code> are supplied directly, and, recently, a <code>recipe</code> implementation can be used to preprocess data using a set of sequential steps.</p>
 <p>As a developer, you likely won’t want to care about the details of how each of these methods work, but (hopefully) still want to provide all three of these interfaces for your shiny new model. <code><a href="../reference/mold.html">mold()</a></code> makes this easy on you, and takes care of the details of preprocessing user input from any of these methods.</p>
 <p>The intended use of <code><a href="../reference/mold.html">mold()</a></code> is to be called from your user facing modeling function. To see that in action, have a look at the vignette found here: <code><a href="../articles/package.html">vignette("package", "hardhat")</a></code>. The rest of this vignette will be focused on the various different ways to use <code><a href="../reference/mold.html">mold()</a></code>, but keep in mind that generally it is not used as an interactive function like this.</p>
 </div>
-<div id="a-first-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#a-first-example" class="anchor"></a>A First Example</h2>
-<p>The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: <code>outcomes ~ predictors</code>. Generally, as a developer, you have to then call <code><a href="https://rdrr.io/r/stats/model.frame.html">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> on this result to coerce it into the right format for ingestion into your model. <code><a href="../reference/mold.html">mold()</a></code> handles all of that for you.</p>
+<div class="section level2">
+<h2 id="a-first-example">A First Example<a class="anchor" aria-label="anchor" href="#a-first-example"></a>
+</h2>
+<p>The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: <code>outcomes ~ predictors</code>. Generally, as a developer, you have to then call <code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> on this result to coerce it into the right format for ingestion into your model. <code><a href="../reference/mold.html">mold()</a></code> handles all of that for you.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">penguin_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">penguin_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">penguin_form</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">penguin_form</span><span class="op">)</span>
 <span class="co">#&gt; [1] "predictors" "outcomes"   "blueprint"  "extras"</span></code></pre></div>
 <p><code><a href="../reference/mold.html">mold()</a></code> returns four things. Two of them are immediately useful, and are almost always applicable to the modeling implementation you have created. The first is the <code>predictors</code>, returned as a tibble. All of the required processing has been done for you, so you just have to focus on the modeling implementation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">penguin_form</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span>
 <span class="co">#&gt;    `log(bill_length_mm)`</span>
-<span class="co">#&gt;                    &lt;dbl&gt;</span>
-<span class="co">#&gt;  1                  3.67</span>
-<span class="co">#&gt;  2                  3.68</span>
-<span class="co">#&gt;  3                  3.70</span>
-<span class="co">#&gt;  4                  3.60</span>
-<span class="co">#&gt;  5                  3.67</span>
-<span class="co">#&gt;  6                  3.66</span>
-<span class="co">#&gt;  7                  3.67</span>
-<span class="co">#&gt;  8                  3.72</span>
-<span class="co">#&gt;  9                  3.65</span>
-<span class="co">#&gt; 10                  3.54</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>                  3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>                  3.68</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>                  3.70</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>                  3.60</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>                  3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>                  3.66</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>                  3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>                  3.72</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>                  3.65</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>                  3.54</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <p>Second is the <code>outcomes</code>, also returned as a tibble. While not used here, any processing on the outcome that was specified in the formula would also be done here.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">penguin_form</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span>
 <span class="co">#&gt;    body_mass_g</span>
-<span class="co">#&gt;          &lt;int&gt;</span>
-<span class="co">#&gt;  1        3750</span>
-<span class="co">#&gt;  2        3800</span>
-<span class="co">#&gt;  3        3250</span>
-<span class="co">#&gt;  4        3450</span>
-<span class="co">#&gt;  5        3650</span>
-<span class="co">#&gt;  6        3625</span>
-<span class="co">#&gt;  7        4675</span>
-<span class="co">#&gt;  8        3200</span>
-<span class="co">#&gt;  9        3800</span>
-<span class="co">#&gt; 10        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
-<p>Beyond these two elements, <code><a href="../reference/mold.html">mold()</a></code> also returns a slot for any <code>extras</code> that might have been generated during preprocessing, but aren’t specifically predictors or outcomes. For example, an <code><a href="https://rdrr.io/r/stats/offset.html">offset()</a></code> can be specified directly in the formula, but isn’t technically a predictor.</p>
+<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
+<p>Beyond these two elements, <code><a href="../reference/mold.html">mold()</a></code> also returns a slot for any <code>extras</code> that might have been generated during preprocessing, but aren’t specifically predictors or outcomes. For example, an <code><a href="https://rdrr.io/r/stats/offset.html" class="external-link">offset()</a></code> can be specified directly in the formula, but isn’t technically a predictor.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="va">bill_depth_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html" class="external-link">offset</a></span><span class="op">(</span><span class="va">bill_depth_mm</span><span class="op">)</span>, <span class="va">penguins</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span>
 <span class="co">#&gt; $offset</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span>
 <span class="co">#&gt;    .offset</span>
-<span class="co">#&gt;      &lt;dbl&gt;</span>
-<span class="co">#&gt;  1    18.7</span>
-<span class="co">#&gt;  2    17.4</span>
-<span class="co">#&gt;  3    18  </span>
-<span class="co">#&gt;  4    19.3</span>
-<span class="co">#&gt;  5    20.6</span>
-<span class="co">#&gt;  6    17.8</span>
-<span class="co">#&gt;  7    19.6</span>
-<span class="co">#&gt;  8    17.6</span>
-<span class="co">#&gt;  9    21.2</span>
-<span class="co">#&gt; 10    21.1</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>    18.7</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>    17.4</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>    18  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>    19.3</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>    20.6</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>    17.8</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>    19.6</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>    17.6</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>    21.2</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>    21.1</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <p>Lastly, <code><a href="../reference/mold.html">mold()</a></code> returns a very important object, the <code>blueprint</code>. This is responsible for knowing how to preprocess both the training data, and any new data at prediction time. As a developer, you should attach the <code>blueprint</code> to your model object before returning it to the user. For more information about this, see the package development vignette, <code><a href="../articles/package.html">vignette("package", "hardhat")</a></code>.</p>
 </div>
-<div id="blueprints" class="section level2">
-<h2 class="hasAnchor">
-<a href="#blueprints" class="anchor"></a>blueprints</h2>
+<div class="section level2">
+<h2 id="blueprints">blueprints<a class="anchor" aria-label="anchor" href="#blueprints"></a>
+</h2>
 <p>As mentioned above, one of the objects that <code><a href="../reference/mold.html">mold()</a></code> returns is an <code>blueprint</code> responsible for controlling the preprocessing. There are multiple blueprints available in <code>hardhat</code>, but when you call <code><a href="../reference/mold.html">mold()</a></code> one is selected automatically for you. The following two calls generate the same result, using the default formula blueprint.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span><span class="op">)</span>, 
   <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span>, blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span></code></pre></div>
 <p>Each blueprint can be tweaked to change how the processing for that interface occurs, and the options vary per blueprint. To understand why you’d ever want to do this, read on!</p>
 </div>
-<div id="formulas" class="section level2">
-<h2 class="hasAnchor">
-<a href="#formulas" class="anchor"></a>Formulas</h2>
+<div class="section level2">
+<h2 id="formulas">Formulas<a class="anchor" aria-label="anchor" href="#formulas"></a>
+</h2>
 <p>Now that you have a basic idea of how <code><a href="../reference/mold.html">mold()</a></code> works, we can talk about some of the more interesting functionality.</p>
-<div id="intercepts" class="section level3">
-<h3 class="hasAnchor">
-<a href="#intercepts" class="anchor"></a>Intercepts</h3>
+<div class="section level3">
+<h3 id="intercepts">Intercepts<a class="anchor" aria-label="anchor" href="#intercepts"></a>
+</h3>
 <p>One challenge with the standard formula interface is that, by default, intercepts are always implicitly present and are added to your data set automatically. This works great for the simple regression case. However, other models might either always require or never allow an intercept, but still use the formula interface because of its convenience (for example, <code>earth</code>). This has led to many ad hoc solutions that prevent the user from removing or adding an intercept.</p>
 <p>To get around this, <code><a href="../reference/mold.html">mold()</a></code> will never add an intercept by default. Instead, the addition of an intercept is completely controlled by the formula blueprint argument, <code>intercept</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">no_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">no_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span>
 <span class="co">#&gt;    body_mass_g</span>
-<span class="co">#&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1        3750</span>
-<span class="co">#&gt;  2        3800</span>
-<span class="co">#&gt;  3        3250</span>
-<span class="co">#&gt;  4        3450</span>
-<span class="co">#&gt;  5        3650</span>
-<span class="co">#&gt;  6        3625</span>
-<span class="co">#&gt;  7        4675</span>
-<span class="co">#&gt;  8        3200</span>
-<span class="co">#&gt;  9        3800</span>
-<span class="co">#&gt; 10        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
   <span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span>, 
@@ -252,20 +249,20 @@
 <span class="op">)</span>
 
 <span class="va">with_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 2</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 2</span></span>
 <span class="co">#&gt;    `(Intercept)` body_mass_g</span>
-<span class="co">#&gt;            &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt;  1             1        3750</span>
-<span class="co">#&gt;  2             1        3800</span>
-<span class="co">#&gt;  3             1        3250</span>
-<span class="co">#&gt;  4             1        3450</span>
-<span class="co">#&gt;  5             1        3650</span>
-<span class="co">#&gt;  6             1        3625</span>
-<span class="co">#&gt;  7             1        4675</span>
-<span class="co">#&gt;  8             1        3200</span>
-<span class="co">#&gt;  9             1        3800</span>
-<span class="co">#&gt; 10             1        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>             1        <span style="text-decoration: underline;">3</span>750</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>             1        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>             1        <span style="text-decoration: underline;">3</span>250</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>             1        <span style="text-decoration: underline;">3</span>450</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>             1        <span style="text-decoration: underline;">3</span>650</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>             1        <span style="text-decoration: underline;">3</span>625</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>             1        <span style="text-decoration: underline;">4</span>675</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1        <span style="text-decoration: underline;">3</span>200</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1        <span style="text-decoration: underline;">4</span>400</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <p>An error is thrown if an intercept removal term is specified:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">penguins</span><span class="op">)</span>
@@ -274,28 +271,28 @@
 <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="fl">0</span>, <span class="va">penguins</span><span class="op">)</span>
 <span class="co">#&gt; Error: `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></code></pre></div>
 </div>
-<div id="dummy-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dummy-variables" class="anchor"></a>Dummy variables</h3>
+<div class="section level3">
+<h3 id="dummy-variables">Dummy variables<a class="anchor" aria-label="anchor" href="#dummy-variables"></a>
+</h3>
 <p>One of the nice things about the formula interface is that it expands factors into dummy variable columns for you. Like intercepts, this is great…until it isn’t. For example, <code>ranger</code> fits a random forest, which can take factors directly, but still uses the formula notation. In this case, it would be great if the factor columns specified as predictors <em>weren’t</em> expanded. This is the job of the blueprint argument, <code>indicators</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">expanded_dummies</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 4</span></span>
 <span class="co">#&gt;    body_mass_g speciesAdelie speciesChinstrap speciesGentoo</span>
-<span class="co">#&gt;          &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1        3750             1                0             0</span>
-<span class="co">#&gt;  2        3800             1                0             0</span>
-<span class="co">#&gt;  3        3250             1                0             0</span>
-<span class="co">#&gt;  4        3450             1                0             0</span>
-<span class="co">#&gt;  5        3650             1                0             0</span>
-<span class="co">#&gt;  6        3625             1                0             0</span>
-<span class="co">#&gt;  7        4675             1                0             0</span>
-<span class="co">#&gt;  8        3200             1                0             0</span>
-<span class="co">#&gt;  9        3800             1                0             0</span>
-<span class="co">#&gt; 10        4400             1                0             0</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800             1                0             0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400             1                0             0</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">non_expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
   <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span>, 
@@ -303,20 +300,20 @@
 <span class="op">)</span>
 
 <span class="va">non_expanded_dummies</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 2</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 2</span></span>
 <span class="co">#&gt;    body_mass_g species</span>
-<span class="co">#&gt;          &lt;dbl&gt; &lt;fct&gt;  </span>
-<span class="co">#&gt;  1        3750 Adelie </span>
-<span class="co">#&gt;  2        3800 Adelie </span>
-<span class="co">#&gt;  3        3250 Adelie </span>
-<span class="co">#&gt;  4        3450 Adelie </span>
-<span class="co">#&gt;  5        3650 Adelie </span>
-<span class="co">#&gt;  6        3625 Adelie </span>
-<span class="co">#&gt;  7        4675 Adelie </span>
-<span class="co">#&gt;  8        3200 Adelie </span>
-<span class="co">#&gt;  9        3800 Adelie </span>
-<span class="co">#&gt; 10        4400 Adelie </span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800 Adelie </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400 Adelie </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <p><em>Note:</em> It’s worth mentioning that when an intercept is not present, base R expands the first factor completely into <code>K</code> indicator columns corresponding to the <code>K</code> levels present in that factor (also known as one-hot encoding). Subsequent columns are expanded into the more traditional <code>K - 1</code> columns. When an intercept is present, <code>K - 1</code> columns are generated for all factor predictors.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">k_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
@@ -326,22 +323,22 @@
   blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">k_cols</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">k_cols</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span>
 <span class="co">#&gt; [1] "speciesAdelie"    "speciesChinstrap" "speciesGentoo"</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">k_minus_one_cols</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">k_minus_one_cols</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span>
 <span class="co">#&gt; [1] "(Intercept)"      "speciesChinstrap" "speciesGentoo"</span></code></pre></div>
 </div>
-<div id="multivariate-outcomes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#multivariate-outcomes" class="anchor"></a>Multivariate outcomes</h3>
+<div class="section level3">
+<h3 id="multivariate-outcomes">Multivariate outcomes<a class="anchor" aria-label="anchor" href="#multivariate-outcomes"></a>
+</h3>
 <p>One of the other frustrating things about working with the formula method is that multivariate outcomes are a bit clunky to specify.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">.f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">body_mass_g</span>, <span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>
+<code class="sourceCode R"><span class="va">.f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">body_mass_g</span>, <span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>
 
-<span class="va">frame</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html">model.frame</a></span><span class="op">(</span><span class="va">.f</span>, <span class="va">penguins</span><span class="op">)</span>
+<span class="va">frame</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame</a></span><span class="op">(</span><span class="va">.f</span>, <span class="va">penguins</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">frame</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">frame</span><span class="op">)</span>
 <span class="co">#&gt;   cbind(body_mass_g, bill_length_mm).body_mass_g</span>
 <span class="co">#&gt; 1                                         3750.0</span>
 <span class="co">#&gt; 2                                         3800.0</span>
@@ -356,15 +353,15 @@
 <span class="co">#&gt; 4                                              36.7          19.3</span>
 <span class="co">#&gt; 5                                              39.3          20.6</span>
 <span class="co">#&gt; 6                                              38.9          17.8</span></code></pre></div>
-<p>This might look like 3 columns, but it is actually 2, where the first column is named <code><a href="https://rdrr.io/r/base/cbind.html">cbind(body_mass_g, bill_length_mm)</a></code>, and it is actually a matrix with 2 columns, <code>body_mass_g</code> and <code>bill_length_mm</code> inside it.</p>
+<p>This might look like 3 columns, but it is actually 2, where the first column is named <code>cbind(body_mass_g, bill_length_mm)</code>, and it is actually a matrix with 2 columns, <code>body_mass_g</code> and <code>bill_length_mm</code> inside it.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">frame</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">frame</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">`cbind(body_mass_g, bill_length_mm)`</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">`cbind(body_mass_g, bill_length_mm)`</span><span class="op">)</span>
 <span class="co">#&gt; [1] "matrix" "array"</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">`cbind(body_mass_g, bill_length_mm)`</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">`cbind(body_mass_g, bill_length_mm)`</span><span class="op">)</span>
 <span class="co">#&gt;      body_mass_g bill_length_mm</span>
 <span class="co">#&gt; [1,]        3750           39.1</span>
 <span class="co">#&gt; [2,]        3800           39.5</span>
@@ -374,151 +371,151 @@
 <span class="co">#&gt; [6,]        3625           38.9</span></code></pre></div>
 <p>The default formula blueprint used with <code><a href="../reference/mold.html">mold()</a></code> allows you to specify multiple outcomes like you specify multiple predictors. You can even do inline transformations of each outcome, although if you are doing very much of that, I’d advise using a recipe instead. <code>outcomes</code> then holds the two outcomes columns.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">multivariate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">multivariate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">multivariate</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 2</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 2</span></span>
 <span class="co">#&gt;    body_mass_g `log(bill_length_mm)`</span>
-<span class="co">#&gt;          &lt;int&gt;                 &lt;dbl&gt;</span>
-<span class="co">#&gt;  1        3750                  3.67</span>
-<span class="co">#&gt;  2        3800                  3.68</span>
-<span class="co">#&gt;  3        3250                  3.70</span>
-<span class="co">#&gt;  4        3450                  3.60</span>
-<span class="co">#&gt;  5        3650                  3.67</span>
-<span class="co">#&gt;  6        3625                  3.66</span>
-<span class="co">#&gt;  7        4675                  3.67</span>
-<span class="co">#&gt;  8        3200                  3.72</span>
-<span class="co">#&gt;  9        3800                  3.65</span>
-<span class="co">#&gt; 10        4400                  3.54</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750                  3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800                  3.68</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250                  3.70</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450                  3.60</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650                  3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625                  3.66</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675                  3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200                  3.72</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800                  3.65</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400                  3.54</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 </div>
 </div>
-<div id="xy" class="section level2">
-<h2 class="hasAnchor">
-<a href="#xy" class="anchor"></a>XY</h2>
+<div class="section level2">
+<h2 id="xy">XY<a class="anchor" aria-label="anchor" href="#xy"></a>
+</h2>
 <p>The second interface is the XY interface, useful when the predictors and outcomes are specified separately.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">body_mass_g</span><span class="op">)</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span>  <span class="va">body_mass_g</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">body_mass_g</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span>  <span class="va">body_mass_g</span><span class="op">)</span>
 
 <span class="va">penguin_xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 
 <span class="va">penguin_xy</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 6</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 6</span></span>
 <span class="co">#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm sex   </span>
-<span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt; &lt;fct&gt; </span>
-<span class="co">#&gt;  1 Adelie  Torgersen           39.1          18.7               181 male  </span>
-<span class="co">#&gt;  2 Adelie  Torgersen           39.5          17.4               186 female</span>
-<span class="co">#&gt;  3 Adelie  Torgersen           40.3          18                 195 female</span>
-<span class="co">#&gt;  4 Adelie  Torgersen           36.7          19.3               193 female</span>
-<span class="co">#&gt;  5 Adelie  Torgersen           39.3          20.6               190 male  </span>
-<span class="co">#&gt;  6 Adelie  Torgersen           38.9          17.8               181 female</span>
-<span class="co">#&gt;  7 Adelie  Torgersen           39.2          19.6               195 male  </span>
-<span class="co">#&gt;  8 Adelie  Torgersen           41.1          17.6               182 female</span>
-<span class="co">#&gt;  9 Adelie  Torgersen           38.6          21.2               191 male  </span>
-<span class="co">#&gt; 10 Adelie  Torgersen           34.6          21.1               198 male  </span>
-<span class="co">#&gt; # … with 323 more rows</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Adelie  Torgersen           39.1          18.7               181 male  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Adelie  Torgersen           39.5          17.4               186 female</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Adelie  Torgersen           40.3          18                 195 female</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Adelie  Torgersen           36.7          19.3               193 female</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Adelie  Torgersen           39.3          20.6               190 male  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Adelie  Torgersen           38.9          17.8               181 female</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Adelie  Torgersen           39.2          19.6               195 male  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Adelie  Torgersen           41.1          17.6               182 female</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Adelie  Torgersen           38.6          21.2               191 male  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Adelie  Torgersen           34.6          21.1               198 male  </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span>
 
 <span class="va">penguin_xy</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span>
 <span class="co">#&gt;    body_mass_g</span>
-<span class="co">#&gt;          &lt;int&gt;</span>
-<span class="co">#&gt;  1        3750</span>
-<span class="co">#&gt;  2        3800</span>
-<span class="co">#&gt;  3        3250</span>
-<span class="co">#&gt;  4        3450</span>
-<span class="co">#&gt;  5        3650</span>
-<span class="co">#&gt;  6        3625</span>
-<span class="co">#&gt;  7        4675</span>
-<span class="co">#&gt;  8        3200</span>
-<span class="co">#&gt;  9        3800</span>
-<span class="co">#&gt; 10        4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <p>This interface doesn’t do too much in the way of preprocessing, but it does let you specify an <code>intercept</code> in the blueprint specific arguments. Rather than <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code>, this uses the <code><a href="../reference/default_xy_blueprint.html">default_xy_blueprint()</a></code>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">xy_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">xy_with_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 7</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 7</span></span>
 <span class="co">#&gt;    `(Intercept)` species island    bill_length_mm bill_depth_mm flipper_length_…</span>
-<span class="co">#&gt;            &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;</span>
-<span class="co">#&gt;  1             1 Adelie  Torgersen           39.1          18.7              181</span>
-<span class="co">#&gt;  2             1 Adelie  Torgersen           39.5          17.4              186</span>
-<span class="co">#&gt;  3             1 Adelie  Torgersen           40.3          18                195</span>
-<span class="co">#&gt;  4             1 Adelie  Torgersen           36.7          19.3              193</span>
-<span class="co">#&gt;  5             1 Adelie  Torgersen           39.3          20.6              190</span>
-<span class="co">#&gt;  6             1 Adelie  Torgersen           38.9          17.8              181</span>
-<span class="co">#&gt;  7             1 Adelie  Torgersen           39.2          19.6              195</span>
-<span class="co">#&gt;  8             1 Adelie  Torgersen           41.1          17.6              182</span>
-<span class="co">#&gt;  9             1 Adelie  Torgersen           38.6          21.2              191</span>
-<span class="co">#&gt; 10             1 Adelie  Torgersen           34.6          21.1              198</span>
-<span class="co">#&gt; # … with 323 more rows, and 1 more variable: sex &lt;fct&gt;</span></code></pre></div>
-<div id="vector-outcomes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#vector-outcomes" class="anchor"></a>Vector outcomes</h3>
+<span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>             1 Adelie  Torgersen           39.1          18.7              181</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>             1 Adelie  Torgersen           39.5          17.4              186</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>             1 Adelie  Torgersen           40.3          18                195</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>             1 Adelie  Torgersen           36.7          19.3              193</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>             1 Adelie  Torgersen           39.3          20.6              190</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>             1 Adelie  Torgersen           38.9          17.8              181</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>             1 Adelie  Torgersen           39.2          19.6              195</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1 Adelie  Torgersen           41.1          17.6              182</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1 Adelie  Torgersen           38.6          21.2              191</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1 Adelie  Torgersen           34.6          21.1              198</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows, and 1 more variable: sex &lt;fct&gt;</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="vector-outcomes">Vector outcomes<a class="anchor" aria-label="anchor" href="#vector-outcomes"></a>
+</h3>
 <p><code>y</code> is a bit special in the XY interface, because in the univariate case users might expect to be able to pass a vector, a 1 column data frame, or a matrix. <code><a href="../reference/mold.html">mold()</a></code> is prepared for all of those cases, but the vector case requires special attention. To be consistent with all of the other <code><a href="../reference/mold.html">mold()</a></code> interfaces, the <code>outcomes</code> slot of the return value should be a tibble. To achieve this when <code>y</code> is supplied as a vector, a default column name is created, <code>".outcome"</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">$</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span>
 <span class="co">#&gt;    .outcome</span>
-<span class="co">#&gt;       &lt;int&gt;</span>
-<span class="co">#&gt;  1     3750</span>
-<span class="co">#&gt;  2     3800</span>
-<span class="co">#&gt;  3     3250</span>
-<span class="co">#&gt;  4     3450</span>
-<span class="co">#&gt;  5     3650</span>
-<span class="co">#&gt;  6     3625</span>
-<span class="co">#&gt;  7     4675</span>
-<span class="co">#&gt;  8     3200</span>
-<span class="co">#&gt;  9     3800</span>
-<span class="co">#&gt; 10     4400</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     <span style="text-decoration: underline;">3</span>750</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     <span style="text-decoration: underline;">3</span>250</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     <span style="text-decoration: underline;">3</span>450</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     <span style="text-decoration: underline;">3</span>650</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     <span style="text-decoration: underline;">3</span>625</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     <span style="text-decoration: underline;">4</span>675</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     <span style="text-decoration: underline;">3</span>200</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     <span style="text-decoration: underline;">3</span>800</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     <span style="text-decoration: underline;">4</span>400</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 </div>
 </div>
-<div id="recipe" class="section level2">
-<h2 class="hasAnchor">
-<a href="#recipe" class="anchor"></a>Recipe</h2>
-<p>The last of the three interfaces is the relatively new recipes interface. The <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> knows how to <code><a href="https://recipes.tidymodels.org/reference/prep.html">prep()</a></code> your recipe, and <code><a href="https://recipes.tidymodels.org/reference/juice.html">juice()</a></code> it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.</p>
+<div class="section level2">
+<h2 id="recipe">Recipe<a class="anchor" aria-label="anchor" href="#recipe"></a>
+</h2>
+<p>The last of the three interfaces is the relatively new recipes interface. The <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> knows how to <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> your recipe, and <code><a href="https://recipes.tidymodels.org/reference/juice.html" class="external-link">juice()</a></code> it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span>
 
-<span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">species</span> <span class="op">+</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html">step_log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span>
+<span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">species</span> <span class="op">+</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span>
 
 <span class="va">penguin_recipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 3</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 3</span></span>
 <span class="co">#&gt;    bill_depth_mm species_Chinstrap species_Gentoo</span>
-<span class="co">#&gt;            &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1          18.7                 0              0</span>
-<span class="co">#&gt;  2          17.4                 0              0</span>
-<span class="co">#&gt;  3          18                   0              0</span>
-<span class="co">#&gt;  4          19.3                 0              0</span>
-<span class="co">#&gt;  5          20.6                 0              0</span>
-<span class="co">#&gt;  6          17.8                 0              0</span>
-<span class="co">#&gt;  7          19.6                 0              0</span>
-<span class="co">#&gt;  8          17.6                 0              0</span>
-<span class="co">#&gt;  9          21.2                 0              0</span>
-<span class="co">#&gt; 10          21.1                 0              0</span>
-<span class="co">#&gt; # … with 323 more rows</span>
+<span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>          18.7                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>          17.4                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>          18                   0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>          19.3                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>          20.6                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>          17.8                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>          19.6                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>          17.6                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>          21.2                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>          21.1                 0              0</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span>
 
 <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; # A tibble: 333 x 1</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span>
 <span class="co">#&gt;    bill_length_mm</span>
-<span class="co">#&gt;             &lt;dbl&gt;</span>
-<span class="co">#&gt;  1           3.67</span>
-<span class="co">#&gt;  2           3.68</span>
-<span class="co">#&gt;  3           3.70</span>
-<span class="co">#&gt;  4           3.60</span>
-<span class="co">#&gt;  5           3.67</span>
-<span class="co">#&gt;  6           3.66</span>
-<span class="co">#&gt;  7           3.67</span>
-<span class="co">#&gt;  8           3.72</span>
-<span class="co">#&gt;  9           3.65</span>
-<span class="co">#&gt; 10           3.54</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           3.68</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           3.70</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           3.60</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           3.66</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           3.67</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           3.72</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           3.65</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           3.54</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 <p>The only special thing you can tweak with the recipe blueprint is whether or not an intercept is added.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">recipe_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
@@ -527,20 +524,20 @@
 <span class="op">)</span>
 
 <span class="va">recipe_with_intercept</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; # A tibble: 333 x 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 4</span></span>
 <span class="co">#&gt;    `(Intercept)` bill_depth_mm species_Chinstrap species_Gentoo</span>
-<span class="co">#&gt;            &lt;int&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1             1          18.7                 0              0</span>
-<span class="co">#&gt;  2             1          17.4                 0              0</span>
-<span class="co">#&gt;  3             1          18                   0              0</span>
-<span class="co">#&gt;  4             1          19.3                 0              0</span>
-<span class="co">#&gt;  5             1          20.6                 0              0</span>
-<span class="co">#&gt;  6             1          17.8                 0              0</span>
-<span class="co">#&gt;  7             1          19.6                 0              0</span>
-<span class="co">#&gt;  8             1          17.6                 0              0</span>
-<span class="co">#&gt;  9             1          21.2                 0              0</span>
-<span class="co">#&gt; 10             1          21.1                 0              0</span>
-<span class="co">#&gt; # … with 323 more rows</span></code></pre></div>
+<span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>             1          18.7                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>             1          17.4                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>             1          18                   0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>             1          19.3                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>             1          20.6                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>             1          17.8                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>             1          19.6                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1          17.6                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1          21.2                 0              0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1          21.1                 0              0</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></code></pre></div>
 </div>
   </div>
 
@@ -560,8 +557,8 @@
 
 <div class="author">
   <p>
-    Developed by Davis Vaughan, Max Kuhn.
-    Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
+    Developed by .
+    Site built by <a href="https://pkgdown.r-lib.org" class="external-link">pkgdown</a>.
   </p>
 </div>
 
@@ -570,6 +567,8 @@
 
   
 
+
+  
 
   </body>
 </html>

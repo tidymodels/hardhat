@@ -42,6 +42,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -56,19 +58,13 @@
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="index.html">hardhat</a>
         <div class="info hidden-xs hidden-sm">
-          <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+          <span class="partof">part of <a href="https://github.com/tidymodels" class="external-link">tidymodels</a></span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -99,16 +95,17 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Release notes</li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/">Version 0.1.0</a>
+      <a href="https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/" class="external-link">Version 0.1.0</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="news/index.html">Change log</a>
     </li>
   </ul>
 </li>
         <li>
-  <a href="https://github.com/tidymodels/hardhat/">
+  <a href="https://github.com/tidymodels/hardhat/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -125,57 +122,57 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="hardhat-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#hardhat-" class="anchor"></a>hardhat <a href="https://hardhat.tidymodels.org"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<div class="section level1">
+<div class="page-header"><h1 id="hardhat-">hardhat <a href="https://hardhat.tidymodels.org"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a class="anchor" aria-label="anchor" href="#hardhat-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>hardhat is a <em>developer focused</em> package designed to ease the creation of new modeling packages, while simultaneously promoting good R modeling package standards as laid out by the set of opinionated <a href="https://tidymodels.github.io/model-implementation-principles/">Conventions for R Modeling Packages</a>.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>hardhat is a <em>developer focused</em> package designed to ease the creation of new modeling packages, while simultaneously promoting good R modeling package standards as laid out by the set of opinionated <a href="https://tidymodels.github.io/model-implementation-principles/" class="external-link">Conventions for R Modeling Packages</a>.</p>
 <p>hardhat has four main goals:</p>
 <ul>
 <li><p>Easily, consistently, and robustly preprocess data at fit time and prediction time with <code><a href="reference/mold.html">mold()</a></code> and <code><a href="reference/forge.html">forge()</a></code>.</p></li>
 <li><p>Provide one source of truth for common input validation functions, such as checking if new data at prediction time contains the same required columns used at fit time.</p></li>
-<li><p>Provide extra utility functions for additional common tasks, such as adding intercept columns, standardizing <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> output, and extracting valuable class and factor level information from the predictors.</p></li>
-<li><p>Reimagine the base R preprocessing infrastructure of <code><a href="https://rdrr.io/r/stats/model.matrix.html">stats::model.matrix()</a></code> and <code><a href="https://rdrr.io/r/stats/model.frame.html">stats::model.frame()</a></code> using the stricter approaches found in <code><a href="reference/model_matrix.html">model_matrix()</a></code> and <code><a href="reference/model_frame.html">model_frame()</a></code>.</p></li>
+<li><p>Provide extra utility functions for additional common tasks, such as adding intercept columns, standardizing <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> output, and extracting valuable class and factor level information from the predictors.</p></li>
+<li><p>Reimagine the base R preprocessing infrastructure of <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">stats::model.matrix()</a></code> and <code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">stats::model.frame()</a></code> using the stricter approaches found in <code><a href="reference/model_matrix.html">model_matrix()</a></code> and <code><a href="reference/model_frame.html">model_frame()</a></code>.</p></li>
 </ul>
 <p>The idea is to reduce the burden of creating a good modeling interface as much as possible, and instead let the package developer focus on writing the core implementation of their new model. This benefits not only the developer, but also the user of the modeling package, as the standardization allows users to build a set of “expectations” around what any modeling function should return, and how they should interact with it.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of hardhat from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of hardhat from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"hardhat"</span><span class="op">)</span></code></pre></div>
-<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hardhat"</span><span class="op">)</span></code></pre></div>
+<p>And the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"tidymodels/hardhat"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tidymodels/hardhat"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="learning-more" class="section level2">
-<h2 class="hasAnchor">
-<a href="#learning-more" class="anchor"></a>Learning more</h2>
+<div class="section level2">
+<h2 id="learning-more">Learning more<a class="anchor" aria-label="anchor" href="#learning-more"></a>
+</h2>
 <p>To learn about how to use hardhat, check out the vignettes:</p>
 <ul>
 <li><p><code><a href="articles/mold.html">vignette("mold", "hardhat")</a></code>: Learn how to preprocess data at fit time with <code><a href="reference/mold.html">mold()</a></code>.</p></li>
 <li><p><code><a href="articles/forge.html">vignette("forge", "hardhat")</a></code>: Learn how to preprocess new data at prediction time with <code><a href="reference/forge.html">forge()</a></code>.</p></li>
 <li><p><code><a href="articles/package.html">vignette("package", "hardhat")</a></code>: Learn how to use <code><a href="reference/mold.html">mold()</a></code> and <code><a href="reference/forge.html">forge()</a></code> to help in creating a new modeling package.</p></li>
 </ul>
-<p>You can also watch <a href="https://github.com/topepo">Max Kuhn</a> discuss how to use hardhat to build a new modeling package from scratch at the XI Jornadas de Usuarios de R conference <a href="https://canal.uned.es/video/5dd25b9f5578f275e407dd88">here</a>.</p>
-<p><a href="https://canal.uned.es/video/5dd25b9f5578f275e407dd88"><img src="https://i.imgur.com/XKIZfWd.png"></a></p>
+<p>You can also watch <a href="https://github.com/topepo" class="external-link">Max Kuhn</a> discuss how to use hardhat to build a new modeling package from scratch at the XI Jornadas de Usuarios de R conference <a href="https://canal.uned.es/video/5dd25b9f5578f275e407dd88" class="external-link">here</a>.</p>
+<p><a href="https://canal.uned.es/video/5dd25b9f5578f275e407dd88" class="external-link"><img src="https://i.imgur.com/XKIZfWd.png"></a></p>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>This project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>This project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 <ul>
-<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://community.rstudio.com/new-topic?category_id=15&amp;tags=tidymodels,question">post on RStudio Community</a>.</p></li>
-<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/hardhat/issues">submit an issue</a>.</p></li>
-<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
-<li><p>Check out further details on <a href="https://www.tidymodels.org/contribute/">contributing guidelines for tidymodels packages</a> and <a href="https://www.tidymodels.org/help/">how to get help</a>.</p></li>
+<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://community.rstudio.com/new-topic?category_id=15&amp;tags=tidymodels,question" class="external-link">post on RStudio Community</a>.</p></li>
+<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/hardhat/issues" class="external-link">submit an issue</a>.</p></li>
+<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html" class="external-link">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
+<li><p>Check out further details on <a href="https://www.tidymodels.org/contribute/" class="external-link">contributing guidelines for tidymodels packages</a> and <a href="https://www.tidymodels.org/help/" class="external-link">how to get help</a>.</p></li>
 </ul>
 </div>
 </div>
@@ -183,49 +180,57 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=hardhat">https://​cloud.r-project.org/​package=hardhat</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/tidymodels/hardhat/">https://​github.com/​tidymodels/​hardhat/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/tidymodels/hardhat/issues">https://​github.com/​tidymodels/​hardhat/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=hardhat" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/tidymodels/hardhat/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/tidymodels/hardhat/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Davis Vaughan <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Max Kuhn <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing hardhat</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://codecov.io/gh/tidymodels/hardhat?branch=master"><img src="https://codecov.io/gh/tidymodels/hardhat/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://cran.r-project.org/package=hardhat"><img src="https://www.r-pkg.org/badges/version/hardhat" alt="CRAN status"></a></li>
-<li><a href="https://github.com/tidymodels/hardhat/actions"><img src="https://github.com/tidymodels/hardhat/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li>Davis Vaughan <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Max Kuhn <br><small class="roles"> Author </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://app.codecov.io/gh/tidymodels/hardhat?branch=main" class="external-link"><img src="https://codecov.io/gh/tidymodels/hardhat/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="lifecycle"></a></li>
+<li><a href="https://cran.r-project.org/package=hardhat" class="external-link"><img src="https://www.r-pkg.org/badges/version/hardhat" alt="CRAN status"></a></li>
+<li><a href="https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
@@ -235,8 +240,8 @@
 
 <div class="author">
   <p>
-    Developed by Davis Vaughan, Max Kuhn.
-    Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
+    Developed by .
+    Site built by <a href="https://pkgdown.r-lib.org" class="external-link">pkgdown</a>.
   </p>
 </div>
 
@@ -245,6 +250,8 @@
 
   
 
+
+  
 
   </body>
 </html>
