@@ -11,7 +11,7 @@ Authors@R:
              role = "aut",
              email = "max@rstudio.com"),
       person(given = "RStudio",
-             role = "cph"))
+             role = c("cph", "fnd")))
 Maintainer: Davis Vaughan <davis@rstudio.com>
 Description: Building modeling packages is hard. A large amount
     of effort generally goes into providing an implementation for a new
