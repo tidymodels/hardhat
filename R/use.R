@@ -73,10 +73,13 @@ create_modeling_package <- function(path,
   use_modeling_deps()
   use_modeling_files_impl(model, prompt_document = FALSE)
 
+  # Use the same option as used by the usethis `ui_*()` family
+  quiet <- getOption("usethis.quiet", default = FALSE)
+
   # Only auto-document when creating _new_ packages
   # Must explicitly set the pkg path
   usethis::ui_info("Running {usethis::ui_code('devtools::document()')}")
-  devtools::document(pkg = usethis::proj_get())
+  devtools::document(pkg = usethis::proj_get(), quiet = quiet)
   ui_blank_line()
 
   # copied from create_package()
