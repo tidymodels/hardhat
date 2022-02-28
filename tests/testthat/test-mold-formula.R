@@ -1,5 +1,3 @@
-context("test-mold-formulas")
-
 test_that("can mold simple formulas", {
   sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_formula_blueprint(composition = "matrix")

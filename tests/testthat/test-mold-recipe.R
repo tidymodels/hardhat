@@ -1,5 +1,3 @@
-context("test-mold-recipes")
-
 library(recipes)
 
 test_that("can mold recipes", {

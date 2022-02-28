@@ -1,5 +1,3 @@
-context("test-intercept")
-
 test_that("can add an intercept column", {
   x <- add_intercept_column(mtcars)
 

@@ -1,5 +1,3 @@
-context("test-offset")
-
 test_that("an offset slot is NULL when there isn't one", {
   x <- mold(Species ~ Sepal.Width, iris)
 

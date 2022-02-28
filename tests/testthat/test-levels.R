@@ -1,5 +1,3 @@
-context("test-levels")
-
 test_that("can extract levels", {
   x <- data.frame(
     x = factor(letters[1:5]),

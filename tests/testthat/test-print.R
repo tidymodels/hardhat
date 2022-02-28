@@ -1,5 +1,3 @@
-context("test-print")
-
 test_that("print - formula", {
   x <- mold(Species ~ Sepal.Length, iris)
 

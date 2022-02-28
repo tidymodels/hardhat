@@ -1,5 +1,3 @@
-context("test-forge-xy")
-
 test_that("simple forge works", {
   sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_xy_blueprint(composition = "matrix")

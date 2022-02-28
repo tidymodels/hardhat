@@ -1,5 +1,3 @@
-context("test-forge-recipe")
-
 library(recipes)
 
 test_that("simple forge works", {

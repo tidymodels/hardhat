@@ -1,5 +1,3 @@
-context("test-mold-xy")
-
 test_that("unknown mold() inputs throw an error", {
   sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_xy_blueprint(composition = "matrix")

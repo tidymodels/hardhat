@@ -1,5 +1,3 @@
-context("test-standardize")
-
 test_that("standardize - factor", {
   std <- standardize(factor(letters[1:5]))
   expect_is(std, "tbl_df")

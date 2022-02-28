@@ -1,5 +1,3 @@
-context("test-model-matrix")
-
 test_that("`model_matrix()` strips all attributes from the `model.matrix()` results", {
   framed <- model_frame(Sepal.Width ~ Species + 0, iris)
   matrix <- model_matrix(framed$terms, framed$data)

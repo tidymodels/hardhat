@@ -1,5 +1,3 @@
-context("test-spruce")
-
 test_that("spruce - numeric", {
   spruced <- spruce_numeric(1:5)
 

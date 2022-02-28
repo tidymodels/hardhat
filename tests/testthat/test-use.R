@@ -1,5 +1,3 @@
-context("test-use")
-
 test_that("can create a modeling package", {
   dir_base <- tempdir()
   dir_pkg <- file.path(dir_base, "model")

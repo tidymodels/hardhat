@@ -1,5 +1,3 @@
-context("test-constructor")
-
 test_that("print - hardhat_model", {
   x <- new_model()
 

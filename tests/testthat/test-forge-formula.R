@@ -1,5 +1,3 @@
-context("test-forge-formula")
-
 test_that("simple forge works", {
   sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_formula_blueprint(composition = "matrix")

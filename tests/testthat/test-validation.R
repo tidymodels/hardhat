@@ -1,5 +1,3 @@
-context("test-validation")
-
 test_that("validate_outcomes_are_univariate()", {
   expect_silent(validate_outcomes_are_univariate(data.frame(x = 1)))
 
