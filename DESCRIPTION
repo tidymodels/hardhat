@@ -16,8 +16,7 @@ Description: Building modeling packages is hard. A large amount of effort
     new modeling packages by providing functionality for preprocessing,
     predicting, and validating input.
 License: MIT + file LICENSE
-URL: https://github.com/tidymodels/hardhat,
-    https://hardhat.tidymodels.org
+URL: https://github.com/tidymodels/hardhat, https://hardhat.tidymodels.org
 BugReports: https://github.com/tidymodels/hardhat/issues
 Depends: 
     R (>= 2.10)
