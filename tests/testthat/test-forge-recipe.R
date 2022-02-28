@@ -161,8 +161,11 @@ test_that("novel predictor levels are caught", {
   )
 
   expect_warning(
-    xx2 <- forge(new, x2$blueprint),
-    "Novel levels found in column 'f': 'e'"
+    expect_warning(
+      xx2 <- forge(new, x2$blueprint),
+      "Novel levels found in column 'f': 'e'"
+    ),
+    "There are new levels in a factor: NA"
   )
 
   expect_equal(
