@@ -1,5 +1,3 @@
-context("test-forge-formula")
-
 test_that("simple forge works", {
   sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_formula_blueprint(composition = "matrix")
@@ -11,9 +9,9 @@ test_that("simple forge works", {
   xx2 <- forge(example_train, x2$blueprint)
   xx3 <- forge(example_train, x3$blueprint)
 
-  expect_is(xx1$predictors, "tbl_df")
-  expect_is(xx2$predictors, "dgCMatrix")
-  expect_is(xx3$predictors, "matrix")
+  expect_s3_class(xx1$predictors, "tbl_df")
+  expect_s4_class(xx2$predictors, "dgCMatrix")
+  expect_matrix(xx3$predictors)
 
   expect_equal(colnames(xx1$predictors), "num_1")
   expect_equal(colnames(xx2$predictors), "num_1")
@@ -35,7 +33,7 @@ test_that("can forge multivariate formulas", {
   xx2 <- forge(example_train, x2$blueprint, outcomes = TRUE)
   xx3 <- forge(example_train, x3$blueprint, outcomes = TRUE)
 
-  expect_is(xx1$outcomes, "tbl_df")
+  expect_s3_class(xx1$outcomes, "tbl_df")
   expect_equal(colnames(xx1$outcomes), c("num_1", "num_2"))
   expect_equal(xx1$outcomes, xx3$outcomes)
   expect_equal(xx1$outcomes, xx3$outcomes)
@@ -73,7 +71,7 @@ test_that("can forge new data without expanding factors into dummies", {
     "fac_1"
   )
 
-  expect_is(
+  expect_s3_class(
     xx$predictors$fac_1,
     "factor"
   )
@@ -829,7 +827,7 @@ test_that("new data classes are caught", {
     NA
   )
 
-  expect_is(
+  expect_s3_class(
     x_example_train2$predictors$fac_1,
     "factor"
   )
@@ -841,7 +839,7 @@ test_that("new data classes are caught", {
     NA
   )
 
-  expect_is(
+  expect_s3_class(
     xx_example_train2$outcomes$fac_1,
     "factor"
   )
@@ -885,7 +883,7 @@ test_that("intercepts can still be forged on when not using indicators (i.e. mod
     "(Intercept)" %in% colnames(xx$predictors)
   )
 
-  expect_is(
+  expect_s3_class(
     xx$predictors$fac_1,
     "factor"
   )

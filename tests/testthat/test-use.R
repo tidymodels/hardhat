@@ -1,6 +1,7 @@
-context("test-use")
-
 test_that("can create a modeling package", {
+  skip_on_cran()
+  rlang::local_options(usethis.quiet = TRUE)
+
   dir_base <- tempdir()
   dir_pkg <- file.path(dir_base, "model")
   dir.create(dir_pkg)
@@ -8,12 +9,11 @@ test_that("can create a modeling package", {
 
   model <- "linear_regression"
 
-  expect_output(
-    expect_error(
-      create_modeling_package(dir_pkg, model, open = FALSE),
-      regex = NA
-    )
-  )
+  # `usethis.quiet = TRUE` silences most of the messages, but there is an
+  # unavoidable `i Loading model` that we get from devtools if we don't do this
+  suppressMessages({
+    create_modeling_package(dir_pkg, model, open = FALSE)
+  })
 
   top_level_files <- list.files(dir_pkg)
   script_files <- list.files(file.path(dir_pkg, "R"))
@@ -29,6 +29,9 @@ test_that("can create a modeling package", {
 })
 
 test_that("can add a second model to a modeling package", {
+  skip_on_cran()
+  rlang::local_options(usethis.quiet = TRUE)
+
   dir_base <- tempdir()
   dir_pkg <- file.path(dir_base, "model")
   dir.create(dir_pkg)
@@ -37,12 +40,11 @@ test_that("can add a second model to a modeling package", {
   model1 <- "linear_regression"
   model2 <- "random_forest"
 
-  expect_output(
-    expect_error(
-      create_modeling_package(dir_pkg, model1, open = FALSE),
-      regex = NA
-    )
-  )
+  # `usethis.quiet = TRUE` silences most of the messages, but there is an
+  # unavoidable `i Loading model` that we get from devtools if we don't do this
+  suppressMessages({
+    create_modeling_package(dir_pkg, model1, open = FALSE)
+  })
 
   with_dir <- function(new, code) {
     old <- setwd(dir = new)
@@ -50,10 +52,7 @@ test_that("can add a second model to a modeling package", {
     force(code)
   }
 
-  expect_error(
-    with_dir(dir_pkg, use_modeling_files(model2)),
-    regex = NA
-  )
+  with_dir(dir_pkg, use_modeling_files(model2))
 
   script_files <- list.files(file.path(dir_pkg, "R"))
 
@@ -67,32 +66,15 @@ test_that("can add a second model to a modeling package", {
 })
 
 test_that("no `model` aborts early", {
-  expect_error(
-    create_modeling_package("my/path"),
-    "is missing, with no default"
-  )
+  expect_snapshot(error = TRUE, create_modeling_package("my/path"))
 })
 
 test_that("no `path` aborts normally", {
-  expect_error(
-    create_modeling_package(model = "my_model"),
-    "is missing, with no default"
-  )
+  expect_snapshot(error = TRUE, create_modeling_package(model = "my_model"))
 })
 
 test_that("`model` can only be a single string", {
-  expect_error(
-    create_modeling_package(model = c("model1", "model2")),
-    "must be a single string"
-  )
-
-  expect_error(
-    create_modeling_package(model = 1),
-    "must be a single string"
-  )
-
-  expect_error(
-    create_modeling_package(model = "model with space"),
-    "must not contain any spaces"
-  )
+  expect_snapshot(error = TRUE, create_modeling_package(model = c("model1", "model2")))
+  expect_snapshot(error = TRUE, create_modeling_package(model = 1))
+  expect_snapshot(error = TRUE, create_modeling_package(model = "model with space"))
 })

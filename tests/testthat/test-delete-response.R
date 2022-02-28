@@ -1,5 +1,3 @@
-context("test-delete-response")
-
 test_that("identical to delete.response() if no dataClasses", {
   trms <- terms(y ~ x)
 

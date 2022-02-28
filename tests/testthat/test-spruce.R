@@ -1,9 +1,7 @@
-context("test-spruce")
-
 test_that("spruce - numeric", {
   spruced <- spruce_numeric(1:5)
 
-  expect_is(spruced, "tbl_df")
+  expect_s3_class(spruced, "tbl_df")
   expect_equal(colnames(spruced), ".pred")
 
   expect_error(spruce_numeric("hi"))
@@ -13,7 +11,7 @@ test_that("spruce - numeric", {
 test_that("spruce - class", {
   spruced <- spruce_class(factor(letters[1:5]))
 
-  expect_is(spruced, "tbl_df")
+  expect_s3_class(spruced, "tbl_df")
   expect_equal(colnames(spruced), ".pred_class")
 
   expect_error(spruce_class(1))
@@ -26,7 +24,7 @@ test_that("spruce - prob", {
 
   spruced <- spruce_prob(pred_levels, prob_matrix)
 
-  expect_is(spruced, "tbl_df")
+  expect_s3_class(spruced, "tbl_df")
   expect_equal(colnames(spruced), paste0(".pred_", pred_levels))
 
   expect_error(spruce_prob(1, prob_matrix))

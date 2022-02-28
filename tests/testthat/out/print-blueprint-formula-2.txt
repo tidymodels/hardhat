@@ -1,8 +1,0 @@
-Formula blueprint: 
- 
-# Predictors: 1 
-  # Outcomes: 0 
-   Intercept: FALSE 
-Novel Levels: FALSE 
- Composition: tibble 
-  Indicators: traditional 

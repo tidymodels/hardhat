@@ -1,18 +1,16 @@
-context("test-standardize")
-
 test_that("standardize - factor", {
   std <- standardize(factor(letters[1:5]))
-  expect_is(std, "tbl_df")
+  expect_s3_class(std, "tbl_df")
   expect_equal(colnames(std), ".outcome")
 })
 
 test_that("standardize - numeric", {
   std <- standardize(1:5)
-  expect_is(std, "tbl_df")
+  expect_s3_class(std, "tbl_df")
   expect_equal(colnames(std), ".outcome")
 
   std2 <- standardize(as.double(1:5))
-  expect_is(std2, "tbl_df")
+  expect_s3_class(std2, "tbl_df")
   expect_equal(colnames(std2), ".outcome")
 })
 
@@ -28,7 +26,7 @@ test_that("standardize - matrix", {
   expect_error(standardize(mat_bad2), "`y` should have numeric elements")
 
   std <- standardize(mat_good)
-  expect_is(std, "tbl_df")
+  expect_s3_class(std, "tbl_df")
   expect_equal(colnames(std), c("a", "b"))
 })
 
@@ -45,13 +43,13 @@ test_that("standardize - array", {
   colnames(good) <- c("a", "b")
 
   std <- standardize(good)
-  expect_is(std, "tbl_df")
+  expect_s3_class(std, "tbl_df")
   expect_equal(colnames(std), c("a", "b"))
 
   good2 <- array(1:5)
 
   std2 <- standardize(good2)
-  expect_is(std2, "tbl_df")
+  expect_s3_class(std2, "tbl_df")
   expect_equal(colnames(std2), ".outcome")
 })
 
@@ -69,13 +67,13 @@ test_that("standardize - data.frame", {
   colnames(good) <- c("a", "b")
 
   std <- standardize(good)
-  expect_is(std, "tbl_df")
+  expect_s3_class(std, "tbl_df")
   expect_equal(colnames(std), c("a", "b"))
 
   good2 <- data.frame(x = factor(letters[1:5]), y = factor(letters[6:10]))
 
   std2 <- standardize(good2)
-  expect_is(std2, "tbl_df")
+  expect_s3_class(std2, "tbl_df")
   expect_equal(colnames(std2), c("x", "y"))
 })
 

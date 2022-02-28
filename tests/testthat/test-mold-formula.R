@@ -1,5 +1,3 @@
-context("test-mold-formulas")
-
 test_that("can mold simple formulas", {
   sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_formula_blueprint(composition = "matrix")
@@ -8,20 +6,20 @@ test_that("can mold simple formulas", {
   x2 <- mold(fac_1 ~ num_1, example_train, blueprint = sparse_bp)
   x3 <- mold(fac_1 ~ num_1, example_train, blueprint = matrix_bp)
 
-  expect_is(x1$predictors, "tbl_df")
-  expect_is(x2$predictors, "dgCMatrix")
-  expect_is(x3$predictors, "matrix")
+  expect_s3_class(x1$predictors, "tbl_df")
+  expect_s4_class(x2$predictors, "dgCMatrix")
+  expect_matrix(x3$predictors)
 
   expect_equal(colnames(x1$predictors), "num_1")
   expect_equal(colnames(x2$predictors), "num_1")
   expect_equal(colnames(x3$predictors), "num_1")
-  expect_is(x1$outcomes, "tbl_df")
-  expect_is(x2$outcomes, "tbl_df")
-  expect_is(x3$outcomes, "tbl_df")
+  expect_s3_class(x1$outcomes, "tbl_df")
+  expect_s3_class(x2$outcomes, "tbl_df")
+  expect_s3_class(x3$outcomes, "tbl_df")
   expect_equal(colnames(x1$outcomes), "fac_1")
   expect_equal(x1$outcomes, x2$outcomes)
   expect_equal(x1$outcomes, x3$outcomes)
-  expect_is(x1$blueprint, "default_formula_blueprint")
+  expect_s3_class(x1$blueprint, "default_formula_blueprint")
 })
 
 test_that("can mold multivariate formulas", {
@@ -32,7 +30,7 @@ test_that("can mold multivariate formulas", {
   x2 <- mold(num_1 + num_2 ~ num_3, example_train, blueprint = sparse_bp)
   x3 <- mold(num_1 + num_2 ~ num_3, example_train, blueprint = matrix_bp)
 
-  expect_is(x1$outcomes, "tbl_df")
+  expect_s3_class(x1$outcomes, "tbl_df")
   expect_equal(colnames(x1$outcomes), c("num_1", "num_2"))
   expect_equal(x1$outcomes, x2$outcomes)
   expect_equal(x1$outcomes, x3$outcomes)
@@ -107,7 +105,7 @@ test_that("can mold and not expand dummies", {
   )
 
   expect_equal(colnames(x$predictors), "fac_1")
-  expect_is(x$predictors$fac_1, "factor")
+  expect_s3_class(x$predictors$fac_1, "factor")
   expect_equal(x$blueprint$indicators, "none")
 })
 
@@ -414,7 +412,7 @@ test_that("intercepts can still be added when not using indicators (i.e. model.m
     "(Intercept)" %in% colnames(x$predictors)
   )
 
-  expect_is(
+  expect_s3_class(
     x$predictors$fac_1,
     "factor"
   )

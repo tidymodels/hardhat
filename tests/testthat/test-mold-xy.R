@@ -1,5 +1,3 @@
-context("test-mold-xy")
-
 test_that("unknown mold() inputs throw an error", {
   sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_xy_blueprint(composition = "matrix")
@@ -26,21 +24,21 @@ test_that("can use x-y mold interface", {
   x2 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = sparse_bp)
   x3 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = matrix_bp)
 
-  expect_is(x1$predictors, "tbl_df")
-  expect_is(x2$predictors, "dgCMatrix")
-  expect_is(x3$predictors, "matrix")
+  expect_s3_class(x1$predictors, "tbl_df")
+  expect_s4_class(x2$predictors, "dgCMatrix")
+  expect_matrix(x3$predictors)
 
   expect_equal(colnames(x1$predictors), "Sepal.Length")
   expect_equal(colnames(x2$predictors), "Sepal.Length")
   expect_equal(colnames(x3$predictors), "Sepal.Length")
 
-  expect_is(x1$outcomes, "tbl_df")
-  expect_is(x2$outcomes, "tbl_df")
-  expect_is(x3$outcomes, "tbl_df")
+  expect_s3_class(x1$outcomes, "tbl_df")
+  expect_s3_class(x2$outcomes, "tbl_df")
+  expect_s3_class(x3$outcomes, "tbl_df")
   expect_equal(colnames(x1$outcomes), ".outcome")
   expect_equal(colnames(x2$outcomes), ".outcome")
   expect_equal(colnames(x3$outcomes), ".outcome")
-  expect_is(x1$blueprint, "default_xy_blueprint")
+  expect_s3_class(x1$blueprint, "default_xy_blueprint")
 })
 
 test_that("xy intercepts can be added", {

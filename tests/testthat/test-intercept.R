@@ -1,14 +1,12 @@
-context("test-intercept")
-
 test_that("can add an intercept column", {
   x <- add_intercept_column(mtcars)
 
   expect_equal(colnames(x)[1], "(Intercept)")
-  expect_is(x[, 1], "integer")
+  expect_type(x[, 1], "integer")
 
   xx <- add_intercept_column(as.matrix(mtcars))
 
-  expect_is(xx, "matrix")
+  expect_matrix(xx)
   expect_equal(colnames(xx)[1], "(Intercept)")
 })
 

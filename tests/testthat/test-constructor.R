@@ -1,41 +1,24 @@
-context("test-constructor")
-
 test_that("print - hardhat_model", {
-  x <- new_model()
-
-  expect_known_output(
-    print(x),
-    test_path("out/print-hardhat_model-1.txt")
-  )
-
-  x2 <- new_model(class = "custom_class")
-
-  expect_known_output(
-    print(x2),
-    test_path("out/print-hardhat_model-2.txt")
-  )
-
-  x3 <- new_model(x = 4, y = "hi", class = "custom_class")
-
-  expect_known_output(
-    print(x3),
-    test_path("out/print-hardhat_model-3.txt")
-  )
+  expect_snapshot({
+    new_model()
+    new_model(class = "custom_class")
+    new_model(x = 4, y = "hi", class = "custom_class")
+  })
 })
 
 test_that("can create new empty models", {
   x <- new_model()
 
-  expect_is(x$blueprint, "default_xy_blueprint")
-  expect_is(x, "hardhat_model")
-  expect_is(x, "hardhat_scalar")
+  expect_s3_class(x$blueprint, "default_xy_blueprint")
+  expect_s3_class(x, "hardhat_model")
+  expect_s3_class(x, "hardhat_scalar")
 })
 
 test_that("can create new models", {
   x <- new_model(class = "custom")
 
-  expect_is(x, "custom")
-  expect_is(x$blueprint, "default_xy_blueprint")
+  expect_s3_class(x, "custom")
+  expect_s3_class(x$blueprint, "default_xy_blueprint")
 })
 
 test_that("can have custom elements", {
