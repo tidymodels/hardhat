@@ -235,7 +235,8 @@
 <code class="sourceCode R"><span class="va">test_missing_column</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">species</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_missing_column</span>, <span class="va">formula_eng</span><span class="op">)</span>
-<span class="co">#&gt; Error: The following required columns are missing: 'species'.</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `glubort()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following required columns are missing: 'species'.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="column-types">Column types<a class="anchor" aria-label="anchor" href="#column-types"></a>
@@ -246,7 +247,8 @@
 <span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_double</span>, <span class="va">formula_eng</span><span class="op">)</span>
-<span class="co">#&gt; Error: Can't convert `species` &lt;double&gt; to match type of `species` &lt;factor&lt;b22a0&gt;&gt;.</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `stop_vctrs()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't convert `species` &lt;double&gt; to match type of `species` &lt;factor&lt;b22a0&gt;&gt;.</span></code></pre></div>
 <p>An error is thrown, indicating that a double can’t be cast to a factor.</p>
 </div>
 <div class="section level3">
@@ -408,7 +410,8 @@
 <code class="sourceCode R"><span class="va">penguin_test_no_outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">bill_length_mm</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_log_outcome</span><span class="op">)</span>
-<span class="co">#&gt; Error: Can't subset columns that don't exist.</span>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `stop_subscript()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't subset columns that don't exist.</span>
 <span class="co">#&gt; <span style="color: #BB0000;">✖</span> Column `bill_length_mm` doesn't exist.</span></code></pre></div>
 <p>The way around this is to use the built-in recipe argument, <code>skip</code>, on the step containing the outcome. This skips the processing of that step at <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> time.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">

@@ -291,7 +291,8 @@
 <code class="sourceCode R"><span class="va">multi_outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">+</span> <span class="va">bill_depth_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span>
 
 <span class="fu">simple_lm_bridge</span><span class="op">(</span><span class="va">multi_outcome</span><span class="op">)</span>
-<span class="co">#&gt; Error: The outcome must be univariate, but 2 columns were found.</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `glubort()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> The outcome must be univariate, but 2 columns were found.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="user-facing-fitting-function">User Facing Fitting Function<a class="anchor" aria-label="anchor" href="#user-facing-fitting-function"></a>
@@ -535,8 +536,9 @@
 
 <span class="co"># Partial matches are an error</span>
 <span class="fu">predict_simple_lm_bridge</span><span class="op">(</span><span class="st">"numer"</span>, <span class="va">model</span>, <span class="va">predictors</span><span class="op">)</span>
-<span class="co">#&gt; Error: `type` must be one of "numeric".</span>
-<span class="co">#&gt; Did you mean "numeric"?</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `predict_simple_lm_bridge()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> `type` must be one of "numeric", not "numer".</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Did you mean "numeric"?</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="user-facing-prediction-function">User Facing Prediction Function<a class="anchor" aria-label="anchor" href="#user-facing-prediction-function"></a>
@@ -585,11 +587,13 @@
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># `new_data` isn't a data frame</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">penguins</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
-<span class="co">#&gt; Error: The class of `new_data`, 'factor', is not recognized.</span>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `glubort()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> The class of `new_data`, 'factor', is not recognized.</span>
 
 <span class="co"># Missing a required column</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Error: The following required columns are missing: 'body_mass_g'.</span>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `glubort()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following required columns are missing: 'body_mass_g'.</span>
 
 <span class="co"># In this case, 'species' is a character, </span>
 <span class="co"># but can be losslessy converted to a factor.</span>
@@ -644,7 +648,8 @@
 <span class="va">penguins_dbl_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">penguins</span>, species <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">penguins_dbl_species</span><span class="op">)</span>
-<span class="co">#&gt; Error: Can't convert `species` &lt;double&gt; to match type of `species` &lt;factor&lt;b22a0&gt;&gt;.</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `stop_vctrs()`:</span></span>
+<span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't convert `species` &lt;double&gt; to match type of `species` &lt;factor&lt;b22a0&gt;&gt;.</span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

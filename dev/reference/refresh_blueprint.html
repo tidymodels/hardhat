@@ -122,11 +122,13 @@ and passes through all of the elements of the blueprint to the constructor.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># ...because the constructor will catch it</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">refresh_blueprint</span><span class="op">(</span><span class="va">blueprint_bad</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("{.x_nm} should be a {.expected}{.note}, ", "not a {.actual}.") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># And update_blueprint() catches this automatically</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="update_blueprint.html">update_blueprint</a></span><span class="op">(</span><span class="va">blueprint</span>, intercept <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("{.x_nm} should be a {.expected}{.note}, ", "not a {.actual}.") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   intercept should be a bool ('TRUE' / 'FALSE'), not a numeric.</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

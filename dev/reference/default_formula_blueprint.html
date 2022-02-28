@@ -361,7 +361,8 @@ interface standardizes all of that flexibility in one place.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># mold() does not allow them, and throws an error</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">fac_1</span> <span class="op">~</span> <span class="va">y</span> <span class="op">+</span> <span class="va">num_2</span>, <span class="va">example_train</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : The following predictors were not found in `data`: 'y'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("The following predictors were not found in `data`: {extra_predictors}.") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   The following predictors were not found in `data`: 'y'.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
 <span class="r-in"><span class="co"># Dummy variables and interactions</span></span>
@@ -403,9 +404,11 @@ interface standardizes all of that flexibility in one place.</p>
 <span class="r-in"><span class="co"># An informative error is thrown when `indicators = "none"` and</span></span>
 <span class="r-in"><span class="co"># factors are present in interaction terms or in inline functions</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">num_1</span> <span class="op">~</span> <span class="va">num_2</span><span class="op">:</span><span class="va">fac_1</span>, <span class="va">example_train</span>, blueprint <span class="op">=</span> <span class="va">bp_no_indicators</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Interaction terms involving factors or characters have been detected on the RHS of `formula`. These are not allowed when `indicators = "none"`. Interactions involving factors were detected for the following columns: 'fac_1'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("Interaction terms involving factors or characters have been detected on the ",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Interaction terms involving factors or characters have been detected on the RHS of `formula`. These are not allowed when `indicators = "none"`. Interactions involving factors were detected for the following columns: 'fac_1'.</span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">num_1</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">fac_1</span><span class="op">)</span>, <span class="va">example_train</span>, blueprint <span class="op">=</span> <span class="va">bp_no_indicators</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Functions involving factors or characters have been detected on the RHS of `formula`. These are not allowed when `indicators = "none"`. Functions involving factors were detected for the following columns: 'fac_1'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("Functions involving factors or characters have been detected on the ",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Functions involving factors or characters have been detected on the RHS of `formula`. These are not allowed when `indicators = "none"`. Functions involving factors were detected for the following columns: 'fac_1'.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
 <span class="r-in"><span class="co"># Multivariate outcomes</span></span>
