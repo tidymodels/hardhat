@@ -79,8 +79,8 @@ try(validate_column_names(bad_test, original_names))
 # ---------------------------------------------------------------------------
 # Special error when `.outcome` is missing
 
-train <- iris[1:100,]
-test <- iris[101:150,]
+train <- iris[1:100, ]
+test <- iris[101:150, ]
 
 train_x <- subset(train, select = -Species)
 train_y <- train$Species
@@ -103,7 +103,6 @@ try(forge(test, processed$blueprint, outcomes = TRUE))
 test$.outcome <- test$Species
 
 forge(test, processed$blueprint, outcomes = TRUE)
-
 }
 \seealso{
 Other validation functions: 

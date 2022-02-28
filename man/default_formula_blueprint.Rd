@@ -325,7 +325,7 @@ forge(example_test, processed$blueprint)
 # `intercept` argument of the blueprint. To use an intercept
 # only formula, you should supply `NULL` on the RHS of the formula.
 mold(
-  ~ NULL,
+  ~NULL,
   example_train,
   blueprint = default_formula_blueprint(intercept = TRUE)
 )
@@ -337,5 +337,4 @@ mold(
 bp <- default_formula_blueprint(composition = "dgCMatrix")
 processed <- mold(log(num_1) ~ num_2 + fac_1, example_train, blueprint = bp)
 class(processed$predictors)
-
 }

@@ -14,5 +14,4 @@ is_blueprint(x)
 }
 \examples{
 is_blueprint(default_xy_blueprint())
-
 }

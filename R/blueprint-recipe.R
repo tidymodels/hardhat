@@ -16,7 +16,6 @@ new_recipe_blueprint <- function(mold,
                                  recipe = NULL,
                                  ...,
                                  subclass = character()) {
-
   validate_recipes_available()
 
   validate_is_function_set(mold)
@@ -42,7 +41,6 @@ new_recipe_blueprint <- function(mold,
     ...,
     subclass = c(subclass, "recipe_blueprint")
   )
-
 }
 
 #' @export

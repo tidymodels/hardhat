@@ -50,15 +50,15 @@
 #' # ---------------------------------------------------------------------------
 #' # Setup
 #'
-#' train <- iris[1:100,]
-#' test <- iris[101:150,]
+#' train <- iris[1:100, ]
+#' test <- iris[101:150, ]
 #'
 #' # ---------------------------------------------------------------------------
 #' # Recipes example
 #'
 #' # Create a recipe that logs a predictor
 #' rec <- recipe(Species ~ Sepal.Length + Sepal.Width, train) %>%
-#'    step_log(Sepal.Length)
+#'   step_log(Sepal.Length)
 #'
 #' processed <- mold(rec, train)
 #'
@@ -116,13 +116,11 @@
 #' bp <- default_recipe_blueprint(composition = "dgCMatrix")
 #' processed <- mold(rec, train, blueprint = bp)
 #' class(processed$predictors)
-#'
 #' @export
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
                                      fresh = TRUE,
                                      composition = "tibble") {
-
   mold <- get_mold_recipe_default_function_set()
   forge <- get_forge_recipe_default_function_set()
 
@@ -134,7 +132,6 @@ default_recipe_blueprint <- function(intercept = FALSE,
     fresh = fresh,
     composition = composition
   )
-
 }
 
 #' @param extra_role_ptypes A named list. The names are the unique non-standard
@@ -155,7 +152,6 @@ new_default_recipe_blueprint <- function(mold,
                                          extra_role_ptypes = NULL,
                                          ...,
                                          subclass = character()) {
-
   new_recipe_blueprint(
     mold = mold,
     forge = forge,
@@ -169,7 +165,6 @@ new_default_recipe_blueprint <- function(mold,
     ...,
     subclass = c(subclass, "default_recipe_blueprint")
   )
-
 }
 
 #' @export
@@ -185,7 +180,6 @@ get_mold_recipe_default_function_set <- function() {
 
 # mold - recipe - clean
 mold_recipe_default_clean <- function(blueprint, data) {
-
   data <- check_is_data_like(data)
 
   out$mold$clean(blueprint, data)
@@ -227,7 +221,6 @@ mold_recipe_default_process <- function(blueprint, data) {
 }
 
 mold_recipe_default_process_predictors <- function(blueprint, data) {
-
   all_predictors <- recipes::all_predictors
 
   predictors <- recipes::juice(blueprint$recipe, all_predictors())
@@ -244,7 +237,6 @@ mold_recipe_default_process_predictors <- function(blueprint, data) {
 }
 
 mold_recipe_default_process_outcomes <- function(blueprint, data) {
-
   all_outcomes <- recipes::all_outcomes
 
   outcomes <- recipes::juice(blueprint$recipe, all_outcomes())
@@ -293,7 +285,6 @@ get_forge_recipe_default_function_set <- function() {
 }
 
 forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
-
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
@@ -310,8 +301,7 @@ forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
     outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
     # Never allow novel levels for outcomes
     outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
-  }
-  else {
+  } else {
     outcomes <- NULL
   }
 
@@ -345,7 +335,6 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data) {
 }
 
 forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras) {
-
   rec <- blueprint$recipe
   roles <- rec$term_info$role
   vars <- rec$term_info$variable
@@ -355,7 +344,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   new_data <- vctrs::vec_cbind(
     predictors,
     outcomes,
-    !!! unname(extras$roles),
+    !!!unname(extras$roles),
     .name_repair = "minimal"
   )
 
@@ -407,7 +396,6 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 }
 
 forge_recipe_default_process_predictors <- function(blueprint, predictors) {
-
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
   predictors <- recompose(predictors, blueprint$composition)
@@ -449,7 +437,6 @@ forge_recipe_default_process_extras <- function(extras, rec, baked_data,
 # ------------------------------------------------------------------------------
 
 get_original_predictor_ptype <- function(rec, data) {
-
   roles <- rec$var_info$role
   original_names <- rec$var_info$variable[strict_equal(roles, "predictor")]
   original_names <- original_names[!is.na(original_names)]
@@ -460,7 +447,6 @@ get_original_predictor_ptype <- function(rec, data) {
 }
 
 get_original_outcome_ptype <- function(rec, data) {
-
   roles <- rec$var_info$role
   original_names <- rec$var_info$variable[strict_equal(roles, "outcome")]
 
@@ -470,11 +456,9 @@ get_original_outcome_ptype <- function(rec, data) {
 }
 
 get_extra_role_columns <- function(rec, data, original = TRUE) {
-
   if (original) {
     info_type <- "var_info"
-  }
-  else {
+  } else {
     info_type <- "term_info"
   }
 
@@ -500,7 +484,6 @@ get_extra_role_columns <- function(rec, data, original = TRUE) {
 }
 
 validate_is_0_row_tibble_or_null <- function(.x, .x_nm) {
-
   if (is.null(.x)) {
     return(invisible(.x))
   }

@@ -61,7 +61,6 @@ new_blueprint <- function(mold,
                           ptypes = NULL,
                           ...,
                           subclass = character()) {
-
   validate_is_function_set(mold)
   validate_is_function_set(forge)
   validate_is_bool(intercept)
@@ -90,7 +89,6 @@ new_blueprint <- function(mold,
   elems <- c(elems, new_elems)
 
   structure(elems, class = c(subclass, "hardhat_blueprint"))
-
 }
 
 # ------------------------------------------------------------------------------
@@ -134,7 +132,6 @@ new_blueprint <- function(mold,
 #'
 #' # And update_blueprint() catches this automatically
 #' try(update_blueprint(blueprint, intercept = 1))
-#'
 #' @export
 refresh_blueprint <- function(blueprint) {
   UseMethod("refresh_blueprint")
@@ -180,10 +177,8 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #'
 #' # Can't add non-valid elements
 #' try(update_blueprint(blueprint, intercept = 1))
-#'
 #' @export
 update_blueprint <- function(blueprint, ...) {
-
   validate_is_blueprint(blueprint)
 
   changes <- rlang::list2(...)
@@ -196,7 +191,6 @@ update_blueprint <- function(blueprint, ...) {
   old_nms <- names(blueprint)
 
   for (nm in new_nms) {
-
     if (!(nm %in% old_nms)) {
       glubort(
         "All elements to change must already exist. `{nm}` is a new field."
@@ -220,7 +214,6 @@ update_blueprint <- function(blueprint, ...) {
 #'
 #' @examples
 #' is_blueprint(default_xy_blueprint())
-#'
 #' @export
 is_blueprint <- function(x) {
   inherits(x, "hardhat_blueprint")
@@ -230,7 +223,6 @@ is_blueprint <- function(x) {
 
 # helper for new_blueprint()$mold and $forge elements
 blueprint_function_set <- function(clean, process) {
-
   validate_is(clean, rlang::is_function, "function")
   validate_is(process, rlang::is_function, "function")
 
@@ -257,7 +249,6 @@ validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
 }
 
 validate_is_function_set <- function(.x, .x_nm) {
-
   if (rlang::is_missing(.x_nm)) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))
   }
@@ -271,7 +262,6 @@ validate_is_function_set <- function(.x, .x_nm) {
 }
 
 validate_has_function_set_structure <- function(.x, .x_nm) {
-
   if (rlang::is_missing(.x_nm)) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))
   }
@@ -285,7 +275,6 @@ validate_has_function_set_structure <- function(.x, .x_nm) {
 }
 
 validate_is_ptype_list_or_null <- function(.x, .x_nm) {
-
   if (rlang::is_missing(.x_nm)) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))
   }
@@ -305,7 +294,6 @@ validate_is_ptype_list_or_null <- function(.x, .x_nm) {
 
 
 validate_is_0_row_tibble <- function(.x, .x_nm) {
-
   validate_is(.x, tibble::is_tibble, "tibble", .x_nm)
 
   .n <- nrow(.x)
@@ -334,7 +322,6 @@ validate_is_character <- function(.x, .x_nm) {
 }
 
 validate_forge_args <- function(forge) {
-
   required_clean_args <- c("blueprint", "new_data", "outcomes")
 
   actual_clean_args <- rlang::fn_fmls_names(forge$clean)

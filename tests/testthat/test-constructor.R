@@ -1,7 +1,6 @@
 context("test-constructor")
 
 test_that("print - hardhat_model", {
-
   x <- new_model()
 
   expect_known_output(
@@ -22,11 +21,9 @@ test_that("print - hardhat_model", {
     print(x3),
     test_path("out/print-hardhat_model-3.txt")
   )
-
 })
 
 test_that("can create new empty models", {
-
   x <- new_model()
 
   expect_is(x$blueprint, "default_xy_blueprint")
@@ -35,7 +32,6 @@ test_that("can create new empty models", {
 })
 
 test_that("can create new models", {
-
   x <- new_model(class = "custom")
 
   expect_is(x, "custom")
@@ -43,7 +39,6 @@ test_that("can create new models", {
 })
 
 test_that("can have custom elements", {
-
   x <- new_model(
     y = 1,
     blueprint = default_xy_blueprint(),
@@ -54,7 +49,6 @@ test_that("can have custom elements", {
 })
 
 test_that("must use a valid blueprint", {
-
   expect_error(
     new_model(blueprint = default_xy_blueprint(), class = "custom"),
     NA
@@ -64,7 +58,6 @@ test_that("must use a valid blueprint", {
     new_model(blueprint = 1, class = "custom"),
     "not a numeric"
   )
-
 })
 
 test_that("`new_scalar()` must have elements", {

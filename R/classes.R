@@ -23,10 +23,8 @@
 #' .MFclass(data$col)
 #'
 #' get_data_classes(data)
-#'
 #' @export
 get_data_classes <- function(data) {
-
   ptype <- extract_ptype(data)
 
   validate_has_unique_column_names(ptype, "data")

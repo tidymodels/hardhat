@@ -1,7 +1,6 @@
 context("test-mold-formulas")
 
 test_that("can mold simple formulas", {
-
   sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_formula_blueprint(composition = "matrix")
 
@@ -26,7 +25,6 @@ test_that("can mold simple formulas", {
 })
 
 test_that("can mold multivariate formulas", {
-
   sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_formula_blueprint(composition = "matrix")
 
@@ -53,17 +51,15 @@ test_that("can mold multivariate formulas", {
   )
   expect_equal(y1$outcomes, y2$outcomes)
   expect_equal(y1$outcomes, y3$outcomes)
-
 })
 
 test_that("factor predictors with no intercept are fully expanded", {
-
-  x1  <- mold(
+  x1 <- mold(
     num_1 ~ fac_1,
     example_train,
     blueprint = default_formula_blueprint(intercept = TRUE)
   )
-  x2  <- mold(
+  x2 <- mold(
     num_1 ~ fac_1,
     example_train,
     blueprint = default_formula_blueprint(intercept = TRUE, composition = "matrix")
@@ -77,9 +73,11 @@ test_that("factor predictors with no intercept are fully expanded", {
   y2 <- mold(
     num_1 ~ fac_1,
     example_train,
-    blueprint = default_formula_blueprint(intercept = FALSE,
-                                          indicators = "one_hot",
-                                          composition = "matrix")
+    blueprint = default_formula_blueprint(
+      intercept = FALSE,
+      indicators = "one_hot",
+      composition = "matrix"
+    )
   )
 
   expect_equal(
@@ -99,11 +97,9 @@ test_that("factor predictors with no intercept are fully expanded", {
     colnames(y2$predictors),
     c("fac_1a", "fac_1b", "fac_1c")
   )
-
 })
 
 test_that("can mold and not expand dummies", {
-
   x <- mold(
     num_1 ~ fac_1,
     example_train,
@@ -116,9 +112,8 @@ test_that("can mold and not expand dummies", {
 })
 
 test_that("errors are thrown if `indicator = 'none'` and factor interactions exist", {
-
   expect_error(
-    mold(~ fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none")),
+    mold(~fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none")),
     NA
   )
 
@@ -153,7 +148,7 @@ test_that("errors are thrown if `indicator = 'none'` and factor interactions exi
 
   expect_error(
     mold(
-      num_1 ~ (fac_1 + num_2) ^ 2,
+      num_1 ~ (fac_1 + num_2)^2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
     ),
@@ -182,11 +177,9 @@ test_that("errors are thrown if `indicator = 'none'` and factor interactions exi
     ),
     "'fac_1', 'fac_12'."
   )
-
 })
 
 test_that("errors are thrown if `indicator = 'none'` and factors are used in inline functions", {
-
   blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
 
   expect_error(
@@ -215,7 +208,6 @@ test_that("errors are thrown if `indicator = 'none'` and factors are used in inl
     mold(~ paste0(fac_1) + paste0(fac_12), example_train2, blueprint = blueprint_no_indicators),
     "'fac_1', 'fac_12'."
   )
-
 })
 
 test_that("`indicators = 'none'` doesn't error if a non-factor name regex-matches a factor name (#182)", {
@@ -241,9 +233,8 @@ test_that("`indicators = 'none'` doesn't error if an inline function regex-match
 })
 
 test_that("`indicators = 'none'` works fine in strange formulas", {
-
   x <- mold(
-    ~ NULL,
+    ~NULL,
     example_train,
     blueprint = default_formula_blueprint(indicators = "none", intercept = TRUE)
   )
@@ -252,11 +243,9 @@ test_that("`indicators = 'none'` works fine in strange formulas", {
     colnames(x$predictors),
     "(Intercept)"
   )
-
 })
 
 test_that("formula intercepts can be added", {
-
   x1 <- mold(
     fac_1 ~ num_1,
     example_train,
@@ -279,7 +268,6 @@ test_that("formula intercepts can be added", {
 })
 
 test_that("can mold formulas with special terms", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
   x1 <- mold(fac_1 ~ num_1:num_2 + I(num_1^2), example_train)
   x2 <- mold(fac_1 ~ num_1:num_2 + I(num_1^2), example_train, blueprint = bp)
@@ -337,7 +325,6 @@ test_that("global environment variables cannot be used", {
 })
 
 test_that("cannot manually remove intercept in the formula itself", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
   expect_error(
     mold(fac_1 ~ y + 0, example_train),
@@ -357,24 +344,22 @@ test_that("cannot manually remove intercept in the formula itself", {
     mold(fac_1 ~ y - 1, example_train),
     "`formula` must not contain"
   )
-
 })
 
 test_that("RHS with _only_ intercept related terms are caught", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
 
   expect_error(
-    mold(~ 0, example_train),
+    mold(~0, example_train),
     "`formula` must not contain the intercept removal term"
   )
   expect_error(
-    mold(~ 0, example_train, blueprint = bp),
+    mold(~0, example_train, blueprint = bp),
     "`formula` must not contain the intercept removal term"
   )
 
   expect_error(
-    mold(~ 1, example_train),
+    mold(~1, example_train),
     "`formula` must not contain the intercept term"
   )
 
@@ -382,19 +367,17 @@ test_that("RHS with _only_ intercept related terms are caught", {
     mold(~ -1, example_train),
     "`formula` must not contain the intercept removal term"
   )
-
 })
 
 test_that("`NULL` can be used to represent empty RHS formulas", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
 
   expect_error(
-    mold(~ 0, example_train),
+    mold(~0, example_train),
     "`formula` must not contain the intercept removal term"
   )
   expect_error(
-    mold(~ 0, example_train, blueprint = bp),
+    mold(~0, example_train, blueprint = bp),
     "`formula` must not contain the intercept removal term"
   )
 
@@ -418,11 +401,9 @@ test_that("`NULL` can be used to represent empty RHS formulas", {
   )
 
   expect_equal(colnames(y$predictors), "(Intercept)")
-
 })
 
 test_that("intercepts can still be added when not using indicators (i.e. model.matrix())", {
-
   x <- mold(
     num_2 ~ fac_1,
     example_train,
@@ -437,11 +418,9 @@ test_that("intercepts can still be added when not using indicators (i.e. model.m
     x$predictors$fac_1,
     "factor"
   )
-
 })
 
 test_that("`data` is validated", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
   expect_error(
     mold(fac_1 ~ num_2, 1),
@@ -451,60 +430,57 @@ test_that("`data` is validated", {
     mold(fac_1 ~ num_2, 1, blueprint = bp),
     "`data` must be a data.frame or a matrix"
   )
-
 })
 
 test_that("full interaction syntax is supported", {
-
   expect_equal(
-    mold(~ fac_1*num_2, example_train)$predictors,
+    mold(~ fac_1 * num_2, example_train)$predictors,
     mold(~ fac_1 + num_2 + fac_1:num_2, example_train)$predictors
   )
 
   expect_equal(
-    mold(~ fac_1*num_2 - fac_1:num_2, example_train)$predictors,
+    mold(~ fac_1 * num_2 - fac_1:num_2, example_train)$predictors,
     mold(~ fac_1 + num_2, example_train)$predictors
   )
 
   expect_equal(
-    mold(~ (num_2 + num_1 + num_3) ^ 2, example_train)$predictors,
-    mold(~ num_2 +
-           num_1 +
-           num_3 +
-           num_2:num_1 +
-           num_2:num_3 +
-           num_1:num_3,
-         example_train)$predictors
+    mold(~ (num_2 + num_1 + num_3)^2, example_train)$predictors,
+    mold(
+      ~ num_2 +
+        num_1 +
+        num_3 +
+        num_2:num_1 +
+        num_2:num_3 +
+        num_1:num_3,
+      example_train
+    )$predictors
   )
 
   expect_equal(
     mold(~ num_2 + num_1 %in% num_2, example_train)$predictors,
     mold(~ num_2 + num_2:num_1, example_train)$predictors
   )
-
 })
 
 test_that("`indicators = 'none'` runs numeric interactions", {
-
   x <- mold(~ num_1:num_2, example_train,
-            blueprint = default_formula_blueprint(indicators = "none"))
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
 
   expect_equal(
     colnames(x$predictors),
     "num_1:num_2"
   )
-
 })
 
 test_that("LHS of the formula cannot contain interactions", {
-
   expect_error(
     mold(num_1:num_2 ~ num_2, example_train),
     "The following interaction terms were found: 'num_1:num_2'"
   )
 
   expect_error(
-    mold(num_1*num_2 ~ num_2, example_train),
+    mold(num_1 * num_2 ~ num_2, example_train),
     "The following interaction terms were found: 'num_1:num_2'"
   )
 
@@ -522,7 +498,6 @@ test_that("LHS of the formula cannot contain interactions", {
     mold(num_1:num_2 + fac_1:num_1 ~ num_2, example_train),
     "The following interaction terms were found: 'num_1:num_2', 'num_1:fac_1'"
   )
-
 })
 
 test_that("LHS of the formula won't misinterpret `::` as an interaction (#174)", {
@@ -531,7 +506,6 @@ test_that("LHS of the formula won't misinterpret `::` as an interaction (#174)",
 })
 
 test_that("original predictor and outcome classes are recorded", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
   x1 <- mold(log(num_1) ~ log(num_2), example_train)
   x2 <- mold(log(num_1) ~ log(num_2), example_train, blueprint = bp)
@@ -553,11 +527,9 @@ test_that("original predictor and outcome classes are recorded", {
     get_data_classes(x2$blueprint$ptypes$outcomes),
     list(num_1 = "integer")
   )
-
 })
 
 test_that("`.` notation works as expected", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
   x1 <- mold(fac_1 ~ ., example_train)
   x2 <- mold(fac_1 ~ ., example_train, blueprint = bp)
@@ -581,7 +553,6 @@ test_that("`.` notation works as expected", {
     colnames(x2$blueprint$ptypes$outcomes),
     "fac_1"
   )
-
 })
 
 # `expand_formula_dot_notation()` does not expand LHS dots, and we check
@@ -600,7 +571,6 @@ test_that("`.` notation fails on the LHS", {
 })
 
 test_that("`.` notation with variable as predictor and outcome", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
   x1 <- mold(num_2 ~ . + num_2, example_train)
   x2 <- mold(num_2 ~ . + num_2, example_train)
@@ -643,15 +613,13 @@ test_that("`.` notation with variable as predictor and outcome", {
     colnames(y2$blueprint$ptypes$outcomes),
     "num_2"
   )
-
 })
 
 test_that("`.` notation with no outcome works fine", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
   # Uses all columns of example_train
-  x1 <- mold(~ ., example_train)
-  x2 <- mold(~ ., example_train, blueprint = bp)
+  x1 <- mold(~., example_train)
+  x2 <- mold(~., example_train, blueprint = bp)
 
   expect_equal(
     ncol(x1$predictors),
@@ -670,7 +638,6 @@ test_that("`.` notation with no outcome works fine", {
     colnames(x2$blueprint$ptypes$predictors),
     c("num_1", "num_2", "num_3", "fac_1", "fac_2")
   )
-
 })
 
 test_that("`-var` still registers var as a predictor", {
@@ -682,14 +649,13 @@ test_that("`-var` still registers var as a predictor", {
   expect_true(
     "num_1" %in% colnames(x$blueprint$ptypes$predictors)
   )
-
 })
 
 test_that("Missing y value returns a 0 column tibble for `outcomes`", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  x1 <- mold(~ num_2, example_train)
+  x1 <- mold(~num_2, example_train)
   x2 <- mold(NULL ~ num_2, example_train)
-  x3 <- mold(~ num_2, example_train, blueprint = bp)
+  x3 <- mold(~num_2, example_train, blueprint = bp)
   x4 <- mold(NULL ~ num_2, example_train, blueprint = bp)
 
   expect_equal(nrow(x1$outcomes), 12)
@@ -703,14 +669,14 @@ test_that("Missing y value returns a 0 column tibble for `outcomes`", {
 
 test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  x1 <- mold(~ num_2, example_train)
-  x2 <- mold(~ num_2, example_train, blueprint = bp)
+  x1 <- mold(~num_2, example_train)
+  x2 <- mold(~num_2, example_train, blueprint = bp)
   expect_equal(x1$blueprint$ptypes$outcomes, tibble())
   expect_equal(x2$blueprint$ptypes$outcomes, tibble())
 })
 
 test_that("Missing y value still has outcome `terms` present", {
-  x <- mold(~ num_2, example_train)
+  x <- mold(~num_2, example_train)
 
   expect_equal(
     rlang::f_rhs(x$blueprint$terms$outcomes),

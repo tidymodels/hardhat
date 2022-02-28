@@ -78,7 +78,6 @@
 #' )
 #' @export
 model_matrix <- function(terms, data) {
-
   validate_is_terms(terms)
   data <- check_is_data_like(data)
 
@@ -115,7 +114,6 @@ is_terms <- function(x) {
 }
 
 validate_is_terms <- function(.x, .x_nm) {
-
   if (rlang::is_missing(.x_nm)) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))
   }

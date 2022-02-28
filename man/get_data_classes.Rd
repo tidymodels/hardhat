@@ -30,5 +30,4 @@ data <- data.frame(col = ordered(c("a", "b")))
 .MFclass(data$col)
 
 get_data_classes(data)
-
 }

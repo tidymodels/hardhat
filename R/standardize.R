@@ -32,7 +32,6 @@
 #'
 #' df <- data.frame(x = 1:5, y = 6:10)
 #' standardize(df)
-#'
 #' @export
 standardize <- function(y) {
   UseMethod("standardize")
@@ -67,20 +66,16 @@ standardize.matrix <- function(y) {
 
 #' @export
 standardize.array <- function(y) {
-
   validate_numeric_elements(y, "y")
 
   # tibble() will strip the array class for us
   if (dims(y) == 1) {
     tibble::tibble(.outcome = y)
-  }
-  else if (dims(y) == 2) {
+  } else if (dims(y) == 2) {
     standardize.matrix(y)
-  }
-  else {
+  } else {
     glubort("3D+ arrays are not supported outcome types.")
   }
-
 }
 
 #' @export
@@ -95,11 +90,9 @@ is_known_output_type <- function(x) {
 }
 
 validate_has_known_outcome_types <- function(y) {
-
   known <- vapply(y, is_known_output_type, logical(1))
 
   if (!all(known)) {
-
     not_known <- which(!known)
     not_known <- colnames(y)[not_known]
     not_known <- glue_quote_collapse(not_known)
@@ -108,7 +101,6 @@ validate_has_known_outcome_types <- function(y) {
       "Not all columns of `y` are known outcome types. ",
       "These columns have unknown types: {not_known}."
     )
-
   }
 
   invisible(y)

@@ -45,5 +45,4 @@ try(refresh_blueprint(blueprint_bad))
 
 # And update_blueprint() catches this automatically
 try(update_blueprint(blueprint, intercept = 1))
-
 }

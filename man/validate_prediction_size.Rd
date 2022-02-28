@@ -62,7 +62,7 @@ and provide your own validation function.
 
 \examples{
 # Say new_data has 5 rows
-new_data <- mtcars[1:5,]
+new_data <- mtcars[1:5, ]
 
 # And somehow you generate predictions
 # for those 5 rows
@@ -81,7 +81,6 @@ check_prediction_size(pred, new_data)
 # An informative error message is thrown
 # if the rows are different
 try(validate_prediction_size(spruce_numeric(1:4), new_data))
-
 }
 \seealso{
 Other validation functions: 

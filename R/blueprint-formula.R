@@ -28,7 +28,6 @@ new_formula_blueprint <- function(mold,
                                   composition = "tibble",
                                   ...,
                                   subclass = character()) {
-
   validate_is_function_set(mold)
   validate_mold_args(
     mold,
@@ -52,7 +51,6 @@ new_formula_blueprint <- function(mold,
     ...,
     subclass = c(subclass, "formula_blueprint")
   )
-
 }
 
 #' @export

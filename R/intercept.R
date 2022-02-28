@@ -20,10 +20,8 @@
 #' add_intercept_column(mtcars, "intercept")
 #'
 #' add_intercept_column(as.matrix(mtcars))
-#'
 #' @export
 add_intercept_column <- function(data, name = "(Intercept)") {
-
   ok <- is.data.frame(data) || is.matrix(data)
 
   if (!ok) {
@@ -36,7 +34,6 @@ add_intercept_column <- function(data, name = "(Intercept)") {
   validate_name(name)
 
   if (name %in% colnames(data)) {
-
     rlang::warn(glue::glue(
       "`data` already has a column named '{name}'. ",
       "Returning `data` unchanged."
@@ -46,7 +43,6 @@ add_intercept_column <- function(data, name = "(Intercept)") {
   }
 
   if (is.matrix(data)) {
-
     new_col <- matrix(
       data = 1L,
       nrow = nrow(data),
@@ -59,16 +55,13 @@ add_intercept_column <- function(data, name = "(Intercept)") {
   }
 
   if (is.data.frame(data)) {
-
     data <- tibble::add_column(data, !!name := 1L, .before = 1L)
 
     return(data)
   }
-
 }
 
 maybe_add_intercept_column <- function(data, intercept = FALSE) {
-
   if (!intercept) {
     return(data)
   }
@@ -77,7 +70,6 @@ maybe_add_intercept_column <- function(data, intercept = FALSE) {
 }
 
 validate_name <- function(name) {
-
   if (length(name) > 1) {
     glubort("name should have size 1, not {length(name)}.")
   }

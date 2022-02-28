@@ -58,7 +58,6 @@ check_outcomes_are_factors(data.frame(x = 1))
 
 # All good
 check_outcomes_are_factors(data.frame(x = factor(c("A", "B"))))
-
 }
 \seealso{
 Other validation functions: 

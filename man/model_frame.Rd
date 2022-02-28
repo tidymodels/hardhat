@@ -75,5 +75,4 @@ framed2 <- model_frame(Species ~ Sepal.Width, iris2)
 head(framed2$data)
 
 nrow(framed2$data) == nrow(iris2)
-
 }

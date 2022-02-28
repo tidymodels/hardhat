@@ -23,21 +23,19 @@
 #' attr(delete.response(framed$terms), "dataClasses")
 #'
 #' attr(delete_response(framed$terms), "dataClasses")
-#'
 #' @export
 delete_response <- function(terms) {
-
   validate_is_terms(terms)
 
   resp <- attr(terms, "response")
   data_class <- attr(terms, "dataClasses")
 
-  response_exists <- ! (is.null(resp) || (resp == 0L))
+  response_exists <- !(is.null(resp) || (resp == 0L))
   data_class_exists <- !is.null(data_class)
 
   # Remove dataClass corresponding to y if it exists
   if (response_exists & data_class_exists) {
-      attr(terms, "dataClasses") <- data_class[-resp]
+    attr(terms, "dataClasses") <- data_class[-resp]
   }
 
   delete.response(terms)

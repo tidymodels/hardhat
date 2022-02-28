@@ -42,5 +42,4 @@ standardize(mat)
 
 df <- data.frame(x = 1:5, y = 6:10)
 standardize(df)
-
 }

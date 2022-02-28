@@ -72,10 +72,8 @@
 #' head(framed2$data)
 #'
 #' nrow(framed2$data) == nrow(iris2)
-#'
 #' @export
 model_frame <- function(formula, data) {
-
   validate_is_formula(formula)
   data <- check_is_data_like(data)
 
@@ -94,7 +92,6 @@ model_frame <- function(formula, data) {
     data = data,
     terms = terms
   )
-
 }
 
 validate_is_formula <- function(formula) {
