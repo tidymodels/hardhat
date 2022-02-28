@@ -1,24 +1,9 @@
 test_that("print - hardhat_model", {
-  x <- new_model()
-
-  expect_known_output(
-    print(x),
-    test_path("out/print-hardhat_model-1.txt")
-  )
-
-  x2 <- new_model(class = "custom_class")
-
-  expect_known_output(
-    print(x2),
-    test_path("out/print-hardhat_model-2.txt")
-  )
-
-  x3 <- new_model(x = 4, y = "hi", class = "custom_class")
-
-  expect_known_output(
-    print(x3),
-    test_path("out/print-hardhat_model-3.txt")
-  )
+  expect_snapshot({
+    new_model()
+    new_model(class = "custom_class")
+    new_model(x = 4, y = "hi", class = "custom_class")
+  })
 })
 
 test_that("can create new empty models", {
