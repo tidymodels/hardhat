@@ -14,6 +14,7 @@ Building modeling packages is hard. A large amount of effort generally goes into
 Useful links:
 \itemize{
   \item \url{https://github.com/tidymodels/hardhat}
+  \item \url{https://hardhat.tidymodels.org}
   \item Report bugs at \url{https://github.com/tidymodels/hardhat/issues}
 }
 
