@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* Bumped required R version to `>= 3.4.0` to reflect tidyverse standards.
+
 # hardhat 0.2.0
 
 * Moved `tune()` from tune to hardhat (#181).
