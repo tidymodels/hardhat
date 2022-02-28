@@ -1,11 +1,11 @@
-pandoc: 2.14.2
+pandoc: '2.5'
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   forge: forge.html
   mold: mold.html
   package: package.html
-last_built: 2022-02-28T18:33Z
+last_built: 2022-02-28T18:46Z
 urls:
   reference: https://hardhat.tidymodels.org/reference
   article: https://hardhat.tidymodels.org/articles
