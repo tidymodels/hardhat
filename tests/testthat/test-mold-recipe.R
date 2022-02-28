@@ -1,10 +1,8 @@
-library(recipes)
-
 test_that("can mold recipes", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
-  rec <- recipe(Species ~ Sepal.Length, data = iris)
+  rec <- recipes::recipe(Species ~ Sepal.Length, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
   x3 <- mold(rec, iris, blueprint = matrix_bp)
@@ -28,7 +26,7 @@ test_that("can mold recipes", {
 })
 
 test_that("can mold recipes with intercepts", {
-  rec <- recipe(Species ~ Sepal.Length, data = iris)
+  rec <- recipes::recipe(Species ~ Sepal.Length, data = iris)
 
   x1 <- mold(
     rec, iris,
@@ -60,10 +58,10 @@ test_that("can pass `fresh` through to `prep()`", {
   iris1 <- iris[1:50, ]
   iris2 <- iris[51:100, ]
 
-  rec <- recipe(Species ~ Sepal.Length, data = iris1)
-  rec <- step_center(rec, Sepal.Length)
+  rec <- recipes::recipe(Species ~ Sepal.Length, data = iris1)
+  rec <- recipes::step_center(rec, Sepal.Length)
 
-  prepped_rec <- prep(rec, iris1)
+  prepped_rec <- recipes::prep(rec, iris1)
   non_fresh_mean <- prepped_rec$steps[[1]]$means
 
   x1 <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint(fresh = FALSE))
@@ -92,10 +90,10 @@ test_that("`fresh` defaults to `TRUE`", {
   iris1 <- iris[1:50, ]
   iris2 <- iris[51:100, ]
 
-  rec <- recipe(Species ~ Sepal.Length, data = iris1)
-  rec <- step_center(rec, Sepal.Length)
+  rec <- recipes::recipe(Species ~ Sepal.Length, data = iris1)
+  rec <- recipes::step_center(rec, Sepal.Length)
 
-  prepped_rec <- prep(rec, iris1)
+  prepped_rec <- recipes::prep(rec, iris1)
   non_fresh_mean <- prepped_rec$steps[[1]]$means
   fresh_mean <- c(Sepal.Length = mean(iris2$Sepal.Length))
 
@@ -112,7 +110,7 @@ test_that("`fresh` defaults to `TRUE`", {
 
 test_that("`data` is validated", {
   expect_error(
-    mold(recipe(Species ~ Sepal.Length, data = iris), 1),
+    mold(recipes::recipe(Species ~ Sepal.Length, data = iris), 1),
     "`data` must be a data.frame or a matrix"
   )
 })
@@ -121,7 +119,7 @@ test_that("`extras` holds a slot for `roles`", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
-  rec <- recipe(Species ~ Sepal.Length, data = iris)
+  rec <- recipes::recipe(Species ~ Sepal.Length, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
   x3 <- mold(rec, iris, blueprint = matrix_bp)
@@ -139,8 +137,8 @@ test_that("non-standard roles columns are stored", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
-  rec <- recipe(Species ~ ., iris) %>%
-    update_role(Sepal.Width, new_role = "dummy")
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy")
 
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -177,9 +175,9 @@ test_that("only original non-standard columns are in the extra roles ptype", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   # same custom role, but not step_bs() columns arent original columns
-  rec <- recipe(Species ~ ., iris) %>%
-    update_role(Sepal.Width, new_role = "dummy") %>%
-    step_bs(Sepal.Length, role = "dummy", deg_free = 3)
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy")
+  rec <- recipes::step_bs(rec, Sepal.Length, role = "dummy", deg_free = 3)
 
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -208,9 +206,9 @@ test_that("only original non-standard columns are in the extra roles ptype", {
 test_that("multiple extra roles types can be stored", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
-  rec <- recipe(Species ~ ., iris) %>%
-    step_bs(Sepal.Length, role = "dummy", deg_free = 3) %>%
-    step_bs(Sepal.Width, role = "dummy2", deg_free = 3)
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::step_bs(rec, Sepal.Length, role = "dummy", deg_free = 3)
+  rec <- recipes::step_bs(rec, Sepal.Width, role = "dummy2", deg_free = 3)
 
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -238,10 +236,10 @@ test_that("multiple extra roles types can be stored", {
 test_that("`NA` roles are skipped over", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
-  rec <- recipe(iris) %>%
-    update_role(Sepal.Length, new_role = "predictor") %>%
-    update_role(Species, new_role = "outcome") %>%
-    update_role(Sepal.Width, new_role = "custom")
+  rec <- recipes::recipe(iris)
+  rec <- recipes::update_role(rec, Sepal.Length, new_role = "predictor")
+  rec <- recipes::update_role(rec, Species, new_role = "outcome")
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "custom")
 
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
@@ -303,7 +301,7 @@ test_that("`NA` roles are skipped over", {
 
 test_that("Missing y value returns a 0 column tibble for `outcomes`", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
-  rec <- recipe(~Sepal.Width, data = iris)
+  rec <- recipes::recipe(~Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
 
@@ -314,7 +312,7 @@ test_that("Missing y value returns a 0 column tibble for `outcomes`", {
 
 test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
-  rec <- recipe(~Sepal.Width, data = iris)
+  rec <- recipes::recipe(~Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
   expect_equal(x1$blueprint$ptypes$outcomes, tibble())
