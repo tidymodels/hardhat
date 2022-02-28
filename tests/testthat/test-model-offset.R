@@ -14,7 +14,7 @@ test_that("the offset slot is only present for the formula method", {
 test_that("can use offsets", {
   x <- mold(Species ~ offset(Sepal.Width), iris)
 
-  expect_is(x$extras$offset, "tbl_df")
+  expect_s3_class(x$extras$offset, "tbl_df")
   expect_equal(colnames(x$extras$offset), ".offset")
   expect_equal(x$extras$offset$.offset, iris$Sepal.Width)
 })

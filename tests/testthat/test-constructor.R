@@ -9,16 +9,16 @@ test_that("print - hardhat_model", {
 test_that("can create new empty models", {
   x <- new_model()
 
-  expect_is(x$blueprint, "default_xy_blueprint")
-  expect_is(x, "hardhat_model")
-  expect_is(x, "hardhat_scalar")
+  expect_s3_class(x$blueprint, "default_xy_blueprint")
+  expect_s3_class(x, "hardhat_model")
+  expect_s3_class(x, "hardhat_scalar")
 })
 
 test_that("can create new models", {
   x <- new_model(class = "custom")
 
-  expect_is(x, "custom")
-  expect_is(x$blueprint, "default_xy_blueprint")
+  expect_s3_class(x, "custom")
+  expect_s3_class(x$blueprint, "default_xy_blueprint")
 })
 
 test_that("can have custom elements", {

@@ -9,9 +9,9 @@ test_that("simple forge works", {
   xx2 <- forge(iris, x2$blueprint)
   xx3 <- forge(iris, x3$blueprint)
 
-  expect_is(xx1$predictors, "tbl_df")
-  expect_is(xx2$predictors, "dgCMatrix")
-  expect_is(xx3$predictors, "matrix")
+  expect_s3_class(xx1$predictors, "tbl_df")
+  expect_s4_class(xx2$predictors, "dgCMatrix")
+  expect_matrix(xx3$predictors)
 
   expect_equal(colnames(xx1$predictors), "Sepal.Length")
   expect_equal(colnames(xx2$predictors), "Sepal.Length")
@@ -349,7 +349,7 @@ test_that("new data classes are caught", {
     NA
   )
 
-  expect_is(
+  expect_s3_class(
     x_iris2$predictors$Species,
     "factor"
   )
@@ -365,7 +365,7 @@ test_that("new data classes are caught", {
     NA
   )
 
-  expect_is(
+  expect_s3_class(
     xx_iris3$outcomes$.outcome,
     "factor"
   )

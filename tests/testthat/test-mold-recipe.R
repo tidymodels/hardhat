@@ -9,19 +9,19 @@ test_that("can mold recipes", {
   x2 <- mold(rec, iris, blueprint = sparse_bp)
   x3 <- mold(rec, iris, blueprint = matrix_bp)
 
-  expect_is(x1$predictors, "data.frame")
-  expect_is(x2$predictors, "dgCMatrix")
-  expect_is(x3$predictors, "matrix")
+  expect_s3_class(x1$predictors, "data.frame")
+  expect_s4_class(x2$predictors, "dgCMatrix")
+  expect_matrix(x3$predictors)
 
-  expect_is(x1$outcomes, "data.frame")
-  expect_is(x2$outcomes, "data.frame")
-  expect_is(x3$outcomes, "data.frame")
+  expect_s3_class(x1$outcomes, "data.frame")
+  expect_s3_class(x2$outcomes, "data.frame")
+  expect_s3_class(x3$outcomes, "data.frame")
 
   expect_equal(colnames(x1$predictors), "Sepal.Length")
   expect_equal(colnames(x2$predictors), "Sepal.Length")
   expect_equal(colnames(x3$predictors), "Sepal.Length")
-  expect_is(x1$outcomes[[1]], "factor")
-  expect_is(x1$blueprint, "default_recipe_blueprint")
+  expect_s3_class(x1$outcomes[[1]], "factor")
+  expect_s3_class(x1$blueprint, "default_recipe_blueprint")
 
   # Training data should _not_ be in the recipe
   expect_error(recipes::juice(x1$blueprint))
