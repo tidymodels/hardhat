@@ -73,8 +73,8 @@ factors in \code{ptype}.
 # ---------------------------------------------------------------------------
 # Setup
 
-train <- iris[1:100,]
-test <- iris[101:150,]
+train <- iris[1:100, ]
+test <- iris[101:150, ]
 
 # mold() is run at model fit time
 # and a formula preprocessing blueprint is recorded
@@ -156,5 +156,4 @@ test4_kept <- scream(test4, ptype_pred, allow_novel_levels = TRUE)
 
 # Novel level is kept
 levels(test4_kept$Species)
-
 }

@@ -68,7 +68,6 @@ check_no_formula_duplication(y ~ log(y), original = TRUE)
 
 # This would throw an error
 try(validate_no_formula_duplication(log(y) ~ log(y)))
-
 }
 \seealso{
 Other validation functions: 

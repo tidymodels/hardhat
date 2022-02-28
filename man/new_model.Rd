@@ -33,9 +33,8 @@ use the one that is returned from a call to \code{\link[=mold]{mold()}}.
 }
 \examples{
 new_model(
-  custom_element= "my-elem",
+  custom_element = "my-elem",
   blueprint = default_xy_blueprint(),
   class = "custom_model"
 )
-
 }

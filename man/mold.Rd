@@ -53,5 +53,4 @@ mold(Species ~ Sepal.Width, iris)
 # Recipe
 library(recipes)
 mold(recipe(Species ~ Sepal.Width, iris), iris)
-
 }

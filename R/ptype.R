@@ -22,11 +22,9 @@
 #' @examples
 #'
 #' hardhat:::extract_ptype(iris)
-#'
 #' @keywords internal
 #'
 extract_ptype <- function(data) {
-
   if (is.null(data)) {
     return(NULL)
   }

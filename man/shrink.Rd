@@ -26,8 +26,8 @@ processing is done.
 # ---------------------------------------------------------------------------
 # Setup
 
-train <- iris[1:100,]
-test <- iris[101:150,]
+train <- iris[1:100, ]
+test <- iris[101:150, ]
 
 # ---------------------------------------------------------------------------
 # shrink()
@@ -54,5 +54,4 @@ shrink(test, ptype_out)
 # and errors nicely when they don't
 test2 <- subset(test, select = -Species)
 try(shrink(test2, ptype_pred))
-
 }

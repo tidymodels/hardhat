@@ -17,7 +17,6 @@ validate_empty_dots <- function(...) {
   n_dots <- length(dots)
 
   if (n_dots != 0L) {
-
     dot_nms <- names(rlang::exprs_auto_name(dots))
     dot_nms <- glue_quote_collapse(dot_nms)
 
@@ -110,7 +109,6 @@ abort_unknown_mold_class <- function(x) {
 }
 
 remove_formula_intercept <- function(formula, intercept) {
-
   if (intercept) {
     return(formula)
   }
@@ -160,12 +158,11 @@ class1 <- function(x) {
   class(x)[1]
 }
 
-is_bool <- function (x) {
+is_bool <- function(x) {
   rlang::is_logical(x, n = 1) && !is.na(x)
 }
 
 validate_is_bool <- function(.x, .x_nm) {
-
   if (rlang::is_missing(.x_nm)) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))
   }
@@ -188,7 +185,6 @@ validate_is_new_data_like <- function(new_data) {
 }
 
 check_is_data_like <- function(.x, .x_nm) {
-
   if (rlang::is_missing(.x_nm)) {
     .x_nm <- rlang::as_label(rlang::enexpr(.x))
   }

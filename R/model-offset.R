@@ -45,10 +45,8 @@
 #'     print(e$message)
 #'   }
 #' )
-#'
 #' @export
-model_offset <- function (terms, data) {
-
+model_offset <- function(terms, data) {
   .offset_pos <- attr(terms, "offset")
 
   has_offset <- !is.null(.offset_pos)
@@ -60,18 +58,15 @@ model_offset <- function (terms, data) {
   ans <- rep(0, times = nrow(data))
 
   for (.pos in .offset_pos) {
-
     .offset_val <- data[[.pos]]
 
     if (!is.numeric(.offset_val)) {
-
       bad_col <- colnames(data)[.pos]
 
       glubort(
         "Column, '{bad_col}', is tagged as an offset, but is not numeric. ",
         "All offsets must be numeric."
       )
-
     }
 
     ans <- ans + .offset_val
@@ -81,14 +76,11 @@ model_offset <- function (terms, data) {
 }
 
 extract_offset <- function(terms, data) {
-
   .offset <- model_offset(terms, data)
 
   if (is.null(.offset)) {
     NULL
-  }
-  else {
+  } else {
     tibble::tibble(.offset = .offset)
   }
-
 }

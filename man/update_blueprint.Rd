@@ -37,5 +37,4 @@ try(update_blueprint(blueprint, intercpt = TRUE))
 
 # Can't add non-valid elements
 try(update_blueprint(blueprint, intercept = 1))
-
 }

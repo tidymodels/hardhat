@@ -52,8 +52,8 @@
 #' # for various ways to call forge with different
 #' # blueprints.
 #'
-#' train <- iris[1:100,]
-#' test <- iris[101:150,]
+#' train <- iris[1:100, ]
+#' test <- iris[101:150, ]
 #'
 #' # Formula
 #' processed <- mold(
@@ -75,7 +75,6 @@ forge.default <- function(new_data, blueprint, ..., outcomes = FALSE) {
 
 #' @export
 forge.data.frame <- function(new_data, blueprint, ..., outcomes = FALSE) {
-
   validate_empty_dots(...)
   validate_is_blueprint(blueprint)
 

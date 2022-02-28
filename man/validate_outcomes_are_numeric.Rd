@@ -61,7 +61,6 @@ check_outcomes_are_numeric(iris)
 
 # This gives an intelligent error message
 try(validate_outcomes_are_numeric(iris))
-
 }
 \seealso{
 Other validation functions: 

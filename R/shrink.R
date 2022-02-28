@@ -22,8 +22,8 @@
 #' # ---------------------------------------------------------------------------
 #' # Setup
 #'
-#' train <- iris[1:100,]
-#' test <- iris[101:150,]
+#' train <- iris[1:100, ]
+#' test <- iris[101:150, ]
 #'
 #' # ---------------------------------------------------------------------------
 #' # shrink()
@@ -50,10 +50,8 @@
 #' # and errors nicely when they don't
 #' test2 <- subset(test, select = -Species)
 #' try(shrink(test2, ptype_pred))
-#'
 #' @export
 shrink <- function(data, ptype) {
-
   if (is.null(data)) {
     return(NULL)
   }
@@ -67,4 +65,3 @@ shrink <- function(data, ptype) {
 
   out
 }
-

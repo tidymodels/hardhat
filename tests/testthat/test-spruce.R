@@ -11,7 +11,6 @@ test_that("spruce - numeric", {
 })
 
 test_that("spruce - class", {
-
   spruced <- spruce_class(factor(letters[1:5]))
 
   expect_is(spruced, "tbl_df")
@@ -22,7 +21,6 @@ test_that("spruce - class", {
 })
 
 test_that("spruce - prob", {
-
   pred_levels <- letters[1:5]
   prob_matrix <- matrix(.5, ncol = 5, nrow = 2)
 
@@ -54,5 +52,4 @@ test_that("spruce - prob", {
     spruce_prob(c("a"), matrix(1, ncol = 2)),
     "2"
   )
-
 })

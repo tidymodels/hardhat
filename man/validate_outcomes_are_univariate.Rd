@@ -56,7 +56,6 @@ and provide your own validation function.
 validate_outcomes_are_univariate(data.frame(x = 1))
 
 try(validate_outcomes_are_univariate(mtcars))
-
 }
 \seealso{
 Other validation functions: 

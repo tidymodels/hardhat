@@ -3,7 +3,6 @@ context("test-mold-recipes")
 library(recipes)
 
 test_that("can mold recipes", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
@@ -31,7 +30,6 @@ test_that("can mold recipes", {
 })
 
 test_that("can mold recipes with intercepts", {
-
   rec <- recipe(Species ~ Sepal.Length, data = iris)
 
   x1 <- mold(
@@ -59,11 +57,10 @@ test_that("can mold recipes with intercepts", {
 })
 
 test_that("can pass `fresh` through to `prep()`", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
-  iris1 <- iris[1:50,]
-  iris2 <- iris[51:100,]
+  iris1 <- iris[1:50, ]
+  iris2 <- iris[51:100, ]
 
   rec <- recipe(Species ~ Sepal.Length, data = iris1)
   rec <- step_center(rec, Sepal.Length)
@@ -92,11 +89,10 @@ test_that("can pass `fresh` through to `prep()`", {
 })
 
 test_that("`fresh` defaults to `TRUE`", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
-  iris1 <- iris[1:50,]
-  iris2 <- iris[51:100,]
+  iris1 <- iris[1:50, ]
+  iris2 <- iris[51:100, ]
 
   rec <- recipe(Species ~ Sepal.Length, data = iris1)
   rec <- step_center(rec, Sepal.Length)
@@ -117,16 +113,13 @@ test_that("`fresh` defaults to `TRUE`", {
 })
 
 test_that("`data` is validated", {
-
   expect_error(
     mold(recipe(Species ~ Sepal.Length, data = iris), 1),
     "`data` must be a data.frame or a matrix"
   )
-
 })
 
 test_that("`extras` holds a slot for `roles`", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
@@ -145,7 +138,6 @@ test_that("`extras` holds a slot for `roles`", {
 })
 
 test_that("non-standard roles columns are stored", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
@@ -181,11 +173,9 @@ test_that("non-standard roles columns are stored", {
     x1$extras$roles,
     x3$extras$roles
   )
-
 })
 
 test_that("only original non-standard columns are in the extra roles ptype", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   # same custom role, but not step_bs() columns arent original columns
@@ -215,11 +205,9 @@ test_that("only original non-standard columns are in the extra roles ptype", {
     colnames(x2$extras$roles$dummy),
     c("Sepal.Width", paste("Sepal.Length", c("1", "2", "3"), sep = "_bs_"))
   )
-
 })
 
 test_that("multiple extra roles types can be stored", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   rec <- recipe(Species ~ ., iris) %>%
@@ -247,11 +235,9 @@ test_that("multiple extra roles types can be stored", {
     names(x2$extras$roles),
     c("dummy", "dummy2")
   )
-
 })
 
 test_that("`NA` roles are skipped over", {
-
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   rec <- recipe(iris) %>%
@@ -315,12 +301,11 @@ test_that("`NA` roles are skipped over", {
     colnames(x2$blueprint$extra_role_ptypes$custom),
     "Sepal.Width"
   )
-
 })
 
 test_that("Missing y value returns a 0 column tibble for `outcomes`", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
-  rec <- recipe(~ Sepal.Width, data = iris)
+  rec <- recipe(~Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
 
@@ -331,7 +316,7 @@ test_that("Missing y value returns a 0 column tibble for `outcomes`", {
 
 test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
-  rec <- recipe(~ Sepal.Width, data = iris)
+  rec <- recipe(~Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
   expect_equal(x1$blueprint$ptypes$outcomes, tibble())

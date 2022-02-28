@@ -28,5 +28,4 @@ add_intercept_column(mtcars)
 add_intercept_column(mtcars, "intercept")
 
 add_intercept_column(as.matrix(mtcars))
-
 }

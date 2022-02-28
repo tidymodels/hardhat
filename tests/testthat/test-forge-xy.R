@@ -1,7 +1,6 @@
 context("test-forge-xy")
 
 test_that("simple forge works", {
-
   sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_xy_blueprint(composition = "matrix")
 
@@ -26,7 +25,6 @@ test_that("simple forge works", {
 })
 
 test_that("asking for the outcome works", {
-
   sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_xy_blueprint(composition = "matrix")
 
@@ -55,12 +53,9 @@ test_that("asking for the outcome works", {
   )
   expect_equal(xx1$outcomes, xx3$outcomes)
   expect_equal(xx1$outcomes, xx3$outcomes)
-
-
 })
 
 test_that("asking for the outcome is special cased for vector `y` values", {
-
   sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_xy_blueprint(composition = "matrix")
 
@@ -126,13 +121,11 @@ test_that("asking for the outcome is special cased for vector `y` values", {
     forge(iris, x3$blueprint, outcomes = TRUE),
     "`new_data` must include a column with the automatically generated name, '.outcome'"
   )
-
 })
 
 test_that("new_data can be a matrix", {
-
   x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-  iris_mat <- as.matrix(iris[,"Sepal.Length", drop = FALSE])
+  iris_mat <- as.matrix(iris[, "Sepal.Length", drop = FALSE])
 
   expect_error(
     xx <- forge(iris_mat, x$blueprint),
@@ -146,7 +139,6 @@ test_that("new_data can be a matrix", {
     xx$predictors,
     pred_tbl
   )
-
 })
 
 test_that("new_data can only be a data frame / matrix", {
@@ -169,7 +161,6 @@ test_that("new_data can only be a data frame / matrix", {
     forge("hi", x3$blueprint),
     "The class of `new_data`, 'character'"
   )
-
 })
 
 test_that("missing predictor columns fail appropriately", {
@@ -178,30 +169,29 @@ test_that("missing predictor columns fail appropriately", {
   x2 <- mold(
     iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE],
     iris$Species,
-    blueprint = bp)
+    blueprint = bp
+  )
 
   expect_error(
-    forge(iris[,1, drop = FALSE], x1$blueprint),
+    forge(iris[, 1, drop = FALSE], x1$blueprint),
     "Sepal.Width"
   )
   expect_error(
-    forge(iris[,1, drop = FALSE], x2$blueprint),
+    forge(iris[, 1, drop = FALSE], x2$blueprint),
     "Sepal.Width"
   )
 
   expect_error(
-    forge(iris[,3, drop = FALSE], x1$blueprint),
+    forge(iris[, 3, drop = FALSE], x1$blueprint),
     "'Sepal.Length', 'Sepal.Width'"
   )
   expect_error(
-    forge(iris[,3, drop = FALSE], x2$blueprint),
+    forge(iris[, 3, drop = FALSE], x2$blueprint),
     "'Sepal.Length', 'Sepal.Width'"
   )
-
 })
 
 test_that("novel predictor levels are caught", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -220,10 +210,9 @@ test_that("novel predictor levels are caught", {
   )
 
   expect_equal(
-    xx$predictors[[5,1]],
+    xx$predictors[[5, 1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
-
 })
 
 test_that("novel predictor levels can be ignored", {
@@ -247,13 +236,12 @@ test_that("novel predictor levels can be ignored", {
   )
 
   expect_equal(
-    xx$predictors[[5,1]],
+    xx$predictors[[5, 1]],
     factor("e", c("a", "b", "c", "d", "e"))
   )
 })
 
 test_that("novel predictor levels without any data are silently removed", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -265,7 +253,7 @@ test_that("novel predictor levels without any data are silently removed", {
   )
 
   # The 'e' level exists, but there is no data for it!
-  new <- new[1:4,]
+  new <- new[1:4, ]
 
   x <- mold(dat[, "f", drop = FALSE], dat$y)
 
@@ -277,11 +265,9 @@ test_that("novel predictor levels without any data are silently removed", {
     colnames(xx$predictors),
     colnames(x$predictors)
   )
-
 })
 
 test_that("novel outcome levels are caught", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -313,18 +299,16 @@ test_that("novel outcome levels are caught", {
   )
 
   expect_equal(
-    xx1$outcomes[[5,1]],
+    xx1$outcomes[[5, 1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
   expect_equal(
-    xx2$outcomes[[5,1]],
+    xx2$outcomes[[5, 1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
-
 })
 
 test_that("original predictor and outcome classes are recorded", {
-
   bp <- default_xy_blueprint(composition = "dgCMatrix")
   x1 <- mold(
     iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE],
@@ -353,11 +337,9 @@ test_that("original predictor and outcome classes are recorded", {
     get_data_classes(x2$blueprint$ptypes$outcomes),
     list(.outcome = "factor")
   )
-
 })
 
 test_that("new data classes are caught", {
-
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
 
@@ -389,11 +371,9 @@ test_that("new data classes are caught", {
     xx_iris3$outcomes$.outcome,
     "factor"
   )
-
 })
 
 test_that("new data classes can interchange integer/numeric", {
-
   iris2 <- iris
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
 
@@ -416,11 +396,9 @@ test_that("new data classes can interchange integer/numeric", {
     forge(iris2, x2$blueprint),
     NA
   )
-
 })
 
 test_that("intercept is not included as a predictor", {
-
   x1 <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris[, "Species", drop = FALSE],
@@ -467,7 +445,6 @@ test_that("intercept is not included as a predictor", {
   expect_false(
     "(Intercept)" %in% colnames(y$blueprint$ptypes$predictors)
   )
-
 })
 
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {

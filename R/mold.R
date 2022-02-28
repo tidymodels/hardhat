@@ -51,7 +51,6 @@
 #' # Recipe
 #' library(recipes)
 #' mold(recipe(Species ~ Sepal.Width, iris), iris)
-#'
 #' @export
 mold <- function(x, ...) {
   UseMethod("mold")
@@ -65,7 +64,6 @@ mold.default <- function(x, ...) {
 #' @rdname default_xy_blueprint
 #' @export
 mold.data.frame <- function(x, y, ..., blueprint = NULL) {
-
   validate_empty_dots(...)
 
   if (is.null(blueprint)) {
@@ -94,7 +92,6 @@ mold.matrix <- mold.data.frame
 #' @rdname default_formula_blueprint
 #' @export
 mold.formula <- function(formula, data, ..., blueprint = NULL) {
-
   validate_empty_dots(...)
 
   if (is.null(blueprint)) {
@@ -121,7 +118,6 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
 #' @rdname default_recipe_blueprint
 #' @export
 mold.recipe <- function(x, data, ..., blueprint = NULL) {
-
   validate_empty_dots(...)
 
   validate_recipes_available()
@@ -220,4 +216,3 @@ run_mold.recipe_blueprint <- function(blueprint, data, ...) {
 
   blueprint$mold$process(blueprint = blueprint, data = data)
 }
-

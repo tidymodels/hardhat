@@ -32,10 +32,8 @@
 #' # which converts the input to a data frame
 #' # with an automatically named column, `".outcome"`
 #' get_outcome_levels(y = factor(letters[1:5]))
-#'
 #' @export
 get_levels <- function(data) {
-
   if (!is.data.frame(data)) {
     return(NULL)
   }

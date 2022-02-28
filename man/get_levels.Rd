@@ -48,7 +48,6 @@ get_levels(mtcars)
 # which converts the input to a data frame
 # with an automatically named column, `".outcome"`
 get_outcome_levels(y = factor(letters[1:5]))
-
 }
 \seealso{
 \code{\link[stats:checkMFClasses]{stats::.getXlevels()}}

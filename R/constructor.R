@@ -25,14 +25,12 @@
 #'
 #' @examples
 #' new_model(
-#'   custom_element= "my-elem",
+#'   custom_element = "my-elem",
 #'   blueprint = default_xy_blueprint(),
 #'   class = "custom_model"
 #' )
-#'
 #' @export
 new_model <- function(..., blueprint = default_xy_blueprint(), class = character()) {
-
   validate_is_blueprint(blueprint)
 
   new_abstract_model(..., blueprint = blueprint, class = c(class, "hardhat_model"))
@@ -47,14 +45,13 @@ print.hardhat_model <- function(x, ...) {
   print(unclass(x))
 }
 
-cat_line <- function (...) {
+cat_line <- function(...) {
   cat(paste0(..., "\n", collapse = ""))
 }
 
 # ------------------------------------------------------------------------------
 
 new_abstract_model <- function(..., class) {
-
   elems <- rlang::list2(...)
   validate_has_unique_names(elems, "...")
 
@@ -69,7 +66,6 @@ new_scalar <- function(elems, ..., class = character()) {
 # ------------------------------------------------------------------------------
 
 check_elems <- function(elems) {
-
   if (!is.list(elems) || length(elems) == 0) {
     abort("`elems` must be a list of length 1 or greater.")
   }

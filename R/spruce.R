@@ -30,7 +30,6 @@ NULL
 #' @rdname spruce
 #' @export
 spruce_numeric <- function(pred) {
-
   validate_is(pred, is.numeric, "numeric")
   validate_not_matrix(pred)
 
@@ -42,7 +41,6 @@ spruce_numeric <- function(pred) {
 #' @rdname spruce
 #' @export
 spruce_class <- function(pred_class) {
-
   validate_is(pred_class, is.factor, "factor")
 
   predictions <- tibble(.pred_class = pred_class)
@@ -67,7 +65,8 @@ spruce_prob <- function(pred_levels, prob_matrix) {
   if (n_levels != n_col) {
     glubort(
       "The number of levels ({n_levels}) must be
-      equal to the number of class probability columns ({n_col}).")
+      equal to the number of class probability columns ({n_col})."
+    )
   }
 
   pred_levels <- paste0(".pred_", pred_levels)

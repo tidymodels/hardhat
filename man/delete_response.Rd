@@ -29,5 +29,4 @@ framed <- model_frame(Species ~ Sepal.Width, iris)
 attr(delete.response(framed$terms), "dataClasses")
 
 attr(delete_response(framed$terms), "dataClasses")
-
 }

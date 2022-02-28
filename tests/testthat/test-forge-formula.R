@@ -25,7 +25,6 @@ test_that("simple forge works", {
 })
 
 test_that("can forge multivariate formulas", {
-
   sparse_bp <- default_formula_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_formula_blueprint(composition = "matrix")
 
@@ -58,11 +57,9 @@ test_that("can forge multivariate formulas", {
   )
   expect_equal(yy1$outcomes, yy2$outcomes)
   expect_equal(yy1$outcomes, yy3$outcomes)
-
 })
 
 test_that("can forge new data without expanding factors into dummies", {
-
   x <- mold(
     num_1 ~ fac_1,
     example_train,
@@ -80,7 +77,6 @@ test_that("can forge new data without expanding factors into dummies", {
     xx$predictors$fac_1,
     "factor"
   )
-
 })
 
 test_that("forging with `indicators = 'none'` works with numeric interactions", {
@@ -157,8 +153,8 @@ test_that("can use special inline functions", {
   # manually create poly df
   x_poly <- stats::poly(example_train$num_1, degree = 2)
   poly_df <- tibble::tibble(
-    `poly(num_1, degree = 2)1` = x_poly[,1],
-    `poly(num_1, degree = 2)2` = x_poly[,2]
+    `poly(num_1, degree = 2)1` = x_poly[, 1],
+    `poly(num_1, degree = 2)2` = x_poly[, 2]
   )
 
   # coerce to df for tolerance..tibbles don't have good tolerance
@@ -176,14 +172,13 @@ test_that("can use special inline functions", {
     tibble::tibble(`log(num_1)` = log(example_train$num_1))
   )
   expect_equal(xx1$outcomes, xx2$outcomes)
-
 })
 
 test_that("new_data can be a matrix", {
   bp <- default_formula_blueprint(composition = "matrix")
   x1 <- mold(fac_1 ~ num_1, example_train)
   x2 <- mold(fac_1 ~ num_1, example_train, blueprint = bp)
-  example_train_mat <- as.matrix(example_train[,"num_1", drop = FALSE])
+  example_train_mat <- as.matrix(example_train[, "num_1", drop = FALSE])
 
   expect_error(
     xx1 <- forge(example_train_mat, x1$blueprint),
@@ -204,7 +199,6 @@ test_that("new_data can be a matrix", {
     unname(xx2$predictors),
     as.matrix(sep_len)
   )
-
 })
 
 test_that("new_data can only be a data frame / matrix", {
@@ -220,7 +214,6 @@ test_that("new_data can only be a data frame / matrix", {
     forge("hi", x2$blueprint),
     "The class of `new_data`, 'character'"
   )
-
 })
 
 test_that("missing predictor columns fail appropriately", {
@@ -229,28 +222,25 @@ test_that("missing predictor columns fail appropriately", {
   x2 <- mold(fac_1 ~ num_1 + num_2, example_train, blueprint = bp)
 
   expect_error(
-    forge(example_train[,1, drop = FALSE], x1$blueprint),
+    forge(example_train[, 1, drop = FALSE], x1$blueprint),
     "num_2"
   )
   expect_error(
-    forge(example_train[,1, drop = FALSE], x2$blueprint),
+    forge(example_train[, 1, drop = FALSE], x2$blueprint),
     "num_2"
   )
 
   expect_error(
-    forge(example_train[,3, drop = FALSE], x1$blueprint),
+    forge(example_train[, 3, drop = FALSE], x1$blueprint),
     "'num_1', 'num_2'"
   )
   expect_error(
-    forge(example_train[,3, drop = FALSE], x2$blueprint),
+    forge(example_train[, 3, drop = FALSE], x2$blueprint),
     "'num_1', 'num_2'"
   )
-
-
 })
 
 test_that("novel predictor levels are caught", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -276,18 +266,16 @@ test_that("novel predictor levels are caught", {
   )
 
   expect_equal(
-    xx1$predictors[[5,1]],
+    xx1$predictors[[5, 1]],
     NA_real_
   )
   expect_equal(
-    unname(xx2$predictors[5,1]),
+    unname(xx2$predictors[5, 1]),
     NA_real_
   )
-
 })
 
 test_that("novel predictor levels can be ignored", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -314,17 +302,16 @@ test_that("novel predictor levels can be ignored", {
   )
 
   expect_equal(
-    xx1$predictors[[5,5]],
+    xx1$predictors[[5, 5]],
     1
   )
   expect_equal(
-    unname(xx2$predictors[5,5]),
+    unname(xx2$predictors[5, 5]),
     1
   )
 })
 
 test_that("novel predictor levels without any data are silently removed", {
-
   bp <- default_formula_blueprint(composition = "dgCMatrix")
 
   dat <- data.frame(
@@ -338,7 +325,7 @@ test_that("novel predictor levels without any data are silently removed", {
   )
 
   # The 'e' level exists, but there is no data for it!
-  new <- new[1:4,]
+  new <- new[1:4, ]
 
   x1 <- mold(y ~ f, dat)
   x2 <- mold(y ~ f, dat, blueprint = bp)
@@ -358,11 +345,9 @@ test_that("novel predictor levels without any data are silently removed", {
     colnames(xx2$predictors),
     colnames(x2$predictors)
   )
-
 })
 
 test_that("novel predictor levels without any data are kept when novel levels are ignored", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -374,7 +359,7 @@ test_that("novel predictor levels without any data are kept when novel levels ar
   )
 
   # The 'e' level exists, but there is no data for it!
-  new <- new[1:4,]
+  new <- new[1:4, ]
 
   bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
   bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
@@ -400,7 +385,6 @@ test_that("novel predictor levels without any data are kept when novel levels ar
 })
 
 test_that("novel levels are handled correctly when the new column is a character", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -425,16 +409,16 @@ test_that("novel levels are handled correctly when the new column is a character
   )
 
   expect_equal(
-    xx1$predictors[[5,1]],
+    xx1$predictors[[5, 1]],
     NA_real_
   )
   expect_equal(
-    unname(xx2$predictors[5,1]),
+    unname(xx2$predictors[5, 1]),
     NA_real_
   )
 
   # The 'e' level exists, but there is no data for it!
-  new2 <- new[1:4,]
+  new2 <- new[1:4, ]
 
   # silently coerces to factor, and silently removes novel level
   expect_silent(
@@ -443,7 +427,6 @@ test_that("novel levels are handled correctly when the new column is a character
   expect_silent(
     xx2 <- forge(new2, x2$blueprint)
   )
-
 })
 
 test_that("novel levels are handled correctly when the new column is a character and the original is ordered", {
@@ -472,7 +455,7 @@ test_that("novel levels are handled correctly when the new column is a character
   )
 
   # The 'e' level exists, but there is no data for it!
-  new2 <- new[1:4,]
+  new2 <- new[1:4, ]
 
   # silently coerces to factor, and silently removes novel level
   expect_silent(
@@ -511,16 +494,16 @@ test_that("novel levels are ignored correctly when the new column is a character
   )
 
   expect_equal(
-    xx1$predictors[[5,5]],
+    xx1$predictors[[5, 5]],
     1
   )
   expect_equal(
-    unname(xx2$predictors[5,5]),
+    unname(xx2$predictors[5, 5]),
     1
   )
 
   # The 'e' level exists, but there is no data for it!
-  new2 <- new[1:4,]
+  new2 <- new[1:4, ]
 
   # silently coerces to factor, and silently removes novel level
   expect_silent(
@@ -619,11 +602,11 @@ test_that("novel outcome levels are caught", {
   )
 
   expect_equal(
-    xx1$outcomes[[5,1]],
+    xx1$outcomes[[5, 1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
   expect_equal(
-    xx2$outcomes[[5,1]],
+    xx2$outcomes[[5, 1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
 })
@@ -655,17 +638,16 @@ test_that("novel outcome levels are always caught, even if `allow_novel_levels =
   )
 
   expect_equal(
-    xx1$outcomes[[5,1]],
+    xx1$outcomes[[5, 1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
   expect_equal(
-    xx2$outcomes[[5,1]],
+    xx2$outcomes[[5, 1]],
     factor(NA_real_, c("a", "b", "c", "d"))
   )
 })
 
 test_that("missing predictor levels are restored silently", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -722,7 +704,6 @@ test_that("missing predictor levels are restored silently", {
     colnames(yy2$predictors),
     c("fa", "fb", "fc", "fd")
   )
-
 })
 
 test_that("missing ordered factor levels are an error", {
@@ -753,7 +734,6 @@ test_that("missing ordered factor levels are an error", {
 })
 
 test_that("can be both missing levels and have new levels", {
-
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -764,8 +744,8 @@ test_that("can be both missing levels and have new levels", {
     f = factor(letters[c(1:3, 5)])
   )
 
-  bp1 = default_formula_blueprint(indicators = "none")
-  bp2 = default_formula_blueprint(indicators = "none", composition = "matrix")
+  bp1 <- default_formula_blueprint(indicators = "none")
+  bp2 <- default_formula_blueprint(indicators = "none", composition = "matrix")
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   expect_error(
     x2 <- mold(y ~ f, dat, blueprint = bp2),
@@ -782,7 +762,6 @@ test_that("can be both missing levels and have new levels", {
     levels(xx$predictors$f),
     levels(dat$f)
   )
-
 })
 
 test_that("can be both missing levels and have new levels that get ignored", {
@@ -839,7 +818,6 @@ test_that("`NA` factor data never triggers a novel level warning (#131)", {
 })
 
 test_that("new data classes are caught", {
-
   example_train2 <- example_train
   example_train2$fac_1 <- as.character(example_train2$fac_1)
 
@@ -867,11 +845,9 @@ test_that("new data classes are caught", {
     xx_example_train2$outcomes$fac_1,
     "factor"
   )
-
 })
 
 test_that("new data classes can interchange integer/numeric", {
-
   example_train2 <- example_train
   example_train2$num_1 <- as.integer(example_train2$num_1)
 
@@ -899,11 +875,9 @@ test_that("new data classes can interchange integer/numeric", {
     forge(example_train2, x4$blueprint, outcomes = TRUE),
     NA
   )
-
 })
 
 test_that("intercepts can still be forged on when not using indicators (i.e. model.matrix())", {
-
   x <- mold(num_2 ~ fac_1, example_train, blueprint = default_formula_blueprint(intercept = TRUE, indicators = "none"))
   xx <- forge(example_train, x$blueprint)
 
@@ -915,21 +889,20 @@ test_that("intercepts can still be forged on when not using indicators (i.e. mod
     xx$predictors$fac_1,
     "factor"
   )
-
 })
 
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  x1 <- mold(~ num_2, example_train)
-  x2 <- mold(~ num_2, example_train, blueprint = bp)
+  x1 <- mold(~num_2, example_train)
+  x2 <- mold(~num_2, example_train, blueprint = bp)
   expect_equal(forge(example_train, x1$blueprint)$outcomes, NULL)
   expect_equal(forge(example_train, x2$blueprint)$outcomes, NULL)
 })
 
 test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  x1 <- mold(~ num_2, example_train)
-  x2 <- mold(~ num_2, example_train, blueprint = bp)
+  x1 <- mold(~num_2, example_train)
+  x2 <- mold(~num_2, example_train, blueprint = bp)
 
   xx1 <- forge(example_train, x1$blueprint, outcomes = TRUE)
   xx2 <- forge(example_train, x2$blueprint, outcomes = TRUE)

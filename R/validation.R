@@ -33,11 +33,9 @@
 #' validate_outcomes_are_univariate(data.frame(x = 1))
 #'
 #' try(validate_outcomes_are_univariate(mtcars))
-#'
 #' @family validation functions
 #' @export
 validate_outcomes_are_univariate <- function(outcomes) {
-
   check <- check_outcomes_are_univariate(outcomes)
 
   if (!check$ok) {
@@ -52,11 +50,9 @@ validate_outcomes_are_univariate <- function(outcomes) {
 #' @rdname validate_outcomes_are_univariate
 #' @export
 check_outcomes_are_univariate <- function(outcomes) {
-
   if (!rlang::is_vector(outcomes)) {
     n_cols <- 0L
-  }
-  else {
+  } else {
     n_cols <- NCOL(outcomes) %||% 0L
   }
 
@@ -109,7 +105,6 @@ check_outcomes_are_univariate <- function(outcomes) {
 #'
 #' # This gives an intelligent error message
 #' try(validate_outcomes_are_numeric(iris))
-#'
 #' @family validation functions
 #' @export
 validate_outcomes_are_numeric <- function(outcomes) {
@@ -142,8 +137,7 @@ check_outcomes_are_numeric <- function(outcomes) {
 
   if (!ok) {
     bad_classes <- get_data_classes(outcomes[, !where_numeric])
-  }
-  else {
+  } else {
     bad_classes <- list()
   }
 
@@ -189,11 +183,9 @@ check_outcomes_are_numeric <- function(outcomes) {
 #'
 #' # All good
 #' check_outcomes_are_factors(data.frame(x = factor(c("A", "B"))))
-#'
 #' @family validation functions
 #' @export
 validate_outcomes_are_factors <- function(outcomes) {
-
   check <- check_outcomes_are_factors(outcomes)
 
   if (!check$ok) {
@@ -215,7 +207,6 @@ validate_outcomes_are_factors <- function(outcomes) {
 #' @rdname validate_outcomes_are_factors
 #' @export
 check_outcomes_are_factors <- function(outcomes) {
-
   outcomes <- check_is_data_like(outcomes, "outcomes")
 
   where_factor <- map_lgl(outcomes, is.factor)
@@ -224,8 +215,7 @@ check_outcomes_are_factors <- function(outcomes) {
 
   if (!ok) {
     bad_classes <- get_data_classes(outcomes[, !where_factor])
-  }
-  else {
+  } else {
     bad_classes <- list()
   }
 
@@ -276,11 +266,9 @@ check_outcomes_are_factors <- function(outcomes) {
 #'
 #' # All good
 #' check_outcomes_are_binary(data.frame(x = factor(c("A", "B"))))
-#'
 #' @family validation functions
 #' @export
 validate_outcomes_are_binary <- function(outcomes) {
-
   check <- check_outcomes_are_binary(outcomes)
 
   if (!check$ok) {
@@ -302,7 +290,6 @@ validate_outcomes_are_binary <- function(outcomes) {
 #' @rdname validate_outcomes_are_binary
 #' @export
 check_outcomes_are_binary <- function(outcomes) {
-
   outcomes <- check_is_data_like(outcomes, "outcomes")
 
   outcomes_levels <- map(outcomes, levels)
@@ -316,8 +303,7 @@ check_outcomes_are_binary <- function(outcomes) {
     num_levels <- map_int(non_binary_levels, length)
     bad_cols <- names(num_levels)
     num_levels <- unname(num_levels)
-  }
-  else {
+  } else {
     num_levels <- integer()
     bad_cols <- character()
   }
@@ -371,11 +357,9 @@ is_binary <- function(x) {
 #'
 #' # This gives an intelligent error message
 #' try(validate_predictors_are_numeric(iris))
-#'
 #' @family validation functions
 #' @export
 validate_predictors_are_numeric <- function(predictors) {
-
   check <- check_predictors_are_numeric(predictors)
 
   if (!check$ok) {
@@ -397,7 +381,6 @@ validate_predictors_are_numeric <- function(predictors) {
 #' @rdname validate_predictors_are_numeric
 #' @export
 check_predictors_are_numeric <- function(predictors) {
-
   predictors <- check_is_data_like(predictors)
 
   where_numeric <- map_lgl(predictors, is.numeric)
@@ -406,8 +389,7 @@ check_predictors_are_numeric <- function(predictors) {
 
   if (!ok) {
     bad_classes <- get_data_classes(predictors[, !where_numeric])
-  }
-  else {
+  } else {
     bad_classes <- list()
   }
 
@@ -474,8 +456,8 @@ check_predictors_are_numeric <- function(predictors) {
 #' # ---------------------------------------------------------------------------
 #' # Special error when `.outcome` is missing
 #'
-#' train <- iris[1:100,]
-#' test <- iris[101:150,]
+#' train <- iris[1:100, ]
+#' test <- iris[101:150, ]
 #'
 #' train_x <- subset(train, select = -Species)
 #' train_y <- train$Species
@@ -498,17 +480,14 @@ check_predictors_are_numeric <- function(predictors) {
 #' test$.outcome <- test$Species
 #'
 #' forge(test, processed$blueprint, outcomes = TRUE)
-#'
 #' @family validation functions
 #' @export
 validate_column_names <- function(data, original_names) {
-
   data <- check_is_data_like(data)
 
   check <- check_column_names(data, original_names)
 
   if (!check$ok) {
-
     validate_missing_name_isnt_.outcome(check$missing_names)
 
     missing_names <- glue_quote_collapse(check$missing_names)
@@ -516,7 +495,6 @@ validate_column_names <- function(data, original_names) {
     glubort(
       "The following required columns are missing: {missing_names}."
     )
-
   }
 
   invisible(data)
@@ -525,7 +503,6 @@ validate_column_names <- function(data, original_names) {
 #' @rdname validate_column_names
 #' @export
 check_column_names <- function(data, original_names) {
-
   if (!is.character(original_names)) {
     glubort("`original_names` must be a character vector.")
   }
@@ -538,8 +515,7 @@ check_column_names <- function(data, original_names) {
 
   if (!ok) {
     missing_names <- original_names[!has_names]
-  }
-  else {
+  } else {
     missing_names <- character()
   }
 
@@ -547,11 +523,9 @@ check_column_names <- function(data, original_names) {
 }
 
 validate_missing_name_isnt_.outcome <- function(missing_names) {
-
   not_ok <- ".outcome" %in% missing_names
 
   if (not_ok) {
-
     missing_names <- glue_quote_collapse(missing_names)
 
     glubort(
@@ -562,7 +536,6 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
       "in `forge()`, `new_data` must include a column with the automatically ",
       "generated name, '.outcome', containing the outcome.)"
     )
-
   }
 
   invisible(missing_names)
@@ -612,7 +585,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #'
 #' @examples
 #' # Say new_data has 5 rows
-#' new_data <- mtcars[1:5,]
+#' new_data <- mtcars[1:5, ]
 #'
 #' # And somehow you generate predictions
 #' # for those 5 rows
@@ -631,14 +604,12 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
 #' # An informative error message is thrown
 #' # if the rows are different
 #' try(validate_prediction_size(spruce_numeric(1:4), new_data))
-#'
 #' @family validation functions
 #' @export
 validate_prediction_size <- function(pred, new_data) {
-
   check <- check_prediction_size(pred, new_data)
 
-  if(!check$ok) {
+  if (!check$ok) {
     glubort(
       "The size of `new_data` ({check$size_new_data}) must match the ",
       "size of `pred` ({check$size_pred})."
@@ -709,11 +680,9 @@ check_prediction_size <- function(pred, new_data) {
 #'
 #' # This would throw an error
 #' try(validate_no_formula_duplication(log(y) ~ log(y)))
-#'
 #' @family validation functions
 #' @export
 validate_no_formula_duplication <- function(formula, original = FALSE) {
-
   check <- check_no_formula_duplication(formula, original)
 
   if (!check$ok) {
@@ -731,7 +700,6 @@ validate_no_formula_duplication <- function(formula, original = FALSE) {
 #' @rdname validate_no_formula_duplication
 #' @export
 check_no_formula_duplication <- function(formula, original = FALSE) {
-
   validate_is_formula(formula)
   validate_is_bool(original, "original")
 
@@ -747,8 +715,7 @@ check_no_formula_duplication <- function(formula, original = FALSE) {
   if (original) {
     predictors <- all.vars(formula_predictors)
     outcomes <- all.vars(formula_outcomes)
-  }
-  else {
+  } else {
     predictors <- attr(terms(formula_predictors), "term.labels")
     outcomes <- attr(terms(formula_outcomes), "term.labels")
   }
@@ -765,7 +732,6 @@ check_no_formula_duplication <- function(formula, original = FALSE) {
 # ok = bool
 # ... = extra info when not ok
 check_list <- function(ok = TRUE, ...) {
-
   validate_is_bool(ok, "ok")
   elems <- rlang::list2(...)
 

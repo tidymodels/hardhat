@@ -1,7 +1,6 @@
 context("test-validation")
 
 test_that("validate_outcomes_are_univariate()", {
-
   expect_silent(validate_outcomes_are_univariate(data.frame(x = 1)))
 
   expect_silent(validate_outcomes_are_univariate(matrix()))
@@ -12,11 +11,9 @@ test_that("validate_outcomes_are_univariate()", {
     validate_outcomes_are_univariate(iris),
     "The outcome must be univariate, but 5 columns were found."
   )
-
 })
 
 test_that("validate_outcomes_are_numeric()", {
-
   expect_silent(
     validate_outcomes_are_numeric(mtcars)
   )
@@ -33,11 +30,9 @@ test_that("validate_outcomes_are_numeric()", {
     validate_outcomes_are_numeric(x),
     "'x': 'POSIXct', 'POSIXt'\n'y': 'factor'"
   )
-
 })
 
 test_that("validate_no_formula_duplication()", {
-
   expect_silent(validate_no_formula_duplication(y ~ x))
 
   expect_error(
@@ -71,7 +66,6 @@ test_that("validate_no_formula_duplication()", {
     validate_no_formula_duplication(y ~ offset(y), original = TRUE),
     "'y'"
   )
-
 })
 
 test_that("validate_outcomes_are_factors()", {
@@ -89,7 +83,6 @@ test_that("validate_outcomes_are_factors()", {
 })
 
 test_that("validate_outcomes_are_binary()", {
-
   expect_silent(
     validate_outcomes_are_binary(data.frame(x = factor(c("A", "B"))))
   )
@@ -98,11 +91,9 @@ test_that("validate_outcomes_are_binary()", {
     validate_outcomes_are_binary(iris),
     "'Sepal.Length': 0\n'Sepal.Width': 0\n'Petal.Length': 0\n'Petal.Width': 0\n'Species': 3"
   )
-
 })
 
 test_that("validate_predictors_are_numeric()", {
-
   expect_silent(
     validate_predictors_are_numeric(mtcars)
   )
@@ -119,18 +110,15 @@ test_that("validate_predictors_are_numeric()", {
     validate_predictors_are_numeric(x),
     "'x': 'POSIXct', 'POSIXt'\n'y': 'factor'"
   )
-
 })
 
 test_that("validate_prediction_size()", {
-
   expect_silent(
     validate_prediction_size(mtcars, mtcars)
   )
 
   expect_error(
-    validate_prediction_size(mtcars[1:5,], mtcars),
+    validate_prediction_size(mtcars[1:5, ], mtcars),
     "The size of `new_data` \\(32\\) must match the size of `pred` \\(5\\)."
   )
-
 })

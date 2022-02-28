@@ -86,8 +86,8 @@ of \code{new_data}.
 # ---------------------------------------------------------------------------
 # Setup
 
-train <- iris[1:100,]
-test <- iris[101:150,]
+train <- iris[1:100, ]
+test <- iris[101:150, ]
 
 train_x <- train[, "Sepal.Length", drop = FALSE]
 train_y <- train[, "Species", drop = FALSE]
@@ -153,5 +153,4 @@ forge(test2, processed_vec$blueprint, outcomes = TRUE)
 bp <- default_xy_blueprint(composition = "dgCMatrix")
 processed <- mold(train_x, train_y, blueprint = bp)
 class(processed$predictors)
-
 }

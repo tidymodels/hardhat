@@ -26,6 +26,5 @@ at prediction time.
 \examples{
 
 hardhat:::extract_ptype(iris)
-
 }
 \keyword{internal}

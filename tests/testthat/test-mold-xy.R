@@ -41,11 +41,9 @@ test_that("can use x-y mold interface", {
   expect_equal(colnames(x2$outcomes), ".outcome")
   expect_equal(colnames(x3$outcomes), ".outcome")
   expect_is(x1$blueprint, "default_xy_blueprint")
-
 })
 
 test_that("xy intercepts can be added", {
-
   x1 <- mold(
     iris[, "Sepal.Length", drop = FALSE],
     iris$Species,

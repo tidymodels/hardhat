@@ -62,7 +62,6 @@ check_outcomes_are_binary(data.frame(x = factor("A")))
 
 # All good
 check_outcomes_are_binary(data.frame(x = factor(c("A", "B"))))
-
 }
 \seealso{
 Other validation functions: 

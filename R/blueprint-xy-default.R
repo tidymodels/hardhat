@@ -57,8 +57,8 @@
 #' # ---------------------------------------------------------------------------
 #' # Setup
 #'
-#' train <- iris[1:100,]
-#' test <- iris[101:150,]
+#' train <- iris[1:100, ]
+#' test <- iris[101:150, ]
 #'
 #' train_x <- train[, "Sepal.Length", drop = FALSE]
 #' train_y <- train[, "Species", drop = FALSE]
@@ -124,12 +124,10 @@
 #' bp <- default_xy_blueprint(composition = "dgCMatrix")
 #' processed <- mold(train_x, train_y, blueprint = bp)
 #' class(processed$predictors)
-#'
 #' @export
 default_xy_blueprint <- function(intercept = FALSE,
                                  allow_novel_levels = FALSE,
                                  composition = "tibble") {
-
   mold <- get_mold_xy_default_function_set()
   forge <- get_forge_xy_default_function_set()
 
@@ -140,7 +138,6 @@ default_xy_blueprint <- function(intercept = FALSE,
     allow_novel_levels = allow_novel_levels,
     composition = composition
   )
-
 }
 
 #' Create a new default blueprint
@@ -164,7 +161,6 @@ new_default_xy_blueprint <- function(mold,
                                      ptypes = NULL,
                                      ...,
                                      subclass = character()) {
-
   new_xy_blueprint(
     mold = mold,
     forge = forge,
@@ -175,7 +171,6 @@ new_default_xy_blueprint <- function(mold,
     ...,
     subclass = c(subclass, "default_xy_blueprint")
   )
-
 }
 
 #' @export
@@ -252,7 +247,6 @@ mold_xy_default_process_predictors <- function(blueprint, x) {
 }
 
 mold_xy_default_process_outcomes <- function(blueprint, y) {
-
   ptype <- extract_ptype(y)
 
   outcomes_lst <- out$mold$process_terms_lst(data = y, ptype)
@@ -267,7 +261,6 @@ get_forge_xy_default_function_set <- function() {
 }
 
 forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
-
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
   validate_is_bool(outcomes)
@@ -284,8 +277,7 @@ forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
     outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
     # Never allow novel levels for outcomes
     outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
-  }
-  else {
+  } else {
     outcomes <- NULL
   }
 
@@ -312,7 +304,6 @@ forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
 }
 
 forge_xy_default_process_predictors <- function(blueprint, predictors) {
-
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
   predictors <- recompose(predictors, blueprint$composition)

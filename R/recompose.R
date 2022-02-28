@@ -17,7 +17,7 @@ convert_matrix <- function(x, sparse = TRUE) {
 
   if (!all(is_num)) {
     num_viol <- sum(!is_num)
-    if (num_viol < 5)
+    if (num_viol < 5) {
       rlang::abort(
         paste0(
           "Columns (",
@@ -25,7 +25,7 @@ convert_matrix <- function(x, sparse = TRUE) {
           ") are not numeric; cannot convert to matrix."
         )
       )
-    else
+    } else {
       rlang::abort(
         paste0(
           num_viol,
@@ -33,6 +33,7 @@ convert_matrix <- function(x, sparse = TRUE) {
           "convert to matrix."
         )
       )
+    }
   }
 
   # At this point, all cols are numeric so we can just use as.matrix()

@@ -8,13 +8,12 @@ test_that("print - formula", {
     test_path("out/print-blueprint-formula-1.txt")
   )
 
-  xx <- mold(~ Sepal.Length, iris)
+  xx <- mold(~Sepal.Length, iris)
 
   expect_known_output(
     print(xx$blueprint),
     test_path("out/print-blueprint-formula-2.txt")
   )
-
 })
 
 test_that("print - default", {
@@ -24,7 +23,6 @@ test_that("print - default", {
     print(x$blueprint),
     test_path("out/print-blueprint-default-1.txt")
   )
-
 })
 
 library(recipes)
@@ -37,5 +35,4 @@ test_that("print - recipe", {
     print(x$blueprint),
     test_path("out/print-blueprint-recipe-1.txt")
   )
-
 })

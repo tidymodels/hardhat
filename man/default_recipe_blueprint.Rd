@@ -80,15 +80,15 @@ library(recipes)
 # ---------------------------------------------------------------------------
 # Setup
 
-train <- iris[1:100,]
-test <- iris[101:150,]
+train <- iris[1:100, ]
+test <- iris[101:150, ]
 
 # ---------------------------------------------------------------------------
 # Recipes example
 
 # Create a recipe that logs a predictor
 rec <- recipe(Species ~ Sepal.Length + Sepal.Width, train) \%>\%
-   step_log(Sepal.Length)
+  step_log(Sepal.Length)
 
 processed <- mold(rec, train)
 
@@ -146,5 +146,4 @@ forge(test, processed_roles$blueprint)
 bp <- default_recipe_blueprint(composition = "dgCMatrix")
 processed <- mold(rec, train, blueprint = bp)
 class(processed$predictors)
-
 }

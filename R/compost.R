@@ -2,7 +2,6 @@
 # https://github.com/tidymodels/recipes/issues/268
 
 compost <- function(object) {
-
   if (!recipes::fully_trained(object)) {
     return(object)
   }
