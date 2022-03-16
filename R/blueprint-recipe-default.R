@@ -341,7 +341,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 
   # Minimal name repair in case a predictor has multiple roles
   # We just want to include it once, but without any name repair
-  new_data <- vctrs::vec_cbind(
+  new_data <- vec_cbind(
     predictors,
     outcomes,
     !!!unname(extras$roles),

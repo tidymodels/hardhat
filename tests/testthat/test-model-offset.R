@@ -1,14 +1,14 @@
 test_that("an offset slot is NULL when there isn't one", {
   x <- mold(Species ~ Sepal.Width, iris)
 
-  expect_true(rlang::has_name(x$extras, "offset"))
+  expect_true(has_name(x$extras, "offset"))
   expect_equal(x$extras$offset, NULL)
 })
 
 test_that("the offset slot is only present for the formula method", {
   x <- mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
 
-  expect_false(rlang::has_name(x$extras, "offset"))
+  expect_false(has_name(x$extras, "offset"))
 })
 
 test_that("can use offsets", {
@@ -91,7 +91,7 @@ test_that("offsets are NULL in forge() result if not used", {
   x <- mold(Species ~ Sepal.Length, iris)
   xx <- forge(iris, x$blueprint)
 
-  expect_true(rlang::has_name(xx$extras, "offset"))
+  expect_true(has_name(xx$extras, "offset"))
 
   expect_equal(xx$extras$offset, NULL)
 })

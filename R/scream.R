@@ -153,7 +153,7 @@
 #' levels(test4_kept$Species)
 #' @export
 scream <- function(data, ptype, allow_novel_levels = FALSE) {
-  vctrs::vec_assert(allow_novel_levels, ptype = logical(), size = 1L)
+  vec_assert(allow_novel_levels, ptype = logical(), size = 1L)
 
   if (is.null(data)) {
     return(NULL)
@@ -167,7 +167,7 @@ scream <- function(data, ptype, allow_novel_levels = FALSE) {
     data <- remove_novel_levels(data, ptype)
   }
 
-  vctrs::vec_cast(data, ptype)
+  vec_cast(data, ptype)
 }
 
 # ------------------------------------------------------------------------------
@@ -242,7 +242,7 @@ warn_novel_levels <- function(levels, column) {
     "The levels have been removed, and values have been coerced to 'NA'."
   )
 
-  rlang::warn(
+  warn(
     message,
     class = "hardhat_warn_novel_levels",
     levels = levels,
@@ -305,5 +305,5 @@ add_novel_levels <- function(x, ptype) {
 # ------------------------------------------------------------------------------
 
 is_bare_factor <- function(x) {
-  rlang::inherits_only(x, "factor")
+  inherits_only(x, "factor")
 }

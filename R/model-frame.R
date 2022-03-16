@@ -77,7 +77,7 @@ model_frame <- function(formula, data) {
   validate_is_formula(formula)
   data <- check_is_data_like(data)
 
-  frame <- rlang::with_options(
+  frame <- with_options(
     stats::model.frame(formula, data = data),
     na.action = "na.pass"
   )
@@ -95,5 +95,5 @@ model_frame <- function(formula, data) {
 }
 
 validate_is_formula <- function(formula) {
-  validate_is(formula, rlang::is_formula, "formula")
+  validate_is(formula, is_formula, "formula")
 }

@@ -9,7 +9,7 @@ test_that("novel levels can be ignored", {
     f = factor(letters[1:5])
   )
 
-  ptype <- vctrs::vec_ptype(dat)
+  ptype <- vec_ptype(dat)
 
   expect_warning(
     x <- scream(new, ptype, allow_novel_levels = TRUE),
@@ -31,7 +31,7 @@ test_that("novel levels in a new character vector can be ignored", {
     stringsAsFactors = FALSE
   )
 
-  ptype <- vctrs::vec_ptype(dat)
+  ptype <- vec_ptype(dat)
 
   expect_warning(
     x <- scream(new, ptype, allow_novel_levels = TRUE),
@@ -45,7 +45,7 @@ test_that("ignoring novel levels still passes through incompatible classes", {
   dat <- data.frame(f = factor(letters[1:4]))
   new <- data.frame(f = 1:5)
 
-  ptype <- vctrs::vec_ptype(dat)
+  ptype <- vec_ptype(dat)
 
   expect_error(
     scream(new, ptype, allow_novel_levels = TRUE),

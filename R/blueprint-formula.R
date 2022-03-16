@@ -69,7 +69,7 @@ validate_is_formula_blueprint <- function(blueprint) {
 # ------------------------------------------------------------------------------
 
 validate_is_formula_or_null <- function(formula) {
-  validate_is_or_null(formula, rlang::is_formula, "formula")
+  validate_is_or_null(formula, is_formula, "formula")
 }
 
 # ------------------------------------------------------------------------------
@@ -82,5 +82,5 @@ validate_indicators <- function(indicators) {
     glubort("`indicators` must have size 1, not {n_indicators}.")
   }
 
-  rlang::arg_match(indicators, c("traditional", "none", "one_hot"))
+  arg_match(indicators, c("traditional", "none", "one_hot"))
 }

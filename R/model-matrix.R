@@ -86,7 +86,7 @@ model_matrix <- function(terms, data) {
   # actually error out if we don't prevent it from running
   attr(data, "terms") <- terms
 
-  predictors <- rlang::with_options(
+  predictors <- with_options(
     model.matrix(object = terms, data = data),
     na.action = "na.pass"
   )
@@ -114,8 +114,8 @@ is_terms <- function(x) {
 }
 
 validate_is_terms <- function(.x, .x_nm) {
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
   validate_is(.x, is_terms, "terms object", .x_nm)
@@ -175,11 +175,11 @@ model_matrix_one_hot <- function(terms, data) {
 #' @keywords internal
 contr_one_hot <- function(n, contrasts = TRUE, sparse = FALSE) {
   if (sparse) {
-    rlang::warn("`sparse = TRUE` not implemented for `contr_one_hot()`.")
+    warn("`sparse = TRUE` not implemented for `contr_one_hot()`.")
   }
 
   if (!contrasts) {
-    rlang::warn("`contrasts = FALSE` not implemented for `contr_one_hot()`.")
+    warn("`contrasts = FALSE` not implemented for `contr_one_hot()`.")
   }
 
   if (is.character(n)) {
@@ -189,12 +189,12 @@ contr_one_hot <- function(n, contrasts = TRUE, sparse = FALSE) {
     n <- as.integer(n)
 
     if (length(n) != 1L) {
-      rlang::abort("`n` must have length 1 when an integer is provided.")
+      abort("`n` must have length 1 when an integer is provided.")
     }
 
     names <- as.character(seq_len(n))
   } else {
-    rlang::abort("`n` must be a character vector or an integer of size 1.")
+    abort("`n` must be a character vector or an integer of size 1.")
   }
 
   out <- diag(n)

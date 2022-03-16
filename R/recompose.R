@@ -18,7 +18,7 @@ convert_matrix <- function(x, sparse = TRUE) {
   if (!all(is_num)) {
     num_viol <- sum(!is_num)
     if (num_viol < 5) {
-      rlang::abort(
+      abort(
         paste0(
           "Columns (",
           paste0("`", names(is_num)[!is_num], "`", collapse = ", "),
@@ -26,7 +26,7 @@ convert_matrix <- function(x, sparse = TRUE) {
         )
       )
     } else {
-      rlang::abort(
+      abort(
         paste0(
           num_viol,
           " columns are not numeric; cannot ",
@@ -50,7 +50,7 @@ convert_matrix <- function(x, sparse = TRUE) {
 }
 
 validate_composition <- function(composition) {
-  rlang::arg_match0(
+  arg_match0(
     arg = composition,
     values = c("tibble", "matrix", "dgCMatrix"),
     arg_nm = "composition"

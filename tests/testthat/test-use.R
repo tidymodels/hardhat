@@ -1,6 +1,6 @@
 test_that("can create a modeling package", {
   skip_on_cran()
-  rlang::local_options(usethis.quiet = TRUE)
+  local_options(usethis.quiet = TRUE)
 
   dir_base <- tempdir()
   dir_pkg <- file.path(dir_base, "model")
@@ -30,7 +30,7 @@ test_that("can create a modeling package", {
 
 test_that("can add a second model to a modeling package", {
   skip_on_cran()
-  rlang::local_options(usethis.quiet = TRUE)
+  local_options(usethis.quiet = TRUE)
 
   dir_base <- tempdir()
   dir_pkg <- file.path(dir_base, "model")

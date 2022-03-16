@@ -181,7 +181,7 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 update_blueprint <- function(blueprint, ...) {
   validate_is_blueprint(blueprint)
 
-  changes <- rlang::list2(...)
+  changes <- list2(...)
 
   if (!has_unique_names(changes)) {
     glubort("`...` must have unique names.")
@@ -223,8 +223,8 @@ is_blueprint <- function(x) {
 
 # helper for new_blueprint()$mold and $forge elements
 blueprint_function_set <- function(clean, process) {
-  validate_is(clean, rlang::is_function, "function")
-  validate_is(process, rlang::is_function, "function")
+  validate_is(clean, is_function, "function")
+  validate_is(process, is_function, "function")
 
   list(
     clean = clean,
@@ -237,8 +237,8 @@ blueprint_function_set <- function(clean, process) {
 validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
 
   # capture name first
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
   if (is.null(.x)) {
@@ -249,24 +249,24 @@ validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
 }
 
 validate_is_function_set <- function(.x, .x_nm) {
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
   validate_has_function_set_structure(.x, .x_nm)
 
-  validate_is(.x$clean, rlang::is_function, "function", .x_nm = glue("{.x_nm}$clean"))
-  validate_is(.x$process, rlang::is_function, "function", .x_nm = glue("{.x_nm}$process"))
+  validate_is(.x$clean, is_function, "function", .x_nm = glue("{.x_nm}$clean"))
+  validate_is(.x$process, is_function, "function", .x_nm = glue("{.x_nm}$process"))
 
   invisible(.x)
 }
 
 validate_has_function_set_structure <- function(.x, .x_nm) {
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
-  validate_is(.x, rlang::is_list, "list")
+  validate_is(.x, is_list, "list")
 
   validate_has_name(.x, .x_nm, "clean")
   validate_has_name(.x, .x_nm, "process")
@@ -275,8 +275,8 @@ validate_has_function_set_structure <- function(.x, .x_nm) {
 }
 
 validate_is_ptype_list_or_null <- function(.x, .x_nm) {
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
   if (is.null(.x)) {
@@ -315,7 +315,7 @@ validate_has_name <- function(.x, .x_nm, .nm) {
 validate_is_character <- function(.x, .x_nm) {
   validate_is(
     .x,
-    rlang::is_character,
+    is_character,
     "character",
     .x_nm
   )
@@ -324,7 +324,7 @@ validate_is_character <- function(.x, .x_nm) {
 validate_forge_args <- function(forge) {
   required_clean_args <- c("blueprint", "new_data", "outcomes")
 
-  actual_clean_args <- rlang::fn_fmls_names(forge$clean)
+  actual_clean_args <- fn_fmls_names(forge$clean)
 
   if (!identical(actual_clean_args, required_clean_args)) {
     required_clean_args <- glue_quote_collapse(required_clean_args)
@@ -336,7 +336,7 @@ validate_forge_args <- function(forge) {
 
   required_process_args <- c("blueprint", "predictors", "outcomes", "extras")
 
-  actual_process_args <- rlang::fn_fmls_names(forge$process)
+  actual_process_args <- fn_fmls_names(forge$process)
 
   if (!identical(required_process_args, actual_process_args)) {
     required_process_args <- glue_quote_collapse(required_process_args)

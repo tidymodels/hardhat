@@ -1,6 +1,6 @@
 validate_is <- function(.x, .f, .expected, .x_nm, .note = "") {
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
   ok <- .f(.x)
@@ -55,7 +55,7 @@ validate_recipes_available <- function() {
 # dont let the user do `0+` or `+0` or `-1`
 
 validate_formula_has_intercept <- function(formula) {
-  formula <- rlang::f_rhs(formula)
+  formula <- f_rhs(formula)
 
   validate_not_1_or_0(formula)
 
@@ -63,7 +63,7 @@ validate_formula_has_intercept <- function(formula) {
 }
 
 validate_not_1_or_0 <- function(formula) {
-  if (!rlang::is_scalar_integerish(formula)) {
+  if (!is_scalar_integerish(formula)) {
     return(invisible(formula))
   }
 
@@ -83,18 +83,18 @@ validate_not_1_or_0 <- function(formula) {
 }
 
 recurse_intercept_search <- function(x) {
-  if (!rlang::is_call(x)) {
+  if (!is_call(x)) {
     return(invisible(x))
   }
 
-  cll_fn <- rlang::call_fn(x)
-  cll_args <- rlang::call_args(x)
+  cll_fn <- call_fn(x)
+  cll_args <- call_args(x)
 
   # Check for `+ 0` or `0 +`
   if (identical(cll_fn, `+`)) {
     for (arg in cll_args) {
       if (arg == 0L) {
-        rlang::abort(
+        abort(
           "`formula` must not contain the intercept removal term: `+ 0` or `0 +`."
         )
       }
@@ -112,7 +112,7 @@ recurse_intercept_search <- function(x) {
     }
 
     if (arg == 1L) {
-      rlang::abort("`formula` must not contain the intercept removal term: `- 1`.")
+      abort("`formula` must not contain the intercept removal term: `- 1`.")
     }
   }
 

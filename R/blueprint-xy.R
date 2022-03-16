@@ -43,7 +43,7 @@ validate_is_xy_blueprint <- function(blueprint) {
 # ------------------------------------------------------------------------------
 
 validate_mold_args <- function(mold, required_clean_args, required_process_args) {
-  actual_clean_args <- rlang::fn_fmls_names(mold$clean)
+  actual_clean_args <- fn_fmls_names(mold$clean)
 
   if (!identical(actual_clean_args, required_clean_args)) {
     required_clean_args <- glue_quote_collapse(required_clean_args)
@@ -53,7 +53,7 @@ validate_mold_args <- function(mold, required_clean_args, required_process_args)
     )
   }
 
-  actual_process_args <- rlang::fn_fmls_names(mold$process)
+  actual_process_args <- fn_fmls_names(mold$process)
 
   if (!identical(required_process_args, actual_process_args)) {
     required_process_args <- glue_quote_collapse(required_process_args)

@@ -677,8 +677,8 @@ test_that("Missing y value still has outcome `terms` present", {
   x <- mold(~num_2, example_train)
 
   expect_equal(
-    rlang::f_rhs(x$blueprint$terms$outcomes),
-    rlang::expr(NULL + 0)
+    f_rhs(x$blueprint$terms$outcomes),
+    expr(NULL + 0)
   )
 })
 

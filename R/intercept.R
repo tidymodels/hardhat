@@ -34,7 +34,7 @@ add_intercept_column <- function(data, name = "(Intercept)") {
   validate_name(name)
 
   if (name %in% colnames(data)) {
-    rlang::warn(glue::glue(
+    warn(glue::glue(
       "`data` already has a column named '{name}'. ",
       "Returning `data` unchanged."
     ))
@@ -74,7 +74,7 @@ validate_name <- function(name) {
     glubort("name should have size 1, not {length(name)}.")
   }
 
-  validate_is(name, rlang::is_character, "character")
+  validate_is(name, is_character, "character")
 
   invisible(name)
 }

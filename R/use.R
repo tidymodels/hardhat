@@ -55,7 +55,7 @@ create_modeling_package <- function(path,
   validate_installed("recipes")
 
   # Avoid creating files if a bad model is supplied
-  if (!rlang::is_string(model)) {
+  if (!is_string(model)) {
     abort("`model` must be a single string.")
   }
 
@@ -123,7 +123,7 @@ use_modeling_files <- function(model) {
 use_modeling_files_impl <- function(model, prompt_document = TRUE) {
   validate_installed("usethis")
 
-  if (!rlang::is_string(model)) {
+  if (!is_string(model)) {
     abort("`model` must be a string.")
   }
 

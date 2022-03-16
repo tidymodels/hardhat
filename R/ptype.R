@@ -31,5 +31,5 @@ extract_ptype <- function(data) {
 
   data <- check_is_data_like(data)
 
-  vctrs::vec_slice(data, 0L)
+  vec_slice(data, 0L)
 }

@@ -17,7 +17,7 @@ validate_empty_dots <- function(...) {
   n_dots <- length(dots)
 
   if (n_dots != 0L) {
-    dot_nms <- names(rlang::exprs_auto_name(dots))
+    dot_nms <- names(exprs_auto_name(dots))
     dot_nms <- glue_quote_collapse(dot_nms)
 
     glubort(
@@ -58,10 +58,10 @@ simplify_terms <- function(x) {
 # - Can't use `get_all_vars()` because it chokes on formulas with variables with
 #   spaces like ~ `x y`
 get_all_predictors <- function(formula, data) {
-  predictor_formula <- rlang::new_formula(
+  predictor_formula <- new_formula(
     lhs = NULL,
-    rhs = rlang::f_rhs(formula),
-    env = rlang::f_env(formula)
+    rhs = f_rhs(formula),
+    env = f_env(formula)
   )
 
   predictors <- all.vars(predictor_formula)
@@ -78,16 +78,16 @@ get_all_predictors <- function(formula, data) {
 # LHS `.` are NOT expanded by `expand_formula_dot_notation()`, and should be
 # considered errors
 get_all_outcomes <- function(formula, data) {
-  outcome_formula <- rlang::new_formula(
-    lhs = rlang::f_lhs(formula),
+  outcome_formula <- new_formula(
+    lhs = f_lhs(formula),
     rhs = 1,
-    env = rlang::f_env(formula)
+    env = f_env(formula)
   )
 
   outcomes <- all.vars(outcome_formula)
 
   if ("." %in% outcomes) {
-    rlang::abort("The left hand side of the formula cannot contain `.`")
+    abort("The left hand side of the formula cannot contain `.`")
   }
 
   extra_outcomes <- setdiff(outcomes, names(data))
@@ -113,13 +113,13 @@ remove_formula_intercept <- function(formula, intercept) {
     return(formula)
   }
 
-  rhs <- rlang::f_rhs(formula)
-  lhs <- rlang::f_lhs(formula)
-  env <- rlang::f_env(formula)
+  rhs <- f_rhs(formula)
+  lhs <- f_lhs(formula)
+  env <- f_env(formula)
 
-  rhs <- rlang::expr(!!rhs + 0)
+  rhs <- expr(!!rhs + 0)
 
-  rlang::new_formula(
+  new_formula(
     lhs = lhs,
     rhs = rhs,
     env = env
@@ -159,12 +159,12 @@ class1 <- function(x) {
 }
 
 is_bool <- function(x) {
-  rlang::is_logical(x, n = 1) && !is.na(x)
+  is_logical(x, n = 1) && !is.na(x)
 }
 
 validate_is_bool <- function(.x, .x_nm) {
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
   validate_is(.x, is_bool, "bool", .x_nm, .note = "'TRUE' / 'FALSE'")
@@ -185,8 +185,8 @@ validate_is_new_data_like <- function(new_data) {
 }
 
 check_is_data_like <- function(.x, .x_nm) {
-  if (rlang::is_missing(.x_nm)) {
-    .x_nm <- rlang::as_label(rlang::enexpr(.x))
+  if (is_missing(.x_nm)) {
+    .x_nm <- as_label(enexpr(.x))
   }
 
   if (!is_new_data_like(.x)) {

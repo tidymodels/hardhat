@@ -52,7 +52,7 @@ cat_line <- function(...) {
 # ------------------------------------------------------------------------------
 
 new_abstract_model <- function(..., class) {
-  elems <- rlang::list2(...)
+  elems <- list2(...)
   validate_has_unique_names(elems, "...")
 
   new_scalar(elems, class = class)

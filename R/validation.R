@@ -50,7 +50,7 @@ validate_outcomes_are_univariate <- function(outcomes) {
 #' @rdname validate_outcomes_are_univariate
 #' @export
 check_outcomes_are_univariate <- function(outcomes) {
-  if (!rlang::is_vector(outcomes)) {
+  if (!is_vector(outcomes)) {
     n_cols <- 0L
   } else {
     n_cols <- NCOL(outcomes) %||% 0L
@@ -624,8 +624,8 @@ validate_prediction_size <- function(pred, new_data) {
 check_prediction_size <- function(pred, new_data) {
   new_data <- check_is_data_like(new_data)
 
-  size_new_data <- vctrs::vec_size(new_data)
-  size_pred <- vctrs::vec_size(pred)
+  size_new_data <- vec_size(new_data)
+  size_pred <- vec_size(pred)
 
   ok <- size_pred == size_new_data
 
@@ -733,7 +733,7 @@ check_no_formula_duplication <- function(formula, original = FALSE) {
 # ... = extra info when not ok
 check_list <- function(ok = TRUE, ...) {
   validate_is_bool(ok, "ok")
-  elems <- rlang::list2(...)
+  elems <- list2(...)
 
   c(list(ok = ok), elems)
 }
