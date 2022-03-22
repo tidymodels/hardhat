@@ -33,6 +33,7 @@ reference:
   - standardize
   - new_model
   - add_intercept_column
+  - weighted_table
   - run_mold
 
 - title: Validation
