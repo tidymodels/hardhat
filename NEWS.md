@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* New `weighted_table()` for generating a weighted contingency table, similar to
+  `table()` (#191).
+
 * Bumped required R version to `>= 3.4.0` to reflect tidyverse standards.
 
 # hardhat 0.2.0
