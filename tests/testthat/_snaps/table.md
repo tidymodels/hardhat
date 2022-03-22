@@ -45,5 +45,5 @@
     Code
       weighted_table(x, weights = "a")
     Error <vctrs_error_incompatible_type>
-      Can't convert `weights` <character> to <double>.
+      Can't convert <character> to <double>.
 
