@@ -150,4 +150,7 @@
   <url>
     <loc>https://hardhat.tidymodels.org/dev/reference/validate_predictors_are_numeric.html</loc>
   </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/weighted_table.html</loc>
+  </url>
 </urlset>
