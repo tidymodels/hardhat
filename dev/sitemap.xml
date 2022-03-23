@@ -58,6 +58,9 @@
     <loc>https://hardhat.tidymodels.org/dev/reference/forge.html</loc>
   </url>
   <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/frequency_weights.html</loc>
+  </url>
+  <url>
     <loc>https://hardhat.tidymodels.org/dev/reference/get_data_classes.html</loc>
   </url>
   <url>
@@ -73,10 +76,22 @@
     <loc>https://hardhat.tidymodels.org/dev/reference/hardhat-package.html</loc>
   </url>
   <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/importance_weights.html</loc>
+  </url>
+  <url>
     <loc>https://hardhat.tidymodels.org/dev/reference/index.html</loc>
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/dev/reference/is_blueprint.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/is_case_weights.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/is_frequency_weights.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/is_importance_weights.html</loc>
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/dev/reference/model_frame.html</loc>
@@ -98,6 +113,12 @@
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/dev/reference/new-default-blueprint.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/new_frequency_weights.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/dev/reference/new_importance_weights.html</loc>
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/dev/reference/new_model.html</loc>
