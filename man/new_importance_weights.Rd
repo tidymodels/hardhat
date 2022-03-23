@@ -17,6 +17,8 @@ new_importance_weights(x = double(), ..., class = character())
 A new importance weights vector.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \code{new_importance_weights()} is a developer oriented function for constructing
 a new importance weights vector. Generally, you should use
 \code{\link[=importance_weights]{importance_weights()}} instead.

@@ -13,6 +13,8 @@ frequency_weights(x)
 A new frequency weights vector.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \code{frequency_weights()} creates a vector of frequency weights which allow you
 to compactly repeat an observation a set number of times. Frequency weights
 are supplied as a non-negative integer vector, where only whole numbers are

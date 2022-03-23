@@ -13,6 +13,8 @@ importance_weights(x)
 A new importance weights vector.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \code{importance_weights()} creates a vector of importance weights which allow you
 to apply a context dependent weight to your observations. Importance weights
 are supplied as a non-negative double vector, where fractional values are

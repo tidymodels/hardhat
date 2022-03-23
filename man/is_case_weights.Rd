@@ -13,6 +13,8 @@ is_case_weights(x)
 A single \code{TRUE} or \code{FALSE}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \code{is_case_weights()} checks if \code{x} inherits from \code{"hardhat_case_weights"}.
 }
 \examples{

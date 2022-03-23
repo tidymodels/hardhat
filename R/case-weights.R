@@ -1,5 +1,8 @@
 #' Importance weights
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' `importance_weights()` creates a vector of importance weights which allow you
 #' to apply a context dependent weight to your observations. Importance weights
 #' are supplied as a non-negative double vector, where fractional values are
@@ -26,6 +29,9 @@ importance_weights <- function(x) {
 }
 
 #' Construct an importance weights vector
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' `new_importance_weights()` is a developer oriented function for constructing
 #' a new importance weights vector. Generally, you should use
@@ -54,6 +60,9 @@ new_importance_weights <- function(x = double(), ..., class = character()) {
 }
 
 #' Is `x` an importance weights vector?
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' `is_importance_weights()` checks if `x` inherits from
 #' `"hardhat_importance_weights"`.
@@ -100,6 +109,9 @@ vec_ptype_abbr.hardhat_importance_weights <- function(x, ...) {
 
 #' Frequency weights
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' `frequency_weights()` creates a vector of frequency weights which allow you
 #' to compactly repeat an observation a set number of times. Frequency weights
 #' are supplied as a non-negative integer vector, where only whole numbers are
@@ -132,6 +144,9 @@ frequency_weights <- function(x) {
 
 #' Construct a frequency weights vector
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' `new_frequency_weights()` is a developer oriented function for constructing
 #' a new frequency weights vector. Generally, you should use
 #' [frequency_weights()] instead.
@@ -159,6 +174,9 @@ new_frequency_weights <- function(x = integer(), ..., class = character()) {
 }
 
 #' Is `x` a frequency weights vector?
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' `is_frequency_weights()` checks if `x` inherits from
 #' `"hardhat_frequency_weights"`.
@@ -218,6 +236,9 @@ new_case_weights <- function(x, ..., class) {
 }
 
 #' Is `x` a case weights vector?
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' `is_case_weights()` checks if `x` inherits from `"hardhat_case_weights"`.
 #'

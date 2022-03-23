@@ -13,6 +13,8 @@ is_importance_weights(x)
 A single \code{TRUE} or \code{FALSE}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \code{is_importance_weights()} checks if \code{x} inherits from
 \code{"hardhat_importance_weights"}.
 }

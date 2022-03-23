@@ -17,6 +17,8 @@ new_frequency_weights(x = integer(), ..., class = character())
 A new frequency weights vector.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \code{new_frequency_weights()} is a developer oriented function for constructing
 a new frequency weights vector. Generally, you should use
 \code{\link[=frequency_weights]{frequency_weights()}} instead.
