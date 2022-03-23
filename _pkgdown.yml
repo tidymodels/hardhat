@@ -46,6 +46,22 @@ reference:
 - title: Blueprint
   contents: contains("blueprint")
 
+- title: Case Weights
+  contents:
+  - is_case_weights
+
+- subtitle: Importance Weights
+  contents:
+  - importance_weights
+  - new_importance_weights
+  - is_importance_weights
+
+- subtitle: Frequency Weights
+  contents:
+  - frequency_weights
+  - new_frequency_weights
+  - is_frequency_weights
+
 - title: Setup
   contents:
   - contains("use_")

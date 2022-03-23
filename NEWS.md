@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* New experimental family of functions for working with case weights. In
+  particular, `frequency_weights()` and `importance_weights()` (#190).
+
 * New `weighted_table()` for generating a weighted contingency table, similar to
   `table()` (#191).
 
