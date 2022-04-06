@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* `use_modeling_files()` and `create_modeling_package()` no longer open the
+  package documentation file in the current RStudio session (#192).
+
 * rlang >=1.0.2 and vctrs >=0.4.0 are now required.
 
 * New experimental family of functions for working with case weights. In

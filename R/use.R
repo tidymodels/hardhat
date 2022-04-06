@@ -150,7 +150,7 @@ use_modeling_files_impl <- function(model, prompt_document = TRUE) {
   path_predict <- glue::glue("R/{model}-predict.R")
 
   usethis::ui_info("Writing skeleton files")
-  usethis::use_package_doc()
+  usethis::use_package_doc(open = FALSE)
   use_hardhat_template("R/constructor.R", path_constructor)
   use_hardhat_template("R/fit.R", path_fit)
   use_hardhat_template("R/predict.R", path_predict)
