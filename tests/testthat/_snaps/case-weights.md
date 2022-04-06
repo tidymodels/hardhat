@@ -55,19 +55,3 @@
       Error in `new_frequency_weights()`:
       ! `x` must be an integer vector.
 
-# can't cast frequency-weights -> double (too lenient)
-
-    Code
-      vec_cast(x, double())
-    Condition
-      Error:
-      ! Can't convert `x` <frequency_weights> to <double>.
-
-# as.double() fails (too lenient)
-
-    Code
-      as.double(x)
-    Condition
-      Error in `as.double()`:
-      ! Can't convert `x` <frequency_weights> to <double>.
-

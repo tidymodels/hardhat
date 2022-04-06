@@ -210,6 +210,12 @@ vec_cast.integer.hardhat_frequency_weights <- function(x, to, ...) {
 }
 
 #' @export
+vec_cast.double.hardhat_frequency_weights <- function(x, to, ...) {
+  x <- unstructure(x)
+  vec_cast_named(x, to = double(), ...)
+}
+
+#' @export
 vec_ptype_full.hardhat_frequency_weights <- function(x, ...) {
   "frequency_weights"
 }
