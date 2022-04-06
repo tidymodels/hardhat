@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* rlang >=1.0.2 and vctrs >=0.4.0 are now required.
+
 * New experimental family of functions for working with case weights. In
   particular, `frequency_weights()` and `importance_weights()` (#190).
 
