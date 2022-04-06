@@ -172,3 +172,16 @@ test_that("can test for case-weights class", {
   x <- new_case_weights(1, class = "subclass")
   expect_true(is_case_weights(x))
 })
+
+test_that("can add attributes", {
+  x <- new_case_weights(1, foo = "bar", class = "subclass")
+  expect_identical(attr(x, "foo"), "bar")
+})
+
+test_that("`x` must be integer or double", {
+  expect_snapshot(error = TRUE, new_case_weights("x", class = "subclass"))
+})
+
+test_that("`class` is a required argument", {
+  expect_snapshot(error = TRUE, new_case_weights(1))
+})
