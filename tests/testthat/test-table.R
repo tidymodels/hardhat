@@ -187,3 +187,23 @@ test_that("requires `weights` to be castable to double", {
 
   expect_snapshot(error = TRUE, weighted_table(x, weights = "a"))
 })
+
+test_that("you can create a weighted table directly from importance weights", {
+  x <- factor(c("x", "y", "x"))
+  w <- importance_weights(c(1.2, 2.5, 3))
+
+  expect_identical(
+    weighted_table(x, weights = w),
+    array(c(4.2, 2.5), dimnames = list(c("x", "y")))
+  )
+})
+
+test_that("you can create a weighted table directly from frequency weights (#193)", {
+  x <- factor(c("x", "y", "x"))
+  w <- frequency_weights(c(1L, 2L, 3L))
+
+  expect_identical(
+    weighted_table(x, weights = w),
+    array(c(4, 2), dimnames = list(c("x", "y")))
+  )
+})
