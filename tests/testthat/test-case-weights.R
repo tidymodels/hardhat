@@ -43,7 +43,7 @@ test_that("can cast importance-weights -> importance-weights", {
   expect_identical(vec_cast(x, x), x)
 })
 
-test_that("can cast importance-weights -> double (it's storage type)", {
+test_that("can cast importance-weights -> double (its storage type)", {
   x <- importance_weights(1)
   expect_identical(vec_cast(x, double()), 1)
 })
@@ -119,19 +119,20 @@ test_that("can cast frequency-weights -> frequency-weights", {
   expect_identical(vec_cast(x, x), x)
 })
 
-test_that("can cast frequency-weights -> integer (it's storage type)", {
+test_that("can cast frequency-weights -> integer (its storage type)", {
   x <- frequency_weights(1L)
   expect_identical(vec_cast(x, integer()), 1L)
 })
 
-test_that("can't cast frequency-weights -> double (too lenient)", {
+test_that("can cast frequency-weights -> double (never lossy, #193)", {
   x <- frequency_weights(1L)
-  expect_snapshot(error = TRUE, vec_cast(x, double()))
+  expect_identical(vec_cast(x, double()), 1)
 })
 
 test_that("casting to integer retains names", {
   x <- frequency_weights(c(x = 1L))
   expect_named(vec_cast(x, integer()), "x")
+  expect_named(vec_cast(x, double()), "x")
 })
 
 test_that("as.integer() works", {
@@ -139,9 +140,9 @@ test_that("as.integer() works", {
   expect_identical(as.integer(x), 1L)
 })
 
-test_that("as.double() fails (too lenient)", {
+test_that("as.double() works (never lossy, #193)", {
   x <- frequency_weights(1L)
-  expect_snapshot(error = TRUE, as.double(x))
+  expect_identical(as.double(x), 1)
 })
 
 test_that("vec_ptype_full() and vec_ptype_abbr() methods are right", {
