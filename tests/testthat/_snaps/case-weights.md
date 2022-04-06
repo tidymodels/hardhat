@@ -55,3 +55,19 @@
       Error in `new_frequency_weights()`:
       ! `x` must be an integer vector.
 
+# `x` must be integer or double
+
+    Code
+      new_case_weights("x", class = "subclass")
+    Condition
+      Error in `new_case_weights()`:
+      ! `x` must be an integer or double vector.
+
+# `class` is a required argument
+
+    Code
+      new_case_weights(1)
+    Condition
+      Error in `new_vctr()`:
+      ! argument "class" is missing, with no default
+

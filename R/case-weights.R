@@ -227,10 +227,28 @@ vec_ptype_abbr.hardhat_frequency_weights <- function(x, ...) {
 
 # ------------------------------------------------------------------------------
 
-# Abstract common class
+#' Extend case weights
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' `new_case_weights()` is a developer oriented function for constructing a new
+#' case weights type. The `<case_weights>` type itself is an _abstract_ type
+#' with very little functionality. Because of this, `class` is a required
+#' argument.
+#'
+#' @inheritParams vctrs::new_vctr
+#'
+#' @param x An integer or double vector.
+#'
+#' @return A new subclassed case weights vector.
+#'
+#' @export
+#' @examples
+#' new_case_weights(1:5, class = "my_weights")
 new_case_weights <- function(x, ..., class) {
   if (!is.integer(x) && !is.double(x)) {
-    abort("`x` must be an integer or double vector.", .internal = TRUE)
+    abort("`x` must be an integer or double vector.")
   }
 
   new_vctr(

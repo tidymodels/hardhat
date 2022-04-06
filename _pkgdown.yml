@@ -48,6 +48,7 @@ reference:
 
 - title: Case Weights
   contents:
+  - new_case_weights
   - is_case_weights
 
 - subtitle: Importance Weights
