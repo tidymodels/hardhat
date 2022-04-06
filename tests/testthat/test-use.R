@@ -65,8 +65,8 @@ test_that("can add a second model to a modeling package", {
   expect_true(glue::glue("{model2}-predict.R") %in% script_files)
 })
 
-test_that("no `model` aborts early", {
-  expect_snapshot(error = TRUE, create_modeling_package("my/path"))
+test_that("no `model` aborts normally", {
+  expect_snapshot(error = TRUE, create_modeling_package(path = "my/path"))
 })
 
 test_that("no `path` aborts normally", {
@@ -74,7 +74,7 @@ test_that("no `path` aborts normally", {
 })
 
 test_that("`model` can only be a single string", {
-  expect_snapshot(error = TRUE, create_modeling_package(model = c("model1", "model2")))
-  expect_snapshot(error = TRUE, create_modeling_package(model = 1))
-  expect_snapshot(error = TRUE, create_modeling_package(model = "model with space"))
+  expect_snapshot(error = TRUE, create_modeling_package(path = "my/path", model = c("model1", "model2")))
+  expect_snapshot(error = TRUE, create_modeling_package(path = "my/path", model = 1))
+  expect_snapshot(error = TRUE, create_modeling_package(path = "my/path", model = "model with space"))
 })

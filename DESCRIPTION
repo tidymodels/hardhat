@@ -22,9 +22,9 @@ Depends:
     R (>= 3.4.0)
 Imports: 
     glue,
-    rlang (>= 0.4.2),
+    rlang (>= 1.0.2),
     tibble,
-    vctrs (>= 0.3.0)
+    vctrs (>= 0.4.0)
 Suggests: 
     covr,
     crayon,
@@ -36,7 +36,7 @@ Suggests:
     rmarkdown (>= 2.3),
     roxygen2,
     testthat (>= 3.0.0),
-    usethis
+    usethis (>= 2.1.5)
 VignetteBuilder: 
     knitr
 Config/Needs/website: tidyverse/tidytemplate
