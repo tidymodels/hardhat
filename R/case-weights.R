@@ -19,7 +19,7 @@
 #' @examples
 #' importance_weights(c(1.5, 2.3, 10))
 importance_weights <- function(x) {
-  x <- vec_cast(x, to = double(), x_arg = "x")
+  x <- vec_cast_named(x, to = double(), x_arg = "x")
 
   if (any(x < 0, na.rm = TRUE)) {
     abort("`x` can't contain negative weights.")
@@ -133,7 +133,7 @@ vec_ptype_abbr.hardhat_importance_weights <- function(x, ...) {
 #' # Fractional values are not allowed
 #' try(frequency_weights(c(1.5, 2.3, 10)))
 frequency_weights <- function(x) {
-  x <- vec_cast(x, to = integer(), x_arg = "x")
+  x <- vec_cast_named(x, to = integer(), x_arg = "x")
 
   if (any(x < 0L, na.rm = TRUE)) {
     abort("`x` can't contain negative weights.")

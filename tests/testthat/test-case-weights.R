@@ -5,6 +5,10 @@ test_that("importance_weights() coerces to double", {
   expect_type(importance_weights(1L), "double")
 })
 
+test_that("importance_weights() retains names when coercing to double", {
+  expect_named(importance_weights(c(x = 1L)), "x")
+})
+
 test_that("importance_weights() doesn't allow negative weights", {
   expect_snapshot(error = TRUE, importance_weights(-1))
 })
@@ -79,6 +83,10 @@ test_that("vec_ptype_full() and vec_ptype_abbr() methods are right", {
 test_that("frequency_weights() coerces to integer", {
   expect_type(frequency_weights(1), "integer")
   expect_snapshot(error = TRUE, frequency_weights(1.5))
+})
+
+test_that("frequency_weights() retains names when coercing to integer", {
+  expect_named(frequency_weights(c(x = 1)), "x")
 })
 
 test_that("frequency_weights() doesn't allow negative weights", {

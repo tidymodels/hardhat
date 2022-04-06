@@ -200,10 +200,10 @@ check_is_data_like <- function(.x, .x_nm) {
 
 # ------------------------------------------------------------------------------
 
-vec_cast_named <- function(x, to, ...) {
+vec_cast_named <- function(x, to, ..., call = caller_env()) {
   # vec_cast() drops names currently
   # https://github.com/r-lib/vctrs/issues/623
-  out <- vec_cast(x, to, ...)
+  out <- vec_cast(x, to, ..., call = call)
 
   names <- vec_names(x)
   if (!is.null(names)) {
