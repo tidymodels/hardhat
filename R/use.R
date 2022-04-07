@@ -49,8 +49,8 @@ create_modeling_package <- function(path,
                                     model,
                                     fields = NULL,
                                     open = interactive()) {
-  force(path)
-  force(model)
+  check_required(path)
+  check_required(model)
 
   validate_installed("usethis")
   validate_installed("roxygen2")
