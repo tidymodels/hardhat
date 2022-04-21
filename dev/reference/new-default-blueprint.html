@@ -94,6 +94,7 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
   intercept <span class="op">=</span> <span class="cn">FALSE</span>,
   allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
   fresh <span class="op">=</span> <span class="cn">TRUE</span>,
+  bake_dependent_roles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,
   composition <span class="op">=</span> <span class="st">"tibble"</span>,
   ptypes <span class="op">=</span> <span class="cn">NULL</span>,
   recipe <span class="op">=</span> <span class="cn">NULL</span>,
@@ -168,6 +169,18 @@ subclass this blueprint.</p></dd>
 <dt>fresh</dt>
 <dd><p>Should already trained operations be re-trained when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> is
 called?</p></dd>
+<dt>bake_dependent_roles</dt>
+<dd><p>A character vector of recipes column "roles"
+specifying roles that are required to <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code> new data. Can't be
+<code>"predictor"</code> or <code>"outcome"</code>, as predictors are always required and
+outcomes are handled by the <code>outcomes</code> argument of <code><a href="forge.html">forge()</a></code>.</p>
+<p>Typically, non-standard roles (such as <code>"id"</code> or <code>"case_weights"</code>) are not
+required to <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> new data. Unless specified by <code>bake_dependent_roles</code>,
+these non-standard role columns are excluded from checks done in <code><a href="forge.html">forge()</a></code>
+to validate the column structure of <code>new_data</code>, will not be passed to
+<code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> even if they existed in <code>new_data</code>, and will not be returned in
+the <code>forge()$extras$roles</code> slot. See the documentation of
+<code><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">recipes::add_role()</a></code> for more information about roles.</p></dd>
 <dt>recipe</dt>
 <dd><p>Either <code>NULL</code>, or an unprepped recipe. This argument is set
 automatically at <code><a href="mold.html">mold()</a></code> time.</p></dd>
