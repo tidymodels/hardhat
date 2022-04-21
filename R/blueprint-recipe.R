@@ -90,7 +90,7 @@ validate_bake_dependent_roles <- function(bake_dependent_roles) {
   }
 
   if (any(bake_dependent_roles %in% c("outcome", "predictor"))) {
-    abort("`bake_dependent_roles` can't be 'outcome' or 'predictor', as these are already required.")
+    abort("`bake_dependent_roles` can't be \"outcome\" or \"predictor\", as these are already handled.")
   }
 
   invisible(bake_dependent_roles)
