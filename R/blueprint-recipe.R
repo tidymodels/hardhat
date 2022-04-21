@@ -5,15 +5,17 @@
 #'   called?
 #'
 #' @param bake_dependent_roles A character vector of recipes column "roles"
-#'   specifying roles that are required to [recipes::bake()] new data.
-#'   `"outcome"` and `"predictor"` roles are always required to be able to call
-#'   `bake()`, but typically non-standard roles (such as `"id"` or
-#'   `"case_weights"`) are not required. Unless specified
-#'   by `bake_dependent_roles`, non-standard role columns are excluded from
-#'   checks done in [forge()] to validate the column structure of `new_data`,
-#'   will not be passed to `bake()` even if they existed in `new_data`, and will
-#'   not be returned in the `forge()$extras$roles` slot. See the documentation
-#'   of [recipes::add_role()] for more information about roles.
+#'   specifying roles that are required to [recipes::bake()] new data. Can't be
+#'   `"predictor"` or `"outcome"`, as predictors are always required and
+#'   outcomes are handled by the `outcomes` argument of [forge()].
+#'
+#'   Typically, non-standard roles (such as `"id"` or `"case_weights"`) are not
+#'   required to `bake()` new data. Unless specified by `bake_dependent_roles`,
+#'   these non-standard role columns are excluded from checks done in [forge()]
+#'   to validate the column structure of `new_data`, will not be passed to
+#'   `bake()` even if they existed in `new_data`, and will not be returned in
+#'   the `forge()$extras$roles` slot. See the documentation of
+#'   [recipes::add_role()] for more information about roles.
 #'
 #' @rdname new-blueprint
 #' @export

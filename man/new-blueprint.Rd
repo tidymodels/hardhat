@@ -110,15 +110,17 @@ subclass this blueprint.}
 called?}
 
 \item{bake_dependent_roles}{A character vector of recipes column "roles"
-specifying roles that are required to \code{\link[recipes:bake]{recipes::bake()}} new data.
-\code{"outcome"} and \code{"predictor"} roles are always required to be able to call
-\code{bake()}, but typically non-standard roles (such as \code{"id"} or
-\code{"case_weights"}) are not required. Unless specified
-by \code{bake_dependent_roles}, non-standard role columns are excluded from
-checks done in \code{\link[=forge]{forge()}} to validate the column structure of \code{new_data},
-will not be passed to \code{bake()} even if they existed in \code{new_data}, and will
-not be returned in the \code{forge()$extras$roles} slot. See the documentation
-of \code{\link[recipes:roles]{recipes::add_role()}} for more information about roles.}
+specifying roles that are required to \code{\link[recipes:bake]{recipes::bake()}} new data. Can't be
+\code{"predictor"} or \code{"outcome"}, as predictors are always required and
+outcomes are handled by the \code{outcomes} argument of \code{\link[=forge]{forge()}}.
+
+Typically, non-standard roles (such as \code{"id"} or \code{"case_weights"}) are not
+required to \code{bake()} new data. Unless specified by \code{bake_dependent_roles},
+these non-standard role columns are excluded from checks done in \code{\link[=forge]{forge()}}
+to validate the column structure of \code{new_data}, will not be passed to
+\code{bake()} even if they existed in \code{new_data}, and will not be returned in
+the \code{forge()$extras$roles} slot. See the documentation of
+\code{\link[recipes:roles]{recipes::add_role()}} for more information about roles.}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
