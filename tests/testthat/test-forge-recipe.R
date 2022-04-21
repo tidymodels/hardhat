@@ -459,39 +459,106 @@ test_that("an `extras` slot exists for `roles`", {
   )
 })
 
-test_that("only original non standard role columns are required", {
+test_that("non-standard roles generated in the recipe must be listed as `bake_dependent_roles` to be returned", {
+  # This is a convention we follow to make internal coding of `bake_dependent_roles` more straightforward.
+  # You ONLY get back `bake_dependent_roles` in the `extras` slot of `forge()`.
+  # I imagine this should be very rare.
 
-  # columns created by step_bs() shouldn't be required,
-  # but are returned in `extras`
-  x1 <- recipes::recipe(Species ~ ., iris)
-  x1 <- recipes::step_bs(x1, Sepal.Length, role = "dummy", deg_free = 3)
-  x1 <- mold(x1, iris)
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::step_bs(rec, Sepal.Length, role = "dummy", deg_free = 3)
 
-  expect_error(
-    xx1 <- forge(iris, x1$blueprint),
-    NA
+  x <- mold(rec, iris)
+  xx <- forge(iris, x$blueprint)
+
+  expect_identical(x$blueprint$extra_role_ptypes, NULL)
+
+  # Even though `step_bs()` created some columns, we don't get them back in `forge()`
+  expect_identical(
+    xx$extras,
+    list(roles = NULL)
   )
 
-  expect_equal(
-    colnames(xx1$extras$roles$dummy),
+  bp <- default_recipe_blueprint(bake_dependent_roles = "dummy")
+  x <- mold(rec, iris, blueprint = bp)
+  xx <- forge(iris, x$blueprint)
+
+  # Still none because they weren't in the original data
+  expect_identical(x$blueprint$extra_role_ptypes, NULL)
+
+  # We do get them here, because we specified them as bake dependent
+  expect_identical(
+    colnames(xx$extras$roles$dummy),
     paste("Sepal.Length", c("1", "2", "3"), sep = "_bs_")
   )
+})
 
-  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
+test_that("non-`bake_dependent_roles` should not be required in `forge()`, and won't be returned", {
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
+  rec <- recipes::update_role(rec, Sepal.Length, new_role = "dummy2")
 
-  x2 <- recipes::recipe(Species ~ ., iris)
-  x2 <- recipes::step_bs(x2, Sepal.Length, role = "dummy", deg_free = 3)
-  x2 <- mold(x2, iris, blueprint = sparse_bp)
+  x <- mold(rec, iris)
+  xx <- forge(iris, x$blueprint)
 
-  expect_error(
-    xx2 <- forge(iris, x2$blueprint),
-    NA
+  expect_named(xx$predictors, c("Petal.Length", "Petal.Width"))
+  expect_null(xx$outcomes)
+
+  expect_identical(
+    xx$extras,
+    list(roles = NULL)
   )
 
-  expect_equal(
-    colnames(xx2$extras$roles$dummy),
-    paste("Sepal.Length", c("1", "2", "3"), sep = "_bs_")
+  bp <- default_recipe_blueprint(bake_dependent_roles = "dummy2")
+  x <- mold(rec, iris, blueprint = bp)
+  xx <- forge(iris, x$blueprint)
+
+  expect_named(xx$predictors, c("Petal.Length", "Petal.Width"))
+  expect_null(xx$outcomes)
+
+  expect_identical(
+    xx$extras$roles,
+    list(dummy2 = tibble::tibble(Sepal.Length = iris$Sepal.Length))
   )
+})
+
+test_that("`bake_dependent_roles` can be dropped during the baking process", {
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
+  rec <- recipes::update_role(rec, Sepal.Length, new_role = "dummy2")
+  rec <- recipes::step_rm(rec, Sepal.Length)
+
+  bp <- default_recipe_blueprint(bake_dependent_roles = c("dummy1", "dummy2"))
+  x <- mold(rec, iris, blueprint = bp)
+  xx <- forge(iris, x$blueprint)
+
+  # `extra_role_ptypes` holds ptypes for both
+  expect_identical(
+    x$blueprint$extra_role_ptypes,
+    list(
+      dummy1 = tibble::tibble(Sepal.Width = double()),
+      dummy2 = tibble::tibble(Sepal.Length = double())
+    )
+  )
+
+  # But `Sepal.Length` got dropped along the way
+  expect_identical(
+    x$extras$roles,
+    list(dummy1 = tibble::tibble(Sepal.Width = iris$Sepal.Width))
+  )
+  expect_identical(
+    xx$extras$roles,
+    list(dummy1 = tibble::tibble(Sepal.Width = iris$Sepal.Width))
+  )
+})
+
+test_that("recipes should error if `bake_dependent_roles` have been left out", {
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
+  rec <- recipes::step_log(rec, Sepal.Width)
+
+  x <- mold(rec, iris)
+
+  expect_error(forge(iris, x$blueprint))
 })
 
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
@@ -519,12 +586,14 @@ test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
 })
 
 test_that("Predictors with multiple roles are only included once before baking (#120)", {
-  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(Species ~ ., iris) # Implicit "predictor" role too
   rec <- recipes::add_role(rec, Sepal.Length, new_role = "test1")
   rec <- recipes::add_role(rec, Sepal.Length, new_role = "test2")
 
-  x1 <- mold(rec, iris)
+  bp <- default_recipe_blueprint(bake_dependent_roles = c("test1", "test2"))
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix", bake_dependent_roles = c("test1", "test2"))
+
+  x1 <- mold(rec, iris, blueprint = bp)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
 
   xx1 <- forge(iris, x1$blueprint)
