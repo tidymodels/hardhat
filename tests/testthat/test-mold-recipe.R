@@ -328,9 +328,11 @@ test_that("non-`bake_dependent_roles` are not retained as `extra_role_ptypes`, b
 })
 
 test_that("`bake_dependent_roles` is validated", {
-  expect_error(default_recipe_blueprint(bake_dependent_roles = 1), "should be a character, not a numeric")
-  expect_error(default_recipe_blueprint(bake_dependent_roles = c("outcome", "x")), "can't be \"outcome\" or \"predictor\"")
-  expect_error(default_recipe_blueprint(bake_dependent_roles = c("predictor", "x")), "can't be \"outcome\" or \"predictor\"")
+  expect_snapshot({
+    (expect_error(default_recipe_blueprint(bake_dependent_roles = 1)))
+    (expect_error(default_recipe_blueprint(bake_dependent_roles = c("outcome", "x"))))
+    (expect_error(default_recipe_blueprint(bake_dependent_roles = c("predictor", "x"))))
+  })
 })
 
 test_that("Missing y value returns a 0 column tibble for `outcomes`", {
