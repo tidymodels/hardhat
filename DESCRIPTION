@@ -24,7 +24,7 @@ Imports:
     glue,
     rlang (>= 1.0.2),
     tibble,
-    vctrs (>= 0.4.0)
+    vctrs (>= 0.4.1)
 Suggests: 
     covr,
     crayon,
