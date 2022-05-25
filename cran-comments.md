@@ -4,6 +4,10 @@ We checked 15 reverse dependencies, comparing R CMD check results across CRAN an
 
  * We saw 0 new problems
  * We failed to check 0 packages
+
+## 1.0.0 Submission
+
+This is a major release of hardhat to signify that we feel that it is stable. It includes a breaking change regarding how recipe roles are handled in `forge()`. It also includes a few new functions useful for case weight handling throughout tidymodels.
  
 ## 0.2.0 Submission
 
