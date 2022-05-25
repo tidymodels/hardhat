@@ -15,16 +15,16 @@
   `bake_dependent_roles`, which can be set to a character vector of
   non-standard roles that are required.
 
-* `use_modeling_files()` and `create_modeling_package()` no longer open the
-  package documentation file in the current RStudio session (#192).
-
-* rlang >=1.0.2 and vctrs >=0.4.0 are now required.
+* New `weighted_table()` for generating a weighted contingency table, similar to
+  `table()` (#191).
 
 * New experimental family of functions for working with case weights. In
   particular, `frequency_weights()` and `importance_weights()` (#190).
 
-* New `weighted_table()` for generating a weighted contingency table, similar to
-  `table()` (#191).
+* `use_modeling_files()` and `create_modeling_package()` no longer open the
+  package documentation file in the current RStudio session (#192).
+
+* rlang >=1.0.2 and vctrs >=0.4.0 are now required.
 
 * Bumped required R version to `>= 3.4.0` to reflect tidyverse standards.
 
