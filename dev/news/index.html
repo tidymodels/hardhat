@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,8 +58,9 @@
       <small>Source: <a href="https://github.com/tidymodels/hardhat/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2"><h2 class="pkg-version" data-toc-text="development version" id="hardhat-development-version">hardhat (development version)<a class="anchor" aria-label="anchor" href="#hardhat-development-version"></a></h2></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="hardhat-development-version">hardhat (development version)<a class="anchor" aria-label="anchor" href="#hardhat-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.0" id="hardhat-100">hardhat 1.0.0<a class="anchor" aria-label="anchor" href="#hardhat-100"></a></h2>
 <ul><li><p>Recipe preprocessors now ignore non-standard recipe roles (i.e. not <code>"outcome"</code> or <code>"predictor"</code>) by default when calling <code><a href="../reference/forge.html">forge()</a></code>. Previously, it was assumed that all non-standard role columns present in the original training data were also required in the test data when <code><a href="../reference/forge.html">forge()</a></code> is called. It seems to be more often the case that those columns are actually not required to <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> new data, and often won’t even be present when making predictions on new data. For example, a custom <code>"case_weights"</code> role might be required for computing case-weighted estimates at <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> time, but won’t be necessary at <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> time (since the estimates have already been pre-computed and stored). To account for the case when you do require a specific non-standard role to be present at <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> time, <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> has gained a new argument, <code>bake_dependent_roles</code>, which can be set to a character vector of non-standard roles that are required.</p></li>
 <li><p>New <code><a href="../reference/weighted_table.html">weighted_table()</a></code> for generating a weighted contingency table, similar to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> (<a href="https://github.com/tidymodels/hardhat/issues/191" class="external-link">#191</a>).</p></li>
 <li><p>New experimental family of functions for working with case weights. In particular, <code><a href="../reference/frequency_weights.html">frequency_weights()</a></code> and <code><a href="../reference/importance_weights.html">importance_weights()</a></code> (<a href="https://github.com/tidymodels/hardhat/issues/190" class="external-link">#190</a>).</p></li>
