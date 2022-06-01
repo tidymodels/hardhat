@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 1.0.0
 
 * Recipe preprocessors now ignore non-standard recipe roles (i.e. not
   `"outcome"` or `"predictor"`) by default when calling `forge()`. Previously,
