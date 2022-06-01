@@ -149,7 +149,7 @@ rec_roles <- recipe(train) \%>\%
   update_role(Sepal.Width, new_role = "predictor") \%>\%
   update_role(Species, new_role = "outcome") \%>\%
   update_role(Sepal.Length, new_role = "id") \%>\%
-  update_role(Petal.Length, new_role = "case_weights")
+  update_role(Petal.Length, new_role = "important")
 
 processed_roles <- mold(rec_roles, train)
 
@@ -171,11 +171,11 @@ forge(test2, processed_roles$blueprint)$extras
 # `bake_dependent_roles` in `default_recipe_blueprint()`, which will ensure
 # that it is a required column when calling `forge()`, that it will be
 # passed on to `bake()`, and that it will be returned in the result.
-bp <- default_recipe_blueprint(bake_dependent_roles = "case_weights")
+bp <- default_recipe_blueprint(bake_dependent_roles = "important")
 
 processed_roles <- mold(rec_roles, train, blueprint = bp)
 
-# Now `"case_weights"` is a required role when `forge()`-ing
+# Now `"important"` is a required role when `forge()`-ing
 forge(test, processed_roles$blueprint)$extras$roles
 
 # Which means that we can't `forge()` with the data frame that is missing
