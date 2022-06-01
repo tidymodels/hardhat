@@ -354,7 +354,7 @@ used during training.</p></li>
 <span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, new_role <span class="op">=</span> <span class="st">"predictor"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Species</span>, new_role <span class="op">=</span> <span class="st">"outcome"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Sepal.Length</span>, new_role <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Petal.Length</span>, new_role <span class="op">=</span> <span class="st">"case_weights"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Petal.Length</span>, new_role <span class="op">=</span> <span class="st">"important"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">processed_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec_roles</span>, <span class="va">train</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -378,7 +378,7 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>          4.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $roles$case_weights</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $roles$important</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -416,13 +416,13 @@ used during training.</p></li>
 <span class="r-in"><span class="co"># `bake_dependent_roles` in `default_recipe_blueprint()`, which will ensure</span></span>
 <span class="r-in"><span class="co"># that it is a required column when calling `forge()`, that it will be</span></span>
 <span class="r-in"><span class="co"># passed on to `bake()`, and that it will be returned in the result.</span></span>
-<span class="r-in"><span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu">default_recipe_blueprint</span><span class="op">(</span>bake_dependent_roles <span class="op">=</span> <span class="st">"case_weights"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu">default_recipe_blueprint</span><span class="op">(</span>bake_dependent_roles <span class="op">=</span> <span class="st">"important"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">processed_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec_roles</span>, <span class="va">train</span>, blueprint <span class="op">=</span> <span class="va">bp</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># Now `"case_weights"` is a required role when `forge()`-ing</span></span>
+<span class="r-in"><span class="co"># Now `"important"` is a required role when `forge()`-ing</span></span>
 <span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span><span class="op">$</span><span class="va">roles</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $case_weights</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $important</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
