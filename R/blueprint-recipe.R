@@ -19,9 +19,7 @@
 #'
 #' @rdname new-blueprint
 #' @export
-new_recipe_blueprint <- function(mold,
-                                 forge,
-                                 intercept = FALSE,
+new_recipe_blueprint <- function(intercept = FALSE,
                                  allow_novel_levels = FALSE,
                                  fresh = TRUE,
                                  bake_dependent_roles = character(),
@@ -32,21 +30,11 @@ new_recipe_blueprint <- function(mold,
                                  subclass = character()) {
   validate_recipes_available()
 
-  validate_is_function_set(mold)
-  validate_mold_args(
-    mold = mold,
-    required_clean_args = c("blueprint", "data"),
-    required_process_args = c("blueprint", "data")
-  )
-
   validate_is_bool(fresh)
   validate_bake_dependent_roles(bake_dependent_roles)
-
   validate_is_recipe_or_null(recipe)
 
   new_blueprint(
-    mold = mold,
-    forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,

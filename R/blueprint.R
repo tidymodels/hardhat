@@ -12,11 +12,8 @@
 #' preprocessing method (i.e. not the formula, xy, or recipe method) then
 #' you should subclass `new_blueprint()`.
 #'
-#' @param mold A named list with two elements, `clean` and `process`, see
-#' the [new_blueprint()] section, Mold Functions, for details.
-#'
-#' @param forge A named list with two elements, `clean` and `process`, see
-#' the [new_blueprint()] section, Forge Functions, for details.
+#' In addition to creating a blueprint subclass, you will likely also need to
+#' provide S3 methods for [run_mold()] and [run_forge()] for your subclass.
 #'
 #' @param intercept A logical. Should an intercept be included in the
 #' processed data? This information is used by the `process` function
@@ -34,8 +31,7 @@
 #' @param ptypes Either `NULL`, or a named list with 2 elements, `predictors`
 #' and `outcomes`, both of which are 0-row tibbles. `ptypes` is generated
 #' automatically at [mold()] time and is used to validate `new_data` at
-#' prediction time. At [mold()] time, the information found in
-#' `blueprint$mold$process()$ptype` is used to set `ptypes` for the `blueprint`.
+#' prediction time.
 #'
 #' @param ... Name-value pairs for additional elements of blueprints that
 #' subclass this blueprint.
@@ -48,34 +44,21 @@
 #' arguments to the function, along with a class specific to the type
 #' of blueprint being created.
 #'
-#' @template section-mold-functions
-#' @template section-forge-functions
-#'
 #' @name new-blueprint
 #' @export
-new_blueprint <- function(mold,
-                          forge,
-                          intercept = FALSE,
+new_blueprint <- function(intercept = FALSE,
                           allow_novel_levels = FALSE,
                           composition = "tibble",
                           ptypes = NULL,
                           ...,
                           subclass = character()) {
-  validate_is_function_set(mold)
-  validate_is_function_set(forge)
   validate_is_bool(intercept)
   validate_is_bool(allow_novel_levels)
   validate_composition(composition)
   validate_is_ptype_list_or_null(ptypes)
   validate_is_character(subclass, "subclass")
 
-  # Can't validate mold() args here
-  # as they differ per blueprint
-  validate_forge_args(forge)
-
   elems <- list(
-    mold = mold,
-    forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     composition = composition,
@@ -221,19 +204,6 @@ is_blueprint <- function(x) {
 
 # ------------------------------------------------------------------------------
 
-# helper for new_blueprint()$mold and $forge elements
-blueprint_function_set <- function(clean, process) {
-  validate_is(clean, is_function, "function")
-  validate_is(process, is_function, "function")
-
-  list(
-    clean = clean,
-    process = process
-  )
-}
-
-# ------------------------------------------------------------------------------
-
 validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
 
   # capture name first
@@ -246,32 +216,6 @@ validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
   }
 
   validate_is(.x, .f, .expected, .x_nm, .note)
-}
-
-validate_is_function_set <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
-  }
-
-  validate_has_function_set_structure(.x, .x_nm)
-
-  validate_is(.x$clean, is_function, "function", .x_nm = glue("{.x_nm}$clean"))
-  validate_is(.x$process, is_function, "function", .x_nm = glue("{.x_nm}$process"))
-
-  invisible(.x)
-}
-
-validate_has_function_set_structure <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
-  }
-
-  validate_is(.x, is_list, "list")
-
-  validate_has_name(.x, .x_nm, "clean")
-  validate_has_name(.x, .x_nm, "process")
-
-  invisible(.x)
 }
 
 validate_is_ptype_list_or_null <- function(.x, .x_nm) {
@@ -319,32 +263,4 @@ validate_is_character <- function(.x, .x_nm) {
     "character",
     .x_nm
   )
-}
-
-validate_forge_args <- function(forge) {
-  required_clean_args <- c("blueprint", "new_data", "outcomes")
-
-  actual_clean_args <- fn_fmls_names(forge$clean)
-
-  if (!identical(actual_clean_args, required_clean_args)) {
-    required_clean_args <- glue_quote_collapse(required_clean_args)
-
-    glubort(
-      "`forge$clean()` must have the following arguments: {required_clean_args}."
-    )
-  }
-
-  required_process_args <- c("blueprint", "predictors", "outcomes", "extras")
-
-  actual_process_args <- fn_fmls_names(forge$process)
-
-  if (!identical(required_process_args, actual_process_args)) {
-    required_process_args <- glue_quote_collapse(required_process_args)
-
-    glubort(
-      "`forge$process()` must have the following arguments: {required_process_args}."
-    )
-  }
-
-  invisible(forge)
 }
