@@ -72,17 +72,7 @@ mold.data.frame <- function(x, y, ..., blueprint = NULL) {
 
   validate_is_xy_blueprint(blueprint)
 
-  molded <- run_mold(blueprint, x, y)
-
-  blueprint <- molded$blueprint
-  predictors <- molded$predictors
-  outcomes <- molded$outcomes
-  ptypes <- molded$ptypes
-  extras <- molded$extras
-
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
-
-  out$mold$final(predictors, outcomes, blueprint, extras)
+  run_mold(blueprint, x = x, y = y)
 }
 
 #' @rdname default_xy_blueprint
@@ -102,17 +92,7 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
 
   blueprint <- update_blueprint(blueprint = blueprint, formula = formula)
 
-  molded <- run_mold(blueprint, data)
-
-  blueprint <- molded$blueprint
-  predictors <- molded$predictors
-  outcomes <- molded$outcomes
-  ptypes <- molded$ptypes
-  extras <- molded$extras
-
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
-
-  out$mold$final(predictors, outcomes, blueprint, extras)
+  run_mold(blueprint, data = data)
 }
 
 #' @rdname default_recipe_blueprint
@@ -130,89 +110,71 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
 
   blueprint <- update_blueprint(blueprint = blueprint, recipe = x)
 
-  molded <- run_mold(blueprint, data)
-
-  blueprint <- molded$blueprint
-  predictors <- molded$predictors
-  outcomes <- molded$outcomes
-  ptypes <- molded$ptypes
-  extras <- molded$extras
-
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
-
-  out$mold$final(predictors, outcomes, blueprint, extras)
+  run_mold(blueprint, data = data)
 }
 
 # ------------------------------------------------------------------------------
 
-#' Call `mold$clean()` and `mold$process()`
+#' `mold()` according to a blueprint
 #'
-#' This is a purely developer facing function, that is _only_ used if you are
-#' creating a completely new blueprint inheriting only from [new_blueprint()], and
-#' not from one of the more common: [new_xy_blueprint()], [new_recipe_blueprint()],
-#' [new_formula_blueprint()].
+#' @description
+#' This is a developer facing function that is _only_ used if you are creating
+#' your own blueprint subclass. It is called from [mold()] and dispatches off
+#' the S3 class of the `blueprint`. This gives you an opportunity to mold the
+#' data in a way that is specific to your blueprint.
+#'
+#' `run_mold()` will be called with different arguments depending on the
+#' interface to `mold()` that is used:
+#'
+#' - XY interface:
+#'   - `run_mold(blueprint, x = x, y = y)`
+#'
+#' - Formula interface:
+#'   - `run_mold(blueprint, data = data)`
+#'   - Additionally, the `blueprint` will have been updated to contain the
+#'   `formula`.
+#'
+#' - Recipe interface:
+#'   - `run_mold(blueprint, data = data)`
+#'   - Additionally, the `blueprint` will have been updated to contain the
+#'   `recipe`.
+#'
+#' If you write a blueprint subclass for [new_xy_blueprint()],
+#' [new_recipe_blueprint()], or [new_formula_blueprint()] then your `run_mold()`
+#' method signature must match whichever interface listed above will be used.
+#'
+#' If you write a completely new blueprint inheriting only from
+#' [new_blueprint()] and write a new [mold()] method (because you aren't using
+#' an xy, formula, or recipe interface), then you will have full control over
+#' how `run_mold()` will be called.
 #'
 #' @param blueprint A preprocessing blueprint.
 #'
 #' @param ... Not used. Required for extensibility.
 #'
 #' @return
+#' `run_mold()` methods return the object that is then immediately returned from
+#' `mold()`. See the return value section of [mold()] to understand what the
+#' structure of the return value should look like.
 #'
-#' The preprocessed result, as a named list.
-#'
-#' @details
-#'
-#' Because `mold()` has different interfaces (like XY and formula),
-#' which require different arguments (`x` and `y` vs `data`), their
-#' corresponding blueprints also have different arguments for the
-#' `blueprint$mold$clean()` and `blueprint$mold$process()` functions. The sole
-#' job of `run_mold()` is simply to call these two functions with the right
-#' arguments.
-#'
-#' The only time you need to implement a method for `run_mold()` is if you
-#' are creating a `new_blueprint()` that does not follow one of the three core
-#' blueprint types. In that special case, create a method for `run_mold()` with
-#' your blueprint type, and pass through whatever arguments are necessary to call
-#' your blueprint specific `clean()` and `process()` functions.
-#'
-#' If you go this route, you will also need to create a `mold()` method if `x`
-#' is not a data frame / matrix, recipe, or formula. If `x` is one of
-#' those types, then `run_mold()` will be called for you by the
-#' existing `mold()` method, you just have to supply the `run_mold()` method
-#' for your blueprint.
-#'
+#' @name run-mold
+#' @order 1
 #' @export
+#' @examples
+#' bp <- default_xy_blueprint()
+#'
+#' outcomes <- mtcars["mpg"]
+#' predictors <- mtcars
+#' predictors$mpg <- NULL
+#'
+#' run_mold(bp, x = predictors, y = outcomes)
 run_mold <- function(blueprint, ...) {
   UseMethod("run_mold")
 }
 
 #' @export
-run_mold.xy_blueprint <- function(blueprint, x, y, ...) {
-  cleaned <- blueprint$mold$clean(blueprint = blueprint, x = x, y = y)
-
-  blueprint <- cleaned$blueprint
-  x <- cleaned$x
-  y <- cleaned$y
-
-  blueprint$mold$process(blueprint = blueprint, x = x, y = y)
-}
-
-#' @export
-run_mold.formula_blueprint <- function(blueprint, data, ...) {
-  cleaned <- blueprint$mold$clean(blueprint = blueprint, data = data)
-
-  blueprint <- cleaned$blueprint
-  data <- cleaned$data
-
-  blueprint$mold$process(blueprint = blueprint, data = data)
-}
-
-#' @export
-run_mold.recipe_blueprint <- function(blueprint, data, ...) {
-  cleaned <- blueprint$mold$clean(blueprint = blueprint, data = data)
-
-  blueprint <- cleaned$blueprint
-  data <- cleaned$data
-
-  blueprint$mold$process(blueprint = blueprint, data = data)
+run_mold.default <- function(blueprint, ...) {
+  class <- class(blueprint)[[1L]]
+  message <- glue("No `run_mold()` method provided for an object of type <{class}>.")
+  abort(message)
 }

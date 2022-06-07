@@ -78,30 +78,69 @@ forge.data.frame <- function(new_data, blueprint, ..., outcomes = FALSE) {
   validate_empty_dots(...)
   validate_is_blueprint(blueprint)
 
-  cleaned <- blueprint$forge$clean(
-    blueprint = blueprint,
+  run_forge(
+    blueprint,
     new_data = new_data,
     outcomes = outcomes
   )
-
-  blueprint <- cleaned$blueprint
-  predictors <- cleaned$predictors
-  outcomes <- cleaned$outcomes
-  extras <- cleaned$extras
-
-  processed <- blueprint$forge$process(
-    blueprint = blueprint,
-    predictors = predictors,
-    outcomes = outcomes,
-    extras = extras
-  )
-
-  predictors <- processed$predictors
-  outcomes <- processed$outcomes
-  extras <- processed$extras
-
-  out$forge$final(predictors, outcomes, extras)
 }
 
 #' @export
 forge.matrix <- forge.data.frame
+
+# ------------------------------------------------------------------------------
+
+#' `forge()` according to a blueprint
+#'
+#' @description
+#' This is a developer facing function that is _only_ used if you are creating
+#' your own blueprint subclass. It is called from [forge()] and dispatches off
+#' the S3 class of the `blueprint`. This gives you an opportunity to forge the
+#' new data in a way that is specific to your blueprint.
+#'
+#' `run_forge()` is always called from `forge()` with the same arguments, unlike
+#' [run_mold()], because there aren't different interfaces for calling
+#' `forge()`. `run_forge()` is always called as:
+#'
+#' `run_forge(blueprint, new_data = new_data, outcomes = outcomes)`
+#'
+#' If you write a blueprint subclass for [new_xy_blueprint()],
+#' [new_recipe_blueprint()], [new_formula_blueprint()], or [new_blueprint()],
+#' then your `run_forge()` method signature must match this.
+#'
+#' @inheritParams forge
+#'
+#' @return
+#' `run_forge()` methods return the object that is then immediately returned
+#' from `forge()`. See the return value section of [forge()] to understand what
+#' the structure of the return value should look like.
+#'
+#' @name run-forge
+#' @order 1
+#' @export
+#' @examples
+#' bp <- default_xy_blueprint()
+#'
+#' outcomes <- mtcars["mpg"]
+#' predictors <- mtcars
+#' predictors$mpg <- NULL
+#'
+#' mold <- run_mold(bp, x = predictors, y = outcomes)
+#'
+#' run_forge(mold$blueprint, new_data = predictors)
+run_forge <- function(blueprint,
+                      new_data,
+                      ...,
+                      outcomes = FALSE) {
+  UseMethod("run_forge")
+}
+
+#' @export
+run_forge.default <- function(blueprint,
+                              new_data,
+                              ...,
+                              outcomes = FALSE) {
+  class <- class(blueprint)[[1L]]
+  message <- glue("No `run_forge()` method provided for an object of type <{class}>.")
+  abort(message)
+}

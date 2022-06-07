@@ -18,9 +18,7 @@
 #'
 #' @rdname new-blueprint
 #' @export
-new_formula_blueprint <- function(mold,
-                                  forge,
-                                  intercept = FALSE,
+new_formula_blueprint <- function(intercept = FALSE,
                                   allow_novel_levels = FALSE,
                                   ptypes = NULL,
                                   formula = NULL,
@@ -28,20 +26,11 @@ new_formula_blueprint <- function(mold,
                                   composition = "tibble",
                                   ...,
                                   subclass = character()) {
-  validate_is_function_set(mold)
-  validate_mold_args(
-    mold,
-    required_clean_args = c("blueprint", "data"),
-    required_process_args = c("blueprint", "data")
-  )
-
   validate_is_formula_or_null(formula)
 
   indicators <- validate_indicators(indicators)
 
   new_blueprint(
-    mold = mold,
-    forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     ptypes = ptypes,

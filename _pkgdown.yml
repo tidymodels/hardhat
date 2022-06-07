@@ -34,7 +34,6 @@ reference:
   - new_model
   - add_intercept_column
   - weighted_table
-  - run_mold
 
 - title: Validation
   contents:
@@ -44,7 +43,10 @@ reference:
   - contains("check")
 
 - title: Blueprint
-  contents: contains("blueprint")
+  contents:
+  - contains("blueprint")
+  - run_mold
+  - run_forge
 
 - title: Case Weights
   contents:

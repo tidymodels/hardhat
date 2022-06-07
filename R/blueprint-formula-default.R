@@ -312,12 +312,7 @@ default_formula_blueprint <- function(intercept = FALSE,
                                       allow_novel_levels = FALSE,
                                       indicators = "traditional",
                                       composition = "tibble") {
-  mold <- get_mold_formula_default_function_set()
-  forge <- get_forge_formula_default_function_set()
-
   new_default_formula_blueprint(
-    mold = mold,
-    forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     indicators = indicators,
@@ -331,9 +326,7 @@ default_formula_blueprint <- function(intercept = FALSE,
 #'
 #' @rdname new-default-blueprint
 #' @export
-new_default_formula_blueprint <- function(mold,
-                                          forge,
-                                          intercept = FALSE,
+new_default_formula_blueprint <- function(intercept = FALSE,
                                           allow_novel_levels = FALSE,
                                           ptypes = NULL,
                                           formula = NULL,
@@ -348,8 +341,6 @@ new_default_formula_blueprint <- function(mold,
   validate_is_terms_list_or_null(terms)
 
   new_formula_blueprint(
-    mold = mold,
-    forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     ptypes = ptypes,
@@ -369,11 +360,24 @@ refresh_blueprint.default_formula_blueprint <- function(blueprint) {
 
 # ------------------------------------------------------------------------------
 
-get_mold_formula_default_function_set <- function() {
-  blueprint_function_set(mold_formula_default_clean, mold_formula_default_process)
+#' @param data A data frame or matrix containing the outcomes and predictors.
+#'
+#' @rdname run-mold
+#' @export
+run_mold.default_formula_blueprint <- function(blueprint, ..., data) {
+  check_dots_empty0(...)
+
+  cleaned <- mold_formula_default_clean(blueprint = blueprint, data = data)
+
+  blueprint <- cleaned$blueprint
+  data <- cleaned$data
+
+  mold_formula_default_process(blueprint = blueprint, data = data)
 }
 
+# ------------------------------------------------------------------------------
 # mold - formula - clean
+
 mold_formula_default_clean <- function(blueprint, data) {
   data <- check_is_data_like(data)
 
@@ -389,7 +393,9 @@ mold_formula_default_clean <- function(blueprint, data) {
   out$mold$clean(blueprint, data)
 }
 
+# ------------------------------------------------------------------------------
 # mold - formula - process
+
 mold_formula_default_process <- function(blueprint, data) {
   processed <- mold_formula_default_process_predictors(
     blueprint = blueprint,
@@ -414,7 +420,12 @@ mold_formula_default_process <- function(blueprint, data) {
   ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
   extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
 
-  out$mold$process(blueprint, predictors_lst$data, outcomes_lst$data, ptypes, extras)
+  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+
+  predictors <- predictors_lst$data
+  outcomes <- outcomes_lst$data
+
+  out$mold$final(predictors, outcomes, blueprint, extras)
 }
 
 mold_formula_default_process_predictors <- function(blueprint, data) {
@@ -499,9 +510,34 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
 
 # ------------------------------------------------------------------------------
 
-get_forge_formula_default_function_set <- function() {
-  blueprint_function_set(forge_formula_default_clean, forge_formula_default_process)
+#' @rdname run-forge
+#' @export
+run_forge.default_formula_blueprint <- function(blueprint,
+                                                new_data,
+                                                ...,
+                                                outcomes = FALSE) {
+  check_dots_empty0(...)
+
+  cleaned <- forge_formula_default_clean(
+    blueprint = blueprint,
+    new_data = new_data,
+    outcomes = outcomes
+  )
+
+  blueprint <- cleaned$blueprint
+  predictors <- cleaned$predictors
+  outcomes <- cleaned$outcomes
+  extras <- cleaned$extras
+
+  forge_formula_default_process(
+    blueprint = blueprint,
+    predictors = predictors,
+    outcomes = outcomes,
+    extras = extras
+  )
 }
+
+# ------------------------------------------------------------------------------
 
 forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
   validate_is_new_data_like(new_data)
@@ -527,6 +563,8 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
   out$forge$clean(blueprint, predictors, outcomes)
 }
 
+# ------------------------------------------------------------------------------
+
 forge_formula_default_process <- function(blueprint, predictors, outcomes, extras) {
   processed <- forge_formula_default_process_predictors(
     blueprint = blueprint,
@@ -549,7 +587,7 @@ forge_formula_default_process <- function(blueprint, predictors, outcomes, extra
     out$extras$final(predictors_lst$extras, outcomes_lst$extras)
   )
 
-  out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
+  out$forge$final(predictors_lst$data, outcomes_lst$data, extras)
 }
 
 forge_formula_default_process_predictors <- function(blueprint, predictors) {

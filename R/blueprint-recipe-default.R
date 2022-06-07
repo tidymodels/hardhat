@@ -151,12 +151,7 @@ default_recipe_blueprint <- function(intercept = FALSE,
                                      fresh = TRUE,
                                      bake_dependent_roles = character(),
                                      composition = "tibble") {
-  mold <- get_mold_recipe_default_function_set()
-  forge <- get_forge_recipe_default_function_set()
-
   new_default_recipe_blueprint(
-    mold = mold,
-    forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
@@ -172,9 +167,7 @@ default_recipe_blueprint <- function(intercept = FALSE,
 #'
 #' @rdname new-default-blueprint
 #' @export
-new_default_recipe_blueprint <- function(mold,
-                                         forge,
-                                         intercept = FALSE,
+new_default_recipe_blueprint <- function(intercept = FALSE,
                                          allow_novel_levels = FALSE,
                                          fresh = TRUE,
                                          bake_dependent_roles = character(),
@@ -185,8 +178,6 @@ new_default_recipe_blueprint <- function(mold,
                                          ...,
                                          subclass = character()) {
   new_recipe_blueprint(
-    mold = mold,
-    forge = forge,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
@@ -207,18 +198,31 @@ refresh_blueprint.default_recipe_blueprint <- function(blueprint) {
 
 # ------------------------------------------------------------------------------
 
-get_mold_recipe_default_function_set <- function() {
-  blueprint_function_set(mold_recipe_default_clean, mold_recipe_default_process)
+#' @rdname run-mold
+#' @export
+run_mold.default_recipe_blueprint <- function(blueprint, ..., data) {
+  check_dots_empty0(...)
+
+  cleaned <- mold_recipe_default_clean(blueprint = blueprint, data = data)
+
+  blueprint <- cleaned$blueprint
+  data <- cleaned$data
+
+  mold_recipe_default_process(blueprint = blueprint, data = data)
 }
 
+# ------------------------------------------------------------------------------
 # mold - recipe - clean
+
 mold_recipe_default_clean <- function(blueprint, data) {
   data <- check_is_data_like(data)
 
   out$mold$clean(blueprint, data)
 }
 
+# ------------------------------------------------------------------------------
 # mold - recipe - process
+
 mold_recipe_default_process <- function(blueprint, data) {
 
   # Prep for predictors and outcomes
@@ -250,7 +254,12 @@ mold_recipe_default_process <- function(blueprint, data) {
 
   ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
 
-  out$mold$process(blueprint, predictors_lst$data, outcomes_lst$data, ptypes, extras)
+  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+
+  predictors <- predictors_lst$data
+  outcomes <- outcomes_lst$data
+
+  out$mold$final(predictors, outcomes, blueprint, extras)
 }
 
 mold_recipe_default_process_predictors <- function(blueprint, data) {
@@ -317,9 +326,34 @@ mold_recipe_default_process_extras <- function(blueprint, data) {
 
 # ------------------------------------------------------------------------------
 
-get_forge_recipe_default_function_set <- function() {
-  blueprint_function_set(forge_recipe_default_clean, forge_recipe_default_process)
+#' @rdname run-forge
+#' @export
+run_forge.default_recipe_blueprint <- function(blueprint,
+                                               new_data,
+                                               ...,
+                                               outcomes = FALSE) {
+  check_dots_empty0(...)
+
+  cleaned <- forge_recipe_default_clean(
+    blueprint = blueprint,
+    new_data = new_data,
+    outcomes = outcomes
+  )
+
+  blueprint <- cleaned$blueprint
+  predictors <- cleaned$predictors
+  outcomes <- cleaned$outcomes
+  extras <- cleaned$extras
+
+  forge_recipe_default_process(
+    blueprint = blueprint,
+    predictors = predictors,
+    outcomes = outcomes,
+    extras = extras
+  )
 }
+
+# ------------------------------------------------------------------------------
 
 forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
   validate_is_new_data_like(new_data)
@@ -370,6 +404,8 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data) {
 
   extras
 }
+
+# ------------------------------------------------------------------------------
 
 forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras) {
   rec <- blueprint$recipe
@@ -430,7 +466,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
     outcomes_lst$extras
   )
 
-  out$forge$process(predictors_lst$data, outcomes_lst$data, extras)
+  out$forge$final(predictors_lst$data, outcomes_lst$data, extras)
 }
 
 forge_recipe_default_process_predictors <- function(blueprint, predictors) {

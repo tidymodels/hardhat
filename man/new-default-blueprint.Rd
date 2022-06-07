@@ -9,8 +9,6 @@
 \title{Create a new default blueprint}
 \usage{
 new_default_formula_blueprint(
-  mold,
-  forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
   ptypes = NULL,
@@ -23,8 +21,6 @@ new_default_formula_blueprint(
 )
 
 new_default_recipe_blueprint(
-  mold,
-  forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
@@ -38,8 +34,6 @@ new_default_recipe_blueprint(
 )
 
 new_default_xy_blueprint(
-  mold,
-  forge,
   intercept = FALSE,
   allow_novel_levels = FALSE,
   composition = "tibble",
@@ -49,12 +43,6 @@ new_default_xy_blueprint(
 )
 }
 \arguments{
-\item{mold}{A named list with two elements, \code{clean} and \code{process}, see
-the \code{\link[=new_blueprint]{new_blueprint()}} section, Mold Functions, for details.}
-
-\item{forge}{A named list with two elements, \code{clean} and \code{process}, see
-the \code{\link[=new_blueprint]{new_blueprint()}} section, Forge Functions, for details.}
-
 \item{intercept}{A logical. Should an intercept be included in the
 processed data? This information is used by the \code{process} function
 in the \code{mold} and \code{forge} function list.}
@@ -66,8 +54,7 @@ prediction time? This information is used by the \code{clean} function in the
 \item{ptypes}{Either \code{NULL}, or a named list with 2 elements, \code{predictors}
 and \code{outcomes}, both of which are 0-row tibbles. \code{ptypes} is generated
 automatically at \code{\link[=mold]{mold()}} time and is used to validate \code{new_data} at
-prediction time. At \code{\link[=mold]{mold()}} time, the information found in
-\code{blueprint$mold$process()$ptype} is used to set \code{ptypes} for the \code{blueprint}.}
+prediction time.}
 
 \item{formula}{Either \code{NULL}, or a formula that specifies how the
 predictors and outcomes should be preprocessed. This argument is set

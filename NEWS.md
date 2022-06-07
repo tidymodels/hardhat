@@ -1,5 +1,33 @@
 # hardhat (development version)
 
+* Fixed a bug where the results from calling `mold()` using hardhat < 1.0.0 were
+  no longer compatible with calling `forge()` in hardhat >= 1.0.0. This could
+  occur if you save a workflow object after fitting it, then load it into an
+  R session that uses a newer version of hardhat (#200).
+
+* Internal details related to how blueprints work alongside `mold()` and
+  `forge()` were heavily re-factored to support the fix for #200. These changes
+  are mostly internal or developer focused. They include:
+  
+  - Blueprints no longer store the clean/process functions used when calling
+    `mold()` and `forge()`. These were stored in `blueprint$mold$clean()`,
+    `blueprint$mold$process()`, `blueprint$forge$clean()`, and
+    `blueprint$forge$process()` and were strictly for internal use. Storing
+    them in the blueprint caused problems because blueprints created with old
+    versions of hardhat were unlikely to be compatible with newer versions of
+    hardhat. This change means that `new_blueprint()` and the other blueprint
+    constructors no longer have `mold` or `forge` arguments.
+  
+  - `run_mold()` has been repurposed. Rather than calling the `$clean()` and
+    `$process()` functions (which, as mentioned above, are no longer in the
+    blueprint), the methods for this S3 generic have been rewritten to directly
+    call the current versions of the clean and process functions that live in
+    hardhat. This should result in less accidental breaking changes.
+  
+  - New `run_forge()` which is a `forge()` equivalent to `run_mold()`. It
+    handles the clean/process steps that were previously handled by the
+    `$clean()` and `$process()` functions stored directly in the blueprint.
+
 # hardhat 1.0.0
 
 * Recipe preprocessors now ignore non-standard recipe roles (i.e. not
