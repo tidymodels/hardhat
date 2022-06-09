@@ -606,3 +606,18 @@ test_that("Predictors with multiple roles are only included once before baking (
   expect_true("Sepal.Length" %in% colnames(xx2$extras$roles$test1))
   expect_true("Sepal.Length" %in% colnames(xx2$extras$roles$test2))
 })
+
+test_that("`forge()` is compatible with hardhat 0.2.0 molded blueprints that don't have `bake_dependent_roles`", {
+  path <- test_path("data", "hardhat-0.2.0-post-mold-recipe.rds")
+  object <- readRDS(path)
+
+  new_data <- object$new_data
+  blueprint <- object$blueprint
+
+  out <- forge(new_data, blueprint)
+
+  expect <- recipes::bake(blueprint$recipe, new_data, recipes::all_predictors())
+  expect_identical(out$predictors, expect)
+
+  expect_identical(out$extras, list(roles = NULL))
+})

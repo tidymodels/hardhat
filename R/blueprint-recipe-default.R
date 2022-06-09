@@ -203,6 +203,8 @@ refresh_blueprint.default_recipe_blueprint <- function(blueprint) {
 run_mold.default_recipe_blueprint <- function(blueprint, ..., data) {
   check_dots_empty0(...)
 
+  blueprint <- patch_recipe_default_blueprint(blueprint)
+
   cleaned <- mold_recipe_default_clean(blueprint = blueprint, data = data)
 
   blueprint <- cleaned$blueprint
@@ -333,6 +335,8 @@ run_forge.default_recipe_blueprint <- function(blueprint,
                                                ...,
                                                outcomes = FALSE) {
   check_dots_empty0(...)
+
+  blueprint <- patch_recipe_default_blueprint(blueprint)
 
   cleaned <- forge_recipe_default_clean(
     blueprint = blueprint,
@@ -517,6 +521,21 @@ forge_recipe_default_process_extras <- function(extras,
   )
 
   extras
+}
+
+# ------------------------------------------------------------------------------
+
+patch_recipe_default_blueprint <- function(blueprint) {
+  blueprint <- patch_recipe_default_blueprint_pre_1.0.0(blueprint)
+  blueprint
+}
+
+patch_recipe_default_blueprint_pre_1.0.0 <- function(blueprint) {
+  if (is.null(blueprint$bake_dependent_roles)) {
+    blueprint$bake_dependent_roles <- character()
+  }
+
+  blueprint
 }
 
 # ------------------------------------------------------------------------------
