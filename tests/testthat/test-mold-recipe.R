@@ -354,3 +354,47 @@ test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
   expect_equal(x1$blueprint$ptypes$outcomes, tibble())
   expect_equal(x2$blueprint$ptypes$outcomes, tibble())
 })
+
+test_that("`mold()` is compatible with hardhat 0.2.0 blueprints that don't have `bake_dependent_roles`", {
+  path <- test_path("data", "hardhat-0.2.0-pre-mold-recipe.rds")
+  object <- readRDS(path)
+
+  data <- object$data
+  blueprint <- object$blueprint
+
+  rec <- recipes::recipe(y ~ ., data = data)
+  rec <- recipes::step_mutate(rec, z = 1)
+
+  out <- mold(rec, data = data, blueprint = blueprint)
+
+  expect_identical(out$blueprint$bake_dependent_roles, character())
+
+  expect <- tibble::tibble(x = data$x, z = 1)
+  expect_identical(out$predictors, expect)
+})
+
+test_that("`patch_recipe_default_blueprint()` patches `bake_dependent_roles` on pre hardhat 1.0.0 blueprints that haven't gone through `mold()`", {
+  path <- test_path("data", "hardhat-0.2.0-pre-mold-recipe.rds")
+  object <- readRDS(path)
+
+  blueprint <- object$blueprint
+
+  expect_null(blueprint$bake_dependent_roles)
+
+  blueprint <- patch_recipe_default_blueprint(blueprint)
+
+  expect_identical(blueprint$bake_dependent_roles, character())
+})
+
+test_that("`patch_recipe_default_blueprint()` patches `bake_dependent_roles` on pre hardhat 1.0.0 blueprints that have gone through `mold()`", {
+  path <- test_path("data", "hardhat-0.2.0-post-mold-recipe.rds")
+  object <- readRDS(path)
+
+  blueprint <- object$blueprint
+
+  expect_null(blueprint$bake_dependent_roles)
+
+  blueprint <- patch_recipe_default_blueprint(blueprint)
+
+  expect_identical(blueprint$bake_dependent_roles, character())
+})
