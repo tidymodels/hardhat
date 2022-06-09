@@ -390,7 +390,7 @@ mold_formula_default_clean <- function(blueprint, data) {
 
   blueprint <- update_blueprint(blueprint, formula = formula)
 
-  out$mold$clean(blueprint, data)
+  new_mold_clean(blueprint, data)
 }
 
 # ------------------------------------------------------------------------------
@@ -403,7 +403,9 @@ mold_formula_default_process <- function(blueprint, data) {
   )
 
   blueprint <- processed$blueprint
-  predictors_lst <- processed$terms_lst
+  predictors <- processed$data
+  predictors_ptype <- processed$ptype
+  predictors_extras <- processed$extras
 
   processed <- mold_formula_default_process_outcomes(
     blueprint = blueprint,
@@ -411,21 +413,20 @@ mold_formula_default_process <- function(blueprint, data) {
   )
 
   blueprint <- processed$blueprint
-  outcomes_lst <- processed$terms_lst
+  outcomes <- processed$data
+  outcomes_ptype <- processed$ptype
+  outcomes_extras <- processed$extras
 
   # nuke formula environment before returning
   formula_empty_env <- nuke_formula_environment(blueprint$formula)
   blueprint <- update_blueprint(blueprint, formula = formula_empty_env)
 
-  ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
-  extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
+  ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
+  extras <- new_extras(predictors_extras, outcomes_extras)
 
   blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
-  predictors <- predictors_lst$data
-  outcomes <- outcomes_lst$data
-
-  out$mold$final(predictors, outcomes, blueprint, extras)
+  new_mold_process(predictors, outcomes, blueprint, extras)
 }
 
 mold_formula_default_process_predictors <- function(blueprint, data) {
@@ -471,13 +472,12 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   blueprint_terms$predictors <- terms
   blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
 
-  predictors_lst <- out$mold$process_terms_lst(
+  new_mold_process_terms(
+    blueprint = blueprint,
     data = predictors,
     ptype = ptype,
     extras = list(offset = offset)
   )
-
-  out$mold$process_terms(blueprint, predictors_lst)
 }
 
 mold_formula_default_process_outcomes <- function(blueprint, data) {
@@ -503,9 +503,11 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
   blueprint_terms$outcomes <- terms
   blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
 
-  outcomes_lst <- out$mold$process_terms_lst(data = outcomes, ptype)
-
-  out$mold$process_terms(blueprint, outcomes_lst)
+  new_mold_process_terms(
+    blueprint = blueprint,
+    data = outcomes,
+    ptype = ptype
+  )
 }
 
 # ------------------------------------------------------------------------------
@@ -560,7 +562,7 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
     outcomes <- NULL
   }
 
-  out$forge$clean(blueprint, predictors, outcomes)
+  new_forge_clean(blueprint, predictors, outcomes)
 }
 
 # ------------------------------------------------------------------------------
@@ -572,7 +574,8 @@ forge_formula_default_process <- function(blueprint, predictors, outcomes, extra
   )
 
   blueprint <- processed$blueprint
-  predictors_lst <- processed$terms_lst
+  predictors <- processed$data
+  predictors_extras <- processed$extras
 
   processed <- forge_formula_default_process_outcomes(
     blueprint = blueprint,
@@ -580,14 +583,15 @@ forge_formula_default_process <- function(blueprint, predictors, outcomes, extra
   )
 
   blueprint <- processed$blueprint
-  outcomes_lst <- processed$terms_lst
+  outcomes <- processed$data
+  outcomes_extras <- processed$extras
 
   extras <- c(
     extras,
-    out$extras$final(predictors_lst$extras, outcomes_lst$extras)
+    new_extras(predictors_extras, outcomes_extras)
   )
 
-  out$forge$final(predictors_lst$data, outcomes_lst$data, extras)
+  new_forge_process(predictors, outcomes, extras)
 }
 
 forge_formula_default_process_predictors <- function(blueprint, predictors) {
@@ -615,22 +619,25 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
 
   data <- recompose(data, blueprint$composition)
 
-  .offset <- extract_offset(framed$terms, framed$data)
+  offset <- extract_offset(framed$terms, framed$data)
 
-  predictors_lst <- out$forge$process_terms_lst(
+  extras <- list(offset = offset)
+
+  new_forge_process_terms(
+    blueprint = blueprint,
     data = data,
-    extras = list(offset = .offset)
+    extras = extras
   )
-
-  out$forge$process_terms(blueprint, predictors_lst)
 }
 
 forge_formula_default_process_outcomes <- function(blueprint, outcomes) {
 
   # no outcomes to process
   if (is.null(outcomes)) {
-    outcomes_lst <- out$forge$process_terms_lst()
-    result <- out$forge$process_terms(blueprint, outcomes_lst)
+    result <- new_forge_process_terms(
+      blueprint = blueprint,
+      data = outcomes
+    )
     return(result)
   }
 
@@ -644,9 +651,10 @@ forge_formula_default_process_outcomes <- function(blueprint, outcomes) {
   # model.frame()
   data <- flatten_embedded_columns(framed$data)
 
-  outcomes_lst <- out$forge$process_terms_lst(data = data)
-
-  out$forge$process_terms(blueprint, outcomes_lst)
+  new_forge_process_terms(
+    blueprint = blueprint,
+    data = data
+  )
 }
 
 # ------------------------------------------------------------------------------

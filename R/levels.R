@@ -38,15 +38,15 @@ get_levels <- function(data) {
     return(NULL)
   }
 
-  lvl_lst <- lapply(data, levels)
+  list_of_levels <- lapply(data, levels)
 
-  null_elems <- vapply(lvl_lst, is.null, logical(1))
+  null_elems <- vapply(list_of_levels, is.null, logical(1))
 
   if (all(null_elems)) {
     return(NULL)
   }
 
-  lvl_lst[!null_elems]
+  list_of_levels[!null_elems]
 }
 
 #' @rdname get_levels
