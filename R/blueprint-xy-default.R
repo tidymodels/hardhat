@@ -208,7 +208,7 @@ mold_xy_default_clean <- function(blueprint, x, y) {
   blueprint <- cleaned$blueprint
   y <- cleaned$y
 
-  out$mold$clean_xy(blueprint, x, y)
+  new_mold_clean_xy(blueprint, x, y)
 }
 
 mold_xy_default_clean_predictors <- function(blueprint, x) {
@@ -228,22 +228,23 @@ mold_xy_default_process <- function(blueprint, x, y) {
   processed <- mold_xy_default_process_predictors(blueprint, x)
 
   blueprint <- processed$blueprint
-  predictors_lst <- processed$terms_lst
+  predictors <- processed$data
+  predictors_ptype <- processed$ptype
+  predictors_extras <- processed$extras
 
   processed <- mold_xy_default_process_outcomes(blueprint, y)
 
   blueprint <- processed$blueprint
-  outcomes_lst <- processed$terms_lst
+  outcomes <- processed$data
+  outcomes_ptype <- processed$ptype
+  outcomes_extras <- processed$extras
 
-  ptypes <- out$ptypes$final(predictors_lst$ptype, outcomes_lst$ptype)
-  extras <- out$extras$final(predictors_lst$extras, outcomes_lst$extras)
+  ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
+  extras <- new_extras(predictors_extras, outcomes_extras)
 
   blueprint <- update_blueprint(blueprint, ptypes = ptypes)
 
-  predictors <- predictors_lst$data
-  outcomes <- outcomes_lst$data
-
-  out$mold$final(predictors, outcomes, blueprint, extras)
+  new_mold_process(predictors, outcomes, blueprint, extras)
 }
 
 mold_xy_default_process_predictors <- function(blueprint, x) {
@@ -255,17 +256,21 @@ mold_xy_default_process_predictors <- function(blueprint, x) {
 
   x <- recompose(x, blueprint$composition)
 
-  predictors_lst <- out$mold$process_terms_lst(data = x, ptype)
-
-  out$mold$process_terms(blueprint, predictors_lst)
+  new_mold_process_terms(
+    blueprint = blueprint,
+    data = x,
+    ptype = ptype
+  )
 }
 
 mold_xy_default_process_outcomes <- function(blueprint, y) {
   ptype <- extract_ptype(y)
 
-  outcomes_lst <- out$mold$process_terms_lst(data = y, ptype)
-
-  out$mold$process_terms(blueprint, outcomes_lst)
+  new_mold_process_terms(
+    blueprint = blueprint,
+    data = y,
+    ptype = ptype
+  )
 }
 
 # ------------------------------------------------------------------------------
@@ -320,7 +325,7 @@ forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
     outcomes <- NULL
   }
 
-  out$forge$clean(blueprint, predictors, outcomes)
+  new_forge_clean(blueprint, predictors, outcomes)
 }
 
 # ------------------------------------------------------------------------------
@@ -329,19 +334,21 @@ forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
   processed <- forge_xy_default_process_predictors(blueprint, predictors)
 
   blueprint <- processed$blueprint
-  predictors_lst <- processed$terms_lst
+  predictors <- processed$data
+  predictors_extras <- processed$extras
 
   processed <- forge_xy_default_process_outcomes(blueprint, outcomes)
 
   blueprint <- processed$blueprint
-  outcomes_lst <- processed$terms_lst
+  outcomes <- processed$data
+  outcomes_extras <- processed$extras
 
   extras <- c(
     extras,
-    out$extras$final(predictors_lst$extras, outcomes_lst$extras)
+    new_extras(predictors_extras, outcomes_extras)
   )
 
-  out$forge$final(predictors_lst$data, outcomes_lst$data, extras)
+  new_forge_process(predictors, outcomes, extras)
 }
 
 forge_xy_default_process_predictors <- function(blueprint, predictors) {
@@ -349,21 +356,25 @@ forge_xy_default_process_predictors <- function(blueprint, predictors) {
 
   predictors <- recompose(predictors, blueprint$composition)
 
-  predictors_lst <- out$forge$process_terms_lst(data = predictors)
-
-  out$forge$process_terms(blueprint, predictors_lst)
+  new_forge_process_terms(
+    blueprint = blueprint,
+    data = predictors
+  )
 }
 
 forge_xy_default_process_outcomes <- function(blueprint, outcomes) {
 
   # no outcomes to process
   if (is.null(outcomes)) {
-    outcomes_lst <- out$forge$process_terms_lst()
-    result <- out$forge$process_terms(blueprint, outcomes_lst)
+    result <- new_forge_process_terms(
+      blueprint = blueprint,
+      data = outcomes
+    )
     return(result)
   }
 
-  outcomes_lst <- out$forge$process_terms_lst(data = outcomes)
-
-  out$forge$process_terms(blueprint, outcomes_lst)
+  new_forge_process_terms(
+    blueprint = blueprint,
+    data = outcomes
+  )
 }
