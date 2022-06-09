@@ -18,7 +18,7 @@ object <- list(data = data, blueprint = blueprint)
 saveRDS(
   object,
   file = file,
-  version = 3
+  version = 2
 )
 
 # ------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ object <- list(new_data = new_data, blueprint = blueprint)
 saveRDS(
   object,
   file = file,
-  version = 3
+  version = 2
 )
 
 # ------------------------------------------------------------------------------
