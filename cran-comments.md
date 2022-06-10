@@ -5,6 +5,13 @@ We checked 19 reverse dependencies, comparing R CMD check results across CRAN an
  * We saw 0 new problems
  * We failed to check 0 packages
 
+## 1.1.0 Submission
+
+This is a minor release of hardhat that follows up on the 1.0.0 release to fix
+a bug that we accidentally introduced. Models fit with hardhat 0.2.0 were no
+longer able to call `predict()` if hardhat 1.0.0 was installed. That was
+unintentional, and has been fixed.
+
 ## 1.0.0 Submission
 
 This is a major release of hardhat to signify that we feel that it is stable. It includes a breaking change regarding how recipe roles are handled in `forge()`. It also includes a few new functions useful for case weight handling throughout tidymodels.
