@@ -133,7 +133,10 @@
     <loc>https://hardhat.tidymodels.org/reference/refresh_blueprint.html</loc>
   </url>
   <url>
-    <loc>https://hardhat.tidymodels.org/reference/run_mold.html</loc>
+    <loc>https://hardhat.tidymodels.org/reference/run-forge.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/reference/run-mold.html</loc>
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/reference/scream.html</loc>

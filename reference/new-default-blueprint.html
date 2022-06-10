@@ -16,7 +16,7 @@ of the constructors found in the documentation for new_blueprint()."><meta prope
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,8 +75,6 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">new_default_formula_blueprint</span><span class="op">(</span>
-  <span class="va">mold</span>,
-  <span class="va">forge</span>,
   intercept <span class="op">=</span> <span class="cn">FALSE</span>,
   allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
   ptypes <span class="op">=</span> <span class="cn">NULL</span>,
@@ -89,8 +87,6 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
 <span class="op">)</span>
 
 <span class="fu">new_default_recipe_blueprint</span><span class="op">(</span>
-  <span class="va">mold</span>,
-  <span class="va">forge</span>,
   intercept <span class="op">=</span> <span class="cn">FALSE</span>,
   allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
   fresh <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -104,8 +100,6 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
 <span class="op">)</span>
 
 <span class="fu">new_default_xy_blueprint</span><span class="op">(</span>
-  <span class="va">mold</span>,
-  <span class="va">forge</span>,
   intercept <span class="op">=</span> <span class="cn">FALSE</span>,
   allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
   composition <span class="op">=</span> <span class="st">"tibble"</span>,
@@ -117,13 +111,7 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>mold</dt>
-<dd><p>A named list with two elements, <code>clean</code> and <code>process</code>, see
-the <code><a href="new-blueprint.html">new_blueprint()</a></code> section, Mold Functions, for details.</p></dd>
-<dt>forge</dt>
-<dd><p>A named list with two elements, <code>clean</code> and <code>process</code>, see
-the <code><a href="new-blueprint.html">new_blueprint()</a></code> section, Forge Functions, for details.</p></dd>
-<dt>intercept</dt>
+    <dl><dt>intercept</dt>
 <dd><p>A logical. Should an intercept be included in the
 processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></dd>
@@ -135,8 +123,7 @@ prediction time? This information is used by the <code>clean</code> function in 
 <dd><p>Either <code>NULL</code>, or a named list with 2 elements, <code>predictors</code>
 and <code>outcomes</code>, both of which are 0-row tibbles. <code>ptypes</code> is generated
 automatically at <code><a href="mold.html">mold()</a></code> time and is used to validate <code>new_data</code> at
-prediction time. At <code><a href="mold.html">mold()</a></code> time, the information found in
-<code>blueprint$mold$process()$ptype</code> is used to set <code>ptypes</code> for the <code>blueprint</code>.</p></dd>
+prediction time.</p></dd>
 <dt>formula</dt>
 <dd><p>Either <code>NULL</code>, or a formula that specifies how the
 predictors and outcomes should be preprocessed. This argument is set
