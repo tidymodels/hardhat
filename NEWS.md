@@ -1,3 +1,5 @@
+# hardhat (development version)
+
 # hardhat 1.1.0
 
 * Fixed a bug where the results from calling `mold()` using hardhat < 1.0.0 were
