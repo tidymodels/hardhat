@@ -9,7 +9,6 @@ default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
-  bake_dependent_roles = character(),
   composition = "tibble"
 )
 
@@ -26,19 +25,6 @@ prediction time? This information is used by the \code{clean} function in the
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
-
-\item{bake_dependent_roles}{A character vector of recipes column "roles"
-specifying roles that are required to \code{\link[recipes:bake]{recipes::bake()}} new data. Can't be
-\code{"predictor"} or \code{"outcome"}, as predictors are always required and
-outcomes are handled by the \code{outcomes} argument of \code{\link[=forge]{forge()}}.
-
-Typically, non-standard roles (such as \code{"id"} or \code{"case_weights"}) are not
-required to \code{bake()} new data. Unless specified by \code{bake_dependent_roles},
-these non-standard role columns are excluded from checks done in \code{\link[=forge]{forge()}}
-to validate the column structure of \code{new_data}, will not be passed to
-\code{bake()} even if they existed in \code{new_data}, and will not be returned in
-the \code{forge()$extras$roles} slot. See the documentation of
-\code{\link[recipes:roles]{recipes::add_role()}} for more information about roles.}
 
 \item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
 of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
@@ -136,15 +122,21 @@ rec2 <- step_intercept(rec)
 mold(rec2, iris)$predictors
 
 # ---------------------------------------------------------------------------
+# Matrix output for predictors
+
+# You can change the `composition` of the predictor data set
+bp <- default_recipe_blueprint(composition = "dgCMatrix")
+processed <- mold(rec, train, blueprint = bp)
+class(processed$predictors)
+
+\dontshow{if (utils::packageVersion("recipes") >= "0.2.0.9002") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# ---------------------------------------------------------------------------
 # Non standard roles
 
-# If you have custom recipes roles, it is assumed that they are required
-# in `prep()` and afterwards for modeling, but are not required at `bake()`
-# time and for prediction. This means that they are processed and returned
-# in the `$extras$roles` slot of the return value of `mold()`, but they
-# are not required to be in `new_data` in `forge()` and are not returned
-# in the result.
-
+# If you have custom recipes roles, they are assumed to be required at
+# `bake()` time when passing in `new_data`. This is an assumption that both
+# recipes and hardhat makes, meaning that those roles are required at
+# `forge()` time as well.
 rec_roles <- recipe(train) \%>\%
   update_role(Sepal.Width, new_role = "predictor") \%>\%
   update_role(Species, new_role = "outcome") \%>\%
@@ -153,40 +145,26 @@ rec_roles <- recipe(train) \%>\%
 
 processed_roles <- mold(rec_roles, train)
 
-# The custom roles will still be in the `mold()` result in case you need
+# The custom roles will be in the `mold()` result in case you need
 # them for modeling.
 processed_roles$extras
 
-# Notice that the columns with custom roles exist in `test`,
-# but they weren't passed to `bake()` and aren't in the output.
+# And they are in the `forge()` result
 forge(test, processed_roles$blueprint)$extras
 
-# They can even be removed from `test` entirely, and it still works.
+# If you remove a column with a custom role from the test data, then you
+# won't be able to `forge()` even though this recipe technically didn't
+# use that column in any steps
 test2 <- test
 test2$Petal.Length <- NULL
-forge(test2, processed_roles$blueprint)$extras
-
-# Occasionally, you might have a custom role that is required to be able
-# to `bake()` on `new_data`. In those cases, you can specify it with
-# `bake_dependent_roles` in `default_recipe_blueprint()`, which will ensure
-# that it is a required column when calling `forge()`, that it will be
-# passed on to `bake()`, and that it will be returned in the result.
-bp <- default_recipe_blueprint(bake_dependent_roles = "important")
-
-processed_roles <- mold(rec_roles, train, blueprint = bp)
-
-# Now `"important"` is a required role when `forge()`-ing
-forge(test, processed_roles$blueprint)$extras$roles
-
-# Which means that we can't `forge()` with the data frame that is missing
-# the `Petal.Length` column
 try(forge(test2, processed_roles$blueprint))
 
-# ---------------------------------------------------------------------------
-# Matrix output for predictors
-
-# You can change the `composition` of the predictor data set
-bp <- default_recipe_blueprint(composition = "dgCMatrix")
-processed <- mold(rec, train, blueprint = bp)
-class(processed$predictors)
+# Most of the time, if you find yourself in the above scenario, then we
+# suggest that you remove `Petal.Length` from the data that is supplied to
+# the recipe. If that isn't an option, you can declare that that column
+# isn't required at `bake()` time by using `update_role_requirements()`
+rec_roles <- update_role_requirements(rec_roles, "important", bake = FALSE)
+processed_roles <- mold(rec_roles, train)
+forge(test2, processed_roles$blueprint)
+\dontshow{\}) # examplesIf}
 }

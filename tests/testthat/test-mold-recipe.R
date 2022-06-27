@@ -133,33 +133,11 @@ test_that("`extras` holds a slot for `roles`", {
   expect_equal(x3$blueprint$extra_role_ptypes, NULL)
 })
 
-test_that("non-standard role ptypes are not retained by default", {
+test_that("non-standard roles ptypes are stored by default", {
   rec <- recipes::recipe(Species ~ ., iris)
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy")
 
   x <- mold(rec, iris)
-
-  expect_true("extra_role_ptypes" %in% names(x$blueprint))
-
-  expect_identical(
-    x$blueprint$extra_role_ptypes,
-    NULL
-  )
-
-  # But they are returned from `mold()` for developer usage
-  expect_identical(
-    x$extras$roles,
-    list(dummy = tibble::tibble(Sepal.Width = iris$Sepal.Width))
-  )
-})
-
-test_that("non-standard roles ptypes can be stored upon request", {
-  bp <- default_recipe_blueprint(bake_dependent_roles = "dummy")
-
-  rec <- recipes::recipe(Species ~ ., iris)
-  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy")
-
-  x <- mold(rec, iris, blueprint = bp)
 
   expect_identical(
     x$blueprint$extra_role_ptypes,
@@ -172,16 +150,71 @@ test_that("non-standard roles ptypes can be stored upon request", {
   )
 })
 
+test_that("case weights is not considered a required extra role by default", {
+  # If we have this, we also have case weight support
+  skip_if_no_update_role_requirements()
+
+  iris$weight <- frequency_weights(seq_len(nrow(iris)))
+
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy")
+
+  x <- mold(rec, iris)
+
+  expect_identical(
+    x$blueprint$extra_role_ptypes,
+    list(dummy = tibble::tibble(Sepal.Width = double()))
+  )
+
+  expect_identical(
+    x$extras$roles$dummy,
+    tibble::tibble(Sepal.Width = iris$Sepal.Width)
+  )
+  expect_identical(
+    x$extras$roles$case_weights,
+    tibble::tibble(weight = iris$weight)
+  )
+})
+
+test_that("case weights can be updated to be a required extra role", {
+  skip_if_no_update_role_requirements()
+
+  iris$weight <- frequency_weights(seq_len(nrow(iris)))
+
+  rec <- recipes::recipe(Species ~ ., iris)
+  rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy")
+  rec <- recipes::update_role_requirements(rec, "case_weights", bake = TRUE)
+
+  x <- mold(rec, iris)
+
+  expect_identical(
+    x$blueprint$extra_role_ptypes$dummy,
+    tibble::tibble(Sepal.Width = double())
+  )
+  expect_identical(
+    x$blueprint$extra_role_ptypes$case_weights,
+    tibble::tibble(weight = frequency_weights(integer()))
+  )
+
+  expect_identical(
+    x$extras$roles$dummy,
+    tibble::tibble(Sepal.Width = iris$Sepal.Width)
+  )
+  expect_identical(
+    x$extras$roles$case_weights,
+    tibble::tibble(weight = iris$weight)
+  )
+})
+
 test_that("only original non-standard columns are in the extra roles ptype", {
-  bp <- default_recipe_blueprint(bake_dependent_roles = "dummy")
-  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix", bake_dependent_roles = "dummy")
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   # same custom role, but note step_bs() columns aren't original columns
   rec <- recipes::recipe(Species ~ ., iris)
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy")
   rec <- recipes::step_bs(rec, Sepal.Length, role = "dummy", deg_free = 3)
 
-  x1 <- mold(rec, iris, blueprint = bp)
+  x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
 
   # extra roles ptype only has original columns
@@ -205,6 +238,20 @@ test_that("only original non-standard columns are in the extra roles ptype", {
   )
 })
 
+test_that("`extra_role_ptypes` and `extras` only hold roles that actually exist in the data", {
+  df <- tibble(y = 1, x = 1, z = 2)
+
+  rec <- recipes::recipe(y ~ ., df)
+  rec <- recipes::update_role(rec, x, new_role = "dummy")
+
+  # For example `default_bake_role_requirements()` specifies that `NA` is
+  # a required role, but there aren't any columns with that role in `df`
+  x <- mold(rec, df)
+
+  expect_named(x$blueprint$extra_role_ptypes, "dummy")
+  expect_named(x$extras$roles, "dummy")
+})
+
 test_that("multiple extra roles types can be stored", {
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
@@ -225,8 +272,7 @@ test_that("multiple extra roles types can be stored", {
     NULL
   )
 
-  # we don't need to request them with `bake_dependent_roles`, they
-  # automatically are returned in the `mold()` result
+  # They are automatically are returned in the `mold()` result
   expect_equal(
     names(x1$extras$roles),
     c("dummy", "dummy2")
@@ -237,16 +283,15 @@ test_that("multiple extra roles types can be stored", {
   )
 })
 
-test_that("`NA` roles are skipped over", {
-  bp <- default_recipe_blueprint(bake_dependent_roles = "custom")
-  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix", bake_dependent_roles = "custom")
+test_that("`NA` roles are treated as extra roles", {
+  sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   rec <- recipes::recipe(iris)
   rec <- recipes::update_role(rec, Sepal.Length, new_role = "predictor")
   rec <- recipes::update_role(rec, Species, new_role = "outcome")
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "custom")
 
-  x1 <- mold(rec, iris, blueprint = bp)
+  x1 <- mold(rec, iris)
   x2 <- mold(rec, iris, blueprint = sparse_bp)
 
   expect_equal(
@@ -295,6 +340,15 @@ test_that("`NA` roles are skipped over", {
   )
 
   expect_equal(
+    colnames(x1$extras$roles$`NA`),
+    c("Petal.Length", "Petal.Width")
+  )
+  expect_equal(
+    colnames(x2$extras$roles$`NA`),
+    c("Petal.Length", "Petal.Width")
+  )
+
+  expect_equal(
     colnames(x1$blueprint$extra_role_ptypes$custom),
     "Sepal.Width"
   )
@@ -302,15 +356,26 @@ test_that("`NA` roles are skipped over", {
     colnames(x2$blueprint$extra_role_ptypes$custom),
     "Sepal.Width"
   )
+
+  expect_equal(
+    colnames(x1$blueprint$extra_role_ptypes$`NA`),
+    c("Petal.Length", "Petal.Width")
+  )
+  expect_equal(
+    colnames(x2$blueprint$extra_role_ptypes$`NA`),
+    c("Petal.Length", "Petal.Width")
+  )
 })
 
-test_that("non-`bake_dependent_roles` are not retained as `extra_role_ptypes`, but are in the mold result", {
+test_that("roles that aren't required are not retained as `extra_role_ptypes`, but are in the mold result", {
+  skip_if_no_update_role_requirements()
+
   rec <- recipes::recipe(Species ~ ., iris)
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
   rec <- recipes::update_role(rec, Sepal.Length, new_role = "dummy2")
+  rec <- recipes::update_role_requirements(rec, "dummy1", bake = FALSE)
 
-  bp <- default_recipe_blueprint(bake_dependent_roles = "dummy2")
-  x <- mold(rec, iris, blueprint = bp)
+  x <- mold(rec, iris)
 
   expect_equal(
     x$blueprint$extra_role_ptypes,
@@ -325,14 +390,6 @@ test_that("non-`bake_dependent_roles` are not retained as `extra_role_ptypes`, b
     x$extras$roles$dummy2,
     tibble::tibble(Sepal.Length = iris$Sepal.Length)
   )
-})
-
-test_that("`bake_dependent_roles` is validated", {
-  expect_snapshot({
-    (expect_error(default_recipe_blueprint(bake_dependent_roles = 1)))
-    (expect_error(default_recipe_blueprint(bake_dependent_roles = c("outcome", "x"))))
-    (expect_error(default_recipe_blueprint(bake_dependent_roles = c("predictor", "x"))))
-  })
 })
 
 test_that("Missing y value returns a 0 column tibble for `outcomes`", {
@@ -355,7 +412,7 @@ test_that("Missing y value returns a 0 column / 0 row tibble for `ptype`", {
   expect_equal(x2$blueprint$ptypes$outcomes, tibble())
 })
 
-test_that("`mold()` is compatible with hardhat 0.2.0 blueprints that don't have `bake_dependent_roles`", {
+test_that("`mold()` is compatible with hardhat 0.2.0 blueprints", {
   path <- test_path("data", "hardhat-0.2.0-pre-mold-recipe.rds")
   object <- readRDS(path)
 
@@ -367,34 +424,6 @@ test_that("`mold()` is compatible with hardhat 0.2.0 blueprints that don't have 
 
   out <- mold(rec, data = data, blueprint = blueprint)
 
-  expect_identical(out$blueprint$bake_dependent_roles, character())
-
   expect <- tibble::tibble(x = data$x, z = 1)
   expect_identical(out$predictors, expect)
-})
-
-test_that("`patch_recipe_default_blueprint()` patches `bake_dependent_roles` on pre hardhat 1.0.0 blueprints that haven't gone through `mold()`", {
-  path <- test_path("data", "hardhat-0.2.0-pre-mold-recipe.rds")
-  object <- readRDS(path)
-
-  blueprint <- object$blueprint
-
-  expect_null(blueprint$bake_dependent_roles)
-
-  blueprint <- patch_recipe_default_blueprint(blueprint)
-
-  expect_identical(blueprint$bake_dependent_roles, character())
-})
-
-test_that("`patch_recipe_default_blueprint()` patches `bake_dependent_roles` on pre hardhat 1.0.0 blueprints that have gone through `mold()`", {
-  path <- test_path("data", "hardhat-0.2.0-post-mold-recipe.rds")
-  object <- readRDS(path)
-
-  blueprint <- object$blueprint
-
-  expect_null(blueprint$bake_dependent_roles)
-
-  blueprint <- patch_recipe_default_blueprint(blueprint)
-
-  expect_identical(blueprint$bake_dependent_roles, character())
 })
