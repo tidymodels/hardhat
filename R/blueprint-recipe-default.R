@@ -539,21 +539,19 @@ get_original_outcome_ptype <- function(rec, data) {
 get_extra_role_columns_original <- function(rec, data) {
   # Extra roles that existed before `prep()` has been called.
   # To get "extra" roles that are required at bake time:
-  # - Start with the roles that actually exist in `data`
-  # - Remove the ones that aren't required at bake time
+  # - Compute the bake role requirements named logical vector.
+  #   It has information about every role in the original data.
+  # - Subset that vector to only `TRUE` locations, where the role is required
   # - Remove the `"predictor"` role (it is always required, but isn't "extra")
   info_type <- "var_info"
 
-  data_roles <- rec[[info_type]][["role"]]
-  data_roles <- chr_explicit_na(data_roles)
-  data_roles <- unique(data_roles)
+  requirements <- compute_bake_role_requirements(rec)
 
-  required_at_bake <- get_bake_role_requirements(rec)
-  not_required_at_bake <- required_at_bake[!required_at_bake]
-  not_required_at_bake_roles <- names(not_required_at_bake)
+  # Filter down to the roles that are actually required
+  requirements <- requirements[requirements]
+  requirement_roles <- names(requirements)
 
-  required_roles <- setdiff(data_roles, not_required_at_bake_roles)
-  extra_roles <- setdiff(required_roles, "predictor")
+  extra_roles <- setdiff(requirement_roles, "predictor")
 
   get_extra_role_columns(rec, data, extra_roles, info_type)
 }
@@ -603,15 +601,25 @@ get_extra_role_columns <- function(rec, data, extra_roles, info_type) {
 
 # ------------------------------------------------------------------------------
 
+new_role_requirements <- function() {
+  # recipes:::new_role_requirements()
+  list(
+    bake = new_bake_role_requirements()
+  )
+}
 get_role_requirements <- function(recipe) {
   # recipes:::get_role_requirements()
-  recipe$requirements %||% set_names(list(), nm = character())
+  recipe$requirements %||% new_role_requirements()
 }
 
+new_bake_role_requirements <- function() {
+  # recipes:::new_bake_role_requirements()
+  set_names(logical(), nms = character())
+}
 get_bake_role_requirements <- function(recipe) {
   # recipes:::get_bake_role_requirements()
   requirements <- get_role_requirements(recipe)
-  requirements$bake %||% default_bake_role_requirements()
+  requirements$bake
 }
 default_bake_role_requirements <- function() {
   # recipes:::default_bake_role_requirements()
@@ -621,6 +629,29 @@ default_bake_role_requirements <- function() {
     "case_weights" = FALSE,
     "NA" = TRUE
   )
+}
+compute_bake_role_requirements <- function(recipe) {
+  # recipes:::compute_bake_role_requirements()
+  var_info <- recipe$var_info
+  var_roles <- var_info$role
+  var_roles <- chr_explicit_na(var_roles)
+  var_roles <- unique(var_roles)
+
+  # Start with default requirements
+  requirements <- default_bake_role_requirements()
+
+  # Drop unused default requirements
+  requirements <- requirements[names(requirements) %in% var_roles]
+
+  # Update with nonstandard roles in the recipe, which are required by default
+  nonstandard_roles <- var_roles[!var_roles %in% names(requirements)]
+  requirements[nonstandard_roles] <- TRUE
+
+  # Override with `update_role_requirements()` changes
+  user_requirements <- get_bake_role_requirements(recipe)
+  requirements[names(user_requirements)] <- user_requirements
+
+  requirements
 }
 
 chr_explicit_na <- function(x) {
