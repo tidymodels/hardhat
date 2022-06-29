@@ -492,9 +492,9 @@ validate_column_names <- function(data, original_names) {
 
     missing_names <- glue_quote_collapse(check$missing_names)
 
-    glubort(
-      "The following required columns are missing: {missing_names}."
-    )
+    message <- glue("The following required columns are missing: {missing_names}.")
+
+    abort(message)
   }
 
   invisible(data)
