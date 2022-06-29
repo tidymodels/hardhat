@@ -4,6 +4,7 @@
 # recipes 1.0.0. After recipes 1.0.0 is release, we can:
 # - Remove this workflow
 # - Remove `skip_if_no_update_role_requirements()`
+# - Remove `@examplesIf` in `default_recipe_blueprint()` docs
 # - Put `recipes (>= 1.0.0)` in Suggests
 
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
