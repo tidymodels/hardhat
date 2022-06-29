@@ -188,7 +188,7 @@ and provide your own validation function.</p></li>
 <span class="r-in"><span><span class="co"># An informative error message is thrown</span></span></span>
 <span class="r-in"><span><span class="co"># if the rows are different</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">validate_prediction_size</span><span class="op">(</span><span class="fu"><a href="spruce.html">spruce_numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, <span class="va">new_data</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("The size of `new_data` ({check$size_new_data}) must match the ",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in validate_prediction_size(spruce_numeric(1:4), new_data) : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   The size of `new_data` (5) must match the size of `pred` (4).</span>
 </code></pre></div>
     </div>
