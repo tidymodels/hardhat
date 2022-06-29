@@ -24,7 +24,6 @@ new_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
-  bake_dependent_roles = character(),
   composition = "tibble",
   ptypes = NULL,
   recipe = NULL,
@@ -93,19 +92,6 @@ subclass this blueprint.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
-
-\item{bake_dependent_roles}{A character vector of recipes column "roles"
-specifying roles that are required to \code{\link[recipes:bake]{recipes::bake()}} new data. Can't be
-\code{"predictor"} or \code{"outcome"}, as predictors are always required and
-outcomes are handled by the \code{outcomes} argument of \code{\link[=forge]{forge()}}.
-
-Typically, non-standard roles (such as \code{"id"} or \code{"case_weights"}) are not
-required to \code{bake()} new data. Unless specified by \code{bake_dependent_roles},
-these non-standard role columns are excluded from checks done in \code{\link[=forge]{forge()}}
-to validate the column structure of \code{new_data}, will not be passed to
-\code{bake()} even if they existed in \code{new_data}, and will not be returned in
-the \code{forge()$extras$roles} slot. See the documentation of
-\code{\link[recipes:roles]{recipes::add_role()}} for more information about roles.}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}

@@ -44,6 +44,7 @@
 #'
 #' - It adds an intercept column onto `new_data` if `intercept = TRUE`.
 #'
+#' @export
 #' @examples
 #' library(recipes)
 #'
@@ -92,15 +93,21 @@
 #' mold(rec2, iris)$predictors
 #'
 #' # ---------------------------------------------------------------------------
+#' # Matrix output for predictors
+#'
+#' # You can change the `composition` of the predictor data set
+#' bp <- default_recipe_blueprint(composition = "dgCMatrix")
+#' processed <- mold(rec, train, blueprint = bp)
+#' class(processed$predictors)
+#'
+#' @examplesIf utils::packageVersion("recipes") >= "0.2.0.9002"
+#' # ---------------------------------------------------------------------------
 #' # Non standard roles
 #'
-#' # If you have custom recipes roles, it is assumed that they are required
-#' # in `prep()` and afterwards for modeling, but are not required at `bake()`
-#' # time and for prediction. This means that they are processed and returned
-#' # in the `$extras$roles` slot of the return value of `mold()`, but they
-#' # are not required to be in `new_data` in `forge()` and are not returned
-#' # in the result.
-#'
+#' # If you have custom recipes roles, they are assumed to be required at
+#' # `bake()` time when passing in `new_data`. This is an assumption that both
+#' # recipes and hardhat makes, meaning that those roles are required at
+#' # `forge()` time as well.
 #' rec_roles <- recipe(train) %>%
 #'   update_role(Sepal.Width, new_role = "predictor") %>%
 #'   update_role(Species, new_role = "outcome") %>%
@@ -109,53 +116,35 @@
 #'
 #' processed_roles <- mold(rec_roles, train)
 #'
-#' # The custom roles will still be in the `mold()` result in case you need
+#' # The custom roles will be in the `mold()` result in case you need
 #' # them for modeling.
 #' processed_roles$extras
 #'
-#' # Notice that the columns with custom roles exist in `test`,
-#' # but they weren't passed to `bake()` and aren't in the output.
+#' # And they are in the `forge()` result
 #' forge(test, processed_roles$blueprint)$extras
 #'
-#' # They can even be removed from `test` entirely, and it still works.
+#' # If you remove a column with a custom role from the test data, then you
+#' # won't be able to `forge()` even though this recipe technically didn't
+#' # use that column in any steps
 #' test2 <- test
 #' test2$Petal.Length <- NULL
-#' forge(test2, processed_roles$blueprint)$extras
-#'
-#' # Occasionally, you might have a custom role that is required to be able
-#' # to `bake()` on `new_data`. In those cases, you can specify it with
-#' # `bake_dependent_roles` in `default_recipe_blueprint()`, which will ensure
-#' # that it is a required column when calling `forge()`, that it will be
-#' # passed on to `bake()`, and that it will be returned in the result.
-#' bp <- default_recipe_blueprint(bake_dependent_roles = "important")
-#'
-#' processed_roles <- mold(rec_roles, train, blueprint = bp)
-#'
-#' # Now `"important"` is a required role when `forge()`-ing
-#' forge(test, processed_roles$blueprint)$extras$roles
-#'
-#' # Which means that we can't `forge()` with the data frame that is missing
-#' # the `Petal.Length` column
 #' try(forge(test2, processed_roles$blueprint))
 #'
-#' # ---------------------------------------------------------------------------
-#' # Matrix output for predictors
-#'
-#' # You can change the `composition` of the predictor data set
-#' bp <- default_recipe_blueprint(composition = "dgCMatrix")
-#' processed <- mold(rec, train, blueprint = bp)
-#' class(processed$predictors)
-#' @export
+#' # Most of the time, if you find yourself in the above scenario, then we
+#' # suggest that you remove `Petal.Length` from the data that is supplied to
+#' # the recipe. If that isn't an option, you can declare that that column
+#' # isn't required at `bake()` time by using `update_role_requirements()`
+#' rec_roles <- update_role_requirements(rec_roles, "important", bake = FALSE)
+#' processed_roles <- mold(rec_roles, train)
+#' forge(test2, processed_roles$blueprint)
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
                                      fresh = TRUE,
-                                     bake_dependent_roles = character(),
                                      composition = "tibble") {
   new_default_recipe_blueprint(
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
-    bake_dependent_roles = bake_dependent_roles,
     composition = composition
   )
 }
@@ -170,7 +159,6 @@ default_recipe_blueprint <- function(intercept = FALSE,
 new_default_recipe_blueprint <- function(intercept = FALSE,
                                          allow_novel_levels = FALSE,
                                          fresh = TRUE,
-                                         bake_dependent_roles = character(),
                                          composition = "tibble",
                                          ptypes = NULL,
                                          recipe = NULL,
@@ -181,7 +169,6 @@ new_default_recipe_blueprint <- function(intercept = FALSE,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
-    bake_dependent_roles = bake_dependent_roles,
     composition = composition,
     ptypes = ptypes,
     recipe = recipe,
@@ -202,8 +189,6 @@ refresh_blueprint.default_recipe_blueprint <- function(blueprint) {
 #' @export
 run_mold.default_recipe_blueprint <- function(blueprint, ..., data) {
   check_dots_empty0(...)
-
-  blueprint <- patch_recipe_default_blueprint(blueprint)
 
   cleaned <- mold_recipe_default_clean(blueprint = blueprint, data = data)
 
@@ -299,28 +284,29 @@ mold_recipe_default_process_outcomes <- function(blueprint, data) {
 
 mold_recipe_default_process_extras <- function(blueprint, data) {
 
-  # Capture original non standard role columns that are required by
-  # `bake_dependent_roles`. These are also required in `new_data`.
+  # Capture original non standard role columns that exist in `data` and are also
+  # required by the `recipe$requirements$bake` requirement. These columns are
+  # also required in `new_data` at `bake()` time.
   original_extra_role_cols <- get_extra_role_columns_original(
     blueprint$recipe,
-    data,
-    blueprint$bake_dependent_roles
+    data
   )
 
   if (!is.null(original_extra_role_cols)) {
+    original_extra_role_ptypes <- lapply(original_extra_role_cols, extract_ptype)
+
     blueprint <- update_blueprint(
       blueprint,
-      extra_role_ptypes = lapply(original_extra_role_cols, extract_ptype)
+      extra_role_ptypes = original_extra_role_ptypes
     )
   }
 
   # Return all of the processed non standard role columns.
   # These might be generated by `prep()` and could differ from the ones in the
   # original data.
-  # These are not required in `new_data`, and are not affected by
-  # `bake_dependent_roles`, but we return them assuming the developer may
-  # need them for model fitting purposes.
-  processed_extra_role_cols <- get_extra_role_columns_mold(
+  # These are not required in `new_data`, but we return them assuming the
+  # developer may need them for model fitting purposes.
+  processed_extra_role_cols <- get_extra_role_columns_processed(
     blueprint$recipe,
     recipes::juice(blueprint$recipe)
   )
@@ -340,8 +326,6 @@ run_forge.default_recipe_blueprint <- function(blueprint,
                                                ...,
                                                outcomes = FALSE) {
   check_dots_empty0(...)
-
-  blueprint <- patch_recipe_default_blueprint(blueprint)
 
   cleaned <- forge_recipe_default_clean(
     blueprint = blueprint,
@@ -472,7 +456,6 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
     extras,
     rec,
     baked_data,
-    blueprint$bake_dependent_roles,
     predictors_extras,
     outcomes_extras
   )
@@ -511,18 +494,16 @@ forge_recipe_default_process_outcomes <- function(blueprint, outcomes) {
 forge_recipe_default_process_extras <- function(extras,
                                                 rec,
                                                 baked_data,
-                                                bake_dependent_roles,
                                                 predictors_extras,
                                                 outcomes_extras) {
 
   # Remove old roles slot
   extras$roles <- NULL
 
-  # Get the `bake_dependent_roles` after `bake()` has been called.
-  processed_extra_role_cols <- get_extra_role_columns_forge(
+  # Get the processed extra role columns after `bake()` has been called.
+  processed_extra_role_cols <- get_extra_role_columns_processed(
     rec,
-    baked_data,
-    bake_dependent_roles
+    baked_data
   )
 
   extras <- c(
@@ -532,21 +513,6 @@ forge_recipe_default_process_extras <- function(extras,
   )
 
   extras
-}
-
-# ------------------------------------------------------------------------------
-
-patch_recipe_default_blueprint <- function(blueprint) {
-  blueprint <- patch_recipe_default_blueprint_pre_1.0.0(blueprint)
-  blueprint
-}
-
-patch_recipe_default_blueprint_pre_1.0.0 <- function(blueprint) {
-  if (is.null(blueprint$bake_dependent_roles)) {
-    blueprint$bake_dependent_roles <- character()
-  }
-
-  blueprint
 }
 
 # ------------------------------------------------------------------------------
@@ -570,41 +536,36 @@ get_original_outcome_ptype <- function(rec, data) {
   extract_ptype(original_data)
 }
 
-get_extra_role_columns_original <- function(rec, data, bake_dependent_roles) {
+get_extra_role_columns_original <- function(rec, data) {
   # Extra roles that existed before `prep()` has been called.
-  # Only the ptypes of `bake_dependent_roles` are retained and required in `new_data`.
+  # To get "extra" roles that are required at bake time:
+  # - Compute the bake role requirements named logical vector.
+  #   It has information about every role in the original data.
+  # - Subset that vector to only `TRUE` locations, where the role is required
+  # - Remove the `"predictor"` role (it is always required, but isn't "extra")
   info_type <- "var_info"
 
-  # Take the intersection in case the user specified a bake dependent role that
-  # isn't actually present in the original data, which is allowed.
-  roles <- rec[[info_type]][["role"]]
-  extra_roles <- intersect(bake_dependent_roles, roles)
+  requirements <- compute_bake_role_requirements(rec)
+
+  # Filter down to the roles that are actually required
+  requirements <- requirements[requirements]
+  requirement_roles <- names(requirements)
+
+  extra_roles <- setdiff(requirement_roles, "predictor")
 
   get_extra_role_columns(rec, data, extra_roles, info_type)
 }
-get_extra_role_columns_mold <- function(rec, data) {
-  # Extra roles that exist after `prep()` has been called on the training data.
-  # These might include more / less than the original ones.
-  # These are not required in `new_data`, but we return all of the results from `mold()`.
+get_extra_role_columns_processed <- function(rec, data) {
+  # Extra roles that exist after baking either the training data or testing
+  # data (i.e. through `prep()` or `bake()`). This might include more or less
+  # roles than in the original data, because steps may have created or removed
+  # them along the way.
   info_type <- "term_info"
 
-  # Any non-standard role is returned from `mold()` in case the developer needs them.
-  roles <- rec[[info_type]][["role"]]
-  extra_roles <- setdiff(roles, c("outcome", "predictor", NA_character_))
+  data_roles <- rec[[info_type]][["role"]]
+  data_roles <- chr_explicit_na(data_roles)
 
-  get_extra_role_columns(rec, data, extra_roles, info_type)
-}
-get_extra_role_columns_forge <- function(rec, data, bake_dependent_roles) {
-  # Extra roles that exist after `bake()` has been called on the test data.
-  # `data` should hold the columns specified by `bake_dependent_roles`.
-  info_type <- "term_info"
-
-  # Take the intersection in case columns with one of the `bake_dependent_roles`
-  # got dropped during the baking process, which is allowed. If users create
-  # an entirely new role at bake-time, it should be listed as a bake dependent
-  # role to be returned.
-  roles <- rec[[info_type]][["role"]]
-  extra_roles <- intersect(bake_dependent_roles, roles)
+  extra_roles <- setdiff(data_roles, c("outcome", "predictor"))
 
   get_extra_role_columns(rec, data, extra_roles, info_type)
 }
@@ -616,23 +577,87 @@ get_extra_role_columns <- function(rec, data, extra_roles, info_type) {
     return(NULL)
   }
 
-  roles <- rec[[info_type]][["role"]]
-  vars <- rec[[info_type]][["variable"]]
+  data_names <- colnames(data)
 
-  extra_role_cols_list <- lapply(extra_roles, function(.role) {
-    .role_cols <- vars[strict_equal(roles, .role)]
-    data[, .role_cols, drop = FALSE]
+  recipe_names <- rec[[info_type]][["variable"]]
+  recipe_roles <- rec[[info_type]][["role"]]
+  recipe_roles <- chr_explicit_na(recipe_roles)
+
+  out <- lapply(extra_roles, function(role) {
+    role_names <- recipe_names[recipe_roles == role]
+
+    # Must restrict to names that are actually in the `data` in case some
+    # roles were declared as "not required" and columns with those roles weren't
+    # passed to `forge()` through `new_data`.
+    role_names <- intersect(role_names, data_names)
+
+    data[, role_names, drop = FALSE]
   })
 
-  names(extra_role_cols_list) <- extra_roles
+  names(out) <- extra_roles
 
-  extra_role_cols_list
+  out
 }
 
-validate_is_0_row_tibble_or_null <- function(.x, .x_nm) {
-  if (is.null(.x)) {
-    return(invisible(.x))
-  }
+# ------------------------------------------------------------------------------
 
-  validate_is_0_row_tibble(.x, .x_nm)
+new_role_requirements <- function() {
+  # recipes:::new_role_requirements()
+  list(
+    bake = new_bake_role_requirements()
+  )
+}
+get_role_requirements <- function(recipe) {
+  # recipes:::get_role_requirements()
+  recipe$requirements %||% new_role_requirements()
+}
+
+new_bake_role_requirements <- function() {
+  # recipes:::new_bake_role_requirements()
+  set_names(logical(), nms = character())
+}
+get_bake_role_requirements <- function(recipe) {
+  # recipes:::get_bake_role_requirements()
+  requirements <- get_role_requirements(recipe)
+  requirements$bake
+}
+default_bake_role_requirements <- function() {
+  # recipes:::default_bake_role_requirements()
+  c(
+    "outcome" = FALSE,
+    "predictor" = TRUE,
+    "case_weights" = FALSE,
+    "NA" = TRUE
+  )
+}
+compute_bake_role_requirements <- function(recipe) {
+  # recipes:::compute_bake_role_requirements()
+  var_info <- recipe$var_info
+  var_roles <- var_info$role
+  var_roles <- chr_explicit_na(var_roles)
+  var_roles <- unique(var_roles)
+
+  # Start with default requirements
+  requirements <- default_bake_role_requirements()
+
+  # Drop unused default requirements
+  requirements <- requirements[names(requirements) %in% var_roles]
+
+  # Update with nonstandard roles in the recipe, which are required by default
+  nonstandard_roles <- var_roles[!var_roles %in% names(requirements)]
+  requirements[nonstandard_roles] <- TRUE
+
+  # Override with `update_role_requirements()` changes
+  user_requirements <- get_bake_role_requirements(recipe)
+  requirements[names(user_requirements)] <- user_requirements
+
+  requirements
+}
+
+chr_explicit_na <- function(x) {
+  # recipes:::chr_explicit_na()
+  # To turn `NA_character_` into `"NA"` because you can't match
+  # against `NA_character_` when assigning with `[<-`
+  x[is.na(x)] <- "NA"
+  x
 }

@@ -1,5 +1,30 @@
 # hardhat (development version)
 
+* We have reverted the change made in hardhat 1.0.0 that caused recipe
+  preprocessors to drop non-standard roles by default when calling `forge()`.
+  Determining what roles are required at `bake()` time is really something
+  that should be controlled within recipes, not hardhat. This results in the
+  following changes (#207):
+  
+  * The new argument, `bake_dependent_roles`, that was added to
+    `default_recipe_blueprint()` in 1.0.0 has been removed. It is no longer
+    needed with the new behavior.
+    
+  * By default, `forge()` will pass on all columns from `new_data` to `bake()`
+    except those with roles of `"outcome"` or `"case_weights"`. With
+    `outcomes = TRUE`, it will also pass on the `"outcome"` role. This is
+    essentially the same as the pre-1.0.0 behavior, and means that, by default,
+    all non-standard roles are required at `bake()` time. This assumption is
+    now also enforced by recipes 1.0.0, even if you aren't using hardhat or
+    a workflow.
+    
+  * In the development version of recipes, which will become recipes 1.0.0,
+    there is a new `update_role_requirements()` function that can be used to
+    declare that a role is not required at `bake()` time. hardhat now knows how
+    to respect that feature, and in `forge()` it won't pass on columns of
+    `new_data` to `bake()` that have roles that aren't required at `bake()`
+    time.
+
 # hardhat 1.1.0
 
 * Fixed a bug where the results from calling `mold()` using hardhat < 1.0.0 were
