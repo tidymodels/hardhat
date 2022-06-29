@@ -402,8 +402,9 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data) {
 
 forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras) {
   rec <- blueprint$recipe
-  roles <- rec$term_info$role
   vars <- rec$term_info$variable
+  roles <- rec$term_info$role
+  roles <- chr_explicit_na(roles)
 
   # Minimal name repair in case a predictor has multiple roles
   # We just want to include it once, but without any name repair
@@ -426,11 +427,11 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
     new_data = new_data
   )
 
-  processed_predictor_names <- vars[strict_equal(roles, "predictor")]
+  processed_predictor_names <- vars[roles == "predictor"]
   predictors <- baked_data[, processed_predictor_names, drop = FALSE]
 
   if (!is.null(outcomes)) {
-    processed_outcome_names <- vars[strict_equal(roles, "outcome")]
+    processed_outcome_names <- vars[roles == "outcome"]
     outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
   }
 
@@ -519,7 +520,9 @@ forge_recipe_default_process_extras <- function(extras,
 
 get_original_predictor_ptype <- function(rec, data) {
   roles <- rec$var_info$role
-  original_names <- rec$var_info$variable[strict_equal(roles, "predictor")]
+  roles <- chr_explicit_na(roles)
+
+  original_names <- rec$var_info$variable[roles == "predictor"]
   original_names <- original_names[!is.na(original_names)]
 
   original_data <- data[, original_names, drop = FALSE]
@@ -529,7 +532,9 @@ get_original_predictor_ptype <- function(rec, data) {
 
 get_original_outcome_ptype <- function(rec, data) {
   roles <- rec$var_info$role
-  original_names <- rec$var_info$variable[strict_equal(roles, "outcome")]
+  roles <- chr_explicit_na(roles)
+
+  original_names <- rec$var_info$variable[roles == "outcome"]
 
   original_data <- data[, original_names, drop = FALSE]
 

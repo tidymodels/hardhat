@@ -6,11 +6,6 @@ glue_quote_collapse <- function(x) {
   glue::glue_collapse(glue::single_quote(x), sep = ", ")
 }
 
-# `NA` values are `FALSE`
-strict_equal <- function(x, y) {
-  vapply(x == y, isTRUE, logical(1))
-}
-
 validate_empty_dots <- function(...) {
   dots <- list(...)
 
