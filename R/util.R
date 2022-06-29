@@ -1,5 +1,5 @@
-glubort <- function(..., .sep = "", .envir = parent.frame()) {
-  abort(glue(..., .sep = .sep, .envir = .envir))
+glubort <- function(..., .sep = "", .envir = caller_env(), .call = .envir) {
+  abort(glue(..., .sep = .sep, .envir = .envir), call = .call)
 }
 
 glue_quote_collapse <- function(x) {
