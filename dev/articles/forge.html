@@ -88,7 +88,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Forging data for predictions</h1>
             
       
@@ -99,11 +99,11 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat" class="external-link">hardhat</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org" class="external-link">modeldata</a></span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span>
-<span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/hardhat" class="external-link">hardhat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org" class="external-link">modeldata</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></span>
+<span><span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -115,52 +115,52 @@
 </h2>
 <p>When <code><a href="../reference/mold.html">mold()</a></code> is used, one of the returned objects is an <code>blueprint</code>. This is the key to preprocessing new data with <code><a href="../reference/forge.html">forge()</a></code>. For instance, assume you’ve called <code><a href="../reference/mold.html">mold()</a></code> like so:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">penguin_train</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">300</span>,<span class="op">]</span>
-<span class="va">penguin_test</span>  <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">300</span><span class="op">)</span>,<span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">penguin_train</span> <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">300</span>,<span class="op">]</span></span>
+<span><span class="va">penguin_test</span>  <span class="op">&lt;-</span> <span class="va">penguins</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">300</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">penguin_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">body_mass_g</span><span class="op">)</span> <span class="op">~</span> <span class="va">species</span> <span class="op">+</span> <span class="va">bill_length_mm</span>, 
-  <span class="va">penguin_train</span>, 
-  blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span>indicators <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="va">formula_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_form</span><span class="op">$</span><span class="va">blueprint</span>
-
-<span class="va">formula_eng</span>
-<span class="co">#&gt; Formula blueprint: </span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; # Predictors: 2 </span>
-<span class="co">#&gt;   # Outcomes: 1 </span>
-<span class="co">#&gt;    Intercept: FALSE </span>
-<span class="co">#&gt; Novel Levels: FALSE </span>
-<span class="co">#&gt;  Composition: tibble </span>
-<span class="co">#&gt;   Indicators: none</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">penguin_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">body_mass_g</span><span class="op">)</span> <span class="op">~</span> <span class="va">species</span> <span class="op">+</span> <span class="va">bill_length_mm</span>, </span>
+<span>  <span class="va">penguin_train</span>, </span>
+<span>  blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span>indicators <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">formula_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_form</span><span class="op">$</span><span class="va">blueprint</span></span>
+<span></span>
+<span><span class="va">formula_eng</span></span>
+<span><span class="co">#&gt; Formula blueprint: </span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt; # Predictors: 2 </span></span>
+<span><span class="co">#&gt;   # Outcomes: 1 </span></span>
+<span><span class="co">#&gt;    Intercept: FALSE </span></span>
+<span><span class="co">#&gt; Novel Levels: FALSE </span></span>
+<span><span class="co">#&gt;  Composition: tibble </span></span>
+<span><span class="co">#&gt;   Indicators: none</span></span></code></pre></div>
 <p>A formula blueprint is returned here, which knows about the predictors and outcomes that were used at training time, and knows that you don’t want to expand <code>species</code> into dummy variables by setting <code>indicators = "none"</code>.</p>
 <p>When it is time to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> on new data, that data is passed on to <code><a href="../reference/forge.html">forge()</a></code> along with the <code>blueprint</code> we just created.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span><span class="op">)</span>
-<span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span>
-<span class="co">#&gt;    bill_length_mm species  </span>
-<span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $extras</span>
-<span class="co">#&gt; $extras$offset</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $predictors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span></span>
+<span><span class="co">#&gt;    bill_length_mm species  </span></span>
+<span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $outcomes</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $extras</span></span>
+<span><span class="co">#&gt; $extras$offset</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>Note that in <code>predictors</code>, <code>species</code> was not expanded because the <code>blueprint</code> knew about the preprocessing options that were set when <code><a href="../reference/mold.html">mold()</a></code> was called.</p>
 <p><code><a href="../reference/forge.html">forge()</a></code> always returns three things, and they should look familiar to you if you have used <code><a href="../reference/mold.html">mold()</a></code>.</p>
 <ul>
@@ -175,42 +175,42 @@
 <p>Generally when generating predictions you only need to know about the new predictors. However, when performing resampling you will need to have the processed outcomes as well so you can compute cross validated performance statistics and decide between multiple models, or choose between hyperparameters.</p>
 <p>You can easily request the outcomes as well with <code>outcomes = TRUE</code>. Just like with the predictors, these get processed using the same steps as done to the outcomes at fit time.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span>
-<span class="co">#&gt;    bill_length_mm species  </span>
-<span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span>
-<span class="co">#&gt;    `log(body_mass_g)`</span>
-<span class="co">#&gt;                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>               8.27</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>               8.26</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>               8.48</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>               7.90</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>               8.41</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>               8.28</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>               8.20</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>               8.17</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>               8.16</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>               8.21</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $extras</span>
-<span class="co">#&gt; $extras$offset</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">formula_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $predictors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span></span>
+<span><span class="co">#&gt;    bill_length_mm species  </span></span>
+<span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $outcomes</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span></span>
+<span><span class="co">#&gt;    `log(body_mass_g)`</span></span>
+<span><span class="co">#&gt;                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>               8.27</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>               8.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>               8.48</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>               7.90</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>               8.41</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>               8.28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>               8.20</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>               8.17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>               8.16</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>               8.21</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $extras</span></span>
+<span><span class="co">#&gt; $extras$offset</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="validation">Validation<a class="anchor" aria-label="anchor" href="#validation"></a>
@@ -232,23 +232,23 @@
 </h3>
 <p>The easiest example to demonstrate is missing columns in the testing data. <code><a href="../reference/forge.html">forge()</a></code> won’t let you continue until all of the required predictors used at training are also present in the new data.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_missing_column</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">species</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_missing_column</span>, <span class="va">formula_eng</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `glubort()`:</span></span>
-<span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following required columns are missing: 'species'.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_missing_column</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">species</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_missing_column</span>, <span class="va">formula_eng</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `glubort()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following required columns are missing: 'species'.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="column-types">Column types<a class="anchor" aria-label="anchor" href="#column-types"></a>
 </h3>
 <p>After an initial scan for the column names is done, a deeper scan of each column is performed, checking the type of that column. For instance, what happens if the new <code>species</code> column was a double, not a factor?</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_species_double</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span>
-<span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_double</span>, <span class="va">formula_eng</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `scream()`:</span></span>
-<span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't convert `data$species` &lt;double&gt; to match type of `species` &lt;factor&lt;b22a0&gt;&gt;.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_species_double</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span></span>
+<span><span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">test_species_double</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_double</span>, <span class="va">formula_eng</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `scream()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't convert `data$species` &lt;double&gt; to match type of `species` &lt;factor&lt;b22a0&gt;&gt;.</span></span></code></pre></div>
 <p>An error is thrown, indicating that a double can’t be cast to a factor.</p>
 </div>
 <div class="section level3">
@@ -256,58 +256,58 @@
 </h3>
 <p>The error message above suggests that in some cases you <em>can</em> automatically cast from one type to another, and in fact that is true! Rather than being a double, what if <code>species</code> was just a character?</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_species_character</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span>
-<span class="va">test_species_character</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">test_species_character</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
-
-<span class="va">forged_char</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_character</span>, <span class="va">formula_eng</span><span class="op">)</span>
-
-<span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span>
-<span class="co">#&gt;    bill_length_mm species  </span>
-<span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
-<span class="co">#&gt; [1] "factor"</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Adelie"    "Chinstrap" "Gentoo"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_species_character</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span></span>
+<span><span class="va">test_species_character</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">test_species_character</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">forged_char</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_character</span>, <span class="va">formula_eng</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span></span>
+<span><span class="co">#&gt;    bill_length_mm species  </span></span>
+<span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "factor"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Adelie"    "Chinstrap" "Gentoo"</span></span></code></pre></div>
 <p>Interesting, so in this case we can actually convert to a factor, and the class and even the levels are all restored. The key here is that this was a <em>lossless</em> conversion. We lost no information when converting the character <code>species</code> to a factor because the unique character values were a subset of the original levels.</p>
 <p>An example of a conversion that would be lossy is if the character <code>species</code> column had a value that was <em>not</em> a level in the training data.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_species_lossy</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span>
-<span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>
-<span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"im new!"</span>
-
-<span class="va">forged_lossy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_lossy</span>, <span class="va">formula_eng</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Novel levels found in column 'species': 'im new!'. The levels</span>
-<span class="co">#&gt; have been removed, and values have been coerced to 'NA'.</span>
-
-<span class="va">forged_lossy</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span>
-<span class="co">#&gt;    bill_length_mm species  </span>
-<span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 <span style="color: #BB0000;">NA</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">test_species_lossy</span> <span class="op">&lt;-</span> <span class="va">penguin_test</span></span>
+<span><span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
+<span><span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"im new!"</span></span>
+<span></span>
+<span><span class="va">forged_lossy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_lossy</span>, <span class="va">formula_eng</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Novel levels found in column 'species': 'im new!'. The levels</span></span>
+<span><span class="co">#&gt; have been removed, and values have been coerced to 'NA'.</span></span>
+<span></span>
+<span><span class="va">forged_lossy</span><span class="op">$</span><span class="va">predictors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span></span>
+<span><span class="co">#&gt;    bill_length_mm species  </span></span>
+<span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6 <span style="color: #BB0000;">NA</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49   Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span></code></pre></div>
 <p>In this case:</p>
 <ul>
 <li><p>A lossy warning is thrown</p></li>
@@ -321,131 +321,131 @@
 </h2>
 <p>Just like with the formula method, a recipe can be used as the preprocessor at fit and prediction time. <code>hardhat</code> handles calling <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code>, <code><a href="https://recipes.tidymodels.org/reference/juice.html" class="external-link">juice()</a></code>, and <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> for you at the right times. For instance, say we have a recipe that just creates dummy variables out of <code>species</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span>
-
-<span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span>
-
-<span class="va">penguin_recipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguin_train</span><span class="op">)</span>
-
-<span class="va">penguin_recipe</span><span class="op">$</span><span class="va">predictors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 300 × 3</span></span>
-<span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
-<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800                 0              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400                 0              0</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 290 more rows</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">penguin_recipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguin_train</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">penguin_recipe</span><span class="op">$</span><span class="va">predictors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 300 × 3</span></span></span>
+<span><span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span></span>
+<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>750                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>800                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">3</span>250                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">3</span>450                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">3</span>650                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>625                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">4</span>675                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400                 0              0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 290 more rows</span></span></span></code></pre></div>
 <p>The blueprint is a <code>recipe</code> blueprint.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recipe_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">blueprint</span>
-
-<span class="va">recipe_eng</span>
-<span class="co">#&gt; Recipe blueprint: </span>
-<span class="co">#&gt;  </span>
-<span class="co">#&gt; # Predictors: 2 </span>
-<span class="co">#&gt;   # Outcomes: 1 </span>
-<span class="co">#&gt;    Intercept: FALSE </span>
-<span class="co">#&gt; Novel Levels: FALSE </span>
-<span class="co">#&gt;  Composition: tibble</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">recipe_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">blueprint</span></span>
+<span></span>
+<span><span class="va">recipe_eng</span></span>
+<span><span class="co">#&gt; Recipe blueprint: </span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt; # Predictors: 2 </span></span>
+<span><span class="co">#&gt;   # Outcomes: 1 </span></span>
+<span><span class="co">#&gt;    Intercept: FALSE </span></span>
+<span><span class="co">#&gt; Novel Levels: FALSE </span></span>
+<span><span class="co">#&gt;  Composition: tibble</span></span></code></pre></div>
 <p>When we <code><a href="../reference/forge.html">forge()</a></code>, we can request <code>outcomes</code> to have the predictors and outcomes separated like with the formula method.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 3</span></span>
-<span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
-<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>900                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>850                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">4</span>800                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">2</span>700                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">4</span>500                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>950                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">3</span>650                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>550                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>500                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">3</span>675                 1              0</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span>
-<span class="co">#&gt;    bill_length_mm</span>
-<span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $extras</span>
-<span class="co">#&gt; $extras$roles</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $predictors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 3</span></span></span>
+<span><span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span></span>
+<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>900                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>850                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">4</span>800                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">2</span>700                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">4</span>500                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>950                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">3</span>650                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>550                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>500                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">3</span>675                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $outcomes</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span></span>
+<span><span class="co">#&gt;    bill_length_mm</span></span>
+<span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $extras</span></span>
+<span><span class="co">#&gt; $extras$roles</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="a-note-on-recipes">A note on recipes<a class="anchor" aria-label="anchor" href="#a-note-on-recipes"></a>
 </h3>
 <p>One complication with <code>recipes</code> is that, in the <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> step, the processing happens to the predictors and the outcomes all together. This means that you might run into the situation where the outcomes seem to be required to <code><a href="../reference/forge.html">forge()</a></code>, even if you aren’t requesting them.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rec2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">step_center</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="co"># Here we modify the outcome</span>
-
-<span class="va">penguin_recipe2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec2</span>, <span class="va">penguin_train</span><span class="op">)</span>
-
-<span class="va">recipe_eng_log_outcome</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe2</span><span class="op">$</span><span class="va">blueprint</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rec2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">step_center</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="co"># Here we modify the outcome</span></span>
+<span></span>
+<span><span class="va">penguin_recipe2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec2</span>, <span class="va">penguin_train</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">recipe_eng_log_outcome</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe2</span><span class="op">$</span><span class="va">blueprint</span></span></code></pre></div>
 <p>If our <code>new_data</code> doesn’t have the outcome, baking this recipe will fail even if we don’t request that the outcomes are returned by <code><a href="../reference/forge.html">forge()</a></code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">penguin_test_no_outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">bill_length_mm</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_log_outcome</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `vectbl_as_col_location()`:</span></span>
-<span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't subset columns that don't exist.</span>
-<span class="co">#&gt; <span style="color: #BB0000;">✖</span> Column `bill_length_mm` doesn't exist.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">penguin_test_no_outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguin_test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">bill_length_mm</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_log_outcome</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `vectbl_as_col_location()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Can't subset columns that don't exist.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Column `bill_length_mm` doesn't exist.</span></span></code></pre></div>
 <p>The way around this is to use the built-in recipe argument, <code>skip</code>, on the step containing the outcome. This skips the processing of that step at <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> time.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rec3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">step_center</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, skip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">penguin_recipe3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec3</span>, <span class="va">penguin_train</span><span class="op">)</span>
-
-<span class="va">recipe_eng_skip_outcome</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe3</span><span class="op">$</span><span class="va">blueprint</span>
-
-<span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_skip_outcome</span><span class="op">)</span>
-<span class="co">#&gt; $predictors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 3</span></span>
-<span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span>
-<span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>900                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>850                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">4</span>800                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">2</span>700                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">4</span>500                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>950                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">3</span>650                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>550                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>500                 1              0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">3</span>675                 1              0</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $outcomes</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $extras</span>
-<span class="co">#&gt; $extras$roles</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rec3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguin_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">step_center</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, skip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">penguin_recipe3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">rec3</span>, <span class="va">penguin_train</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">recipe_eng_skip_outcome</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe3</span><span class="op">$</span><span class="va">blueprint</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_skip_outcome</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $predictors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 3</span></span></span>
+<span><span class="co">#&gt;    body_mass_g species_Chinstrap species_Gentoo</span></span>
+<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        <span style="text-decoration: underline;">3</span>900                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        <span style="text-decoration: underline;">3</span>850                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        <span style="text-decoration: underline;">4</span>800                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        <span style="text-decoration: underline;">2</span>700                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        <span style="text-decoration: underline;">4</span>500                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        <span style="text-decoration: underline;">3</span>950                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        <span style="text-decoration: underline;">3</span>650                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>550                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>500                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">3</span>675                 1              0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $outcomes</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $extras</span></span>
+<span><span class="co">#&gt; $extras$roles</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>There is a tradeoff here that you need to be aware of.</p>
 <ul>
 <li><p>If you are just interested in generating predictions on completely new data, you can safely use <code>skip = TRUE</code> because you will almost never have access to the corresponding true outcomes to preprocess and compare against.</p></li>
@@ -453,26 +453,26 @@
 </ul>
 <p>For example, if we used <code>penguin_test</code> with the above recipe (which has the outcome), <code>bill_length_mm</code> wouldn’t get centered when <code><a href="../reference/forge.html">forge()</a></code> is called. But we probably would not have skipped that step if we knew that our test data would have the outcome.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng_skip_outcome</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span>
-<span class="co">#&gt;    bill_length_mm</span>
-<span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span>
-
-<span class="co"># Notice that the `outcome` values haven't been centered</span>
-<span class="co"># and are the same as before</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">penguin_test</span><span class="op">$</span><span class="va">bill_length_mm</span><span class="op">)</span>
-<span class="co">#&gt; [1] 47.5 47.6 52.0 46.9 53.5 49.0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test</span>, <span class="va">recipe_eng_skip_outcome</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span></span>
+<span><span class="co">#&gt;    bill_length_mm</span></span>
+<span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           47.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           47.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           52  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           46.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           53.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           49  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           46.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span></span>
+<span><span class="co"># Notice that the `outcome` values haven't been centered</span></span>
+<span><span class="co"># and are the same as before</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">penguin_test</span><span class="op">$</span><span class="va">bill_length_mm</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 47.5 47.6 52.0 46.9 53.5 49.0</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -490,7 +490,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer>
