@@ -1,5 +1,5 @@
-glubort <- function(..., .sep = "", .envir = parent.frame()) {
-  abort(glue(..., .sep = .sep, .envir = .envir))
+glubort <- function(..., .sep = "", .envir = caller_env(), .call = .envir) {
+  abort(glue(..., .sep = .sep, .envir = .envir), call = .call)
 }
 
 glue_quote_collapse <- function(x) {
@@ -179,18 +179,19 @@ validate_is_new_data_like <- function(new_data) {
   )
 }
 
-check_is_data_like <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
+check_is_data_like <- function(x, arg, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
+  if (is_missing(arg)) {
+    arg <- as_label(enexpr(x))
   }
 
-  if (!is_new_data_like(.x)) {
-    glubort(
-      "`{.x_nm}` must be a data.frame or a matrix, not a {class1(.x)}."
-    )
+  if (!is_new_data_like(x)) {
+    message <- glue("`{arg}` must be a data.frame or a matrix, not a {class1(x)}.")
+    abort(message, call = call)
   }
 
-  tibble::as_tibble(.x)
+  tibble::as_tibble(x)
 }
 
 # ------------------------------------------------------------------------------
