@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,8 +58,9 @@
       <small>Source: <a href="https://github.com/tidymodels/hardhat/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2"><h2 class="pkg-version" data-toc-text="development version" id="hardhat-development-version">hardhat (development version)<a class="anchor" aria-label="anchor" href="#hardhat-development-version"></a></h2></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="hardhat-development-version">hardhat (development version)<a class="anchor" aria-label="anchor" href="#hardhat-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.2.0" id="hardhat-120">hardhat 1.2.0<a class="anchor" aria-label="anchor" href="#hardhat-120"></a></h2>
 <ul><li>
 <p>We have reverted the change made in hardhat 1.0.0 that caused recipe preprocessors to drop non-standard roles by default when calling <code><a href="../reference/forge.html">forge()</a></code>. Determining what roles are required at <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> time is really something that should be controlled within recipes, not hardhat. This results in the following changes (<a href="https://github.com/tidymodels/hardhat/issues/207" class="external-link">#207</a>):</p>
 <ul><li><p>The new argument, <code>bake_dependent_roles</code>, that was added to <code><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint()</a></code> in 1.0.0 has been removed. It is no longer needed with the new behavior.</p></li>
