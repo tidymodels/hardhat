@@ -18,7 +18,7 @@ that first calls standardize() on y."><meta property="og:image" content="https:/
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,15 +77,17 @@ that first calls <code><a href="standardize.html">standardize()</a></code> on <c
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_levels</span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
-
-<span class="fu">get_outcome_levels</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_levels</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_outcome_levels</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data.frame to extract levels from.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>The outcome. This can be:</p><ul><li><p>A factor vector</p></li>
 <li><p>A numeric vector</p></li>
@@ -94,12 +96,20 @@ that first calls <code><a href="standardize.html">standardize()</a></code> on <c
 <li><p>A 2D numeric array with column names</p></li>
 <li><p>A data frame with numeric or factor columns</p></li>
 </ul></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with as many elements as there are factor columns in <code>data</code>or <code>y</code>. The names are the names of the factor columns, and the values
-are character vectors of the levels.
-If there are no factor columns, <code>NULL</code> is returned.</p>
+    
+
+<p>A named list with as many elements as there are factor columns in <code>data</code></p>
+
+
+<p>or <code>y</code>. The names are the names of the factor columns, and the values
+are character vectors of the levels.</p>
+
+
+<p>If there are no factor columns, <code>NULL</code> is returned.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -108,21 +118,21 @@ If there are no factor columns, <code>NULL</code> is returned.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># Factor columns are returned with their levels</span></span>
-<span class="r-in"><span class="fu">get_levels</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Factor columns are returned with their levels</span></span></span>
+<span class="r-in"><span><span class="fu">get_levels</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "setosa"     "versicolor" "virginica" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># No factor columns</span></span>
-<span class="r-in"><span class="fu">get_levels</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># No factor columns</span></span></span>
+<span class="r-in"><span><span class="fu">get_levels</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># standardize() is first run on `y`</span></span>
-<span class="r-in"><span class="co"># which converts the input to a data frame</span></span>
-<span class="r-in"><span class="co"># with an automatically named column, `".outcome"`</span></span>
-<span class="r-in"><span class="fu">get_outcome_levels</span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># standardize() is first run on `y`</span></span></span>
+<span class="r-in"><span><span class="co"># which converts the input to a data frame</span></span></span>
+<span class="r-in"><span><span class="co"># with an automatically named column, `".outcome"`</span></span></span>
+<span class="r-in"><span><span class="fu">get_outcome_levels</span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $.outcome</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a" "b" "c" "d" "e"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -139,7 +149,7 @@ If there are no factor columns, <code>NULL</code> is returned.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

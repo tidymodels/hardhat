@@ -16,7 +16,7 @@ of the constructors found in the documentation for new_blueprint()."><meta prope
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,39 +74,38 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">new_default_formula_blueprint</span><span class="op">(</span>
-  intercept <span class="op">=</span> <span class="cn">FALSE</span>,
-  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
-  ptypes <span class="op">=</span> <span class="cn">NULL</span>,
-  formula <span class="op">=</span> <span class="cn">NULL</span>,
-  indicators <span class="op">=</span> <span class="st">"traditional"</span>,
-  composition <span class="op">=</span> <span class="st">"tibble"</span>,
-  terms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>predictors <span class="op">=</span> <span class="cn">NULL</span>, outcomes <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,
-  <span class="va">...</span>,
-  subclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu">new_default_recipe_blueprint</span><span class="op">(</span>
-  intercept <span class="op">=</span> <span class="cn">FALSE</span>,
-  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
-  fresh <span class="op">=</span> <span class="cn">TRUE</span>,
-  bake_dependent_roles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,
-  composition <span class="op">=</span> <span class="st">"tibble"</span>,
-  ptypes <span class="op">=</span> <span class="cn">NULL</span>,
-  recipe <span class="op">=</span> <span class="cn">NULL</span>,
-  extra_role_ptypes <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  subclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu">new_default_xy_blueprint</span><span class="op">(</span>
-  intercept <span class="op">=</span> <span class="cn">FALSE</span>,
-  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
-  composition <span class="op">=</span> <span class="st">"tibble"</span>,
-  ptypes <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  subclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_default_formula_blueprint</span><span class="op">(</span></span>
+<span>  intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ptypes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  indicators <span class="op">=</span> <span class="st">"traditional"</span>,</span>
+<span>  composition <span class="op">=</span> <span class="st">"tibble"</span>,</span>
+<span>  terms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>predictors <span class="op">=</span> <span class="cn">NULL</span>, outcomes <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  subclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">new_default_recipe_blueprint</span><span class="op">(</span></span>
+<span>  intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fresh <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  composition <span class="op">=</span> <span class="st">"tibble"</span>,</span>
+<span>  ptypes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  recipe <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  extra_role_ptypes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  subclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">new_default_xy_blueprint</span><span class="op">(</span></span>
+<span>  intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  composition <span class="op">=</span> <span class="st">"tibble"</span>,</span>
+<span>  ptypes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  subclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -115,19 +114,27 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
 <dd><p>A logical. Should an intercept be included in the
 processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></dd>
+
+
 <dt>allow_novel_levels</dt>
 <dd><p>A logical. Should novel factor levels be allowed at
 prediction time? This information is used by the <code>clean</code> function in the
 <code>forge</code> function list, and is passed on to <code><a href="scream.html">scream()</a></code>.</p></dd>
+
+
 <dt>ptypes</dt>
 <dd><p>Either <code>NULL</code>, or a named list with 2 elements, <code>predictors</code>
 and <code>outcomes</code>, both of which are 0-row tibbles. <code>ptypes</code> is generated
 automatically at <code><a href="mold.html">mold()</a></code> time and is used to validate <code>new_data</code> at
 prediction time.</p></dd>
+
+
 <dt>formula</dt>
 <dd><p>Either <code>NULL</code>, or a formula that specifies how the
 predictors and outcomes should be preprocessed. This argument is set
 automatically at <code><a href="mold.html">mold()</a></code> time.</p></dd>
+
+
 <dt>indicators</dt>
 <dd><p>A single character string. Control how factors are
 expanded into dummy variable indicator columns. One of:</p><ul><li><p><code>"traditional"</code> - The default. Create dummy variables using the
@@ -139,43 +146,46 @@ levels in that factor.</p></li>
 that expands unordered factors into all <code>K</code> indicator columns, rather than
 <code>K - 1</code>.</p></li>
 </ul></dd>
+
+
 <dt>composition</dt>
 <dd><p>Either "tibble", "matrix", or "dgCMatrix" for the format
 of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
 the predictors must be numeric after the preprocessing method has been
 applied; otherwise an error is thrown.</p></dd>
+
+
 <dt>terms</dt>
 <dd><p>A named list of two elements, <code>predictors</code> and <code>outcomes</code>. Both
 elements are <code>terms</code> objects that describe the terms for the outcomes and
 predictors separately. This argument is set automatically at <code><a href="mold.html">mold()</a></code> time.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Name-value pairs for additional elements of blueprints that
 subclass this blueprint.</p></dd>
+
+
 <dt>subclass</dt>
 <dd><p>A character vector. The subclasses of this blueprint.</p></dd>
+
+
 <dt>fresh</dt>
 <dd><p>Should already trained operations be re-trained when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> is
 called?</p></dd>
-<dt>bake_dependent_roles</dt>
-<dd><p>A character vector of recipes column "roles"
-specifying roles that are required to <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code> new data. Can't be
-<code>"predictor"</code> or <code>"outcome"</code>, as predictors are always required and
-outcomes are handled by the <code>outcomes</code> argument of <code><a href="forge.html">forge()</a></code>.</p>
-<p>Typically, non-standard roles (such as <code>"id"</code> or <code>"case_weights"</code>) are not
-required to <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> new data. Unless specified by <code>bake_dependent_roles</code>,
-these non-standard role columns are excluded from checks done in <code><a href="forge.html">forge()</a></code>
-to validate the column structure of <code>new_data</code>, will not be passed to
-<code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> even if they existed in <code>new_data</code>, and will not be returned in
-the <code>forge()$extras$roles</code> slot. See the documentation of
-<code><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">recipes::add_role()</a></code> for more information about roles.</p></dd>
+
+
 <dt>recipe</dt>
 <dd><p>Either <code>NULL</code>, or an unprepped recipe. This argument is set
 automatically at <code><a href="mold.html">mold()</a></code> time.</p></dd>
+
+
 <dt>extra_role_ptypes</dt>
 <dd><p>A named list. The names are the unique non-standard
 recipe roles (i.e. everything except <code>"predictors"</code> and <code>"outcomes"</code>). The
 values are prototypes of the original columns with that role. These are
 used for validation in <code><a href="forge.html">forge()</a></code>.</p></dd>
+
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -189,7 +199,7 @@ used for validation in <code><a href="forge.html">forge()</a></code>.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

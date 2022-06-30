@@ -14,7 +14,7 @@ separately (i.e. the XY interface is used)."><meta property="og:image" content="
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,17 +71,17 @@ separately (i.e. the XY interface is used).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">default_xy_blueprint</span><span class="op">(</span>
-  intercept <span class="op">=</span> <span class="cn">FALSE</span>,
-  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
-  composition <span class="op">=</span> <span class="st">"tibble"</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, blueprint <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="co"># S3 method for matrix</span>
-<span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, blueprint <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">default_xy_blueprint</span><span class="op">(</span></span>
+<span>  intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  composition <span class="op">=</span> <span class="st">"tibble"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, blueprint <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for matrix</span></span>
+<span><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, blueprint <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,28 +90,43 @@ separately (i.e. the XY interface is used).</p>
 <dd><p>A logical. Should an intercept be included in the
 processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></dd>
+
+
 <dt>allow_novel_levels</dt>
 <dd><p>A logical. Should novel factor levels be allowed at
 prediction time? This information is used by the <code>clean</code> function in the
 <code>forge</code> function list, and is passed on to <code><a href="scream.html">scream()</a></code>.</p></dd>
+
+
 <dt>composition</dt>
 <dd><p>Either "tibble", "matrix", or "dgCMatrix" for the format
 of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
 the predictors must be numeric after the preprocessing method has been
 applied; otherwise an error is thrown.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>A data frame or matrix containing the predictors.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>A data frame, matrix, or vector containing the outcomes.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used.</p></dd>
+
+
 <dt>blueprint</dt>
 <dd><p>A preprocessing <code>blueprint</code>. If left as <code>NULL</code>, then a
 <code>default_xy_blueprint()</code> is used.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>For <code>default_xy_blueprint()</code>, an XY blueprint.</p>
+    
+
+<p>For <code>default_xy_blueprint()</code>, an XY blueprint.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -147,27 +162,27 @@ of <code>new_data</code>.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Setup</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">train_x</span> <span class="op">&lt;-</span> <span class="va">train</span><span class="op">[</span>, <span class="st">"Sepal.Length"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">train_y</span> <span class="op">&lt;-</span> <span class="va">train</span><span class="op">[</span>, <span class="st">"Species"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test_x</span> <span class="op">&lt;-</span> <span class="va">test</span><span class="op">[</span>, <span class="st">"Sepal.Length"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">test_y</span> <span class="op">&lt;-</span> <span class="va">test</span><span class="op">[</span>, <span class="st">"Species"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># XY Example</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># First, call mold() with the training data</span></span>
-<span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Then, call forge() with the blueprint and the test data</span></span>
-<span class="r-in"><span class="co"># to have it preprocess the test data in the same way</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test_x</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Setup</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">train_x</span> <span class="op">&lt;-</span> <span class="va">train</span><span class="op">[</span>, <span class="st">"Sepal.Length"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">train_y</span> <span class="op">&lt;-</span> <span class="va">train</span><span class="op">[</span>, <span class="st">"Species"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test_x</span> <span class="op">&lt;-</span> <span class="va">test</span><span class="op">[</span>, <span class="st">"Sepal.Length"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">test_y</span> <span class="op">&lt;-</span> <span class="va">test</span><span class="op">[</span>, <span class="st">"Species"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># XY Example</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># First, call mold() with the training data</span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Then, call forge() with the blueprint and the test data</span></span></span>
+<span class="r-in"><span><span class="co"># to have it preprocess the test data in the same way</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test_x</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $predictors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length</span>
@@ -190,13 +205,13 @@ of <code>new_data</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $extras</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Intercept</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span>, blueprint <span class="op">=</span> <span class="fu">default_xy_blueprint</span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test_x</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Intercept</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span>, blueprint <span class="op">=</span> <span class="fu">default_xy_blueprint</span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test_x</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $predictors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    `(Intercept)` Sepal.Length</span>
@@ -219,22 +234,22 @@ of <code>new_data</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $extras</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># XY Method and forge(outcomes = TRUE)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># You can request that the new outcome columns are preprocessed as well, but</span></span>
-<span class="r-in"><span class="co"># they have to be present in `new_data`!</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Can't do this!</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test_x</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("The following required columns are missing: {missing_names}.") : </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># XY Method and forge(outcomes = TRUE)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># You can request that the new outcome columns are preprocessed as well, but</span></span></span>
+<span class="r-in"><span><span class="co"># they have to be present in `new_data`!</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Can't do this!</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test_x</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in validate_column_names(data, cols) : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   The following required columns are missing: 'Species'.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Need to use the full test set, including `y`</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Need to use the full test set, including `y`</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $predictors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length</span>
@@ -270,30 +285,30 @@ of <code>new_data</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $extras</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># With the XY method, if the Y value used in `mold()` is a vector,</span></span>
-<span class="r-in"><span class="co"># then a column name of `.outcome` is automatically generated.</span></span>
-<span class="r-in"><span class="co"># This name is what forge() looks for in `new_data`.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Y is a vector!</span></span>
-<span class="r-in"><span class="va">y_vec</span> <span class="op">&lt;-</span> <span class="va">train_y</span><span class="op">$</span><span class="va">Species</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">y_vec</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># This throws an informative error that tell you</span></span>
-<span class="r-in"><span class="co"># to include an `".outcome"` column in `new_data`.</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">processed_vec</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("The following required columns are missing: {missing_names}.\n\n      (This indicates that `mold()` was called with a vector for `y`. ",  : </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># With the XY method, if the Y value used in `mold()` is a vector,</span></span></span>
+<span class="r-in"><span><span class="co"># then a column name of `.outcome` is automatically generated.</span></span></span>
+<span class="r-in"><span><span class="co"># This name is what forge() looks for in `new_data`.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Y is a vector!</span></span></span>
+<span class="r-in"><span><span class="va">y_vec</span> <span class="op">&lt;-</span> <span class="va">train_y</span><span class="op">$</span><span class="va">Species</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processed_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">y_vec</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># This throws an informative error that tell you</span></span></span>
+<span class="r-in"><span><span class="co"># to include an `".outcome"` column in `new_data`.</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">processed_vec</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in validate_missing_name_isnt_.outcome(check$missing_names) : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   The following required columns are missing: '.outcome'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, '.outcome', containing the outcome.)</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test2</span> <span class="op">&lt;-</span> <span class="va">test</span></span>
-<span class="r-in"><span class="va">test2</span><span class="op">$</span><span class="va">.outcome</span> <span class="op">&lt;-</span> <span class="va">test2</span><span class="op">$</span><span class="va">Species</span></span>
-<span class="r-in"><span class="va">test2</span><span class="op">$</span><span class="va">Species</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># This works, and returns a tibble in the $outcomes slot</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">processed_vec</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test2</span> <span class="op">&lt;-</span> <span class="va">test</span></span></span>
+<span class="r-in"><span><span class="va">test2</span><span class="op">$</span><span class="va">.outcome</span> <span class="op">&lt;-</span> <span class="va">test2</span><span class="op">$</span><span class="va">Species</span></span></span>
+<span class="r-in"><span><span class="va">test2</span><span class="op">$</span><span class="va">Species</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># This works, and returns a tibble in the $outcomes slot</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">processed_vec</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $predictors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length</span>
@@ -329,14 +344,14 @@ of <code>new_data</code>.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $extras</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Matrix output for predictors</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># You can change the `composition` of the predictor data set</span></span>
-<span class="r-in"><span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu">default_xy_blueprint</span><span class="op">(</span>composition <span class="op">=</span> <span class="st">"dgCMatrix"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span>, blueprint <span class="op">=</span> <span class="va">bp</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Matrix output for predictors</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># You can change the `composition` of the predictor data set</span></span></span>
+<span class="r-in"><span><span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu">default_xy_blueprint</span><span class="op">(</span>composition <span class="op">=</span> <span class="st">"dgCMatrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">train_x</span>, <span class="va">train_y</span>, blueprint <span class="op">=</span> <span class="va">bp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "dgCMatrix"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"package")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Matrix"</span>
@@ -353,7 +368,7 @@ of <code>new_data</code>.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

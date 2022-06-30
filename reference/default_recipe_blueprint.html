@@ -12,7 +12,7 @@ is the blueprint used by default from mold() if x is a recipe."><meta property="
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,16 +68,15 @@ is the blueprint used by default from <code><a href="mold.html">mold()</a></code
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">default_recipe_blueprint</span><span class="op">(</span>
-  intercept <span class="op">=</span> <span class="cn">FALSE</span>,
-  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,
-  fresh <span class="op">=</span> <span class="cn">TRUE</span>,
-  bake_dependent_roles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,
-  composition <span class="op">=</span> <span class="st">"tibble"</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for recipe</span>
-<span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, <span class="va">...</span>, blueprint <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">default_recipe_blueprint</span><span class="op">(</span></span>
+<span>  intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  allow_novel_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fresh <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  composition <span class="op">=</span> <span class="st">"tibble"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for recipe</span></span>
+<span><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">data</span>, <span class="va">...</span>, blueprint <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -86,43 +85,48 @@ is the blueprint used by default from <code><a href="mold.html">mold()</a></code
 <dd><p>A logical. Should an intercept be included in the
 processed data? This information is used by the <code>process</code> function
 in the <code>mold</code> and <code>forge</code> function list.</p></dd>
+
+
 <dt>allow_novel_levels</dt>
 <dd><p>A logical. Should novel factor levels be allowed at
 prediction time? This information is used by the <code>clean</code> function in the
 <code>forge</code> function list, and is passed on to <code><a href="scream.html">scream()</a></code>.</p></dd>
+
+
 <dt>fresh</dt>
 <dd><p>Should already trained operations be re-trained when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> is
 called?</p></dd>
-<dt>bake_dependent_roles</dt>
-<dd><p>A character vector of recipes column "roles"
-specifying roles that are required to <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code> new data. Can't be
-<code>"predictor"</code> or <code>"outcome"</code>, as predictors are always required and
-outcomes are handled by the <code>outcomes</code> argument of <code><a href="forge.html">forge()</a></code>.</p>
-<p>Typically, non-standard roles (such as <code>"id"</code> or <code>"case_weights"</code>) are not
-required to <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> new data. Unless specified by <code>bake_dependent_roles</code>,
-these non-standard role columns are excluded from checks done in <code><a href="forge.html">forge()</a></code>
-to validate the column structure of <code>new_data</code>, will not be passed to
-<code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> even if they existed in <code>new_data</code>, and will not be returned in
-the <code>forge()$extras$roles</code> slot. See the documentation of
-<code><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">recipes::add_role()</a></code> for more information about roles.</p></dd>
+
+
 <dt>composition</dt>
 <dd><p>Either "tibble", "matrix", or "dgCMatrix" for the format
 of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
 the predictors must be numeric after the preprocessing method has been
 applied; otherwise an error is thrown.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>An unprepped recipe created from <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code>.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A data frame or matrix containing the outcomes and predictors.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used.</p></dd>
+
+
 <dt>blueprint</dt>
 <dd><p>A preprocessing <code>blueprint</code>. If left as <code>NULL</code>, then a
 <code>default_recipe_blueprint()</code> is used.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>For <code>default_recipe_blueprint()</code>, a recipe blueprint.</p>
+    
+
+<p>For <code>default_recipe_blueprint()</code>, a recipe blueprint.</p>
     </div>
     <div class="section level2">
     <h2 id="mold">Mold<a class="anchor" aria-label="anchor" href="#mold"></a></h2>
@@ -150,7 +154,7 @@ used during training.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: dplyr</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
@@ -165,24 +169,24 @@ used during training.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:stats’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     step</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Setup</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Recipes example</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Create a recipe that logs a predictor</span></span>
-<span class="r-in"><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, <span class="va">train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">train</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Sepal.Length has been logged</span></span>
-<span class="r-in"><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Setup</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Recipes example</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Create a recipe that logs a predictor</span></span></span>
+<span class="r-in"><span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, <span class="va">train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">train</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Sepal.Length has been logged</span></span></span>
+<span class="r-in"><span><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -197,8 +201,8 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>         1.48         2.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>         1.59         3.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed</span><span class="op">$</span><span class="va">outcomes</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processed</span><span class="op">$</span><span class="va">outcomes</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  </span>
@@ -213,9 +217,9 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> setosa </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> setosa </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The underlying blueprint is a prepped recipe</span></span>
-<span class="r-in"><span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">$</span><span class="va">recipe</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The underlying blueprint is a prepped recipe</span></span></span>
+<span class="r-in"><span><span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">$</span><span class="va">recipe</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Recipe</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Inputs:</span>
@@ -229,10 +233,10 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Operations:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Log transformation on Sepal.Length [trained]</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Call forge() with the blueprint and the test data</span></span>
-<span class="r-in"><span class="co"># to have it preprocess the test data in the same way</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Call forge() with the blueprint and the test data</span></span></span>
+<span class="r-in"><span><span class="co"># to have it preprocess the test data in the same way</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $predictors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width</span>
@@ -257,10 +261,10 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Use `outcomes = TRUE` to also extract the preprocessed outcome!</span></span>
-<span class="r-in"><span class="co"># This logged the Sepal.Length column of `new_data`</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Use `outcomes = TRUE` to also extract the preprocessed outcome!</span></span></span>
+<span class="r-in"><span><span class="co"># This logged the Sepal.Length column of `new_data`</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $predictors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width</span>
@@ -298,14 +302,14 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># With an intercept</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># You can add an intercept with `intercept = TRUE`</span></span>
-<span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">train</span>, blueprint <span class="op">=</span> <span class="fu">default_recipe_blueprint</span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># With an intercept</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># You can add an intercept with `intercept = TRUE`</span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">train</span>, blueprint <span class="op">=</span> <span class="fu">default_recipe_blueprint</span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    `(Intercept)` Sepal.Length Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -320,11 +324,11 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>             1         1.48         2.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>             1         1.59         3.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># But you also could have used a recipe step</span></span>
-<span class="r-in"><span class="va">rec2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_intercept.html" class="external-link">step_intercept</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec2</span>, <span class="va">iris</span><span class="op">)</span><span class="op">$</span><span class="va">predictors</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># But you also could have used a recipe step</span></span></span>
+<span class="r-in"><span><span class="va">rec2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_intercept.html" class="external-link">step_intercept</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec2</span>, <span class="va">iris</span><span class="op">)</span><span class="op">$</span><span class="va">predictors</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 150 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    intercept Sepal.Length Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -339,122 +343,56 @@ used during training.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>         1         1.48         2.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>         1         1.59         3.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 140 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Non standard roles</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># If you have custom recipes roles, it is assumed that they are required</span></span>
-<span class="r-in"><span class="co"># in `prep()` and afterwards for modeling, but are not required at `bake()`</span></span>
-<span class="r-in"><span class="co"># time and for prediction. This means that they are processed and returned</span></span>
-<span class="r-in"><span class="co"># in the `$extras$roles` slot of the return value of `mold()`, but they</span></span>
-<span class="r-in"><span class="co"># are not required to be in `new_data` in `forge()` and are not returned</span></span>
-<span class="r-in"><span class="co"># in the result.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">rec_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, new_role <span class="op">=</span> <span class="st">"predictor"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Species</span>, new_role <span class="op">=</span> <span class="st">"outcome"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Sepal.Length</span>, new_role <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Petal.Length</span>, new_role <span class="op">=</span> <span class="st">"important"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec_roles</span>, <span class="va">train</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The custom roles will still be in the `mold()` result in case you need</span></span>
-<span class="r-in"><span class="co"># them for modeling.</span></span>
-<span class="r-in"><span class="va">processed_roles</span><span class="op">$</span><span class="va">extras</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $roles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $roles$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>          5.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>          4.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>          4.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>          4.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>          5  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>          5.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>          4.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>          5  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>          4.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>          4.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $roles$important</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Length</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>          1.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>          1.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>          1.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>          1.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>          1.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>          1.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>          1.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>          1.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>          1.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>          1.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Notice that the columns with custom roles exist in `test`,</span></span>
-<span class="r-in"><span class="co"># but they weren't passed to `bake()` and aren't in the output.</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $roles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># They can even be removed from `test` entirely, and it still works.</span></span>
-<span class="r-in"><span class="va">test2</span> <span class="op">&lt;-</span> <span class="va">test</span></span>
-<span class="r-in"><span class="va">test2</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $roles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Occasionally, you might have a custom role that is required to be able</span></span>
-<span class="r-in"><span class="co"># to `bake()` on `new_data`. In those cases, you can specify it with</span></span>
-<span class="r-in"><span class="co"># `bake_dependent_roles` in `default_recipe_blueprint()`, which will ensure</span></span>
-<span class="r-in"><span class="co"># that it is a required column when calling `forge()`, that it will be</span></span>
-<span class="r-in"><span class="co"># passed on to `bake()`, and that it will be returned in the result.</span></span>
-<span class="r-in"><span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu">default_recipe_blueprint</span><span class="op">(</span>bake_dependent_roles <span class="op">=</span> <span class="st">"important"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processed_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec_roles</span>, <span class="va">train</span>, blueprint <span class="op">=</span> <span class="va">bp</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Now `"important"` is a required role when `forge()`-ing</span></span>
-<span class="r-in"><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span><span class="op">$</span><span class="va">roles</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $important</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Length</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>          6  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>          5.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>          5.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>          5.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>          5.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>          6.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>          4.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>          6.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>          5.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>          6.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Which means that we can't `forge()` with the data frame that is missing</span></span>
-<span class="r-in"><span class="co"># the `Petal.Length` column</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("The following required columns are missing: {missing_names}.") : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   The following required columns are missing: 'Petal.Length'.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Matrix output for predictors</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># You can change the `composition` of the predictor data set</span></span>
-<span class="r-in"><span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu">default_recipe_blueprint</span><span class="op">(</span>composition <span class="op">=</span> <span class="st">"dgCMatrix"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">train</span>, blueprint <span class="op">=</span> <span class="va">bp</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Matrix output for predictors</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># You can change the `composition` of the predictor data set</span></span></span>
+<span class="r-in"><span><span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu">default_recipe_blueprint</span><span class="op">(</span>composition <span class="op">=</span> <span class="st">"dgCMatrix"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec</span>, <span class="va">train</span>, blueprint <span class="op">=</span> <span class="va">bp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">processed</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "dgCMatrix"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"package")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Matrix"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># utils::packageVersion("recipes") &gt;= "0.2.0.9002"</span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Non standard roles</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># If you have custom recipes roles, they are assumed to be required at</span></span></span>
+<span class="r-in"><span><span class="co"># `bake()` time when passing in `new_data`. This is an assumption that both</span></span></span>
+<span class="r-in"><span><span class="co"># recipes and hardhat makes, meaning that those roles are required at</span></span></span>
+<span class="r-in"><span><span class="co"># `forge()` time as well.</span></span></span>
+<span class="r-in"><span><span class="va">rec_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, new_role <span class="op">=</span> <span class="st">"predictor"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Species</span>, new_role <span class="op">=</span> <span class="st">"outcome"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Sepal.Length</span>, new_role <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html" class="external-link">update_role</a></span><span class="op">(</span><span class="va">Petal.Length</span>, new_role <span class="op">=</span> <span class="st">"important"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processed_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec_roles</span>, <span class="va">train</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The custom roles will be in the `mold()` result in case you need</span></span></span>
+<span class="r-in"><span><span class="co"># them for modeling.</span></span></span>
+<span class="r-in"><span><span class="va">processed_roles</span><span class="op">$</span><span class="va">extras</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># And they are in the `forge()` result</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">$</span><span class="va">extras</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># If you remove a column with a custom role from the test data, then you</span></span></span>
+<span class="r-in"><span><span class="co"># won't be able to `forge()` even though this recipe technically didn't</span></span></span>
+<span class="r-in"><span><span class="co"># use that column in any steps</span></span></span>
+<span class="r-in"><span><span class="va">test2</span> <span class="op">&lt;-</span> <span class="va">test</span></span></span>
+<span class="r-in"><span><span class="va">test2</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Most of the time, if you find yourself in the above scenario, then we</span></span></span>
+<span class="r-in"><span><span class="co"># suggest that you remove `Petal.Length` from the data that is supplied to</span></span></span>
+<span class="r-in"><span><span class="co"># the recipe. If that isn't an option, you can declare that that column</span></span></span>
+<span class="r-in"><span><span class="co"># isn't required at `bake()` time by using `update_role_requirements()`</span></span></span>
+<span class="r-in"><span><span class="va">rec_roles</span> <span class="op">&lt;-</span> <span class="fu">update_role_requirements</span><span class="op">(</span><span class="va">rec_roles</span>, <span class="st">"important"</span>, bake <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">processed_roles</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="va">rec_roles</span>, <span class="va">train</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test2</span>, <span class="va">processed_roles</span><span class="op">$</span><span class="va">blueprint</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -468,7 +406,7 @@ used during training.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

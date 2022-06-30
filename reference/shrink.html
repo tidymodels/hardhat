@@ -12,7 +12,7 @@ the prototype, ptype."><meta property="og:image" content="https://hardhat.tidymo
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,19 +68,24 @@ the prototype, <code>ptype</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">shrink</span><span class="op">(</span><span class="va">data</span>, <span class="va">ptype</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">shrink</span><span class="op">(</span><span class="va">data</span>, <span class="va">ptype</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data frame containing the data to subset.</p></dd>
+
+
 <dt>ptype</dt>
 <dd><p>A data frame prototype containing the required columns.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble containing the required columns.</p>
+    
+
+<p>A tibble containing the required columns.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -90,27 +95,27 @@ processing is done.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># Setup</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ---------------------------------------------------------------------------</span></span>
-<span class="r-in"><span class="co"># shrink()</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># mold() is run at model fit time</span></span>
-<span class="r-in"><span class="co"># and a formula preprocessing blueprint is recorded</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span> <span class="op">~</span> <span class="va">Species</span>, <span class="va">train</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Inside the result of mold() are the prototype tibbles</span></span>
-<span class="r-in"><span class="co"># for the predictors and the outcomes</span></span>
-<span class="r-in"><span class="va">ptype_pred</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">blueprint</span><span class="op">$</span><span class="va">ptypes</span><span class="op">$</span><span class="va">predictors</span></span>
-<span class="r-in"><span class="va">ptype_out</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">blueprint</span><span class="op">$</span><span class="va">ptypes</span><span class="op">$</span><span class="va">outcomes</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Pass the test data, along with a prototype, to</span></span>
-<span class="r-in"><span class="co"># shrink() to extract the prototype columns</span></span>
-<span class="r-in"><span class="fu">shrink</span><span class="op">(</span><span class="va">test</span>, <span class="va">ptype_pred</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Setup</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># shrink()</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># mold() is run at model fit time</span></span></span>
+<span class="r-in"><span><span class="co"># and a formula preprocessing blueprint is recorded</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="mold.html">mold</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span> <span class="op">~</span> <span class="va">Species</span>, <span class="va">train</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Inside the result of mold() are the prototype tibbles</span></span></span>
+<span class="r-in"><span><span class="co"># for the predictors and the outcomes</span></span></span>
+<span class="r-in"><span><span class="va">ptype_pred</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">blueprint</span><span class="op">$</span><span class="va">ptypes</span><span class="op">$</span><span class="va">predictors</span></span></span>
+<span class="r-in"><span><span class="va">ptype_out</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">blueprint</span><span class="op">$</span><span class="va">ptypes</span><span class="op">$</span><span class="va">outcomes</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Pass the test data, along with a prototype, to</span></span></span>
+<span class="r-in"><span><span class="co"># shrink() to extract the prototype columns</span></span></span>
+<span class="r-in"><span><span class="fu">shrink</span><span class="op">(</span><span class="va">test</span>, <span class="va">ptype_pred</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Species  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
@@ -125,10 +130,10 @@ processing is done.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> virginica</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> virginica</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># To extract the outcomes, just use the</span></span>
-<span class="r-in"><span class="co"># outcome prototype</span></span>
-<span class="r-in"><span class="fu">shrink</span><span class="op">(</span><span class="va">test</span>, <span class="va">ptype_out</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># To extract the outcomes, just use the</span></span></span>
+<span class="r-in"><span><span class="co"># outcome prototype</span></span></span>
+<span class="r-in"><span><span class="fu">shrink</span><span class="op">(</span><span class="va">test</span>, <span class="va">ptype_out</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -143,13 +148,13 @@ processing is done.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>         2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>         3.6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># shrink() makes sure that the columns</span></span>
-<span class="r-in"><span class="co"># required by `ptype` actually exist in the data</span></span>
-<span class="r-in"><span class="co"># and errors nicely when they don't</span></span>
-<span class="r-in"><span class="va">test2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">Species</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">shrink</span><span class="op">(</span><span class="va">test2</span>, <span class="va">ptype_pred</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("The following required columns are missing: {missing_names}.") : </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># shrink() makes sure that the columns</span></span></span>
+<span class="r-in"><span><span class="co"># required by `ptype` actually exist in the data</span></span></span>
+<span class="r-in"><span><span class="co"># and errors nicely when they don't</span></span></span>
+<span class="r-in"><span><span class="va">test2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">test</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">Species</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">shrink</span><span class="op">(</span><span class="va">test2</span>, <span class="va">ptype_pred</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in validate_column_names(data, cols) : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   The following required columns are missing: 'Species'.</span>
 </code></pre></div>
     </div>
@@ -164,7 +169,7 @@ processing is done.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

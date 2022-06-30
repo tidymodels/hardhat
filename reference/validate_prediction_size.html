@@ -28,7 +28,7 @@ size_pred A single numeric. The size of pred.
     
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,9 +86,9 @@ size_pred A single numeric. The size of pred.
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">validate_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span>
-
-<span class="fu">check_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">check_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -97,13 +97,20 @@ size_pred A single numeric. The size of pred.
 <dd><p>A tibble. The predictions to return from any prediction
 <code>type</code>. This is often created using one of the spruce functions, like
 <code><a href="spruce.html">spruce_numeric()</a></code>.</p></dd>
+
+
 <dt>new_data</dt>
 <dd><p>A data frame of new predictors and possibly outcomes.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>validate_prediction_size()</code> returns <code>pred</code> invisibly.
-<code>check_prediction_size()</code> returns a named list of three components,
+    
+
+<p><code>validate_prediction_size()</code> returns <code>pred</code> invisibly.</p>
+
+
+<p><code>check_prediction_size()</code> returns a named list of three components,
 <code>ok</code>, <code>size_new_data</code>, and <code>size_pred</code>.</p>
     </div>
     <div class="section level2">
@@ -144,18 +151,18 @@ and provide your own validation function.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Say new_data has 5 rows</span></span>
-<span class="r-in"><span class="va">new_data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># And somehow you generate predictions</span></span>
-<span class="r-in"><span class="co"># for those 5 rows</span></span>
-<span class="r-in"><span class="va">pred_vec</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Then you use `spruce_numeric()` to clean</span></span>
-<span class="r-in"><span class="co"># up these numeric predictions</span></span>
-<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="spruce.html">spruce_numeric</a></span><span class="op">(</span><span class="va">pred_vec</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pred</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Say new_data has 5 rows</span></span></span>
+<span class="r-in"><span><span class="va">new_data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># And somehow you generate predictions</span></span></span>
+<span class="r-in"><span><span class="co"># for those 5 rows</span></span></span>
+<span class="r-in"><span><span class="va">pred_vec</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Then you use `spruce_numeric()` to clean</span></span></span>
+<span class="r-in"><span><span class="co"># up these numeric predictions</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="spruce.html">spruce_numeric</a></span><span class="op">(</span><span class="va">pred_vec</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pred</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .pred</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
@@ -164,10 +171,10 @@ and provide your own validation function.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     5</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Use this check to ensure that</span></span>
-<span class="r-in"><span class="co"># the number of rows or pred match new_data</span></span>
-<span class="r-in"><span class="fu">check_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Use this check to ensure that</span></span></span>
+<span class="r-in"><span><span class="co"># the number of rows or pred match new_data</span></span></span>
+<span class="r-in"><span><span class="fu">check_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ok</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -177,11 +184,11 @@ and provide your own validation function.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $size_pred</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># An informative error message is thrown</span></span>
-<span class="r-in"><span class="co"># if the rows are different</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">validate_prediction_size</span><span class="op">(</span><span class="fu"><a href="spruce.html">spruce_numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, <span class="va">new_data</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in glubort("The size of `new_data` ({check$size_new_data}) must match the ",  : </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># An informative error message is thrown</span></span></span>
+<span class="r-in"><span><span class="co"># if the rows are different</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">validate_prediction_size</span><span class="op">(</span><span class="fu"><a href="spruce.html">spruce_numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, <span class="va">new_data</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in validate_prediction_size(spruce_numeric(1:4), new_data) : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   The size of `new_data` (5) must match the size of `pred` (4).</span>
 </code></pre></div>
     </div>
@@ -196,7 +203,7 @@ and provide your own validation function.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>
