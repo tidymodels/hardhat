@@ -1,3 +1,5 @@
+# hardhat (development version)
+
 # hardhat 1.2.0
 
 * We have reverted the change made in hardhat 1.0.0 that caused recipe
