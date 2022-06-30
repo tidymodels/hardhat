@@ -1,9 +1,14 @@
 ## revdepcheck results
 
-We checked 19 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 23 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
+
+## 1.2.0 Submission
+
+This is a minor release of hardhat that rolls back some of the changes made in
+hardhat 1.0.0.
 
 ## 1.1.0 Submission
 
