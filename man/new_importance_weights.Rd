@@ -23,6 +23,13 @@ A new importance weights vector.
 a new importance weights vector. Generally, you should use
 \code{\link[=importance_weights]{importance_weights()}} instead.
 }
+\details{
+Frequency weights are integers that denote how many times a particular row of
+data has been observed. They help compress redundant rows into a single entry.
+
+In tidymodels, frequency weights are used for all parts of the preprocessing,
+model fitting, and performance estimation operations.
+}
 \examples{
 new_importance_weights()
 new_importance_weights(c(1.5, 2.3, 10))

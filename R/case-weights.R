@@ -9,6 +9,15 @@
 #' allowed.
 #'
 #' @param x A double vector.
+#' @details
+#'
+#' Importance weights focus on how much each row of the data set should
+#' influence model estimation. These can be based on data or arbitrarily set to
+#' achieve some goal.
+#'
+#' In tidymodels, importance weights only affect the model estimation and
+#' _supervised_ recipes steps. They are not used with yardstick functions for
+#' calculating measures of model performance.
 #'
 #' @return A new importance weights vector.
 #'
@@ -41,6 +50,12 @@ importance_weights <- function(x) {
 #'
 #' @param x A double vector.
 #'
+#' @details
+#' Frequency weights are integers that denote how many times a particular row of
+#' data has been observed. They help compress redundant rows into a single entry.
+#'
+#' In tidymodels, frequency weights are used for all parts of the preprocessing,
+#' model fitting, and performance estimation operations.
 #' @return A new importance weights vector.
 #'
 #' @export
