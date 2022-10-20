@@ -7,7 +7,7 @@
 factor_to_indicators(x)
 }
 \arguments{
-\item{x}{A factor without missing values.}
+\item{x}{A factor without missing values. Can also be a ordered factor.}
 }
 \value{
 A integer matrix with the same number of columns as levels of \code{x},

@@ -17,6 +17,17 @@ test_that("factor_to_indicators works as expected", {
   expect_snapshot(error = TRUE, factor_to_indicators(letters))
 })
 
+test_that("factor_to_indicators works as expected", {
+
+  fact <- factor(c("c", "d", "a", "c", "a"), levels = c("a", "d", "c"))
+  ord_fact <- ordered(fact)
+
+  expect_identical(
+    factor_to_indicators(ord_fact),
+    factor_to_indicators(fact)
+  )
+})
+
 test_that("factor_to_indicators errors for missing values", {
   fact <- factor(c("c", "d", "a", "c", NA), levels = c("a", "d", "c"))
 

@@ -3,7 +3,7 @@
 #' Takes a factor vector and construct the corresponding indicator matrix, also
 #' known as a one-hot encoding matrix.
 #'
-#' @param x A factor without missing values.
+#' @param x A factor without missing values. Can also be a ordered factor.
 #'
 #' @return A integer matrix with the same number of columns as levels of `x`,
 #' and the same number of rows as the number of elements in `x`.
