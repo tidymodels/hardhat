@@ -15,6 +15,26 @@ test_that("factor_to_indicators works as expected", {
   )
 
   expect_snapshot(error = TRUE, factor_to_indicators(letters))
+
+  expect_equal(
+    factor_to_indicators(factor(rep("a", 3))),
+    matrix(1L, nrow = 3, ncol = 1, dimnames = list(NULL, "a"))
+  )
+
+  expect_equal(
+    factor_to_indicators(factor(rep("a", 1))),
+    matrix(1L, nrow = 1, ncol = 1, dimnames = list(NULL, "a"))
+  )
+
+  expect_equal(
+    factor_to_indicators(factor(character(), levels = c("a", "b", "c"))),
+    matrix(1L, nrow = 0, ncol = 3, dimnames = list(NULL, c("a", "b", "c")))
+  )
+
+  expect_equal(
+    factor_to_indicators(factor()),
+    matrix(1L, nrow = 0, ncol = 0, dimnames = list(NULL, NULL))
+  )
 })
 
 test_that("factor_to_indicators works as expected", {
