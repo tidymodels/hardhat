@@ -1,16 +1,16 @@
-# get_indicators works as expected
+# factor_to_indicators works as expected
 
     Code
-      get_indicators(letters)
+      factor_to_indicators(letters)
     Condition
-      Error in `get_indicators()`:
+      Error in `factor_to_indicators()`:
       ! `x` must be a factor.
 
-# get_indicators errors for missing data
+# factor_to_indicators errors for missing values
 
     Code
-      get_indicators(fact)
+      factor_to_indicators(fact)
     Condition
-      Error in `get_indicators()`:
+      Error in `factor_to_indicators()`:
       ! `x` must not have any missing values.
 

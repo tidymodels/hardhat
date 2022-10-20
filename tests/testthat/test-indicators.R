@@ -1,4 +1,4 @@
-test_that("get_indicators works as expected", {
+test_that("factor_to_indicators works as expected", {
 
   fact <- factor(c("c", "d", "a", "c", "a"), levels = c("a", "d", "c"))
   exp_matrix <- matrix(
@@ -10,15 +10,15 @@ test_that("get_indicators works as expected", {
   colnames(exp_matrix) <- c("a", "d", "c")
 
   expect_identical(
-    get_indicators(fact),
+    factor_to_indicators(fact),
     exp_matrix
   )
 
-  expect_snapshot(error = TRUE, get_indicators(letters))
+  expect_snapshot(error = TRUE, factor_to_indicators(letters))
 })
 
-test_that("get_indicators errors for missing values", {
+test_that("factor_to_indicators errors for missing values", {
   fact <- factor(c("c", "d", "a", "c", NA), levels = c("a", "d", "c"))
 
-  expect_snapshot(error = TRUE, get_indicators(fact))
+  expect_snapshot(error = TRUE, factor_to_indicators(fact))
 })

@@ -1,7 +1,7 @@
 # hardhat (development version)
 
-* Adds `get_indicators()` function that takes a factor as input, and returns
-  the indicators as a integer matrix.
+* Adds `factor_to_indicators()` function that takes a factor as input, and 
+  returns the indicators as a integer matrix.
 
 * Added more documentation about importance and frequency weights in
   `?importance_weights()` and `?frequency_weights()` (#214).

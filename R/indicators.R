@@ -9,14 +9,14 @@
 #' and the same number of rows as the number of elements in `x`.
 #'
 #' @examples
-#' get_indicators(factor(letters))
+#' factor_to_indicators(factor(letters))
 #'
-#' get_indicators(factor(letters[1:2], levels = letters))
+#' factor_to_indicators(factor(letters[1:2], levels = letters))
 #'
 #' set.seed(1234)
-#' get_indicators(factor(sample(letters[1:4], 10, TRUE)))
+#' factor_to_indicators(factor(sample(letters[1:4], 10, TRUE)))
 #' @export
-get_indicators <- function(x) {
+factor_to_indicators <- function(x) {
   if (!is.factor(x)) {
     rlang::abort("`x` must be a factor.")
   }
