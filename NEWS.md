@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* New `fct_encode_one_hot()` that encodes a factor as a one-hot indicator matrix
+  (#215).
+
 * Added more documentation about importance and frequency weights in
   `?importance_weights()` and `?frequency_weights()` (#214).
 
