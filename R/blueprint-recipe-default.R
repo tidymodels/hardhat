@@ -100,7 +100,6 @@
 #' processed <- mold(rec, train, blueprint = bp)
 #' class(processed$predictors)
 #'
-#' @examplesIf utils::packageVersion("recipes") >= "0.2.0.9002"
 #' # ---------------------------------------------------------------------------
 #' # Non standard roles
 #'
