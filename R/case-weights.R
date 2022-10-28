@@ -8,6 +8,15 @@
 #' are supplied as a non-negative double vector, where fractional values are
 #' allowed.
 #'
+#' @details
+#' Importance weights focus on how much each row of the data set should
+#' influence model estimation. These can be based on data or arbitrarily set to
+#' achieve some goal.
+#'
+#' In tidymodels, importance weights only affect the model estimation and
+#' _supervised_ recipes steps. They are not used with yardstick functions for
+#' calculating measures of model performance.
+#'
 #' @param x A double vector.
 #'
 #' @return A new importance weights vector.
@@ -116,6 +125,14 @@ vec_ptype_abbr.hardhat_importance_weights <- function(x, ...) {
 #' to compactly repeat an observation a set number of times. Frequency weights
 #' are supplied as a non-negative integer vector, where only whole numbers are
 #' allowed.
+#'
+#' @details
+#' Frequency weights are integers that denote how many times a particular row of
+#' the data has been observed. They help compress redundant rows into a single
+#' entry.
+#'
+#' In tidymodels, frequency weights are used for all parts of the preprocessing,
+#' model fitting, and performance estimation operations.
 #'
 #' @param x An integer vector.
 #'

@@ -20,6 +20,14 @@ to compactly repeat an observation a set number of times. Frequency weights
 are supplied as a non-negative integer vector, where only whole numbers are
 allowed.
 }
+\details{
+Frequency weights are integers that denote how many times a particular row of
+the data has been observed. They help compress redundant rows into a single
+entry.
+
+In tidymodels, frequency weights are used for all parts of the preprocessing,
+model fitting, and performance estimation operations.
+}
 \examples{
 # Record that the first observation has 10 replicates, the second has 12
 # replicates, and so on

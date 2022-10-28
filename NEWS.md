@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* Added more documentation about importance and frequency weights in
+  `?importance_weights()` and `?frequency_weights()` (#214).
+
 # hardhat 1.2.0
 
 * We have reverted the change made in hardhat 1.0.0 that caused recipe

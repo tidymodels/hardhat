@@ -20,6 +20,15 @@ to apply a context dependent weight to your observations. Importance weights
 are supplied as a non-negative double vector, where fractional values are
 allowed.
 }
+\details{
+Importance weights focus on how much each row of the data set should
+influence model estimation. These can be based on data or arbitrarily set to
+achieve some goal.
+
+In tidymodels, importance weights only affect the model estimation and
+\emph{supervised} recipes steps. They are not used with yardstick functions for
+calculating measures of model performance.
+}
 \examples{
 importance_weights(c(1.5, 2.3, 10))
 }
