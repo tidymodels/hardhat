@@ -483,8 +483,6 @@ test_that("non-standard roles generated in the recipe are returned by both `mold
 })
 
 test_that("`forge()` returns a slot for non standard roles that aren't required at `bake()` time", {
-  skip_if_no_update_role_requirements()
-
   # This is a convention we follow to have consistency between `mold()` and `forge()`.
   # Both should have the same `.$extras$roles$<name>` slot names, even if there
   # wasn't any data there at `forge()` time (because it wasn't a required role).
@@ -567,8 +565,6 @@ test_that("`forge()` will error if required non standard roles are missing", {
 })
 
 test_that("recipes will error if the role is declared as not required, but really was", {
-  skip_if_no_update_role_requirements()
-
   rec <- recipes::recipe(Species ~ ., iris)
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
   rec <- recipes::update_role_requirements(rec, "dummy1", bake = FALSE)
@@ -605,8 +601,6 @@ test_that("`NA` roles are treated as extra roles that are required at `forge()` 
 })
 
 test_that("`NA` roles can be declared as not required at `forge()` time", {
-  skip_if_no_update_role_requirements()
-
   # Petal.Length, Petal.Width have `NA` roles
   rec <- recipes::recipe(iris)
   rec <- recipes::update_role(rec, Sepal.Length, new_role = "predictor")

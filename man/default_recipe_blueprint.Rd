@@ -129,7 +129,6 @@ bp <- default_recipe_blueprint(composition = "dgCMatrix")
 processed <- mold(rec, train, blueprint = bp)
 class(processed$predictors)
 
-\dontshow{if (utils::packageVersion("recipes") >= "0.2.0.9002") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ---------------------------------------------------------------------------
 # Non standard roles
 
@@ -166,5 +165,4 @@ try(forge(test2, processed_roles$blueprint))
 rec_roles <- update_role_requirements(rec_roles, "important", bake = FALSE)
 processed_roles <- mold(rec_roles, train)
 forge(test2, processed_roles$blueprint)
-\dontshow{\}) # examplesIf}
 }
