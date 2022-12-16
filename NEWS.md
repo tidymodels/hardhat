@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* Added `extract_fit_time()` generic.
+
 * New `fct_encode_one_hot()` that encodes a factor as a one-hot indicator matrix
   (#215).
 
