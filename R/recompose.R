@@ -12,6 +12,18 @@ recompose <- function(data, composition) {
   }
 }
 
+#' Convert tibble to matrix
+#'
+#' @param x A tibble.
+#' @param sparse Logical, denoting if result should be a sparse matrix.
+#'
+#' @return A matrix or dgCMatrix.
+#' @export
+#'
+#' @examples
+#' convert_matrix(mtcars, sparse = TRUE)
+#'
+#' convert_matrix(mtcars, sparse = FALSE)
 convert_matrix <- function(x, sparse = TRUE) {
   is_num <- vapply(x, is.numeric, logical(1))
 
