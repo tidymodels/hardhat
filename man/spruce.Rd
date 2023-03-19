@@ -5,6 +5,9 @@
 \alias{spruce_numeric}
 \alias{spruce_class}
 \alias{spruce_prob}
+\alias{spruce_numeric_multi}
+\alias{spruce_class_multi}
+\alias{spruce_prob_multi}
 \title{Spruce up predictions}
 \usage{
 spruce_numeric(pred)
@@ -12,6 +15,12 @@ spruce_numeric(pred)
 spruce_class(pred_class)
 
 spruce_prob(pred_levels, prob_matrix)
+
+spruce_numeric_multi(pred_df)
+
+spruce_class_multi(pred_class_df)
+
+spruce_prob_multi(pred_levels_df, prob_matrix_df)
 }
 \arguments{
 \item{pred}{(\code{type = "numeric"}) A numeric vector of predictions.}
@@ -24,6 +33,17 @@ spruce_prob(pred_levels, prob_matrix)
 the outcome used in training.
 \item \code{prob_matrix} should be a numeric matrix of class probabilities with
 as many columns as levels in \code{pred_levels}, and in the same order.
+}}
+
+\item{pred_df}{(\code{type = "numeric"}) A data-frame of \code{pred} columns for multi-outcomes predictions.}
+
+\item{pred_class_df}{(\code{type = "class"}) A data-frame of \code{pred_class} columns for multi-outcomes predictions.}
+
+\item{pred_levels_df, prob_matrix_df}{(\code{type = "prob"})
+\itemize{
+\item \code{pred_levels_df} should be a data-frame of \code{pred_levels} columns for multi-outcomes predictions.
+\item \code{prob_matrix_df} should be a data-frame of \code{prob_matrix} data-frames for multi-outcomes predictions.
+Each of the \code{prob_matrix} data-frame should be coercible as a matrix
 }}
 }
 \value{

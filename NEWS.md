@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* Extend `spruce_*` function family to cover multi-outcomes model (#224 cregouby).
+
 * New `fct_encode_one_hot()` that encodes a factor as a one-hot indicator matrix
   (#215).
 

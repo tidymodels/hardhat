@@ -18,6 +18,15 @@
 #' - `prob_matrix` should be a numeric matrix of class probabilities with
 #' as many columns as levels in `pred_levels`, and in the same order.
 #'
+#' @param pred_df (`type = "numeric"`) A data-frame of `pred` columns for multi-outcomes predictions.
+#'
+#' @param pred_class_df (`type = "class"`) A data-frame of `pred_class` columns for multi-outcomes predictions.
+#'
+#' @param pred_levels_df,prob_matrix_df (`type = "prob"`)
+#' - `pred_levels_df` should be a data-frame of `pred_levels` columns for multi-outcomes predictions.
+#' - `prob_matrix_df` should be a data-frame of `prob_matrix` data-frames for multi-outcomes predictions.
+#' Each of the `prob_matrix` data-frame should be coercible as a matrix
+#'
 #' @return
 #'
 #' A tibble, ideally with the same number of rows as the `new_data` passed
@@ -74,6 +83,64 @@ spruce_prob <- function(pred_levels, prob_matrix) {
   colnames(prob_matrix) <- pred_levels
 
   predictions <- tibble::as_tibble(prob_matrix)
+
+  predictions
+}
+
+#' @rdname spruce
+#' @export
+spruce_numeric_multi <- function(pred_df) {
+
+  validate_is(pred_df, is.data.frame, "data-frame")
+
+  outcomes <- seq(ncol(pred_df))
+  pred_outcomes <- paste0(".pred_", outcomes)
+
+  pred_lst <- lapply(outcomes, function(col) spruce_numeric(pred_df[[col]]) %>%
+                       rlang::set_names(pred_outcomes[[col]]))
+  vctrs::obj_check_list(pred_lst)
+
+  predictions <- vctrs::vec_cbind(!!!pred_lst)
+
+  predictions
+}
+
+#' @rdname spruce
+#' @export
+spruce_class_multi <- function(pred_class_df) {
+  validate_is(pred_class_df, is.data.frame, "dataframe")
+
+  outcomes <- seq(ncol(pred_class_df))
+  pred_outcomes <- paste0(".pred_class_", outcomes)
+
+  pred_lst <- lapply(outcomes, function(col) spruce_class(pred_class_df[[col]]) %>%
+                       rlang::set_names(pred_outcomes[[col]]))
+  vctrs::obj_check_list(pred_lst)
+
+  predictions <- vctrs::vec_cbind(!!!pred_lst)
+}
+
+#' @rdname spruce
+#' @export
+spruce_prob_multi <- function(pred_levels_df, prob_matrix_df) {
+
+  validate_is(pred_levels_df, is.data.frame, "dataframe")
+  validate_is(prob_matrix_df, is.data.frame, "dataframe")
+
+  outcomes <- seq(ncol(pred_levels_df))
+
+  # prediction names
+  pred_outcomes <- paste0(".pred_class_", outcomes)
+  vctrs::obj_check_list(pred_outcomes)
+
+  # perform `spruce_prob` on each outcome vector
+  pred_lst <-
+    lapply(outcomes, function(col)
+      spruce_prob(pred_levels_df[[col]], as.matrix(prob_matrix_df[[col]])) %>%
+        rlang::set_names(pred_outcomes[[col]]))
+  vctrs::obj_check_list(pred_lst)
+
+  predictions <- vctrs::vec_cbind(!!!pred_lst)
 
   predictions
 }
