@@ -118,6 +118,8 @@ spruce_class_multi <- function(pred_class_df) {
   vctrs::obj_check_list(pred_lst)
 
   predictions <- vctrs::vec_cbind(!!!pred_lst)
+
+  predictions
 }
 
 #' @rdname spruce
