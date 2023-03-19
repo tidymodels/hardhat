@@ -96,8 +96,10 @@ spruce_numeric_multi <- function(pred_df) {
   outcomes <- seq(ncol(pred_df))
   pred_outcomes <- paste0(".pred_", outcomes)
 
-  pred_lst <- lapply(outcomes, function(col) spruce_numeric(pred_df[[col]]) %>%
-                       rlang::set_names(pred_outcomes[[col]]))
+  pred_lst <-
+    lapply(outcomes, function(col)
+      rlang::set_names(spruce_numeric(pred_df[[col]]),
+                       pred_outcomes[[col]]))
   vctrs::obj_check_list(pred_lst)
 
   predictions <- vctrs::vec_cbind(!!!pred_lst)
@@ -113,8 +115,10 @@ spruce_class_multi <- function(pred_class_df) {
   outcomes <- seq(ncol(pred_class_df))
   pred_outcomes <- paste0(".pred_class_", outcomes)
 
-  pred_lst <- lapply(outcomes, function(col) spruce_class(pred_class_df[[col]]) %>%
-                       rlang::set_names(pred_outcomes[[col]]))
+  pred_lst <-
+    lapply(outcomes, function(col)
+      rlang::set_names(spruce_class(pred_class_df[[col]]),
+                       pred_outcomes[[col]]))
   vctrs::obj_check_list(pred_lst)
 
   predictions <- vctrs::vec_cbind(!!!pred_lst)
@@ -133,13 +137,14 @@ spruce_prob_multi <- function(pred_levels_df, prob_matrix_df) {
 
   # prediction names
   pred_outcomes <- paste0(".pred_class_", outcomes)
-  vctrs::obj_check_list(pred_outcomes)
 
   # perform `spruce_prob` on each outcome vector
   pred_lst <-
     lapply(outcomes, function(col)
-      spruce_prob(pred_levels_df[[col]], as.matrix(prob_matrix_df[[col]])) %>%
-        rlang::set_names(pred_outcomes[[col]]))
+     spruce_prob(
+        pred_levels_df[[col]], as.matrix(prob_matrix_df[[col]])
+      ))
+  names(pred_lst) <- pred_outcomes
   vctrs::obj_check_list(pred_lst)
 
   predictions <- vctrs::vec_cbind(!!!pred_lst)

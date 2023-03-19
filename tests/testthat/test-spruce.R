@@ -76,20 +76,40 @@ test_that("spruce - class - multi", {
   expect_error(spruce_class_multi("hi"))
 })
 
-test_that("spruce - prob - multi", {
-  # pred_levels_df <- tibble(day = letters[1:5],
-  #                          month = letters[2:13])
+test_that("spruce - prob - multi - same nlevels", {
   pred_levels_df <- tibble(day = letters[1:5],
                            month = letters[2:6])
+  prob_matrix_df <- tibble(day = tibble(matrix(seq(.1, .5, .1), nrow = 2, ncol = 5, byrow = T ), .name_repair = "minimal"),
+                           month = tibble(matrix(seq(.6, 1, .1), nrow = 2, ncol = 5, byrow = T), .name_repair = "minimal"))
+  spruced <- spruce_prob_multi(pred_levels_df, prob_matrix_df)
+
+  expect_s3_class(spruced, "tbl_df")
+  expect_equal(dim(spruced), c(2, 2))
+  expect_equal(colnames(spruced), c(".pred_class_1", ".pred_class_2"))
+
+  expect_s3_class(spruced$.pred_class_1, "tbl_df")
+  expect_equal(dim(spruced$.pred_class_1), c(2, 5))
+  expect_s3_class(spruced$.pred_class_2, "tbl_df")
+  expect_equal(dim(spruced$.pred_class_2), c(2, 5))
+  #
+})
+test_that("spruce - prob - multi - different nlevels", {
+  skip("waiting for #223 clarification")
+  pred_levels_df <- tibble(day = letters[1:5],
+                           month = letters[2:13])
   prob_matrix_df <- tibble(day = tibble(matrix(seq(.1, .5, .1), nrow = 2, ncol = 5, byrow = T ), .name_repair = "minimal"),
                            month = tibble(matrix(seq(.5, 1, .05), nrow = 2, ncol = 12, byrow = T), .name_repair = "minimal"))
   spruced <- spruce_prob_multi(pred_levels_df, prob_matrix_df)
 
   expect_s3_class(spruced, "tbl_df")
-  # expect_equal(colnames(spruced), c(".pred_class_1", ".pred_class_2"))
+  expect_equal(dim(spruced), c(2, 2))
+  expect_equal(colnames(spruced), c(".pred_class_1", ".pred_class_2"))
+
+  expect_s3_class(spruced$.pred_class_1, "tbl_df")
+  expect_equal(dim(spruced$.pred_class_1), c(2, 5))
+  expect_s3_class(spruced$.pred_class_2, "tbl_df")
+  expect_equal(dim(spruced$.pred_class_2), c(2, 5))
   #
-  # expect_error(spruce_class_multi(tibble(a = 1:5)))
-  # expect_error(spruce_class_multi("hi"))
 })
 
 
