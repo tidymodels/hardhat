@@ -697,8 +697,8 @@ nuke_formula_environment <- function(formula) {
 validate_is_terms_list_or_null <- function(terms) {
   validate_is(terms, is_list, "list")
 
-  validate_has_name(terms, "terms", "predictors")
-  validate_has_name(terms, "terms", "outcomes")
+  check_has_name(terms, "predictors")
+  check_has_name(terms, "outcomes")
 
   if (!is.null(terms$predictors)) {
     check_terms(terms$predictors, arg = glue("terms$predictors"))
