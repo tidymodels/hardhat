@@ -162,7 +162,7 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #' try(update_blueprint(blueprint, intercept = 1))
 #' @export
 update_blueprint <- function(blueprint, ...) {
-  validate_is_blueprint(blueprint)
+  check_blueprint(blueprint)
 
   changes <- list2(...)
 
@@ -200,6 +200,13 @@ update_blueprint <- function(blueprint, ...) {
 #' @export
 is_blueprint <- function(x) {
   inherits(x, "hardhat_blueprint")
+}
+
+check_blueprint <- function(x,
+                            ...,
+                            arg = caller_arg(x),
+                            call = caller_env()) {
+  check_inherits(x, "hardhat_blueprint", arg = arg, call = call)
 }
 
 # ------------------------------------------------------------------------------

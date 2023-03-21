@@ -31,7 +31,7 @@
 #' )
 #' @export
 new_model <- function(..., blueprint = default_xy_blueprint(), class = character()) {
-  validate_is_blueprint(blueprint)
+  check_blueprint(blueprint)
 
   new_abstract_model(..., blueprint = blueprint, class = c(class, "hardhat_model"))
 }
@@ -79,8 +79,4 @@ check_elems <- function(elems) {
   }
 
   invisible(elems)
-}
-
-validate_is_blueprint <- function(blueprint) {
-  validate_is(blueprint, is_blueprint, "blueprint")
 }
