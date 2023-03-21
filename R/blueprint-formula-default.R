@@ -382,9 +382,9 @@ mold_formula_default_clean <- function(blueprint, data) {
   check_data_frame_or_matrix(data)
   data <- coerce_to_tibble(data)
 
-  # validate here, not in the constructor, because we
+  # Check here, not in the constructor, because we
   # put a non-intercept-containing formula back in
-  validate_formula_has_intercept(blueprint$formula)
+  check_implicit_intercept(blueprint$formula, arg = "formula")
 
   formula <- remove_formula_intercept(blueprint$formula, blueprint$intercept)
   formula <- alter_formula_environment(formula)
@@ -392,6 +392,91 @@ mold_formula_default_clean <- function(blueprint, data) {
   blueprint <- update_blueprint(blueprint, formula = formula)
 
   new_mold_clean(blueprint, data)
+}
+
+check_implicit_intercept <- function(x,
+                                     ...,
+                                     arg = caller_arg(x),
+                                     call = caller_env()) {
+  # The formula must have an implicit intercept to remove.
+  # Don't let the user do `0+` or `+0` or `-1`.
+  x <- f_rhs(x)
+  check_not_1_or_0(x, arg = arg, call = call)
+  recurse_intercept_search(x, arg = arg, call = call)
+}
+
+check_not_1_or_0 <- function(x,
+                             ...,
+                             arg = caller_arg(x),
+                             call = caller_env()) {
+  if (!is_scalar_integerish(x)) {
+    return(invisible(NULL))
+  }
+
+  if (x == 1) {
+    cli::cli_abort(
+      "{.arg {arg}} must not contain the intercept term, `1`.",
+      call = call
+    )
+  }
+
+  if (x == 0) {
+    cli::cli_abort(
+      "{.arg {arg}} must not contain the intercept removal term, `0`.",
+      call = call
+    )
+  }
+
+  invisible(NULL)
+}
+
+recurse_intercept_search <- function(x,
+                                     ...,
+                                     arg = caller_arg(x),
+                                     call = caller_env()) {
+  if (!is_call(x)) {
+    return(invisible(NULL))
+  }
+
+  call_name <- call_name(x)
+  call_args <- call_args(x)
+
+  # Check for `+ 0` or `0 +`
+  if (is_string(call_name, string = "+")) {
+    for (call_arg in call_args) {
+      if (call_arg == 0L) {
+        cli::cli_abort(
+          "{.arg {arg}} must not contain the intercept removal term: `+ 0` or `0 +`.",
+          call = call
+        )
+      }
+    }
+  }
+
+  # Check for `- 1`
+  if (is_string(call_name, string = "-")) {
+    if (length(call_args) == 2L) {
+      call_arg <- call_args[[2]]
+    }
+
+    if (length(call_args) == 1L) {
+      call_arg <- call_args[[1]]
+    }
+
+    if (call_arg == 1L) {
+      cli::cli_abort(
+        "{.arg {arg}} must not contain the intercept removal term: `- 1`.",
+        call = call
+      )
+    }
+  }
+
+  # Recurse
+  for (call_arg in call_args) {
+    recurse_intercept_search(call_arg, arg = arg, call = call)
+  }
+
+  invisible(NULL)
 }
 
 # ------------------------------------------------------------------------------
