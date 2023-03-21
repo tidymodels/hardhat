@@ -6,24 +6,6 @@ glue_quote_collapse <- function(x) {
   glue::glue_collapse(glue::single_quote(x), sep = ", ")
 }
 
-validate_empty_dots <- function(...) {
-  dots <- list(...)
-
-  n_dots <- length(dots)
-
-  if (n_dots != 0L) {
-    dot_nms <- names(exprs_auto_name(dots))
-    dot_nms <- glue_quote_collapse(dot_nms)
-
-    glubort(
-      "`...` must not contain any input. ",
-      "{n_dots} elements were found in the dots with names: {dot_nms}."
-    )
-  }
-
-  invisible()
-}
-
 simplify_terms <- function(x) {
 
   # This is like stats:::terms.default

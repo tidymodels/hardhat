@@ -64,7 +64,7 @@ mold.default <- function(x, ...) {
 #' @rdname default_xy_blueprint
 #' @export
 mold.data.frame <- function(x, y, ..., blueprint = NULL) {
-  validate_empty_dots(...)
+  check_dots_empty0(...)
 
   if (is.null(blueprint)) {
     blueprint <- default_xy_blueprint()
@@ -82,7 +82,7 @@ mold.matrix <- mold.data.frame
 #' @rdname default_formula_blueprint
 #' @export
 mold.formula <- function(formula, data, ..., blueprint = NULL) {
-  validate_empty_dots(...)
+  check_dots_empty0(...)
 
   if (is.null(blueprint)) {
     blueprint <- default_formula_blueprint()
@@ -98,7 +98,7 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
 #' @rdname default_recipe_blueprint
 #' @export
 mold.recipe <- function(x, data, ..., blueprint = NULL) {
-  validate_empty_dots(...)
+  check_dots_empty0(...)
 
   validate_recipes_available()
 

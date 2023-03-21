@@ -58,23 +58,21 @@ test_that("xy intercepts can be added", {
 })
 
 test_that("cannot pass anything in the dots", {
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       iris[, "Sepal.Length", drop = FALSE],
       iris$Species,
       z = "in the dots"
-    ),
-    "`...` must not contain any input. 1 elements were found"
-  )
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       iris[, "Sepal.Length", drop = FALSE],
       iris$Species,
       blueprint = default_xy_blueprint(composition = "dgCMatrix"),
       z = "in the dots"
-    ),
-    "`...` must not contain any input. 1 elements were found"
-  )
+    )
+  })
 })
 
 test_that("`NULL` y value returns a 0 column tibble for `outcomes`", {
