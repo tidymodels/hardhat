@@ -1,3 +1,11 @@
+# unknown mold() inputs throw an error
+
+    Code
+      mold("hi")
+    Condition
+      Error in `mold()`:
+      ! `x` must be a data frame, matrix, recipe, or formula, not the string "hi".
+
 # cannot pass anything in the dots
 
     Code

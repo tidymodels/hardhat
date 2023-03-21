@@ -58,7 +58,10 @@ mold <- function(x, ...) {
 
 #' @export
 mold.default <- function(x, ...) {
-  abort_unknown_mold_class(x)
+  stop_input_type(
+    x = x,
+    what = "a data frame, matrix, recipe, or formula"
+  )
 }
 
 #' @rdname default_xy_blueprint

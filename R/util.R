@@ -76,15 +76,6 @@ get_all_outcomes <- function(formula, data) {
   outcomes
 }
 
-abort_unknown_mold_class <- function(x) {
-  cls <- class(x)[1]
-  glubort(
-    "`x` is not a recognized type.
-     Only data.frame, matrix, recipe, and formula objects are allowed.
-     A {cls} was specified."
-  )
-}
-
 remove_formula_intercept <- function(formula, intercept) {
   if (intercept) {
     return(formula)
