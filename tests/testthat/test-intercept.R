@@ -31,13 +31,10 @@ test_that("can change the intercept column name", {
 })
 
 test_that("name can only be a single character", {
-  expect_error(
-    add_intercept_column(mtcars, name = c("x", "y")),
-    "name should have size 1, not 2."
-  )
-
-  expect_error(
-    add_intercept_column(mtcars, name = 1),
-    "name should be a character, not a numeric."
-  )
+  expect_snapshot(error = TRUE, {
+    add_intercept_column(mtcars, name = c("x", "y"))
+  })
+  expect_snapshot(error = TRUE, {
+    add_intercept_column(mtcars, name = 1)
+  })
 })
