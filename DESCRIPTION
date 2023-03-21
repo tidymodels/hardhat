@@ -19,7 +19,7 @@ License: MIT + file LICENSE
 URL: https://github.com/tidymodels/hardhat, https://hardhat.tidymodels.org
 BugReports: https://github.com/tidymodels/hardhat/issues
 Depends: 
-    R (>= 3.4.0)
+    R (>= 3.5.0)
 Imports: 
     glue (>= 1.6.2),
     rlang (>= 1.0.6),
