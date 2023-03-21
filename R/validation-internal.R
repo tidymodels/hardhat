@@ -41,16 +41,6 @@ validate_has_unique_column_names <- function(x, x_nm) {
   invisible(x)
 }
 
-validate_recipes_available <- function() {
-  if (!requireNamespace("recipes", quietly = TRUE)) {
-    abort(
-      "The `recipes` package must be available to use the recipe interface."
-    )
-  }
-
-  invisible()
-}
-
 # the formula must have an implicit intercept to remove
 # dont let the user do `0+` or `+0` or `-1`
 

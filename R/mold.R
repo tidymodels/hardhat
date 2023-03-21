@@ -100,8 +100,6 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
 mold.recipe <- function(x, data, ..., blueprint = NULL) {
   check_dots_empty0(...)
 
-  validate_recipes_available()
-
   if (is.null(blueprint)) {
     blueprint <- default_recipe_blueprint()
   }
