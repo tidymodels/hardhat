@@ -135,10 +135,6 @@ class1 <- function(x) {
   class(x)[1]
 }
 
-is_bool <- function(x) {
-  is_logical(x, n = 1) && !is.na(x)
-}
-
 validate_is_bool <- function(.x, .x_nm) {
   if (is_missing(.x_nm)) {
     .x_nm <- as_label(enexpr(.x))
