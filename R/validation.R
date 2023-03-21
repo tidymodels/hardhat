@@ -58,7 +58,7 @@ check_outcomes_are_univariate <- function(outcomes) {
 
   ok <- (n_cols == 1L)
 
-  check <- check_list(ok = ok, n_cols = n_cols)
+  check <- new_check_result(ok = ok, n_cols = n_cols)
 
   check
 }
@@ -142,7 +142,7 @@ check_outcomes_are_numeric <- function(outcomes) {
     bad_classes <- list()
   }
 
-  check_list(ok = ok, bad_classes = bad_classes)
+  new_check_result(ok = ok, bad_classes = bad_classes)
 }
 
 # ------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ check_outcomes_are_factors <- function(outcomes) {
     bad_classes <- list()
   }
 
-  check_list(ok = ok, bad_classes = bad_classes)
+  new_check_result(ok = ok, bad_classes = bad_classes)
 }
 
 # ------------------------------------------------------------------------------
@@ -311,7 +311,7 @@ check_outcomes_are_binary <- function(outcomes) {
     bad_cols <- character()
   }
 
-  check_list(ok = ok, bad_cols = bad_cols, num_levels = num_levels)
+  new_check_result(ok = ok, bad_cols = bad_cols, num_levels = num_levels)
 }
 
 is_binary <- function(x) {
@@ -397,7 +397,7 @@ check_predictors_are_numeric <- function(predictors) {
     bad_classes <- list()
   }
 
-  check_list(ok = ok, bad_classes = bad_classes)
+  new_check_result(ok = ok, bad_classes = bad_classes)
 }
 
 # ------------------------------------------------------------------------------
@@ -524,7 +524,7 @@ check_column_names <- function(data, original_names) {
     missing_names <- character()
   }
 
-  check_list(ok = ok, missing_names = missing_names)
+  new_check_result(ok = ok, missing_names = missing_names)
 }
 
 validate_missing_name_isnt_.outcome <- function(missing_names) {
@@ -635,7 +635,7 @@ check_prediction_size <- function(pred, new_data) {
 
   ok <- size_pred == size_new_data
 
-  check_list(ok = ok, size_new_data = size_new_data, size_pred = size_pred)
+  new_check_result(ok = ok, size_new_data = size_new_data, size_pred = size_pred)
 }
 
 # ------------------------------------------------------------------------------
@@ -730,14 +730,14 @@ check_no_formula_duplication <- function(formula, original = FALSE) {
 
   ok <- length(duplicates) == 0L
 
-  check_list(ok = ok, duplicates = duplicates)
+  new_check_result(ok = ok, duplicates = duplicates)
 }
 
 # ------------------------------------------------------------------------------
 
 # ok = bool
 # ... = extra info when not ok
-check_list <- function(ok = TRUE, ...) {
+new_check_result <- function(ok = TRUE, ...) {
   check_bool(ok)
   elems <- list2(...)
 
