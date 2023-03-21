@@ -379,7 +379,8 @@ run_mold.default_formula_blueprint <- function(blueprint, ..., data) {
 # mold - formula - clean
 
 mold_formula_default_clean <- function(blueprint, data) {
-  data <- check_is_data_like(data)
+  check_is_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   # validate here, not in the constructor, because we
   # put a non-intercept-containing formula back in
@@ -542,7 +543,7 @@ run_forge.default_formula_blueprint <- function(blueprint,
 # ------------------------------------------------------------------------------
 
 forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
-  validate_is_new_data_like(new_data)
+  check_is_data_frame_or_matrix(new_data)
   validate_has_unique_column_names(new_data, "new_data")
   check_bool(outcomes)
 

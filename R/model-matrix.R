@@ -79,7 +79,8 @@
 #' @export
 model_matrix <- function(terms, data) {
   validate_is_terms(terms)
-  data <- check_is_data_like(data)
+  check_is_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   # otherwise model.matrix() will try and run model.frame() for us on data
   # but we definitely don't want this, as we have already done it and it can
@@ -125,7 +126,8 @@ validate_is_terms <- function(.x, .x_nm) {
 
 model_matrix_one_hot <- function(terms, data) {
   validate_is_terms(terms)
-  data <- check_is_data_like(data)
+  check_is_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   n_cols <- length(data)
 

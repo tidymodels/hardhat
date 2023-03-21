@@ -137,31 +137,34 @@ class1 <- function(x) {
 
 # ------------------------------------------------------------------------------
 
-is_new_data_like <- function(x) {
-  is.data.frame(x) || is.matrix(x)
-}
+check_is_data_frame_or_matrix <- function(x,
+                                          ...,
+                                          arg = caller_arg(x),
+                                          call = caller_env()) {
+  if (!missing(x)) {
+    if (is.data.frame(x) || is.matrix(x)) {
+      return(invisible(NULL))
+    }
+  }
 
-validate_is_new_data_like <- function(new_data) {
-  validate_is(
-    new_data,
-    is_new_data_like,
-    "data.frame or matrix"
+  stop_input_type(
+    x = x,
+    what = "a data frame or a matrix",
+    arg = arg,
+    call = call
   )
 }
 
-check_is_data_like <- function(x, arg, ..., call = caller_env()) {
-  check_dots_empty0(...)
-
-  if (is_missing(arg)) {
-    arg <- as_label(enexpr(x))
+coerce_to_tibble <- function(x) {
+  # Only to be used after calling `check_is_data_frame_or_matrix()`.
+  # Coerces matrices and bare data frames to tibbles.
+  # Avoids calling `as_tibble()` on tibbles, as that is more expensive than
+  # you'd think.
+  if (tibble::is_tibble(x)) {
+    x
+  } else {
+    tibble::as_tibble(x, .name_repair = "minimal")
   }
-
-  if (!is_new_data_like(x)) {
-    message <- glue("`{arg}` must be a data.frame or a matrix, not a {class1(x)}.")
-    abort(message, call = call)
-  }
-
-  tibble::as_tibble(x)
 }
 
 # ------------------------------------------------------------------------------

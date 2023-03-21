@@ -129,7 +129,8 @@ validate_outcomes_are_numeric <- function(outcomes) {
 #' @rdname validate_outcomes_are_numeric
 #' @export
 check_outcomes_are_numeric <- function(outcomes) {
-  outcomes <- check_is_data_like(outcomes)
+  check_is_data_frame_or_matrix(outcomes)
+  outcomes <- coerce_to_tibble(outcomes)
 
   where_numeric <- map_lgl(outcomes, is.numeric)
 
@@ -207,7 +208,8 @@ validate_outcomes_are_factors <- function(outcomes) {
 #' @rdname validate_outcomes_are_factors
 #' @export
 check_outcomes_are_factors <- function(outcomes) {
-  outcomes <- check_is_data_like(outcomes, "outcomes")
+  check_is_data_frame_or_matrix(outcomes)
+  outcomes <- coerce_to_tibble(outcomes)
 
   where_factor <- map_lgl(outcomes, is.factor)
 
@@ -290,7 +292,8 @@ validate_outcomes_are_binary <- function(outcomes) {
 #' @rdname validate_outcomes_are_binary
 #' @export
 check_outcomes_are_binary <- function(outcomes) {
-  outcomes <- check_is_data_like(outcomes, "outcomes")
+  check_is_data_frame_or_matrix(outcomes)
+  outcomes <- coerce_to_tibble(outcomes)
 
   outcomes_levels <- map(outcomes, levels)
 
@@ -381,7 +384,8 @@ validate_predictors_are_numeric <- function(predictors) {
 #' @rdname validate_predictors_are_numeric
 #' @export
 check_predictors_are_numeric <- function(predictors) {
-  predictors <- check_is_data_like(predictors)
+  check_is_data_frame_or_matrix(predictors)
+  predictors <- coerce_to_tibble(predictors)
 
   where_numeric <- map_lgl(predictors, is.numeric)
 
@@ -483,7 +487,8 @@ check_predictors_are_numeric <- function(predictors) {
 #' @family validation functions
 #' @export
 validate_column_names <- function(data, original_names) {
-  data <- check_is_data_like(data)
+  check_is_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   check <- check_column_names(data, original_names)
 
@@ -622,7 +627,8 @@ validate_prediction_size <- function(pred, new_data) {
 #' @rdname validate_prediction_size
 #' @export
 check_prediction_size <- function(pred, new_data) {
-  new_data <- check_is_data_like(new_data)
+  check_is_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
 
   size_new_data <- vec_size(new_data)
   size_pred <- vec_size(pred)

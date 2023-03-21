@@ -75,7 +75,8 @@
 #' @export
 model_frame <- function(formula, data) {
   validate_is_formula(formula)
-  data <- check_is_data_like(data)
+  check_is_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   frame <- with_options(
     stats::model.frame(formula, data = data),
