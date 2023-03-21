@@ -338,7 +338,7 @@ new_default_formula_blueprint <- function(intercept = FALSE,
                                           ),
                                           ...,
                                           subclass = character()) {
-  validate_is_terms_list_or_null(terms)
+  check_terms_list(terms)
 
   new_formula_blueprint(
     intercept = intercept,
@@ -694,21 +694,29 @@ nuke_formula_environment <- function(formula) {
   )
 }
 
-validate_is_terms_list_or_null <- function(terms) {
-  validate_is(terms, is_list, "list")
+check_terms_list <- function(x,
+                             ...,
+                             arg = caller_arg(x),
+                             call = caller_env()) {
+  check_list(x, arg = arg, call = call)
 
-  check_has_name(terms, "predictors")
-  check_has_name(terms, "outcomes")
+  check_has_name(x = x, name = "predictors", arg = arg, call = call)
+  check_has_name(x = x, name = "outcomes", arg = arg, call = call)
 
-  if (!is.null(terms$predictors)) {
-    check_terms(terms$predictors, arg = glue("terms$predictors"))
-  }
+  check_terms(
+    x = x$predictors,
+    allow_null = TRUE,
+    arg = cli::format_inline("{arg}$predictors"),
+    call = call
+  )
+  check_terms(
+    x = x$outcomes,
+    allow_null = TRUE,
+    arg = cli::format_inline("{arg}$outcomes"),
+    call = call
+  )
 
-  if (!is.null(terms$outcomes)) {
-    check_terms(terms$outcomes, arg = glue("terms$outcomes"))
-  }
-
-  invisible(terms)
+  invisible(NULL)
 }
 
 alter_formula_environment <- function(formula) {
