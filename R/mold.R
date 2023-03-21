@@ -91,7 +91,7 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
     blueprint <- default_formula_blueprint()
   }
 
-  check_inherits(blueprint, what = "formula_blueprint")
+  check_formula_blueprint(blueprint)
 
   blueprint <- update_blueprint(blueprint = blueprint, formula = formula)
 

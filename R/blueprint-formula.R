@@ -46,8 +46,11 @@ refresh_blueprint.formula_blueprint <- function(blueprint) {
   do.call(new_formula_blueprint, as.list(blueprint))
 }
 
-is_formula_blueprint <- function(x) {
-  inherits(x, "formula_blueprint")
+check_formula_blueprint <- function(x,
+                                    ...,
+                                    arg = caller_arg(x),
+                                    call = caller_env()) {
+  check_inherits(x, "formula_blueprint", arg = arg, call = call)
 }
 
 # ------------------------------------------------------------------------------
