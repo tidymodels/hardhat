@@ -52,10 +52,10 @@ create_modeling_package <- function(path,
   check_required(path)
   check_required(model)
 
-  validate_installed("usethis")
-  validate_installed("roxygen2")
-  validate_installed("devtools")
-  validate_installed("recipes")
+  check_installed("usethis")
+  check_installed("roxygen2")
+  check_installed("devtools")
+  check_installed("recipes")
 
   # Avoid creating files if a bad model is supplied
   if (!is_string(model)) {
@@ -98,10 +98,10 @@ create_modeling_package <- function(path,
 #' @rdname modeling-package
 #' @export
 use_modeling_deps <- function() {
-  validate_installed("usethis")
-  validate_installed("roxygen2")
-  validate_installed("devtools")
-  validate_installed("recipes")
+  check_installed("usethis")
+  check_installed("roxygen2")
+  check_installed("devtools")
+  check_installed("recipes")
 
   usethis::ui_info("Adding required packages to the DESCRIPTION")
   usethis::use_package("hardhat", type = "Imports")
@@ -124,7 +124,7 @@ use_modeling_files <- function(model) {
 }
 
 use_modeling_files_impl <- function(model, prompt_document = TRUE) {
-  validate_installed("usethis")
+  check_installed("usethis")
 
   if (!is_string(model)) {
     abort("`model` must be a string.")
@@ -170,13 +170,7 @@ has_spaces <- function(x) {
   grepl("\\s", x)
 }
 
-validate_installed <- function(pkg) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
-    abort(paste0("The `", pkg, "` package must be installed for this functionality."))
-  }
-}
-
 ui_blank_line <- function() {
-  validate_installed("usethis")
+  check_installed("usethis")
   usethis::ui_line("")
 }
