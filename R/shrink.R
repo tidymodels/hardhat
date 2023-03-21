@@ -56,7 +56,7 @@ shrink <- function(data, ptype) {
     return(NULL)
   }
 
-  check_is_data_frame_or_matrix(data)
+  check_data_frame_or_matrix(data)
   data <- coerce_to_tibble(data)
 
   cols <- colnames(ptype)

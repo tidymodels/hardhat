@@ -75,7 +75,7 @@
 #' @export
 model_frame <- function(formula, data) {
   validate_is_formula(formula)
-  check_is_data_frame_or_matrix(data)
+  check_data_frame_or_matrix(data)
   data <- coerce_to_tibble(data)
 
   frame <- with_options(

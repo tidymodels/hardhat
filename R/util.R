@@ -137,10 +137,10 @@ class1 <- function(x) {
 
 # ------------------------------------------------------------------------------
 
-check_is_data_frame_or_matrix <- function(x,
-                                          ...,
-                                          arg = caller_arg(x),
-                                          call = caller_env()) {
+check_data_frame_or_matrix <- function(x,
+                                       ...,
+                                       arg = caller_arg(x),
+                                       call = caller_env()) {
   if (!missing(x)) {
     if (is.data.frame(x) || is.matrix(x)) {
       return(invisible(NULL))
@@ -156,7 +156,7 @@ check_is_data_frame_or_matrix <- function(x,
 }
 
 coerce_to_tibble <- function(x) {
-  # Only to be used after calling `check_is_data_frame_or_matrix()`.
+  # Only to be used after calling `check_data_frame_or_matrix()`.
   # Coerces matrices and bare data frames to tibbles.
   # Avoids calling `as_tibble()` on tibbles, as that is more expensive than
   # you'd think.
