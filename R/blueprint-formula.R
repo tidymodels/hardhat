@@ -26,7 +26,7 @@ new_formula_blueprint <- function(intercept = FALSE,
                                   composition = "tibble",
                                   ...,
                                   subclass = character()) {
-  validate_is_formula_or_null(formula)
+  check_formula(formula, allow_null = TRUE)
 
   indicators <- validate_indicators(indicators)
 
@@ -53,12 +53,6 @@ is_formula_blueprint <- function(x) {
 
 validate_is_formula_blueprint <- function(blueprint) {
   validate_is(blueprint, is_formula_blueprint, "formula_blueprint")
-}
-
-# ------------------------------------------------------------------------------
-
-validate_is_formula_or_null <- function(formula) {
-  validate_is_or_null(formula, is_formula, "formula")
 }
 
 # ------------------------------------------------------------------------------
