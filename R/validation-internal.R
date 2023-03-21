@@ -1,26 +1,3 @@
-validate_is <- function(.x, .f, .expected, .x_nm, .note = "") {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
-  }
-
-  ok <- .f(.x)
-
-  if (!ok) {
-    if (!identical(.note, "")) {
-      .note <- glue::glue(" (", .note, ")")
-    }
-
-    .actual <- class1(.x)
-
-    glubort(
-      "{.x_nm} should be a {.expected}{.note}, ",
-      "not a {.actual}."
-    )
-  }
-
-  invisible(.x)
-}
-
 validate_has_unique_names <- function(x, x_nm) {
   if (!has_unique_names(x)) {
     glubort(
