@@ -31,7 +31,7 @@ Suggests:
     knitr,
     Matrix,
     modeldata (>= 0.0.2),
-    recipes (>= 1.0.0),
+    recipes (>= 1.0.5),
     rmarkdown (>= 2.3),
     roxygen2,
     testthat (>= 3.0.0),
