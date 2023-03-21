@@ -706,7 +706,7 @@ validate_no_formula_duplication <- function(formula, original = FALSE) {
 #' @rdname validate_no_formula_duplication
 #' @export
 check_no_formula_duplication <- function(formula, original = FALSE) {
-  validate_is_formula(formula)
+  check_formula(formula)
   check_bool(original)
 
   # Only required to expand any `.` values so terms() can be called
