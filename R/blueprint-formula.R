@@ -27,8 +27,7 @@ new_formula_blueprint <- function(intercept = FALSE,
                                   ...,
                                   subclass = character()) {
   check_formula(formula, allow_null = TRUE)
-
-  indicators <- validate_indicators(indicators)
+  check_indicators(indicators)
 
   new_blueprint(
     intercept = intercept,
@@ -53,13 +52,10 @@ is_formula_blueprint <- function(x) {
 
 # ------------------------------------------------------------------------------
 
-validate_indicators <- function(indicators) {
-  check_character(indicators)
-
-  n_indicators <- length(indicators)
-  if (n_indicators != 1L) {
-    glubort("`indicators` must have size 1, not {n_indicators}.")
-  }
-
-  arg_match(indicators, c("traditional", "none", "one_hot"))
+check_indicators <- function(indicators, error_call = caller_env()) {
+  arg_match0(
+    arg = indicators,
+    values = c("traditional", "none", "one_hot"),
+    error_call = error_call
+  )
 }
