@@ -135,14 +135,6 @@ class1 <- function(x) {
   class(x)[1]
 }
 
-validate_is_bool <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
-  }
-
-  validate_is(.x, is_bool, "bool", .x_nm, .note = "'TRUE' / 'FALSE'")
-}
-
 # ------------------------------------------------------------------------------
 
 is_new_data_like <- function(x) {

@@ -52,8 +52,8 @@ new_blueprint <- function(intercept = FALSE,
                           ptypes = NULL,
                           ...,
                           subclass = character()) {
-  validate_is_bool(intercept)
-  validate_is_bool(allow_novel_levels)
+  check_bool(intercept)
+  check_bool(allow_novel_levels)
   validate_composition(composition)
   validate_is_ptype_list_or_null(ptypes)
   validate_is_character(subclass, "subclass")

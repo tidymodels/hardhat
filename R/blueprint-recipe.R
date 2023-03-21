@@ -14,7 +14,7 @@ new_recipe_blueprint <- function(intercept = FALSE,
                                  recipe = NULL,
                                  ...,
                                  subclass = character()) {
-  validate_is_bool(fresh)
+  check_bool(fresh)
   validate_is_recipe_or_null(recipe)
 
   new_blueprint(

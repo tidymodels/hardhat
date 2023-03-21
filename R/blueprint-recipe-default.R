@@ -350,7 +350,7 @@ run_forge.default_recipe_blueprint <- function(blueprint,
 forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
   validate_is_new_data_like(new_data)
   validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
+  check_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)
 

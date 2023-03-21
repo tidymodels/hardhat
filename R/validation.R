@@ -701,7 +701,7 @@ validate_no_formula_duplication <- function(formula, original = FALSE) {
 #' @export
 check_no_formula_duplication <- function(formula, original = FALSE) {
   validate_is_formula(formula)
-  validate_is_bool(original, "original")
+  check_bool(original)
 
   # Only required to expand any `.` values so terms() can be called
   # The `.` is designed to never contain duplicates, so we just expand
@@ -732,7 +732,7 @@ check_no_formula_duplication <- function(formula, original = FALSE) {
 # ok = bool
 # ... = extra info when not ok
 check_list <- function(ok = TRUE, ...) {
-  validate_is_bool(ok, "ok")
+  check_bool(ok)
   elems <- list2(...)
 
   c(list(ok = ok), elems)
