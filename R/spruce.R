@@ -83,13 +83,6 @@ spruce_prob <- function(pred_levels, prob_matrix) {
 
 # ------------------------------------------------------------------------------
 
-validate_numeric_elements <- function(.x, .x_nm) {
-  if (!is.numeric(.x[[1]])) {
-    cls <- class1(.x[[1]])
-    glubort("`{.x_nm}` should have numeric elements, not {cls}.")
-  }
-}
-
 check_factor <- function(x,
                          ...,
                          allow_null = FALSE,

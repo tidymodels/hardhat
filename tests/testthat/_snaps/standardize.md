@@ -11,8 +11,8 @@
     Code
       standardize(mat_bad2)
     Condition
-      Error in `validate_numeric_elements()`:
-      ! `y` should have numeric elements, not character.
+      Error in `standardize()`:
+      ! `y` must be a numeric matrix, not a character matrix.
 
 # standardize - array
 
@@ -21,6 +21,14 @@
     Condition
       Error in `standardize()`:
       ! All columns of `y` must have unique names.
+
+---
+
+    Code
+      standardize(bad2)
+    Condition
+      Error in `standardize()`:
+      ! `y` must be a numeric matrix, not a character matrix.
 
 # standardize - data.frame
 

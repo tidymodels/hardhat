@@ -43,7 +43,9 @@ test_that("standardize - array", {
 
   bad2 <- array("a", c(1, 1), dimnames = list(NULL, "c1"))
 
-  expect_error(standardize(bad2), "`y` should have numeric elements")
+  expect_snapshot(error = TRUE, {
+    standardize(bad2)
+  })
 
   good <- bad
   colnames(good) <- c("a", "b")
