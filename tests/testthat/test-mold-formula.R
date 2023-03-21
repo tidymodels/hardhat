@@ -682,6 +682,14 @@ test_that("Missing y value still has outcome `terms` present", {
   )
 })
 
+test_that("`blueprint` is validated", {
+  df <- tibble(x = 1)
+
+  expect_snapshot(error = TRUE, {
+    mold(~x, df, blueprint = 1)
+  })
+})
+
 # ------------------------------------------------------------------------------
 # Character predictors
 

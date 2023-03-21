@@ -169,6 +169,27 @@ coerce_to_tibble <- function(x) {
 
 # ------------------------------------------------------------------------------
 
+check_inherits <- function(x,
+                           what,
+                           ...,
+                           arg = caller_arg(x),
+                           call = caller_env()) {
+  if (!missing(x)) {
+    if (inherits(x, what)) {
+      return(invisible(NULL))
+    }
+  }
+
+  stop_input_type(
+    x = x,
+    what = cli::format_inline("a <{what}>"),
+    arg = arg,
+    call = call
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 vec_cast_named <- function(x, to, ..., call = caller_env()) {
   # vec_cast() drops names currently
   # https://github.com/r-lib/vctrs/issues/623

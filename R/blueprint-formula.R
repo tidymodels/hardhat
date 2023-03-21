@@ -51,10 +51,6 @@ is_formula_blueprint <- function(x) {
   inherits(x, "formula_blueprint")
 }
 
-validate_is_formula_blueprint <- function(blueprint) {
-  validate_is(blueprint, is_formula_blueprint, "formula_blueprint")
-}
-
 # ------------------------------------------------------------------------------
 
 validate_indicators <- function(indicators) {
