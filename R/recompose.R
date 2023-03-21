@@ -48,11 +48,3 @@ convert_matrix <- function(x, sparse = TRUE) {
 
   res
 }
-
-validate_composition <- function(composition) {
-  arg_match0(
-    arg = composition,
-    values = c("tibble", "matrix", "dgCMatrix"),
-    arg_nm = "composition"
-  )
-}

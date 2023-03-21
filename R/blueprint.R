@@ -54,7 +54,7 @@ new_blueprint <- function(intercept = FALSE,
                           subclass = character()) {
   check_bool(intercept)
   check_bool(allow_novel_levels)
-  validate_composition(composition)
+  check_composition(composition)
   validate_is_ptype_list_or_null(ptypes)
   check_character(subclass)
 
@@ -254,4 +254,13 @@ validate_has_name <- function(.x, .x_nm, .nm) {
     glubort("`{.x_nm}` must have an element named '{.nm}'.")
   }
   invisible(.x)
+}
+
+check_composition <- function(composition, error_call = caller_env()) {
+  arg_match0(
+    arg = composition,
+    values = c("tibble", "matrix", "dgCMatrix"),
+    arg_nm = "composition",
+    error_call = error_call
+  )
 }
