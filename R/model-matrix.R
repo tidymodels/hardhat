@@ -112,9 +112,16 @@ strip_model_matrix <- function(x) {
 
 check_terms <- function(x,
                         ...,
+                        allow_null = FALSE,
                         arg = caller_arg(x),
                         call = caller_env()) {
-  check_inherits(x, "terms", arg = arg, call = call)
+  check_inherits(
+    x = x,
+    what = "terms",
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
 }
 
 # ------------------------------------------------------------------------------

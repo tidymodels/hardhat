@@ -163,10 +163,14 @@ coerce_to_tibble <- function(x) {
 check_inherits <- function(x,
                            what,
                            ...,
+                           allow_null = FALSE,
                            arg = caller_arg(x),
                            call = caller_env()) {
   if (!missing(x)) {
     if (inherits(x, what)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
       return(invisible(NULL))
     }
   }
