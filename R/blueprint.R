@@ -67,7 +67,7 @@ new_blueprint <- function(intercept = FALSE,
 
   new_elems <- list(...)
 
-  validate_has_unique_names(new_elems, "...")
+  check_unique_names(new_elems, arg = "...")
 
   elems <- c(elems, new_elems)
 

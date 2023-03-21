@@ -53,7 +53,7 @@ cat_line <- function(...) {
 
 new_abstract_model <- function(..., class) {
   elems <- list2(...)
-  validate_has_unique_names(elems, "...")
+  check_unique_names(elems, arg = "...")
 
   new_scalar(elems, class = class)
 }

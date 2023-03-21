@@ -1,23 +1,3 @@
-validate_has_unique_names <- function(x, x_nm) {
-  if (!has_unique_names(x)) {
-    glubort(
-      "All elements of `{x_nm}` must have unique names."
-    )
-  }
-
-  invisible(x)
-}
-
-validate_has_unique_column_names <- function(x, x_nm) {
-  if (!has_unique_column_names(x)) {
-    glubort(
-      "All columns of `{x_nm}` must have unique names."
-    )
-  }
-
-  invisible(x)
-}
-
 # the formula must have an implicit intercept to remove
 # dont let the user do `0+` or `+0` or `-1`
 

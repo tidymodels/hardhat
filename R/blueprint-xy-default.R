@@ -306,7 +306,7 @@ run_forge.default_xy_blueprint <- function(blueprint,
 
 forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
   check_data_frame_or_matrix(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
+  check_unique_column_names(new_data)
   check_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)

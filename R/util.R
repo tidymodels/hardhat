@@ -94,6 +94,34 @@ remove_formula_intercept <- function(formula, intercept) {
   )
 }
 
+check_unique_names <- function(x,
+                               ...,
+                               arg = caller_arg(x),
+                               call = caller_env()) {
+  if (has_unique_names(x)) {
+    return(invisible(NULL))
+  }
+
+  cli::cli_abort(
+    "All elements of {.arg {arg}} must have unique names.",
+    call = call
+  )
+}
+
+check_unique_column_names <- function(x,
+                                      ...,
+                                      arg = caller_arg(x),
+                                      call = caller_env()) {
+  if (has_unique_column_names(x)) {
+    return(invisible(NULL))
+  }
+
+  cli::cli_abort(
+    "All columns of {.arg {arg}} must have unique names.",
+    call = call
+  )
+}
+
 has_unique_names <- function(x) {
   nms <- names(x)
 

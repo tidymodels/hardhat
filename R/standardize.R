@@ -59,7 +59,7 @@ standardize.double <- function(y) {
 
 #' @export
 standardize.matrix <- function(y) {
-  validate_has_unique_column_names(y, "y")
+  check_unique_column_names(y)
   validate_numeric_elements(y, "y")
   tibble::as_tibble(y)
 }
@@ -80,7 +80,7 @@ standardize.array <- function(y) {
 
 #' @export
 standardize.data.frame <- function(y) {
-  validate_has_unique_column_names(y, "y")
+  check_unique_column_names(y)
   validate_has_known_outcome_types(y)
   tibble::as_tibble(y)
 }

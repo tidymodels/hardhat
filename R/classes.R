@@ -25,9 +25,7 @@
 #' get_data_classes(data)
 #' @export
 get_data_classes <- function(data) {
-  ptype <- extract_ptype(data)
-
-  validate_has_unique_column_names(ptype, "data")
-
-  lapply(ptype, class)
+  data <- extract_ptype(data)
+  check_unique_column_names(data)
+  lapply(data, class)
 }
