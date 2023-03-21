@@ -243,7 +243,7 @@ validate_is_0_row_tibble <- function(.x, .x_nm) {
 }
 
 validate_has_name <- function(.x, .x_nm, .nm) {
-  if (!tibble::has_name(.x, .nm)) {
+  if (!has_name(.x, .nm)) {
     glubort("`{.x_nm}` must have an element named '{.nm}'.")
   }
   invisible(.x)
