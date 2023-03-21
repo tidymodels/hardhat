@@ -211,20 +211,6 @@ check_blueprint <- function(x,
 
 # ------------------------------------------------------------------------------
 
-validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
-
-  # capture name first
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
-  }
-
-  if (is.null(.x)) {
-    return(invisible(.x))
-  }
-
-  validate_is(.x, .f, .expected, .x_nm, .note)
-}
-
 validate_is_ptype_list_or_null <- function(.x, .x_nm) {
   if (is_missing(.x_nm)) {
     .x_nm <- as_label(enexpr(.x))
