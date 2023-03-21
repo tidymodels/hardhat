@@ -2,11 +2,10 @@ Package: hardhat
 Title: Construct Modeling Packages
 Version: 1.2.0.9000
 Authors@R: c(
-    person("Davis", "Vaughan", , "davis@rstudio.com", role = c("aut", "cre")),
-    person("Max", "Kuhn", , "max@rstudio.com", role = "aut"),
-    person("RStudio", role = c("cph", "fnd"))
+    person("Davis", "Vaughan", , "davis@posit.co", role = c("aut", "cre")),
+    person("Max", "Kuhn", , "max@posit.co", role = "aut"),
+    person("Posit Software, PBC", role = c("cph", "fnd"))
   )
-Maintainer: Davis Vaughan <davis@rstudio.com>
 Description: Building modeling packages is hard. A large amount of effort
     generally goes into providing an implementation for a new method that
     is efficient, fast, and correct, but often less emphasis is put on the
