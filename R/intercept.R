@@ -31,7 +31,7 @@ add_intercept_column <- function(data, name = "(Intercept)") {
     )
   }
 
-  validate_name(name)
+  check_name(name)
 
   if (name %in% colnames(data)) {
     warn(glue::glue(
@@ -67,14 +67,4 @@ maybe_add_intercept_column <- function(data, intercept = FALSE) {
   }
 
   add_intercept_column(data)
-}
-
-validate_name <- function(name) {
-  if (length(name) > 1) {
-    glubort("name should have size 1, not {length(name)}.")
-  }
-
-  validate_is(name, is_character, "character")
-
-  invisible(name)
 }
