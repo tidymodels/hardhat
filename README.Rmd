@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 options(rlang__backtrace_on_error = "reminder")
 ```
 
-# hardhat <a href='https://hardhat.tidymodels.org'><img src="man/figures/logo.png" align="right" height="139"/></a>
+# hardhat <a href="https://hardhat.tidymodels.org"><img src="man/figures/logo.png" align="right" height="138"/></a>
 
 <!-- badges: start -->
 
