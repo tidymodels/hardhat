@@ -78,7 +78,7 @@
 #' )
 #' @export
 model_matrix <- function(terms, data) {
-  validate_is_terms(terms)
+  check_terms(terms)
   check_data_frame_or_matrix(data)
   data <- coerce_to_tibble(data)
 
@@ -110,22 +110,17 @@ strip_model_matrix <- function(x) {
   x
 }
 
-is_terms <- function(x) {
-  inherits(x, "terms")
-}
-
-validate_is_terms <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
-  }
-
-  validate_is(.x, is_terms, "terms object", .x_nm)
+check_terms <- function(x,
+                        ...,
+                        arg = caller_arg(x),
+                        call = caller_env()) {
+  check_inherits(x, "terms", arg = arg, call = call)
 }
 
 # ------------------------------------------------------------------------------
 
 model_matrix_one_hot <- function(terms, data) {
-  validate_is_terms(terms)
+  check_terms(terms)
   check_data_frame_or_matrix(data)
   data <- coerce_to_tibble(data)
 

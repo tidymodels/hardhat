@@ -25,7 +25,7 @@
 #' attr(delete_response(framed$terms), "dataClasses")
 #' @export
 delete_response <- function(terms) {
-  validate_is_terms(terms)
+  check_terms(terms)
 
   resp <- attr(terms, "response")
   data_class <- attr(terms, "dataClasses")

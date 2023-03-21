@@ -701,11 +701,11 @@ validate_is_terms_list_or_null <- function(terms) {
   validate_has_name(terms, "terms", "outcomes")
 
   if (!is.null(terms$predictors)) {
-    validate_is_terms(terms$predictors, glue("terms$predictors"))
+    check_terms(terms$predictors, arg = glue("terms$predictors"))
   }
 
   if (!is.null(terms$outcomes)) {
-    validate_is_terms(terms$outcomes, glue("terms$outcomes"))
+    check_terms(terms$outcomes, arg = glue("terms$outcomes"))
   }
 
   invisible(terms)
