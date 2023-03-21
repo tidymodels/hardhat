@@ -73,7 +73,7 @@ mold.data.frame <- function(x, y, ..., blueprint = NULL) {
     blueprint <- default_xy_blueprint()
   }
 
-  validate_is_xy_blueprint(blueprint)
+  check_xy_blueprint(blueprint)
 
   run_mold(blueprint, x = x, y = y)
 }
@@ -107,7 +107,7 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
     blueprint <- default_recipe_blueprint()
   }
 
-  validate_is_recipe_blueprint(blueprint)
+  check_recipe_blueprint(blueprint)
 
   blueprint <- update_blueprint(blueprint = blueprint, recipe = x)
 

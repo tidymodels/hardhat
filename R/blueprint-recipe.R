@@ -34,12 +34,11 @@ refresh_blueprint.recipe_blueprint <- function(blueprint) {
   do.call(new_recipe_blueprint, as.list(blueprint))
 }
 
-is_recipe_blueprint <- function(x) {
-  inherits(x, "recipe_blueprint")
-}
-
-validate_is_recipe_blueprint <- function(blueprint) {
-  validate_is(blueprint, is_recipe_blueprint, "recipe_blueprint")
+check_recipe_blueprint <- function(x,
+                                   ...,
+                                   arg = caller_arg(x),
+                                   call = caller_env()) {
+  check_inherits(x, "recipe_blueprint", arg = arg, call = call)
 }
 
 # ------------------------------------------------------------------------------
