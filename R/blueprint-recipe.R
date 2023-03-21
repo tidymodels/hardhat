@@ -15,7 +15,7 @@ new_recipe_blueprint <- function(intercept = FALSE,
                                  ...,
                                  subclass = character()) {
   check_bool(fresh)
-  validate_is_recipe_or_null(recipe)
+  check_recipe(recipe, allow_null = TRUE)
 
   new_blueprint(
     intercept = intercept,
@@ -48,6 +48,25 @@ is_recipe <- function(x) {
   inherits(x, "recipe")
 }
 
-validate_is_recipe_or_null <- function(recipe) {
-  validate_is_or_null(recipe, is_recipe, "recipe")
+check_recipe <- function(x,
+                         ...,
+                         allow_null = FALSE,
+                         arg = caller_arg(x),
+                         call = caller_env()) {
+  if (!missing(x)) {
+    if (is_recipe(x)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
+      return(invisible(NULL))
+    }
+  }
+
+  stop_input_type(
+    x = x,
+    what = "a recipe",
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
 }
