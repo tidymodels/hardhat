@@ -87,12 +87,12 @@ recurse_intercept_search <- function(x) {
     return(invisible(x))
   }
 
-  cll_fn <- call_fn(x)
-  cll_args <- call_args(x)
+  call_name <- call_name(x)
+  call_args <- call_args(x)
 
   # Check for `+ 0` or `0 +`
-  if (identical(cll_fn, `+`)) {
-    for (arg in cll_args) {
+  if (is_string(call_name, string = "+")) {
+    for (arg in call_args) {
       if (arg == 0L) {
         abort(
           "`formula` must not contain the intercept removal term: `+ 0` or `0 +`."
@@ -102,13 +102,13 @@ recurse_intercept_search <- function(x) {
   }
 
   # Check for `- 1`
-  if (identical(cll_fn, `-`)) {
-    if (length(cll_args) == 2L) {
-      arg <- cll_args[[2]]
+  if (is_string(call_name, string = "-")) {
+    if (length(call_args) == 2L) {
+      arg <- call_args[[2]]
     }
 
-    if (length(cll_args) == 1L) {
-      arg <- cll_args[[1]]
+    if (length(call_args) == 1L) {
+      arg <- call_args[[1]]
     }
 
     if (arg == 1L) {
@@ -117,7 +117,7 @@ recurse_intercept_search <- function(x) {
   }
 
   # Recurse
-  for (arg in cll_args) {
+  for (arg in call_args) {
     recurse_intercept_search(arg)
   }
 
