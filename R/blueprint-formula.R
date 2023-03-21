@@ -54,7 +54,7 @@ is_formula_blueprint <- function(x) {
 # ------------------------------------------------------------------------------
 
 validate_indicators <- function(indicators) {
-  validate_is_character(indicators, "indicators")
+  check_character(indicators)
 
   n_indicators <- length(indicators)
   if (n_indicators != 1L) {

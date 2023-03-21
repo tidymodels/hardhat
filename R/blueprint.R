@@ -56,7 +56,7 @@ new_blueprint <- function(intercept = FALSE,
   check_bool(allow_novel_levels)
   validate_composition(composition)
   validate_is_ptype_list_or_null(ptypes)
-  validate_is_character(subclass, "subclass")
+  check_character(subclass)
 
   elems <- list(
     intercept = intercept,
@@ -254,13 +254,4 @@ validate_has_name <- function(.x, .x_nm, .nm) {
     glubort("`{.x_nm}` must have an element named '{.nm}'.")
   }
   invisible(.x)
-}
-
-validate_is_character <- function(.x, .x_nm) {
-  validate_is(
-    .x,
-    is_character,
-    "character",
-    .x_nm
-  )
 }
