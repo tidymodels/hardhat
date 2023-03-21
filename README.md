@@ -57,8 +57,8 @@ install.packages("hardhat")
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("tidymodels/hardhat")
+# install.packages("pak")
+pak::pak("tidymodels/hardhat")
 ```
 
 ## Learning more
