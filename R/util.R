@@ -181,6 +181,8 @@ coerce_to_tibble <- function(x) {
   # you'd think.
   if (tibble::is_tibble(x)) {
     x
+  } else if (is.data.frame(x)) {
+    tibble::new_tibble(x, nrow = nrow(x))
   } else {
     tibble::as_tibble(x, .name_repair = "minimal")
   }
