@@ -296,12 +296,13 @@ controlled by the formula blueprint argument,
 <p>An error is thrown if an intercept removal term is specified:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">penguins</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `recurse_intercept_search()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mold_formula_default_clean()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `formula` must not contain the intercept removal term: `- 1`.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="fl">0</span>, <span class="va">penguins</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `recurse_intercept_search()`:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `formula` must not contain the intercept removal term: `+ 0` or `0 +`.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mold_formula_default_clean()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `formula` must not contain the intercept removal term: `+ 0` or</span></span>
+<span><span class="co">#&gt;   `0 +`.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dummy-variables">Dummy variables<a class="anchor" aria-label="anchor" href="#dummy-variables"></a>
