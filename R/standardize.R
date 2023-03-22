@@ -59,14 +59,20 @@ standardize.double <- function(y) {
 
 #' @export
 standardize.matrix <- function(y) {
-  validate_has_unique_column_names(y, "y")
-  validate_numeric_elements(y, "y")
+  check_unique_column_names(y)
+
+  if (!is.numeric(y)) {
+    stop_input_type(y, "a numeric matrix")
+  }
+
   tibble::as_tibble(y)
 }
 
 #' @export
 standardize.array <- function(y) {
-  validate_numeric_elements(y, "y")
+  if (!is.numeric(y)) {
+    stop_input_type(y, "a numeric array")
+  }
 
   # tibble() will strip the array class for us
   if (dims(y) == 1) {
@@ -80,7 +86,7 @@ standardize.array <- function(y) {
 
 #' @export
 standardize.data.frame <- function(y) {
-  validate_has_unique_column_names(y, "y")
+  check_unique_column_names(y)
   validate_has_known_outcome_types(y)
   tibble::as_tibble(y)
 }

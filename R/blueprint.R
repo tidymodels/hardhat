@@ -52,11 +52,11 @@ new_blueprint <- function(intercept = FALSE,
                           ptypes = NULL,
                           ...,
                           subclass = character()) {
-  validate_is_bool(intercept)
-  validate_is_bool(allow_novel_levels)
-  validate_composition(composition)
-  validate_is_ptype_list_or_null(ptypes)
-  validate_is_character(subclass, "subclass")
+  check_bool(intercept)
+  check_bool(allow_novel_levels)
+  check_composition(composition)
+  check_ptype_list(ptypes, allow_null = TRUE)
+  check_character(subclass)
 
   elems <- list(
     intercept = intercept,
@@ -67,7 +67,7 @@ new_blueprint <- function(intercept = FALSE,
 
   new_elems <- list(...)
 
-  validate_has_unique_names(new_elems, "...")
+  check_unique_names(new_elems, arg = "...")
 
   elems <- c(elems, new_elems)
 
@@ -162,7 +162,7 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 #' try(update_blueprint(blueprint, intercept = 1))
 #' @export
 update_blueprint <- function(blueprint, ...) {
-  validate_is_blueprint(blueprint)
+  check_blueprint(blueprint)
 
   changes <- list2(...)
 
@@ -202,65 +202,116 @@ is_blueprint <- function(x) {
   inherits(x, "hardhat_blueprint")
 }
 
+check_blueprint <- function(x,
+                            ...,
+                            arg = caller_arg(x),
+                            call = caller_env()) {
+  check_inherits(x, "hardhat_blueprint", arg = arg, call = call)
+}
+
 # ------------------------------------------------------------------------------
 
-validate_is_or_null <- function(.x, .f, .expected, .x_nm, .note = "") {
-
-  # capture name first
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
+check_ptype_list <- function(x,
+                             ...,
+                             allow_null = FALSE,
+                             arg = caller_arg(x),
+                             call = caller_env()) {
+  if (allow_null && is_null(x)) {
+    return(invisible(NULL))
   }
 
-  if (is.null(.x)) {
-    return(invisible(.x))
-  }
+  check_list(x, arg = arg, call = call)
 
-  validate_is(.x, .f, .expected, .x_nm, .note)
+  check_has_name(x = x, name = "predictors", arg = arg, call = call)
+  check_has_name(x = x, name = "outcomes", arg = arg, call = call)
+
+  check_zero_row_tibble(
+    x = x$predictors,
+    arg = cli::format_inline("{arg}$predictors"),
+    call = call
+  )
+  check_zero_row_tibble(
+    x = x$outcomes,
+    arg = cli::format_inline("{arg}$outcomes"),
+    call = call
+  )
+
+  invisible(NULL)
 }
 
-validate_is_ptype_list_or_null <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
+check_zero_row_tibble <- function(x,
+                                  ...,
+                                  arg = caller_arg(x),
+                                  call = caller_env()) {
+  if (!missing(x)) {
+    if (tibble::is_tibble(x) && nrow(x) == 0L) {
+      return(invisible(NULL))
+    }
   }
 
-  if (is.null(.x)) {
-    return(invisible(.x))
+  if (!tibble::is_tibble(x)) {
+    stop_input_type(
+      x = x,
+      what = "a tibble",
+      arg = arg,
+      call = call
+    )
   }
 
-  validate_has_name(.x, .x_nm, "predictors")
-  validate_has_name(.x, .x_nm, "outcomes")
+  size <- nrow(x)
 
-  validate_is_0_row_tibble(.x$predictors, glue("{.x_nm}$predictors"))
-  validate_is_0_row_tibble(.x$outcomes, glue("{.x_nm}$outcomes"))
-
-  invisible(.x)
+  cli::cli_abort("{.arg {arg}} must be size 0, not size {size}.", call = call)
 }
 
-
-validate_is_0_row_tibble <- function(.x, .x_nm) {
-  validate_is(.x, tibble::is_tibble, "tibble", .x_nm)
-
-  .n <- nrow(.x)
-
-  if (.n != 0) {
-    glubort("`{.x_nm}` must be a tibble of size 0, not {.n}.")
+check_has_name <- function(x,
+                           name,
+                           ...,
+                           arg = caller_arg(x),
+                           call = caller_env()) {
+  if (!missing(x)) {
+    if (has_name(x, name)) {
+      return(invisible(NULL))
+    }
   }
 
-  invisible(.x)
+  message <- cli::format_inline(
+    "{.arg {arg}} must have an element named {.str {name}}."
+  )
+
+  abort(message, call = call)
 }
 
-validate_has_name <- function(.x, .x_nm, .nm) {
-  if (!tibble::has_name(.x, .nm)) {
-    glubort("`{.x_nm}` must have an element named '{.nm}'.")
+# https://github.com/r-lib/rlang/pull/1605
+check_list <- function(x,
+                       ...,
+                       allow_null = FALSE,
+                       arg = caller_arg(x),
+                       call = caller_env()) {
+  if (!missing(x)) {
+    if (is_list(x)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
+      return(invisible(NULL))
+    }
   }
-  invisible(.x)
+
+  stop_input_type(
+    x,
+    "a list",
+    ...,
+    allow_na = FALSE,
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
 }
 
-validate_is_character <- function(.x, .x_nm) {
-  validate_is(
-    .x,
-    is_character,
-    "character",
-    .x_nm
+check_composition <- function(composition, error_call = caller_env()) {
+  arg_match0(
+    arg = composition,
+    values = c("tibble", "matrix", "dgCMatrix"),
+    arg_nm = "composition",
+    error_call = error_call
   )
 }

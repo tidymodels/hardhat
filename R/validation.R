@@ -58,7 +58,7 @@ check_outcomes_are_univariate <- function(outcomes) {
 
   ok <- (n_cols == 1L)
 
-  check <- check_list(ok = ok, n_cols = n_cols)
+  check <- new_check_result(ok = ok, n_cols = n_cols)
 
   check
 }
@@ -129,7 +129,8 @@ validate_outcomes_are_numeric <- function(outcomes) {
 #' @rdname validate_outcomes_are_numeric
 #' @export
 check_outcomes_are_numeric <- function(outcomes) {
-  outcomes <- check_is_data_like(outcomes)
+  check_data_frame_or_matrix(outcomes)
+  outcomes <- coerce_to_tibble(outcomes)
 
   where_numeric <- map_lgl(outcomes, is.numeric)
 
@@ -141,7 +142,7 @@ check_outcomes_are_numeric <- function(outcomes) {
     bad_classes <- list()
   }
 
-  check_list(ok = ok, bad_classes = bad_classes)
+  new_check_result(ok = ok, bad_classes = bad_classes)
 }
 
 # ------------------------------------------------------------------------------
@@ -207,7 +208,8 @@ validate_outcomes_are_factors <- function(outcomes) {
 #' @rdname validate_outcomes_are_factors
 #' @export
 check_outcomes_are_factors <- function(outcomes) {
-  outcomes <- check_is_data_like(outcomes, "outcomes")
+  check_data_frame_or_matrix(outcomes)
+  outcomes <- coerce_to_tibble(outcomes)
 
   where_factor <- map_lgl(outcomes, is.factor)
 
@@ -219,7 +221,7 @@ check_outcomes_are_factors <- function(outcomes) {
     bad_classes <- list()
   }
 
-  check_list(ok = ok, bad_classes = bad_classes)
+  new_check_result(ok = ok, bad_classes = bad_classes)
 }
 
 # ------------------------------------------------------------------------------
@@ -290,7 +292,8 @@ validate_outcomes_are_binary <- function(outcomes) {
 #' @rdname validate_outcomes_are_binary
 #' @export
 check_outcomes_are_binary <- function(outcomes) {
-  outcomes <- check_is_data_like(outcomes, "outcomes")
+  check_data_frame_or_matrix(outcomes)
+  outcomes <- coerce_to_tibble(outcomes)
 
   outcomes_levels <- map(outcomes, levels)
 
@@ -308,7 +311,7 @@ check_outcomes_are_binary <- function(outcomes) {
     bad_cols <- character()
   }
 
-  check_list(ok = ok, bad_cols = bad_cols, num_levels = num_levels)
+  new_check_result(ok = ok, bad_cols = bad_cols, num_levels = num_levels)
 }
 
 is_binary <- function(x) {
@@ -381,7 +384,8 @@ validate_predictors_are_numeric <- function(predictors) {
 #' @rdname validate_predictors_are_numeric
 #' @export
 check_predictors_are_numeric <- function(predictors) {
-  predictors <- check_is_data_like(predictors)
+  check_data_frame_or_matrix(predictors)
+  predictors <- coerce_to_tibble(predictors)
 
   where_numeric <- map_lgl(predictors, is.numeric)
 
@@ -393,7 +397,7 @@ check_predictors_are_numeric <- function(predictors) {
     bad_classes <- list()
   }
 
-  check_list(ok = ok, bad_classes = bad_classes)
+  new_check_result(ok = ok, bad_classes = bad_classes)
 }
 
 # ------------------------------------------------------------------------------
@@ -483,7 +487,8 @@ check_predictors_are_numeric <- function(predictors) {
 #' @family validation functions
 #' @export
 validate_column_names <- function(data, original_names) {
-  data <- check_is_data_like(data)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   check <- check_column_names(data, original_names)
 
@@ -519,7 +524,7 @@ check_column_names <- function(data, original_names) {
     missing_names <- character()
   }
 
-  check_list(ok = ok, missing_names = missing_names)
+  new_check_result(ok = ok, missing_names = missing_names)
 }
 
 validate_missing_name_isnt_.outcome <- function(missing_names) {
@@ -622,14 +627,15 @@ validate_prediction_size <- function(pred, new_data) {
 #' @rdname validate_prediction_size
 #' @export
 check_prediction_size <- function(pred, new_data) {
-  new_data <- check_is_data_like(new_data)
+  check_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
 
   size_new_data <- vec_size(new_data)
   size_pred <- vec_size(pred)
 
   ok <- size_pred == size_new_data
 
-  check_list(ok = ok, size_new_data = size_new_data, size_pred = size_pred)
+  new_check_result(ok = ok, size_new_data = size_new_data, size_pred = size_pred)
 }
 
 # ------------------------------------------------------------------------------
@@ -700,8 +706,8 @@ validate_no_formula_duplication <- function(formula, original = FALSE) {
 #' @rdname validate_no_formula_duplication
 #' @export
 check_no_formula_duplication <- function(formula, original = FALSE) {
-  validate_is_formula(formula)
-  validate_is_bool(original, "original")
+  check_formula(formula)
+  check_bool(original)
 
   # Only required to expand any `.` values so terms() can be called
   # The `.` is designed to never contain duplicates, so we just expand
@@ -724,15 +730,15 @@ check_no_formula_duplication <- function(formula, original = FALSE) {
 
   ok <- length(duplicates) == 0L
 
-  check_list(ok = ok, duplicates = duplicates)
+  new_check_result(ok = ok, duplicates = duplicates)
 }
 
 # ------------------------------------------------------------------------------
 
 # ok = bool
 # ... = extra info when not ok
-check_list <- function(ok = TRUE, ...) {
-  validate_is_bool(ok, "ok")
+new_check_result <- function(ok = TRUE, ...) {
+  check_bool(ok)
   elems <- list2(...)
 
   c(list(ok = ok), elems)

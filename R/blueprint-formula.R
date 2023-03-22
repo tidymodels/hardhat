@@ -26,9 +26,8 @@ new_formula_blueprint <- function(intercept = FALSE,
                                   composition = "tibble",
                                   ...,
                                   subclass = character()) {
-  validate_is_formula_or_null(formula)
-
-  indicators <- validate_indicators(indicators)
+  check_formula(formula, allow_null = TRUE)
+  check_indicators(indicators)
 
   new_blueprint(
     intercept = intercept,
@@ -47,29 +46,19 @@ refresh_blueprint.formula_blueprint <- function(blueprint) {
   do.call(new_formula_blueprint, as.list(blueprint))
 }
 
-is_formula_blueprint <- function(x) {
-  inherits(x, "formula_blueprint")
-}
-
-validate_is_formula_blueprint <- function(blueprint) {
-  validate_is(blueprint, is_formula_blueprint, "formula_blueprint")
-}
-
-# ------------------------------------------------------------------------------
-
-validate_is_formula_or_null <- function(formula) {
-  validate_is_or_null(formula, is_formula, "formula")
+check_formula_blueprint <- function(x,
+                                    ...,
+                                    arg = caller_arg(x),
+                                    call = caller_env()) {
+  check_inherits(x, "formula_blueprint", arg = arg, call = call)
 }
 
 # ------------------------------------------------------------------------------
 
-validate_indicators <- function(indicators) {
-  validate_is_character(indicators, "indicators")
-
-  n_indicators <- length(indicators)
-  if (n_indicators != 1L) {
-    glubort("`indicators` must have size 1, not {n_indicators}.")
-  }
-
-  arg_match(indicators, c("traditional", "none", "one_hot"))
+check_indicators <- function(indicators, error_call = caller_env()) {
+  arg_match0(
+    arg = indicators,
+    values = c("traditional", "none", "one_hot"),
+    error_call = error_call
+  )
 }

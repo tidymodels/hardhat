@@ -14,8 +14,8 @@ new_recipe_blueprint <- function(intercept = FALSE,
                                  recipe = NULL,
                                  ...,
                                  subclass = character()) {
-  validate_is_bool(fresh)
-  validate_is_recipe_or_null(recipe)
+  check_bool(fresh)
+  check_recipe(recipe, allow_null = TRUE)
 
   new_blueprint(
     intercept = intercept,
@@ -34,12 +34,11 @@ refresh_blueprint.recipe_blueprint <- function(blueprint) {
   do.call(new_recipe_blueprint, as.list(blueprint))
 }
 
-is_recipe_blueprint <- function(x) {
-  inherits(x, "recipe_blueprint")
-}
-
-validate_is_recipe_blueprint <- function(blueprint) {
-  validate_is(blueprint, is_recipe_blueprint, "recipe_blueprint")
+check_recipe_blueprint <- function(x,
+                                   ...,
+                                   arg = caller_arg(x),
+                                   call = caller_env()) {
+  check_inherits(x, "recipe_blueprint", arg = arg, call = call)
 }
 
 # ------------------------------------------------------------------------------
@@ -48,6 +47,25 @@ is_recipe <- function(x) {
   inherits(x, "recipe")
 }
 
-validate_is_recipe_or_null <- function(recipe) {
-  validate_is_or_null(recipe, is_recipe, "recipe")
+check_recipe <- function(x,
+                         ...,
+                         allow_null = FALSE,
+                         arg = caller_arg(x),
+                         call = caller_env()) {
+  if (!missing(x)) {
+    if (is_recipe(x)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
+      return(invisible(NULL))
+    }
+  }
+
+  stop_input_type(
+    x = x,
+    what = "a recipe",
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
 }

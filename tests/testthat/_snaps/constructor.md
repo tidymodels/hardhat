@@ -21,3 +21,11 @@
       [1] "hi"
       
 
+# must use a valid blueprint
+
+    Code
+      new_model(blueprint = 1, class = "custom")
+    Condition
+      Error in `new_model()`:
+      ! `blueprint` must be a <hardhat_blueprint>, not the number 1.
+

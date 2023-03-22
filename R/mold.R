@@ -58,7 +58,10 @@ mold <- function(x, ...) {
 
 #' @export
 mold.default <- function(x, ...) {
-  abort_unknown_mold_class(x)
+  stop_input_type(
+    x = x,
+    what = "a data frame, matrix, recipe, or formula"
+  )
 }
 
 #' @rdname default_xy_blueprint
@@ -70,7 +73,7 @@ mold.data.frame <- function(x, y, ..., blueprint = NULL) {
     blueprint <- default_xy_blueprint()
   }
 
-  validate_is_xy_blueprint(blueprint)
+  check_xy_blueprint(blueprint)
 
   run_mold(blueprint, x = x, y = y)
 }
@@ -88,7 +91,7 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
     blueprint <- default_formula_blueprint()
   }
 
-  validate_is_formula_blueprint(blueprint)
+  check_formula_blueprint(blueprint)
 
   blueprint <- update_blueprint(blueprint = blueprint, formula = formula)
 
@@ -104,7 +107,7 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
     blueprint <- default_recipe_blueprint()
   }
 
-  validate_is_recipe_blueprint(blueprint)
+  check_recipe_blueprint(blueprint)
 
   blueprint <- update_blueprint(blueprint = blueprint, recipe = x)
 

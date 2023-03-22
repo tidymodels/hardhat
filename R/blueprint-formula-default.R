@@ -338,7 +338,7 @@ new_default_formula_blueprint <- function(intercept = FALSE,
                                           ),
                                           ...,
                                           subclass = character()) {
-  validate_is_terms_list_or_null(terms)
+  check_terms_list(terms)
 
   new_formula_blueprint(
     intercept = intercept,
@@ -379,11 +379,12 @@ run_mold.default_formula_blueprint <- function(blueprint, ..., data) {
 # mold - formula - clean
 
 mold_formula_default_clean <- function(blueprint, data) {
-  data <- check_is_data_like(data)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
-  # validate here, not in the constructor, because we
+  # Check here, not in the constructor, because we
   # put a non-intercept-containing formula back in
-  validate_formula_has_intercept(blueprint$formula)
+  check_implicit_intercept(blueprint$formula, arg = "formula")
 
   formula <- remove_formula_intercept(blueprint$formula, blueprint$intercept)
   formula <- alter_formula_environment(formula)
@@ -391,6 +392,91 @@ mold_formula_default_clean <- function(blueprint, data) {
   blueprint <- update_blueprint(blueprint, formula = formula)
 
   new_mold_clean(blueprint, data)
+}
+
+check_implicit_intercept <- function(x,
+                                     ...,
+                                     arg = caller_arg(x),
+                                     call = caller_env()) {
+  # The formula must have an implicit intercept to remove.
+  # Don't let the user do `0+` or `+0` or `-1`.
+  x <- f_rhs(x)
+  check_not_1_or_0(x, arg = arg, call = call)
+  recurse_intercept_search(x, arg = arg, call = call)
+}
+
+check_not_1_or_0 <- function(x,
+                             ...,
+                             arg = caller_arg(x),
+                             call = caller_env()) {
+  if (!is_scalar_integerish(x)) {
+    return(invisible(NULL))
+  }
+
+  if (x == 1) {
+    cli::cli_abort(
+      "{.arg {arg}} must not contain the intercept term, `1`.",
+      call = call
+    )
+  }
+
+  if (x == 0) {
+    cli::cli_abort(
+      "{.arg {arg}} must not contain the intercept removal term, `0`.",
+      call = call
+    )
+  }
+
+  invisible(NULL)
+}
+
+recurse_intercept_search <- function(x,
+                                     ...,
+                                     arg = caller_arg(x),
+                                     call = caller_env()) {
+  if (!is_call(x)) {
+    return(invisible(NULL))
+  }
+
+  call_name <- call_name(x)
+  call_args <- call_args(x)
+
+  # Check for `+ 0` or `0 +`
+  if (is_string(call_name, string = "+")) {
+    for (call_arg in call_args) {
+      if (call_arg == 0L) {
+        cli::cli_abort(
+          "{.arg {arg}} must not contain the intercept removal term: `+ 0` or `0 +`.",
+          call = call
+        )
+      }
+    }
+  }
+
+  # Check for `- 1`
+  if (is_string(call_name, string = "-")) {
+    if (length(call_args) == 2L) {
+      call_arg <- call_args[[2]]
+    }
+
+    if (length(call_args) == 1L) {
+      call_arg <- call_args[[1]]
+    }
+
+    if (call_arg == 1L) {
+      cli::cli_abort(
+        "{.arg {arg}} must not contain the intercept removal term: `- 1`.",
+        call = call
+      )
+    }
+  }
+
+  # Recurse
+  for (call_arg in call_args) {
+    recurse_intercept_search(call_arg, arg = arg, call = call)
+  }
+
+  invisible(NULL)
 }
 
 # ------------------------------------------------------------------------------
@@ -542,9 +628,9 @@ run_forge.default_formula_blueprint <- function(blueprint,
 # ------------------------------------------------------------------------------
 
 forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
+  check_data_frame_or_matrix(new_data)
+  check_unique_column_names(new_data)
+  check_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)
 
@@ -693,21 +779,29 @@ nuke_formula_environment <- function(formula) {
   )
 }
 
-validate_is_terms_list_or_null <- function(terms) {
-  validate_is(terms, is_list, "list")
+check_terms_list <- function(x,
+                             ...,
+                             arg = caller_arg(x),
+                             call = caller_env()) {
+  check_list(x, arg = arg, call = call)
 
-  validate_has_name(terms, "terms", "predictors")
-  validate_has_name(terms, "terms", "outcomes")
+  check_has_name(x = x, name = "predictors", arg = arg, call = call)
+  check_has_name(x = x, name = "outcomes", arg = arg, call = call)
 
-  if (!is.null(terms$predictors)) {
-    validate_is_terms(terms$predictors, glue("terms$predictors"))
-  }
+  check_terms(
+    x = x$predictors,
+    allow_null = TRUE,
+    arg = cli::format_inline("{arg}$predictors"),
+    call = call
+  )
+  check_terms(
+    x = x$outcomes,
+    allow_null = TRUE,
+    arg = cli::format_inline("{arg}$outcomes"),
+    call = call
+  )
 
-  if (!is.null(terms$outcomes)) {
-    validate_is_terms(terms$outcomes, glue("terms$outcomes"))
-  }
-
-  invisible(terms)
+  invisible(NULL)
 }
 
 alter_formula_environment <- function(formula) {

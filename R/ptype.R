@@ -29,7 +29,8 @@ extract_ptype <- function(data) {
     return(NULL)
   }
 
-  data <- check_is_data_like(data)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   vec_slice(data, 0L)
 }

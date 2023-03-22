@@ -347,37 +347,30 @@ test_that("cannot manually remove intercept in the formula itself", {
 test_that("RHS with _only_ intercept related terms are caught", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
 
-  expect_error(
-    mold(~0, example_train),
-    "`formula` must not contain the intercept removal term"
-  )
-  expect_error(
-    mold(~0, example_train, blueprint = bp),
-    "`formula` must not contain the intercept removal term"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train, blueprint = bp)
+  })
 
-  expect_error(
-    mold(~1, example_train),
-    "`formula` must not contain the intercept term"
-  )
-
-  expect_error(
-    mold(~ -1, example_train),
-    "`formula` must not contain the intercept removal term"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~1, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ -1, example_train)
+  })
 })
 
 test_that("`NULL` can be used to represent empty RHS formulas", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
 
-  expect_error(
-    mold(~0, example_train),
-    "`formula` must not contain the intercept removal term"
-  )
-  expect_error(
-    mold(~0, example_train, blueprint = bp),
-    "`formula` must not contain the intercept removal term"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train, blueprint = bp)
+  })
 
   expect_error(
     x1 <- mold(~NULL, example_train),
@@ -680,6 +673,14 @@ test_that("Missing y value still has outcome `terms` present", {
     f_rhs(x$blueprint$terms$outcomes),
     expr(NULL + 0)
   )
+})
+
+test_that("`blueprint` is validated", {
+  df <- tibble(x = 1)
+
+  expect_snapshot(error = TRUE, {
+    mold(~x, df, blueprint = 1)
+  })
 })
 
 # ------------------------------------------------------------------------------

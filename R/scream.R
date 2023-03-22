@@ -159,7 +159,8 @@ scream <- function(data, ptype, allow_novel_levels = FALSE) {
     return(NULL)
   }
 
-  data <- check_is_data_like(data, "data")
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   if (allow_novel_levels) {
     ptype <- add_novel_levels_to_ptype(ptype, data)

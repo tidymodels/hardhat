@@ -201,7 +201,8 @@ run_mold.default_recipe_blueprint <- function(blueprint, ..., data) {
 # mold - recipe - clean
 
 mold_recipe_default_clean <- function(blueprint, data) {
-  data <- check_is_data_like(data)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   new_mold_clean(blueprint, data)
 }
@@ -348,9 +349,9 @@ run_forge.default_recipe_blueprint <- function(blueprint,
 # ------------------------------------------------------------------------------
 
 forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
+  check_data_frame_or_matrix(new_data)
+  check_unique_column_names(new_data)
+  check_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)
 

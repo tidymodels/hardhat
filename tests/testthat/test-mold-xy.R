@@ -1,19 +1,7 @@
 test_that("unknown mold() inputs throw an error", {
-  sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
-  matrix_bp <- default_xy_blueprint(composition = "matrix")
-
-  expect_error(
-    mold("hi"),
-    "`x` is not a recognized type.\nOnly data.frame, matrix, recipe, and formula objects are allowed.\nA character was specified."
-  )
-  expect_error(
-    mold("hi", blueprint = sparse_bp),
-    "`x` is not a recognized type.\nOnly data.frame, matrix, recipe, and formula objects are allowed.\nA character was specified."
-  )
-  expect_error(
-    mold("hi", blueprint = matrix_bp),
-    "`x` is not a recognized type.\nOnly data.frame, matrix, recipe, and formula objects are allowed.\nA character was specified."
-  )
+  expect_snapshot(error = TRUE, {
+    mold("hi")
+  })
 })
 
 test_that("can use x-y mold interface", {
