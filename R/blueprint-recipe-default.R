@@ -139,11 +139,13 @@
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
                                      fresh = TRUE,
+                                     strings_as_factors = TRUE,
                                      composition = "tibble") {
   new_default_recipe_blueprint(
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
+    strings_as_factors = strings_as_factors,
     composition = composition
   )
 }
@@ -158,6 +160,7 @@ default_recipe_blueprint <- function(intercept = FALSE,
 new_default_recipe_blueprint <- function(intercept = FALSE,
                                          allow_novel_levels = FALSE,
                                          fresh = TRUE,
+                                         strings_as_factors = TRUE,
                                          composition = "tibble",
                                          ptypes = NULL,
                                          recipe = NULL,
@@ -168,6 +171,7 @@ new_default_recipe_blueprint <- function(intercept = FALSE,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
+    strings_as_factors = strings_as_factors,
     composition = composition,
     ptypes = ptypes,
     recipe = recipe,
@@ -213,7 +217,12 @@ mold_recipe_default_clean <- function(blueprint, data) {
 mold_recipe_default_process <- function(blueprint, data) {
 
   # Prep for predictors and outcomes
-  recipe <- recipes::prep(blueprint$recipe, training = data, fresh = blueprint$fresh)
+  recipe <- recipes::prep(
+    blueprint$recipe,
+    training = data,
+    fresh = blueprint$fresh,
+    strings_as_factors = blueprint_strings_as_factors(blueprint)
+  )
   blueprint <- update_blueprint(blueprint, recipe = recipe)
 
   processed <- mold_recipe_default_process_predictors(blueprint = blueprint, data = data)
