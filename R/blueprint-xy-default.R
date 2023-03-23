@@ -60,11 +60,11 @@
 #' train <- iris[1:100, ]
 #' test <- iris[101:150, ]
 #'
-#' train_x <- train[, "Sepal.Length", drop = FALSE]
-#' train_y <- train[, "Species", drop = FALSE]
+#' train_x <- train["Sepal.Length"]
+#' train_y <- train["Species"]
 #'
-#' test_x <- test[, "Sepal.Length", drop = FALSE]
-#' test_y <- test[, "Species", drop = FALSE]
+#' test_x <- test["Sepal.Length"]
+#' test_y <- test["Species"]
 #'
 #' # ---------------------------------------------------------------------------
 #' # XY Example
@@ -200,7 +200,7 @@ mold_xy_default_clean <- function(blueprint, x, y) {
 
   # Special case `y = NULL` as a 0 column variation on `x`
   if (is.null(y)) {
-    y <- x[, 0L, drop = FALSE]
+    y <- x[0L]
   }
 
   cleaned <- mold_xy_default_clean_outcomes(blueprint, y)

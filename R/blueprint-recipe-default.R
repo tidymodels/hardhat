@@ -419,7 +419,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   new_data_names <- names(new_data)
   unique_names <- unique(new_data_names)
 
-  new_data <- new_data[, unique_names, drop = FALSE]
+  new_data <- new_data[unique_names]
 
   # Can't move this inside core functions
   # predictors and outcomes both must be present
@@ -429,11 +429,11 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   )
 
   processed_predictor_names <- vars[roles == "predictor"]
-  predictors <- baked_data[, processed_predictor_names, drop = FALSE]
+  predictors <- baked_data[processed_predictor_names]
 
   if (!is.null(outcomes)) {
     processed_outcome_names <- vars[roles == "outcome"]
-    outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
+    outcomes <- baked_data[processed_outcome_names]
   }
 
   processed <- forge_recipe_default_process_predictors(
@@ -526,7 +526,7 @@ get_original_predictor_ptype <- function(rec, data) {
   original_names <- rec$var_info$variable[roles == "predictor"]
   original_names <- original_names[!is.na(original_names)]
 
-  original_data <- data[, original_names, drop = FALSE]
+  original_data <- data[original_names]
 
   extract_ptype(original_data)
 }
@@ -537,7 +537,7 @@ get_original_outcome_ptype <- function(rec, data) {
 
   original_names <- rec$var_info$variable[roles == "outcome"]
 
-  original_data <- data[, original_names, drop = FALSE]
+  original_data <- data[original_names]
 
   extract_ptype(original_data)
 }
@@ -597,7 +597,7 @@ get_extra_role_columns <- function(rec, data, extra_roles, info_type) {
     # passed to `forge()` through `new_data`.
     role_names <- intersect(role_names, data_names)
 
-    data[, role_names, drop = FALSE]
+    data[role_names]
   })
 
   names(out) <- extra_roles

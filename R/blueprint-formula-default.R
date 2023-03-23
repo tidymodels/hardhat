@@ -520,7 +520,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   formula <- get_predictors_formula(formula)
 
   original_names <- get_all_predictors(formula, data)
-  original_data <- data[, original_names, drop = FALSE]
+  original_data <- data[original_names]
 
   ptype <- extract_ptype(original_data)
 
@@ -570,7 +570,7 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
   formula <- blueprint$formula
 
   original_names <- get_all_outcomes(formula, data)
-  original_data <- data[, original_names, drop = FALSE]
+  original_data <- data[original_names]
 
   ptype <- extract_ptype(original_data)
 
@@ -1108,7 +1108,7 @@ remove_factorish_from_formula <- function(.formula, .factorish_names) {
 }
 
 reattach_factorish_columns <- function(predictors, data, factorish_names) {
-  data_factorish_cols <- data[, factorish_names, drop = FALSE]
+  data_factorish_cols <- data[factorish_names]
   tibble::add_column(predictors, !!!data_factorish_cols)
 }
 

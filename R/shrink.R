@@ -62,7 +62,7 @@ shrink <- function(data, ptype) {
   cols <- colnames(ptype)
   validate_column_names(data, cols)
 
-  out <- data[, cols, drop = FALSE]
+  out <- data[cols]
 
   out
 }
