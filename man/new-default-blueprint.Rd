@@ -24,6 +24,7 @@ new_default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
+  strings_as_factors = TRUE,
   composition = "tibble",
   ptypes = NULL,
   recipe = NULL,
@@ -88,6 +89,9 @@ subclass this blueprint.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{strings_as_factors}{Should character columns be converted to factors
+when \code{prep()} is called?}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}

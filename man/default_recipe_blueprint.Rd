@@ -9,6 +9,7 @@ default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
+  strings_as_factors = TRUE,
   composition = "tibble"
 )
 
@@ -25,6 +26,9 @@ prediction time? This information is used by the \code{clean} function in the
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{strings_as_factors}{Should character columns be converted to factors
+when \code{prep()} is called?}
 
 \item{composition}{Either "tibble", "matrix", or "dgCMatrix" for the format
 of the processed predictors. If "matrix" or "dgCMatrix" are chosen, all of
