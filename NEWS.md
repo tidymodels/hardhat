@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* `default_recipe_blueprint()` has gained a `strings_as_factors` argument, which
+  is passed on to `recipes::prep()` (#212).
+
 * New `fct_encode_one_hot()` that encodes a factor as a one-hot indicator matrix
   (#215).
 
