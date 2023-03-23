@@ -165,7 +165,7 @@ just have to focus on the modeling implementation.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>                  3.72</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>                  3.65</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>                  3.54</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p>Second is the <code>outcomes</code>, also returned as a tibble. While
 not used here, any processing on the outcome that was specified in the
 formula would also be done here.</p>
@@ -184,7 +184,7 @@ formula would also be done here.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p>Beyond these two elements, <code><a href="../reference/mold.html">mold()</a></code> also returns a slot
 for any <code>extras</code> that might have been generated during
 preprocessing, but aren’t specifically predictors or outcomes. For
@@ -206,7 +206,7 @@ formula, but isn’t technically a predictor.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>    17.6</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>    21.2</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>    21.1</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p>Lastly, <code><a href="../reference/mold.html">mold()</a></code> returns a very important object, the
 <code>blueprint</code>. This is responsible for knowing how to
 preprocess both the training data, and any new data at prediction time.
@@ -271,7 +271,7 @@ controlled by the formula blueprint argument,
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span> <span class="va">body_mass_g</span>, <span class="va">penguins</span>, </span>
@@ -292,7 +292,7 @@ controlled by the formula blueprint argument,
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1        <span style="text-decoration: underline;">3</span>200</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1        <span style="text-decoration: underline;">3</span>800</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1        <span style="text-decoration: underline;">4</span>400</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p>An error is thrown if an intercept removal term is specified:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">penguins</span><span class="op">)</span></span>
@@ -331,7 +331,7 @@ the blueprint argument, <code>indicators</code>.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200             1                0             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800             1                0             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400             1                0             0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">non_expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span>, </span>
@@ -352,7 +352,7 @@ the blueprint argument, <code>indicators</code>.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200 Adelie </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800 Adelie </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400 Adelie </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p><em>Note:</em> It’s worth mentioning that when an intercept is not
 present, base R expands the first factor completely into <code>K</code>
 indicator columns corresponding to the <code>K</code> levels present in
@@ -440,7 +440,7 @@ are doing very much of that, I’d advise using a recipe instead.
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200                  3.72</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800                  3.65</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400                  3.54</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -468,7 +468,7 @@ and outcomes are specified separately.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Adelie  Torgersen           41.1          17.6               182 female</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Adelie  Torgersen           38.6          21.2               191 male  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Adelie  Torgersen           34.6          21.1               198 male  </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span>
 <span></span>
 <span><span class="va">penguin_xy</span><span class="op">$</span><span class="va">outcomes</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span></span>
@@ -484,7 +484,7 @@ and outcomes are specified separately.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p>This interface doesn’t do too much in the way of preprocessing, but
 it does let you specify an <code>intercept</code> in the blueprint
 specific arguments. Rather than
@@ -495,20 +495,20 @@ specific arguments. Rather than
 <span></span>
 <span><span class="va">xy_with_intercept</span><span class="op">$</span><span class="va">predictors</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 7</span></span></span>
-<span><span class="co">#&gt;    `(Intercept)` species island    bill_length_mm bill_dep…¹ flipp…² sex  </span></span>
-<span><span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>             1 Adelie  Torgersen           39.1       18.7     181 male </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>             1 Adelie  Torgersen           39.5       17.4     186 fema…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>             1 Adelie  Torgersen           40.3       18       195 fema…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>             1 Adelie  Torgersen           36.7       19.3     193 fema…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>             1 Adelie  Torgersen           39.3       20.6     190 male </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>             1 Adelie  Torgersen           38.9       17.8     181 fema…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>             1 Adelie  Torgersen           39.2       19.6     195 male </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1 Adelie  Torgersen           41.1       17.6     182 fema…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1 Adelie  Torgersen           38.6       21.2     191 male </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1 Adelie  Torgersen           34.6       21.1     198 male </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows, and abbreviated variable names ¹​bill_depth_mm,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ²​flipper_length_mm</span></span></span></code></pre></div>
+<span><span class="co">#&gt;    `(Intercept)` species island    bill_length_mm bill_depth_mm</span></span>
+<span><span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>             1 Adelie  Torgersen           39.1          18.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>             1 Adelie  Torgersen           39.5          17.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>             1 Adelie  Torgersen           40.3          18  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>             1 Adelie  Torgersen           36.7          19.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>             1 Adelie  Torgersen           39.3          20.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>             1 Adelie  Torgersen           38.9          17.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>             1 Adelie  Torgersen           39.2          19.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1 Adelie  Torgersen           41.1          17.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1 Adelie  Torgersen           38.6          21.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1 Adelie  Torgersen           34.6          21.1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: flipper_length_mm &lt;int&gt;, sex &lt;fct&gt;</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="vector-outcomes">Vector outcomes<a class="anchor" aria-label="anchor" href="#vector-outcomes"></a>
 </h3>
@@ -535,7 +535,7 @@ column name is created, <code>".outcome"</code>.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     <span style="text-decoration: underline;">3</span>200</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     <span style="text-decoration: underline;">3</span>800</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     <span style="text-decoration: underline;">4</span>400</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -569,7 +569,7 @@ preprocess your data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>          17.6                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>          21.2                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>          21.1                 0              0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span>
 <span></span>
 <span><span class="va">penguin_recipe</span><span class="op">$</span><span class="va">outcomes</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span></span>
@@ -585,7 +585,7 @@ preprocess your data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           3.72</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           3.65</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           3.54</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p>The only special thing you can tweak with the recipe blueprint is
 whether or not an intercept is added.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -608,7 +608,7 @@ whether or not an intercept is added.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1          17.6                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1          21.2                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1          21.1                 0              0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 323 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -171,7 +171,7 @@ we just created.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $outcomes</span></span>
 <span><span class="co">#&gt; NULL</span></span>
@@ -223,7 +223,7 @@ processed using the same steps as done to the outcomes at fit time.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $outcomes</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span></span>
@@ -239,7 +239,7 @@ processed using the same steps as done to the outcomes at fit time.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>               8.17</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>               8.16</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>               8.21</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $extras</span></span>
 <span><span class="co">#&gt; $extras$offset</span></span>
@@ -330,7 +330,7 @@ character?</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">forged_char</span><span class="op">$</span><span class="va">predictors</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "factor"</span></span>
@@ -368,7 +368,7 @@ the training data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5 Chinstrap</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9 Chinstrap</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span></code></pre></div>
 <p>In this case:</p>
 <ul>
 <li><p>A lossy warning is thrown</p></li>
@@ -410,7 +410,7 @@ have a recipe that just creates dummy variables out of
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>200                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400                 0              0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 290 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 290 more rows</span></span></span></code></pre></div>
 <p>The blueprint is a <code>recipe</code> blueprint.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">recipe_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">blueprint</span></span>
@@ -442,7 +442,7 @@ method.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>550                 1              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>500                 1              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">3</span>675                 1              0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $outcomes</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 1</span></span></span>
@@ -458,7 +458,7 @@ method.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $extras</span></span>
 <span><span class="co">#&gt; $extras$roles</span></span>
@@ -488,7 +488,7 @@ by <code><a href="../reference/forge.html">forge()</a></code>.</p>
 <span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">penguin_test_no_outcome</span>, <span class="va">recipe_eng_log_outcome</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `step_center()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following required column is missing from `new_data` in step</span></span>
-<span><span class="co">#&gt;   'center_b8d6y': bill_length_mm.</span></span></code></pre></div>
+<span><span class="co">#&gt;   'center_xAZLG': bill_length_mm.</span></span></code></pre></div>
 <p>The way around this is to use the built-in recipe argument,
 <code>skip</code>, on the step containing the outcome. This skips the
 processing of that step at <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> time.</p>
@@ -516,7 +516,7 @@ processing of that step at <code><a href="https://recipes.tidymodels.org/referen
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        <span style="text-decoration: underline;">3</span>550                 1              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>500                 1              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">3</span>675                 1              0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $outcomes</span></span>
 <span><span class="co">#&gt; NULL</span></span>
@@ -556,7 +556,7 @@ outcome.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           50.9</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           45.5</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           50.9</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 23 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 23 more rows</span></span></span>
 <span></span>
 <span><span class="co"># Notice that the `outcome` values haven't been centered</span></span>
 <span><span class="co"># and are the same as before</span></span>
