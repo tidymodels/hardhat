@@ -182,10 +182,17 @@ coerce_to_tibble <- function(x) {
   if (tibble::is_tibble(x)) {
     x
   } else if (is.data.frame(x)) {
-    tibble::new_tibble(x, nrow = nrow(x))
+    hardhat_new_tibble(x, size = vec_size(x))
   } else {
     tibble::as_tibble(x, .name_repair = "minimal")
   }
+}
+
+# ------------------------------------------------------------------------------
+
+hardhat_new_tibble <- function (x, size) {
+  # Faster than `tibble::new_tibble()`, and it drops extra attributes
+  new_data_frame(x = x, n = size, class = c("tbl_df", "tbl"))
 }
 
 # ------------------------------------------------------------------------------

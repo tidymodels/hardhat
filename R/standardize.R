@@ -65,7 +65,7 @@ standardize.matrix <- function(y) {
     stop_input_type(y, "a numeric matrix")
   }
 
-  tibble::as_tibble(y)
+  tibble::as_tibble(y, .name_repair = "minimal")
 }
 
 #' @export
@@ -88,7 +88,7 @@ standardize.array <- function(y) {
 standardize.data.frame <- function(y) {
   check_unique_column_names(y)
   validate_has_known_outcome_types(y)
-  tibble::as_tibble(y)
+  coerce_to_tibble(y)
 }
 
 is_known_output_type <- function(x) {

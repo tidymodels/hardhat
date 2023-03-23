@@ -94,7 +94,7 @@ model_matrix <- function(terms, data) {
 
   predictors <- strip_model_matrix(predictors)
 
-  tibble::as_tibble(predictors)
+  tibble::as_tibble(predictors, .name_repair = "minimal")
 }
 
 strip_model_matrix <- function(x) {

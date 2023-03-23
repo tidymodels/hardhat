@@ -86,8 +86,7 @@ model_frame <- function(formula, data) {
   # Can't simplify terms env here, sometimes we need it to exist
   terms <- terms(frame)
 
-  attr(frame, "terms") <- NULL
-  data <- tibble::as_tibble(frame)
+  data <- hardhat_new_tibble(frame, size = vec_size(frame))
 
   list(
     data = data,

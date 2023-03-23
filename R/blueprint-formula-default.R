@@ -629,6 +629,7 @@ run_forge.default_formula_blueprint <- function(blueprint,
 
 forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
   check_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
 
@@ -847,9 +848,10 @@ flatten_embedded_columns <- function(data) {
     )
 
     data <- eval_bare(frame_flattener)
+    data <- hardhat_new_tibble(data, size = vec_size(data))
   }
 
-  tibble::as_tibble(data)
+  data
 }
 
 validate_no_factorish_in_functions <- function(.formula, .factorish_names) {

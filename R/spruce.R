@@ -76,7 +76,7 @@ spruce_prob <- function(pred_levels, prob_matrix) {
 
   colnames(prob_matrix) <- pred_levels
 
-  predictions <- tibble::as_tibble(prob_matrix)
+  predictions <- tibble::as_tibble(prob_matrix, .name_repair = "minimal")
 
   predictions
 }

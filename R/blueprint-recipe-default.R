@@ -350,6 +350,7 @@ run_forge.default_recipe_blueprint <- function(blueprint,
 
 forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
   check_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
 

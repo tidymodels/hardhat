@@ -212,7 +212,8 @@ mold_xy_default_clean <- function(blueprint, x, y) {
 }
 
 mold_xy_default_clean_predictors <- function(blueprint, x) {
-  x <- tibble::as_tibble(x)
+  check_data_frame_or_matrix(x)
+  x <- coerce_to_tibble(x)
   list(blueprint = blueprint, x = x)
 }
 
@@ -306,6 +307,7 @@ run_forge.default_xy_blueprint <- function(blueprint,
 
 forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
   check_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
 
