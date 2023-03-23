@@ -177,11 +177,10 @@ check_data_frame_or_matrix <- function(x,
 coerce_to_tibble <- function(x) {
   # Only to be used after calling `check_data_frame_or_matrix()`.
   # Coerces matrices and bare data frames to tibbles.
-  # Avoids calling `as_tibble()` on tibbles, as that is more expensive than
-  # you'd think.
-  if (tibble::is_tibble(x)) {
-    x
-  } else if (is.data.frame(x)) {
+  # Avoids calling `as_tibble()` on data frames, as that is more expensive than
+  # you'd think, even on tibbles. Need to call `hardhat_new_tibble()` even on
+  # existing tibbles to ensure subclasses are dropped (#228).
+  if (is.data.frame(x)) {
     hardhat_new_tibble(x, size = vec_size(x))
   } else {
     tibble::as_tibble(x, .name_repair = "minimal")
