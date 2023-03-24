@@ -535,9 +535,9 @@ get_original_predictor_ptype <- function(rec, data) {
   original_names <- rec$var_info$variable[roles == "predictor"]
   original_names <- original_names[!is.na(original_names)]
 
-  original_data <- data[original_names]
+  data <- data[original_names]
 
-  extract_ptype(original_data)
+  extract_ptype(data)
 }
 
 get_original_outcome_ptype <- function(rec, data) {
@@ -546,9 +546,9 @@ get_original_outcome_ptype <- function(rec, data) {
 
   original_names <- rec$var_info$variable[roles == "outcome"]
 
-  original_data <- data[original_names]
+  data <- data[original_names]
 
-  extract_ptype(original_data)
+  extract_ptype(data)
 }
 
 get_extra_role_columns_original <- function(rec, data) {

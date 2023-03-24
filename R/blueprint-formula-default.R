@@ -520,9 +520,9 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   formula <- get_predictors_formula(formula)
 
   original_names <- get_all_predictors(formula, data)
-  original_data <- data[original_names]
+  data <- data[original_names]
 
-  ptype <- extract_ptype(original_data)
+  ptype <- extract_ptype(data)
 
   if (identical(blueprint$indicators, "none")) {
     factorish_names <- extract_original_factorish_names(ptype)
@@ -570,9 +570,9 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
   formula <- blueprint$formula
 
   original_names <- get_all_outcomes(formula, data)
-  original_data <- data[original_names]
+  data <- data[original_names]
 
-  ptype <- extract_ptype(original_data)
+  ptype <- extract_ptype(data)
 
   formula <- get_outcomes_formula(formula)
 
