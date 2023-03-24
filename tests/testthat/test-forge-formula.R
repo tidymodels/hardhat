@@ -744,11 +744,11 @@ test_that("can be both missing levels and have new levels", {
 
   bp1 <- default_formula_blueprint(indicators = "none")
   bp2 <- default_formula_blueprint(indicators = "none", composition = "matrix")
+
   x1 <- mold(y ~ f, dat, blueprint = bp1)
-  expect_error(
-    x2 <- mold(y ~ f, dat, blueprint = bp2),
-    "cannot convert to matrix"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(y ~ f, dat, blueprint = bp2)
+  })
 
   # Warning for the extra level
   expect_warning(

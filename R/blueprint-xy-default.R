@@ -255,7 +255,7 @@ mold_xy_default_process_predictors <- function(blueprint, x) {
 
   x <- maybe_add_intercept_column(x, blueprint$intercept)
 
-  x <- recompose(x, blueprint$composition)
+  x <- recompose(x, composition = blueprint$composition)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -356,7 +356,7 @@ forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
 forge_xy_default_process_predictors <- function(blueprint, predictors) {
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   new_forge_process_terms(
     blueprint = blueprint,
