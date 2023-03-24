@@ -115,97 +115,115 @@ test_that("errors are thrown if `indicator = 'none'` and factor interactions exi
     NA
   )
 
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1:num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "Interaction terms involving factors"
-  )
+    )
+  })
 
   # Checking various types of generated interactions
 
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1:num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1 * num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ (fac_1 + num_2)^2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1 %in% num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  # Both factor issues are reported
+    )
+  })
 
   example_train2 <- example_train
   example_train2$fac_12 <- example_train2$fac_1
 
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       ~ fac_1:fac_12,
       example_train2,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1', 'fac_12'."
-  )
+    )
+  })
 })
 
 test_that("errors are thrown if `indicator = 'none'` and factors are used in inline functions", {
   blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
 
-  expect_error(
-    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators),
-    "Functions involving factors"
-  )
-
-  expect_error(
-    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators),
-    "'fac_1'"
-  )
-
-  expect_error(
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
     mold(~ fac_1 %>% paste0(), example_train, blueprint = blueprint_no_indicators)
-  )
-
-  expect_error(
-    mold(~ paste0(fac_1 + fac_1), example_train, blueprint = blueprint_no_indicators),
-    "'fac_1'"
-  )
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1 + fac_1), example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ (fac_1) & num_1, example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ (fac_1 & num_1), example_train, blueprint = blueprint_no_indicators)
+  })
 
   example_train2 <- example_train
   example_train2$fac_12 <- example_train2$fac_1
 
-  expect_error(
-    mold(~ paste0(fac_1) + paste0(fac_12), example_train2, blueprint = blueprint_no_indicators),
-    "'fac_1', 'fac_12'."
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1) + paste0(fac_12), example_train2, blueprint = blueprint_no_indicators)
+  })
+})
+
+test_that("`indicators = 'none'` doesn't error for allowed inline functions", {
+  df <- tibble(y = 1:2, x = factor(c("a", "b")), x2 = c(2, 3))
+
+  blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
+
+  out <- mold(y ~ (x), df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+
+  out <- mold(y ~ (x) + x, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+
+  out <- mold(y ~ (x) - x2, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors, df["x"])
+
+  out <- mold(y ~ 1 + x2 + x, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+
+  out <- mold(y ~ 1 - x2 + (x), df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+})
+
+test_that("`indicators = 'none'` doesn't error for names with spaces in them (#217)", {
+  df <- vctrs::data_frame(y = 1:2, `foo bar` = factor(c("a", "b")))
+
+  blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
+
+  out <- mold(y ~ `foo bar`, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors[["foo bar"]], df[["foo bar"]])
 })
 
 test_that("`indicators = 'none'` doesn't error if a non-factor name regex-matches a factor name (#182)", {
@@ -465,30 +483,24 @@ test_that("`indicators = 'none'` runs numeric interactions", {
 })
 
 test_that("LHS of the formula cannot contain interactions", {
-  expect_error(
-    mold(num_1:num_2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold(num_1 * num_2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold(num_1 %in% num_2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold((num_1 + num_2)^2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold(num_1:num_2 + fac_1:num_1 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2', 'num_1:fac_1'"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(num_1:num_2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1 * num_2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1 %in% num_2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold((num_1 + num_2)^2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1:num_2 + fac_1:num_1 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1 / num_2 ~ num_2, example_train)
+  })
 })
 
 test_that("LHS of the formula won't misinterpret `::` as an interaction (#174)", {
