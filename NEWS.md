@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* Using a formula blueprint with `indicators = "none"` now works correctly if
+  there is a variable in the formula with a space in the name (#217).
+
 * New internal `recompose()` helper (#220).
 
 * `default_recipe_blueprint()` has gained a `strings_as_factors` argument, which
