@@ -1,7 +1,14 @@
-test_that("data frames are coerced to tibble", {
+test_that("data frames are coerced to tibble by default", {
   expect_identical(
     recompose(data.frame(x = 1)),
     tibble(x = 1)
+  )
+})
+
+test_that("can coerce to base data frame", {
+  expect_identical(
+    recompose(tibble(x = 1), composition = "data.frame"),
+    data.frame(x = 1)
   )
 })
 
@@ -21,9 +28,10 @@ test_that("can coerce to sparse matrix", {
   )
 })
 
-test_that("non-numeric columns are allowed with tibble output", {
+test_that("non-numeric columns are allowed with tibble/data.frame output", {
   df <- data.frame(x = 1, y = "a", z = "b")
   expect_identical(recompose(df), tibble::as_tibble(df))
+  expect_identical(recompose(df, composition = "data.frame"), df)
 })
 
 test_that("columns must be numeric when coercing to matrix", {

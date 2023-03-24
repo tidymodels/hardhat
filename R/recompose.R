@@ -3,6 +3,7 @@
 #' @description
 #' `recompose()` takes a data frame and converts it into one of:
 #' - A tibble
+#' - A data frame
 #' - A matrix
 #' - A sparse matrix (using the Matrix package)
 #'
@@ -14,6 +15,7 @@
 #'
 #' @param composition One of:
 #'   - `"tibble"` to convert to a tibble.
+#'   - `"data.frame"` to convert to a base data frame.
 #'   - `"matrix"` to convert to a matrix. All columns must be numeric.
 #'   - `"dgCMatrix"` to convert to a sparse matrix. All columns must be numeric,
 #'     and the Matrix package must be installed.
@@ -35,19 +37,22 @@
 #' try(recompose(df, composition = "matrix"))
 recompose <- function(data,
                       ...,
-                      composition = c("tibble", "matrix", "dgCMatrix")) {
+                      composition = "tibble") {
   check_dots_empty0(...)
   check_data_frame(data)
 
   composition <- arg_match0(
     arg = composition,
-    values = c("tibble", "matrix", "dgCMatrix")
+    values = c("tibble", "data.frame", "matrix", "dgCMatrix")
   )
 
   switch(
     composition,
     tibble = {
       coerce_to_tibble(data)
+    },
+    data.frame = {
+      new_data_frame(data, n = vec_size(data))
     },
     matrix = {
       coerce_to_matrix(data)

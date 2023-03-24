@@ -308,6 +308,8 @@ check_list <- function(x,
 }
 
 check_composition <- function(composition, error_call = caller_env()) {
+  # `recompose()` technically also supports `"data.frame"`,
+  # but that is only for recipes, and we probably don't want that here
   arg_match0(
     arg = composition,
     values = c("tibble", "matrix", "dgCMatrix"),

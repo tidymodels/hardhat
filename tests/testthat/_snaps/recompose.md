@@ -41,7 +41,7 @@
       recompose(data.frame(), composition = "foo")
     Condition
       Error in `recompose()`:
-      ! `composition` must be one of "tibble", "matrix", or "dgCMatrix", not "foo".
+      ! `composition` must be one of "tibble", "data.frame", "matrix", or "dgCMatrix", not "foo".
 
 ---
 

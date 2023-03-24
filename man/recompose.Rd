@@ -4,7 +4,7 @@
 \alias{recompose}
 \title{Recompose a data frame into another form}
 \usage{
-recompose(data, ..., composition = c("tibble", "matrix", "dgCMatrix"))
+recompose(data, ..., composition = "tibble")
 }
 \arguments{
 \item{data}{A data frame.}
@@ -14,6 +14,7 @@ recompose(data, ..., composition = c("tibble", "matrix", "dgCMatrix"))
 \item{composition}{One of:
 \itemize{
 \item \code{"tibble"} to convert to a tibble.
+\item \code{"data.frame"} to convert to a base data frame.
 \item \code{"matrix"} to convert to a matrix. All columns must be numeric.
 \item \code{"dgCMatrix"} to convert to a sparse matrix. All columns must be numeric,
 and the Matrix package must be installed.
@@ -26,6 +27,7 @@ The output type is determined from the \code{composition}.
 \code{recompose()} takes a data frame and converts it into one of:
 \itemize{
 \item A tibble
+\item A data frame
 \item A matrix
 \item A sparse matrix (using the Matrix package)
 }
