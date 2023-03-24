@@ -552,7 +552,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
 
   terms <- simplify_terms(framed$terms)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   blueprint_terms <- blueprint$terms
   blueprint_terms$predictors <- terms
@@ -704,7 +704,7 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
     data <- reattach_factorish_columns(data, predictors, factorish_names)
   }
 
-  data <- recompose(data, blueprint$composition)
+  data <- recompose(data, composition = blueprint$composition)
 
   offset <- extract_offset(framed$terms, framed$data)
 

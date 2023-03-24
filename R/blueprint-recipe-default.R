@@ -266,7 +266,7 @@ mold_recipe_default_process_predictors <- function(blueprint, data) {
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   ptype <- get_original_predictor_ptype(blueprint$recipe, data)
 
@@ -477,7 +477,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 forge_recipe_default_process_predictors <- function(blueprint, predictors) {
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   new_forge_process_terms(
     blueprint = blueprint,

@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* New internal `recompose()` helper (#220).
+
 * `default_recipe_blueprint()` has gained a `strings_as_factors` argument, which
   is passed on to `recipes::prep()` (#212).
 
