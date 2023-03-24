@@ -526,8 +526,8 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
 
   if (identical(blueprint$indicators, "none")) {
     factorish_names <- extract_original_factorish_names(ptype)
-    validate_no_factorish_in_functions(formula, factorish_names)
-    validate_no_factorish_in_interactions(formula, factorish_names)
+    check_no_factorish_in_interactions(formula, factorish_names)
+    check_no_factorish_in_functions(formula, factorish_names)
     formula <- remove_factorish_from_formula(formula, factorish_names)
   }
 
@@ -577,7 +577,7 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
   formula <- get_outcomes_formula(formula)
 
   # used on the `~ LHS` formula
-  validate_no_interactions(formula)
+  check_no_interactions(formula)
 
   framed <- model_frame(formula, data)
 
@@ -854,225 +854,163 @@ flatten_embedded_columns <- function(data) {
   data
 }
 
-validate_no_factorish_in_functions <- function(.formula, .factorish_names) {
-  .terms <- terms(.formula)
+check_no_factorish_in_functions <- function(f, names, error_call = caller_env()) {
+  expr <- f_rhs(f)
 
-  bad_original_cols <- detect_factorish_in_functions(.terms, .factorish_names)
-
-  ok <- length(bad_original_cols) == 0L
-
-  if (!ok) {
-    bad_original_cols <- glue_quote_collapse(bad_original_cols)
-
-    glubort(
-      "Functions involving factors or characters have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
-      "Functions involving factors were detected for the following columns: ",
-      "{bad_original_cols}."
-    )
-  }
-
-  invisible(.formula)
+  expr_check_no_factorish_in_functions(
+    expr = expr,
+    names = names,
+    error_call = error_call,
+    in_allowed_subset = TRUE
+  )
 }
-
-# Returns original column names of any factor columns that
-# are present in an inline function
-# The row.names() of the factors matrix contains all of the
-# non-interaction expressions that are used in the formula
-detect_factorish_in_functions <- function(.terms, .factorish_names) {
-  terms_matrix <- attr(.terms, "factors")
-
-  only_intercept_or_offsets <- length(terms_matrix) == 0L
-  if (only_intercept_or_offsets) {
-    return(character(0))
+expr_check_no_factorish_in_functions <- function(expr,
+                                                 names,
+                                                 error_call,
+                                                 in_allowed_subset = FALSE) {
+  if (!is_call(expr)) {
+    return(invisible(NULL))
   }
 
-  all_terms_chrs <- row.names(terms_matrix)
+  original_expr <- expr
+  expr <- expr[-1L]
 
-  # Remove bare factor / character names
-  candidate_chrs <- all_terms_chrs[!(all_terms_chrs %in% .factorish_names)]
+  # Are we continuing an existing chain of allowed functions?
+  in_allowed_subset <- in_allowed_subset &&
+    is_call(original_expr, name = c("+", "-", "("))
 
-  if (length(candidate_chrs) == 0L) {
-    return(character(0))
-  }
+  for (i in seq_along(expr)) {
+    elt <- expr[[i]]
 
-  candidate_exprs <- parse_exprs(candidate_chrs)
+    if (!in_allowed_subset && is_symbol(elt, name = names)) {
+      name <- as_string(elt)
+      expr <- as_label(original_expr)
 
-  # Look for each factorish name in the list of candidate expressions
-  factorish_name_is_in_a_fn <- map_lgl(
-    .factorish_names,
-    function(factorish_name) {
-      has_name <- map_lgl(
-        candidate_exprs,
-        expr_contains,
-        what = as.name(factorish_name),
-        include_function_names = FALSE
+      message <- c(
+        paste0(
+          "Functions involving factors or characters have been detected on the ",
+          "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
+        ),
+        i = "Functions involving factors were detected for {.str {name}} in {.arg {expr}}."
       )
-      any(has_name)
+
+      cli::cli_abort(message, call = error_call)
     }
-  )
 
-  bad_cols <- .factorish_names[factorish_name_is_in_a_fn]
-
-  bad_cols
-}
-
-validate_no_factorish_in_interactions <- function(.formula, .factorish_names) {
-
-  # Call terms on a standard formula to generate the terms interaction matrix
-  .terms <- terms(.formula)
-
-  bad_original_cols <- detect_factorish_in_interactions(.terms, .factorish_names)
-
-  ok <- length(bad_original_cols) == 0L
-
-  if (!ok) {
-    bad_original_cols <- glue_quote_collapse(bad_original_cols)
-
-    glubort(
-      "Interaction terms involving factors or characters have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
-      "Interactions involving factors were detected for the following columns: ",
-      "{bad_original_cols}."
+    expr_check_no_factorish_in_functions(
+      expr = elt,
+      names = names,
+      in_allowed_subset = in_allowed_subset,
+      error_call = error_call
     )
   }
 
-  invisible(.formula)
+  invisible(NULL)
 }
 
-# Returns the _original_ column names
-# of any factor / character columns that are present
-# in any interaction terms (from : or * or %in% or ^)
-detect_factorish_in_interactions <- function(.terms, .factorish_names) {
-  terms_matrix <- attr(.terms, "factors")
-
-  only_intercept_or_offsets <- length(terms_matrix) == 0L
-  if (only_intercept_or_offsets) {
-    return(character(0))
-  }
-
-  other_cols <- setdiff(colnames(terms_matrix), .factorish_names)
-
-  no_other_cols <- length(other_cols) == 0L
-  if (no_other_cols) {
-    return(character(0))
-  }
-
-  # Something like Species, rather than paste0(Species)
-  indicator_bare_factorish <- .factorish_names %in% row.names(terms_matrix)
-  bare_factorish_names <- .factorish_names[indicator_bare_factorish]
-
-  # Something like mold(~ paste0(Species), iris, indicators = "none")
-  no_bare_factorish_used <- length(bare_factorish_names) == 0L
-  if (no_bare_factorish_used) {
-    return(character(0))
-  }
-
-  factorish_rows <- terms_matrix[bare_factorish_names, , drop = FALSE]
-  factorish_rows <- factorish_rows[, other_cols, drop = FALSE]
-
-  # In the factor matrix, only `:` is present to represent interactions,
-  # even if something like * or ^ or %in% was used to generate it
-  terms_names <- colnames(factorish_rows)
-  terms_exprs <- parse_exprs(terms_names)
-  has_interactions <- map_lgl(terms_exprs, expr_contains, what = as.name(":"))
-
-  none_have_interactions <- !any(has_interactions)
-  if (none_have_interactions) {
-    return(character(0))
-  }
-
-  interaction_cols <- factorish_rows[, has_interactions, drop = FALSE]
-
-  factorish_is_bad_if_gt_0 <- rowSums(interaction_cols)
-  bad_factorish_vals <- factorish_is_bad_if_gt_0[factorish_is_bad_if_gt_0 > 0]
-
-  bad_cols <- names(bad_factorish_vals)
-
-  bad_cols
+check_no_factorish_in_interactions <- function(f, names, error_call = caller_env()) {
+  expr <- f_rhs(f)
+  expr_check_no_factorish_in_interactions(expr, names, error_call = error_call)
 }
-
-validate_no_interactions <- function(.formula) {
-  bad_terms <- detect_interactions(.formula)
-
-  no_interactions <- length(bad_terms) == 0L
-  if (no_interactions) {
-    return(invisible(.formula))
+expr_check_no_factorish_in_interactions <- function(expr, names, error_call) {
+  if (!is_call(expr)) {
+    return(invisible(NULL))
   }
 
-  bad_terms <- glue_quote_collapse(bad_terms)
-
-  glubort(
-    "Interaction terms cannot be specified on the LHS of `formula`. ",
-    "The following interaction terms were found: {bad_terms}."
-  )
-}
-
-# Returns processed names of any interaction terms
-# like 'Species:Sepal.Width', or character(0)
-detect_interactions <- function(.formula) {
-  .terms <- terms(.formula)
-
-  terms_matrix <- attr(.terms, "factors")
-
-  only_intercept_or_offsets <- length(terms_matrix) == 0L
-  if (only_intercept_or_offsets) {
-    return(character(0))
-  }
-
-  terms_names <- colnames(terms_matrix)
-
-  # All interactions (*, ^, %in%) will be expanded to `:`
-  terms_exprs <- parse_exprs(terms_names)
-  has_interactions <- map_lgl(terms_exprs, expr_contains, what = as.name(":"))
-
-  has_any_interactions <- any(has_interactions)
-
-  if (!has_any_interactions) {
-    return(character(0))
-  }
-
-  bad_terms <- terms_names[has_interactions]
-
-  bad_terms
-}
-
-expr_contains <- function(expr, what, ..., include_function_names = TRUE) {
-  if (!is_expression(expr)) {
-    abort("`expr` must be an expression.")
-  }
-  if (!is_symbol(what)) {
-    abort("`what` must be a symbol.")
-  }
-
-  expr_contains_recurse(expr, what, include_function_names)
-}
-expr_contains_recurse <- function(expr, what, include_function_names) {
-  switch(typeof(expr),
-    symbol = identical(expr, what),
-    language = language_contains(expr, what, include_function_names),
-    FALSE
-  )
-}
-language_contains <- function(expr, what, include_function_names) {
-  if (length(expr) == 0L) {
-    abort("Internal error, `expr` should be at least length 1.")
-  }
-
-  if (!include_function_names) {
-    # Drop function name to avoid matching that
+  if (is_call(expr, name = fns_interactions())) {
+    expr_original <- expr
     expr <- expr[-1L]
+
+    for (i in seq_along(expr)) {
+      expr_check_no_factorish_in_interaction_term(
+        expr = expr[[i]],
+        names = names,
+        expr_original = expr_original,
+        error_call = error_call
+      )
+    }
+  } else {
+    expr <- expr[-1L]
+
+    for (i in seq_along(expr)) {
+      expr_check_no_factorish_in_interactions(
+        expr = expr[[i]],
+        names = names,
+        error_call = error_call
+      )
+    }
   }
 
-  # Recurse into elements
-  contains <- map_lgl(
-    expr,
-    expr_contains_recurse,
-    what = what,
-    include_function_names = include_function_names
-  )
+  invisible(NULL)
+}
+expr_check_no_factorish_in_interaction_term <- function(expr,
+                                                        names,
+                                                        expr_original,
+                                                        error_call) {
+  if (is_symbol(expr, name = names)) {
+    name <- as_string(expr)
+    expr <- as_label(expr_original)
 
-  any(contains)
+    message <- c(
+      paste0(
+        "Interaction terms involving factors or characters have been detected on the ",
+        "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
+      ),
+      i = "Interactions terms involving factors were detected for {.str {name}} in {.arg {expr}}."
+    )
+
+    cli::cli_abort(message, call = error_call)
+  }
+
+  if (!is_call(expr)) {
+    return(invisible(NULL))
+  }
+
+  expr <- expr[-1L]
+
+  for (i in seq_along(expr)) {
+    expr_check_no_factorish_in_interaction_term(
+      expr = expr[[i]],
+      names = names,
+      expr_original = expr_original,
+      error_call = error_call
+    )
+  }
+
+  invisible(NULL)
+}
+
+check_no_interactions <- function(f, error_call = caller_env()) {
+  expr <- f_rhs(f)
+  expr_check_no_interactions(expr, error_call = error_call)
+}
+expr_check_no_interactions <- function(expr, error_call) {
+  if (!is_call(expr)) {
+    return(invisible(NULL))
+  }
+
+  if (is_call(expr, name = fns_interactions())) {
+    expr <- as_label(expr)
+
+    message <- c(
+      "Interaction terms can't be specified on the LHS of `formula`.",
+      i = "The following interaction term was found: {.arg {expr}}."
+    )
+
+    cli::cli_abort(message, call = error_call)
+  }
+
+  expr <- expr[-1L]
+
+  for (i in seq_along(expr)) {
+    expr_check_no_interactions(expr[[i]], error_call = error_call)
+  }
+
+  invisible(NULL)
+}
+
+fns_interactions <- function() {
+  c(":", "*", "^", "/", "%in%")
 }
 
 extract_original_factorish_names <- function(ptype) {
