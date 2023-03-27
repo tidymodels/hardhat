@@ -397,7 +397,7 @@ mold_formula_default_clean <- function(blueprint, data) {
   formula <- remove_formula_intercept(blueprint$formula, blueprint$intercept)
   formula <- alter_formula_environment(formula)
 
-  blueprint <- update_blueprint(blueprint, formula = formula)
+  blueprint <- update_blueprint0(blueprint, formula = formula)
 
   new_mold_clean(blueprint, data)
 }
@@ -513,12 +513,12 @@ mold_formula_default_process <- function(blueprint, data) {
 
   # nuke formula environment before returning
   formula_empty_env <- nuke_formula_environment(blueprint$formula)
-  blueprint <- update_blueprint(blueprint, formula = formula_empty_env)
+  blueprint <- update_blueprint0(blueprint, formula = formula_empty_env)
 
   ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
   extras <- new_extras(predictors_extras, outcomes_extras)
 
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+  blueprint <- update_blueprint0(blueprint, ptypes = ptypes)
 
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
@@ -548,7 +548,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
     levels <- list()
   }
 
-  blueprint <- update_blueprint(blueprint, levels = levels)
+  blueprint <- update_blueprint0(blueprint, levels = levels)
 
   if (identical(blueprint$indicators, "none")) {
     factorish_names <- extract_original_factorish_names(ptype)
@@ -584,7 +584,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
 
   blueprint_terms <- blueprint$terms
   blueprint_terms$predictors <- terms
-  blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
+  blueprint <- update_blueprint0(blueprint, terms = blueprint_terms)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -615,7 +615,7 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
 
   blueprint_terms <- blueprint$terms
   blueprint_terms$outcomes <- terms
-  blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
+  blueprint <- update_blueprint0(blueprint, terms = blueprint_terms)
 
   new_mold_process_terms(
     blueprint = blueprint,

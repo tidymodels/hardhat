@@ -93,7 +93,7 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
 
   check_formula_blueprint(blueprint)
 
-  blueprint <- update_blueprint(blueprint = blueprint, formula = formula)
+  blueprint <- update_blueprint0(blueprint, formula = formula)
 
   run_mold(blueprint, data = data)
 }
@@ -109,7 +109,7 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
 
   check_recipe_blueprint(blueprint)
 
-  blueprint <- update_blueprint(blueprint = blueprint, recipe = x)
+  blueprint <- update_blueprint0(blueprint, recipe = x)
 
   run_mold(blueprint, data = data)
 }
