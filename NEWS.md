@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* `mold()` and `forge()` generally have less overhead (#235, #236).
+
 * Using a formula blueprint with `indicators = "none"` and character predictors
   now works properly if you provide a character column that only contains a
   single value (#213).
