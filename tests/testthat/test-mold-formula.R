@@ -759,6 +759,54 @@ test_that("character predictors are left as characters when `indicators` is 'non
   expect_true(is.character(x$blueprint$ptypes$predictors$z))
 })
 
+test_that("character vectors with `indicators = traditional/one_hot` store levels in `levels` (#213)", {
+  df <- tibble(x = c("a", "b", "c"), y = factor(c("d", "e", "e")), z = c("g", "f", "g"))
+
+  bp <- default_formula_blueprint(indicators = "traditional")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  # Only from character columns, and the levels get sorted
+  # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
+  expect_identical(
+    x$blueprint$levels,
+    list(
+      x = c("a", "b", "c"),
+      z = c("f", "g")
+    )
+  )
+
+  # We leave the `ptype` untouched, mirroring the original data
+  expect_identical(x$blueprint$ptypes$predictors$x, character())
+  expect_identical(x$blueprint$ptypes$predictors$y, vec_ptype(df$y))
+  expect_identical(x$blueprint$ptypes$predictors$z, character())
+
+  bp <- default_formula_blueprint(indicators = "one_hot")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  # Only from character columns, and the levels get sorted
+  # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
+  expect_identical(
+    x$blueprint$levels,
+    list(
+      x = c("a", "b", "c"),
+      z = c("f", "g")
+    )
+  )
+})
+
+test_that("character vectors with `indicators = none` don't use `levels` (#213)", {
+  df <- tibble(x = c("a", "b", "c"), y = factor(c("d", "e", "e")), z = c("g", "f", "g"))
+
+  bp <- default_formula_blueprint(indicators = "none")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  expect_identical(x$blueprint$levels, list())
+
+  expect_identical(x$blueprint$ptypes$predictors$x, character())
+  expect_identical(x$blueprint$ptypes$predictors$y, vec_ptype(df$y))
+  expect_identical(x$blueprint$ptypes$predictors$z, character())
+})
+
 # ------------------------------------------------------------------------------
 # Factor encodings
 

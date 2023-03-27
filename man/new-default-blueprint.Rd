@@ -16,6 +16,7 @@ new_default_formula_blueprint(
   indicators = "traditional",
   composition = "tibble",
   terms = list(predictors = NULL, outcomes = NULL),
+  levels = NULL,
   ...,
   subclass = character()
 )
@@ -81,6 +82,11 @@ applied; otherwise an error is thrown.}
 \item{terms}{A named list of two elements, \code{predictors} and \code{outcomes}. Both
 elements are \code{terms} objects that describe the terms for the outcomes and
 predictors separately. This argument is set automatically at \code{\link[=mold]{mold()}} time.}
+
+\item{levels}{Either \code{NULL} or a named list of character vectors that
+correspond to the levels observed when converting character predictor columns
+to factors during \code{\link[=mold]{mold()}}. This argument is set automatically at \code{\link[=mold]{mold()}}
+time.}
 
 \item{...}{Name-value pairs for additional elements of blueprints that
 subclass this blueprint.}

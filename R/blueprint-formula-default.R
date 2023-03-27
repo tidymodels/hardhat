@@ -324,6 +324,11 @@ default_formula_blueprint <- function(intercept = FALSE,
 #' elements are `terms` objects that describe the terms for the outcomes and
 #' predictors separately. This argument is set automatically at [mold()] time.
 #'
+#' @param levels Either `NULL` or a named list of character vectors that
+#' correspond to the levels observed when converting character predictor columns
+#' to factors during [mold()]. This argument is set automatically at [mold()]
+#' time.
+#'
 #' @rdname new-default-blueprint
 #' @export
 new_default_formula_blueprint <- function(intercept = FALSE,
@@ -336,9 +341,11 @@ new_default_formula_blueprint <- function(intercept = FALSE,
                                             predictors = NULL,
                                             outcomes = NULL
                                           ),
+                                          levels = NULL,
                                           ...,
                                           subclass = character()) {
   check_terms_list(terms)
+  check_levels(levels, allow_null = TRUE)
 
   new_formula_blueprint(
     intercept = intercept,
@@ -348,6 +355,7 @@ new_default_formula_blueprint <- function(intercept = FALSE,
     indicators = indicators,
     composition = composition,
     terms = terms,
+    levels = levels,
     ...,
     subclass = c(subclass, "default_formula_blueprint")
   )
@@ -520,9 +528,27 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   formula <- get_predictors_formula(formula)
 
   original_names <- get_all_predictors(formula, data)
-  original_data <- data[original_names]
+  data <- data[original_names]
 
-  ptype <- extract_ptype(original_data)
+  ptype <- extract_ptype(data)
+
+  if (identical(blueprint$indicators, "traditional") ||
+      identical(blueprint$indicators, "one_hot")) {
+    # Early convert character columns to factors and capture the factor levels
+    # for use in `forge()`. Do this after collecting the `ptype` on the original
+    # data to ensure it is untouched. Converting with just `factor()` and
+    # letting levels be sorted (rather than by appearance) to match base R and
+    # recipes `prep(strings_as_factors = TRUE)`.
+    characters <- map_lgl(ptype, is.character)
+    characters <- names(ptype)[characters]
+    data[characters] <- map(data[characters], factor)
+    levels <- map(data[characters], levels)
+  } else if (identical(blueprint$indicators, "none")) {
+    # We don't convert character columns to factors with `indicators = "none"`
+    levels <- list()
+  }
+
+  blueprint <- update_blueprint(blueprint, levels = levels)
 
   if (identical(blueprint$indicators, "none")) {
     factorish_names <- extract_original_factorish_names(ptype)
@@ -570,9 +596,9 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
   formula <- blueprint$formula
 
   original_names <- get_all_outcomes(formula, data)
-  original_data <- data[original_names]
+  data <- data[original_names]
 
-  ptype <- extract_ptype(original_data)
+  ptype <- extract_ptype(data)
 
   formula <- get_outcomes_formula(formula)
 
@@ -633,11 +659,22 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
   check_unique_column_names(new_data)
   check_bool(outcomes)
 
-  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  # If character columns were converted to factor at `mold()` time,
+  # reapply that to the predictors `ptype` here (#213)
+  predictors_levels <- blueprint_levels(blueprint)
+  predictors_characters <- names2(predictors_levels)
+  predictors_ptype <- blueprint$ptypes$predictors
+  predictors_ptype[predictors_characters] <- map2(
+    predictors_ptype[predictors_characters],
+    predictors_levels,
+    function(col, levels) factor(col, levels = levels)
+  )
+
+  predictors <- shrink(new_data, predictors_ptype)
 
   predictors <- scream(
     predictors,
-    blueprint$ptypes$predictors,
+    predictors_ptype,
     allow_novel_levels = blueprint$allow_novel_levels
   )
 
@@ -758,6 +795,19 @@ alter_terms_environment <- function(terms_blueprint) {
 
 # ------------------------------------------------------------------------------
 
+blueprint_levels <- function(x) {
+  # See #213
+  if (has_name(x, "levels")) {
+    # Blueprint is new enough to have this field
+    x[["levels"]]
+  } else {
+    # Backwards compatible support if the blueprint is old
+    list()
+  }
+}
+
+# ------------------------------------------------------------------------------
+
 expand_formula_dot_notation <- function(formula, data) {
 
   # Calling terms() on the formula, and providing
@@ -801,6 +851,28 @@ check_terms_list <- function(x,
     arg = cli::format_inline("{arg}$outcomes"),
     call = call
   )
+
+  invisible(NULL)
+}
+
+check_levels <- function(x,
+                         ...,
+                         allow_null = FALSE,
+                         arg = caller_arg(x),
+                         call = caller_env()) {
+  if (allow_null && is_null(x)) {
+    return(invisible(NULL))
+  }
+
+  check_list(x, arg = arg, call = call)
+
+  if (!is_named2(x)) {
+    cli::cli_abort("{.arg {arg}} must be fully named.", call = call)
+  }
+
+  if (!all(map_lgl(x, is.character))) {
+    cli::cli_abort("{.arg {arg}} must only contain character vectors.", call = call)
+  }
 
   invisible(NULL)
 }
