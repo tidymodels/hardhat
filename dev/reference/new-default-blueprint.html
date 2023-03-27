@@ -82,6 +82,7 @@ of the constructors found in the documentation for <code><a href="new-blueprint.
 <span>  indicators <span class="op">=</span> <span class="st">"traditional"</span>,</span>
 <span>  composition <span class="op">=</span> <span class="st">"tibble"</span>,</span>
 <span>  terms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>predictors <span class="op">=</span> <span class="cn">NULL</span>, outcomes <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  levels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  subclass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -160,6 +161,13 @@ applied; otherwise an error is thrown.</p></dd>
 <dd><p>A named list of two elements, <code>predictors</code> and <code>outcomes</code>. Both
 elements are <code>terms</code> objects that describe the terms for the outcomes and
 predictors separately. This argument is set automatically at <code><a href="mold.html">mold()</a></code> time.</p></dd>
+
+
+<dt>levels</dt>
+<dd><p>Either <code>NULL</code> or a named list of character vectors that
+correspond to the levels observed when converting character predictor columns
+to factors during <code><a href="mold.html">mold()</a></code>. This argument is set automatically at <code><a href="mold.html">mold()</a></code>
+time.</p></dd>
 
 
 <dt>...</dt>
