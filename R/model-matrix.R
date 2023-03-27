@@ -87,9 +87,8 @@ model_matrix <- function(terms, data) {
   # actually error out if we don't prevent it from running
   attr(data, "terms") <- terms
 
-  predictors <- with_options(
-    model.matrix(object = terms, data = data),
-    na.action = "na.pass"
+  predictors <- with_na_pass(
+    model.matrix(object = terms, data = data)
   )
 
   predictors <- strip_model_matrix(predictors)

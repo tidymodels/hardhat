@@ -78,9 +78,8 @@ model_frame <- function(formula, data) {
   check_data_frame_or_matrix(data)
   data <- coerce_to_tibble(data)
 
-  frame <- with_options(
-    stats::model.frame(formula, data = data),
-    na.action = "na.pass"
+  frame <- with_na_pass(
+    stats::model.frame(formula, data = data)
   )
 
   # Can't simplify terms env here, sometimes we need it to exist

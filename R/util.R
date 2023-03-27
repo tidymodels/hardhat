@@ -196,6 +196,17 @@ hardhat_new_tibble <- function (x, size) {
 
 # ------------------------------------------------------------------------------
 
+with_na_pass <- function(expr) {
+  # TODO: This helper is only used because `withr::defer()` is somewhat slow
+  # right now. Remove this helper and use `rlang::with_options()` once the next
+  # version of withr/rlang is on CRAN https://github.com/r-lib/withr/pull/221.
+  old <- options(na.action = "na.pass")
+  on.exit(options(old), add = TRUE, after = FALSE)
+  expr
+}
+
+# ------------------------------------------------------------------------------
+
 check_inherits <- function(x,
                            what,
                            ...,
