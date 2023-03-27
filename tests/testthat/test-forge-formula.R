@@ -1006,6 +1006,12 @@ test_that("`allow_novel_levels` works right with character predictors", {
   })
   expect_named(out$predictors, c("xa", "xb", "xc"))
 
+  bp <- default_formula_blueprint(allow_novel_levels = FALSE, indicators = "none")
+  x <- mold(~ x, df1, blueprint = bp)
+  out <- forge(df2, x$blueprint)
+  expect_named(out$predictors, "x")
+  expect_identical(out$predictors$x, c("a", "d"))
+
   bp <- default_formula_blueprint(allow_novel_levels = TRUE)
   x <- mold(~ x, df1, blueprint = bp)
   out <- forge(df2, x$blueprint)
@@ -1029,6 +1035,18 @@ test_that("character vectors in `new_data` with 1 contrast level works properly 
   expect_named(out$predictors, c("xa", "xb"))
   expect_identical(out$predictors$xa, 1)
   expect_identical(out$predictors$xb, 0)
+})
+
+test_that("character vectors in `new_data` with 1 contrast level works properly with `indicators = none` (#213)", {
+  df1 <- tibble(x = c("a", "b"))
+  df2 <- tibble(x = "a")
+
+  bp <- default_formula_blueprint(indicators = "none")
+  x <- mold(~ x, df1, blueprint = bp)
+  out <- forge(df2, x$blueprint)
+
+  expect_named(out$predictors, "x")
+  expect_identical(out$predictors$x, "a")
 })
 
 test_that("`new_data` can be converted losslessly from factor to character", {
