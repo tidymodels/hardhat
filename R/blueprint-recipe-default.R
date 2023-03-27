@@ -223,7 +223,7 @@ mold_recipe_default_process <- function(blueprint, data) {
     fresh = blueprint$fresh,
     strings_as_factors = blueprint_strings_as_factors(blueprint)
   )
-  blueprint <- update_blueprint(blueprint, recipe = recipe)
+  blueprint <- update_blueprint0(blueprint, recipe = recipe)
 
   processed <- mold_recipe_default_process_predictors(blueprint = blueprint, data = data)
 
@@ -250,11 +250,11 @@ mold_recipe_default_process <- function(blueprint, data) {
   )
 
   # un-retain training data
-  blueprint <- update_blueprint(blueprint, recipe = compost(blueprint$recipe))
+  blueprint <- update_blueprint0(blueprint, recipe = compost(blueprint$recipe))
 
   ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
 
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+  blueprint <- update_blueprint0(blueprint, ptypes = ptypes)
 
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
@@ -304,7 +304,7 @@ mold_recipe_default_process_extras <- function(blueprint, data) {
   if (!is.null(original_extra_role_cols)) {
     original_extra_role_ptypes <- lapply(original_extra_role_cols, extract_ptype)
 
-    blueprint <- update_blueprint(
+    blueprint <- update_blueprint0(
       blueprint,
       extra_role_ptypes = original_extra_role_ptypes
     )

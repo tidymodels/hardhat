@@ -164,27 +164,42 @@ refresh_blueprint.hardhat_blueprint <- function(blueprint) {
 update_blueprint <- function(blueprint, ...) {
   check_blueprint(blueprint)
 
-  changes <- list2(...)
+  args <- list2(...)
 
-  if (!has_unique_names(changes)) {
-    glubort("`...` must have unique names.")
+  if (!has_unique_names(args)) {
+    cli::cli_abort("{.arg ...} must have unique names.")
   }
 
-  new_nms <- names(changes)
-  old_nms <- names(blueprint)
+  names_new <- names(args)
+  names_old <- names(blueprint)
+  names_exist <- names_new %in% names_old
 
-  for (nm in new_nms) {
-    if (!(nm %in% old_nms)) {
-      glubort(
-        "All elements to change must already exist. `{nm}` is a new field."
-      )
-    }
+  if (any(!names_exist)) {
+    loc <- which(!names_exist)
+    names <- names_new[loc]
 
-    # this nukes elements if we set them to NULL
-    blueprint[[nm]] <- changes[[nm]]
+    message <- c(
+      "All elements of {.arg ...} must already exist.",
+      i = "The following fields are new: {.str {names}}."
+    )
+
+    cli::cli_abort(message)
   }
+
+  blueprint <- update_blueprint0(blueprint, !!!args)
 
   refresh_blueprint(blueprint)
+}
+
+update_blueprint0 <- function(blueprint, ...) {
+  # Performance variant only for internal use
+  # - Does not validate names
+  # - Does not refresh blueprint (i.e. to perform more validation on types)
+  # - Much faster though, because `check_*()` functions can add up
+  args <- list2(...)
+  names <- names2(args)
+  blueprint[names] <- args
+  blueprint
 }
 
 # ------------------------------------------------------------------------------

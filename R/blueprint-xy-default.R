@@ -243,7 +243,7 @@ mold_xy_default_process <- function(blueprint, x, y) {
   ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
   extras <- new_extras(predictors_extras, outcomes_extras)
 
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+  blueprint <- update_blueprint0(blueprint, ptypes = ptypes)
 
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
