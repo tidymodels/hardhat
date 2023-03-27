@@ -807,6 +807,21 @@ test_that("character vectors with `indicators = none` don't use `levels` (#213)"
   expect_identical(x$blueprint$ptypes$predictors$z, character())
 })
 
+test_that("character vectors with `indicators = none` works with constant columns (#213)", {
+  df <- tibble(x = "a", y = factor("d"), z = "g")
+
+  bp <- default_formula_blueprint(indicators = "none")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  expect_identical(x$blueprint$ptypes$predictors$x, character())
+  expect_identical(x$blueprint$ptypes$predictors$y, vec_ptype(df$y))
+  expect_identical(x$blueprint$ptypes$predictors$z, character())
+
+  expect_identical(x$predictors$x, df$x)
+  expect_identical(x$predictors$y, df$y)
+  expect_identical(x$predictors$z, df$z)
+})
+
 # ------------------------------------------------------------------------------
 # Factor encodings
 

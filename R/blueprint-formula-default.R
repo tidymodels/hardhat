@@ -552,9 +552,11 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
 
   if (identical(blueprint$indicators, "none")) {
     factorish_names <- extract_original_factorish_names(ptype)
+    factorish_data <- data[factorish_names]
     check_no_factorish_in_interactions(formula, factorish_names)
     check_no_factorish_in_functions(formula, factorish_names)
     formula <- remove_factorish_from_formula(formula, factorish_names)
+    data <- mask_factorish_in_data(data, factorish_names)
   }
 
   framed <- model_frame(formula, data)
@@ -573,7 +575,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   }
 
   if (identical(blueprint$indicators, "none")) {
-    predictors <- reattach_factorish_columns(predictors, data, factorish_names)
+    predictors <- unmask_factorish_in_data(predictors, factorish_data)
   }
 
   terms <- simplify_terms(framed$terms)
@@ -722,6 +724,12 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   terms <- blueprint$terms$predictors
   terms <- alter_terms_environment(terms)
 
+  if (identical(blueprint$indicators, "none")) {
+    factorish_names <- extract_original_factorish_names(blueprint$ptypes$predictors)
+    factorish_predictors <- predictors[factorish_names]
+    predictors <- mask_factorish_in_data(predictors, factorish_names)
+  }
+
   framed <- model_frame(terms, predictors)
 
   if (identical(blueprint$indicators, "one_hot")) {
@@ -737,8 +745,7 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   }
 
   if (identical(blueprint$indicators, "none")) {
-    factorish_names <- extract_original_factorish_names(blueprint$ptypes$predictors)
-    data <- reattach_factorish_columns(data, predictors, factorish_names)
+    data <- unmask_factorish_in_data(data, factorish_predictors)
   }
 
   data <- recompose(data, composition = blueprint$composition)
@@ -1117,9 +1124,26 @@ remove_factorish_from_formula <- function(.formula, .factorish_names) {
   )
 }
 
-reattach_factorish_columns <- function(predictors, data, factorish_names) {
-  data_factorish_cols <- data[factorish_names]
-  tibble::add_column(predictors, !!!data_factorish_cols)
+mask_factorish_in_data <- function(data, factorish_names) {
+  # Replace factorish columns with columns of repeated `1L`s (#213).
+  # Hopefully this is as close to a no-op as we can get in `model.matrix()`.
+  if (length(factorish_names) > 0L) {
+    ones <- vec_rep(1L, times = nrow(data))
+    ones <- list(ones)
+    data[factorish_names] <- ones
+  }
+
+  data
+}
+
+unmask_factorish_in_data <- function(data, factorish_data) {
+  factorish_names <- names(factorish_data)
+
+  if (length(factorish_names) > 0L) {
+    data[factorish_names] <- factorish_data
+  }
+
+  data
 }
 
 get_predictors_formula <- function(formula) {
