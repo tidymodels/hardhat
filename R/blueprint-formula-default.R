@@ -536,10 +536,12 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
       identical(blueprint$indicators, "one_hot")) {
     # Early convert character columns to factors and capture the factor levels
     # for use in `forge()`. Do this after collecting the `ptype` on the original
-    # data to ensure it is untouched.
+    # data to ensure it is untouched. Converting with just `factor()` and
+    # letting levels be sorted (rather than by appearance) to match base R and
+    # recipes `prep(strings_as_factors = TRUE)`.
     characters <- map_lgl(ptype, is.character)
     characters <- names(ptype)[characters]
-    data[characters] <- map(data[characters], function(col) factor(col, levels = unique(col)))
+    data[characters] <- map(data[characters], factor)
     levels <- map(data[characters], levels)
   } else if (identical(blueprint$indicators, "none")) {
     # We don't convert character columns to factors with `indicators = "none"`

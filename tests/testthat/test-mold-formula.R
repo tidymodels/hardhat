@@ -765,12 +765,13 @@ test_that("character vectors with `indicators = traditional/one_hot` store level
   bp <- default_formula_blueprint(indicators = "traditional")
   x <- mold(~x + y + z, df, blueprint = bp)
 
-  # Only from character columns, and in the order they appear in the data
+  # Only from character columns, and the levels get sorted
+  # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
   expect_identical(
     x$blueprint$levels,
     list(
       x = c("a", "b", "c"),
-      z = c("g", "f")
+      z = c("f", "g")
     )
   )
 
@@ -782,12 +783,13 @@ test_that("character vectors with `indicators = traditional/one_hot` store level
   bp <- default_formula_blueprint(indicators = "one_hot")
   x <- mold(~x + y + z, df, blueprint = bp)
 
-  # Only from character columns, and in the order they appear in the data
+  # Only from character columns, and the levels get sorted
+  # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
   expect_identical(
     x$blueprint$levels,
     list(
       x = c("a", "b", "c"),
-      z = c("g", "f")
+      z = c("f", "g")
     )
   )
 })
