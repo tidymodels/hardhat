@@ -1,5 +1,9 @@
 # hardhat (development version)
 
+* A new family of `spruce_*_multiple()` functions have been added to support
+  standardizing multi-outcome predictions (#223, with contributions from
+  @cregouby).
+
 * `mold()` and `forge()` generally have less overhead (#235, #236).
 
 * Using a formula blueprint with `indicators = "none"` and character predictors
