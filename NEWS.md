@@ -1,10 +1,13 @@
 # hardhat (development version)
 
-* A new family of `spruce_*_multiple()` functions have been added to support
-  standardizing multi-outcome predictions (#223, with contributions from
-  @cregouby).
-
-* `mold()` and `forge()` generally have less overhead (#235, #236).
+* New family of `spruce_*_multiple()` functions to support standardizing
+  multi-outcome predictions (#223, with contributions from @cregouby).
+  
+* New `fct_encode_one_hot()` that encodes a factor as a one-hot indicator matrix
+  (#215).
+  
+* `default_recipe_blueprint()` has gained a `strings_as_factors` argument, which
+  is passed on to `recipes::prep()` (#212).
 
 * Using a formula blueprint with `indicators = "none"` and character predictors
   now works properly if you provide a character column that only contains a
@@ -17,17 +20,13 @@
 
 * Using a formula blueprint with `indicators = "none"` now works correctly if
   there is a variable in the formula with a space in the name (#217).
-
-* New internal `recompose()` helper (#220).
-
-* `default_recipe_blueprint()` has gained a `strings_as_factors` argument, which
-  is passed on to `recipes::prep()` (#212).
-
-* New `fct_encode_one_hot()` that encodes a factor as a one-hot indicator matrix
-  (#215).
+  
+* `mold()` and `forge()` generally have less overhead (#235, #236).
 
 * Added more documentation about importance and frequency weights in
   `?importance_weights()` and `?frequency_weights()` (#214).
+
+* New internal `recompose()` helper (#220).
 
 # hardhat 1.2.0
 
