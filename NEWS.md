@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 1.3.0
 
 * New family of `spruce_*_multiple()` functions to support standardizing
   multi-outcome predictions (#223, with contributions from @cregouby).
