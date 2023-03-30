@@ -58,6 +58,9 @@
     <loc>https://hardhat.tidymodels.org/reference/extract_ptype.html</loc>
   </url>
   <url>
+    <loc>https://hardhat.tidymodels.org/reference/fct_encode_one_hot.html</loc>
+  </url>
+  <url>
     <loc>https://hardhat.tidymodels.org/reference/forge.html</loc>
   </url>
   <url>
@@ -130,6 +133,9 @@
     <loc>https://hardhat.tidymodels.org/reference/new_model.html</loc>
   </url>
   <url>
+    <loc>https://hardhat.tidymodels.org/reference/recompose.html</loc>
+  </url>
+  <url>
     <loc>https://hardhat.tidymodels.org/reference/refresh_blueprint.html</loc>
   </url>
   <url>
@@ -143,6 +149,9 @@
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/reference/shrink.html</loc>
+  </url>
+  <url>
+    <loc>https://hardhat.tidymodels.org/reference/spruce-multiple.html</loc>
   </url>
   <url>
     <loc>https://hardhat.tidymodels.org/reference/spruce.html</loc>
