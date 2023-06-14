@@ -74,26 +74,21 @@
 #' nrow(framed2$data) == nrow(iris2)
 #' @export
 model_frame <- function(formula, data) {
-  validate_is_formula(formula)
-  data <- check_is_data_like(data)
+  check_formula(formula)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
-  frame <- with_options(
-    stats::model.frame(formula, data = data),
-    na.action = "na.pass"
+  frame <- with_na_pass(
+    stats::model.frame(formula, data = data)
   )
 
   # Can't simplify terms env here, sometimes we need it to exist
   terms <- terms(frame)
 
-  attr(frame, "terms") <- NULL
-  data <- tibble::as_tibble(frame)
+  data <- hardhat_new_tibble(frame, size = vec_size(frame))
 
   list(
     data = data,
     terms = terms
   )
-}
-
-validate_is_formula <- function(formula) {
-  validate_is(formula, is_formula, "formula")
 }

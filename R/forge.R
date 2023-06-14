@@ -75,8 +75,8 @@ forge.default <- function(new_data, blueprint, ..., outcomes = FALSE) {
 
 #' @export
 forge.data.frame <- function(new_data, blueprint, ..., outcomes = FALSE) {
-  validate_empty_dots(...)
-  validate_is_blueprint(blueprint)
+  check_dots_empty0(...)
+  check_blueprint(blueprint)
 
   run_forge(
     blueprint,

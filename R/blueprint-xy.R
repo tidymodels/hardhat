@@ -21,10 +21,9 @@ refresh_blueprint.xy_blueprint <- function(blueprint) {
   do.call(new_xy_blueprint, as.list(blueprint))
 }
 
-is_xy_blueprint <- function(x) {
-  inherits(x, "xy_blueprint")
-}
-
-validate_is_xy_blueprint <- function(blueprint) {
-  validate_is(blueprint, is_xy_blueprint, "xy_blueprint")
+check_xy_blueprint <- function(x,
+                               ...,
+                               arg = caller_arg(x),
+                               call = caller_env()) {
+  check_inherits(x, "xy_blueprint", arg = arg, call = call)
 }

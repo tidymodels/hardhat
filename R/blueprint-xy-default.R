@@ -60,11 +60,11 @@
 #' train <- iris[1:100, ]
 #' test <- iris[101:150, ]
 #'
-#' train_x <- train[, "Sepal.Length", drop = FALSE]
-#' train_y <- train[, "Species", drop = FALSE]
+#' train_x <- train["Sepal.Length"]
+#' train_y <- train["Species"]
 #'
-#' test_x <- test[, "Sepal.Length", drop = FALSE]
-#' test_y <- test[, "Species", drop = FALSE]
+#' test_x <- test["Sepal.Length"]
+#' test_y <- test["Species"]
 #'
 #' # ---------------------------------------------------------------------------
 #' # XY Example
@@ -200,7 +200,7 @@ mold_xy_default_clean <- function(blueprint, x, y) {
 
   # Special case `y = NULL` as a 0 column variation on `x`
   if (is.null(y)) {
-    y <- x[, 0L, drop = FALSE]
+    y <- x[0L]
   }
 
   cleaned <- mold_xy_default_clean_outcomes(blueprint, y)
@@ -212,7 +212,8 @@ mold_xy_default_clean <- function(blueprint, x, y) {
 }
 
 mold_xy_default_clean_predictors <- function(blueprint, x) {
-  x <- tibble::as_tibble(x)
+  check_data_frame_or_matrix(x)
+  x <- coerce_to_tibble(x)
   list(blueprint = blueprint, x = x)
 }
 
@@ -242,7 +243,7 @@ mold_xy_default_process <- function(blueprint, x, y) {
   ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
   extras <- new_extras(predictors_extras, outcomes_extras)
 
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+  blueprint <- update_blueprint0(blueprint, ptypes = ptypes)
 
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
@@ -254,7 +255,7 @@ mold_xy_default_process_predictors <- function(blueprint, x) {
 
   x <- maybe_add_intercept_column(x, blueprint$intercept)
 
-  x <- recompose(x, blueprint$composition)
+  x <- recompose(x, composition = blueprint$composition)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -305,9 +306,10 @@ run_forge.default_xy_blueprint <- function(blueprint,
 # ------------------------------------------------------------------------------
 
 forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
+  check_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
+  check_unique_column_names(new_data)
+  check_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)
 
@@ -354,7 +356,7 @@ forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
 forge_xy_default_process_predictors <- function(blueprint, predictors) {
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   new_forge_process_terms(
     blueprint = blueprint,

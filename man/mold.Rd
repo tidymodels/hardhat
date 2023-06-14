@@ -45,7 +45,7 @@ how to use each one in conjunction with \code{mold()}.
 # for the details of each blueprint, and more examples.
 
 # XY
-mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
+mold(iris["Sepal.Width"], iris$Species)
 
 # Formula
 mold(Species ~ Sepal.Width, iris)

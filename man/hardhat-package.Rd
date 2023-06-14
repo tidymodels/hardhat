@@ -20,16 +20,16 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Davis Vaughan \email{davis@rstudio.com}
+\strong{Maintainer}: Davis Vaughan \email{davis@posit.co}
 
 Authors:
 \itemize{
-  \item Max Kuhn \email{max@rstudio.com}
+  \item Max Kuhn \email{max@posit.co}
 }
 
 Other contributors:
 \itemize{
-  \item RStudio [copyright holder, funder]
+  \item Posit Software, PBC [copyright holder, funder]
 }
 
 }

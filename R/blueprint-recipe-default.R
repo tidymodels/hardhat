@@ -139,11 +139,13 @@
 default_recipe_blueprint <- function(intercept = FALSE,
                                      allow_novel_levels = FALSE,
                                      fresh = TRUE,
+                                     strings_as_factors = TRUE,
                                      composition = "tibble") {
   new_default_recipe_blueprint(
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
+    strings_as_factors = strings_as_factors,
     composition = composition
   )
 }
@@ -158,6 +160,7 @@ default_recipe_blueprint <- function(intercept = FALSE,
 new_default_recipe_blueprint <- function(intercept = FALSE,
                                          allow_novel_levels = FALSE,
                                          fresh = TRUE,
+                                         strings_as_factors = TRUE,
                                          composition = "tibble",
                                          ptypes = NULL,
                                          recipe = NULL,
@@ -168,6 +171,7 @@ new_default_recipe_blueprint <- function(intercept = FALSE,
     intercept = intercept,
     allow_novel_levels = allow_novel_levels,
     fresh = fresh,
+    strings_as_factors = strings_as_factors,
     composition = composition,
     ptypes = ptypes,
     recipe = recipe,
@@ -201,7 +205,8 @@ run_mold.default_recipe_blueprint <- function(blueprint, ..., data) {
 # mold - recipe - clean
 
 mold_recipe_default_clean <- function(blueprint, data) {
-  data <- check_is_data_like(data)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   new_mold_clean(blueprint, data)
 }
@@ -212,8 +217,13 @@ mold_recipe_default_clean <- function(blueprint, data) {
 mold_recipe_default_process <- function(blueprint, data) {
 
   # Prep for predictors and outcomes
-  recipe <- recipes::prep(blueprint$recipe, training = data, fresh = blueprint$fresh)
-  blueprint <- update_blueprint(blueprint, recipe = recipe)
+  recipe <- recipes::prep(
+    blueprint$recipe,
+    training = data,
+    fresh = blueprint$fresh,
+    strings_as_factors = blueprint_strings_as_factors(blueprint)
+  )
+  blueprint <- update_blueprint0(blueprint, recipe = recipe)
 
   processed <- mold_recipe_default_process_predictors(blueprint = blueprint, data = data)
 
@@ -240,11 +250,11 @@ mold_recipe_default_process <- function(blueprint, data) {
   )
 
   # un-retain training data
-  blueprint <- update_blueprint(blueprint, recipe = compost(blueprint$recipe))
+  blueprint <- update_blueprint0(blueprint, recipe = compost(blueprint$recipe))
 
   ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
 
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+  blueprint <- update_blueprint0(blueprint, ptypes = ptypes)
 
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
@@ -256,7 +266,7 @@ mold_recipe_default_process_predictors <- function(blueprint, data) {
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   ptype <- get_original_predictor_ptype(blueprint$recipe, data)
 
@@ -294,7 +304,7 @@ mold_recipe_default_process_extras <- function(blueprint, data) {
   if (!is.null(original_extra_role_cols)) {
     original_extra_role_ptypes <- lapply(original_extra_role_cols, extract_ptype)
 
-    blueprint <- update_blueprint(
+    blueprint <- update_blueprint0(
       blueprint,
       extra_role_ptypes = original_extra_role_ptypes
     )
@@ -348,9 +358,10 @@ run_forge.default_recipe_blueprint <- function(blueprint,
 # ------------------------------------------------------------------------------
 
 forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
+  check_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
+  check_unique_column_names(new_data)
+  check_bool(outcomes)
 
   predictors <- shrink(new_data, blueprint$ptypes$predictors)
 
@@ -417,7 +428,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   new_data_names <- names(new_data)
   unique_names <- unique(new_data_names)
 
-  new_data <- new_data[, unique_names, drop = FALSE]
+  new_data <- new_data[unique_names]
 
   # Can't move this inside core functions
   # predictors and outcomes both must be present
@@ -427,11 +438,11 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   )
 
   processed_predictor_names <- vars[roles == "predictor"]
-  predictors <- baked_data[, processed_predictor_names, drop = FALSE]
+  predictors <- baked_data[processed_predictor_names]
 
   if (!is.null(outcomes)) {
     processed_outcome_names <- vars[roles == "outcome"]
-    outcomes <- baked_data[, processed_outcome_names, drop = FALSE]
+    outcomes <- baked_data[processed_outcome_names]
   }
 
   processed <- forge_recipe_default_process_predictors(
@@ -466,7 +477,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 forge_recipe_default_process_predictors <- function(blueprint, predictors) {
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   new_forge_process_terms(
     blueprint = blueprint,
@@ -524,9 +535,9 @@ get_original_predictor_ptype <- function(rec, data) {
   original_names <- rec$var_info$variable[roles == "predictor"]
   original_names <- original_names[!is.na(original_names)]
 
-  original_data <- data[, original_names, drop = FALSE]
+  data <- data[original_names]
 
-  extract_ptype(original_data)
+  extract_ptype(data)
 }
 
 get_original_outcome_ptype <- function(rec, data) {
@@ -535,9 +546,9 @@ get_original_outcome_ptype <- function(rec, data) {
 
   original_names <- rec$var_info$variable[roles == "outcome"]
 
-  original_data <- data[, original_names, drop = FALSE]
+  data <- data[original_names]
 
-  extract_ptype(original_data)
+  extract_ptype(data)
 }
 
 get_extra_role_columns_original <- function(rec, data) {
@@ -595,7 +606,7 @@ get_extra_role_columns <- function(rec, data, extra_roles, info_type) {
     # passed to `forge()` through `new_data`.
     role_names <- intersect(role_names, data_names)
 
-    data[, role_names, drop = FALSE]
+    data[role_names]
   })
 
   names(out) <- extra_roles

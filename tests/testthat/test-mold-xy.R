@@ -1,19 +1,7 @@
 test_that("unknown mold() inputs throw an error", {
-  sparse_bp <- default_xy_blueprint(composition = "dgCMatrix")
-  matrix_bp <- default_xy_blueprint(composition = "matrix")
-
-  expect_error(
-    mold("hi"),
-    "`x` is not a recognized type.\nOnly data.frame, matrix, recipe, and formula objects are allowed.\nA character was specified."
-  )
-  expect_error(
-    mold("hi", blueprint = sparse_bp),
-    "`x` is not a recognized type.\nOnly data.frame, matrix, recipe, and formula objects are allowed.\nA character was specified."
-  )
-  expect_error(
-    mold("hi", blueprint = matrix_bp),
-    "`x` is not a recognized type.\nOnly data.frame, matrix, recipe, and formula objects are allowed.\nA character was specified."
-  )
+  expect_snapshot(error = TRUE, {
+    mold("hi")
+  })
 })
 
 test_that("can use x-y mold interface", {
@@ -58,23 +46,21 @@ test_that("xy intercepts can be added", {
 })
 
 test_that("cannot pass anything in the dots", {
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       iris[, "Sepal.Length", drop = FALSE],
       iris$Species,
       z = "in the dots"
-    ),
-    "`...` must not contain any input. 1 elements were found"
-  )
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       iris[, "Sepal.Length", drop = FALSE],
       iris$Species,
       blueprint = default_xy_blueprint(composition = "dgCMatrix"),
       z = "in the dots"
-    ),
-    "`...` must not contain any input. 1 elements were found"
-  )
+    )
+  })
 })
 
 test_that("`NULL` y value returns a 0 column tibble for `outcomes`", {

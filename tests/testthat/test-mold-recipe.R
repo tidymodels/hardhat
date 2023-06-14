@@ -108,6 +108,18 @@ test_that("`fresh` defaults to `TRUE`", {
   expect_identical(mold_fresh_mean2, fresh_mean)
 })
 
+test_that("can pass `strings_as_factors` through to `prep()`", {
+  df <- tibble(y = 1, x = "a")
+  rec <- recipes::recipe(y ~ x, data = df)
+
+  # Defaults to `TRUE`
+  x <- mold(rec, df)
+  expect_identical(x$predictors$x, factor("a"))
+
+  x <- mold(rec, df, blueprint = default_recipe_blueprint(strings_as_factors = FALSE))
+  expect_identical(x$predictors$x, "a")
+})
+
 test_that("`data` is validated", {
   expect_error(
     mold(recipes::recipe(Species ~ Sepal.Length, data = iris), 1),

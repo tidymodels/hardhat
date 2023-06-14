@@ -324,6 +324,11 @@ default_formula_blueprint <- function(intercept = FALSE,
 #' elements are `terms` objects that describe the terms for the outcomes and
 #' predictors separately. This argument is set automatically at [mold()] time.
 #'
+#' @param levels Either `NULL` or a named list of character vectors that
+#' correspond to the levels observed when converting character predictor columns
+#' to factors during [mold()]. This argument is set automatically at [mold()]
+#' time.
+#'
 #' @rdname new-default-blueprint
 #' @export
 new_default_formula_blueprint <- function(intercept = FALSE,
@@ -336,9 +341,11 @@ new_default_formula_blueprint <- function(intercept = FALSE,
                                             predictors = NULL,
                                             outcomes = NULL
                                           ),
+                                          levels = NULL,
                                           ...,
                                           subclass = character()) {
-  validate_is_terms_list_or_null(terms)
+  check_terms_list(terms)
+  check_levels(levels, allow_null = TRUE)
 
   new_formula_blueprint(
     intercept = intercept,
@@ -348,6 +355,7 @@ new_default_formula_blueprint <- function(intercept = FALSE,
     indicators = indicators,
     composition = composition,
     terms = terms,
+    levels = levels,
     ...,
     subclass = c(subclass, "default_formula_blueprint")
   )
@@ -379,18 +387,104 @@ run_mold.default_formula_blueprint <- function(blueprint, ..., data) {
 # mold - formula - clean
 
 mold_formula_default_clean <- function(blueprint, data) {
-  data <- check_is_data_like(data)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
-  # validate here, not in the constructor, because we
+  # Check here, not in the constructor, because we
   # put a non-intercept-containing formula back in
-  validate_formula_has_intercept(blueprint$formula)
+  check_implicit_intercept(blueprint$formula, arg = "formula")
 
   formula <- remove_formula_intercept(blueprint$formula, blueprint$intercept)
   formula <- alter_formula_environment(formula)
 
-  blueprint <- update_blueprint(blueprint, formula = formula)
+  blueprint <- update_blueprint0(blueprint, formula = formula)
 
   new_mold_clean(blueprint, data)
+}
+
+check_implicit_intercept <- function(x,
+                                     ...,
+                                     arg = caller_arg(x),
+                                     call = caller_env()) {
+  # The formula must have an implicit intercept to remove.
+  # Don't let the user do `0+` or `+0` or `-1`.
+  x <- f_rhs(x)
+  check_not_1_or_0(x, arg = arg, call = call)
+  recurse_intercept_search(x, arg = arg, call = call)
+}
+
+check_not_1_or_0 <- function(x,
+                             ...,
+                             arg = caller_arg(x),
+                             call = caller_env()) {
+  if (!is_scalar_integerish(x)) {
+    return(invisible(NULL))
+  }
+
+  if (x == 1) {
+    cli::cli_abort(
+      "{.arg {arg}} must not contain the intercept term, `1`.",
+      call = call
+    )
+  }
+
+  if (x == 0) {
+    cli::cli_abort(
+      "{.arg {arg}} must not contain the intercept removal term, `0`.",
+      call = call
+    )
+  }
+
+  invisible(NULL)
+}
+
+recurse_intercept_search <- function(x,
+                                     ...,
+                                     arg = caller_arg(x),
+                                     call = caller_env()) {
+  if (!is_call(x)) {
+    return(invisible(NULL))
+  }
+
+  call_name <- call_name(x)
+  call_args <- call_args(x)
+
+  # Check for `+ 0` or `0 +`
+  if (is_string(call_name, string = "+")) {
+    for (call_arg in call_args) {
+      if (call_arg == 0L) {
+        cli::cli_abort(
+          "{.arg {arg}} must not contain the intercept removal term: `+ 0` or `0 +`.",
+          call = call
+        )
+      }
+    }
+  }
+
+  # Check for `- 1`
+  if (is_string(call_name, string = "-")) {
+    if (length(call_args) == 2L) {
+      call_arg <- call_args[[2]]
+    }
+
+    if (length(call_args) == 1L) {
+      call_arg <- call_args[[1]]
+    }
+
+    if (call_arg == 1L) {
+      cli::cli_abort(
+        "{.arg {arg}} must not contain the intercept removal term: `- 1`.",
+        call = call
+      )
+    }
+  }
+
+  # Recurse
+  for (call_arg in call_args) {
+    recurse_intercept_search(call_arg, arg = arg, call = call)
+  }
+
+  invisible(NULL)
 }
 
 # ------------------------------------------------------------------------------
@@ -419,12 +513,12 @@ mold_formula_default_process <- function(blueprint, data) {
 
   # nuke formula environment before returning
   formula_empty_env <- nuke_formula_environment(blueprint$formula)
-  blueprint <- update_blueprint(blueprint, formula = formula_empty_env)
+  blueprint <- update_blueprint0(blueprint, formula = formula_empty_env)
 
   ptypes <- new_ptypes(predictors_ptype, outcomes_ptype)
   extras <- new_extras(predictors_extras, outcomes_extras)
 
-  blueprint <- update_blueprint(blueprint, ptypes = ptypes)
+  blueprint <- update_blueprint0(blueprint, ptypes = ptypes)
 
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
@@ -434,15 +528,35 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   formula <- get_predictors_formula(formula)
 
   original_names <- get_all_predictors(formula, data)
-  original_data <- data[, original_names, drop = FALSE]
+  data <- data[original_names]
 
-  ptype <- extract_ptype(original_data)
+  ptype <- extract_ptype(data)
+
+  if (identical(blueprint$indicators, "traditional") ||
+      identical(blueprint$indicators, "one_hot")) {
+    # Early convert character columns to factors and capture the factor levels
+    # for use in `forge()`. Do this after collecting the `ptype` on the original
+    # data to ensure it is untouched. Converting with just `factor()` and
+    # letting levels be sorted (rather than by appearance) to match base R and
+    # recipes `prep(strings_as_factors = TRUE)`.
+    characters <- map_lgl(ptype, is.character)
+    characters <- names(ptype)[characters]
+    data[characters] <- map(data[characters], factor)
+    levels <- map(data[characters], levels)
+  } else if (identical(blueprint$indicators, "none")) {
+    # We don't convert character columns to factors with `indicators = "none"`
+    levels <- list()
+  }
+
+  blueprint <- update_blueprint0(blueprint, levels = levels)
 
   if (identical(blueprint$indicators, "none")) {
     factorish_names <- extract_original_factorish_names(ptype)
-    validate_no_factorish_in_functions(formula, factorish_names)
-    validate_no_factorish_in_interactions(formula, factorish_names)
+    factorish_data <- data[factorish_names]
+    check_no_factorish_in_interactions(formula, factorish_names)
+    check_no_factorish_in_functions(formula, factorish_names)
     formula <- remove_factorish_from_formula(formula, factorish_names)
+    data <- mask_factorish_in_data(data, factorish_names)
   }
 
   framed <- model_frame(formula, data)
@@ -461,16 +575,16 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
   }
 
   if (identical(blueprint$indicators, "none")) {
-    predictors <- reattach_factorish_columns(predictors, data, factorish_names)
+    predictors <- unmask_factorish_in_data(predictors, factorish_data)
   }
 
   terms <- simplify_terms(framed$terms)
 
-  predictors <- recompose(predictors, blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition)
 
   blueprint_terms <- blueprint$terms
   blueprint_terms$predictors <- terms
-  blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
+  blueprint <- update_blueprint0(blueprint, terms = blueprint_terms)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -484,14 +598,14 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
   formula <- blueprint$formula
 
   original_names <- get_all_outcomes(formula, data)
-  original_data <- data[, original_names, drop = FALSE]
+  data <- data[original_names]
 
-  ptype <- extract_ptype(original_data)
+  ptype <- extract_ptype(data)
 
   formula <- get_outcomes_formula(formula)
 
   # used on the `~ LHS` formula
-  validate_no_interactions(formula)
+  check_no_interactions(formula)
 
   framed <- model_frame(formula, data)
 
@@ -501,7 +615,7 @@ mold_formula_default_process_outcomes <- function(blueprint, data) {
 
   blueprint_terms <- blueprint$terms
   blueprint_terms$outcomes <- terms
-  blueprint <- update_blueprint(blueprint, terms = blueprint_terms)
+  blueprint <- update_blueprint0(blueprint, terms = blueprint_terms)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -542,15 +656,27 @@ run_forge.default_formula_blueprint <- function(blueprint,
 # ------------------------------------------------------------------------------
 
 forge_formula_default_clean <- function(blueprint, new_data, outcomes) {
-  validate_is_new_data_like(new_data)
-  validate_has_unique_column_names(new_data, "new_data")
-  validate_is_bool(outcomes)
+  check_data_frame_or_matrix(new_data)
+  new_data <- coerce_to_tibble(new_data)
+  check_unique_column_names(new_data)
+  check_bool(outcomes)
 
-  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  # If character columns were converted to factor at `mold()` time,
+  # reapply that to the predictors `ptype` here (#213)
+  predictors_levels <- blueprint_levels(blueprint)
+  predictors_characters <- names2(predictors_levels)
+  predictors_ptype <- blueprint$ptypes$predictors
+  predictors_ptype[predictors_characters] <- map2(
+    predictors_ptype[predictors_characters],
+    predictors_levels,
+    function(col, levels) factor(col, levels = levels)
+  )
+
+  predictors <- shrink(new_data, predictors_ptype)
 
   predictors <- scream(
     predictors,
-    blueprint$ptypes$predictors,
+    predictors_ptype,
     allow_novel_levels = blueprint$allow_novel_levels
   )
 
@@ -598,6 +724,12 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   terms <- blueprint$terms$predictors
   terms <- alter_terms_environment(terms)
 
+  if (identical(blueprint$indicators, "none")) {
+    factorish_names <- extract_original_factorish_names(blueprint$ptypes$predictors)
+    factorish_predictors <- predictors[factorish_names]
+    predictors <- mask_factorish_in_data(predictors, factorish_names)
+  }
+
   framed <- model_frame(terms, predictors)
 
   if (identical(blueprint$indicators, "one_hot")) {
@@ -613,11 +745,10 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
   }
 
   if (identical(blueprint$indicators, "none")) {
-    factorish_names <- extract_original_factorish_names(blueprint$ptypes$predictors)
-    data <- reattach_factorish_columns(data, predictors, factorish_names)
+    data <- unmask_factorish_in_data(data, factorish_predictors)
   }
 
-  data <- recompose(data, blueprint$composition)
+  data <- recompose(data, composition = blueprint$composition)
 
   offset <- extract_offset(framed$terms, framed$data)
 
@@ -671,6 +802,19 @@ alter_terms_environment <- function(terms_blueprint) {
 
 # ------------------------------------------------------------------------------
 
+blueprint_levels <- function(x) {
+  # See #213
+  if (has_name(x, "levels")) {
+    # Blueprint is new enough to have this field
+    x[["levels"]]
+  } else {
+    # Backwards compatible support if the blueprint is old
+    list()
+  }
+}
+
+# ------------------------------------------------------------------------------
+
 expand_formula_dot_notation <- function(formula, data) {
 
   # Calling terms() on the formula, and providing
@@ -693,21 +837,51 @@ nuke_formula_environment <- function(formula) {
   )
 }
 
-validate_is_terms_list_or_null <- function(terms) {
-  validate_is(terms, is_list, "list")
+check_terms_list <- function(x,
+                             ...,
+                             arg = caller_arg(x),
+                             call = caller_env()) {
+  check_list(x, arg = arg, call = call)
 
-  validate_has_name(terms, "terms", "predictors")
-  validate_has_name(terms, "terms", "outcomes")
+  check_has_name(x = x, name = "predictors", arg = arg, call = call)
+  check_has_name(x = x, name = "outcomes", arg = arg, call = call)
 
-  if (!is.null(terms$predictors)) {
-    validate_is_terms(terms$predictors, glue("terms$predictors"))
+  check_terms(
+    x = x$predictors,
+    allow_null = TRUE,
+    arg = cli::format_inline("{arg}$predictors"),
+    call = call
+  )
+  check_terms(
+    x = x$outcomes,
+    allow_null = TRUE,
+    arg = cli::format_inline("{arg}$outcomes"),
+    call = call
+  )
+
+  invisible(NULL)
+}
+
+check_levels <- function(x,
+                         ...,
+                         allow_null = FALSE,
+                         arg = caller_arg(x),
+                         call = caller_env()) {
+  if (allow_null && is_null(x)) {
+    return(invisible(NULL))
   }
 
-  if (!is.null(terms$outcomes)) {
-    validate_is_terms(terms$outcomes, glue("terms$outcomes"))
+  check_list(x, arg = arg, call = call)
+
+  if (!is_named2(x)) {
+    cli::cli_abort("{.arg {arg}} must be fully named.", call = call)
   }
 
-  invisible(terms)
+  if (!all(map_lgl(x, is.character))) {
+    cli::cli_abort("{.arg {arg}} must only contain character vectors.", call = call)
+  }
+
+  invisible(NULL)
 }
 
 alter_formula_environment <- function(formula) {
@@ -753,230 +927,169 @@ flatten_embedded_columns <- function(data) {
     )
 
     data <- eval_bare(frame_flattener)
+    data <- hardhat_new_tibble(data, size = vec_size(data))
   }
 
-  tibble::as_tibble(data)
+  data
 }
 
-validate_no_factorish_in_functions <- function(.formula, .factorish_names) {
-  .terms <- terms(.formula)
+check_no_factorish_in_functions <- function(f, names, error_call = caller_env()) {
+  expr <- f_rhs(f)
 
-  bad_original_cols <- detect_factorish_in_functions(.terms, .factorish_names)
-
-  ok <- length(bad_original_cols) == 0L
-
-  if (!ok) {
-    bad_original_cols <- glue_quote_collapse(bad_original_cols)
-
-    glubort(
-      "Functions involving factors or characters have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
-      "Functions involving factors were detected for the following columns: ",
-      "{bad_original_cols}."
-    )
-  }
-
-  invisible(.formula)
+  expr_check_no_factorish_in_functions(
+    expr = expr,
+    names = names,
+    error_call = error_call,
+    in_allowed_subset = TRUE
+  )
 }
-
-# Returns original column names of any factor columns that
-# are present in an inline function
-# The row.names() of the factors matrix contains all of the
-# non-interaction expressions that are used in the formula
-detect_factorish_in_functions <- function(.terms, .factorish_names) {
-  terms_matrix <- attr(.terms, "factors")
-
-  only_intercept_or_offsets <- length(terms_matrix) == 0L
-  if (only_intercept_or_offsets) {
-    return(character(0))
+expr_check_no_factorish_in_functions <- function(expr,
+                                                 names,
+                                                 error_call,
+                                                 in_allowed_subset = FALSE) {
+  if (!is_call(expr)) {
+    return(invisible(NULL))
   }
 
-  all_terms_chrs <- row.names(terms_matrix)
+  original_expr <- expr
+  expr <- expr[-1L]
 
-  # Remove bare factor / character names
-  candidate_chrs <- all_terms_chrs[!(all_terms_chrs %in% .factorish_names)]
+  # Are we continuing an existing chain of allowed functions?
+  in_allowed_subset <- in_allowed_subset &&
+    is_call(original_expr, name = c("+", "-", "("))
 
-  if (length(candidate_chrs) == 0L) {
-    return(character(0))
-  }
+  for (i in seq_along(expr)) {
+    elt <- expr[[i]]
 
-  candidate_exprs <- parse_exprs(candidate_chrs)
+    if (!in_allowed_subset && is_symbol(elt, name = names)) {
+      name <- as_string(elt)
+      expr <- as_label(original_expr)
 
-  # Look for each factorish name in the list of candidate expressions
-  factorish_name_is_in_a_fn <- map_lgl(
-    .factorish_names,
-    function(factorish_name) {
-      has_name <- map_lgl(
-        candidate_exprs,
-        expr_contains,
-        what = as.name(factorish_name),
-        include_function_names = FALSE
+      message <- c(
+        paste0(
+          "Functions involving factors or characters have been detected on the ",
+          "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
+        ),
+        i = "Functions involving factors were detected for {.str {name}} in {.arg {expr}}."
       )
-      any(has_name)
+
+      cli::cli_abort(message, call = error_call)
     }
-  )
 
-  bad_cols <- .factorish_names[factorish_name_is_in_a_fn]
-
-  bad_cols
-}
-
-validate_no_factorish_in_interactions <- function(.formula, .factorish_names) {
-
-  # Call terms on a standard formula to generate the terms interaction matrix
-  .terms <- terms(.formula)
-
-  bad_original_cols <- detect_factorish_in_interactions(.terms, .factorish_names)
-
-  ok <- length(bad_original_cols) == 0L
-
-  if (!ok) {
-    bad_original_cols <- glue_quote_collapse(bad_original_cols)
-
-    glubort(
-      "Interaction terms involving factors or characters have been detected on the ",
-      "RHS of `formula`. These are not allowed when `indicators = \"none\"`. ",
-      "Interactions involving factors were detected for the following columns: ",
-      "{bad_original_cols}."
+    expr_check_no_factorish_in_functions(
+      expr = elt,
+      names = names,
+      in_allowed_subset = in_allowed_subset,
+      error_call = error_call
     )
   }
 
-  invisible(.formula)
+  invisible(NULL)
 }
 
-# Returns the _original_ column names
-# of any factor / character columns that are present
-# in any interaction terms (from : or * or %in% or ^)
-detect_factorish_in_interactions <- function(.terms, .factorish_names) {
-  terms_matrix <- attr(.terms, "factors")
-
-  only_intercept_or_offsets <- length(terms_matrix) == 0L
-  if (only_intercept_or_offsets) {
-    return(character(0))
-  }
-
-  other_cols <- setdiff(colnames(terms_matrix), .factorish_names)
-
-  no_other_cols <- length(other_cols) == 0L
-  if (no_other_cols) {
-    return(character(0))
-  }
-
-  # Something like Species, rather than paste0(Species)
-  indicator_bare_factorish <- .factorish_names %in% row.names(terms_matrix)
-  bare_factorish_names <- .factorish_names[indicator_bare_factorish]
-
-  # Something like mold(~ paste0(Species), iris, indicators = "none")
-  no_bare_factorish_used <- length(bare_factorish_names) == 0L
-  if (no_bare_factorish_used) {
-    return(character(0))
-  }
-
-  factorish_rows <- terms_matrix[bare_factorish_names, , drop = FALSE]
-  factorish_rows <- factorish_rows[, other_cols, drop = FALSE]
-
-  # In the factor matrix, only `:` is present to represent interactions,
-  # even if something like * or ^ or %in% was used to generate it
-  terms_names <- colnames(factorish_rows)
-  terms_exprs <- parse_exprs(terms_names)
-  has_interactions <- map_lgl(terms_exprs, expr_contains, what = as.name(":"))
-
-  none_have_interactions <- !any(has_interactions)
-  if (none_have_interactions) {
-    return(character(0))
-  }
-
-  interaction_cols <- factorish_rows[, has_interactions, drop = FALSE]
-
-  factorish_is_bad_if_gt_0 <- rowSums(interaction_cols)
-  bad_factorish_vals <- factorish_is_bad_if_gt_0[factorish_is_bad_if_gt_0 > 0]
-
-  bad_cols <- names(bad_factorish_vals)
-
-  bad_cols
+check_no_factorish_in_interactions <- function(f, names, error_call = caller_env()) {
+  expr <- f_rhs(f)
+  expr_check_no_factorish_in_interactions(expr, names, error_call = error_call)
 }
-
-validate_no_interactions <- function(.formula) {
-  bad_terms <- detect_interactions(.formula)
-
-  no_interactions <- length(bad_terms) == 0L
-  if (no_interactions) {
-    return(invisible(.formula))
+expr_check_no_factorish_in_interactions <- function(expr, names, error_call) {
+  if (!is_call(expr)) {
+    return(invisible(NULL))
   }
 
-  bad_terms <- glue_quote_collapse(bad_terms)
-
-  glubort(
-    "Interaction terms cannot be specified on the LHS of `formula`. ",
-    "The following interaction terms were found: {bad_terms}."
-  )
-}
-
-# Returns processed names of any interaction terms
-# like 'Species:Sepal.Width', or character(0)
-detect_interactions <- function(.formula) {
-  .terms <- terms(.formula)
-
-  terms_matrix <- attr(.terms, "factors")
-
-  only_intercept_or_offsets <- length(terms_matrix) == 0L
-  if (only_intercept_or_offsets) {
-    return(character(0))
-  }
-
-  terms_names <- colnames(terms_matrix)
-
-  # All interactions (*, ^, %in%) will be expanded to `:`
-  terms_exprs <- parse_exprs(terms_names)
-  has_interactions <- map_lgl(terms_exprs, expr_contains, what = as.name(":"))
-
-  has_any_interactions <- any(has_interactions)
-
-  if (!has_any_interactions) {
-    return(character(0))
-  }
-
-  bad_terms <- terms_names[has_interactions]
-
-  bad_terms
-}
-
-expr_contains <- function(expr, what, ..., include_function_names = TRUE) {
-  if (!is_expression(expr)) {
-    abort("`expr` must be an expression.")
-  }
-  if (!is_symbol(what)) {
-    abort("`what` must be a symbol.")
-  }
-
-  expr_contains_recurse(expr, what, include_function_names)
-}
-expr_contains_recurse <- function(expr, what, include_function_names) {
-  switch(typeof(expr),
-    symbol = identical(expr, what),
-    language = language_contains(expr, what, include_function_names),
-    FALSE
-  )
-}
-language_contains <- function(expr, what, include_function_names) {
-  if (length(expr) == 0L) {
-    abort("Internal error, `expr` should be at least length 1.")
-  }
-
-  if (!include_function_names) {
-    # Drop function name to avoid matching that
+  if (is_call(expr, name = fns_interactions())) {
+    expr_original <- expr
     expr <- expr[-1L]
+
+    for (i in seq_along(expr)) {
+      expr_check_no_factorish_in_interaction_term(
+        expr = expr[[i]],
+        names = names,
+        expr_original = expr_original,
+        error_call = error_call
+      )
+    }
+  } else {
+    expr <- expr[-1L]
+
+    for (i in seq_along(expr)) {
+      expr_check_no_factorish_in_interactions(
+        expr = expr[[i]],
+        names = names,
+        error_call = error_call
+      )
+    }
   }
 
-  # Recurse into elements
-  contains <- map_lgl(
-    expr,
-    expr_contains_recurse,
-    what = what,
-    include_function_names = include_function_names
-  )
+  invisible(NULL)
+}
+expr_check_no_factorish_in_interaction_term <- function(expr,
+                                                        names,
+                                                        expr_original,
+                                                        error_call) {
+  if (is_symbol(expr, name = names)) {
+    name <- as_string(expr)
+    expr <- as_label(expr_original)
 
-  any(contains)
+    message <- c(
+      paste0(
+        "Interaction terms involving factors or characters have been detected on the ",
+        "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
+      ),
+      i = "Interactions terms involving factors were detected for {.str {name}} in {.arg {expr}}."
+    )
+
+    cli::cli_abort(message, call = error_call)
+  }
+
+  if (!is_call(expr)) {
+    return(invisible(NULL))
+  }
+
+  expr <- expr[-1L]
+
+  for (i in seq_along(expr)) {
+    expr_check_no_factorish_in_interaction_term(
+      expr = expr[[i]],
+      names = names,
+      expr_original = expr_original,
+      error_call = error_call
+    )
+  }
+
+  invisible(NULL)
+}
+
+check_no_interactions <- function(f, error_call = caller_env()) {
+  expr <- f_rhs(f)
+  expr_check_no_interactions(expr, error_call = error_call)
+}
+expr_check_no_interactions <- function(expr, error_call) {
+  if (!is_call(expr)) {
+    return(invisible(NULL))
+  }
+
+  if (is_call(expr, name = fns_interactions())) {
+    expr <- as_label(expr)
+
+    message <- c(
+      "Interaction terms can't be specified on the LHS of `formula`.",
+      i = "The following interaction term was found: {.arg {expr}}."
+    )
+
+    cli::cli_abort(message, call = error_call)
+  }
+
+  expr <- expr[-1L]
+
+  for (i in seq_along(expr)) {
+    expr_check_no_interactions(expr[[i]], error_call = error_call)
+  }
+
+  invisible(NULL)
+}
+
+fns_interactions <- function() {
+  c(":", "*", "^", "/", "%in%")
 }
 
 extract_original_factorish_names <- function(ptype) {
@@ -1011,9 +1124,26 @@ remove_factorish_from_formula <- function(.formula, .factorish_names) {
   )
 }
 
-reattach_factorish_columns <- function(predictors, data, factorish_names) {
-  data_factorish_cols <- data[, factorish_names, drop = FALSE]
-  tibble::add_column(predictors, !!!data_factorish_cols)
+mask_factorish_in_data <- function(data, factorish_names) {
+  # Replace factorish columns with columns of repeated `1L`s (#213).
+  # Hopefully this is as close to a no-op as we can get in `model.matrix()`.
+  if (length(factorish_names) > 0L) {
+    ones <- vec_rep(1L, times = nrow(data))
+    ones <- list(ones)
+    data[factorish_names] <- ones
+  }
+
+  data
+}
+
+unmask_factorish_in_data <- function(data, factorish_data) {
+  factorish_names <- names(factorish_data)
+
+  if (length(factorish_names) > 0L) {
+    data[factorish_names] <- factorish_data
+  }
+
+  data
 }
 
 get_predictors_formula <- function(formula) {

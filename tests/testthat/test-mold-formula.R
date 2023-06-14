@@ -115,97 +115,115 @@ test_that("errors are thrown if `indicator = 'none'` and factor interactions exi
     NA
   )
 
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1:num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "Interaction terms involving factors"
-  )
+    )
+  })
 
   # Checking various types of generated interactions
 
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1:num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1 * num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ (fac_1 + num_2)^2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  expect_error(
+    )
+  })
+  expect_snapshot(error = TRUE, {
     mold(
       num_1 ~ fac_1 %in% num_2,
       example_train,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1'"
-  )
-
-  # Both factor issues are reported
+    )
+  })
 
   example_train2 <- example_train
   example_train2$fac_12 <- example_train2$fac_1
 
-  expect_error(
+  expect_snapshot(error = TRUE, {
     mold(
       ~ fac_1:fac_12,
       example_train2,
       blueprint = default_formula_blueprint(indicators = "none")
-    ),
-    "'fac_1', 'fac_12'."
-  )
+    )
+  })
 })
 
 test_that("errors are thrown if `indicator = 'none'` and factors are used in inline functions", {
   blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
 
-  expect_error(
-    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators),
-    "Functions involving factors"
-  )
-
-  expect_error(
-    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators),
-    "'fac_1'"
-  )
-
-  expect_error(
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
     mold(~ fac_1 %>% paste0(), example_train, blueprint = blueprint_no_indicators)
-  )
-
-  expect_error(
-    mold(~ paste0(fac_1 + fac_1), example_train, blueprint = blueprint_no_indicators),
-    "'fac_1'"
-  )
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1 + fac_1), example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ (fac_1) & num_1, example_train, blueprint = blueprint_no_indicators)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ (fac_1 & num_1), example_train, blueprint = blueprint_no_indicators)
+  })
 
   example_train2 <- example_train
   example_train2$fac_12 <- example_train2$fac_1
 
-  expect_error(
-    mold(~ paste0(fac_1) + paste0(fac_12), example_train2, blueprint = blueprint_no_indicators),
-    "'fac_1', 'fac_12'."
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~ paste0(fac_1) + paste0(fac_12), example_train2, blueprint = blueprint_no_indicators)
+  })
+})
+
+test_that("`indicators = 'none'` doesn't error for allowed inline functions", {
+  df <- tibble(y = 1:2, x = factor(c("a", "b")), x2 = c(2, 3))
+
+  blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
+
+  out <- mold(y ~ (x), df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+
+  out <- mold(y ~ (x) + x, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+
+  out <- mold(y ~ (x) - x2, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors, df["x"])
+
+  out <- mold(y ~ 1 + x2 + x, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+
+  out <- mold(y ~ 1 - x2 + (x), df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors$x, df$x)
+})
+
+test_that("`indicators = 'none'` doesn't error for names with spaces in them (#217)", {
+  df <- vctrs::data_frame(y = 1:2, `foo bar` = factor(c("a", "b")))
+
+  blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
+
+  out <- mold(y ~ `foo bar`, df, blueprint = blueprint_no_indicators)
+  expect_identical(out$predictors[["foo bar"]], df[["foo bar"]])
 })
 
 test_that("`indicators = 'none'` doesn't error if a non-factor name regex-matches a factor name (#182)", {
@@ -347,37 +365,30 @@ test_that("cannot manually remove intercept in the formula itself", {
 test_that("RHS with _only_ intercept related terms are caught", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
 
-  expect_error(
-    mold(~0, example_train),
-    "`formula` must not contain the intercept removal term"
-  )
-  expect_error(
-    mold(~0, example_train, blueprint = bp),
-    "`formula` must not contain the intercept removal term"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train, blueprint = bp)
+  })
 
-  expect_error(
-    mold(~1, example_train),
-    "`formula` must not contain the intercept term"
-  )
-
-  expect_error(
-    mold(~ -1, example_train),
-    "`formula` must not contain the intercept removal term"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~1, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~ -1, example_train)
+  })
 })
 
 test_that("`NULL` can be used to represent empty RHS formulas", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
 
-  expect_error(
-    mold(~0, example_train),
-    "`formula` must not contain the intercept removal term"
-  )
-  expect_error(
-    mold(~0, example_train, blueprint = bp),
-    "`formula` must not contain the intercept removal term"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(~0, example_train, blueprint = bp)
+  })
 
   expect_error(
     x1 <- mold(~NULL, example_train),
@@ -472,30 +483,24 @@ test_that("`indicators = 'none'` runs numeric interactions", {
 })
 
 test_that("LHS of the formula cannot contain interactions", {
-  expect_error(
-    mold(num_1:num_2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold(num_1 * num_2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold(num_1 %in% num_2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold((num_1 + num_2)^2 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2'"
-  )
-
-  expect_error(
-    mold(num_1:num_2 + fac_1:num_1 ~ num_2, example_train),
-    "The following interaction terms were found: 'num_1:num_2', 'num_1:fac_1'"
-  )
+  expect_snapshot(error = TRUE, {
+    mold(num_1:num_2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1 * num_2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1 %in% num_2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold((num_1 + num_2)^2 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1:num_2 + fac_1:num_1 ~ num_2, example_train)
+  })
+  expect_snapshot(error = TRUE, {
+    mold(num_1 / num_2 ~ num_2, example_train)
+  })
 })
 
 test_that("LHS of the formula won't misinterpret `::` as an interaction (#174)", {
@@ -682,6 +687,14 @@ test_that("Missing y value still has outcome `terms` present", {
   )
 })
 
+test_that("`blueprint` is validated", {
+  df <- tibble(x = 1)
+
+  expect_snapshot(error = TRUE, {
+    mold(~x, df, blueprint = 1)
+  })
+})
+
 # ------------------------------------------------------------------------------
 # Character predictors
 
@@ -744,6 +757,69 @@ test_that("character predictors are left as characters when `indicators` is 'non
 
   expect_true(is.character(x$blueprint$ptypes$predictors$x))
   expect_true(is.character(x$blueprint$ptypes$predictors$z))
+})
+
+test_that("character vectors with `indicators = traditional/one_hot` store levels in `levels` (#213)", {
+  df <- tibble(x = c("a", "b", "c"), y = factor(c("d", "e", "e")), z = c("g", "f", "g"))
+
+  bp <- default_formula_blueprint(indicators = "traditional")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  # Only from character columns, and the levels get sorted
+  # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
+  expect_identical(
+    x$blueprint$levels,
+    list(
+      x = c("a", "b", "c"),
+      z = c("f", "g")
+    )
+  )
+
+  # We leave the `ptype` untouched, mirroring the original data
+  expect_identical(x$blueprint$ptypes$predictors$x, character())
+  expect_identical(x$blueprint$ptypes$predictors$y, vec_ptype(df$y))
+  expect_identical(x$blueprint$ptypes$predictors$z, character())
+
+  bp <- default_formula_blueprint(indicators = "one_hot")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  # Only from character columns, and the levels get sorted
+  # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
+  expect_identical(
+    x$blueprint$levels,
+    list(
+      x = c("a", "b", "c"),
+      z = c("f", "g")
+    )
+  )
+})
+
+test_that("character vectors with `indicators = none` don't use `levels` (#213)", {
+  df <- tibble(x = c("a", "b", "c"), y = factor(c("d", "e", "e")), z = c("g", "f", "g"))
+
+  bp <- default_formula_blueprint(indicators = "none")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  expect_identical(x$blueprint$levels, list())
+
+  expect_identical(x$blueprint$ptypes$predictors$x, character())
+  expect_identical(x$blueprint$ptypes$predictors$y, vec_ptype(df$y))
+  expect_identical(x$blueprint$ptypes$predictors$z, character())
+})
+
+test_that("character vectors with `indicators = none` works with constant columns (#213)", {
+  df <- tibble(x = "a", y = factor("d"), z = "g")
+
+  bp <- default_formula_blueprint(indicators = "none")
+  x <- mold(~x + y + z, df, blueprint = bp)
+
+  expect_identical(x$blueprint$ptypes$predictors$x, character())
+  expect_identical(x$blueprint$ptypes$predictors$y, vec_ptype(df$y))
+  expect_identical(x$blueprint$ptypes$predictors$z, character())
+
+  expect_identical(x$predictors$x, df$x)
+  expect_identical(x$predictors$y, df$y)
+  expect_identical(x$predictors$z, df$z)
 })
 
 # ------------------------------------------------------------------------------

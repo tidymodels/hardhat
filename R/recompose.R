@@ -1,58 +1,88 @@
-# This is the same as the "recomposition" at the end of recipes::bake()
+#' Recompose a data frame into another form
+#'
+#' @description
+#' `recompose()` takes a data frame and converts it into one of:
+#' - A tibble
+#' - A data frame
+#' - A matrix
+#' - A sparse matrix (using the Matrix package)
+#'
+#' This is an internal function used only by hardhat and recipes.
+#'
+#' @inheritParams rlang::args_dots_empty
+#'
+#' @param data A data frame.
+#'
+#' @param composition One of:
+#'   - `"tibble"` to convert to a tibble.
+#'   - `"data.frame"` to convert to a base data frame.
+#'   - `"matrix"` to convert to a matrix. All columns must be numeric.
+#'   - `"dgCMatrix"` to convert to a sparse matrix. All columns must be numeric,
+#'     and the Matrix package must be installed.
+#'
+#' @returns
+#' The output type is determined from the `composition`.
+#'
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' df <- vctrs::data_frame(x = 1)
+#'
+#' recompose(df)
+#' recompose(df, composition = "matrix")
+#'
+#' # All columns must be numeric to convert to a matrix
+#' df <- vctrs::data_frame(x = 1, y = "a")
+#' try(recompose(df, composition = "matrix"))
+recompose <- function(data,
+                      ...,
+                      composition = "tibble") {
+  check_dots_empty0(...)
+  check_data_frame(data)
 
-recompose <- function(data, composition) {
-  if (identical(composition, "tibble")) {
-    data
-  } else if (identical(composition, "dgCMatrix")) {
-    convert_matrix(data, sparse = TRUE)
-  } else if (identical(composition, "matrix")) {
-    convert_matrix(data, sparse = FALSE)
-  } else {
-    abort("Internal error: Unknown `composition` type.")
-  }
-}
-
-convert_matrix <- function(x, sparse = TRUE) {
-  is_num <- vapply(x, is.numeric, logical(1))
-
-  if (!all(is_num)) {
-    num_viol <- sum(!is_num)
-    if (num_viol < 5) {
-      abort(
-        paste0(
-          "Columns (",
-          paste0("`", names(is_num)[!is_num], "`", collapse = ", "),
-          ") are not numeric; cannot convert to matrix."
-        )
-      )
-    } else {
-      abort(
-        paste0(
-          num_viol,
-          " columns are not numeric; cannot ",
-          "convert to matrix."
-        )
-      )
-    }
-  }
-
-  # At this point, all cols are numeric so we can just use as.matrix()
-  res <- as.matrix(x)
-
-  if (sparse) {
-    if (!is_installed("Matrix")) {
-      abort("The Matrix package must be installed to use a 'dgCMatrix' `composition`")
-    }
-    res <- Matrix::Matrix(res, sparse = TRUE)
-  }
-
-  res
-}
-
-validate_composition <- function(composition) {
-  arg_match0(
+  composition <- arg_match0(
     arg = composition,
-    values = c("tibble", "matrix", "dgCMatrix"),
-    arg_nm = "composition"
+    values = c("tibble", "data.frame", "matrix", "dgCMatrix")
   )
+
+  switch(
+    composition,
+    tibble = {
+      coerce_to_tibble(data)
+    },
+    data.frame = {
+      new_data_frame(data, n = vec_size(data))
+    },
+    matrix = {
+      coerce_to_matrix(data)
+    },
+    dgCMatrix = {
+      data <- coerce_to_matrix(data)
+      coerce_to_sparse(data)
+    }
+  )
+}
+
+coerce_to_matrix <- function(data, error_call = caller_env()) {
+  numeric <- map_lgl(data, is.numeric)
+
+  if (!all(numeric)) {
+    loc <- which(!numeric)
+    loc <- names(data)[loc]
+
+    message <- c(
+      "{.arg data} must only contain numeric columns.",
+      i = "These columns aren't numeric: {.str {loc}}."
+    )
+
+    cli::cli_abort(message, call = error_call)
+  }
+
+  as.matrix(data)
+}
+
+coerce_to_sparse <- function(data, error_call = caller_env()) {
+  check_installed("Matrix", call = error_call)
+  Matrix::Matrix(data, sparse = TRUE)
 }

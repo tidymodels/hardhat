@@ -6,24 +6,6 @@ glue_quote_collapse <- function(x) {
   glue::glue_collapse(glue::single_quote(x), sep = ", ")
 }
 
-validate_empty_dots <- function(...) {
-  dots <- list(...)
-
-  n_dots <- length(dots)
-
-  if (n_dots != 0L) {
-    dot_nms <- names(exprs_auto_name(dots))
-    dot_nms <- glue_quote_collapse(dot_nms)
-
-    glubort(
-      "`...` must not contain any input. ",
-      "{n_dots} elements were found in the dots with names: {dot_nms}."
-    )
-  }
-
-  invisible()
-}
-
 simplify_terms <- function(x) {
 
   # This is like stats:::terms.default
@@ -94,15 +76,6 @@ get_all_outcomes <- function(formula, data) {
   outcomes
 }
 
-abort_unknown_mold_class <- function(x) {
-  cls <- class(x)[1]
-  glubort(
-    "`x` is not a recognized type.
-     Only data.frame, matrix, recipe, and formula objects are allowed.
-     A {cls} was specified."
-  )
-}
-
 remove_formula_intercept <- function(formula, intercept) {
   if (intercept) {
     return(formula)
@@ -118,6 +91,34 @@ remove_formula_intercept <- function(formula, intercept) {
     lhs = lhs,
     rhs = rhs,
     env = env
+  )
+}
+
+check_unique_names <- function(x,
+                               ...,
+                               arg = caller_arg(x),
+                               call = caller_env()) {
+  if (has_unique_names(x)) {
+    return(invisible(NULL))
+  }
+
+  cli::cli_abort(
+    "All elements of {.arg {arg}} must have unique names.",
+    call = call
+  )
+}
+
+check_unique_column_names <- function(x,
+                                      ...,
+                                      arg = caller_arg(x),
+                                      call = caller_env()) {
+  if (has_unique_column_names(x)) {
+    return(invisible(NULL))
+  }
+
+  cli::cli_abort(
+    "All columns of {.arg {arg}} must have unique names.",
+    call = call
   )
 }
 
@@ -153,45 +154,87 @@ class1 <- function(x) {
   class(x)[1]
 }
 
-is_bool <- function(x) {
-  is_logical(x, n = 1) && !is.na(x)
-}
+# ------------------------------------------------------------------------------
 
-validate_is_bool <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
+check_data_frame_or_matrix <- function(x,
+                                       ...,
+                                       arg = caller_arg(x),
+                                       call = caller_env()) {
+  if (!missing(x)) {
+    if (is.data.frame(x) || is.matrix(x)) {
+      return(invisible(NULL))
+    }
   }
 
-  validate_is(.x, is_bool, "bool", .x_nm, .note = "'TRUE' / 'FALSE'")
+  stop_input_type(
+    x = x,
+    what = "a data frame or a matrix",
+    arg = arg,
+    call = call
+  )
+}
+
+coerce_to_tibble <- function(x) {
+  # Only to be used after calling `check_data_frame_or_matrix()`.
+  # Coerces matrices and bare data frames to tibbles.
+  # Avoids calling `as_tibble()` on data frames, as that is more expensive than
+  # you'd think, even on tibbles. Need to call `hardhat_new_tibble()` even on
+  # existing tibbles to ensure subclasses are dropped (#228).
+  if (is.data.frame(x)) {
+    hardhat_new_tibble(x, size = vec_size(x))
+  } else {
+    tibble::as_tibble(x, .name_repair = "minimal")
+  }
 }
 
 # ------------------------------------------------------------------------------
 
-is_new_data_like <- function(x) {
-  is.data.frame(x) || is.matrix(x)
+hardhat_new_tibble <- function (x, size) {
+  # Faster than `tibble::new_tibble()`, and it drops extra attributes
+  new_data_frame(x = x, n = size, class = c("tbl_df", "tbl"))
 }
 
-validate_is_new_data_like <- function(new_data) {
-  validate_is(
-    new_data,
-    is_new_data_like,
-    "data.frame or matrix"
+# ------------------------------------------------------------------------------
+
+with_na_pass <- function(expr) {
+  # TODO: This helper is only used because `withr::defer()` is somewhat slow
+  # right now. Remove this helper and use `rlang::with_options()` once the next
+  # version of withr/rlang is on CRAN https://github.com/r-lib/withr/pull/221.
+  old <- options(na.action = "na.pass")
+  on.exit(options(old), add = TRUE, after = FALSE)
+  expr
+}
+
+# ------------------------------------------------------------------------------
+
+vec_paste0 <- function(...) {
+  args <- vec_recycle_common(...)
+  exec(paste0, !!!args)
+}
+
+# ------------------------------------------------------------------------------
+
+check_inherits <- function(x,
+                           what,
+                           ...,
+                           allow_null = FALSE,
+                           arg = caller_arg(x),
+                           call = caller_env()) {
+  if (!missing(x)) {
+    if (inherits(x, what)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
+      return(invisible(NULL))
+    }
+  }
+
+  stop_input_type(
+    x = x,
+    what = cli::format_inline("a <{what}>"),
+    arg = arg,
+    call = call
   )
-}
-
-check_is_data_like <- function(x, arg, ..., call = caller_env()) {
-  check_dots_empty0(...)
-
-  if (is_missing(arg)) {
-    arg <- as_label(enexpr(x))
-  }
-
-  if (!is_new_data_like(x)) {
-    message <- glue("`{arg}` must be a data.frame or a matrix, not a {class1(x)}.")
-    abort(message, call = call)
-  }
-
-  tibble::as_tibble(x)
 }
 
 # ------------------------------------------------------------------------------

@@ -181,7 +181,3 @@ test_that("can add attributes", {
 test_that("`x` must be integer or double", {
   expect_snapshot(error = TRUE, new_case_weights("x", class = "subclass"))
 })
-
-test_that("`class` is a required argument", {
-  expect_snapshot(error = TRUE, new_case_weights(1))
-})

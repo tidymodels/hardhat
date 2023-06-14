@@ -681,6 +681,22 @@ test_that("Predictors with multiple roles are only included once before baking (
   expect_true("Sepal.Length" %in% colnames(xx2$extras$roles$test2))
 })
 
+test_that("`strings_as_factors` is used at `bake()` time", {
+  df <- tibble(y = "a", x = "b")
+  rec <- recipes::recipe(y ~ x, data = df)
+
+  # Default is `TRUE`
+  x <- mold(rec, df)
+  out <- forge(df, x$blueprint, outcomes = TRUE)
+  expect_identical(out$outcomes$y, factor("a"))
+  expect_identical(out$predictors$x, factor("b"))
+
+  x <- mold(rec, df, blueprint = default_recipe_blueprint(strings_as_factors = FALSE))
+  out <- forge(df, x$blueprint, outcomes = TRUE)
+  expect_identical(out$outcomes$y, "a")
+  expect_identical(out$predictors$x, "b")
+})
+
 test_that("`forge()` is compatible with hardhat 0.2.0 molded blueprints with a basic recipe", {
   path <- test_path("data", "hardhat-0.2.0-post-mold-recipe.rds")
   object <- readRDS(path)

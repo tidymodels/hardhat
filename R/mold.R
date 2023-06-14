@@ -43,7 +43,7 @@
 #' # for the details of each blueprint, and more examples.
 #'
 #' # XY
-#' mold(iris[, "Sepal.Width", drop = FALSE], iris$Species)
+#' mold(iris["Sepal.Width"], iris$Species)
 #'
 #' # Formula
 #' mold(Species ~ Sepal.Width, iris)
@@ -58,19 +58,22 @@ mold <- function(x, ...) {
 
 #' @export
 mold.default <- function(x, ...) {
-  abort_unknown_mold_class(x)
+  stop_input_type(
+    x = x,
+    what = "a data frame, matrix, recipe, or formula"
+  )
 }
 
 #' @rdname default_xy_blueprint
 #' @export
 mold.data.frame <- function(x, y, ..., blueprint = NULL) {
-  validate_empty_dots(...)
+  check_dots_empty0(...)
 
   if (is.null(blueprint)) {
     blueprint <- default_xy_blueprint()
   }
 
-  validate_is_xy_blueprint(blueprint)
+  check_xy_blueprint(blueprint)
 
   run_mold(blueprint, x = x, y = y)
 }
@@ -82,15 +85,15 @@ mold.matrix <- mold.data.frame
 #' @rdname default_formula_blueprint
 #' @export
 mold.formula <- function(formula, data, ..., blueprint = NULL) {
-  validate_empty_dots(...)
+  check_dots_empty0(...)
 
   if (is.null(blueprint)) {
     blueprint <- default_formula_blueprint()
   }
 
-  validate_is_formula_blueprint(blueprint)
+  check_formula_blueprint(blueprint)
 
-  blueprint <- update_blueprint(blueprint = blueprint, formula = formula)
+  blueprint <- update_blueprint0(blueprint, formula = formula)
 
   run_mold(blueprint, data = data)
 }
@@ -98,17 +101,15 @@ mold.formula <- function(formula, data, ..., blueprint = NULL) {
 #' @rdname default_recipe_blueprint
 #' @export
 mold.recipe <- function(x, data, ..., blueprint = NULL) {
-  validate_empty_dots(...)
-
-  validate_recipes_available()
+  check_dots_empty0(...)
 
   if (is.null(blueprint)) {
     blueprint <- default_recipe_blueprint()
   }
 
-  validate_is_recipe_blueprint(blueprint)
+  check_recipe_blueprint(blueprint)
 
-  blueprint <- update_blueprint(blueprint = blueprint, recipe = x)
+  blueprint <- update_blueprint0(blueprint, recipe = x)
 
   run_mold(blueprint, data = data)
 }

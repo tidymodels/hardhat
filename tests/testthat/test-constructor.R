@@ -37,10 +37,9 @@ test_that("must use a valid blueprint", {
     NA
   )
 
-  expect_error(
-    new_model(blueprint = 1, class = "custom"),
-    "not a numeric"
-  )
+  expect_snapshot(error = TRUE, {
+    new_model(blueprint = 1, class = "custom")
+  })
 })
 
 test_that("`new_scalar()` must have elements", {

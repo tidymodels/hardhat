@@ -78,22 +78,22 @@
 #' )
 #' @export
 model_matrix <- function(terms, data) {
-  validate_is_terms(terms)
-  data <- check_is_data_like(data)
+  check_terms(terms)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   # otherwise model.matrix() will try and run model.frame() for us on data
   # but we definitely don't want this, as we have already done it and it can
   # actually error out if we don't prevent it from running
   attr(data, "terms") <- terms
 
-  predictors <- with_options(
-    model.matrix(object = terms, data = data),
-    na.action = "na.pass"
+  predictors <- with_na_pass(
+    model.matrix(object = terms, data = data)
   )
 
   predictors <- strip_model_matrix(predictors)
 
-  tibble::as_tibble(predictors)
+  tibble::as_tibble(predictors, .name_repair = "minimal")
 }
 
 strip_model_matrix <- function(x) {
@@ -109,23 +109,26 @@ strip_model_matrix <- function(x) {
   x
 }
 
-is_terms <- function(x) {
-  inherits(x, "terms")
-}
-
-validate_is_terms <- function(.x, .x_nm) {
-  if (is_missing(.x_nm)) {
-    .x_nm <- as_label(enexpr(.x))
-  }
-
-  validate_is(.x, is_terms, "terms object", .x_nm)
+check_terms <- function(x,
+                        ...,
+                        allow_null = FALSE,
+                        arg = caller_arg(x),
+                        call = caller_env()) {
+  check_inherits(
+    x = x,
+    what = "terms",
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
 }
 
 # ------------------------------------------------------------------------------
 
 model_matrix_one_hot <- function(terms, data) {
-  validate_is_terms(terms)
-  data <- check_is_data_like(data)
+  check_terms(terms)
+  check_data_frame_or_matrix(data)
+  data <- coerce_to_tibble(data)
 
   n_cols <- length(data)
 

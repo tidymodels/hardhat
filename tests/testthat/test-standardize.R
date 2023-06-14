@@ -21,9 +21,13 @@ test_that("standardize - matrix", {
   mat_good <- mat_bad
   colnames(mat_good) <- c("a", "b")
 
-  expect_error(standardize(mat_bad), "All columns of `y`")
+  expect_snapshot(error = TRUE, {
+    standardize(mat_bad)
+  })
 
-  expect_error(standardize(mat_bad2), "`y` should have numeric elements")
+  expect_snapshot(error = TRUE, {
+    standardize(mat_bad2)
+  })
 
   std <- standardize(mat_good)
   expect_s3_class(std, "tbl_df")
@@ -33,11 +37,15 @@ test_that("standardize - matrix", {
 test_that("standardize - array", {
   bad <- array(1:10, c(5, 2))
 
-  expect_error(standardize(bad), "All columns of `y`")
+  expect_snapshot(error = TRUE, {
+    standardize(bad)
+  })
 
   bad2 <- array("a", c(1, 1), dimnames = list(NULL, "c1"))
 
-  expect_error(standardize(bad2), "`y` should have numeric elements")
+  expect_snapshot(error = TRUE, {
+    standardize(bad2)
+  })
 
   good <- bad
   colnames(good) <- c("a", "b")
@@ -57,7 +65,9 @@ test_that("standardize - data.frame", {
   bad <- data.frame(1:5, 6:10)
   colnames(bad) <- NULL
 
-  expect_error(standardize(bad), "All columns of `y`")
+  expect_snapshot(error = TRUE, {
+    standardize(bad)
+  })
 
   bad2 <- data.frame(x = "a", stringsAsFactors = FALSE)
 

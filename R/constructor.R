@@ -31,7 +31,7 @@
 #' )
 #' @export
 new_model <- function(..., blueprint = default_xy_blueprint(), class = character()) {
-  validate_is_blueprint(blueprint)
+  check_blueprint(blueprint)
 
   new_abstract_model(..., blueprint = blueprint, class = c(class, "hardhat_model"))
 }
@@ -53,7 +53,7 @@ cat_line <- function(...) {
 
 new_abstract_model <- function(..., class) {
   elems <- list2(...)
-  validate_has_unique_names(elems, "...")
+  check_unique_names(elems, arg = "...")
 
   new_scalar(elems, class = class)
 }
@@ -79,8 +79,4 @@ check_elems <- function(elems) {
   }
 
   invisible(elems)
-}
-
-validate_is_blueprint <- function(blueprint) {
-  validate_is(blueprint, is_blueprint, "blueprint")
 }

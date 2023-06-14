@@ -30,34 +30,37 @@ NULL
 #' @rdname spruce
 #' @export
 spruce_numeric <- function(pred) {
-  validate_is(pred, is.numeric, "numeric")
-  validate_not_matrix(pred)
+  if (!is.numeric(pred)) {
+    stop_input_type(pred, "a numeric vector")
+  }
+  if (dims(pred) != 1L) {
+    stop_input_type(pred, "a numeric vector")
+  }
 
-  predictions <- tibble(.pred = pred)
-
-  predictions
+  tibble(.pred = pred)
 }
 
 #' @rdname spruce
 #' @export
 spruce_class <- function(pred_class) {
-  validate_is(pred_class, is.factor, "factor")
-
-  predictions <- tibble(.pred_class = pred_class)
-
-  predictions
+  check_factor(pred_class)
+  tibble(.pred_class = pred_class)
 }
 
 #' @rdname spruce
 #' @export
 spruce_prob <- function(pred_levels, prob_matrix) {
-
   # Assumes the order is correct!
   # Assumes you gave it the original levels and the class probability matrix
 
-  validate_is(pred_levels, is.character, "character")
-  validate_is(prob_matrix, is.matrix, "matrix")
-  validate_numeric_elements(prob_matrix, "prob_matrix")
+  check_character(pred_levels)
+
+  if (!is.matrix(prob_matrix)) {
+    stop_input_type(prob_matrix, "a numeric matrix")
+  }
+  if (!is.numeric(prob_matrix)) {
+    stop_input_type(prob_matrix, "a numeric matrix")
+  }
 
   n_levels <- length(pred_levels)
   n_col <- ncol(prob_matrix)
@@ -73,24 +76,167 @@ spruce_prob <- function(pred_levels, prob_matrix) {
 
   colnames(prob_matrix) <- pred_levels
 
-  predictions <- tibble::as_tibble(prob_matrix)
+  predictions <- tibble::as_tibble(prob_matrix, .name_repair = "minimal")
 
   predictions
 }
 
 # ------------------------------------------------------------------------------
 
-validate_numeric_elements <- function(.x, .x_nm) {
-  if (!is.numeric(.x[[1]])) {
-    cls <- class1(.x[[1]])
-    glubort("`{.x_nm}` should have numeric elements, not {cls}.")
-  }
+#' Spruce up multi-outcome predictions
+#'
+#' This family of `spruce_*_multiple()` functions converts multi-outcome
+#' predictions into a standardized format. They are generally called from a
+#' prediction implementation function for the specific `type` of prediction to
+#' return.
+#'
+#' @param ... Multiple vectors of predictions:
+#'
+#'   - For `spruce_numeric_multiple()`, numeric vectors of equal size.
+#'
+#'   - For `spruce_class_multiple()`, factors of "hard" class predictions of
+#'     equal size.
+#'
+#'   - For `spruce_prob_multiple()`, tibbles of equal size, which are the result
+#'     of calling [spruce_prob()] on each matrix of prediction probabilities.
+#'
+#'   If the `...` are named, then this name will be used as the suffix on the
+#'   resulting column name, otherwise a positional index will be used.
+#'
+#' @returns
+#' - For `spruce_numeric_multiple()`, a tibble of numeric columns named with the
+#'   pattern `.pred_*`.
+#'
+#' - For `spruce_class_multiple()`, a tibble of factor columns named with the
+#'   pattern `.pred_class_*`.
+#'
+#' - For `spruce_prob_multiple()`, a tibble of data frame columns named with the
+#'   pattern `.pred_*`.
+#'
+#' @name spruce-multiple
+#' @examples
+#' spruce_numeric_multiple(1:3, foo = 2:4)
+#'
+#' spruce_class_multiple(
+#'   one_step = factor(c("a", "b", "c")),
+#'   two_step = factor(c("a", "c", "c"))
+#' )
+#'
+#' one_step <- matrix(c(.3, .7, .0, .1, .3, .6), nrow = 2, byrow = TRUE)
+#' two_step <- matrix(c(.2, .7, .1, .2, .4, .4), nrow = 2, byrow = TRUE)
+#' binary <- matrix(c(.5, .5, .4, .6), nrow = 2, byrow = TRUE)
+#'
+#' spruce_prob_multiple(
+#'   one_step = spruce_prob(c("a", "b", "c"), one_step),
+#'   two_step = spruce_prob(c("a", "b", "c"), two_step),
+#'   binary = spruce_prob(c("yes", "no"), binary)
+#' )
+NULL
+
+#' @rdname spruce-multiple
+#' @export
+spruce_numeric_multiple <- function(...) {
+  args <- list2(...)
+  call <- environment()
+
+  map(args, function(x) {
+    if (!is.numeric(x) || dims(x) != 1L) {
+      cli::cli_abort(
+        "Each element of `...` must be a numeric vector, not {.obj_type_friendly {x}}.",
+        call = call
+      )
+    }
+  })
+
+  size <- vec_size_common(!!!args)
+  list_check_all_size(args, size, arg = "")
+
+  names(args) <- names_as_spruce_names(names2(args), prefix = ".pred_")
+
+  hardhat_new_tibble(args, size)
 }
 
-validate_not_matrix <- function(pred) {
-  if (dims(pred) != 1L) {
-    glubort("`pred` must be a numeric vector, not a numeric matrix/array.")
+#' @rdname spruce-multiple
+#' @export
+spruce_class_multiple <- function(...) {
+  args <- list2(...)
+  call <- environment()
+
+  map(args, function(x) {
+    if (!is.factor(x)) {
+      cli::cli_abort(
+        "Each element of `...` must be a factor, not {.obj_type_friendly {x}}.",
+        call = call
+      )
+    }
+  })
+
+  size <- vec_size_common(!!!args)
+  list_check_all_size(args, size, arg = "")
+
+  names(args) <- names_as_spruce_names(names2(args), prefix = ".pred_class_")
+
+  hardhat_new_tibble(args, size)
+}
+
+#' @rdname spruce-multiple
+#' @export
+spruce_prob_multiple <- function(...) {
+  args <- list2(...)
+  call <- environment()
+
+  map(args, function(x) {
+    if (!tibble::is_tibble(x)) {
+      cli::cli_abort(
+        "Each element of `...` must be a tibble, not {.obj_type_friendly {x}}.",
+        call = call
+      )
+    }
+  })
+
+  size <- vec_size_common(!!!args)
+  list_check_all_size(args, size, arg = "")
+
+  names(args) <- names_as_spruce_names(names2(args), prefix = ".pred_")
+
+  hardhat_new_tibble(args, size)
+}
+
+# ------------------------------------------------------------------------------
+
+check_factor <- function(x,
+                         ...,
+                         allow_null = FALSE,
+                         arg = caller_arg(x),
+                         call = caller_env()) {
+  if (!missing(x)) {
+    if (is.factor(x)) {
+      return(invisible(NULL))
+    }
+    if (allow_null && is_null(x)) {
+      return(invisible(NULL))
+    }
   }
+
+  stop_input_type(
+    x,
+    "a factor",
+    ...,
+    allow_na = FALSE,
+    allow_null = allow_null,
+    arg = arg,
+    call = call
+  )
+}
+
+names_as_spruce_names <- function(names, prefix) {
+  missing <- which(names == "")
+
+  if (length(missing) > 0L) {
+    names[missing] <- missing
+  }
+
+  vec_paste0(prefix, names)
 }
 
 dims <- function(x) {

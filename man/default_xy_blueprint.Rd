@@ -89,11 +89,11 @@ of \code{new_data}.
 train <- iris[1:100, ]
 test <- iris[101:150, ]
 
-train_x <- train[, "Sepal.Length", drop = FALSE]
-train_y <- train[, "Species", drop = FALSE]
+train_x <- train["Sepal.Length"]
+train_y <- train["Species"]
 
-test_x <- test[, "Sepal.Length", drop = FALSE]
-test_y <- test[, "Species", drop = FALSE]
+test_x <- test["Sepal.Length"]
+test_y <- test["Species"]
 
 # ---------------------------------------------------------------------------
 # XY Example

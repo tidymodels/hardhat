@@ -16,6 +16,7 @@ new_default_formula_blueprint(
   indicators = "traditional",
   composition = "tibble",
   terms = list(predictors = NULL, outcomes = NULL),
+  levels = NULL,
   ...,
   subclass = character()
 )
@@ -24,6 +25,7 @@ new_default_recipe_blueprint(
   intercept = FALSE,
   allow_novel_levels = FALSE,
   fresh = TRUE,
+  strings_as_factors = TRUE,
   composition = "tibble",
   ptypes = NULL,
   recipe = NULL,
@@ -81,6 +83,11 @@ applied; otherwise an error is thrown.}
 elements are \code{terms} objects that describe the terms for the outcomes and
 predictors separately. This argument is set automatically at \code{\link[=mold]{mold()}} time.}
 
+\item{levels}{Either \code{NULL} or a named list of character vectors that
+correspond to the levels observed when converting character predictor columns
+to factors during \code{\link[=mold]{mold()}}. This argument is set automatically at \code{\link[=mold]{mold()}}
+time.}
+
 \item{...}{Name-value pairs for additional elements of blueprints that
 subclass this blueprint.}
 
@@ -88,6 +95,9 @@ subclass this blueprint.}
 
 \item{fresh}{Should already trained operations be re-trained when \code{prep()} is
 called?}
+
+\item{strings_as_factors}{Should character columns be converted to factors
+when \code{prep()} is called?}
 
 \item{recipe}{Either \code{NULL}, or an unprepped recipe. This argument is set
 automatically at \code{\link[=mold]{mold()}} time.}
