@@ -1,5 +1,8 @@
 # hardhat (development version)
 
+* A set of methods to obtain the names of predictors for a model: 
+  `.get_predictor_names_actual()` and `.get_predictor_names_original()`.
+
 # hardhat 1.3.0
 
 * New family of `spruce_*_multiple()` functions to support standardizing
