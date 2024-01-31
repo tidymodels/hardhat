@@ -202,10 +202,9 @@ test_that("novel predictor levels are caught", {
 
   x <- mold(dat[, "f", drop = FALSE], dat$y)
 
-  expect_warning(
-    xx <- forge(new, x$blueprint),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot({
+    xx <- forge(new, x$blueprint)
+  })
 
   expect_equal(
     xx$predictors[[5, 1]],
@@ -228,10 +227,10 @@ test_that("novel predictor levels can be ignored", {
 
   x <- mold(dat[, "f", drop = FALSE], dat$y, blueprint = blueprint)
 
-  expect_warning(
-    xx <- forge(new, x$blueprint),
-    NA
-  )
+  # Silent
+  expect_snapshot({
+    xx <- forge(new, x$blueprint)
+  })
 
   expect_equal(
     xx$predictors[[5, 1]],
@@ -287,14 +286,12 @@ test_that("novel outcome levels are caught", {
     blueprint = bp
   )
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot({
+    xx1 <- forge(new, x1$blueprint, outcomes = TRUE)
+  })
+  expect_snapshot({
+    xx2 <- forge(new, x2$blueprint, outcomes = TRUE)
+  })
 
   expect_equal(
     xx1$outcomes[[5, 1]],

@@ -1,3 +1,11 @@
+# existing intercepts are skipped with a warning
+
+    Code
+      xx <- add_intercept_column(x)
+    Condition
+      Warning:
+      `data` already has a column named '(Intercept)'. Returning `data` unchanged.
+
 # name can only be a single character
 
     Code

@@ -155,18 +155,13 @@ test_that("novel predictor levels are caught", {
   x1 <- mold(recipes::recipe(y ~ f, dat), dat)
   x2 <- mold(recipes::step_dummy(recipes::recipe(y ~ f, dat), f), dat, blueprint = sparse_bp)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot({
+    xx1 <- forge(new, x1$blueprint)
+  })
 
-  expect_warning(
-    expect_warning(
-      xx2 <- forge(new, x2$blueprint),
-      "Novel levels found in column 'f': 'e'"
-    ),
-    "There are new levels in a factor: NA"
-  )
+  expect_snapshot({
+    xx2 <- forge(new, x2$blueprint)
+  })
 
   expect_equal(
     xx1$predictors[[5, 1]],
@@ -201,10 +196,9 @@ test_that("novel predictor levels can be ignored and handled by recipes", {
   x3 <- mold(rec3, dat, blueprint = bp2)
 
   # Recipes will silently handle the novel level
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint),
-    NA
-  )
+  expect_snapshot({
+    xx1 <- forge(new, x1$blueprint)
+  })
 
   expect_equal(
     xx1$predictors$f[[5]],
@@ -212,20 +206,19 @@ test_that("novel predictor levels can be ignored and handled by recipes", {
   )
 
   # `step_novel()` let's us handle the novel level differently
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint),
-    NA
-  )
+  expect_snapshot({
+    xx2 <- forge(new, x2$blueprint)
+  })
 
   expect_equal(
     xx2$predictors$f[[5]],
     factor("new", levels = c("a", "b", "c", "d", "new"))
   )
 
-  expect_warning(
-    xx3 <- forge(new, x3$blueprint),
-    NA
-  )
+  # Silent
+  expect_snapshot({
+    xx3 <- forge(new, x3$blueprint)
+  })
 
   expect_equal(
     colnames(xx3$predictors),
@@ -292,20 +285,18 @@ test_that("novel outcome levels are caught", {
   x1 <- mold(rec1, dat)
   x2 <- mold(rec1, dat, blueprint = sparse_bp)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot({
+    xx1 <- forge(new, x1$blueprint, outcomes = TRUE)
+  })
 
   expect_equal(
     xx1$outcomes[[5, 1]],
     factor(NA_real_, levels = c("a", "b", "c", "d"))
   )
 
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot({
+    xx2 <- forge(new, x2$blueprint, outcomes = TRUE)
+  })
 
   expect_equal(
     xx2$outcomes[[5, 1]],
