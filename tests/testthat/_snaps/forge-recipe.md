@@ -14,7 +14,7 @@
       Warning:
       Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
       Warning:
-      There are new levels in a factor: NA
+      ! There are new levels in a factor: NA
 
 # novel predictor levels can be ignored and handled by recipes
 
