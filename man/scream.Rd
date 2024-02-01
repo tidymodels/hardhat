@@ -2,7 +2,7 @@
 % Please edit documentation in R/scream.R
 \name{scream}
 \alias{scream}
-\title{\if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.}
+\title{Scream}
 \usage{
 scream(data, ptype, allow_novel_levels = FALSE)
 }
