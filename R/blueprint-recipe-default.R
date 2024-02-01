@@ -216,10 +216,17 @@ mold_recipe_default_clean <- function(blueprint, data) {
 
 mold_recipe_default_process <- function(blueprint, data) {
 
+  # `prep()` will warn if you pass `training` data and `fresh = FALSE`
+  if (is_true(blueprint$fresh)) {
+    training <- data
+  } else {
+    training <- NULL
+  }
+
   # Prep for predictors and outcomes
   recipe <- recipes::prep(
     blueprint$recipe,
-    training = data,
+    training = training,
     fresh = blueprint$fresh,
     strings_as_factors = blueprint_strings_as_factors(blueprint)
   )
