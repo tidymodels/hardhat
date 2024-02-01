@@ -43,7 +43,7 @@
 #'
 #' `use_modeling_files()` return `model` invisibly.
 #'
-#' @name modeling-package
+#' @name modeling-usethis
 #' @export
 create_modeling_package <- function(path,
                                     model,
@@ -95,7 +95,7 @@ create_modeling_package <- function(path,
   invisible(usethis::proj_get())
 }
 
-#' @rdname modeling-package
+#' @rdname modeling-usethis
 #' @export
 use_modeling_deps <- function() {
   check_installed("usethis")
@@ -117,7 +117,7 @@ use_modeling_deps <- function() {
   invisible()
 }
 
-#' @rdname modeling-package
+#' @rdname modeling-usethis
 #' @export
 use_modeling_files <- function(model) {
   use_modeling_files_impl(model)
