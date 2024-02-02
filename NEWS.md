@@ -1,3 +1,5 @@
+# hardhat (development version)
+
 # hardhat 1.3.1
 
 * Changed an Rd name from `modeling-package` -> `modeling-usethis` at the
