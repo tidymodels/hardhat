@@ -29,6 +29,8 @@
 #'
 #' - `extract_parameter_set_dials()` returns a set of dials parameter objects.
 #'
+#' - `extract_fit_time()` returns a tibble with fit times.
+#'
 #' @param x An object.
 #'
 #' @param ... Extra arguments passed on to methods.
@@ -93,4 +95,10 @@ extract_parameter_dials <- function(x, ...) {
 #' @export
 extract_parameter_set_dials <- function(x, ...) {
   UseMethod("extract_parameter_set_dials")
+}
+
+#' @rdname hardhat-extract
+#' @export
+extract_fit_time <- function(x, ...) {
+  UseMethod("extract_fit_time")
 }
