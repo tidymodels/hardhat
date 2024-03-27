@@ -254,14 +254,8 @@ test_that("novel predictor levels are caught", {
   x2 <- mold(y ~ f, dat, blueprint = bp)
 
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint),
-    "Novel levels found in column 'f': 'e'"
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot(xx1 <- forge(new, x1$blueprint))
+  expect_snapshot(xx2 <- forge(new, x2$blueprint))
 
   expect_equal(
     xx1$predictors[[5, 1]],
@@ -290,14 +284,9 @@ test_that("novel predictor levels can be ignored", {
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint),
-    NA
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint),
-    NA
-  )
+  # Silent
+  expect_snapshot(xx1 <- forge(new, x1$blueprint))
+  expect_snapshot(xx2 <- forge(new, x2$blueprint))
 
   expect_equal(
     xx1$predictors[[5, 5]],
@@ -397,14 +386,8 @@ test_that("novel levels are handled correctly when the new column is a character
   x1 <- mold(y ~ f, dat)
   x2 <- mold(y ~ f, dat, blueprint = bp)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint),
-    "Novel levels found in column 'f': 'e'"
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot(xx1 <- forge(new, x1$blueprint))
+  expect_snapshot(xx2 <- forge(new, x2$blueprint))
 
   expect_equal(
     xx1$predictors[[5, 1]],
@@ -482,14 +465,9 @@ test_that("novel levels are ignored correctly when the new column is a character
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint),
-    NA
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint),
-    NA
-  )
+  # Silent
+  expect_snapshot(xx1 <- forge(new, x1$blueprint))
+  expect_snapshot(xx2 <- forge(new, x2$blueprint))
 
   expect_equal(
     xx1$predictors[[5, 5]],
@@ -590,14 +568,8 @@ test_that("novel outcome levels are caught", {
   x1 <- mold(f ~ y, dat)
   x2 <- mold(f ~ y, dat, blueprint = bp)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot(xx1 <- forge(new, x1$blueprint, outcomes = TRUE))
+  expect_snapshot(xx2 <- forge(new, x2$blueprint, outcomes = TRUE))
 
   expect_equal(
     xx1$outcomes[[5, 1]],
@@ -626,14 +598,8 @@ test_that("novel outcome levels are always caught, even if `allow_novel_levels =
   x1 <- mold(f ~ y, dat, blueprint = bp1)
   x2 <- mold(f ~ y, dat, blueprint = bp2)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint, outcomes = TRUE),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot(xx1 <- forge(new, x1$blueprint, outcomes = TRUE))
+  expect_snapshot(xx2 <- forge(new, x2$blueprint, outcomes = TRUE))
 
   expect_equal(
     xx1$outcomes[[5, 1]],
@@ -667,14 +633,9 @@ test_that("missing predictor levels are restored silently", {
   x1 <- mold(y ~ f, dat)
   x2 <- mold(y ~ f, dat, blueprint = bp)
 
-  expect_warning(
-    xx1 <- forge(new, x1$blueprint),
-    NA
-  )
-  expect_warning(
-    xx2 <- forge(new, x2$blueprint),
-    NA
-  )
+  # Silent
+  expect_snapshot(xx1 <- forge(new, x1$blueprint))
+  expect_snapshot(xx2 <- forge(new, x2$blueprint))
 
   expect_equal(
     colnames(xx1$predictors),
@@ -685,14 +646,9 @@ test_that("missing predictor levels are restored silently", {
     c("fa", "fb", "fc", "fd")
   )
 
-  expect_warning(
-    yy1 <- forge(new2, x1$blueprint),
-    NA
-  )
-  expect_warning(
-    yy2 <- forge(new2, x2$blueprint),
-    NA
-  )
+  # Silent
+  expect_snapshot(yy1 <- forge(new2, x1$blueprint))
+  expect_snapshot(yy2 <- forge(new2, x2$blueprint))
 
   expect_equal(
     colnames(yy1$predictors),
@@ -751,10 +707,7 @@ test_that("can be both missing levels and have new levels", {
   })
 
   # Warning for the extra level
-  expect_warning(
-    xx <- forge(new, x1$blueprint),
-    "Novel levels found in column 'f': 'e'"
-  )
+  expect_snapshot(xx <- forge(new, x1$blueprint))
 
   expect_equal(
     levels(xx$predictors$f),
@@ -777,10 +730,8 @@ test_that("can be both missing levels and have new levels that get ignored", {
 
   x <- mold(y ~ f, dat, blueprint = blueprint)
 
-  expect_warning(
-    xx <- forge(new, x$blueprint),
-    NA
-  )
+  # Silent
+  expect_snapshot(xx <- forge(new, x$blueprint))
 
   # Order of levels comes from `new` first, then `dat`
   expect_equal(
@@ -804,10 +755,7 @@ test_that("`NA` factor data never triggers a novel level warning (#131)", {
 
   x <- mold(y ~ f, dat, blueprint = blueprint)
 
-  expect_warning(
-    xx <- forge(new, x$blueprint),
-    NA
-  )
+  expect_snapshot(xx <- forge(new, x$blueprint))
 
   expect_identical(
     xx$predictors$f,

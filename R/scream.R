@@ -1,4 +1,4 @@
-#' \if{html}{\Sexpr[stage=render,results=rd]{"\U0001f631"}} Scream.
+#' Scream
 #'
 #' @description
 #'

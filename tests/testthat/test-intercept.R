@@ -13,10 +13,9 @@ test_that("can add an intercept column", {
 test_that("existing intercepts are skipped with a warning", {
   x <- add_intercept_column(mtcars)
 
-  expect_warning(
-    xx <- add_intercept_column(x),
-    "`data` already has a column named"
-  )
+  expect_snapshot({
+    xx <- add_intercept_column(x)
+  })
 
   expect_equal(
     xx,

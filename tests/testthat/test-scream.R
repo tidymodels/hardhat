@@ -11,10 +11,10 @@ test_that("novel levels can be ignored", {
 
   ptype <- vec_ptype(dat)
 
-  expect_warning(
-    x <- scream(new, ptype, allow_novel_levels = TRUE),
-    NA
-  )
+  # Silent
+  expect_snapshot({
+    x <- scream(new, ptype, allow_novel_levels = TRUE)
+  })
 
   expect_equal(levels(x$f), letters[1:5])
 })
@@ -33,10 +33,10 @@ test_that("novel levels in a new character vector can be ignored", {
 
   ptype <- vec_ptype(dat)
 
-  expect_warning(
-    x <- scream(new, ptype, allow_novel_levels = TRUE),
-    NA
-  )
+  # Silent
+  expect_snapshot({
+    x <- scream(new, ptype, allow_novel_levels = TRUE)
+  })
 
   expect_equal(levels(x$f), new$f)
 })

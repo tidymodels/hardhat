@@ -1,6 +1,11 @@
 # hardhat (development version)
 
-* Added `extract_fit_time()` generic.
+* Added `extract_fit_time()` generic (#218).
+
+# hardhat 1.3.1
+
+* Changed an Rd name from `modeling-package` -> `modeling-usethis` at the
+  request of CRAN.
 
 # hardhat 1.3.0
 
