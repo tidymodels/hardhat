@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* Added `extract_postprocessor()` generic (#247).
+
 * Added `extract_fit_time()` generic (#218).
 
 # hardhat 1.3.1

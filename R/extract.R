@@ -87,6 +87,12 @@ extract_preprocessor <- function(x, ...) {
 
 #' @rdname hardhat-extract
 #' @export
+extract_postprocessor <- function(x, ...) {
+  UseMethod("extract_postprocessor")
+}
+
+#' @rdname hardhat-extract
+#' @export
 extract_parameter_dials <- function(x, ...) {
   UseMethod("extract_parameter_dials")
 }
