@@ -9,6 +9,7 @@
 \alias{extract_fit_engine}
 \alias{extract_mold}
 \alias{extract_preprocessor}
+\alias{extract_postprocessor}
 \alias{extract_parameter_dials}
 \alias{extract_parameter_set_dials}
 \alias{extract_fit_time}
@@ -27,6 +28,8 @@ extract_fit_engine(x, ...)
 extract_mold(x, ...)
 
 extract_preprocessor(x, ...)
+
+extract_postprocessor(x, ...)
 
 extract_parameter_dials(x, ...)
 
