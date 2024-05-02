@@ -58,8 +58,12 @@ recompose <- function(data,
       coerce_to_matrix(data)
     },
     dgCMatrix = {
-      data <- coerce_to_matrix(data)
-      coerce_to_sparse(data)
+      if (isTRUE(options()$recipes.sparse)) {
+        create_sparse_matrix(data)
+      } else {
+        data <- coerce_to_matrix(data)
+        coerce_to_sparse(data)
+      }
     }
   )
 }
@@ -85,4 +89,21 @@ coerce_to_matrix <- function(data, error_call = caller_env()) {
 coerce_to_sparse <- function(data, error_call = caller_env()) {
   check_installed("Matrix", call = error_call)
   Matrix::Matrix(data, sparse = TRUE)
+}
+
+create_sparse_matrix <- function(x) {
+  all_positions <- lapply(x, sparsevctrs:::.positions)
+  all_values <- lapply(x, sparsevctrs:::.values)
+  all_rows <- rep(seq_along(x), times = lengths(all_positions))
+
+  all_positions <- unlist(all_positions, use.names = FALSE)
+  all_values <- unlist(all_values, use.names = FALSE)
+
+  res <- Matrix::sparseMatrix(
+    i = all_positions,
+    j = all_rows,
+    x = all_values,
+    dimnames = list(character(), colnames(x))
+  )
+  res
 }
