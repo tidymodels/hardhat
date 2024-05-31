@@ -56,6 +56,7 @@ create_modeling_package <- function(path,
   check_installed("roxygen2")
   check_installed("devtools")
   check_installed("recipes")
+  check_installed("withr")
 
   # Avoid creating files if a bad model is supplied
   if (!is_string(model)) {
@@ -69,8 +70,7 @@ create_modeling_package <- function(path,
   usethis::create_package(path, fields, open = FALSE)
 
   # copied from create_package()
-  old_project <- usethis::proj_set(path, force = TRUE)
-  on.exit(usethis::proj_set(old_project), add = TRUE)
+  usethis::local_project(path, force = TRUE)
   ui_blank_line()
 
   use_modeling_deps()
@@ -88,7 +88,7 @@ create_modeling_package <- function(path,
   # copied from create_package()
   if (open) {
     if (usethis::proj_activate(path)) {
-      on.exit()
+      withr::deferred_clear()
     }
   }
 

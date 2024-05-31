@@ -20,10 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Davis Vaughan \email{davis@posit.co}
+\strong{Maintainer}: Hannah Frick \email{hannah@posit.co} (\href{https://orcid.org/0000-0002-6049-5258}{ORCID})
 
 Authors:
 \itemize{
+  \item Davis Vaughan \email{davis@posit.co}
   \item Max Kuhn \email{max@posit.co}
 }
 
