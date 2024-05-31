@@ -4,7 +4,7 @@ Version: 1.4.0
 Authors@R: c(
     person("Hannah", "Frick", , "hannah@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6049-5258")),
-    person("Davis", "Vaughan", , "davis@posit.co", role = c("aut")),
+    person("Davis", "Vaughan", , "davis@posit.co", role = "aut"),
     person("Max", "Kuhn", , "max@posit.co", role = "aut"),
     person("Posit Software, PBC", role = c("cph", "fnd"))
   )
