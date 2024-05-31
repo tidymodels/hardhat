@@ -38,7 +38,8 @@ Suggests:
     rmarkdown (>= 2.3),
     roxygen2,
     testthat (>= 3.0.0),
-    usethis (>= 2.1.5)
+    usethis (>= 2.1.5),
+    withr (>= 3.0.0)
 VignetteBuilder: 
     knitr
 Config/Needs/website: tidyverse/tidytemplate
