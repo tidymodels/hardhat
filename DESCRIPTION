@@ -19,15 +19,15 @@ Description: Building modeling packages is hard. A large amount of effort
 License: MIT + file LICENSE
 URL: https://github.com/tidymodels/hardhat, https://hardhat.tidymodels.org
 BugReports: https://github.com/tidymodels/hardhat/issues
-Depends: 
+Depends:
     R (>= 3.5.0)
-Imports: 
+Imports:
     cli (>= 3.6.0),
     glue (>= 1.6.2),
     rlang (>= 1.1.0),
     tibble (>= 3.2.1),
     vctrs (>= 0.6.0)
-Suggests: 
+Suggests:
     covr,
     crayon,
     devtools,
@@ -40,7 +40,7 @@ Suggests:
     testthat (>= 3.0.0),
     usethis (>= 2.1.5),
     withr (>= 3.0.0)
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate
 Config/testthat/edition: 3
