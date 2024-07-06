@@ -8,7 +8,6 @@
 [![Codecov test
 coverage](https://codecov.io/gh/tidymodels/hardhat/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/hardhat?branch=main)
 [![R-CMD-check](https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check.yaml)
-
 <!-- badges: end -->
 
 ## Introduction
