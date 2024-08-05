@@ -1,192 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/articles/forge.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/articles/mold.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/articles/package.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/add_intercept_column.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/contr_one_hot.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/default_formula_blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/default_recipe_blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/default_xy_blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/delete_response.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/extract_ptype.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/fct_encode_one_hot.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/forge.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/frequency_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/get_data_classes.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/get_levels.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/hardhat-example-data.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/hardhat-extract.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/hardhat-package.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/importance_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/is_blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/is_case_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/is_frequency_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/is_importance_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/model_frame.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/model_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/model_offset.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/modeling-usethis.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/mold.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/new-blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/new-default-blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/new_case_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/new_frequency_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/new_importance_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/new_model.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/recompose.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/refresh_blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/run-forge.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/run-mold.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/scream.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/shrink.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/spruce-multiple.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/spruce.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/standardize.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/tune.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/update_blueprint.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_column_names.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_no_formula_duplication.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_factors.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_univariate.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_prediction_size.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/validate_predictors_are_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://hardhat.tidymodels.org/dev/reference/weighted_table.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://hardhat.tidymodels.org/dev/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/CONTRIBUTING.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/LICENSE-text.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/LICENSE.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/articles/forge.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/articles/index.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/articles/mold.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/articles/package.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/authors.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/index.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/news/index.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/add_intercept_column.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/contr_one_hot.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/default_formula_blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/default_recipe_blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/default_xy_blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/delete_response.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/extract_ptype.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/fct_encode_one_hot.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/forge.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/frequency_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/get_data_classes.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/get_levels.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/hardhat-example-data.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/hardhat-extract.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/hardhat-package.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/importance_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/index.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/is_blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/is_case_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/is_frequency_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/is_importance_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/model_frame.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/model_matrix.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/model_offset.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/modeling-usethis.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/mold.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/new-blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/new-default-blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/new_case_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/new_frequency_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/new_importance_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/new_model.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/recompose.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/refresh_blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/run-forge.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/run-mold.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/scream.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/shrink.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/spruce-multiple.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/spruce.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/standardize.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/tune.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/update_blueprint.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_column_names.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_no_formula_duplication.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_binary.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_factors.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_numeric.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_univariate.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_prediction_size.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/validate_predictors_are_numeric.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/weighted_table.html</loc></url>
 </urlset>
+
