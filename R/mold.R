@@ -29,7 +29,7 @@
 #'  - `predictors`: A tibble containing the molded predictors to be used in the
 #'  model.
 #'
-#'  - `outcome`: A tibble containing the molded outcomes to be used in the
+#'  - `outcomes`: A tibble containing the molded outcomes to be used in the
 #'  model.
 #'
 #'  - `blueprint`: A method specific `"hardhat_blueprint"` object for use when
