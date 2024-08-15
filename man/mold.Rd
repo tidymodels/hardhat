@@ -17,7 +17,7 @@ A named list containing 4 elements:
 \itemize{
 \item \code{predictors}: A tibble containing the molded predictors to be used in the
 model.
-\item \code{outcome}: A tibble containing the molded outcomes to be used in the
+\item \code{outcomes}: A tibble containing the molded outcomes to be used in the
 model.
 \item \code{blueprint}: A method specific \code{"hardhat_blueprint"} object for use when
 making predictions.
