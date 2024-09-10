@@ -25,6 +25,7 @@ Imports:
     cli (>= 3.6.0),
     glue (>= 1.6.2),
     rlang (>= 1.1.0),
+    sparsevctrs (>= 0.1.0.9000),
     tibble (>= 3.2.1),
     vctrs (>= 0.6.0)
 Suggests:

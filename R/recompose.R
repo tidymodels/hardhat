@@ -58,8 +58,12 @@ recompose <- function(data,
       coerce_to_matrix(data)
     },
     dgCMatrix = {
-      data <- coerce_to_matrix(data)
-      coerce_to_sparse(data)
+      if (is_sparse_tibble(data)) {
+        sparsevctrs::coerce_to_sparse_matrix(data)
+      } else {
+        data <- coerce_to_matrix(data)
+        coerce_to_sparse(data)
+      }
     }
   )
 }
