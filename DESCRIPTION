@@ -41,6 +41,8 @@ Suggests:
     testthat (>= 3.0.0),
     usethis (>= 2.1.5),
     withr (>= 3.0.0)
+Remotes:  
+    r-lib/sparsevctrs
 VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate
