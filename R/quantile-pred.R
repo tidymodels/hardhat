@@ -208,11 +208,11 @@ as_tibble.quantile_pred <-
     lvls <- attr(x, "quantile_levels")
     n_samp <- length(x)
     n_quant <- length(lvls)
-    tibble::tibble(
+    tibble::new_tibble(list(
       .pred_quantile = unlist(x),
       .quantile_levels = rep(lvls, n_samp),
       .row = rep(1:n_samp, each = n_quant)
-    )
+    ))
   }
 
 #' @export
