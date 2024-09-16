@@ -72,3 +72,65 @@ test_that("validates `composition`", {
     recompose(data.frame(), composition = 1)
   })
 })
+
+test_that("sparse tibble can be turned to tibble", {
+  skip_if_not_installed("modeldata")
+
+  hotel_data <- sparse_hotel_rates()
+  hotel_data <- sparsevctrs::coerce_to_sparse_tibble(hotel_data)
+
+  res <- recompose(hotel_data, composition = "tibble")
+
+  expect_identical(
+    res,
+    hotel_data
+  )
+
+  expect_true(is_sparse_tibble(res))
+})
+
+test_that("sparse tibble can be turned to data.frame", {
+  skip_if_not_installed("modeldata")
+
+  hotel_data <- sparse_hotel_rates()
+  hotel_data <- sparsevctrs::coerce_to_sparse_tibble(hotel_data)
+
+  res <- recompose(hotel_data, composition = "data.frame")
+
+  expect_identical(
+    res,
+    as.data.frame(hotel_data)
+  )
+
+  expect_true(is_sparse_tibble(res))
+})
+
+test_that("sparse tibble can be turned to matrix", {
+  skip_if_not_installed("modeldata")
+
+  hotel_data <- sparse_hotel_rates()
+  hotel_data <- sparsevctrs::coerce_to_sparse_tibble(hotel_data)
+  hotel_data <- hotel_data[1:10, 1:10]
+
+  res <- recompose(hotel_data, composition = "matrix")
+
+  expect_identical(
+    res,
+    as.matrix(hotel_data)
+  )
+})
+
+test_that("sparse tibble can be turned to dgCMatrix", {
+  skip_if_not_installed("modeldata")
+
+  hotel_mat <- sparse_hotel_rates()
+  hotel_data <- sparsevctrs::coerce_to_sparse_tibble(hotel_mat)
+
+  res <- recompose(hotel_data, composition = "dgCMatrix")
+  rownames(res) <- NULL
+
+  expect_identical(
+    res,
+    hotel_mat
+  )
+})
