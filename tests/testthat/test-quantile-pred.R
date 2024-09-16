@@ -67,3 +67,10 @@ test_that("as_tibble() for quantile_pred", {
   expect_named(tbl, c(".pred_quantile", ".quantile_levels", ".row"))
   expect_true(nrow(tbl) == 20)
 })
+
+test_that("as.matrix() for quantile_pred", {
+  v <- quantile_pred(matrix(1:20, 5), 1:4 / 5)
+  m <- as.matrix(v)
+  expect_true(is.matrix(m))
+  expect_identical(m, matrix(1:20, 5))
+})
