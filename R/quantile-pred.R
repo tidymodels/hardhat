@@ -128,6 +128,36 @@ check_vector_probability <- function(x, ...,
 }
 
 #' @export
+#' @rdname quantile_pred
+extract_quantile_levels <- function(x) {
+  if (!inherits(x, "quantile_pred")) {
+    cli::cli_abort("{.arg x} should have class {.cls quantile_pred}.")
+  }
+  attr(x, "quantile_levels")
+}
+
+#' @export
+#' @rdname quantile_pred
+as_tibble.quantile_pred <-
+  function (x, ..., .rows = NULL, .name_repair = "minimal", rownames = NULL) {
+    lvls <- attr(x, "quantile_levels")
+    n_samp <- length(x)
+    n_quant <- length(lvls)
+    tibble::new_tibble(list(
+      .pred_quantile = unlist(x),
+      .quantile_levels = rep(lvls, n_samp),
+      .row = rep(1:n_samp, each = n_quant)
+    ))
+  }
+
+#' @export
+#' @rdname quantile_pred
+as.matrix.quantile_pred <- function(x, ...) {
+  num_samp <- length(x)
+  matrix(unlist(x), nrow = num_samp)
+}
+
+#' @export
 format.quantile_pred <- function(x, ...) {
   quantile_levels <- attr(x, "quantile_levels")
   if (length(quantile_levels) == 1L) {
@@ -151,7 +181,6 @@ vctrs::vec_ptype_abbr
 #' @importFrom vctrs vec_ptype_full
 #' @export
 vctrs::vec_ptype_full
-
 
 #' @export
 vec_ptype_abbr.quantile_pred <- function(x, ...) {
@@ -196,34 +225,4 @@ restructure_rq_pred <- function(x, object) {
   quantile_level <- object$spec$quantile_level
 
   tibble::new_tibble(x = list(.pred_quantile = quantile_pred(x, quantile_level)))
-}
-
-#' @export
-#' @rdname quantile_pred
-extract_quantile_levels <- function(x) {
-  if (!inherits(x, "quantile_pred")) {
-    cli::cli_abort("{.arg x} should have class {.cls quantile_pred}.")
-  }
-  attr(x, "quantile_levels")
-}
-
-#' @export
-#' @rdname quantile_pred
-as_tibble.quantile_pred <-
-  function (x, ..., .rows = NULL, .name_repair = "minimal", rownames = NULL) {
-    lvls <- attr(x, "quantile_levels")
-    n_samp <- length(x)
-    n_quant <- length(lvls)
-    tibble::new_tibble(list(
-      .pred_quantile = unlist(x),
-      .quantile_levels = rep(lvls, n_samp),
-      .row = rep(1:n_samp, each = n_quant)
-    ))
-  }
-
-#' @export
-#' @rdname quantile_pred
-as.matrix.quantile_pred <- function(x, ...) {
-  num_samp <- length(x)
-  matrix(unlist(x), nrow = num_samp)
 }
