@@ -22,23 +22,6 @@ check_quantile_level <- function(x, object, call) {
 # -------------------------------------------------------------------------
 # A column vector of quantiles with an attribute
 
-#' @importFrom vctrs vec_ptype_abbr
-#' @export
-vctrs::vec_ptype_abbr
-
-#' @importFrom vctrs vec_ptype_full
-#' @export
-vctrs::vec_ptype_full
-
-
-#' @export
-vec_ptype_abbr.quantile_pred <- function(x, ...) {
-  n_lvls <- length(attr(x, "quantile_levels"))
-  cli::format_inline("qtl{?s}({n_lvls})")
-}
-
-#' @export
-vec_ptype_full.quantile_pred <- function(x, ...) "quantiles"
 
 #' Create a vector containing sets of quantiles
 #'
@@ -141,6 +124,24 @@ format.quantile_pred <- function(x, ...) {
   }
   out
 }
+
+#' @importFrom vctrs vec_ptype_abbr
+#' @export
+vctrs::vec_ptype_abbr
+
+#' @importFrom vctrs vec_ptype_full
+#' @export
+vctrs::vec_ptype_full
+
+
+#' @export
+vec_ptype_abbr.quantile_pred <- function(x, ...) {
+  n_lvls <- length(attr(x, "quantile_levels"))
+  cli::format_inline("qtl{?s}({n_lvls})")
+}
+
+#' @export
+vec_ptype_full.quantile_pred <- function(x, ...) "quantiles"
 
 #' @importFrom vctrs obj_print_footer
 #' @export
