@@ -199,7 +199,7 @@ restructure_rq_pred <- function(x, object) {
 #' @rdname quantile_pred
 extract_quantile_levels <- function(x) {
   if (!inherits(x, "quantile_pred")) {
-    cli::cli_abort("{.arg x} should have class {.val quantile_pred}.")
+    cli::cli_abort("{.arg x} should have class {.cls quantile_pred}.")
   }
   attr(x, "quantile_levels")
 }

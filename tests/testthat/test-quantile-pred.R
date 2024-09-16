@@ -27,6 +27,16 @@ test_that("quantile_pred outputs", {
   )
 })
 
+test_that("extract_quantile_levels", {
+  v <- quantile_pred(matrix(1:20, 5), 1:4 / 5)
+  expect_identical(extract_quantile_levels(v), 1:4 / 5)
+
+  expect_snapshot(
+    error = TRUE,
+    extract_quantile_levels(1:10)
+  )
+})
+
 test_that("quantile_pred formatting", {
   # multiple quantiles
   v <- quantile_pred(matrix(1:20, 5), 1:4 / 5)

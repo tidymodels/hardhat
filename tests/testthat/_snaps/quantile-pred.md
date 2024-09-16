@@ -30,6 +30,14 @@
       Error in `quantile_pred()`:
       ! `quantile_levels` must be sorted in increasing order.
 
+# extract_quantile_levels
+
+    Code
+      extract_quantile_levels(1:10)
+    Condition
+      Error in `extract_quantile_levels()`:
+      ! `x` should have class <quantile_pred>.
+
 # quantile_pred formatting
 
     Code
