@@ -159,8 +159,11 @@ check_vector_probability <- function(x, ...,
                                      call = caller_env()) {
   for (d in x) {
     check_number_decimal(
-      d, min = 0, max = 1,
-      arg = arg, call = call,
+      d, 
+      min = 0,
+      max = 1,
+      arg = arg,
+      call = call,
       allow_na = allow_na,
       allow_null = allow_null,
       allow_infinite = FALSE
