@@ -40,13 +40,6 @@ vec_ptype_abbr.quantile_pred <- function(x, ...) {
 #' @export
 vec_ptype_full.quantile_pred <- function(x, ...) "quantiles"
 
-new_quantile_pred <- function(values = list(), quantile_levels = double()) {
-  quantile_levels <- vctrs::vec_cast(quantile_levels, double())
-  vctrs::new_vctr(
-    values, quantile_levels = quantile_levels, class = "quantile_pred"
-  )
-}
-
 #' Create a vector containing sets of quantiles
 #'
 #' [quantile_pred()] is a special vector class used to efficiently store
@@ -100,6 +93,13 @@ quantile_pred <- function(values, quantile_levels = double()) {
   colnames(values) <- NULL
   values <- lapply(vctrs::vec_chop(values), drop)
   new_quantile_pred(values, quantile_levels)
+}
+
+new_quantile_pred <- function(values = list(), quantile_levels = double()) {
+  quantile_levels <- vctrs::vec_cast(quantile_levels, double())
+  vctrs::new_vctr(
+    values, quantile_levels = quantile_levels, class = "quantile_pred"
+  )
 }
 
 check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
