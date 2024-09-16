@@ -108,6 +108,25 @@ check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
   invisible(NULL)
 }
 
+check_vector_probability <- function(x, ...,
+                                     allow_na = FALSE,
+                                     allow_null = FALSE,
+                                     arg = caller_arg(x),
+                                     call = caller_env()) {
+  for (d in x) {
+    check_number_decimal(
+      d, 
+      min = 0,
+      max = 1,
+      arg = arg,
+      call = call,
+      allow_na = allow_na,
+      allow_null = allow_null,
+      allow_infinite = FALSE
+    )
+  }
+}
+
 #' @export
 format.quantile_pred <- function(x, ...) {
   quantile_levels <- attr(x, "quantile_levels")
@@ -153,24 +172,7 @@ obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
   cat("# Quantile levels: ", format(lvls, digits = digits), "\n", sep = " ")
 }
 
-check_vector_probability <- function(x, ...,
-                                     allow_na = FALSE,
-                                     allow_null = FALSE,
-                                     arg = caller_arg(x),
-                                     call = caller_env()) {
-  for (d in x) {
-    check_number_decimal(
-      d, 
-      min = 0,
-      max = 1,
-      arg = arg,
-      call = call,
-      allow_na = allow_na,
-      allow_null = allow_null,
-      allow_infinite = FALSE
-    )
-  }
-}
+
 
 #' @export
 median.quantile_pred <- function(x, ...) {
