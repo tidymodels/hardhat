@@ -1,28 +1,3 @@
-# Helpers for quantile regression models
-
-check_quantile_level <- function(x, object, call) {
-  if (object$mode != "quantile regression") {
-    return(invisible(TRUE))
-  } else {
-    if (is.null(x)) {
-      cli::cli_abort("In {.fn check_mode}, at least one value of
-      {.arg quantile_level} must be specified for quantile regression models.")
-    }
-  }
-  if (any(is.na(x))) {
-    cli::cli_abort("Missing values are not allowed in {.arg quantile_levels}.",
-                   call = call)
-  }
-  x <- sort(unique(x))
-  check_vector_probability(x, arg = "quantile_level", call = call)
-  x
-}
-
-
-# -------------------------------------------------------------------------
-# A column vector of quantiles with an attribute
-
-
 #' Create a vector containing sets of quantiles
 #'
 #' [quantile_pred()] is a special vector class used to efficiently store
@@ -125,6 +100,24 @@ check_vector_probability <- function(x, ...,
       allow_infinite = FALSE
     )
   }
+}
+
+check_quantile_level <- function(x, object, call) {
+  if (object$mode != "quantile regression") {
+    return(invisible(TRUE))
+  } else {
+    if (is.null(x)) {
+      cli::cli_abort("In {.fn check_mode}, at least one value of
+      {.arg quantile_level} must be specified for quantile regression models.")
+    }
+  }
+  if (any(is.na(x))) {
+    cli::cli_abort("Missing values are not allowed in {.arg quantile_levels}.",
+                   call = call)
+  }
+  x <- sort(unique(x))
+  check_vector_probability(x, arg = "quantile_level", call = call)
+  x
 }
 
 #' @export
