@@ -102,24 +102,6 @@ check_vector_probability <- function(x, ...,
   }
 }
 
-check_quantile_level <- function(x, object, call) {
-  if (object$mode != "quantile regression") {
-    return(invisible(TRUE))
-  } else {
-    if (is.null(x)) {
-      cli::cli_abort("In {.fn check_mode}, at least one value of
-      {.arg quantile_level} must be specified for quantile regression models.")
-    }
-  }
-  if (any(is.na(x))) {
-    cli::cli_abort("Missing values are not allowed in {.arg quantile_levels}.",
-                   call = call)
-  }
-  x <- sort(unique(x))
-  check_vector_probability(x, arg = "quantile_level", call = call)
-  x
-}
-
 #' @export
 #' @rdname quantile_pred
 extract_quantile_levels <- function(x) {
