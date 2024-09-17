@@ -58,6 +58,11 @@ test_that("quantile_pred formatting", {
   expect_snapshot(tibble(qntls = one_quantile))
   m[2] <- NA
   expect_snapshot(quantile_pred(m, 5/9))
+
+  set.seed(393)
+  v <- quantile_pred(matrix(exp(rnorm(20)), ncol = 4), 1:4 / 5)
+  expect_snapshot(format(v))
+  expect_snapshot(format(v, digits = 5))
 })
 
 test_that("as_tibble() for quantile_pred", {

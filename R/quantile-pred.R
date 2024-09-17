@@ -133,18 +133,15 @@ as.matrix.quantile_pred <- function(x, ...) {
 }
 
 #' @export
-format.quantile_pred <- function(x, ...) {
+format.quantile_pred <- function(x, digits = 3L, ...) {
   quantile_levels <- attr(x, "quantile_levels")
   if (length(quantile_levels) == 1L) {
     x <- unlist(x)
-    out <- round(x, 3L)
+    out <- signif(x, digits = digits)
     out[is.na(x)] <- NA_real_
   } else {
-    rng <- sapply(x, range, na.rm = TRUE)
-    out <- paste0("[", round(rng[1, ], 3L), ", ", round(rng[2, ], 3L), "]")
-    out[is.na(rng[1, ]) & is.na(rng[2, ])] <- NA_character_
-    m <- median(x)
-    out <- paste0("[", round(m, 3L), "]")
+    m <- median(x, na.rm = TRUE)
+    out <- paste0("[", signif(m, digits = digits), "]")
   }
   out
 }
