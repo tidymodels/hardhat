@@ -35,7 +35,7 @@ quantile levels.
 \item \code{\link[=extract_quantile_levels]{extract_quantile_levels()}} returns a numeric vector of levels.
 \item \code{\link[=as_tibble]{as_tibble()}} returns a tibble with rows \code{".pred_quantile"},
 \code{".quantile_levels"}, and \code{".row"}.
-\item \code{\link[=as.matrix]{as.matrix()}} returns an unnamed matrix with rows as sames, columns as
+\item \code{\link[=as.matrix]{as.matrix()}} returns an unnamed matrix with rows as samples, columns as
 quantile levels, and entries are predictions.
 }
 }

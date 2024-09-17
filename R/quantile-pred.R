@@ -19,7 +19,7 @@
 #'   * [extract_quantile_levels()] returns a numeric vector of levels.
 #'   * [as_tibble()] returns a tibble with rows `".pred_quantile"`,
 #'   `".quantile_levels"`, and `".row"`.
-#'   * [as.matrix()] returns an unnamed matrix with rows as sames, columns as
+#'   * [as.matrix()] returns an unnamed matrix with rows as samples, columns as
 #'   quantile levels, and entries are predictions.
 #' @examples
 #' .pred_quantile <- quantile_pred(matrix(rnorm(20), 5), c(.2, .4, .6, .8))
@@ -90,7 +90,7 @@ check_vector_probability <- function(x, ...,
                                      call = caller_env()) {
   for (d in x) {
     check_number_decimal(
-      d, 
+      d,
       min = 0,
       max = 1,
       arg = arg,
