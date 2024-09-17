@@ -188,14 +188,3 @@ obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
   lvls <- attr(x, "quantile_levels")
   cat("# Quantile levels: ", format(lvls, digits = digits), "\n", sep = " ")
 }
-
-restructure_rq_pred <- function(x, object) {
-  if (!is.matrix(x)) {
-    x <- as.matrix(x)
-  }
-  rownames(x) <- NULL
-  n_pred_quantiles <- ncol(x)
-  quantile_level <- object$spec$quantile_level
-
-  tibble::new_tibble(x = list(.pred_quantile = quantile_pred(x, quantile_level)))
-}
