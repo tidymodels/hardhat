@@ -75,6 +75,7 @@ test_that("validates `composition`", {
 
 test_that("sparse tibble can be turned to tibble", {
   skip_if_not_installed("modeldata")
+  withr::local_options("sparsevctrs.verbose_materialize" = 3)
 
   hotel_data <- sparse_hotel_rates()
   hotel_data <- sparsevctrs::coerce_to_sparse_tibble(hotel_data)
@@ -91,6 +92,7 @@ test_that("sparse tibble can be turned to tibble", {
 
 test_that("sparse tibble can be turned to data.frame", {
   skip_if_not_installed("modeldata")
+  withr::local_options("sparsevctrs.verbose_materialize" = 3)
 
   hotel_data <- sparse_hotel_rates()
   hotel_data <- sparsevctrs::coerce_to_sparse_tibble(hotel_data)
@@ -122,6 +124,7 @@ test_that("sparse tibble can be turned to matrix", {
 
 test_that("sparse tibble can be turned to dgCMatrix", {
   skip_if_not_installed("modeldata")
+  withr::local_options("sparsevctrs.verbose_materialize" = 3)
 
   hotel_mat <- sparse_hotel_rates()
   hotel_data <- sparsevctrs::coerce_to_sparse_tibble(hotel_mat)
