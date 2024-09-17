@@ -129,7 +129,7 @@ as_tibble.quantile_pred <-
 #' @rdname quantile_pred
 as.matrix.quantile_pred <- function(x, ...) {
   num_samp <- length(x)
-  matrix(unlist(x), nrow = num_samp)
+  matrix(unlist(x), nrow = num_samp, byrow = TRUE)
 }
 
 #' @export

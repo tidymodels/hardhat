@@ -74,8 +74,9 @@ test_that("as_tibble() for quantile_pred", {
 })
 
 test_that("as.matrix() for quantile_pred", {
-  v <- quantile_pred(matrix(1:20, 5), 1:4 / 5)
+  x <- matrix(1:20, 5)
+  v <- quantile_pred(x, 1:4 / 5)
   m <- as.matrix(v)
   expect_true(is.matrix(m))
-  expect_identical(m, matrix(1:20, 5))
+  expect_identical(m, x)
 })
