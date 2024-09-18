@@ -171,5 +171,6 @@ vec_ptype_full.quantile_pred <- function(x, ...) "quantiles"
 #' @export
 obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
   lvls <- attr(x, "quantile_levels")
-  cat("# Quantile levels: ", format(lvls, digits = digits), "\n", sep = " ")
+  footer <- cli::format_inline("# Quantile {cli::qty(length(lvls))}level{?s}:")
+  cat(footer, format(lvls, digits = digits), "\n", sep = " ")
 }

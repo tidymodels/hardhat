@@ -45,7 +45,7 @@
     Output
       <quantiles[5]>
       [1] [8.5]  [9.5]  [10.5] [11.5] [12.5]
-      # Quantile levels:  0.2 0.4 0.6 0.8 
+      # Quantile levels: 0.2 0.4 0.6 0.8 
 
 ---
 
@@ -54,7 +54,7 @@
     Output
       <quantiles[9]>
       [1] [5.5]  [6.5]  [7.5]  [8.5]  [9.5]  [10.5] [11.5] [12.5] [13.5]
-      # Quantile levels:  0.333 0.667 
+      # Quantile levels: 0.333 0.667 
 
 ---
 
@@ -63,7 +63,7 @@
     Output
       <quantiles[3]>
       [1] [0.304] [0.5]   [0.696]
-      # Quantile levels:  0.2 0.8 
+      # Quantile levels: 0.2 0.8 
 
 ---
 
@@ -86,7 +86,7 @@
     Output
       <quantiles[5]>
       [1] [8.5]  [9.5]  [10.5] [11.5] [12.5]
-      # Quantile levels:  0.2 0.4 0.6 0.8 
+      # Quantile levels: 0.2 0.4 0.6 0.8 
 
 ---
 
@@ -95,7 +95,7 @@
     Output
       <quantiles[5]>
       [1] 1 2 3 4 5
-      # Quantile levels:  0.556 
+      # Quantile level: 0.556 
 
 ---
 
@@ -118,7 +118,7 @@
     Output
       <quantiles[5]>
       [1]  1 NA  3  4  5
-      # Quantile levels:  0.556 
+      # Quantile level: 0.556 
 
 ---
 
