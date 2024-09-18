@@ -159,11 +159,9 @@ median.quantile_pred <- function(x, ...) {
   map_dbl(x, ~ stats::approx(lvls, .x, xout = 0.5)$y)
 }
 
-#' @importFrom vctrs vec_ptype_abbr
 #' @export
 vctrs::vec_ptype_abbr
 
-#' @importFrom vctrs vec_ptype_full
 #' @export
 vctrs::vec_ptype_full
 
@@ -176,7 +174,6 @@ vec_ptype_abbr.quantile_pred <- function(x, ...) {
 #' @export
 vec_ptype_full.quantile_pred <- function(x, ...) "quantiles"
 
-#' @importFrom vctrs obj_print_footer
 #' @export
 vctrs::obj_print_footer
 
