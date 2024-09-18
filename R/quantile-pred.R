@@ -160,12 +160,6 @@ median.quantile_pred <- function(x, ...) {
 }
 
 #' @export
-vctrs::vec_ptype_abbr
-
-#' @export
-vctrs::vec_ptype_full
-
-#' @export
 vec_ptype_abbr.quantile_pred <- function(x, ...) {
   n_lvls <- length(attr(x, "quantile_levels"))
   cli::format_inline("qtl{?s}({n_lvls})")
@@ -173,9 +167,6 @@ vec_ptype_abbr.quantile_pred <- function(x, ...) {
 
 #' @export
 vec_ptype_full.quantile_pred <- function(x, ...) "quantiles"
-
-#' @export
-vctrs::obj_print_footer
 
 #' @export
 obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
