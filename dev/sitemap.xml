@@ -11,6 +11,7 @@
 <url><loc>https://hardhat.tidymodels.org/dev/index.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/news/index.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/add_intercept_column.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/check_quantile_levels.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/contr_one_hot.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/default_formula_blueprint.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/default_recipe_blueprint.html</loc></url>
@@ -42,6 +43,7 @@
 <url><loc>https://hardhat.tidymodels.org/dev/reference/new_frequency_weights.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/new_importance_weights.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/new_model.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/quantile_pred.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/recompose.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/refresh_blueprint.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/run-forge.html</loc></url>
