@@ -36,17 +36,10 @@
 #' library(tibble)
 #' as_tibble(.pred_quantile)
 quantile_pred <- function(values, quantile_levels = double()) {
+  quantile_levels <- vctrs::vec_cast(quantile_levels, double())
+  check_quantile_levels(quantile_levels)
   check_quantile_pred_inputs(values, quantile_levels)
 
-  quantile_levels <- vctrs::vec_cast(quantile_levels, double())
-  num_lvls <- length(quantile_levels)
-
-  if (ncol(values) != num_lvls) {
-    cli::cli_abort(
-      "The number of columns in {.arg values} must be equal to the length of
-        {.arg quantile_levels}."
-    )
-  }
   rownames(values) <- NULL
   colnames(values) <- NULL
   values <- lapply(vctrs::vec_chop(values), drop)
@@ -58,48 +51,6 @@ new_quantile_pred <- function(values = list(), quantile_levels = double()) {
   vctrs::new_vctr(
     values, quantile_levels = quantile_levels, class = "quantile_pred"
   )
-}
-
-check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
-  if (any(is.na(levels))) {
-    cli::cli_abort("Missing values are not allowed in {.arg quantile_levels}.",
-                   call = call)
-  }
-
-  if (!is.matrix(values)) {
-    cli::cli_abort(
-      "{.arg values} must be a {.cls matrix}, not {.obj_type_friendly {values}}.",
-      call = call
-    )
-  }
-  check_vector_probability(levels, arg = "quantile_levels", call = call)
-
-  if (is.unsorted(levels)) {
-    cli::cli_abort(
-      "{.arg quantile_levels} must be sorted in increasing order.",
-      call = call
-    )
-  }
-  invisible(NULL)
-}
-
-check_vector_probability <- function(x, ...,
-                                     allow_na = FALSE,
-                                     allow_null = FALSE,
-                                     arg = caller_arg(x),
-                                     call = caller_env()) {
-  for (d in x) {
-    check_number_decimal(
-      d,
-      min = 0,
-      max = 1,
-      arg = arg,
-      call = call,
-      allow_na = allow_na,
-      allow_null = allow_null,
-      allow_infinite = FALSE
-    )
-  }
 }
 
 #' @export
@@ -173,4 +124,79 @@ obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
   lvls <- attr(x, "quantile_levels")
   footer <- cli::format_inline("# Quantile {cli::qty(length(lvls))}level{?s}:")
   cat(footer, format(lvls, digits = digits), "\n", sep = " ")
+}
+
+
+# ------------------------------------------------------------------------------
+# Checking functions
+
+check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
+  if (!is.matrix(values)) {
+    cli::cli_abort(
+      "{.arg values} must be a {.cls matrix}, not {.obj_type_friendly {values}}.",
+      call = call
+    )
+  }
+
+  num_lvls <- length(levels)
+
+  if (ncol(values) != num_lvls) {
+    cli::cli_abort(
+      "The number of columns in {.arg values} must be equal to the length of
+        {.arg quantile_levels}.", call = call
+    )
+  }
+
+  invisible(TRUE)
+}
+
+#' Check levels of quantiles
+#' @param levels The quantile levels.
+#' @param arg,call Inputs to use to write error messages
+#' @return Invisible `TRUE`
+#' @keywords internal
+#' @details
+#' Checks the levels for their data type, range, uniqueness, orderm and missingness.
+#' @export
+check_quantile_levels <- function(levels, call = rlang::caller_env()) {
+  # data type, range, etc
+  check_quantile_level_values(levels, arg = "quantile_levels", call = call)
+
+  # uniqueness
+  is_dup <- duplicated(levels)
+  if (any(is_dup)) {
+    redund <- levels[is_dup]
+    redund <- signif(redund, digits = 5)
+    cli::cli_abort("Quantile levels should be unique. The following values were
+                   repeated: {redund}.", call = call)
+  }
+
+  # order
+  if (is.unsorted(levels)) {
+    cli::cli_abort(
+      "{.arg quantile_levels} must be sorted in increasing order.",
+      call = call
+    )
+  }
+
+  invisible(TRUE)
+}
+
+check_quantile_level_values <- function(levels, arg, call) {
+  if (is.null(levels)) {
+    cli::cli_abort("{.arg {arg}} cannot be NULL.", call = call)
+  }
+  for (val in levels) {
+    check_number_decimal(
+      val,
+      min = 0,
+      max = 1,
+      arg = arg,
+      call = call,
+      allow_na = FALSE,
+      allow_null = FALSE,
+      allow_infinite = FALSE
+    )
+  }
+  invisible(TRUE)
 }
