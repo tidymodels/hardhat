@@ -17,6 +17,21 @@ test_that("quantile_pred error types", {
   )
 })
 
+test_that("quantile levels are checked", {
+  expect_snapshot(error = TRUE, {
+    quantile_pred(matrix(1:20, 5), quantile_levels = NULL)
+  })
+  expect_snapshot(error = TRUE, {
+    quantile_pred(matrix(1:20, 5), quantile_levels = c(0.7, 0.7, 0.7))   
+  })
+  expect_snapshot(error = TRUE, {
+    quantile_pred(matrix(1:20, 5), quantile_levels = c(rep(0.7, 2), rep(0.8, 3)))    
+  })
+  expect_snapshot(error = TRUE, {
+    quantile_pred(matrix(1:20, 5), quantile_levels = c(0.8, 0.7))    
+  })
+})
+
 test_that("quantile_pred outputs", {
   v <- quantile_pred(matrix(1:20, 5), 1:4 / 5)
   expect_s3_class(v, "quantile_pred")

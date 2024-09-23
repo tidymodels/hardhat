@@ -30,6 +30,40 @@
       Error in `quantile_pred()`:
       ! `quantile_levels` must be sorted in increasing order.
 
+# quantile levels are checked
+
+    Code
+      quantile_pred(matrix(1:20, 5), quantile_levels = NULL)
+    Condition
+      Error in `quantile_pred()`:
+      ! `quantile_levels` cannot be "NULL".
+
+---
+
+    Code
+      quantile_pred(matrix(1:20, 5), quantile_levels = c(0.7, 0.7, 0.7))
+    Condition
+      Error in `quantile_pred()`:
+      ! Quantile levels should be unique.
+      i The following value was repeated: 0.7.
+
+---
+
+    Code
+      quantile_pred(matrix(1:20, 5), quantile_levels = c(rep(0.7, 2), rep(0.8, 3)))
+    Condition
+      Error in `quantile_pred()`:
+      ! Quantile levels should be unique.
+      i The following values were repeated: 0.7 and 0.8.
+
+---
+
+    Code
+      quantile_pred(matrix(1:20, 5), quantile_levels = c(0.8, 0.7))
+    Condition
+      Error in `quantile_pred()`:
+      ! `quantile_levels` must be sorted in increasing order.
+
 # extract_quantile_levels
 
     Code

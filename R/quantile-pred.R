@@ -168,8 +168,12 @@ check_quantile_levels <- function(levels, call = rlang::caller_env()) {
     redund <- levels[is_dup]
     redund <- unique(redund)
     redund <- signif(redund, digits = 5)
-    cli::cli_abort("Quantile levels should be unique. The following values were
-                   repeated: {redund}.", call = call)
+    cli::cli_abort(c(
+      "Quantile levels should be unique.", 
+      i = "The following {cli::qty(length(redund))}value{?s} {?was/were} repeated:
+         {redund}."),
+      call = call
+    )
   }
 
   # order
@@ -185,7 +189,7 @@ check_quantile_levels <- function(levels, call = rlang::caller_env()) {
 
 check_quantile_level_values <- function(levels, arg, call) {
   if (is.null(levels)) {
-    cli::cli_abort("{.arg {arg}} cannot be NULL.", call = call)
+    cli::cli_abort("{.arg {arg}} cannot be {.val NULL}.", call = call)
   }
   for (val in levels) {
     check_number_decimal(
