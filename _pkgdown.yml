@@ -24,7 +24,9 @@ reference:
   - forge
 
 - title: Prediction
-  contents: contains("spruce")
+  contents:
+  - contains("spruce")
+  - quantile_pred
 
 - title: Utility
   contents:
