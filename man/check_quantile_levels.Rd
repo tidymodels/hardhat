@@ -18,6 +18,6 @@ Invisible \code{TRUE}
 Check levels of quantiles
 }
 \details{
-Checks the levels for their data type, range, uniqueness, and missingness.
+Checks the levels for their data type, range, uniqueness, order and missingness.
 }
 \keyword{internal}

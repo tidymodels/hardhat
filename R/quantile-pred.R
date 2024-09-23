@@ -156,7 +156,7 @@ check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
 #' @return Invisible `TRUE`
 #' @keywords internal
 #' @details
-#' Checks the levels for their data type, range, uniqueness, orderm and missingness.
+#' Checks the levels for their data type, range, uniqueness, order and missingness.
 #' @export
 check_quantile_levels <- function(levels, call = rlang::caller_env()) {
   # data type, range, etc
