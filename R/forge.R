@@ -70,7 +70,7 @@ forge <- function(new_data, blueprint, ..., outcomes = FALSE) {
 
 #' @export
 forge.default <- function(new_data, blueprint, ..., outcomes = FALSE) {
-  glubort("The class of `new_data`, '{class1(new_data)}', is not recognized.")
+  cli::cli_abort("No {.fn forge} method provided for {.obj_type_friendly {new_data}} object.")
 }
 
 #' @export
@@ -140,7 +140,5 @@ run_forge.default <- function(blueprint,
                               new_data,
                               ...,
                               outcomes = FALSE) {
-  class <- class(blueprint)[[1L]]
-  message <- glue("No `run_forge()` method provided for an object of type <{class}>.")
-  abort(message)
+  cli::cli_abort("No {.fn run_forge} method provided for {.obj_type_friendly {blueprint}} object.")
 }
