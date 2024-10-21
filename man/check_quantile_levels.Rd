@@ -9,7 +9,7 @@ check_quantile_levels(levels, call = rlang::caller_env())
 \arguments{
 \item{levels}{The quantile levels.}
 
-\item{arg, call}{Inputs to use to write error messages}
+\item{call}{Call shown in the error messages.}
 }
 \value{
 Invisible \code{TRUE}

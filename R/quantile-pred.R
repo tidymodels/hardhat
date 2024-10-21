@@ -152,7 +152,7 @@ check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
 
 #' Check levels of quantiles
 #' @param levels The quantile levels.
-#' @param arg,call Inputs to use to write error messages
+#' @param call Call shown in the error messages.
 #' @return Invisible `TRUE`
 #' @keywords internal
 #' @details
@@ -169,7 +169,7 @@ check_quantile_levels <- function(levels, call = rlang::caller_env()) {
     redund <- unique(redund)
     redund <- signif(redund, digits = 5)
     cli::cli_abort(c(
-      "Quantile levels should be unique.", 
+      "Quantile levels should be unique.",
       i = "The following {cli::qty(length(redund))}value{?s} {?was/were} repeated:
          {redund}."),
       call = call
