@@ -66,9 +66,9 @@ test_that("Can extract levels from an outcome", {
     NULL
   )
 
-  expect_error(
-    get_outcome_levels("a"),
-    "`y` is of unknown type"
+  expect_snapshot(
+    error = TRUE,
+    get_outcome_levels("a")
   )
 
   expect_equal(
