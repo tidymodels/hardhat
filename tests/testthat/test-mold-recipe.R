@@ -121,9 +121,9 @@ test_that("can pass `strings_as_factors` through to `prep()`", {
 })
 
 test_that("`data` is validated", {
-  expect_error(
-    mold(recipes::recipe(Species ~ Sepal.Length, data = iris), 1),
-    "`data` must be a data.frame or a matrix"
+  expect_snapshot(
+    error = TRUE,
+    mold(recipes::recipe(Species ~ Sepal.Length, data = iris), 1)
   )
 })
 
