@@ -90,14 +90,14 @@ test_that("asking for the outcome when it isn't there fails", {
   iris2 <- iris
   iris2$Species <- NULL
 
-  expect_error(
-    forge(iris2, x1$blueprint, outcomes = TRUE),
-    "The following required columns"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris2, x1$blueprint, outcomes = TRUE)
   )
 
-  expect_error(
-    forge(iris2, x2$blueprint, outcomes = TRUE),
-    "The following required columns"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris2, x2$blueprint, outcomes = TRUE)
   )
 })
 
@@ -128,14 +128,14 @@ test_that("missing predictor columns fail appropriately", {
     iris
   )
 
-  expect_error(
-    forge(iris[, 1, drop = FALSE], x$blueprint),
-    "Sepal.Width"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 1, drop = FALSE], x$blueprint)
   )
 
-  expect_error(
-    forge(iris[, 3, drop = FALSE], x$blueprint),
-    "'Sepal.Length', 'Sepal.Width'"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 3, drop = FALSE], x$blueprint)
   )
 })
 
@@ -360,14 +360,8 @@ test_that("new data classes are caught", {
   x2 <- mold(recipes::step_dummy(rec, Species), iris, blueprint = sparse_bp)
 
   # Silent recovery
-  expect_error(
-    xx1 <- forge(iris2, x1$blueprint),
-    NA
-  )
-  expect_error(
-    xx2 <- forge(iris2, x2$blueprint),
-    NA
-  )
+  expect_no_error(xx1 <- forge(iris2, x1$blueprint))
+  expect_no_error(xx2 <- forge(iris2, x2$blueprint))
 
   expect_s3_class(
     xx1$predictors$Species,
@@ -381,14 +375,8 @@ test_that("new data classes are caught", {
   x3 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)
   x4 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris, blueprint = sparse_bp)
 
-  expect_error(
-    xx3 <- forge(iris2, x3$blueprint, outcomes = TRUE),
-    NA
-  )
-  expect_error(
-    xx4 <- forge(iris2, x4$blueprint, outcomes = TRUE),
-    NA
-  )
+  expect_no_error(xx3 <- forge(iris2, x3$blueprint, outcomes = TRUE))
+  expect_no_error(xx4 <- forge(iris2, x4$blueprint, outcomes = TRUE))
 
   expect_s3_class(
     xx3$outcomes$Species,
@@ -408,26 +396,18 @@ test_that("new data classes can interchange integer/numeric", {
   x1 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)
   x2 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris, blueprint = sparse_bp)
 
-  expect_error(
-    forge(iris2, x1$blueprint),
-    NA
-  )
-  expect_error(
-    forge(iris2, x2$blueprint),
-    NA
-  )
+  expect_no_error(forge(iris2, x1$blueprint))
+  expect_no_error(forge(iris2, x2$blueprint))
 
   rec <- recipes::recipe(Sepal.Length ~ Species, iris)
   x3 <- mold(rec, iris)
   x4 <- mold(recipes::step_dummy(rec, Species), iris, blueprint = sparse_bp)
 
-  expect_error(
-    forge(iris2, x3$blueprint, outcomes = TRUE),
-    NA
+  expect_no_error(
+    forge(iris2, x3$blueprint, outcomes = TRUE)
   )
-  expect_error(
-    forge(iris2, x4$blueprint, outcomes = TRUE),
-    NA
+  expect_no_error(
+    forge(iris2, x4$blueprint, outcomes = TRUE)
   )
 })
 

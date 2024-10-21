@@ -1,3 +1,35 @@
+# asking for the outcome when it isn't there fails
+
+    Code
+      forge(iris2, x1$blueprint, outcomes = TRUE)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'Species'.
+
+---
+
+    Code
+      forge(iris2, x2$blueprint, outcomes = TRUE)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'Species'.
+
+# missing predictor columns fail appropriately
+
+    Code
+      forge(iris[, 1, drop = FALSE], x$blueprint)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'Sepal.Width'.
+
+---
+
+    Code
+      forge(iris[, 3, drop = FALSE], x$blueprint)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'Sepal.Length', 'Sepal.Width'.
+
 # novel predictor levels are caught
 
     Code
