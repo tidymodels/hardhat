@@ -110,9 +110,8 @@ test_that("can mold and not expand dummies", {
 })
 
 test_that("errors are thrown if `indicator = 'none'` and factor interactions exist", {
-  expect_error(
-    mold(~fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none")),
-    NA
+  expect_no_condition(
+    mold(~fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none"))
   )
 
   expect_snapshot(error = TRUE, {
@@ -311,54 +310,54 @@ test_that("can mold formulas with special terms", {
 
 test_that("formulas with non-existent columns are caught", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  expect_error(
-    mold(fac_1 ~ y + z, example_train),
-    "predictors were not found in `data`: 'y', 'z'"
+  expect_snapshot(
+    error = TRUE,
+    mold(fac_1 ~ y + z, example_train)
   )
-  expect_error(
-    mold(fac_1 ~ y + z, example_train, blueprint = bp),
-    "predictors were not found in `data`: 'y', 'z'"
+  expect_snapshot(
+    error = TRUE,
+    mold(fac_1 ~ y + z, example_train, blueprint = bp)
   )
 
-  expect_error(
-    mold(y + z ~ fac_1, example_train),
-    "outcomes were not found in `data`: 'y', 'z'"
+  expect_snapshot(
+    error = TRUE,
+    mold(y + z ~ fac_1, example_train)
   )
-  expect_error(
-    mold(y + z ~ fac_1, example_train, blueprint = bp),
-    "outcomes were not found in `data`: 'y', 'z'"
+  expect_snapshot(
+    error = TRUE,
+    mold(y + z ~ fac_1, example_train, blueprint = bp)
   )
 })
 
 test_that("global environment variables cannot be used", {
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     {
       y <- 1
       mold(fac_1 ~ y, example_train)
-    },
-    "predictors were not found in `data`: 'y'"
+    }
   )
 })
 
 test_that("cannot manually remove intercept in the formula itself", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  expect_error(
-    mold(fac_1 ~ y + 0, example_train),
-    "`formula` must not contain"
+  expect_snapshot(
+    error = TRUE,
+    mold(fac_1 ~ y + 0, example_train)
   )
-  expect_error(
-    mold(fac_1 ~ y + 0, example_train, blueprint = bp),
-    "`formula` must not contain"
-  )
-
-  expect_error(
-    mold(fac_1 ~ 0 + y, example_train),
-    "`formula` must not contain"
+  expect_snapshot(
+    error = TRUE,
+    mold(fac_1 ~ y + 0, example_train, blueprint = bp)
   )
 
-  expect_error(
-    mold(fac_1 ~ y - 1, example_train),
-    "`formula` must not contain"
+  expect_snapshot(
+    error = TRUE,
+    mold(fac_1 ~ 0 + y, example_train)
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    mold(fac_1 ~ y - 1, example_train)
   )
 })
 
@@ -390,13 +389,11 @@ test_that("`NULL` can be used to represent empty RHS formulas", {
     mold(~0, example_train, blueprint = bp)
   })
 
-  expect_error(
-    x1 <- mold(~NULL, example_train),
-    NA
+  expect_no_condition(
+    x1 <- mold(~NULL, example_train)
   )
-  expect_error(
-    x2 <- mold(~NULL, example_train, blueprint = bp),
-    NA
+  expect_no_condition(
+    x2 <- mold(~NULL, example_train, blueprint = bp)
   )
 
   expect_equal(nrow(x1$predictors), 12)
@@ -404,9 +401,8 @@ test_that("`NULL` can be used to represent empty RHS formulas", {
   expect_equal(nrow(x2$predictors), 12)
   expect_equal(nrow(x2$outcomes), 12)
 
-  expect_error(
-    y <- mold(~NULL, example_train, blueprint = default_formula_blueprint(intercept = TRUE)),
-    NA
+  expect_no_condition(
+    y <- mold(~NULL, example_train, blueprint = default_formula_blueprint(intercept = TRUE))
   )
 
   expect_equal(colnames(y$predictors), "(Intercept)")
@@ -431,14 +427,8 @@ test_that("intercepts can still be added when not using indicators (i.e. model.m
 
 test_that("`data` is validated", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  expect_error(
-    mold(fac_1 ~ num_2, 1),
-    "`data` must be a data.frame or a matrix"
-  )
-  expect_error(
-    mold(fac_1 ~ num_2, 1, blueprint = bp),
-    "`data` must be a data.frame or a matrix"
-  )
+  expect_snapshot(error = TRUE, mold(fac_1 ~ num_2, 1))
+  expect_snapshot(error = TRUE, mold(fac_1 ~ num_2, 1, blueprint = bp))
 })
 
 test_that("full interaction syntax is supported", {
@@ -563,13 +553,13 @@ test_that("`.` notation works as expected", {
 # the `"."` as a variable.
 test_that("`.` notation fails on the LHS", {
   bp <- default_formula_blueprint(composition = "dgCMatrix")
-  expect_error(
-    mold(. ~ fac_1, example_train),
-    "The left hand side of the formula cannot contain `.`"
+  expect_snapshot(
+    error = TRUE,
+    mold(. ~ fac_1, example_train)
   )
-  expect_error(
-    mold(. ~ fac_1, example_train, blueprint = bp),
-    "The left hand side of the formula cannot contain `.`"
+  expect_snapshot(
+    error = TRUE,
+    mold(. ~ fac_1, example_train, blueprint = bp)
   )
 })
 
