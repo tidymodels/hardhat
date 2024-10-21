@@ -32,9 +32,8 @@ test_that("can have custom elements", {
 })
 
 test_that("must use a valid blueprint", {
-  expect_error(
-    new_model(blueprint = default_xy_blueprint(), class = "custom"),
-    NA
+  expect_no_condition(
+    new_model(blueprint = default_xy_blueprint(), class = "custom")
   )
 
   expect_snapshot(error = TRUE, {
@@ -43,15 +42,15 @@ test_that("must use a valid blueprint", {
 })
 
 test_that("`new_scalar()` must have elements", {
-  expect_error(new_scalar(list()), "must be a list of length 1 or greater")
+  expect_snapshot(error = TRUE, new_scalar(list()))
 })
 
 test_that("`new_scalar()` must have unique names", {
-  expect_error(new_scalar(list(x = 1, x = 2)), "must have unique names")
+  expect_snapshot(error = TRUE, new_scalar(list(x = 1, x = 2)))
 })
 
 test_that("`new_scalar()` must have no extra attributes", {
   x <- list(x = 1)
   attr(x, "extra") <- 1
-  expect_error(new_scalar(x), "must have no attributes")
+  expect_snapshot(error = TRUE, new_scalar(x))
 })
