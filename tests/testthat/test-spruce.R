@@ -4,8 +4,8 @@ test_that("spruce - numeric", {
   expect_s3_class(spruced, "tbl_df")
   expect_equal(colnames(spruced), ".pred")
 
-  expect_error(spruce_numeric("hi"))
-  expect_error(spruce_numeric(matrix(1)))
+  expect_snapshot(error = TRUE, spruce_numeric("hi"))
+  expect_snapshot(error = TRUE, spruce_numeric(matrix(1)))
 })
 
 test_that("spruce - class", {
@@ -14,8 +14,8 @@ test_that("spruce - class", {
   expect_s3_class(spruced, "tbl_df")
   expect_equal(colnames(spruced), ".pred_class")
 
-  expect_error(spruce_class(1))
-  expect_error(spruce_class("hi"))
+  expect_snapshot(error = TRUE, spruce_class(1))
+  expect_snapshot(error = TRUE, spruce_class("hi"))
 })
 
 test_that("spruce - prob", {
@@ -27,29 +27,20 @@ test_that("spruce - prob", {
   expect_s3_class(spruced, "tbl_df")
   expect_equal(colnames(spruced), paste0(".pred_", pred_levels))
 
-  expect_error(spruce_prob(1, prob_matrix))
-  expect_error(spruce_prob(pred_levels, 1))
-  expect_error(spruce_prob("a", matrix("a")))
+  expect_snapshot(error = TRUE, spruce_prob(1, prob_matrix))
+  expect_snapshot(error = TRUE, spruce_prob(pred_levels, 1))
+  expect_snapshot(error = TRUE, spruce_prob("a", matrix("a")))
 
-  expect_error(
-    spruce_prob(c("a", "b"), matrix(1, ncol = 3)),
-    "2"
+  expect_snapshot(
+    error = TRUE,
+    spruce_prob(c("a", "b"), matrix(1, ncol = 3))
   )
 
-  expect_error(
-    spruce_prob(c("a", "b"), matrix(1, ncol = 3)),
-    "3"
+  expect_snapshot(
+    error = TRUE,
+    spruce_prob(c("a"), matrix(1, ncol = 2))
   )
 
-  expect_error(
-    spruce_prob(c("a"), matrix(1, ncol = 2)),
-    "1"
-  )
-
-  expect_error(
-    spruce_prob(c("a"), matrix(1, ncol = 2)),
-    "2"
-  )
 })
 
 test_that("`spruce_numeric_multiple()` generates the correct output", {

@@ -100,24 +100,16 @@ test_that("asking for the outcome is special cased for vector `y` values", {
   expect_equal(xx1$outcomes, xx3$outcomes)
   expect_equal(xx1$outcomes, xx3$outcomes)
 
-  # standard message
-  expect_error(
-    forge(iris, x1$blueprint, outcomes = TRUE),
-    "The following required columns"
+  # This expects:
+  # - standard message: "The following required columns"
+  # - more detail: "`new_data` must include a column with the automatically generated name, '.outcome'"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris, x1$blueprint, outcomes = TRUE)
   )
-  expect_error(
-    forge(iris, x2$blueprint, outcomes = TRUE),
-    "The following required columns"
-  )
-
-  # but also more detail
-  expect_error(
-    forge(iris, x1$blueprint, outcomes = TRUE),
-    "`new_data` must include a column with the automatically generated name, '.outcome'"
-  )
-  expect_error(
-    forge(iris, x3$blueprint, outcomes = TRUE),
-    "`new_data` must include a column with the automatically generated name, '.outcome'"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris, x2$blueprint, outcomes = TRUE)
   )
 })
 
@@ -125,10 +117,7 @@ test_that("new_data can be a matrix", {
   x <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
   iris_mat <- as.matrix(iris[, "Sepal.Length", drop = FALSE])
 
-  expect_error(
-    xx <- forge(iris_mat, x$blueprint),
-    NA
-  )
+  expect_no_error(xx <- forge(iris_mat, x$blueprint))
 
   sep_len <- iris$Sepal.Length
   pred_tbl <- tibble::tibble(Sepal.Length = sep_len)
@@ -147,18 +136,9 @@ test_that("new_data can only be a data frame / matrix", {
   x2 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = sparse_bp)
   x3 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = matrix_bp)
 
-  expect_error(
-    forge("hi", x1$blueprint),
-    "The class of `new_data`, 'character'"
-  )
-  expect_error(
-    forge("hi", x2$blueprint),
-    "The class of `new_data`, 'character'"
-  )
-  expect_error(
-    forge("hi", x3$blueprint),
-    "The class of `new_data`, 'character'"
-  )
+  expect_snapshot(error = TRUE, forge("hi", x1$blueprint))
+  expect_snapshot(error = TRUE, forge("hi", x2$blueprint))
+  expect_snapshot(error = TRUE, forge("hi", x3$blueprint))
 })
 
 test_that("missing predictor columns fail appropriately", {
@@ -170,22 +150,22 @@ test_that("missing predictor columns fail appropriately", {
     blueprint = bp
   )
 
-  expect_error(
-    forge(iris[, 1, drop = FALSE], x1$blueprint),
-    "Sepal.Width"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 1, drop = FALSE], x1$blueprint)
   )
-  expect_error(
-    forge(iris[, 1, drop = FALSE], x2$blueprint),
-    "Sepal.Width"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 1, drop = FALSE], x2$blueprint)
   )
 
-  expect_error(
-    forge(iris[, 3, drop = FALSE], x1$blueprint),
-    "'Sepal.Length', 'Sepal.Width'"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 3, drop = FALSE], x1$blueprint)
   )
-  expect_error(
-    forge(iris[, 3, drop = FALSE], x2$blueprint),
-    "'Sepal.Length', 'Sepal.Width'"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 3, drop = FALSE], x2$blueprint)
   )
 })
 
@@ -341,9 +321,8 @@ test_that("new data classes are caught", {
   x <- mold(iris[, "Species", drop = FALSE], iris$Sepal.Length)
 
   # Silent recovery
-  expect_error(
-    x_iris2 <- forge(iris2, x$blueprint),
-    NA
+  expect_no_error(
+    x_iris2 <- forge(iris2, x$blueprint)
   )
 
   expect_s3_class(
@@ -357,9 +336,8 @@ test_that("new data classes are caught", {
   iris3$.outcome <- iris2$Species
   iris3$Species <- NULL
 
-  expect_error(
-    xx_iris3 <- forge(iris3, xx$blueprint, outcomes = TRUE),
-    NA
+  expect_no_error(
+    xx_iris3 <- forge(iris3, xx$blueprint, outcomes = TRUE)
   )
 
   expect_s3_class(
@@ -383,14 +361,8 @@ test_that("new data classes can interchange integer/numeric", {
     blueprint = bp
   )
 
-  expect_error(
-    forge(iris2, x1$blueprint),
-    NA
-  )
-  expect_error(
-    forge(iris2, x2$blueprint),
-    NA
-  )
+  expect_no_error(forge(iris2, x1$blueprint))
+  expect_no_error(forge(iris2, x2$blueprint))
 })
 
 test_that("intercept is not included as a predictor", {
@@ -412,14 +384,8 @@ test_that("intercept is not included as a predictor", {
     "(Intercept)" %in% colnames(x2$blueprint$ptypes$predictors)
   )
 
-  expect_error(
-    xx1 <- forge(iris, x1$blueprint),
-    NA
-  )
-  expect_error(
-    xx2 <- forge(iris, x2$blueprint),
-    NA
-  )
+  expect_no_error(xx1 <- forge(iris, x1$blueprint))
+  expect_no_error(xx2 <- forge(iris, x2$blueprint))
 
   expect_equal(
     colnames(xx1$predictors),
