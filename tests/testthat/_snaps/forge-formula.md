@@ -1,3 +1,67 @@
+# asking for the outcome when it isn't there fails
+
+    Code
+      forge(example_train2, x1$blueprint, outcomes = TRUE)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'fac_1'.
+
+---
+
+    Code
+      forge(example_train2, x2$blueprint, outcomes = TRUE)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'fac_1'.
+
+# new_data can only be a data frame / matrix
+
+    Code
+      forge("hi", x1$blueprint)
+    Condition
+      Error in `forge()`:
+      ! The class of `new_data`, 'character', is not recognized.
+
+---
+
+    Code
+      forge("hi", x2$blueprint)
+    Condition
+      Error in `forge()`:
+      ! The class of `new_data`, 'character', is not recognized.
+
+# missing predictor columns fail appropriately
+
+    Code
+      forge(example_train[, 1, drop = FALSE], x1$blueprint)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'num_2'.
+
+---
+
+    Code
+      forge(example_train[, 1, drop = FALSE], x2$blueprint)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'num_2'.
+
+---
+
+    Code
+      forge(example_train[, 3, drop = FALSE], x1$blueprint)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'num_1', 'num_2'.
+
+---
+
+    Code
+      forge(example_train[, 3, drop = FALSE], x2$blueprint)
+    Condition
+      Error in `validate_column_names()`:
+      ! The following required columns are missing: 'num_1', 'num_2'.
+
 # novel predictor levels are caught
 
     Code

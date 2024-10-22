@@ -38,9 +38,9 @@ test_that("(offset) is not recognized as an offset", {
 })
 
 test_that("Only numeric columns can be offsets", {
-  expect_error(
-    mold(~ Sepal.Width + offset(Species), iris),
-    "Column, 'offset"
+  expect_snapshot(
+    error = TRUE,
+    mold(~ Sepal.Width + offset(Species), iris)
   )
 })
 
@@ -117,9 +117,9 @@ test_that("offset columns are stored as predictors", {
   iris2 <- iris
   iris2$Sepal.Length <- NULL
 
-  expect_error(
-    forge(iris2, x$blueprint),
-    "Sepal.Length"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris2, x$blueprint)
   )
 })
 
