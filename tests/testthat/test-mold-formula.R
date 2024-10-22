@@ -110,7 +110,7 @@ test_that("can mold and not expand dummies", {
 })
 
 test_that("errors are thrown if `indicator = 'none'` and factor interactions exist", {
-  expect_no_condition(
+  expect_no_error(
     mold(~fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none"))
   )
 
@@ -389,10 +389,10 @@ test_that("`NULL` can be used to represent empty RHS formulas", {
     mold(~0, example_train, blueprint = bp)
   })
 
-  expect_no_condition(
+  expect_no_error(
     x1 <- mold(~NULL, example_train)
   )
-  expect_no_condition(
+  expect_no_error(
     x2 <- mold(~NULL, example_train, blueprint = bp)
   )
 
@@ -401,7 +401,7 @@ test_that("`NULL` can be used to represent empty RHS formulas", {
   expect_equal(nrow(x2$predictors), 12)
   expect_equal(nrow(x2$outcomes), 12)
 
-  expect_no_condition(
+  expect_no_error(
     y <- mold(~NULL, example_train, blueprint = default_formula_blueprint(intercept = TRUE))
   )
 

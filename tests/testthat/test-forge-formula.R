@@ -178,8 +178,8 @@ test_that("new_data can be a matrix", {
   x2 <- mold(fac_1 ~ num_1, example_train, blueprint = bp)
   example_train_mat <- as.matrix(example_train[, "num_1", drop = FALSE])
 
-  expect_no_condition(xx1 <- forge(example_train_mat, x1$blueprint))
-  expect_no_condition(xx2 <- forge(example_train_mat, x2$blueprint))
+  expect_no_error(xx1 <- forge(example_train_mat, x1$blueprint))
+  expect_no_error(xx2 <- forge(example_train_mat, x2$blueprint))
 
   sep_len <- example_train$num_1
 
@@ -764,7 +764,7 @@ test_that("new data classes are caught", {
   x <- mold(num_1 ~ fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none"))
 
   # Silently recover character -> factor
-  expect_no_condition(
+  expect_no_error(
     x_example_train2 <- forge(example_train2, x$blueprint)
   )
 
@@ -775,7 +775,7 @@ test_that("new data classes are caught", {
 
   xx <- mold(fac_1 ~ num_1, example_train)
 
-  expect_no_condition(
+  expect_no_error(
     xx_example_train2 <- forge(example_train2, xx$blueprint, outcomes = TRUE)
   )
 
@@ -793,16 +793,16 @@ test_that("new data classes can interchange integer/numeric", {
   x1 <- mold(fac_1 ~ num_1, example_train)
   x2 <- mold(fac_1 ~ num_1, example_train, blueprint = bp)
 
-  expect_no_condition(forge(example_train2, x1$blueprint))
-  expect_no_condition(forge(example_train2, x2$blueprint))
+  expect_no_error(forge(example_train2, x1$blueprint))
+  expect_no_error(forge(example_train2, x2$blueprint))
 
   x3 <- mold(num_1 ~ fac_1, example_train)
   x4 <- mold(num_1 ~ fac_1, example_train, blueprint = bp)
 
-  expect_no_condition(
+  expect_no_error(
     forge(example_train2, x3$blueprint, outcomes = TRUE)
   )
-  expect_no_condition(
+  expect_no_error(
     forge(example_train2, x4$blueprint, outcomes = TRUE)
   )
 })

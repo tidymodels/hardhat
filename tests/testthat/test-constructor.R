@@ -32,7 +32,7 @@ test_that("can have custom elements", {
 })
 
 test_that("must use a valid blueprint", {
-  expect_no_condition(
+  expect_no_error(
     new_model(blueprint = default_xy_blueprint(), class = "custom")
   )
 
