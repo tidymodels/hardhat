@@ -19,6 +19,7 @@ A call object that echos the user's input.
 tune packages. It marks recipes step and parsnip model arguments for tuning.
 }
 \examples{
+\dontshow{if (rlang::is_installed(c("recipes"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tune()
 tune("your name here")
 
@@ -29,6 +30,7 @@ library(recipes)
 recipe(mpg ~ ., data = mtcars) \%>\%
   step_normalize(all_numeric_predictors()) \%>\%
   step_pca(all_numeric_predictors, num_comp = tune())
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{tune::tune_grid()}, \code{tune::tune_bayes()}

@@ -45,7 +45,9 @@
 #' - It adds an intercept column onto `new_data` if `intercept = TRUE`.
 #'
 #' @export
-#' @examples
+#' @examplesIf rlang::is_installed(c("recipes"))
+#' # example code
+#'
 #' library(recipes)
 #'
 #' # ---------------------------------------------------------------------------

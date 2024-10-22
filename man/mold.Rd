@@ -41,6 +41,7 @@ how to use each one in conjunction with \code{mold()}.
 }
 }
 \examples{
+\dontshow{if (rlang::is_installed(c("recipes"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # See the method specific documentation linked in Description
 # for the details of each blueprint, and more examples.
 
@@ -53,4 +54,5 @@ mold(Species ~ Sepal.Width, iris)
 # Recipe
 library(recipes)
 mold(recipe(Species ~ Sepal.Width, iris), iris)
+\dontshow{\}) # examplesIf}
 }
