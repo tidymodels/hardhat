@@ -13,7 +13,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf rlang::is_installed(c("recipes"))
 #' tune()
 #' tune("your name here")
 #'

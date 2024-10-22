@@ -79,6 +79,9 @@ used during training.
 }
 
 \examples{
+\dontshow{if (rlang::is_installed(c("recipes"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# example code
+
 library(recipes)
 
 # ---------------------------------------------------------------------------
@@ -169,4 +172,5 @@ try(forge(test2, processed_roles$blueprint))
 rec_roles <- update_role_requirements(rec_roles, "important", bake = FALSE)
 processed_roles <- mold(rec_roles, train)
 forge(test2, processed_roles$blueprint)
+\dontshow{\}) # examplesIf}
 }

@@ -12,6 +12,8 @@ test_that("print - default", {
 })
 
 test_that("print - recipe", {
+  skip_if_not_installed("recipes")
+
   expect_snapshot({
     mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)$blueprint
   })
