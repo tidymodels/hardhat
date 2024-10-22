@@ -1,3 +1,9 @@
+test_that("check on input to `new_blueprint()`", {
+  expect_snapshot(error = TRUE, {
+    new_blueprint(same_new_arg = 1, same_new_arg = 2)
+  })
+})
+
 test_that("checks for updating a blueprint", {
   blueprint <- default_xy_blueprint()
 

@@ -1,3 +1,11 @@
+# check on input to `new_blueprint()`
+
+    Code
+      new_blueprint(same_new_arg = 1, same_new_arg = 2)
+    Condition
+      Error in `new_blueprint()`:
+      ! All elements of `...` must have unique names.
+
 # checks for updating a blueprint
 
     Code
