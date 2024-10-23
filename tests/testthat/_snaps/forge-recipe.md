@@ -36,7 +36,8 @@
       xx1 <- forge(new, x1$blueprint)
     Condition
       Warning:
-      Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
+      Novel level found in column f: "e".
+      i The level has been removed, and values have been coerced to "NA".
 
 ---
 
@@ -44,7 +45,8 @@
       xx2 <- forge(new, x2$blueprint)
     Condition
       Warning:
-      Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
+      Novel level found in column f: "e".
+      i The level has been removed, and values have been coerced to "NA".
       Warning:
       ! There are new levels in `f`: NA.
       i Consider using step_unknown() (`?recipes::step_unknown()`) before `step_dummy()` to handle missing values.
@@ -70,7 +72,8 @@
       xx1 <- forge(new, x1$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
+      Novel level found in column f: "e".
+      i The level has been removed, and values have been coerced to "NA".
 
 ---
 
@@ -78,7 +81,8 @@
       xx2 <- forge(new, x2$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
+      Novel level found in column f: "e".
+      i The level has been removed, and values have been coerced to "NA".
 
 # `forge()` will error if required non standard roles are missing
 

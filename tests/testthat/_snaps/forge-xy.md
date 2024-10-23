@@ -80,7 +80,8 @@
       xx <- forge(new, x$blueprint)
     Condition
       Warning:
-      Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
+      Novel level found in column f: "e".
+      i The level has been removed, and values have been coerced to "NA".
 
 # novel predictor levels can be ignored
 
@@ -93,7 +94,8 @@
       xx1 <- forge(new, x1$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
+      Novel level found in column f: "e".
+      i The level has been removed, and values have been coerced to "NA".
 
 ---
 
@@ -101,5 +103,6 @@
       xx2 <- forge(new, x2$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel levels found in column 'f': 'e'. The levels have been removed, and values have been coerced to 'NA'.
+      Novel level found in column f: "e".
+      i The level has been removed, and values have been coerced to "NA".
 

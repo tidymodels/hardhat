@@ -259,6 +259,14 @@ test_that("novel predictor levels are caught", {
     unname(xx2$predictors[5, 1]),
     NA_real_
   )
+
+  new_multiple <- data.frame(
+    y = 1:6,
+    f = factor(letters[1:6])
+  )
+  x3 <- mold(y ~ f, dat)
+
+  expect_snapshot(xx3 <- forge(new_multiple, x3$blueprint))
 })
 
 test_that("novel predictor levels can be ignored", {
