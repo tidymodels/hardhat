@@ -4,7 +4,7 @@
       forge(iris2, x1$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'Species'.
+      ! The required column `Species` is missing.
 
 ---
 
@@ -12,7 +12,7 @@
       forge(iris2, x2$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'Species'.
+      ! The required column `Species` is missing.
 
 # missing predictor columns fail appropriately
 
@@ -20,7 +20,7 @@
       forge(iris[, 1, drop = FALSE], x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'Sepal.Width'.
+      ! The required column `Sepal.Width` is missing.
 
 ---
 
@@ -28,7 +28,7 @@
       forge(iris[, 3, drop = FALSE], x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'Sepal.Length', 'Sepal.Width'.
+      ! The required columns `Sepal.Length` and `Sepal.Width` are missing.
 
 # novel predictor levels are caught
 
@@ -86,7 +86,7 @@
       forge(iris, x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'Sepal.Width'.
+      ! The required column `Sepal.Width` is missing.
 
 # `NA` roles are treated as extra roles that are required at `forge()` time
 
@@ -94,7 +94,7 @@
       forge(iris, x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'Petal.Length'.
+      ! The required column `Petal.Length` is missing.
 
 # `forge()` is compatible with hardhat 0.2.0 molded blueprints with a basic recipe
 
@@ -102,7 +102,7 @@
       forge(new_data, blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'x'.
+      ! The required column `x` is missing.
 
 # `forge()` is compatible with hardhat 0.2.0 molded blueprints with a recipe with a nonstandard role
 
@@ -110,5 +110,5 @@
       forge(new_data, blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'id'.
+      ! The required column `id` is missing.
 

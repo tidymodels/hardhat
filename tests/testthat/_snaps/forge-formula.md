@@ -4,7 +4,7 @@
       forge(example_train2, x1$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'fac_1'.
+      ! The required column `fac_1` is missing.
 
 ---
 
@@ -12,7 +12,7 @@
       forge(example_train2, x2$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'fac_1'.
+      ! The required column `fac_1` is missing.
 
 # new_data can only be a data frame / matrix
 
@@ -36,7 +36,7 @@
       forge(example_train[, 1, drop = FALSE], x1$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'num_2'.
+      ! The required column `num_2` is missing.
 
 ---
 
@@ -44,7 +44,7 @@
       forge(example_train[, 1, drop = FALSE], x2$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'num_2'.
+      ! The required column `num_2` is missing.
 
 ---
 
@@ -52,7 +52,7 @@
       forge(example_train[, 3, drop = FALSE], x1$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'num_1', 'num_2'.
+      ! The required columns `num_1` and `num_2` are missing.
 
 ---
 
@@ -60,7 +60,7 @@
       forge(example_train[, 3, drop = FALSE], x2$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'num_1', 'num_2'.
+      ! The required columns `num_1` and `num_2` are missing.
 
 # novel predictor levels are caught
 

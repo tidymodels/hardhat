@@ -12,5 +12,5 @@
       forge(iris2, x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The following required columns are missing: 'Sepal.Length'.
+      ! The required column `Sepal.Length` is missing.
 
