@@ -20,7 +20,7 @@
       create_modeling_package(path = "my/path", model = c("model1", "model2"))
     Condition
       Error in `create_modeling_package()`:
-      ! `model` must be a single string.
+      ! `model` must be a single string, not a character vector.
 
 ---
 
@@ -28,7 +28,7 @@
       create_modeling_package(path = "my/path", model = 1)
     Condition
       Error in `create_modeling_package()`:
-      ! `model` must be a single string.
+      ! `model` must be a single string, not the number 1.
 
 ---
 

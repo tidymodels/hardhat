@@ -10,7 +10,7 @@ test_that("tune `id` value", {
 })
 
 test_that("`id` is validated", {
-  expect_error(tune(1), "The `id` should be a single character string.")
-  expect_error(tune(c("x", "y")), "The `id` should be a single character string.")
-  expect_error(tune(NA_character_), "The `id` can't be missing.")
+  expect_snapshot(error = TRUE, tune(1))
+  expect_snapshot(error = TRUE, tune(c("x", "y")))
+  expect_snapshot(error = TRUE, tune(NA_character_))
 })

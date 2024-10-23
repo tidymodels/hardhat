@@ -1,4 +1,7 @@
 test_that("simple forge works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
@@ -53,6 +56,9 @@ test_that("simple forge works", {
 })
 
 test_that("asking for the outcome works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   matrix_bp <- default_recipe_blueprint(composition = "matrix")
 
@@ -82,6 +88,8 @@ test_that("asking for the outcome works", {
 })
 
 test_that("asking for the outcome when it isn't there fails", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(Species ~ Sepal.Length, data = iris)
   x1 <- mold(rec, iris)
@@ -90,18 +98,21 @@ test_that("asking for the outcome when it isn't there fails", {
   iris2 <- iris
   iris2$Species <- NULL
 
-  expect_error(
-    forge(iris2, x1$blueprint, outcomes = TRUE),
-    "The following required columns"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris2, x1$blueprint, outcomes = TRUE)
   )
 
-  expect_error(
-    forge(iris2, x2$blueprint, outcomes = TRUE),
-    "The following required columns"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris2, x2$blueprint, outcomes = TRUE)
   )
 })
 
 test_that("outcomes steps get processed", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(Sepal.Width ~ Sepal.Length, data = iris)
   rec <- recipes::step_log(rec, Sepal.Width)
@@ -123,23 +134,27 @@ test_that("outcomes steps get processed", {
 })
 
 test_that("missing predictor columns fail appropriately", {
+  skip_if_not_installed("recipes")
+
   x <- mold(
     recipes::recipe(Species ~ Sepal.Length + Sepal.Width, data = iris),
     iris
   )
 
-  expect_error(
-    forge(iris[, 1, drop = FALSE], x$blueprint),
-    "Sepal.Width"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 1, drop = FALSE], x$blueprint)
   )
 
-  expect_error(
-    forge(iris[, 3, drop = FALSE], x$blueprint),
-    "'Sepal.Length', 'Sepal.Width'"
+  expect_snapshot(
+    error = TRUE,
+    forge(iris[, 3, drop = FALSE], x$blueprint)
   )
 })
 
 test_that("novel predictor levels are caught", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   dat <- data.frame(
@@ -174,6 +189,9 @@ test_that("novel predictor levels are caught", {
 })
 
 test_that("novel predictor levels can be ignored and handled by recipes", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   dat <- data.frame(
     y = 1:4,
     f = factor(letters[1:4])
@@ -227,6 +245,9 @@ test_that("novel predictor levels can be ignored and handled by recipes", {
 })
 
 test_that("novel predictor levels without any data are silently removed", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   dat <- data.frame(
@@ -268,6 +289,9 @@ test_that("novel predictor levels without any data are silently removed", {
 })
 
 test_that("novel outcome levels are caught", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   dat <- data.frame(
@@ -305,6 +329,9 @@ test_that("novel outcome levels are caught", {
 })
 
 test_that("original predictor and outcome classes / names are recorded", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
 
   rec <- recipes::recipe(Sepal.Length ~ Species, data = iris)
@@ -351,6 +378,9 @@ test_that("original predictor and outcome classes / names are recorded", {
 })
 
 test_that("new data classes are caught", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   iris2 <- iris
   iris2$Species <- as.character(iris2$Species)
@@ -360,14 +390,8 @@ test_that("new data classes are caught", {
   x2 <- mold(recipes::step_dummy(rec, Species), iris, blueprint = sparse_bp)
 
   # Silent recovery
-  expect_error(
-    xx1 <- forge(iris2, x1$blueprint),
-    NA
-  )
-  expect_error(
-    xx2 <- forge(iris2, x2$blueprint),
-    NA
-  )
+  expect_no_error(xx1 <- forge(iris2, x1$blueprint))
+  expect_no_error(xx2 <- forge(iris2, x2$blueprint))
 
   expect_s3_class(
     xx1$predictors$Species,
@@ -381,14 +405,8 @@ test_that("new data classes are caught", {
   x3 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)
   x4 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris, blueprint = sparse_bp)
 
-  expect_error(
-    xx3 <- forge(iris2, x3$blueprint, outcomes = TRUE),
-    NA
-  )
-  expect_error(
-    xx4 <- forge(iris2, x4$blueprint, outcomes = TRUE),
-    NA
-  )
+  expect_no_error(xx3 <- forge(iris2, x3$blueprint, outcomes = TRUE))
+  expect_no_error(xx4 <- forge(iris2, x4$blueprint, outcomes = TRUE))
 
   expect_s3_class(
     xx3$outcomes$Species,
@@ -401,6 +419,9 @@ test_that("new data classes are caught", {
 })
 
 test_that("new data classes can interchange integer/numeric", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   iris2 <- iris
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
@@ -408,30 +429,25 @@ test_that("new data classes can interchange integer/numeric", {
   x1 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)
   x2 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris, blueprint = sparse_bp)
 
-  expect_error(
-    forge(iris2, x1$blueprint),
-    NA
-  )
-  expect_error(
-    forge(iris2, x2$blueprint),
-    NA
-  )
+  expect_no_error(forge(iris2, x1$blueprint))
+  expect_no_error(forge(iris2, x2$blueprint))
 
   rec <- recipes::recipe(Sepal.Length ~ Species, iris)
   x3 <- mold(rec, iris)
   x4 <- mold(recipes::step_dummy(rec, Species), iris, blueprint = sparse_bp)
 
-  expect_error(
-    forge(iris2, x3$blueprint, outcomes = TRUE),
-    NA
+  expect_no_error(
+    forge(iris2, x3$blueprint, outcomes = TRUE)
   )
-  expect_error(
-    forge(iris2, x4$blueprint, outcomes = TRUE),
-    NA
+  expect_no_error(
+    forge(iris2, x4$blueprint, outcomes = TRUE)
   )
 })
 
 test_that("an `extras` slot exists for `roles`", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(Species ~ Sepal.Length, data = iris)
   x1 <- mold(rec, iris)
@@ -451,6 +467,8 @@ test_that("an `extras` slot exists for `roles`", {
 })
 
 test_that("non-standard roles generated in the recipe are returned by both `mold()` and `forge()`", {
+  skip_if_not_installed("recipes")
+
   # This is a convention we follow to have consistency between `mold()` and `forge()`.
   # Both should have the same `.$extras$roles$<name>` slot names.
 
@@ -474,6 +492,8 @@ test_that("non-standard roles generated in the recipe are returned by both `mold
 })
 
 test_that("`forge()` returns a slot for non standard roles that aren't required at `bake()` time", {
+  skip_if_not_installed("recipes")
+
   # This is a convention we follow to have consistency between `mold()` and `forge()`.
   # Both should have the same `.$extras$roles$<name>` slot names, even if there
   # wasn't any data there at `forge()` time (because it wasn't a required role).
@@ -512,6 +532,8 @@ test_that("`forge()` returns a slot for non standard roles that aren't required 
 })
 
 test_that("required non standard roles can be dropped during the baking process", {
+  skip_if_not_installed("recipes")
+
   rec <- recipes::recipe(Species ~ ., iris)
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
   rec <- recipes::update_role(rec, Sepal.Length, new_role = "dummy2")
@@ -543,6 +565,8 @@ test_that("required non standard roles can be dropped during the baking process"
 })
 
 test_that("`forge()` will error if required non standard roles are missing", {
+  skip_if_not_installed("recipes")
+
   rec <- recipes::recipe(Species ~ ., iris)
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
 
@@ -556,6 +580,8 @@ test_that("`forge()` will error if required non standard roles are missing", {
 })
 
 test_that("recipes will error if the role is declared as not required, but really was", {
+  skip_if_not_installed("recipes")
+
   rec <- recipes::recipe(Species ~ ., iris)
   rec <- recipes::update_role(rec, Sepal.Width, new_role = "dummy1")
   rec <- recipes::update_role_requirements(rec, "dummy1", bake = FALSE)
@@ -568,6 +594,8 @@ test_that("recipes will error if the role is declared as not required, but reall
 })
 
 test_that("`NA` roles are treated as extra roles that are required at `forge()` time", {
+  skip_if_not_installed("recipes")
+
   # `Petal.Length`, `Petal.Width` have `NA` roles
   rec <- recipes::recipe(iris)
   rec <- recipes::update_role(rec, Sepal.Length, new_role = "predictor")
@@ -592,6 +620,8 @@ test_that("`NA` roles are treated as extra roles that are required at `forge()` 
 })
 
 test_that("`NA` roles can be declared as not required at `forge()` time", {
+  skip_if_not_installed("recipes")
+
   # Petal.Length, Petal.Width have `NA` roles
   rec <- recipes::recipe(iris)
   rec <- recipes::update_role(rec, Sepal.Length, new_role = "predictor")
@@ -614,6 +644,8 @@ test_that("`NA` roles can be declared as not required at `forge()` time", {
 })
 
 test_that("`extras` only hold roles that actually exist in the data", {
+  skip_if_not_installed("recipes")
+
   df <- tibble(y = 1, x = 1, z = 2)
 
   rec <- recipes::recipe(y ~ ., df)
@@ -628,6 +660,9 @@ test_that("`extras` only hold roles that actually exist in the data", {
 })
 
 test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(~Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
@@ -637,6 +672,9 @@ test_that("Missing y value still returns `NULL` if no outcomes are asked for", {
 })
 
 test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   sparse_bp <- default_recipe_blueprint(composition = "dgCMatrix")
   rec <- recipes::recipe(~Sepal.Width, data = iris)
   x1 <- mold(rec, iris)
@@ -652,6 +690,9 @@ test_that("Missing y value returns 0 column tibble if outcomes are asked for", {
 })
 
 test_that("Predictors with multiple roles are only included once before baking (#120)", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("Matrix")
+
   rec <- recipes::recipe(Species ~ ., iris) # Implicit "predictor" role too
   rec <- recipes::add_role(rec, Sepal.Length, new_role = "test1")
   rec <- recipes::add_role(rec, Sepal.Length, new_role = "test2")
@@ -673,6 +714,8 @@ test_that("Predictors with multiple roles are only included once before baking (
 })
 
 test_that("`strings_as_factors` is used at `bake()` time", {
+  skip_if_not_installed("recipes")
+
   df <- tibble(y = "a", x = "b")
   rec <- recipes::recipe(y ~ x, data = df)
 
@@ -689,6 +732,8 @@ test_that("`strings_as_factors` is used at `bake()` time", {
 })
 
 test_that("`forge()` is compatible with hardhat 0.2.0 molded blueprints with a basic recipe", {
+  skip_if_not_installed("recipes")
+
   path <- test_path("data", "hardhat-0.2.0-post-mold-recipe.rds")
   object <- readRDS(path)
 
@@ -710,6 +755,8 @@ test_that("`forge()` is compatible with hardhat 0.2.0 molded blueprints with a b
 })
 
 test_that("`forge()` is compatible with hardhat 0.2.0 molded blueprints with a recipe with a nonstandard role", {
+  skip_if_not_installed("recipes")
+
   path <- test_path("data", "hardhat-0.2.0-post-mold-recipe-nonstandard-role.rds")
   object <- readRDS(path)
 

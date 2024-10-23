@@ -13,3 +13,14 @@ test_that("`model_matrix()` strips all attributes from the `model.matrix()` resu
   # attached "assign" and "contrasts" attributes here
   expect_identical(matrix$Speciessetosa, expect)
 })
+
+test_that("`contr_one_hot()` input checks", {
+  expect_snapshot(contr_one_hot(n = 1, sparse = TRUE))
+  expect_snapshot(contr_one_hot(n = 1, contrasts = FALSE))
+  expect_snapshot(error = TRUE, {
+    contr_one_hot(n = 1:2)
+  })
+  expect_snapshot(error = TRUE, {
+    contr_one_hot(n = list(1:2))
+  })
+})

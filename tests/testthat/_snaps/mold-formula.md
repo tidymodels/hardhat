@@ -121,6 +121,79 @@
       ! Functions involving factors or characters have been detected on the RHS of `formula`. These are not allowed when `indicators = "none"`.
       i Functions involving factors were detected for "fac_1" in `paste0(fac_1)`.
 
+# formulas with non-existent columns are caught
+
+    Code
+      mold(fac_1 ~ y + z, example_train)
+    Condition
+      Error in `get_all_predictors()`:
+      ! The following predictors were not found in `data`: 'y', 'z'.
+
+---
+
+    Code
+      mold(fac_1 ~ y + z, example_train, blueprint = bp)
+    Condition
+      Error in `get_all_predictors()`:
+      ! The following predictors were not found in `data`: 'y', 'z'.
+
+---
+
+    Code
+      mold(y + z ~ fac_1, example_train)
+    Condition
+      Error in `get_all_outcomes()`:
+      ! The following outcomes were not found in `data`: 'y', 'z'.
+
+---
+
+    Code
+      mold(y + z ~ fac_1, example_train, blueprint = bp)
+    Condition
+      Error in `get_all_outcomes()`:
+      ! The following outcomes were not found in `data`: 'y', 'z'.
+
+# global environment variables cannot be used
+
+    Code
+      y <- 1
+      mold(fac_1 ~ y, example_train)
+    Condition
+      Error in `get_all_predictors()`:
+      ! The following predictors were not found in `data`: 'y'.
+
+# cannot manually remove intercept in the formula itself
+
+    Code
+      mold(fac_1 ~ y + 0, example_train)
+    Condition
+      Error in `mold_formula_default_clean()`:
+      ! `formula` must not contain the intercept removal term: `+ 0` or `0 +`.
+
+---
+
+    Code
+      mold(fac_1 ~ y + 0, example_train, blueprint = bp)
+    Condition
+      Error in `mold_formula_default_clean()`:
+      ! `formula` must not contain the intercept removal term: `+ 0` or `0 +`.
+
+---
+
+    Code
+      mold(fac_1 ~ 0 + y, example_train)
+    Condition
+      Error in `mold_formula_default_clean()`:
+      ! `formula` must not contain the intercept removal term: `+ 0` or `0 +`.
+
+---
+
+    Code
+      mold(fac_1 ~ y - 1, example_train)
+    Condition
+      Error in `mold_formula_default_clean()`:
+      ! `formula` must not contain the intercept removal term: `- 1`.
+
 # RHS with _only_ intercept related terms are caught
 
     Code
@@ -168,6 +241,22 @@
     Condition
       Error in `mold_formula_default_clean()`:
       ! `formula` must not contain the intercept removal term, `0`.
+
+# `data` is validated
+
+    Code
+      mold(fac_1 ~ num_2, 1)
+    Condition
+      Error in `mold_formula_default_clean()`:
+      ! `data` must be a data frame or a matrix, not the number 1.
+
+---
+
+    Code
+      mold(fac_1 ~ num_2, 1, blueprint = bp)
+    Condition
+      Error in `mold_formula_default_clean()`:
+      ! `data` must be a data frame or a matrix, not the number 1.
 
 # LHS of the formula cannot contain interactions
 
@@ -222,6 +311,22 @@
       Error in `mold_formula_default_process_outcomes()`:
       ! Interaction terms can't be specified on the LHS of `formula`.
       i The following interaction term was found: `num_1/num_2`.
+
+# `.` notation fails on the LHS
+
+    Code
+      mold(. ~ fac_1, example_train)
+    Condition
+      Error in `get_all_outcomes()`:
+      ! The left hand side of the formula cannot contain `.`
+
+---
+
+    Code
+      mold(. ~ fac_1, example_train, blueprint = bp)
+    Condition
+      Error in `get_all_outcomes()`:
+      ! The left hand side of the formula cannot contain `.`
 
 # `blueprint` is validated
 

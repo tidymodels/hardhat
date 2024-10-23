@@ -119,9 +119,7 @@ weighted_table <- function(..., weights, na_remove = FALSE) {
   weights <- vec_cast(weights, to = double())
   vec_assert(weights, size = size)
 
-  if (!is_bool(na_remove)) {
-    abort("`na_remove` must be a single `TRUE` or `FALSE`.")
-  }
+  check_bool(na_remove)
 
   tapply(
     X = weights,

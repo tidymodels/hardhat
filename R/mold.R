@@ -38,7 +38,7 @@
 #'  - `extras`: Either `NULL` if the blueprint returns no extra information,
 #'  or a named list containing the extra information.
 #'
-#' @examples
+#' @examplesIf rlang::is_installed(c("recipes"))
 #' # See the method specific documentation linked in Description
 #' # for the details of each blueprint, and more examples.
 #'

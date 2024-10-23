@@ -71,7 +71,7 @@ test_that("standardize - data.frame", {
 
   bad2 <- data.frame(x = "a", stringsAsFactors = FALSE)
 
-  expect_error(standardize(bad2), "These columns have unknown types: 'x'.")
+  expect_snapshot(error = TRUE, standardize(bad2))
 
   good <- bad
   colnames(good) <- c("a", "b")
@@ -88,6 +88,6 @@ test_that("standardize - data.frame", {
 })
 
 test_that("standardize - unknown", {
-  expect_error(standardize("hi"), "`y` is of unknown type 'character'")
-  expect_error(standardize(Sys.time()), "`y` is of unknown type 'POSIXct'")
+  expect_snapshot(error = TRUE, standardize("hi"))
+  expect_snapshot(error = TRUE, standardize(Sys.time()))
 })
