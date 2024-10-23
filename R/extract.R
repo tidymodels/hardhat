@@ -42,6 +42,8 @@
 #' # `workflows`.
 NULL
 
+# nocov start
+
 #' @rdname hardhat-extract
 #' @export
 extract_workflow <- function(x, ...) {
@@ -108,3 +110,5 @@ extract_parameter_set_dials <- function(x, ...) {
 extract_fit_time <- function(x, ...) {
   UseMethod("extract_fit_time")
 }
+
+# nocov end
