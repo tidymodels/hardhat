@@ -57,7 +57,10 @@ new_quantile_pred <- function(values = list(), quantile_levels = double()) {
 #' @rdname quantile_pred
 extract_quantile_levels <- function(x) {
   if (!inherits(x, "quantile_pred")) {
-    cli::cli_abort("{.arg x} should have class {.cls quantile_pred}.")
+    cli::cli_abort(
+      "{.arg x} must be a {.cls quantile_pred} object, not
+      {.obj_type_friendly {x}}."
+    )
   }
   attr(x, "quantile_levels")
 }
@@ -169,7 +172,7 @@ check_quantile_levels <- function(levels, call = rlang::caller_env()) {
     redund <- unique(redund)
     redund <- signif(redund, digits = 5)
     cli::cli_abort(c(
-      "Quantile levels should be unique.",
+      "Quantile levels must be unique.",
       i = "The following {cli::qty(length(redund))}value{?s} {?was/were} repeated:
          {redund}."),
       call = call
