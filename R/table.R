@@ -103,17 +103,17 @@ weighted_table <- function(..., weights, na_remove = FALSE) {
   n_args <- length(args)
 
   if (n_args == 0L) {
-    abort("At least one vector must be supplied to `...`.")
+    cli::cli_abort("At least one vector must be supplied to {.arg ...}.")
   }
   if (!all(map_lgl(args, is.factor))) {
-    abort("All elements of `...` must be factors.")
+    cli::cli_abort("All elements of {.arg ...} must be factors.")
   }
 
   sizes <- list_sizes(args)
   size <- sizes[[1L]]
 
   if (!all(sizes == size)) {
-    abort("All elements of `...` must be the same size.")
+    cli::cli_abort("All elements of {.arg ...} must be the same size.")
   }
 
   weights <- vec_cast(weights, to = double())
