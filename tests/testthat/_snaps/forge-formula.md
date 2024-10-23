@@ -20,7 +20,7 @@
       forge("hi", x1$blueprint)
     Condition
       Error in `forge()`:
-      ! The class of `new_data`, 'character', is not recognized.
+      ! No `forge()` method provided for a string object.
 
 ---
 
@@ -28,7 +28,7 @@
       forge("hi", x2$blueprint)
     Condition
       Error in `forge()`:
-      ! The class of `new_data`, 'character', is not recognized.
+      ! No `forge()` method provided for a string object.
 
 # missing predictor columns fail appropriately
 
