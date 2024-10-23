@@ -318,7 +318,7 @@
       mold(. ~ fac_1, example_train)
     Condition
       Error in `get_all_outcomes()`:
-      ! The left hand side of the formula cannot contain `.`
+      ! The left-hand side of the formula cannot contain `.`.
 
 ---
 
@@ -326,7 +326,7 @@
       mold(. ~ fac_1, example_train, blueprint = bp)
     Condition
       Error in `get_all_outcomes()`:
-      ! The left hand side of the formula cannot contain `.`
+      ! The left-hand side of the formula cannot contain `.`.
 
 # `blueprint` is validated
 

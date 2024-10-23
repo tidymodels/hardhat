@@ -14,7 +14,7 @@ simplify_terms <- function(x) {
   is_terms <- inherits(x, "terms")
 
   if (!is_terms) {
-    abort("`x` must be a terms object")
+    cli::cli_abort("{.arg x} must be a {.cls terms} object.")
   }
 
   # It removes the environment
@@ -64,7 +64,7 @@ get_all_outcomes <- function(formula, data) {
   outcomes <- all.vars(outcome_formula)
 
   if ("." %in% outcomes) {
-    abort("The left hand side of the formula cannot contain `.`")
+    cli::cli_abort("The left-hand side of the formula cannot contain {.code .}.")
   }
 
   extra_outcomes <- setdiff(outcomes, names(data))
