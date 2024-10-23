@@ -4,7 +4,7 @@
       weighted_table(x, y, weights = w, na_remove = c(TRUE, FALSE))
     Condition
       Error in `weighted_table()`:
-      ! `na_remove` must be a single `TRUE` or `FALSE`.
+      ! `na_remove` must be `TRUE` or `FALSE`, not a logical vector.
 
 ---
 
@@ -12,7 +12,7 @@
       weighted_table(x, y, weights = w, na_remove = 1)
     Condition
       Error in `weighted_table()`:
-      ! `na_remove` must be a single `TRUE` or `FALSE`.
+      ! `na_remove` must be `TRUE` or `FALSE`, not the number 1.
 
 # requires at least one `...`
 

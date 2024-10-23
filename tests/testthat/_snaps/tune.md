@@ -4,7 +4,7 @@
       tune(1)
     Condition
       Error in `tune()`:
-      ! The `id` should be a single character string.
+      ! `id` must be a single string, not the number 1.
 
 ---
 
@@ -12,7 +12,7 @@
       tune(c("x", "y"))
     Condition
       Error in `tune()`:
-      ! The `id` should be a single character string.
+      ! `id` must be a single string, not a character vector.
 
 ---
 
@@ -20,5 +20,5 @@
       tune(NA_character_)
     Condition
       Error in `tune()`:
-      ! The `id` can't be missing.
+      ! `id` must be a single string, not a character `NA`.
 
