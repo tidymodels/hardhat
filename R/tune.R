@@ -25,12 +25,7 @@
 #'   step_normalize(all_numeric_predictors()) %>%
 #'   step_pca(all_numeric_predictors, num_comp = tune())
 tune <- function(id = "") {
-  if (!is.character(id) || length(id) != 1) {
-    abort("The `id` should be a single character string.")
-  }
-  if (is.na(id)) {
-    abort("The `id` can't be missing.")
-  }
+  check_string(id)
 
   if (id == "") {
     call("tune")
