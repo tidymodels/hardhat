@@ -1,11 +1,3 @@
-glubort <- function(..., .sep = "", .envir = caller_env(), .call = .envir) {
-  abort(glue(..., .sep = .sep, .envir = .envir), call = .call)
-}
-
-glue_quote_collapse <- function(x) {
-  glue::glue_collapse(glue::single_quote(x), sep = ", ")
-}
-
 simplify_terms <- function(x) {
 
   # This is like stats:::terms.default
@@ -151,10 +143,6 @@ has_unique_column_names <- function(x) {
   }
 
   !anyDuplicated(nms)
-}
-
-class1 <- function(x) {
-  class(x)[1]
 }
 
 # ------------------------------------------------------------------------------
