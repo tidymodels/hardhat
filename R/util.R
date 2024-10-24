@@ -45,8 +45,10 @@ get_all_predictors <- function(formula, data) {
 
   extra_predictors <- setdiff(predictors, names(data))
   if (length(extra_predictors) > 0) {
-    extra_predictors <- glue_quote_collapse(extra_predictors)
-    glubort("The following predictors were not found in `data`: {extra_predictors}.")
+    cli::cli_abort(
+      "The following predictor{?s} {?was/were} not found in
+      {.arg data}: {.val {extra_predictors}}."
+    )
   }
 
   predictors
@@ -69,8 +71,9 @@ get_all_outcomes <- function(formula, data) {
 
   extra_outcomes <- setdiff(outcomes, names(data))
   if (length(extra_outcomes) > 0) {
-    extra_outcomes <- glue_quote_collapse(extra_outcomes)
-    glubort("The following outcomes were not found in `data`: {extra_outcomes}.")
+    cli::cli_abort(
+      "The following outcome{?s} {?was/were} not found in {.arg data}:
+      {.val {extra_outcomes}}.")
   }
 
   outcomes

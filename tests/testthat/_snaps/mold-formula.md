@@ -127,7 +127,7 @@
       mold(fac_1 ~ y + z, example_train)
     Condition
       Error in `get_all_predictors()`:
-      ! The following predictors were not found in `data`: 'y', 'z'.
+      ! The following predictors were not found in `data`: "y" and "z".
 
 ---
 
@@ -135,7 +135,7 @@
       mold(fac_1 ~ y + z, example_train, blueprint = bp)
     Condition
       Error in `get_all_predictors()`:
-      ! The following predictors were not found in `data`: 'y', 'z'.
+      ! The following predictors were not found in `data`: "y" and "z".
 
 ---
 
@@ -143,7 +143,7 @@
       mold(y + z ~ fac_1, example_train)
     Condition
       Error in `get_all_outcomes()`:
-      ! The following outcomes were not found in `data`: 'y', 'z'.
+      ! The following outcomes were not found in `data`: "y" and "z".
 
 ---
 
@@ -151,7 +151,7 @@
       mold(y + z ~ fac_1, example_train, blueprint = bp)
     Condition
       Error in `get_all_outcomes()`:
-      ! The following outcomes were not found in `data`: 'y', 'z'.
+      ! The following outcomes were not found in `data`: "y" and "z".
 
 # global environment variables cannot be used
 
@@ -160,7 +160,7 @@
       mold(fac_1 ~ y, example_train)
     Condition
       Error in `get_all_predictors()`:
-      ! The following predictors were not found in `data`: 'y'.
+      ! The following predictor was not found in `data`: "y".
 
 # cannot manually remove intercept in the formula itself
 
