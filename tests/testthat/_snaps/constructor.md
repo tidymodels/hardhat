@@ -3,17 +3,17 @@
     Code
       new_model()
     Output
-      <hardhat_model> 
+      <hardhat_model>
       named list()
     Code
       new_model(class = "custom_class")
     Output
-      <custom_class> 
+      <custom_class>
       named list()
     Code
       new_model(x = 4, y = "hi", class = "custom_class")
     Output
-      <custom_class> 
+      <custom_class>
       $x
       [1] 4
       

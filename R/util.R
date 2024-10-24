@@ -1,11 +1,3 @@
-glubort <- function(..., .sep = "", .envir = caller_env(), .call = .envir) {
-  abort(glue(..., .sep = .sep, .envir = .envir), call = .call)
-}
-
-glue_quote_collapse <- function(x) {
-  glue::glue_collapse(glue::single_quote(x), sep = ", ")
-}
-
 simplify_terms <- function(x) {
 
   # This is like stats:::terms.default
@@ -14,7 +6,7 @@ simplify_terms <- function(x) {
   is_terms <- inherits(x, "terms")
 
   if (!is_terms) {
-    abort("`x` must be a terms object")
+    cli::cli_abort("{.arg x} must be a {.cls terms} object.")
   }
 
   # It removes the environment
@@ -45,8 +37,10 @@ get_all_predictors <- function(formula, data) {
 
   extra_predictors <- setdiff(predictors, names(data))
   if (length(extra_predictors) > 0) {
-    extra_predictors <- glue_quote_collapse(extra_predictors)
-    glubort("The following predictors were not found in `data`: {extra_predictors}.")
+    cli::cli_abort(
+      "The following predictor{?s} {?was/were} not found in
+      {.arg data}: {.val {extra_predictors}}."
+    )
   }
 
   predictors
@@ -64,13 +58,14 @@ get_all_outcomes <- function(formula, data) {
   outcomes <- all.vars(outcome_formula)
 
   if ("." %in% outcomes) {
-    abort("The left hand side of the formula cannot contain `.`")
+    cli::cli_abort("The left-hand side of the formula cannot contain {.code .}.")
   }
 
   extra_outcomes <- setdiff(outcomes, names(data))
   if (length(extra_outcomes) > 0) {
-    extra_outcomes <- glue_quote_collapse(extra_outcomes)
-    glubort("The following outcomes were not found in `data`: {extra_outcomes}.")
+    cli::cli_abort(
+      "The following outcome{?s} {?was/were} not found in {.arg data}:
+      {.val {extra_outcomes}}.")
   }
 
   outcomes
@@ -148,10 +143,6 @@ has_unique_column_names <- function(x) {
   }
 
   !anyDuplicated(nms)
-}
-
-class1 <- function(x) {
-  class(x)[1]
 }
 
 # ------------------------------------------------------------------------------

@@ -12,8 +12,9 @@
       validate_outcomes_are_numeric(iris)
     Condition
       Error in `validate_outcomes_are_numeric()`:
-      ! All outcomes must be numeric, but the following are not:
-      'Species': 'factor'
+      ! All outcomes must be numeric.
+      i The following is not:
+      "Species": <factor>
 
 ---
 
@@ -21,9 +22,10 @@
       validate_outcomes_are_numeric(x)
     Condition
       Error in `validate_outcomes_are_numeric()`:
-      ! All outcomes must be numeric, but the following are not:
-      'x': 'POSIXct', 'POSIXt'
-      'y': 'factor'
+      ! All outcomes must be numeric.
+      i The following are not:
+      "x": <POSIXct/POSIXt>
+      "y": <factor>
 
 # validate_no_formula_duplication()
 
@@ -31,7 +33,8 @@
       validate_no_formula_duplication(y ~ y)
     Condition
       Error in `validate_no_formula_duplication()`:
-      ! The following terms are duplicated on the left and right hand side of the `formula`: 'y'.
+      ! Terms must not be duplicated on the left- and right-hand side of the `formula`.
+      i The following duplicated term was found: "y"
 
 ---
 
@@ -39,7 +42,8 @@
       validate_no_formula_duplication(y ~ log(y), original = TRUE)
     Condition
       Error in `validate_no_formula_duplication()`:
-      ! The following terms are duplicated on the left and right hand side of the `formula`: 'y'.
+      ! Terms must not be duplicated on the left- and right-hand side of the `formula`.
+      i The following duplicated term was found: "y"
 
 ---
 
@@ -47,7 +51,8 @@
       validate_no_formula_duplication(y + x ~ y + x)
     Condition
       Error in `validate_no_formula_duplication()`:
-      ! The following terms are duplicated on the left and right hand side of the `formula`: 'y', 'x'.
+      ! Terms must not be duplicated on the left- and right-hand side of the `formula`.
+      i The following duplicated terms were found: "y" and "x"
 
 ---
 
@@ -55,7 +60,8 @@
       validate_no_formula_duplication(y ~ . + y)
     Condition
       Error in `validate_no_formula_duplication()`:
-      ! The following terms are duplicated on the left and right hand side of the `formula`: 'y'.
+      ! Terms must not be duplicated on the left- and right-hand side of the `formula`.
+      i The following duplicated term was found: "y"
 
 ---
 
@@ -63,7 +69,8 @@
       validate_no_formula_duplication(y ~ offset(y), original = TRUE)
     Condition
       Error in `validate_no_formula_duplication()`:
-      ! The following terms are duplicated on the left and right hand side of the `formula`: 'y'.
+      ! Terms must not be duplicated on the left- and right-hand side of the `formula`.
+      i The following duplicated term was found: "y"
 
 # validate_outcomes_are_factors()
 
@@ -71,9 +78,10 @@
       validate_outcomes_are_factors(x)
     Condition
       Error in `validate_outcomes_are_factors()`:
-      ! All outcomes must be factors, but the following are not:
-      'x': 'POSIXct', 'POSIXt'
-      'y': 'character'
+      ! All outcomes must be factors.
+      i The following are not:
+      "x": <POSIXct/POSIXt>
+      "y": <character>
 
 # validate_outcomes_are_binary()
 
@@ -81,12 +89,13 @@
       validate_outcomes_are_binary(iris)
     Condition
       Error in `validate_outcomes_are_binary()`:
-      ! The outcome must be binary, but the following number of levels were found:
-      'Sepal.Length': 0
-      'Sepal.Width': 0
-      'Petal.Length': 0
-      'Petal.Width': 0
-      'Species': 3
+      ! The outcome must be binary.
+      i The following number of levels were found:
+      "Sepal.Length": 0
+      "Sepal.Width": 0
+      "Petal.Length": 0
+      "Petal.Width": 0
+      "Species": 3
 
 # validate_predictors_are_numeric()
 
@@ -94,8 +103,9 @@
       validate_predictors_are_numeric(iris)
     Condition
       Error in `validate_predictors_are_numeric()`:
-      ! All predictors must be numeric, but the following are not:
-      'Species': 'factor'
+      ! All predictors must be numeric.
+      i The following is not:
+      "Species": <factor>
 
 ---
 
@@ -103,9 +113,10 @@
       validate_predictors_are_numeric(x)
     Condition
       Error in `validate_predictors_are_numeric()`:
-      ! All predictors must be numeric, but the following are not:
-      'x': 'POSIXct', 'POSIXt'
-      'y': 'factor'
+      ! All predictors must be numeric.
+      i The following are not:
+      "x": <POSIXct/POSIXt>
+      "y": <factor>
 
 # validate_prediction_size()
 

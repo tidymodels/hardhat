@@ -31,7 +31,7 @@ importance_weights <- function(x) {
   x <- vec_cast_named(x, to = double(), x_arg = "x")
 
   if (any(x < 0, na.rm = TRUE)) {
-    abort("`x` can't contain negative weights.")
+    cli::cli_abort("{.arg x} can't contain negative weights.")
   }
 
   new_importance_weights(x)
@@ -58,7 +58,7 @@ importance_weights <- function(x) {
 #' new_importance_weights(c(1.5, 2.3, 10))
 new_importance_weights <- function(x = double(), ..., class = character()) {
   if (!is.double(x)) {
-    abort("`x` must be a double vector.")
+    cli::cli_abort("{.arg x} must be a double vector.")
   }
 
   new_case_weights(
@@ -153,7 +153,7 @@ frequency_weights <- function(x) {
   x <- vec_cast_named(x, to = integer(), x_arg = "x")
 
   if (any(x < 0L, na.rm = TRUE)) {
-    abort("`x` can't contain negative weights.")
+    cli::cli_abort("{.arg x} can't contain negative weights.")
   }
 
   new_frequency_weights(x)
@@ -180,7 +180,7 @@ frequency_weights <- function(x) {
 #' new_frequency_weights(1:5)
 new_frequency_weights <- function(x = integer(), ..., class = character()) {
   if (!is.integer(x)) {
-    abort("`x` must be an integer vector.")
+    cli::cli_abort("{.arg x} must be an integer vector.")
   }
 
   new_case_weights(
@@ -265,7 +265,7 @@ vec_ptype_abbr.hardhat_frequency_weights <- function(x, ...) {
 #' new_case_weights(1:5, class = "my_weights")
 new_case_weights <- function(x, ..., class) {
   if (!is.integer(x) && !is.double(x)) {
-    abort("`x` must be an integer or double vector.")
+    cli::cli_abort("{.arg x} must be {.cls integer} or {.cls double} vector.")
   }
 
   new_vctr(

@@ -60,8 +60,7 @@
       spruce_prob(c("a", "b"), matrix(1, ncol = 3))
     Condition
       Error in `spruce_prob()`:
-      ! The number of levels (2) must be
-      equal to the number of class probability columns (3).
+      ! The number of levels (2) must be equal to the number of class probability columns (3).
 
 ---
 
@@ -69,8 +68,7 @@
       spruce_prob(c("a"), matrix(1, ncol = 2))
     Condition
       Error in `spruce_prob()`:
-      ! The number of levels (1) must be
-      equal to the number of class probability columns (2).
+      ! The number of levels (1) must be equal to the number of class probability columns (2).
 
 # spruce multiple helpers check input type
 

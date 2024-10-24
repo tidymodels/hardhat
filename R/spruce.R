@@ -66,9 +66,9 @@ spruce_prob <- function(pred_levels, prob_matrix) {
   n_col <- ncol(prob_matrix)
 
   if (n_levels != n_col) {
-    glubort(
-      "The number of levels ({n_levels}) must be
-      equal to the number of class probability columns ({n_col})."
+    cli::cli_abort(
+      "The number of levels ({n_levels}) must be equal to the number
+      of class probability columns ({n_col})."
     )
   }
 
