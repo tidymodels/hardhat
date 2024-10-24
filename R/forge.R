@@ -70,7 +70,7 @@ forge <- function(new_data, blueprint, ..., outcomes = FALSE) {
 
 #' @export
 forge.default <- function(new_data, blueprint, ..., outcomes = FALSE) {
-  cli::cli_abort("No {.fn forge} method provided for {.obj_type_friendly {new_data}} object.")
+  cli::cli_abort("No {.fn forge} method provided for {.obj_type_friendly {new_data}}.")
 }
 
 #' @export
@@ -140,5 +140,5 @@ run_forge.default <- function(blueprint,
                               new_data,
                               ...,
                               outcomes = FALSE) {
-  cli::cli_abort("No {.fn run_forge} method provided for {.obj_type_friendly {blueprint}} object.")
+  cli::cli_abort("No {.fn run_forge} method provided for {.obj_type_friendly {blueprint}}.")
 }

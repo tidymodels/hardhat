@@ -4,5 +4,5 @@
       run_forge(1)
     Condition
       Error in `run_forge()`:
-      ! No `run_forge()` method provided for a number object.
+      ! No `run_forge()` method provided for a number.
 

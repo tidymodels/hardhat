@@ -52,7 +52,7 @@
       standardize("hi")
     Condition
       Error in `standardize()`:
-      ! `y` is of unknown type 'character'.
+      ! No `standardize()` method provided for a string.
 
 ---
 
@@ -60,5 +60,5 @@
       standardize(Sys.time())
     Condition
       Error in `standardize()`:
-      ! `y` is of unknown type 'POSIXct'.
+      ! No `standardize()` method provided for a <POSIXct> object.
 

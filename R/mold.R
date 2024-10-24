@@ -175,5 +175,5 @@ run_mold <- function(blueprint, ...) {
 
 #' @export
 run_mold.default <- function(blueprint, ...) {
-  cli::cli_abort("No {.fn run_mold} method provided for {.obj_type_friendly {blueprint}} object.")
+  cli::cli_abort("No {.fn run_mold} method provided for {.obj_type_friendly {blueprint}}.")
 }

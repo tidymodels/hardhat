@@ -39,7 +39,7 @@ standardize <- function(y) {
 
 #' @export
 standardize.default <- function(y) {
-  glubort("`y` is of unknown type '{class1(y)}'.")
+  cli::cli_abort("No {.fn standardize} method provided for {.obj_type_friendly {y}}.")
 }
 
 #' @export

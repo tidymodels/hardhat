@@ -20,7 +20,7 @@
       forge("hi", x1$blueprint)
     Condition
       Error in `forge()`:
-      ! No `forge()` method provided for a string object.
+      ! No `forge()` method provided for a string.
 
 ---
 
@@ -28,7 +28,7 @@
       forge("hi", x2$blueprint)
     Condition
       Error in `forge()`:
-      ! No `forge()` method provided for a string object.
+      ! No `forge()` method provided for a string.
 
 # missing predictor columns fail appropriately
 

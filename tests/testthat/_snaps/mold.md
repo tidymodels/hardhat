@@ -4,5 +4,5 @@
       run_mold(1)
     Condition
       Error in `run_mold()`:
-      ! No `run_mold()` method provided for a number object.
+      ! No `run_mold()` method provided for a number.
 
