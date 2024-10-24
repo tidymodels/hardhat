@@ -504,9 +504,7 @@ validate_column_names <- function(data, original_names) {
 #' @rdname validate_column_names
 #' @export
 check_column_names <- function(data, original_names) {
-  if (!is.character(original_names)) {
-    glubort("`original_names` must be a character vector.")
-  }
+  check_character(original_names)
 
   new_names <- colnames(data)
 
