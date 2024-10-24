@@ -24,11 +24,6 @@ print.hardhat_blueprint <- function(x, ...) {
   invisible(x)
 }
 
-cat_line <- function(..., .envir = parent.frame()) {
-  lines <- paste(glue(..., .envir = .envir), "\n")
-  cat(lines, sep = "")
-}
-
 n_blueprint_predictors <- function(x) {
   ncol(x$ptypes$predictors) %||% 0L
 }
