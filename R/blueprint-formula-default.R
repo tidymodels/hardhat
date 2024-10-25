@@ -970,7 +970,7 @@ expr_check_no_factorish_in_functions <- function(expr,
           "Functions involving factors or characters have been detected on the ",
           "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
         ),
-        i = "Functions involving factors were detected for {.str {name}} in {.arg {expr}}."
+        i = "Functions involving factors were detected for {.val {name}} in {.arg {expr}}."
       )
 
       cli::cli_abort(message, call = error_call)
@@ -1035,7 +1035,7 @@ expr_check_no_factorish_in_interaction_term <- function(expr,
         "Interaction terms involving factors or characters have been detected on the ",
         "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
       ),
-      i = "Interactions terms involving factors were detected for {.str {name}} in {.arg {expr}}."
+      i = "Interactions terms involving factors were detected for {.val {name}} in {.arg {expr}}."
     )
 
     cli::cli_abort(message, call = error_call)

@@ -241,7 +241,7 @@ warn_novel_levels <- function(levels, column) {
   n_levels <- length(levels)
   cli::cli_warn(
     c(
-      "{cli::qty(n_levels)}Novel level{?s} found in column {.field {column}}: {.val {levels}}.",
+      "{cli::qty(n_levels)}Novel level{?s} found in column {.val {column}}: {.val {levels}}.",
       "i" = "The {cli::qty(n_levels)}level{?s} {?has/have} been removed,
             and values have been coerced to {.val NA}."
     ),

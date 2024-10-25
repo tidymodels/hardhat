@@ -4,7 +4,7 @@
       forge(example_train2, x1$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `fac_1` is missing.
+      ! The required column "fac_1" is missing.
 
 ---
 
@@ -12,7 +12,7 @@
       forge(example_train2, x2$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `fac_1` is missing.
+      ! The required column "fac_1" is missing.
 
 # new_data can only be a data frame / matrix
 
@@ -36,7 +36,7 @@
       forge(example_train[, 1, drop = FALSE], x1$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `num_2` is missing.
+      ! The required column "num_2" is missing.
 
 ---
 
@@ -44,7 +44,7 @@
       forge(example_train[, 1, drop = FALSE], x2$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `num_2` is missing.
+      ! The required column "num_2" is missing.
 
 ---
 
@@ -52,7 +52,7 @@
       forge(example_train[, 3, drop = FALSE], x1$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required columns `num_1` and `num_2` are missing.
+      ! The required columns "num_1" and "num_2" are missing.
 
 ---
 
@@ -60,7 +60,7 @@
       forge(example_train[, 3, drop = FALSE], x2$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required columns `num_1` and `num_2` are missing.
+      ! The required columns "num_1" and "num_2" are missing.
 
 # novel predictor levels are caught
 
@@ -68,7 +68,7 @@
       xx1 <- forge(new, x1$blueprint)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 ---
@@ -77,7 +77,7 @@
       xx2 <- forge(new, x2$blueprint)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 ---
@@ -86,7 +86,7 @@
       xx3 <- forge(new_multiple, x3$blueprint)
     Condition
       Warning:
-      Novel levels found in column f: "e" and "f".
+      Novel levels found in column "f": "e" and "f".
       i The levels have been removed, and values have been coerced to "NA".
 
 # novel predictor levels can be ignored
@@ -105,7 +105,7 @@
       xx1 <- forge(new, x1$blueprint)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 ---
@@ -114,7 +114,7 @@
       xx2 <- forge(new, x2$blueprint)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 # novel levels are ignored correctly when the new column is a character
@@ -133,7 +133,7 @@
       xx1 <- forge(new, x1$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 ---
@@ -142,7 +142,7 @@
       xx2 <- forge(new, x2$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 # novel outcome levels are always caught, even if `allow_novel_levels = TRUE`
@@ -151,7 +151,7 @@
       xx1 <- forge(new, x1$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 ---
@@ -160,7 +160,7 @@
       xx2 <- forge(new, x2$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 # missing predictor levels are restored silently
@@ -198,7 +198,7 @@
       xx <- forge(new, x1$blueprint)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 # can be both missing levels and have new levels that get ignored
@@ -217,6 +217,6 @@
       out <- forge(df2, x$blueprint)
     Condition
       Warning:
-      Novel level found in column x: "d".
+      Novel level found in column "x": "d".
       i The level has been removed, and values have been coerced to "NA".
 

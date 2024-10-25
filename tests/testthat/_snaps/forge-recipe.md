@@ -4,7 +4,7 @@
       forge(iris2, x1$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `Species` is missing.
+      ! The required column "Species" is missing.
 
 ---
 
@@ -12,7 +12,7 @@
       forge(iris2, x2$blueprint, outcomes = TRUE)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `Species` is missing.
+      ! The required column "Species" is missing.
 
 # missing predictor columns fail appropriately
 
@@ -20,7 +20,7 @@
       forge(iris[, 1, drop = FALSE], x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `Sepal.Width` is missing.
+      ! The required column "Sepal.Width" is missing.
 
 ---
 
@@ -28,7 +28,7 @@
       forge(iris[, 3, drop = FALSE], x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required columns `Sepal.Length` and `Sepal.Width` are missing.
+      ! The required columns "Sepal.Length" and "Sepal.Width" are missing.
 
 # novel predictor levels are caught
 
@@ -36,7 +36,7 @@
       xx1 <- forge(new, x1$blueprint)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 ---
@@ -45,7 +45,7 @@
       xx2 <- forge(new, x2$blueprint)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
       Warning:
       ! There are new levels in `f`: NA.
@@ -72,7 +72,7 @@
       xx1 <- forge(new, x1$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 ---
@@ -81,7 +81,7 @@
       xx2 <- forge(new, x2$blueprint, outcomes = TRUE)
     Condition
       Warning:
-      Novel level found in column f: "e".
+      Novel level found in column "f": "e".
       i The level has been removed, and values have been coerced to "NA".
 
 # `forge()` will error if required non standard roles are missing
@@ -90,7 +90,7 @@
       forge(iris, x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `Sepal.Width` is missing.
+      ! The required column "Sepal.Width" is missing.
 
 # `NA` roles are treated as extra roles that are required at `forge()` time
 
@@ -98,7 +98,7 @@
       forge(iris, x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `Petal.Length` is missing.
+      ! The required column "Petal.Length" is missing.
 
 # `forge()` is compatible with hardhat 0.2.0 molded blueprints with a basic recipe
 
@@ -106,7 +106,7 @@
       forge(new_data, blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `x` is missing.
+      ! The required column "x" is missing.
 
 # `forge()` is compatible with hardhat 0.2.0 molded blueprints with a recipe with a nonstandard role
 
@@ -114,5 +114,5 @@
       forge(new_data, blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `id` is missing.
+      ! The required column "id" is missing.
 

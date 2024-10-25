@@ -77,7 +77,7 @@ coerce_to_matrix <- function(data, error_call = caller_env()) {
 
     message <- c(
       "{.arg data} must only contain numeric columns.",
-      i = "These columns aren't numeric: {.str {loc}}."
+      i = "These columns aren't numeric: {.val {loc}}."
     )
 
     cli::cli_abort(message, call = error_call)

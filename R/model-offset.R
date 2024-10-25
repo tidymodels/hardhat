@@ -64,7 +64,7 @@ model_offset <- function(terms, data) {
       bad_col <- colnames(data)[.pos]
 
       cli::cli_abort(
-        "Column {.field {bad_col}} is tagged as an offset and thus must be
+        "Column {.val {bad_col}} is tagged as an offset and thus must be
         numeric, not {.obj_type_friendly { .offset_val }}."
       )
     }

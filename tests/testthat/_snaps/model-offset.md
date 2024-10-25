@@ -4,7 +4,7 @@
       mold(~ Sepal.Width + offset(Species), iris)
     Condition
       Error in `model_offset()`:
-      ! Column offset(Species) is tagged as an offset and thus must be numeric, not a <factor> object.
+      ! Column "offset(Species)" is tagged as an offset and thus must be numeric, not a <factor> object.
 
 # offset columns are stored as predictors
 
@@ -12,5 +12,5 @@
       forge(iris2, x$blueprint)
     Condition
       Error in `validate_column_names()`:
-      ! The required column `Sepal.Length` is missing.
+      ! The required column "Sepal.Length" is missing.
 
