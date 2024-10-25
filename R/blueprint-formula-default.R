@@ -1071,7 +1071,7 @@ expr_check_no_interactions <- function(expr, error_call) {
     expr <- as_label(expr)
 
     message <- c(
-      "Interaction terms can't be specified on the LHS of `formula`.",
+      "Interaction terms can't be specified on the LHS of {.arg formula}.",
       i = "The following interaction term was found: {.arg {expr}}."
     )
 
