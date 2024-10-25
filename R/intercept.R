@@ -22,15 +22,7 @@
 #' add_intercept_column(as.matrix(mtcars))
 #' @export
 add_intercept_column <- function(data, name = "(Intercept)") {
-  ok <- is.data.frame(data) || is.matrix(data)
-
-  if (!ok) {
-    cli::cli_abort(
-      "{.arg data} must be a data frame or matrix to add an intercept column,
-      not {.obj_type_friendly {data}}."
-    )
-  }
-
+  check_data_frame_or_matrix(data)
   check_name(name)
 
   if (name %in% colnames(data)) {

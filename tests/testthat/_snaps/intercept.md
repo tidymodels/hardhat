@@ -29,5 +29,5 @@
       add_intercept_column(1)
     Condition
       Error in `add_intercept_column()`:
-      ! `data` must be a data frame or matrix to add an intercept column, not a number.
+      ! `data` must be a data frame or a matrix, not the number 1.
 

@@ -134,12 +134,7 @@ obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
 # Checking functions
 
 check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
-  if (!is.matrix(values)) {
-    cli::cli_abort(
-      "{.arg values} must be a {.cls matrix}, not {.obj_type_friendly {values}}.",
-      call = call
-    )
-  }
+  check_inherits(values, "matrix", call = call)
 
   num_lvls <- length(levels)
 
