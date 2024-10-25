@@ -708,6 +708,16 @@ test_that("can be both missing levels and have new levels", {
     mold(y ~ f, dat, blueprint = bp2)
   })
 
+  dat_2f <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4]),
+    f_2 = factor(letters[5:8])
+  )
+
+  expect_snapshot(error = TRUE, {
+    mold(y ~ f + f_2, dat_2f, blueprint = bp2)
+  })
+
   # Warning for the extra level
   expect_snapshot(xx <- forge(new, x1$blueprint))
 
