@@ -61,5 +61,5 @@
       new_case_weights("x", class = "subclass")
     Condition
       Error in `new_case_weights()`:
-      ! `x` must be <integer> or <double> vector.
+      ! `x` must be an integer or double vector.
 

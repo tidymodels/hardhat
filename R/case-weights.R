@@ -265,7 +265,7 @@ vec_ptype_abbr.hardhat_frequency_weights <- function(x, ...) {
 #' new_case_weights(1:5, class = "my_weights")
 new_case_weights <- function(x, ..., class) {
   if (!is.integer(x) && !is.double(x)) {
-    cli::cli_abort("{.arg x} must be {.cls integer} or {.cls double} vector.")
+    cli::cli_abort("{.arg x} must be an integer or double vector.")
   }
 
   new_vctr(
