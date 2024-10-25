@@ -3,11 +3,7 @@ simplify_terms <- function(x) {
   # This is like stats:::terms.default
   # but doesn't look at x$terms.
 
-  is_terms <- inherits(x, "terms")
-
-  if (!is_terms) {
-    cli::cli_abort("{.arg x} must be a {.cls terms} object.")
-  }
+  check_terms(x)
 
   # It removes the environment
   # (which could be large)
