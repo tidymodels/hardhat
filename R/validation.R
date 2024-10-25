@@ -113,11 +113,13 @@ validate_outcomes_are_numeric <- function(outcomes) {
   if (!check$ok) {
     bad_msg <- style_bad_classes(check$bad_classes)
 
-    cli::cli_abort(c(
-      "All outcomes must be numeric.",
-      "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
-      bad_msg
-    ))
+    cli::cli_abort(
+      c(
+        "All outcomes must be numeric.",
+        "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
+        bad_msg
+      )
+    )
   }
 
   invisible(outcomes)
@@ -196,11 +198,13 @@ validate_outcomes_are_factors <- function(outcomes) {
   if (!check$ok) {
     bad_msg <- style_bad_classes(check$bad_classes)
 
-    cli::cli_abort(c(
-      "All outcomes must be factors.",
-      "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
-      bad_msg
-    ))
+    cli::cli_abort(
+      c(
+        "All outcomes must be factors.",
+        "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
+        bad_msg
+      )
+    )
   }
 
   invisible(outcomes)
@@ -279,12 +283,14 @@ validate_outcomes_are_binary <- function(outcomes) {
 
     bad_msg <- glue::glue("{bad_col}: {check$num_levels}")
 
-    cli::cli_abort(c(
-      "The outcome must be binary.",
-      "i" = "{cli::qty(length(bad_col))}The following number of levels
-             {?was/were} found:",
-      bad_msg
-    ))
+    cli::cli_abort(
+      c(
+        "The outcome must be binary.",
+        "i" = "{cli::qty(length(bad_col))}The following number of levels
+               {?was/were} found:",
+        bad_msg
+      )
+    )
   }
 
   invisible(outcomes)
@@ -369,11 +375,13 @@ validate_predictors_are_numeric <- function(predictors) {
   if (!check$ok) {
     bad_msg <- style_bad_classes(check$bad_classes)
 
-    cli::cli_abort(c(
-      "All predictors must be numeric.",
-      "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
-      bad_msg
-    ))
+    cli::cli_abort(
+      c(
+        "All predictors must be numeric.",
+        "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
+        bad_msg
+      )
+    )
   }
 
   invisible(predictors)
@@ -687,8 +695,8 @@ validate_no_formula_duplication <- function(formula, original = FALSE) {
   if (!check$ok) {
     cli::cli_abort(
       c(
-        "Terms must not be duplicated on the left- and right-hand side
-     of the {.arg formula}.",
+        "Terms must not be duplicated on the left- and right-hand side of the
+        {.arg formula}.",
         "i" = "The following duplicated term{?s} {?was/were} found:
               {.val {check$duplicates}}"
       )

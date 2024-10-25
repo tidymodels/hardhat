@@ -34,8 +34,8 @@ get_all_predictors <- function(formula, data) {
   extra_predictors <- setdiff(predictors, names(data))
   if (length(extra_predictors) > 0) {
     cli::cli_abort(
-      "The following predictor{?s} {?was/were} not found in
-      {.arg data}: {.val {extra_predictors}}."
+      "The following predictor{?s} {?was/were} not found in {.arg data}:
+      {.val {extra_predictors}}."
     )
   }
 
@@ -61,7 +61,8 @@ get_all_outcomes <- function(formula, data) {
   if (length(extra_outcomes) > 0) {
     cli::cli_abort(
       "The following outcome{?s} {?was/were} not found in {.arg data}:
-      {.val {extra_outcomes}}.")
+      {.val {extra_outcomes}}."
+    )
   }
 
   outcomes

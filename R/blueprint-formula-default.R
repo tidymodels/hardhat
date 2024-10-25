@@ -878,7 +878,10 @@ check_levels <- function(x,
   }
 
   if (!all(map_lgl(x, is.character))) {
-    cli::cli_abort("{.arg {arg}} must only contain character vectors.", call = call)
+    cli::cli_abort(
+      "{.arg {arg}} must only contain character vectors.", 
+      call = call
+    )
   }
 
   invisible(NULL)
