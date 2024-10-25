@@ -69,7 +69,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -78,7 +78,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -87,7 +87,7 @@
     Condition
       Warning:
       Novel levels found in column "f": "e" and "f".
-      i The levels have been removed, and values have been coerced to "NA".
+      i The levels have been removed, and values have been coerced to <NA>.
 
 # novel predictor levels can be ignored
 
@@ -106,7 +106,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -115,7 +115,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 # novel levels are ignored correctly when the new column is a character
 
@@ -134,7 +134,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -143,7 +143,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 # novel outcome levels are always caught, even if `allow_novel_levels = TRUE`
 
@@ -152,7 +152,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -161,7 +161,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 # missing predictor levels are restored silently
 
@@ -208,7 +208,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 # can be both missing levels and have new levels that get ignored
 
@@ -227,5 +227,5 @@
     Condition
       Warning:
       Novel level found in column "x": "d".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 

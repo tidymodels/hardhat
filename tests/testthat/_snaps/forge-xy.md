@@ -81,7 +81,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 # novel predictor levels can be ignored
 
@@ -95,7 +95,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -104,5 +104,5 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 

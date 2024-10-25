@@ -37,7 +37,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -46,7 +46,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
       Warning:
       ! There are new levels in `f`: NA.
       i Consider using step_unknown() (`?recipes::step_unknown()`) before `step_dummy()` to handle missing values.
@@ -73,7 +73,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 ---
 
@@ -82,7 +82,7 @@
     Condition
       Warning:
       Novel level found in column "f": "e".
-      i The level has been removed, and values have been coerced to "NA".
+      i The level has been removed, and values have been coerced to <NA>.
 
 # `forge()` will error if required non standard roles are missing
 

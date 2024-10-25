@@ -243,7 +243,7 @@ warn_novel_levels <- function(levels, column) {
     c(
       "{cli::qty(n_levels)}Novel level{?s} found in column {.val {column}}: {.val {levels}}.",
       "i" = "The {cli::qty(n_levels)}level{?s} {?has/have} been removed,
-            and values have been coerced to {.val NA}."
+            and values have been coerced to {.cls NA}."
     ),
     class = "hardhat_warn_novel_levels",
     levels = levels,
