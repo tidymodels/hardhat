@@ -966,10 +966,8 @@ expr_check_no_factorish_in_functions <- function(expr,
       expr <- as_label(original_expr)
 
       message <- c(
-        paste0(
-          "Functions involving factors or characters have been detected on the ",
-          "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
-        ),
+        "Functions involving factors or characters have been detected on the
+        RHS of {.arg formula}. These are not allowed when {.code indicators = \"none\"}.",
         i = "Functions involving factors were detected for {.val {name}} in {.arg {expr}}."
       )
 
@@ -1031,10 +1029,8 @@ expr_check_no_factorish_in_interaction_term <- function(expr,
     expr <- as_label(expr_original)
 
     message <- c(
-      paste0(
-        "Interaction terms involving factors or characters have been detected on the ",
-        "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
-      ),
+      "Interaction terms involving factors or characters have been detected on the
+      RHS of {.arg formula}. These are not allowed when {.code indicators = \"none\"}.",
       i = "Interactions terms involving factors were detected for {.val {name}} in {.arg {expr}}."
     )
 
