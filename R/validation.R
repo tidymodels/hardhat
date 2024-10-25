@@ -111,19 +111,23 @@ validate_outcomes_are_numeric <- function(outcomes) {
   check <- check_outcomes_are_numeric(outcomes)
 
   if (!check$ok) {
-    bad_col <- map(names(check$bad_classes), ~ cli::format_inline("{.val {.x}}"))
-    bad_class <- map(check$bad_classes, ~ cli::format_inline("{.cls {.x}}"))
-
-    bad_msg <- glue::glue("{bad_col}: {bad_class}")
+    bad_msg <- style_bad_classes(check$bad_classes)
 
     cli::cli_abort(c(
       "All outcomes must be numeric.",
-      "i" = "{cli::qty(length(bad_class))}The following {?is/are} not:",
+      "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
       bad_msg
     ))
   }
 
   invisible(outcomes)
+}
+
+style_bad_classes <- function(bad_classes){
+  bad_col <- map(names(bad_classes), ~ cli::format_inline("{.val {.x}}"))
+  bad_class <- map(bad_classes, ~ cli::format_inline("{.cls {.x}}"))
+
+  glue::glue("{bad_col}: {bad_class}")
 }
 
 #' @rdname validate_outcomes_are_numeric
@@ -190,14 +194,11 @@ validate_outcomes_are_factors <- function(outcomes) {
   check <- check_outcomes_are_factors(outcomes)
 
   if (!check$ok) {
-    bad_col <- map(names(check$bad_classes), ~ cli::format_inline("{.val {.x}}"))
-    bad_class <- map(check$bad_classes, ~ cli::format_inline("{.cls {.x}}"))
-
-    bad_msg <- glue::glue("{bad_col}: {bad_class}")
+    bad_msg <- style_bad_classes(check$bad_classes)
 
     cli::cli_abort(c(
       "All outcomes must be factors.",
-      "i" = "{cli::qty(length(bad_class))}The following {?is/are} not:",
+      "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
       bad_msg
     ))
   }
@@ -366,14 +367,11 @@ validate_predictors_are_numeric <- function(predictors) {
   check <- check_predictors_are_numeric(predictors)
 
   if (!check$ok) {
-    bad_col <- map(names(check$bad_classes), ~ cli::format_inline("{.val {.x}}"))
-    bad_class <- map(check$bad_classes, ~ cli::format_inline("{.cls {.x}}"))
-
-    bad_msg <- glue::glue("{bad_col}: {bad_class}")
+    bad_msg <- style_bad_classes(check$bad_classes)
 
     cli::cli_abort(c(
       "All predictors must be numeric.",
-      "i" = "{cli::qty(length(bad_class))}The following {?is/are} not:",
+      "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
       bad_msg
     ))
   }
