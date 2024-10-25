@@ -12,5 +12,5 @@
       fct_encode_one_hot(1)
     Condition
       Error in `fct_encode_one_hot()`:
-      ! `x` must be a factor.
+      ! `x` must be a factor, not a number.
 

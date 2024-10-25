@@ -31,7 +31,7 @@
 #' fct_encode_one_hot(factor(sample(letters[1:4], 10, TRUE)))
 fct_encode_one_hot <- function(x) {
   if (!is.factor(x)) {
-    cli::cli_abort("{.arg x} must be a factor.")
+    cli::cli_abort("{.arg x} must be a factor, not {.obj_type_friendly {x}}.")
   }
 
   row_names <- names(x)
