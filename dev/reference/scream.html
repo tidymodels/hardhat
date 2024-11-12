@@ -273,7 +273,8 @@ factors in <code>ptype</code>.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Warning is thrown</span></span></span>
 <span class="r-in"><span><span class="va">test4_removed</span> <span class="op">&lt;-</span> <span class="fu">scream</span><span class="op">(</span><span class="va">test4</span>, <span class="va">ptype_pred</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Novel levels found in column 'Species': 'new_level'. The levels have been removed, and values have been coerced to 'NA'.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Novel level found in column <span style="color: #0000BB;">"Species"</span>: <span style="color: #0000BB;">"new_level"</span>.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The level has been removed, and values have been coerced to <span style="color: #0000BB;">&lt;NA&gt;</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Novel level is removed</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">test4_removed</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span></span>

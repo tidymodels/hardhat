@@ -126,14 +126,14 @@ offers.</p>
 <span><span class="va">formula_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_form</span><span class="op">$</span><span class="va">blueprint</span></span>
 <span></span>
 <span><span class="va">formula_eng</span></span>
-<span><span class="co">#&gt; Formula blueprint: </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; # Predictors: 2 </span></span>
-<span><span class="co">#&gt;   # Outcomes: 1 </span></span>
-<span><span class="co">#&gt;    Intercept: FALSE </span></span>
-<span><span class="co">#&gt; Novel Levels: FALSE </span></span>
-<span><span class="co">#&gt;  Composition: tibble </span></span>
-<span><span class="co">#&gt;   Indicators: none</span></span></code></pre></div>
+<span><span class="co">#&gt; Formula blueprint:</span></span>
+<span><span class="co">#&gt; # Predictors: 2</span></span>
+<span><span class="co">#&gt; # Outcomes: 1</span></span>
+<span><span class="co">#&gt; Intercept: FALSE</span></span>
+<span><span class="co">#&gt; Novel Levels: FALSE</span></span>
+<span><span class="co">#&gt; Composition: tibble</span></span>
+<span><span class="co">#&gt; Indicators: none</span></span>
+<span><span class="co">#&gt; </span></span></code></pre></div>
 <p>A formula blueprint is returned here, which knows about the
 predictors and outcomes that were used at training time, and knows that
 you don’t want to expand <code>species</code> into dummy variables by
@@ -270,7 +270,7 @@ data.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_missing_column</span>, <span class="va">formula_eng</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `validate_column_names()`:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The following required columns are missing: 'species'.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The required column <span style="color: #0000BB;">"species"</span> is missing.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="column-types">Column types<a class="anchor" aria-label="anchor" href="#column-types"></a>
@@ -337,8 +337,8 @@ the training data.</p>
 <span><span class="va">test_species_lossy</span><span class="op">$</span><span class="va">species</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"im new!"</span></span>
 <span></span>
 <span><span class="va">forged_lossy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forge.html">forge</a></span><span class="op">(</span><span class="va">test_species_lossy</span>, <span class="va">formula_eng</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Novel levels found in column 'species': 'im new!'. The levels</span></span>
-<span><span class="co">#&gt; have been removed, and values have been coerced to 'NA'.</span></span>
+<span><span class="co">#&gt; Warning: Novel level found in column <span style="color: #0000BB;">"species"</span>: <span style="color: #0000BB;">"im new!"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The level has been removed, and values have been coerced to <span style="color: #0000BB;">&lt;NA&gt;</span>.</span></span>
 <span></span>
 <span><span class="va">forged_lossy</span><span class="op">$</span><span class="va">predictors</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 2</span></span></span>
@@ -402,13 +402,13 @@ have a recipe that just creates dummy variables out of
 <code class="sourceCode R"><span><span class="va">recipe_eng</span> <span class="op">&lt;-</span> <span class="va">penguin_recipe</span><span class="op">$</span><span class="va">blueprint</span></span>
 <span></span>
 <span><span class="va">recipe_eng</span></span>
-<span><span class="co">#&gt; Recipe blueprint: </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; # Predictors: 2 </span></span>
-<span><span class="co">#&gt;   # Outcomes: 1 </span></span>
-<span><span class="co">#&gt;    Intercept: FALSE </span></span>
-<span><span class="co">#&gt; Novel Levels: FALSE </span></span>
-<span><span class="co">#&gt;  Composition: tibble</span></span></code></pre></div>
+<span><span class="co">#&gt; Recipe blueprint:</span></span>
+<span><span class="co">#&gt; # Predictors: 2</span></span>
+<span><span class="co">#&gt; # Outcomes: 1</span></span>
+<span><span class="co">#&gt; Intercept: FALSE</span></span>
+<span><span class="co">#&gt; Novel Levels: FALSE</span></span>
+<span><span class="co">#&gt; Composition: tibble</span></span>
+<span><span class="co">#&gt; </span></span></code></pre></div>
 <p>When we <code><a href="../reference/forge.html">forge()</a></code>, we can request <code>outcomes</code> to
 have the predictors and outcomes separated like with the formula
 method.</p>

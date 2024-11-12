@@ -159,7 +159,7 @@ and provide your own validation function.</p></li>
 <span class="r-in"><span><span class="co"># Will error</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">validate_column_names</span><span class="op">(</span><span class="va">bad_test</span>, <span class="va">original_names</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in validate_column_names(bad_test, original_names) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   The following required columns are missing: 'disp', 'hp'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   The required columns <span style="color: #0000BB;">"disp"</span> and <span style="color: #0000BB;">"hp"</span> are missing.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ---------------------------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="co"># Special error when `.outcome` is missing</span></span></span>
@@ -220,9 +220,11 @@ and provide your own validation function.</p></li>
 <span class="r-in"><span><span class="co"># with very specific instructions</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="forge.html">forge</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">processed</span><span class="op">$</span><span class="va">blueprint</span>, outcomes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in validate_missing_name_isnt_.outcome(check$missing_names) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   The following required columns are missing: '.outcome'.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (This indicates that `mold()` was called with a vector for `y`. When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, '.outcome', containing the outcome.)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   The following required columns are missing: <span style="color: #0000BB;">".outcome"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> This indicates that `mold()` was called with a vector for `y`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> When this is the case, and the outcome columns are requested in</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `forge()`, `new_data` must include a column with the automatically</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   generated name, `.outcome`, containing the outcome.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># To get this to work, just create an .outcome column in new_data</span></span></span>
 <span class="r-in"><span><span class="va">test</span><span class="op">$</span><span class="va">.outcome</span> <span class="op">&lt;-</span> <span class="va">test</span><span class="op">$</span><span class="va">Species</span></span></span>
