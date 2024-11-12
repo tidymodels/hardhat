@@ -238,13 +238,13 @@ check_novel_levels <- function(x, ptype, column) {
 }
 
 warn_novel_levels <- function(levels, column) {
-  message <- glue(
-    "Novel levels found in column '{column}': {glue_quote_collapse(levels)}. ",
-    "The levels have been removed, and values have been coerced to 'NA'."
-  )
-
-  warn(
-    message,
+  n_levels <- length(levels)
+  cli::cli_warn(
+    c(
+      "{cli::qty(n_levels)}Novel level{?s} found in column {.val {column}}: {.val {levels}}.",
+      "i" = "The {cli::qty(n_levels)}level{?s} {?has/have} been removed,
+            and values have been coerced to {.cls NA}."
+    ),
     class = "hardhat_warn_novel_levels",
     levels = levels,
     column = column

@@ -67,15 +67,15 @@ new_scalar <- function(elems, ..., class = character()) {
 
 check_elems <- function(elems) {
   if (!is.list(elems) || length(elems) == 0) {
-    abort("`elems` must be a list of length 1 or greater.")
+    cli::cli_abort("{.arg elems} must be a list of length 1 or greater.")
   }
 
   if (!has_unique_names(elems)) {
-    abort("`elems` must have unique names.")
+    cli::cli_abort("{.arg elems} must have unique names.")
   }
 
   if (!identical(names(attributes(elems)), "names")) {
-    abort("`elems` must have no attributes (apart from names).")
+    cli::cli_abort("{.arg elems} must have no attributes (apart from names).")
   }
 
   invisible(elems)

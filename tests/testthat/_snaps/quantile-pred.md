@@ -44,7 +44,7 @@
       quantile_pred(matrix(1:20, 5), quantile_levels = c(0.7, 0.7, 0.7))
     Condition
       Error in `quantile_pred()`:
-      ! Quantile levels should be unique.
+      ! Quantile levels must be unique.
       i The following value was repeated: 0.7.
 
 ---
@@ -53,7 +53,7 @@
       quantile_pred(matrix(1:20, 5), quantile_levels = c(rep(0.7, 2), rep(0.8, 3)))
     Condition
       Error in `quantile_pred()`:
-      ! Quantile levels should be unique.
+      ! Quantile levels must be unique.
       i The following values were repeated: 0.7 and 0.8.
 
 ---
@@ -70,7 +70,7 @@
       extract_quantile_levels(1:10)
     Condition
       Error in `extract_quantile_levels()`:
-      ! `x` should have class <quantile_pred>.
+      ! `x` must be a <quantile_pred> object, not an integer vector.
 
 # quantile_pred formatting
 

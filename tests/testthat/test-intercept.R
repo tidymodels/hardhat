@@ -37,3 +37,9 @@ test_that("name can only be a single character", {
     add_intercept_column(mtcars, name = 1)
   })
 })
+
+test_that("data has to be a data frame or matrix", {
+  expect_snapshot(error = TRUE, {
+    add_intercept_column(1)
+  })
+})

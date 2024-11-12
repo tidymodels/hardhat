@@ -39,7 +39,7 @@ standardize <- function(y) {
 
 #' @export
 standardize.default <- function(y) {
-  glubort("`y` is of unknown type '{class1(y)}'.")
+  cli::cli_abort("No {.fn standardize} method provided for {.obj_type_friendly {y}}.")
 }
 
 #' @export
@@ -80,7 +80,7 @@ standardize.array <- function(y) {
   } else if (dims(y) == 2) {
     standardize.matrix(y)
   } else {
-    glubort("3D+ arrays are not supported outcome types.")
+    cli::cli_abort("3D+ arrays are not supported outcome types.")
   }
 }
 
@@ -101,11 +101,12 @@ validate_has_known_outcome_types <- function(y) {
   if (!all(known)) {
     not_known <- which(!known)
     not_known <- colnames(y)[not_known]
-    not_known <- glue_quote_collapse(not_known)
-
-    glubort(
-      "Not all columns of `y` are known outcome types. ",
-      "These columns have unknown types: {not_known}."
+    cli::cli_abort(
+      c(
+        "Not all columns of {.arg y} are known outcome types.",
+        "i" = "{?This/These} column{?s} {?has/have} {?an/} unknown type{?s}:
+              {.val {not_known}}."
+      )
     )
   }
 

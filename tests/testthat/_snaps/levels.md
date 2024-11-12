@@ -4,5 +4,5 @@
       get_outcome_levels("a")
     Condition
       Error in `standardize()`:
-      ! `y` is of unknown type 'character'.
+      ! No `standardize()` method provided for a string.
 

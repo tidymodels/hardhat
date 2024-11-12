@@ -73,6 +73,10 @@ test_that("standardize - data.frame", {
 
   expect_snapshot(error = TRUE, standardize(bad2))
 
+  bad3 <- data.frame(x = "a", y = "b", stringsAsFactors = FALSE)
+
+  expect_snapshot(error = TRUE, standardize(bad3))
+
   good <- bad
   colnames(good) <- c("a", "b")
 

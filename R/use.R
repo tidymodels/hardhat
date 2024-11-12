@@ -62,7 +62,7 @@ create_modeling_package <- function(path,
   check_string(model)
 
   if (has_spaces(model)) {
-    abort("`model` must not contain any spaces.")
+    cli::cli_abort("{.arg model} must not contain any spaces.")
   }
 
   usethis::create_package(path, fields, open = FALSE)
@@ -125,9 +125,9 @@ use_modeling_files_impl <- function(model, prompt_document = TRUE) {
   check_installed("usethis")
 
   check_string(model)
-  
+
   if (has_spaces(model)) {
-    abort("`model` must not contain any spaces.")
+    cli::cli_abort("{.arg model} must not contain any spaces.")
   }
 
   data <- list(model = model)

@@ -259,6 +259,14 @@ test_that("novel predictor levels are caught", {
     unname(xx2$predictors[5, 1]),
     NA_real_
   )
+
+  new_multiple <- data.frame(
+    y = 1:6,
+    f = factor(letters[1:6])
+  )
+  x3 <- mold(y ~ f, dat)
+
+  expect_snapshot(xx3 <- forge(new_multiple, x3$blueprint))
 })
 
 test_that("novel predictor levels can be ignored", {
@@ -698,6 +706,16 @@ test_that("can be both missing levels and have new levels", {
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   expect_snapshot(error = TRUE, {
     mold(y ~ f, dat, blueprint = bp2)
+  })
+
+  dat_2f <- data.frame(
+    y = 1:4,
+    f = factor(letters[1:4]),
+    f_2 = factor(letters[5:8])
+  )
+
+  expect_snapshot(error = TRUE, {
+    mold(y ~ f + f_2, dat_2f, blueprint = bp2)
   })
 
   # Warning for the extra level

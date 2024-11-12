@@ -39,7 +39,7 @@ validate_outcomes_are_univariate <- function(outcomes) {
   check <- check_outcomes_are_univariate(outcomes)
 
   if (!check$ok) {
-    glubort(
+    cli::cli_abort(
       "The outcome must be univariate, but {check$n_cols} columns were found."
     )
   }
@@ -111,19 +111,25 @@ validate_outcomes_are_numeric <- function(outcomes) {
   check <- check_outcomes_are_numeric(outcomes)
 
   if (!check$ok) {
-    bad_cols <- glue::single_quote(names(check$bad_classes))
-    bad_printable_classes <- map(check$bad_classes, glue_quote_collapse)
-    bad_msg <- glue::glue("{bad_cols}: {bad_printable_classes}")
-    bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
+    bad_msg <- style_bad_classes(check$bad_classes)
 
-    glubort(
-      "All outcomes must be numeric, but the following are not:",
-      "\n",
-      "{bad_msg}"
+    cli::cli_abort(
+      c(
+        "All outcomes must be numeric.",
+        "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
+        bad_msg
+      )
     )
   }
 
   invisible(outcomes)
+}
+
+style_bad_classes <- function(bad_classes){
+  bad_col <- map(names(bad_classes), ~ cli::format_inline("{.val {.x}}"))
+  bad_class <- map(bad_classes, ~ cli::format_inline("{.cls {.x}}"))
+
+  glue::glue("{bad_col}: {bad_class}")
 }
 
 #' @rdname validate_outcomes_are_numeric
@@ -190,15 +196,14 @@ validate_outcomes_are_factors <- function(outcomes) {
   check <- check_outcomes_are_factors(outcomes)
 
   if (!check$ok) {
-    bad_cols <- glue::single_quote(names(check$bad_classes))
-    bad_printable_classes <- map(check$bad_classes, glue_quote_collapse)
-    bad_msg <- glue::glue("{bad_cols}: {bad_printable_classes}")
-    bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
+    bad_msg <- style_bad_classes(check$bad_classes)
 
-    glubort(
-      "All outcomes must be factors, but the following are not:",
-      "\n",
-      "{bad_msg}"
+    cli::cli_abort(
+      c(
+        "All outcomes must be factors.",
+        "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
+        bad_msg
+      )
     )
   }
 
@@ -274,15 +279,17 @@ validate_outcomes_are_binary <- function(outcomes) {
   check <- check_outcomes_are_binary(outcomes)
 
   if (!check$ok) {
-    bad_cols <- glue::single_quote(check$bad_cols)
-    bad_msg <- glue::glue("{bad_cols}: {check$num_levels}")
-    bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
+    bad_col <- map(check$bad_cols, ~ cli::format_inline("{.val {.x}}"))
 
-    glubort(
-      "The outcome must be binary, ",
-      "but the following number of levels were found:",
-      "\n",
-      "{bad_msg}"
+    bad_msg <- glue::glue("{bad_col}: {check$num_levels}")
+
+    cli::cli_abort(
+      c(
+        "The outcome must be binary.",
+        "i" = "{cli::qty(length(bad_col))}The following number of levels
+               {?was/were} found:",
+        bad_msg
+      )
     )
   }
 
@@ -366,15 +373,14 @@ validate_predictors_are_numeric <- function(predictors) {
   check <- check_predictors_are_numeric(predictors)
 
   if (!check$ok) {
-    bad_cols <- glue::single_quote(names(check$bad_classes))
-    bad_printable_classes <- map(check$bad_classes, glue_quote_collapse)
-    bad_msg <- glue::glue("{bad_cols}: {bad_printable_classes}")
-    bad_msg <- glue::glue_collapse(bad_msg, sep = "\n")
+    bad_msg <- style_bad_classes(check$bad_classes)
 
-    glubort(
-      "All predictors must be numeric, but the following are not:",
-      "\n",
-      "{bad_msg}"
+    cli::cli_abort(
+      c(
+        "All predictors must be numeric.",
+        "i" = "{cli::qty(length(check$bad_classes))}The following {?is/are} not:",
+        bad_msg
+      )
     )
   }
 
@@ -495,11 +501,9 @@ validate_column_names <- function(data, original_names) {
   if (!check$ok) {
     validate_missing_name_isnt_.outcome(check$missing_names)
 
-    missing_names <- glue_quote_collapse(check$missing_names)
-
-    message <- glue("The following required columns are missing: {missing_names}.")
-
-    abort(message)
+    cli::cli_abort(
+      "The required column{?s} {.val {check$missing_names}} {?is/are} missing."
+    )
   }
 
   invisible(data)
@@ -508,9 +512,7 @@ validate_column_names <- function(data, original_names) {
 #' @rdname validate_column_names
 #' @export
 check_column_names <- function(data, original_names) {
-  if (!is.character(original_names)) {
-    glubort("`original_names` must be a character vector.")
-  }
+  check_character(original_names)
 
   new_names <- colnames(data)
 
@@ -531,15 +533,14 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
   not_ok <- ".outcome" %in% missing_names
 
   if (not_ok) {
-    missing_names <- glue_quote_collapse(missing_names)
-
-    glubort(
-      "The following required columns are missing: {missing_names}.
-
-      (This indicates that `mold()` was called with a vector for `y`. ",
-      "When this is the case, and the outcome columns are requested ",
-      "in `forge()`, `new_data` must include a column with the automatically ",
-      "generated name, '.outcome', containing the outcome.)"
+    cli::cli_abort(
+      c(
+        "The following required columns are missing: {.val {missing_names}}.",
+        "i" = "This indicates that {.fn mold} was called with a vector for {.arg y}.",
+        "i" = "When this is the case, and the outcome columns are requested in
+           {.fn forge}, {.arg new_data} must include a column with the
+           automatically generated name, {.code .outcome}, containing the outcome."
+      )
     )
   }
 
@@ -615,9 +616,9 @@ validate_prediction_size <- function(pred, new_data) {
   check <- check_prediction_size(pred, new_data)
 
   if (!check$ok) {
-    glubort(
-      "The size of `new_data` ({check$size_new_data}) must match the ",
-      "size of `pred` ({check$size_pred})."
+    cli::cli_abort(
+      "The size of {.arg new_data} ({check$size_new_data}) must match the
+      size of {.arg pred} ({check$size_pred})."
     )
   }
 
@@ -692,11 +693,13 @@ validate_no_formula_duplication <- function(formula, original = FALSE) {
   check <- check_no_formula_duplication(formula, original)
 
   if (!check$ok) {
-    duplicates <- glue_quote_collapse(check$duplicates)
-
-    glubort(
-      "The following terms are duplicated on the left and right hand side ",
-      "of the `formula`: {duplicates}."
+    cli::cli_abort(
+      c(
+        "Terms must not be duplicated on the left- and right-hand side of the
+        {.arg formula}.",
+        "i" = "The following duplicated term{?s} {?was/were} found:
+              {.val {check$duplicates}}"
+      )
     )
   }
 

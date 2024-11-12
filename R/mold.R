@@ -175,7 +175,5 @@ run_mold <- function(blueprint, ...) {
 
 #' @export
 run_mold.default <- function(blueprint, ...) {
-  class <- class(blueprint)[[1L]]
-  message <- glue("No `run_mold()` method provided for an object of type <{class}>.")
-  abort(message)
+  cli::cli_abort("No {.fn run_mold} method provided for {.obj_type_friendly {blueprint}}.")
 }

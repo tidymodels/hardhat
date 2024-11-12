@@ -63,9 +63,9 @@ model_offset <- function(terms, data) {
     if (!is.numeric(.offset_val)) {
       bad_col <- colnames(data)[.pos]
 
-      glubort(
-        "Column, '{bad_col}', is tagged as an offset, but is not numeric. ",
-        "All offsets must be numeric."
+      cli::cli_abort(
+        "Column {.val {bad_col}} is tagged as an offset and thus must be
+        numeric, not {.obj_type_friendly { .offset_val }}."
       )
     }
 

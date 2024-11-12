@@ -878,7 +878,10 @@ check_levels <- function(x,
   }
 
   if (!all(map_lgl(x, is.character))) {
-    cli::cli_abort("{.arg {arg}} must only contain character vectors.", call = call)
+    cli::cli_abort(
+      "{.arg {arg}} must only contain character vectors.", 
+      call = call
+    )
   }
 
   invisible(NULL)
@@ -966,11 +969,9 @@ expr_check_no_factorish_in_functions <- function(expr,
       expr <- as_label(original_expr)
 
       message <- c(
-        paste0(
-          "Functions involving factors or characters have been detected on the ",
-          "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
-        ),
-        i = "Functions involving factors were detected for {.str {name}} in {.arg {expr}}."
+        "Functions involving factors or characters have been detected on the
+        RHS of {.arg formula}. These are not allowed when {.code indicators = \"none\"}.",
+        i = "Functions involving factors were detected for {.val {name}} in {.arg {expr}}."
       )
 
       cli::cli_abort(message, call = error_call)
@@ -1031,11 +1032,9 @@ expr_check_no_factorish_in_interaction_term <- function(expr,
     expr <- as_label(expr_original)
 
     message <- c(
-      paste0(
-        "Interaction terms involving factors or characters have been detected on the ",
-        "RHS of `formula`. These are not allowed when `indicators = \"none\"`."
-      ),
-      i = "Interactions terms involving factors were detected for {.str {name}} in {.arg {expr}}."
+      "Interaction terms involving factors or characters have been detected on the
+      RHS of {.arg formula}. These are not allowed when {.code indicators = \"none\"}.",
+      i = "Interactions terms involving factors were detected for {.val {name}} in {.arg {expr}}."
     )
 
     cli::cli_abort(message, call = error_call)
@@ -1072,7 +1071,7 @@ expr_check_no_interactions <- function(expr, error_call) {
     expr <- as_label(expr)
 
     message <- c(
-      "Interaction terms can't be specified on the LHS of `formula`.",
+      "Interaction terms can't be specified on the LHS of {.arg formula}.",
       i = "The following interaction term was found: {.arg {expr}}."
     )
 

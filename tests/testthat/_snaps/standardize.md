@@ -44,7 +44,17 @@
       standardize(bad2)
     Condition
       Error in `validate_has_known_outcome_types()`:
-      ! Not all columns of `y` are known outcome types. These columns have unknown types: 'x'.
+      ! Not all columns of `y` are known outcome types.
+      i This column has an unknown type: "x".
+
+---
+
+    Code
+      standardize(bad3)
+    Condition
+      Error in `validate_has_known_outcome_types()`:
+      ! Not all columns of `y` are known outcome types.
+      i These columns have unknown types: "x" and "y".
 
 # standardize - unknown
 
@@ -52,7 +62,7 @@
       standardize("hi")
     Condition
       Error in `standardize()`:
-      ! `y` is of unknown type 'character'.
+      ! No `standardize()` method provided for a string.
 
 ---
 
@@ -60,5 +70,5 @@
       standardize(Sys.time())
     Condition
       Error in `standardize()`:
-      ! `y` is of unknown type 'POSIXct'.
+      ! No `standardize()` method provided for a <POSIXct> object.
 

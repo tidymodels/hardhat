@@ -31,7 +31,7 @@
 #' fct_encode_one_hot(factor(sample(letters[1:4], 10, TRUE)))
 fct_encode_one_hot <- function(x) {
   if (!is.factor(x)) {
-    abort("`x` must be a factor.")
+    cli::cli_abort("{.arg x} must be a factor, not {.obj_type_friendly {x}}.")
   }
 
   row_names <- names(x)
@@ -44,7 +44,7 @@ fct_encode_one_hot <- function(x) {
   x <- unclass(x)
 
   if (vec_any_missing(x)) {
-    abort("`x` can't contain missing values.")
+    cli::cli_abort("{.arg x} can't contain missing values.")
   }
 
   out <- matrix(0L, nrow = n_rows, ncol = n_cols, dimnames = dim_names)

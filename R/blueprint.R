@@ -289,11 +289,10 @@ check_has_name <- function(x,
     }
   }
 
-  message <- cli::format_inline(
-    "{.arg {arg}} must have an element named {.str {name}}."
+  cli::cli_abort(
+    "{.arg {arg}} must have an element named {.str {name}}.", 
+    call = call
   )
-
-  abort(message, call = call)
 }
 
 # https://github.com/r-lib/rlang/pull/1605
