@@ -13,6 +13,8 @@
 #' @param data A data frame containing the data to subset.
 #'
 #' @param ptype A data frame prototype containing the required columns.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -51,7 +53,9 @@
 #' test2 <- subset(test, select = -Species)
 #' try(shrink(test2, ptype_pred))
 #' @export
-shrink <- function(data, ptype) {
+shrink <- function(data, ptype, ..., call = current_env()) {
+  check_dots_empty0(...)
+
   if (is.null(data)) {
     return(NULL)
   }
@@ -60,7 +64,7 @@ shrink <- function(data, ptype) {
   data <- coerce_to_tibble(data)
 
   cols <- colnames(ptype)
-  validate_column_names(data, cols)
+  validate_column_names(data, cols, call = call)
 
   out <- data[cols]
 

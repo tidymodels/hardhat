@@ -281,13 +281,16 @@ mold_xy_default_process_outcomes <- function(blueprint, y) {
 run_forge.default_xy_blueprint <- function(blueprint,
                                            new_data,
                                            ...,
-                                           outcomes = FALSE) {
+                                           outcomes = FALSE,
+                                           call = caller_env()
+                                          ) {
   check_dots_empty0(...)
 
   cleaned <- forge_xy_default_clean(
     blueprint = blueprint,
     new_data = new_data,
-    outcomes = outcomes
+    outcomes = outcomes,
+    call = call
   )
 
   blueprint <- cleaned$blueprint
@@ -305,13 +308,14 @@ run_forge.default_xy_blueprint <- function(blueprint,
 
 # ------------------------------------------------------------------------------
 
-forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
+forge_xy_default_clean <- function(blueprint, new_data, outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
   check_data_frame_or_matrix(new_data)
   new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
 
-  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  predictors <- shrink(new_data, blueprint$ptypes$predictors, call = call)
 
   predictors <- scream(
     predictors,
@@ -320,7 +324,7 @@ forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
   )
 
   if (outcomes) {
-    outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    outcomes <- shrink(new_data, blueprint$ptypes$outcomes, call = call)
     # Never allow novel levels for outcomes
     outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   } else {

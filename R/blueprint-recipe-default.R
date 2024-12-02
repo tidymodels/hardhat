@@ -342,13 +342,16 @@ mold_recipe_default_process_extras <- function(blueprint, data) {
 run_forge.default_recipe_blueprint <- function(blueprint,
                                                new_data,
                                                ...,
-                                               outcomes = FALSE) {
+                                               outcomes = FALSE,
+                                               call = caller_env()
+                                              ) {
   check_dots_empty0(...)
 
   cleaned <- forge_recipe_default_clean(
     blueprint = blueprint,
     new_data = new_data,
-    outcomes = outcomes
+    outcomes = outcomes, 
+    call = call
   )
 
   blueprint <- cleaned$blueprint
@@ -366,13 +369,14 @@ run_forge.default_recipe_blueprint <- function(blueprint,
 
 # ------------------------------------------------------------------------------
 
-forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
+forge_recipe_default_clean <- function(blueprint, new_data, outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
   check_data_frame_or_matrix(new_data)
   new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
 
-  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  predictors <- shrink(new_data, blueprint$ptypes$predictors, call = call)
 
   predictors <- scream(
     predictors,
@@ -381,19 +385,20 @@ forge_recipe_default_clean <- function(blueprint, new_data, outcomes) {
   )
 
   if (outcomes) {
-    outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    outcomes <- shrink(new_data, blueprint$ptypes$outcomes, call = call)
     # Never allow novel levels for outcomes
     outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   } else {
     outcomes <- NULL
   }
 
-  extras <- forge_recipe_default_clean_extras(blueprint, new_data)
+  extras <- forge_recipe_default_clean_extras(blueprint, new_data, call = call)
 
   new_forge_clean(blueprint, predictors, outcomes, extras)
 }
 
-forge_recipe_default_clean_extras <- function(blueprint, new_data) {
+forge_recipe_default_clean_extras <- function(blueprint, new_data, ..., call = caller_env()) {
+  check_dots_empty0(...)
   if (is.null(blueprint$extra_role_ptypes)) {
     extras <- list(roles = NULL)
     return(extras)
@@ -402,7 +407,8 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data) {
   extra_role_cols <- map(
     blueprint$extra_role_ptypes,
     shrink,
-    data = new_data
+    data = new_data,
+    call = call
   )
 
   extra_role_cols <- map2(

@@ -47,7 +47,7 @@
     Code
       forge(iris[, 1, drop = FALSE], x1$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "Sepal.Width" is missing.
 
 ---
@@ -55,7 +55,7 @@
     Code
       forge(iris[, 1, drop = FALSE], x2$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "Sepal.Width" is missing.
 
 ---
@@ -63,7 +63,7 @@
     Code
       forge(iris[, 3, drop = FALSE], x1$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required columns "Sepal.Length" and "Sepal.Width" are missing.
 
 ---
@@ -71,7 +71,7 @@
     Code
       forge(iris[, 3, drop = FALSE], x2$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required columns "Sepal.Length" and "Sepal.Width" are missing.
 
 # novel predictor levels are caught
