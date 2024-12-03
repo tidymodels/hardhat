@@ -126,7 +126,7 @@
     Code
       mold(fac_1 ~ y + z, example_train)
     Condition
-      Error in `get_all_predictors()`:
+      Error in `mold()`:
       ! The following predictors were not found in `data`: "y" and "z".
 
 ---
@@ -134,7 +134,7 @@
     Code
       mold(fac_1 ~ y + z, example_train, blueprint = bp)
     Condition
-      Error in `get_all_predictors()`:
+      Error in `mold()`:
       ! The following predictors were not found in `data`: "y" and "z".
 
 ---
@@ -159,7 +159,7 @@
       y <- 1
       mold(fac_1 ~ y, example_train)
     Condition
-      Error in `get_all_predictors()`:
+      Error in `mold()`:
       ! The following predictor was not found in `data`: "y".
 
 # cannot manually remove intercept in the formula itself

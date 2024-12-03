@@ -22,7 +22,9 @@ simplify_terms <- function(x) {
 # - RHS `.` should be expanded ahead of time by `expand_formula_dot_notation()`
 # - Can't use `get_all_vars()` because it chokes on formulas with variables with
 #   spaces like ~ `x y`
-get_all_predictors <- function(formula, data) {
+get_all_predictors <- function(formula, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   predictor_formula <- new_formula(
     lhs = NULL,
     rhs = f_rhs(formula),
@@ -35,7 +37,8 @@ get_all_predictors <- function(formula, data) {
   if (length(extra_predictors) > 0) {
     cli::cli_abort(
       "The following predictor{?s} {?was/were} not found in {.arg data}:
-      {.val {extra_predictors}}."
+      {.val {extra_predictors}}.",
+      call = call
     )
   }
 
