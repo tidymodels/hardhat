@@ -532,7 +532,7 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
   formula <- expand_formula_dot_notation(blueprint$formula, data)
   formula <- get_predictors_formula(formula)
 
-  original_names <- get_all_predictors(formula, data)
+  original_names <- get_all_predictors(formula, data, call = call)
   data <- data[original_names]
 
   ptype <- extract_ptype(data)
@@ -558,8 +558,8 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
   if (identical(blueprint$indicators, "none")) {
     factorish_names <- extract_original_factorish_names(ptype)
     factorish_data <- data[factorish_names]
-    check_no_factorish_in_interactions(formula, factorish_names)
-    check_no_factorish_in_functions(formula, factorish_names)
+    check_no_factorish_in_interactions(formula, factorish_names, error_call = call)
+    check_no_factorish_in_functions(formula, factorish_names, error_call = call)
     formula <- remove_factorish_from_formula(formula, factorish_names)
     data <- mask_factorish_in_data(data, factorish_names)
   }
