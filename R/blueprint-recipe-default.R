@@ -195,7 +195,7 @@ refresh_blueprint.default_recipe_blueprint <- function(blueprint) {
 run_mold.default_recipe_blueprint <- function(blueprint, ..., data, call = caller_env()) {
   check_dots_empty0(...)
 
-  cleaned <- mold_recipe_default_clean(blueprint = blueprint, data = data)
+  cleaned <- mold_recipe_default_clean(blueprint = blueprint, data = data, call = call)
 
   blueprint <- cleaned$blueprint
   data <- cleaned$data
@@ -206,8 +206,9 @@ run_mold.default_recipe_blueprint <- function(blueprint, ..., data, call = calle
 # ------------------------------------------------------------------------------
 # mold - recipe - clean
 
-mold_recipe_default_clean <- function(blueprint, data) {
-  check_data_frame_or_matrix(data)
+mold_recipe_default_clean <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   new_mold_clean(blueprint, data)
