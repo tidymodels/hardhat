@@ -3,7 +3,7 @@
     Code
       forge(iris, x1$blueprint, outcomes = TRUE)
     Condition
-      Error in `validate_missing_name_isnt_.outcome()`:
+      Error in `forge()`:
       ! The following required columns are missing: ".outcome".
       i This indicates that `mold()` was called with a vector for `y`.
       i When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, `.outcome`, containing the outcome.
@@ -13,7 +13,7 @@
     Code
       forge(iris, x2$blueprint, outcomes = TRUE)
     Condition
-      Error in `validate_missing_name_isnt_.outcome()`:
+      Error in `forge()`:
       ! The following required columns are missing: ".outcome".
       i This indicates that `mold()` was called with a vector for `y`.
       i When this is the case, and the outcome columns are requested in `forge()`, `new_data` must include a column with the automatically generated name, `.outcome`, containing the outcome.
