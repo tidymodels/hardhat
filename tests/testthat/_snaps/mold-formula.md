@@ -167,7 +167,7 @@
     Code
       mold(fac_1 ~ y + 0, example_train)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term: `+ 0` or `0 +`.
 
 ---
@@ -175,7 +175,7 @@
     Code
       mold(fac_1 ~ y + 0, example_train, blueprint = bp)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term: `+ 0` or `0 +`.
 
 ---
@@ -183,7 +183,7 @@
     Code
       mold(fac_1 ~ 0 + y, example_train)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term: `+ 0` or `0 +`.
 
 ---
@@ -191,7 +191,7 @@
     Code
       mold(fac_1 ~ y - 1, example_train)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term: `- 1`.
 
 # RHS with _only_ intercept related terms are caught
@@ -199,7 +199,7 @@
     Code
       mold(~0, example_train)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term, `0`.
 
 ---
@@ -207,7 +207,7 @@
     Code
       mold(~0, example_train, blueprint = bp)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term, `0`.
 
 ---
@@ -215,7 +215,7 @@
     Code
       mold(~1, example_train)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept term, `1`.
 
 ---
@@ -223,7 +223,7 @@
     Code
       mold(~ -1, example_train)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term: `- 1`.
 
 # `NULL` can be used to represent empty RHS formulas
@@ -231,7 +231,7 @@
     Code
       mold(~0, example_train)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term, `0`.
 
 ---
@@ -239,7 +239,7 @@
     Code
       mold(~0, example_train, blueprint = bp)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `formula` must not contain the intercept removal term, `0`.
 
 # `data` is validated
@@ -247,7 +247,7 @@
     Code
       mold(fac_1 ~ num_2, 1)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `data` must be a data frame or a matrix, not the number 1.
 
 ---
@@ -255,7 +255,7 @@
     Code
       mold(fac_1 ~ num_2, 1, blueprint = bp)
     Condition
-      Error in `mold_formula_default_clean()`:
+      Error in `mold()`:
       ! `data` must be a data frame or a matrix, not the number 1.
 
 # LHS of the formula cannot contain interactions

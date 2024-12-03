@@ -375,7 +375,7 @@ refresh_blueprint.default_formula_blueprint <- function(blueprint) {
 run_mold.default_formula_blueprint <- function(blueprint, ..., data, call = caller_env()) {
   check_dots_empty0(...)
 
-  cleaned <- mold_formula_default_clean(blueprint = blueprint, data = data)
+  cleaned <- mold_formula_default_clean(blueprint = blueprint, data = data, call = call)
 
   blueprint <- cleaned$blueprint
   data <- cleaned$data
@@ -386,13 +386,14 @@ run_mold.default_formula_blueprint <- function(blueprint, ..., data, call = call
 # ------------------------------------------------------------------------------
 # mold - formula - clean
 
-mold_formula_default_clean <- function(blueprint, data) {
   check_data_frame_or_matrix(data)
+mold_formula_default_clean <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
   data <- coerce_to_tibble(data)
 
   # Check here, not in the constructor, because we
   # put a non-intercept-containing formula back in
-  check_implicit_intercept(blueprint$formula, arg = "formula")
+  check_implicit_intercept(blueprint$formula, arg = "formula", call = call)
 
   formula <- remove_formula_intercept(blueprint$formula, blueprint$intercept)
   formula <- alter_formula_environment(formula)
