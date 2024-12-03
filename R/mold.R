@@ -152,6 +152,8 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
 #' @param blueprint A preprocessing blueprint.
 #'
 #' @param ... Not used. Required for extensibility.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #' `run_mold()` methods return the object that is then immediately returned from

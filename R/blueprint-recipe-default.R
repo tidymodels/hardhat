@@ -192,7 +192,7 @@ refresh_blueprint.default_recipe_blueprint <- function(blueprint) {
 
 #' @rdname run-mold
 #' @export
-run_mold.default_recipe_blueprint <- function(blueprint, ..., data) {
+run_mold.default_recipe_blueprint <- function(blueprint, ..., data, call = caller_env()) {
   check_dots_empty0(...)
 
   cleaned <- mold_recipe_default_clean(blueprint = blueprint, data = data)
@@ -200,7 +200,7 @@ run_mold.default_recipe_blueprint <- function(blueprint, ..., data) {
   blueprint <- cleaned$blueprint
   data <- cleaned$data
 
-  mold_recipe_default_process(blueprint = blueprint, data = data)
+  mold_recipe_default_process(blueprint = blueprint, data = data, call = call)
 }
 
 # ------------------------------------------------------------------------------
@@ -216,7 +216,8 @@ mold_recipe_default_clean <- function(blueprint, data) {
 # ------------------------------------------------------------------------------
 # mold - recipe - process
 
-mold_recipe_default_process <- function(blueprint, data) {
+mold_recipe_default_process <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
 
   # `prep()` will warn if you pass `training` data and `fresh = FALSE`
   if (is_true(blueprint$fresh)) {
@@ -234,7 +235,7 @@ mold_recipe_default_process <- function(blueprint, data) {
   )
   blueprint <- update_blueprint0(blueprint, recipe = recipe)
 
-  processed <- mold_recipe_default_process_predictors(blueprint = blueprint, data = data)
+  processed <- mold_recipe_default_process_predictors(blueprint = blueprint, data = data, call = call)
 
   blueprint <- processed$blueprint
   predictors <- processed$data
@@ -268,14 +269,16 @@ mold_recipe_default_process <- function(blueprint, data) {
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
 
-mold_recipe_default_process_predictors <- function(blueprint, data) {
+mold_recipe_default_process_predictors <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   all_predictors <- recipes::all_predictors
 
   predictors <- recipes::juice(blueprint$recipe, all_predictors())
 
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, composition = blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition, call = call)
 
   ptype <- get_original_predictor_ptype(blueprint$recipe, data)
 

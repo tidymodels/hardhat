@@ -177,7 +177,7 @@ refresh_blueprint.default_xy_blueprint <- function(blueprint) {
 #'
 #' @rdname run-mold
 #' @export
-run_mold.default_xy_blueprint <- function(blueprint, ..., x, y) {
+run_mold.default_xy_blueprint <- function(blueprint, ..., x, y, call = caller_env()) {
   check_dots_empty0(...)
 
   cleaned <- mold_xy_default_clean(blueprint = blueprint, x = x, y = y)
@@ -186,7 +186,7 @@ run_mold.default_xy_blueprint <- function(blueprint, ..., x, y) {
   x <- cleaned$x
   y <- cleaned$y
 
-  mold_xy_default_process(blueprint = blueprint, x = x, y = y)
+  mold_xy_default_process(blueprint = blueprint, x = x, y = y, call = call)
 }
 
 # ------------------------------------------------------------------------------
@@ -225,8 +225,10 @@ mold_xy_default_clean_outcomes <- function(blueprint, y) {
 # ------------------------------------------------------------------------------
 # mold - xy - process
 
-mold_xy_default_process <- function(blueprint, x, y) {
-  processed <- mold_xy_default_process_predictors(blueprint, x)
+mold_xy_default_process <- function(blueprint, x, y, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
+  processed <- mold_xy_default_process_predictors(blueprint, x, call = call)
 
   blueprint <- processed$blueprint
   predictors <- processed$data
@@ -248,14 +250,15 @@ mold_xy_default_process <- function(blueprint, x, y) {
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
 
-mold_xy_default_process_predictors <- function(blueprint, x) {
+mold_xy_default_process_predictors <- function(blueprint, x, ..., call = caller_env()) {
+  check_dots_empty0(...)
 
   # Important! Collect ptype before adding intercept!
   ptype <- extract_ptype(x)
 
   x <- maybe_add_intercept_column(x, blueprint$intercept)
 
-  x <- recompose(x, composition = blueprint$composition)
+  x <- recompose(x, composition = blueprint$composition, call = call)
 
   new_mold_process_terms(
     blueprint = blueprint,

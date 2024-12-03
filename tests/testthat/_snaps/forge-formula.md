@@ -188,7 +188,7 @@
     Code
       mold(y ~ f, dat, blueprint = bp2)
     Condition
-      Error in `recompose()`:
+      Error in `mold()`:
       ! `data` must only contain numeric columns.
       i This column isn't numeric: "f".
 
@@ -197,7 +197,7 @@
     Code
       mold(y ~ f + f_2, dat_2f, blueprint = bp2)
     Condition
-      Error in `recompose()`:
+      Error in `mold()`:
       ! `data` must only contain numeric columns.
       i These columns aren't numeric: "f" and "f_2".
 

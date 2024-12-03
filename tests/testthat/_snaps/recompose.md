@@ -3,7 +3,7 @@
     Code
       recompose(df, composition = "matrix")
     Condition
-      Error in `recompose()`:
+      Error:
       ! `data` must only contain numeric columns.
       i These columns aren't numeric: "y" and "z".
 
@@ -12,7 +12,7 @@
     Code
       recompose(df, composition = "dgCMatrix")
     Condition
-      Error in `recompose()`:
+      Error:
       ! `data` must only contain numeric columns.
       i These columns aren't numeric: "y" and "z".
 
@@ -21,7 +21,7 @@
     Code
       recompose(1)
     Condition
-      Error in `recompose()`:
+      Error:
       ! `data` must be a data frame, not the number 1.
 
 # dots must be empty
@@ -40,7 +40,7 @@
     Code
       recompose(data.frame(), composition = "foo")
     Condition
-      Error in `recompose()`:
+      Error:
       ! `composition` must be one of "tibble", "data.frame", "matrix", or "dgCMatrix", not "foo".
 
 ---
@@ -48,6 +48,6 @@
     Code
       recompose(data.frame(), composition = 1)
     Condition
-      Error in `recompose()`:
+      Error:
       ! `composition` must be a string or character vector.
 

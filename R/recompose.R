@@ -19,6 +19,8 @@
 #'   - `"matrix"` to convert to a matrix. All columns must be numeric.
 #'   - `"dgCMatrix"` to convert to a sparse matrix. All columns must be numeric,
 #'     and the Matrix package must be installed.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @returns
 #' The output type is determined from the `composition`.
@@ -37,13 +39,16 @@
 #' try(recompose(df, composition = "matrix"))
 recompose <- function(data,
                       ...,
-                      composition = "tibble") {
+                      composition = "tibble",
+                      call = caller_env()
+                    ) {
   check_dots_empty0(...)
-  check_data_frame(data)
+  check_data_frame(data, call = call)
 
   composition <- arg_match0(
     arg = composition,
-    values = c("tibble", "data.frame", "matrix", "dgCMatrix")
+    values = c("tibble", "data.frame", "matrix", "dgCMatrix"),
+    error_call = call
   )
 
   switch(
@@ -55,14 +60,14 @@ recompose <- function(data,
       new_data_frame(data, n = vec_size(data))
     },
     matrix = {
-      coerce_to_matrix(data)
+      coerce_to_matrix(data, error_call = call)
     },
     dgCMatrix = {
       if (is_sparse_tibble(data)) {
-        sparsevctrs::coerce_to_sparse_matrix(data)
+        sparsevctrs::coerce_to_sparse_matrix(data, call = call)
       } else {
-        data <- coerce_to_matrix(data)
-        coerce_to_sparse(data)
+        data <- coerce_to_matrix(data, error_call = call)
+        coerce_to_sparse(data, error_call = call)
       }
     }
   )

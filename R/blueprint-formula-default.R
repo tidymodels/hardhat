@@ -372,7 +372,7 @@ refresh_blueprint.default_formula_blueprint <- function(blueprint) {
 #'
 #' @rdname run-mold
 #' @export
-run_mold.default_formula_blueprint <- function(blueprint, ..., data) {
+run_mold.default_formula_blueprint <- function(blueprint, ..., data, call = caller_env()) {
   check_dots_empty0(...)
 
   cleaned <- mold_formula_default_clean(blueprint = blueprint, data = data)
@@ -380,7 +380,7 @@ run_mold.default_formula_blueprint <- function(blueprint, ..., data) {
   blueprint <- cleaned$blueprint
   data <- cleaned$data
 
-  mold_formula_default_process(blueprint = blueprint, data = data)
+  mold_formula_default_process(blueprint = blueprint, data = data, call = call)
 }
 
 # ------------------------------------------------------------------------------
@@ -490,10 +490,13 @@ recurse_intercept_search <- function(x,
 # ------------------------------------------------------------------------------
 # mold - formula - process
 
-mold_formula_default_process <- function(blueprint, data) {
+mold_formula_default_process <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   processed <- mold_formula_default_process_predictors(
     blueprint = blueprint,
-    data = data
+    data = data,
+    call = call
   )
 
   blueprint <- processed$blueprint
@@ -523,7 +526,9 @@ mold_formula_default_process <- function(blueprint, data) {
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
 
-mold_formula_default_process_predictors <- function(blueprint, data) {
+mold_formula_default_process_predictors <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   formula <- expand_formula_dot_notation(blueprint$formula, data)
   formula <- get_predictors_formula(formula)
 
@@ -580,7 +585,7 @@ mold_formula_default_process_predictors <- function(blueprint, data) {
 
   terms <- simplify_terms(framed$terms)
 
-  predictors <- recompose(predictors, composition = blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition, call = call)
 
   blueprint_terms <- blueprint$terms
   blueprint_terms$predictors <- terms
