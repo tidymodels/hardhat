@@ -142,7 +142,7 @@
     Code
       mold(y + z ~ fac_1, example_train)
     Condition
-      Error in `get_all_outcomes()`:
+      Error in `mold()`:
       ! The following outcomes were not found in `data`: "y" and "z".
 
 ---
@@ -150,7 +150,7 @@
     Code
       mold(y + z ~ fac_1, example_train, blueprint = bp)
     Condition
-      Error in `get_all_outcomes()`:
+      Error in `mold()`:
       ! The following outcomes were not found in `data`: "y" and "z".
 
 # global environment variables cannot be used
@@ -317,7 +317,7 @@
     Code
       mold(. ~ fac_1, example_train)
     Condition
-      Error in `get_all_outcomes()`:
+      Error in `mold()`:
       ! The left-hand side of the formula cannot contain `.`.
 
 ---
@@ -325,7 +325,7 @@
     Code
       mold(. ~ fac_1, example_train, blueprint = bp)
     Condition
-      Error in `get_all_outcomes()`:
+      Error in `mold()`:
       ! The left-hand side of the formula cannot contain `.`.
 
 # `blueprint` is validated

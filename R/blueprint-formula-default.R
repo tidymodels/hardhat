@@ -506,7 +506,8 @@ mold_formula_default_process <- function(blueprint, data, ..., call = caller_env
 
   processed <- mold_formula_default_process_outcomes(
     blueprint = blueprint,
-    data = data
+    data = data,
+    call = call
   )
 
   blueprint <- processed$blueprint
@@ -599,10 +600,12 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
   )
 }
 
-mold_formula_default_process_outcomes <- function(blueprint, data) {
+mold_formula_default_process_outcomes <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   formula <- blueprint$formula
 
-  original_names <- get_all_outcomes(formula, data)
+  original_names <- get_all_outcomes(formula, data, call = call)
   data <- data[original_names]
 
   ptype <- extract_ptype(data)
