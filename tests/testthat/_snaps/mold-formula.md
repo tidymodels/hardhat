@@ -263,7 +263,7 @@
     Code
       mold(num_1:num_2 ~ num_2, example_train)
     Condition
-      Error in `mold_formula_default_process_outcomes()`:
+      Error in `mold()`:
       ! Interaction terms can't be specified on the LHS of `formula`.
       i The following interaction term was found: `num_1:num_2`.
 
@@ -272,7 +272,7 @@
     Code
       mold(num_1 * num_2 ~ num_2, example_train)
     Condition
-      Error in `mold_formula_default_process_outcomes()`:
+      Error in `mold()`:
       ! Interaction terms can't be specified on the LHS of `formula`.
       i The following interaction term was found: `num_1 * num_2`.
 
@@ -281,7 +281,7 @@
     Code
       mold(num_1 %in% num_2 ~ num_2, example_train)
     Condition
-      Error in `mold_formula_default_process_outcomes()`:
+      Error in `mold()`:
       ! Interaction terms can't be specified on the LHS of `formula`.
       i The following interaction term was found: `num_1 %in% num_2`.
 
@@ -290,7 +290,7 @@
     Code
       mold((num_1 + num_2)^2 ~ num_2, example_train)
     Condition
-      Error in `mold_formula_default_process_outcomes()`:
+      Error in `mold()`:
       ! Interaction terms can't be specified on the LHS of `formula`.
       i The following interaction term was found: `(num_1 + num_2)^2`.
 
@@ -299,7 +299,7 @@
     Code
       mold(num_1:num_2 + fac_1:num_1 ~ num_2, example_train)
     Condition
-      Error in `mold_formula_default_process_outcomes()`:
+      Error in `mold()`:
       ! Interaction terms can't be specified on the LHS of `formula`.
       i The following interaction term was found: `num_1:num_2`.
 
@@ -308,7 +308,7 @@
     Code
       mold(num_1 / num_2 ~ num_2, example_train)
     Condition
-      Error in `mold_formula_default_process_outcomes()`:
+      Error in `mold()`:
       ! Interaction terms can't be specified on the LHS of `formula`.
       i The following interaction term was found: `num_1/num_2`.
 

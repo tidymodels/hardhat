@@ -614,7 +614,7 @@ mold_formula_default_process_outcomes <- function(blueprint, data, ..., call = c
   formula <- get_outcomes_formula(formula)
 
   # used on the `~ LHS` formula
-  check_no_interactions(formula)
+  check_no_interactions(formula, error_call = call)
 
   framed <- model_frame(formula, data)
 
