@@ -366,7 +366,8 @@ run_forge.default_recipe_blueprint <- function(blueprint,
     blueprint = blueprint,
     predictors = predictors,
     outcomes = outcomes,
-    extras = extras
+    extras = extras,
+    call = call
   )
 }
 
@@ -428,7 +429,9 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data, ..., call = c
 
 # ------------------------------------------------------------------------------
 
-forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras) {
+forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   rec <- blueprint$recipe
   vars <- rec$term_info$variable
   roles <- rec$term_info$role
@@ -465,7 +468,8 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 
   processed <- forge_recipe_default_process_predictors(
     blueprint = blueprint,
-    predictors = predictors
+    predictors = predictors,
+    call = call
   )
 
   blueprint <- processed$blueprint
@@ -492,10 +496,12 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
   new_forge_process(predictors, outcomes, extras)
 }
 
-forge_recipe_default_process_predictors <- function(blueprint, predictors) {
+forge_recipe_default_process_predictors <- function(blueprint, predictors, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, composition = blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition, call = call)
 
   new_forge_process_terms(
     blueprint = blueprint,

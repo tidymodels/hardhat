@@ -657,7 +657,8 @@ run_forge.default_formula_blueprint <- function(blueprint,
     blueprint = blueprint,
     predictors = predictors,
     outcomes = outcomes,
-    extras = extras
+    extras = extras,
+    call = call
   )
 }
 
@@ -702,10 +703,13 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes, ..., call
 
 # ------------------------------------------------------------------------------
 
-forge_formula_default_process <- function(blueprint, predictors, outcomes, extras) {
+forge_formula_default_process <- function(blueprint, predictors, outcomes, extras, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   processed <- forge_formula_default_process_predictors(
     blueprint = blueprint,
-    predictors = predictors
+    predictors = predictors,
+    call = call
   )
 
   blueprint <- processed$blueprint
@@ -729,7 +733,9 @@ forge_formula_default_process <- function(blueprint, predictors, outcomes, extra
   new_forge_process(predictors, outcomes, extras)
 }
 
-forge_formula_default_process_predictors <- function(blueprint, predictors) {
+forge_formula_default_process_predictors <- function(blueprint, predictors, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   terms <- blueprint$terms$predictors
   terms <- alter_terms_environment(terms)
 
@@ -757,7 +763,7 @@ forge_formula_default_process_predictors <- function(blueprint, predictors) {
     data <- unmask_factorish_in_data(data, factorish_predictors)
   }
 
-  data <- recompose(data, composition = blueprint$composition)
+  data <- recompose(data, composition = blueprint$composition, call = call)
 
   offset <- extract_offset(framed$terms, framed$data)
 
