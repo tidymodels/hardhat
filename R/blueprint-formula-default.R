@@ -565,7 +565,7 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
   }
 
   framed <- model_frame(formula, data)
-  offset <- extract_offset(framed$terms, framed$data)
+  offset <- extract_offset(framed$terms, framed$data, call = call)
 
   if (identical(blueprint$indicators, "one_hot")) {
     predictors <- model_matrix_one_hot(
@@ -765,7 +765,7 @@ forge_formula_default_process_predictors <- function(blueprint, predictors, ...,
 
   data <- recompose(data, composition = blueprint$composition, call = call)
 
-  offset <- extract_offset(framed$terms, framed$data)
+  offset <- extract_offset(framed$terms, framed$data, call = call)
 
   extras <- list(offset = offset)
 
