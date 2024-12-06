@@ -386,9 +386,9 @@ run_mold.default_formula_blueprint <- function(blueprint, ..., data, call = call
 # ------------------------------------------------------------------------------
 # mold - formula - clean
 
-  check_data_frame_or_matrix(data)
 mold_formula_default_clean <- function(blueprint, data, ..., call = caller_env()) {
   check_dots_empty0(...)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   # Check here, not in the constructor, because we
