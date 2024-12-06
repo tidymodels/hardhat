@@ -95,7 +95,9 @@ is_known_output_type <- function(x) {
   is.numeric(x) || is.factor(x)
 }
 
-validate_has_known_outcome_types <- function(y) {
+validate_has_known_outcome_types <- function(y, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   known <- vapply(y, is_known_output_type, logical(1))
 
   if (!all(known)) {
@@ -106,7 +108,8 @@ validate_has_known_outcome_types <- function(y) {
         "Not all columns of {.arg y} are known outcome types.",
         "i" = "{?This/These} column{?s} {?has/have} {?an/} unknown type{?s}:
               {.val {not_known}}."
-      )
+      ),
+      call = call
     )
   }
 

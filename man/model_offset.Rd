@@ -4,13 +4,17 @@
 \alias{model_offset}
 \title{Extract a model offset}
 \usage{
-model_offset(terms, data)
+model_offset(terms, data, ..., call = caller_env())
 }
 \arguments{
 \item{terms}{A \code{"terms"} object corresponding to \code{data}, returned from a
 call to \code{model_frame()}.}
 
 \item{data}{A data frame returned from a call to \code{model_frame()}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 A numeric vector representing the offset.

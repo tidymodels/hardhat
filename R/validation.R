@@ -436,6 +436,10 @@ check_predictors_are_numeric <- function(predictors) {
 #' @param data A data frame to check.
 #'
 #' @param original_names A character vector. The original column names.
+#' 
+#' @inheritParams rlang::args_dots_empty
+#' 
+#' @param call The call used for errors and warnings.
 #'
 #' @return
 #'
@@ -492,17 +496,20 @@ check_predictors_are_numeric <- function(predictors) {
 #' forge(test, processed$blueprint, outcomes = TRUE)
 #' @family validation functions
 #' @export
-validate_column_names <- function(data, original_names) {
+validate_column_names <- function(data, original_names, ..., call = current_env()) {
+  check_dots_empty()
+
   check_data_frame_or_matrix(data)
   data <- coerce_to_tibble(data)
 
   check <- check_column_names(data, original_names)
 
   if (!check$ok) {
-    validate_missing_name_isnt_.outcome(check$missing_names)
+    validate_missing_name_isnt_.outcome(check$missing_names, call = call)
 
     cli::cli_abort(
-      "The required column{?s} {.val {check$missing_names}} {?is/are} missing."
+      "The required column{?s} {.val {check$missing_names}} {?is/are} missing.",
+      call = call
     )
   }
 
@@ -529,7 +536,9 @@ check_column_names <- function(data, original_names) {
   new_check_result(ok = ok, missing_names = missing_names)
 }
 
-validate_missing_name_isnt_.outcome <- function(missing_names) {
+validate_missing_name_isnt_.outcome <- function(missing_names, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   not_ok <- ".outcome" %in% missing_names
 
   if (not_ok) {
@@ -540,7 +549,8 @@ validate_missing_name_isnt_.outcome <- function(missing_names) {
         "i" = "When this is the case, and the outcome columns are requested in
            {.fn forge}, {.arg new_data} must include a column with the
            automatically generated name, {.code .outcome}, containing the outcome."
-      )
+      ),
+      call = call
     )
   }
 

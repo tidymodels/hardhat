@@ -4,7 +4,7 @@
 \alias{recompose}
 \title{Recompose a data frame into another form}
 \usage{
-recompose(data, ..., composition = "tibble")
+recompose(data, ..., composition = "tibble", call = caller_env())
 }
 \arguments{
 \item{data}{A data frame.}
@@ -19,6 +19,8 @@ recompose(data, ..., composition = "tibble")
 \item \code{"dgCMatrix"} to convert to a sparse matrix. All columns must be numeric,
 and the Matrix package must be installed.
 }}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 The output type is determined from the \code{composition}.

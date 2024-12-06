@@ -8,6 +8,8 @@
 #' call to `model_frame()`.
 #'
 #' @param data A data frame returned from a call to `model_frame()`.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -46,7 +48,9 @@
 #'   }
 #' )
 #' @export
-model_offset <- function(terms, data) {
+model_offset <- function(terms, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   .offset_pos <- attr(terms, "offset")
 
   has_offset <- !is.null(.offset_pos)
@@ -65,7 +69,8 @@ model_offset <- function(terms, data) {
 
       cli::cli_abort(
         "Column {.val {bad_col}} is tagged as an offset and thus must be
-        numeric, not {.obj_type_friendly { .offset_val }}."
+        numeric, not {.obj_type_friendly { .offset_val }}.",
+        call = call
       )
     }
 
@@ -75,8 +80,10 @@ model_offset <- function(terms, data) {
   ans
 }
 
-extract_offset <- function(terms, data) {
-  .offset <- model_offset(terms, data)
+extract_offset <- function(terms, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
+  .offset <- model_offset(terms, data, call = call)
 
   if (is.null(.offset)) {
     NULL

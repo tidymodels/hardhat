@@ -11,11 +11,11 @@
 \usage{
 run_forge(blueprint, new_data, ..., outcomes = FALSE)
 
-\method{run_forge}{default_formula_blueprint}(blueprint, new_data, ..., outcomes = FALSE)
+\method{run_forge}{default_formula_blueprint}(blueprint, new_data, ..., outcomes = FALSE, call = caller_env())
 
-\method{run_forge}{default_recipe_blueprint}(blueprint, new_data, ..., outcomes = FALSE)
+\method{run_forge}{default_recipe_blueprint}(blueprint, new_data, ..., outcomes = FALSE, call = caller_env())
 
-\method{run_forge}{default_xy_blueprint}(blueprint, new_data, ..., outcomes = FALSE)
+\method{run_forge}{default_xy_blueprint}(blueprint, new_data, ..., outcomes = FALSE, call = caller_env())
 }
 \arguments{
 \item{blueprint}{A preprocessing \code{blueprint}.}
@@ -27,6 +27,8 @@ run_forge(blueprint, new_data, ..., outcomes = FALSE)
 
 \item{outcomes}{A logical. Should the outcomes be processed and returned
 as well?}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 \code{run_forge()} methods return the object that is then immediately returned

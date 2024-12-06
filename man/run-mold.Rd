@@ -11,11 +11,11 @@
 \usage{
 run_mold(blueprint, ...)
 
-\method{run_mold}{default_formula_blueprint}(blueprint, ..., data)
+\method{run_mold}{default_formula_blueprint}(blueprint, ..., data, call = caller_env())
 
-\method{run_mold}{default_recipe_blueprint}(blueprint, ..., data)
+\method{run_mold}{default_recipe_blueprint}(blueprint, ..., data, call = caller_env())
 
-\method{run_mold}{default_xy_blueprint}(blueprint, ..., x, y)
+\method{run_mold}{default_xy_blueprint}(blueprint, ..., x, y, call = caller_env())
 }
 \arguments{
 \item{blueprint}{A preprocessing blueprint.}
@@ -23,6 +23,8 @@ run_mold(blueprint, ...)
 \item{...}{Not used. Required for extensibility.}
 
 \item{data}{A data frame or matrix containing the outcomes and predictors.}
+
+\item{call}{The call used for errors and warnings.}
 
 \item{x}{A data frame or matrix containing the predictors.}
 

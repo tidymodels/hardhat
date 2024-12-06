@@ -4,12 +4,16 @@
 \alias{shrink}
 \title{Subset only required columns}
 \usage{
-shrink(data, ptype)
+shrink(data, ptype, ..., call = current_env())
 }
 \arguments{
 \item{data}{A data frame containing the data to subset.}
 
 \item{ptype}{A data frame prototype containing the required columns.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 A tibble containing the required columns.
