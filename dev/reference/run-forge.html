@@ -83,13 +83,13 @@ then your <code>run_forge()</code> method signature must match this.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_forge</span><span class="op">(</span><span class="va">blueprint</span>, <span class="va">new_data</span>, <span class="va">...</span>, outcomes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'default_formula_blueprint'</span></span>
-<span><span class="fu">run_forge</span><span class="op">(</span><span class="va">blueprint</span>, <span class="va">new_data</span>, <span class="va">...</span>, outcomes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">run_forge</span><span class="op">(</span><span class="va">blueprint</span>, <span class="va">new_data</span>, <span class="va">...</span>, outcomes <span class="op">=</span> <span class="cn">FALSE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'default_recipe_blueprint'</span></span>
-<span><span class="fu">run_forge</span><span class="op">(</span><span class="va">blueprint</span>, <span class="va">new_data</span>, <span class="va">...</span>, outcomes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">run_forge</span><span class="op">(</span><span class="va">blueprint</span>, <span class="va">new_data</span>, <span class="va">...</span>, outcomes <span class="op">=</span> <span class="cn">FALSE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'default_xy_blueprint'</span></span>
-<span><span class="fu">run_forge</span><span class="op">(</span><span class="va">blueprint</span>, <span class="va">new_data</span>, <span class="va">...</span>, outcomes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">run_forge</span><span class="op">(</span><span class="va">blueprint</span>, <span class="va">new_data</span>, <span class="va">...</span>, outcomes <span class="op">=</span> <span class="cn">FALSE</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -112,6 +112,10 @@ then your <code>run_forge()</code> method signature must match this.</p>
 <dt id="arg-outcomes">outcomes<a class="anchor" aria-label="anchor" href="#arg-outcomes"></a></dt>
 <dd><p>A logical. Should the outcomes be processed and returned
 as well?</p></dd>
+
+
+<dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
+<dd><p>The call used for errors and warnings.</p></dd>
 
 </dl></div>
     <div class="section level2">
