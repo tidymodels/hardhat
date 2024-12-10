@@ -109,6 +109,7 @@ forge.matrix <- forge.data.frame
 #' then your `run_forge()` method signature must match this.
 #'
 #' @inheritParams forge
+#' @inheritParams validate_column_names
 #'
 #' @return
 #' `run_forge()` methods return the object that is then immediately returned

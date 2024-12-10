@@ -5,7 +5,7 @@
 \alias{check_column_names}
 \title{Ensure that \code{data} contains required column names}
 \usage{
-validate_column_names(data, original_names)
+validate_column_names(data, original_names, ..., call = current_env())
 
 check_column_names(data, original_names)
 }
@@ -13,6 +13,10 @@ check_column_names(data, original_names)
 \item{data}{A data frame to check.}
 
 \item{original_names}{A character vector. The original column names.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 \code{validate_column_names()} returns \code{data} invisibly.

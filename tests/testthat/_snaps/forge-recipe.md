@@ -3,7 +3,7 @@
     Code
       forge(iris2, x1$blueprint, outcomes = TRUE)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "Species" is missing.
 
 ---
@@ -11,7 +11,7 @@
     Code
       forge(iris2, x2$blueprint, outcomes = TRUE)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "Species" is missing.
 
 # missing predictor columns fail appropriately
@@ -19,7 +19,7 @@
     Code
       forge(iris[, 1, drop = FALSE], x$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "Sepal.Width" is missing.
 
 ---
@@ -27,7 +27,7 @@
     Code
       forge(iris[, 3, drop = FALSE], x$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required columns "Sepal.Length" and "Sepal.Width" are missing.
 
 # novel predictor levels are caught
@@ -89,7 +89,7 @@
     Code
       forge(iris, x$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "Sepal.Width" is missing.
 
 # `NA` roles are treated as extra roles that are required at `forge()` time
@@ -97,7 +97,7 @@
     Code
       forge(iris, x$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "Petal.Length" is missing.
 
 # `forge()` is compatible with hardhat 0.2.0 molded blueprints with a basic recipe
@@ -105,7 +105,7 @@
     Code
       forge(new_data, blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "x" is missing.
 
 # `forge()` is compatible with hardhat 0.2.0 molded blueprints with a recipe with a nonstandard role
@@ -113,6 +113,6 @@
     Code
       forge(new_data, blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "id" is missing.
 

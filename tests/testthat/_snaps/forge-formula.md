@@ -3,7 +3,7 @@
     Code
       forge(example_train2, x1$blueprint, outcomes = TRUE)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "fac_1" is missing.
 
 ---
@@ -11,7 +11,7 @@
     Code
       forge(example_train2, x2$blueprint, outcomes = TRUE)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "fac_1" is missing.
 
 # new_data can only be a data frame / matrix
@@ -35,7 +35,7 @@
     Code
       forge(example_train[, 1, drop = FALSE], x1$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "num_2" is missing.
 
 ---
@@ -43,7 +43,7 @@
     Code
       forge(example_train[, 1, drop = FALSE], x2$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required column "num_2" is missing.
 
 ---
@@ -51,7 +51,7 @@
     Code
       forge(example_train[, 3, drop = FALSE], x1$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required columns "num_1" and "num_2" are missing.
 
 ---
@@ -59,7 +59,7 @@
     Code
       forge(example_train[, 3, drop = FALSE], x2$blueprint)
     Condition
-      Error in `validate_column_names()`:
+      Error in `forge()`:
       ! The required columns "num_1" and "num_2" are missing.
 
 # novel predictor levels are caught
@@ -188,7 +188,7 @@
     Code
       mold(y ~ f, dat, blueprint = bp2)
     Condition
-      Error in `recompose()`:
+      Error in `mold()`:
       ! `data` must only contain numeric columns.
       i This column isn't numeric: "f".
 
@@ -197,7 +197,7 @@
     Code
       mold(y ~ f + f_2, dat_2f, blueprint = bp2)
     Condition
-      Error in `recompose()`:
+      Error in `mold()`:
       ! `data` must only contain numeric columns.
       i These columns aren't numeric: "f" and "f_2".
 

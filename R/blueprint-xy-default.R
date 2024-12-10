@@ -177,7 +177,7 @@ refresh_blueprint.default_xy_blueprint <- function(blueprint) {
 #'
 #' @rdname run-mold
 #' @export
-run_mold.default_xy_blueprint <- function(blueprint, ..., x, y) {
+run_mold.default_xy_blueprint <- function(blueprint, ..., x, y, call = caller_env()) {
   check_dots_empty0(...)
 
   cleaned <- mold_xy_default_clean(blueprint = blueprint, x = x, y = y)
@@ -186,7 +186,7 @@ run_mold.default_xy_blueprint <- function(blueprint, ..., x, y) {
   x <- cleaned$x
   y <- cleaned$y
 
-  mold_xy_default_process(blueprint = blueprint, x = x, y = y)
+  mold_xy_default_process(blueprint = blueprint, x = x, y = y, call = call)
 }
 
 # ------------------------------------------------------------------------------
@@ -225,8 +225,10 @@ mold_xy_default_clean_outcomes <- function(blueprint, y) {
 # ------------------------------------------------------------------------------
 # mold - xy - process
 
-mold_xy_default_process <- function(blueprint, x, y) {
-  processed <- mold_xy_default_process_predictors(blueprint, x)
+mold_xy_default_process <- function(blueprint, x, y, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
+  processed <- mold_xy_default_process_predictors(blueprint, x, call = call)
 
   blueprint <- processed$blueprint
   predictors <- processed$data
@@ -248,14 +250,15 @@ mold_xy_default_process <- function(blueprint, x, y) {
   new_mold_process(predictors, outcomes, blueprint, extras)
 }
 
-mold_xy_default_process_predictors <- function(blueprint, x) {
+mold_xy_default_process_predictors <- function(blueprint, x, ..., call = caller_env()) {
+  check_dots_empty0(...)
 
   # Important! Collect ptype before adding intercept!
   ptype <- extract_ptype(x)
 
   x <- maybe_add_intercept_column(x, blueprint$intercept)
 
-  x <- recompose(x, composition = blueprint$composition)
+  x <- recompose(x, composition = blueprint$composition, call = call)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -281,13 +284,16 @@ mold_xy_default_process_outcomes <- function(blueprint, y) {
 run_forge.default_xy_blueprint <- function(blueprint,
                                            new_data,
                                            ...,
-                                           outcomes = FALSE) {
+                                           outcomes = FALSE,
+                                           call = caller_env()
+                                          ) {
   check_dots_empty0(...)
 
   cleaned <- forge_xy_default_clean(
     blueprint = blueprint,
     new_data = new_data,
-    outcomes = outcomes
+    outcomes = outcomes,
+    call = call
   )
 
   blueprint <- cleaned$blueprint
@@ -299,19 +305,21 @@ run_forge.default_xy_blueprint <- function(blueprint,
     blueprint = blueprint,
     predictors = predictors,
     outcomes = outcomes,
-    extras = extras
+    extras = extras,
+    call = call
   )
 }
 
 # ------------------------------------------------------------------------------
 
-forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
+forge_xy_default_clean <- function(blueprint, new_data, outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
   check_data_frame_or_matrix(new_data)
   new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
 
-  predictors <- shrink(new_data, blueprint$ptypes$predictors)
+  predictors <- shrink(new_data, blueprint$ptypes$predictors, call = call)
 
   predictors <- scream(
     predictors,
@@ -320,7 +328,7 @@ forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
   )
 
   if (outcomes) {
-    outcomes <- shrink(new_data, blueprint$ptypes$outcomes)
+    outcomes <- shrink(new_data, blueprint$ptypes$outcomes, call = call)
     # Never allow novel levels for outcomes
     outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
   } else {
@@ -332,8 +340,10 @@ forge_xy_default_clean <- function(blueprint, new_data, outcomes) {
 
 # ------------------------------------------------------------------------------
 
-forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
-  processed <- forge_xy_default_process_predictors(blueprint, predictors)
+forge_xy_default_process <- function(blueprint, predictors, outcomes, extras, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
+  processed <- forge_xy_default_process_predictors(blueprint, predictors, call = call)
 
   blueprint <- processed$blueprint
   predictors <- processed$data
@@ -353,10 +363,12 @@ forge_xy_default_process <- function(blueprint, predictors, outcomes, extras) {
   new_forge_process(predictors, outcomes, extras)
 }
 
-forge_xy_default_process_predictors <- function(blueprint, predictors) {
+forge_xy_default_process_predictors <- function(blueprint, predictors, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
 
-  predictors <- recompose(predictors, composition = blueprint$composition)
+  predictors <- recompose(predictors, composition = blueprint$composition, call = call)
 
   new_forge_process_terms(
     blueprint = blueprint,
