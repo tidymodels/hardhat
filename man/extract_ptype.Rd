@@ -4,10 +4,14 @@
 \alias{extract_ptype}
 \title{Extract a prototype}
 \usage{
-extract_ptype(data)
+extract_ptype(data, ..., call = current_env())
 }
 \arguments{
 \item{data}{A data frame or matrix.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 A 0 row slice of \code{data} after converting it to a tibble.

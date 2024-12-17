@@ -8,6 +8,8 @@
 #' time.
 #'
 #' @param data A data frame or matrix.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -24,12 +26,14 @@
 #' hardhat:::extract_ptype(iris)
 #' @keywords internal
 #'
-extract_ptype <- function(data) {
+extract_ptype <- function(data, ..., call = current_env()) {
+  check_dots_empty0(...)
+
   if (is.null(data)) {
     return(NULL)
   }
 
-  check_data_frame_or_matrix(data)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   vec_slice(data, 0L)
