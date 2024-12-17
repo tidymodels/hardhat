@@ -423,7 +423,8 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data, ..., call = c
     extra_role_cols,
     blueprint$extra_role_ptypes,
     scream,
-    allow_novel_levels = blueprint$allow_novel_levels
+    allow_novel_levels = blueprint$allow_novel_levels,
+    call = call
   )
 
   extras <- list(roles = extra_role_cols)

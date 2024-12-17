@@ -58,6 +58,8 @@
 #' will ignore all novel levels. This argument does not apply to ordered
 #' factors. Novel levels are not allowed in ordered factors because the
 #' level ordering is a critical part of the type.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -152,14 +154,15 @@
 #' # Novel level is kept
 #' levels(test4_kept$Species)
 #' @export
-scream <- function(data, ptype, allow_novel_levels = FALSE) {
-  vec_assert(allow_novel_levels, ptype = logical(), size = 1L)
+scream <- function(data, ptype, allow_novel_levels = FALSE, ..., call = current_env()) {
+  check_dots_empty0(...)
+  vec_assert(allow_novel_levels, ptype = logical(), size = 1L, call = call)
 
   if (is.null(data)) {
     return(NULL)
   }
 
-  check_data_frame_or_matrix(data)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   if (allow_novel_levels) {
