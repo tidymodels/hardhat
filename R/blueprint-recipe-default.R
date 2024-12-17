@@ -500,7 +500,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 forge_recipe_default_process_predictors <- function(blueprint, predictors, ..., call = caller_env()) {
   check_dots_empty0(...)
 
-  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept, call = call)
 
   predictors <- recompose(predictors, composition = blueprint$composition, call = call)
 
