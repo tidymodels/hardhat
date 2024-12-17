@@ -609,14 +609,14 @@ mold_formula_default_process_outcomes <- function(blueprint, data, ..., call = c
   original_names <- get_all_outcomes(formula, data, call = call)
   data <- data[original_names]
 
-  ptype <- extract_ptype(data)
+  ptype <- extract_ptype(data, call = call)
 
   formula <- get_outcomes_formula(formula)
 
   # used on the `~ LHS` formula
   check_no_interactions(formula, error_call = call)
 
-  framed <- model_frame(formula, data)
+  framed <- model_frame(formula, data, call = call)
 
   outcomes <- flatten_embedded_columns(framed$data)
 
