@@ -722,7 +722,8 @@ forge_formula_default_process <- function(blueprint, predictors, outcomes, extra
 
   processed <- forge_formula_default_process_outcomes(
     blueprint = blueprint,
-    outcomes = outcomes
+    outcomes = outcomes,
+    call = call
   )
 
   blueprint <- processed$blueprint
@@ -780,7 +781,8 @@ forge_formula_default_process_predictors <- function(blueprint, predictors, ...,
   )
 }
 
-forge_formula_default_process_outcomes <- function(blueprint, outcomes) {
+forge_formula_default_process_outcomes <- function(blueprint, outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
 
   # no outcomes to process
   if (is.null(outcomes)) {
@@ -794,7 +796,7 @@ forge_formula_default_process_outcomes <- function(blueprint, outcomes) {
   terms <- blueprint$terms$outcomes
   terms <- alter_terms_environment(terms)
 
-  framed <- model_frame(terms, outcomes)
+  framed <- model_frame(terms, outcomes, call = call)
 
   # Because model.matrix() does this for the RHS and we want
   # to be consistent even though we are only going through
