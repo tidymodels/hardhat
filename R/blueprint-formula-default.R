@@ -537,7 +537,7 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
   original_names <- get_all_predictors(formula, data, call = call)
   data <- data[original_names]
 
-  ptype <- extract_ptype(data)
+  ptype <- extract_ptype(data, call = call)
 
   if (identical(blueprint$indicators, "traditional") ||
       identical(blueprint$indicators, "one_hot")) {
@@ -566,18 +566,20 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
     data <- mask_factorish_in_data(data, factorish_names)
   }
 
-  framed <- model_frame(formula, data)
+  framed <- model_frame(formula, data, call = call)
   offset <- extract_offset(framed$terms, framed$data, call = call)
 
   if (identical(blueprint$indicators, "one_hot")) {
     predictors <- model_matrix_one_hot(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   } else {
     predictors <- model_matrix(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   }
 
