@@ -180,7 +180,7 @@ refresh_blueprint.default_xy_blueprint <- function(blueprint) {
 run_mold.default_xy_blueprint <- function(blueprint, ..., x, y, call = caller_env()) {
   check_dots_empty0(...)
 
-  cleaned <- mold_xy_default_clean(blueprint = blueprint, x = x, y = y)
+  cleaned <- mold_xy_default_clean(blueprint = blueprint, x = x, y = y, call = call)
 
   blueprint <- cleaned$blueprint
   x <- cleaned$x
@@ -192,8 +192,10 @@ run_mold.default_xy_blueprint <- function(blueprint, ..., x, y, call = caller_en
 # ------------------------------------------------------------------------------
 # mold - xy - clean
 
-mold_xy_default_clean <- function(blueprint, x, y) {
-  cleaned <- mold_xy_default_clean_predictors(blueprint, x)
+mold_xy_default_clean <- function(blueprint, x, y, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
+  cleaned <- mold_xy_default_clean_predictors(blueprint, x, call = call)
 
   blueprint <- cleaned$blueprint
   x <- cleaned$x
@@ -211,8 +213,9 @@ mold_xy_default_clean <- function(blueprint, x, y) {
   new_mold_clean_xy(blueprint, x, y)
 }
 
-mold_xy_default_clean_predictors <- function(blueprint, x) {
-  check_data_frame_or_matrix(x)
+mold_xy_default_clean_predictors <- function(blueprint, x, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(x, call = call)
   x <- coerce_to_tibble(x)
   list(blueprint = blueprint, x = x)
 }
@@ -235,7 +238,7 @@ mold_xy_default_process <- function(blueprint, x, y, ..., call = caller_env()) {
   predictors_ptype <- processed$ptype
   predictors_extras <- processed$extras
 
-  processed <- mold_xy_default_process_outcomes(blueprint, y)
+  processed <- mold_xy_default_process_outcomes(blueprint, y, call = call)
 
   blueprint <- processed$blueprint
   outcomes <- processed$data
@@ -254,9 +257,9 @@ mold_xy_default_process_predictors <- function(blueprint, x, ..., call = caller_
   check_dots_empty0(...)
 
   # Important! Collect ptype before adding intercept!
-  ptype <- extract_ptype(x)
+  ptype <- extract_ptype(x, call = call)
 
-  x <- maybe_add_intercept_column(x, blueprint$intercept)
+  x <- maybe_add_intercept_column(x, blueprint$intercept, call = call)
 
   x <- recompose(x, composition = blueprint$composition, call = call)
 
@@ -267,8 +270,10 @@ mold_xy_default_process_predictors <- function(blueprint, x, ..., call = caller_
   )
 }
 
-mold_xy_default_process_outcomes <- function(blueprint, y) {
-  ptype <- extract_ptype(y)
+mold_xy_default_process_outcomes <- function(blueprint, y, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
+  ptype <- extract_ptype(y, call = call)
 
   new_mold_process_terms(
     blueprint = blueprint,
