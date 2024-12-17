@@ -4,10 +4,14 @@
 \alias{get_data_classes}
 \title{Extract data classes from a data frame or matrix}
 \usage{
-get_data_classes(data)
+get_data_classes(data, ..., call = current_env())
 }
 \arguments{
 \item{data}{A data frame or matrix.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 A named list. The names are the column names of \code{data} and the values are
