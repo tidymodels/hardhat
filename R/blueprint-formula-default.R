@@ -750,17 +750,19 @@ forge_formula_default_process_predictors <- function(blueprint, predictors, ...,
     predictors <- mask_factorish_in_data(predictors, factorish_names)
   }
 
-  framed <- model_frame(terms, predictors)
+  framed <- model_frame(terms, predictors, call = call)
 
   if (identical(blueprint$indicators, "one_hot")) {
     data <- model_matrix_one_hot(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   } else {
     data <- model_matrix(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   }
 

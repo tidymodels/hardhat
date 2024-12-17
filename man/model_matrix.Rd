@@ -4,7 +4,7 @@
 \alias{model_matrix}
 \title{Construct a design matrix}
 \usage{
-model_matrix(terms, data)
+model_matrix(terms, data, ..., call = current_env())
 }
 \arguments{
 \item{terms}{A terms object to construct a model matrix with. This is
@@ -14,6 +14,10 @@ typically the terms object returned from the corresponding call to
 \item{data}{A tibble to construct the design matrix with. This is
 typically the tibble returned from the corresponding call to
 \code{\link[=model_frame]{model_frame()}}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 A tibble containing the design matrix.
