@@ -589,6 +589,8 @@ validate_missing_name_isnt_.outcome <- function(missing_names, ..., call = calle
 #' [spruce_numeric()].
 #'
 #' @param new_data A data frame of new predictors and possibly outcomes.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -646,8 +648,9 @@ validate_prediction_size <- function(pred, new_data) {
 
 #' @rdname validate_prediction_size
 #' @export
-check_prediction_size <- function(pred, new_data) {
-  check_data_frame_or_matrix(new_data)
+check_prediction_size <- function(pred, new_data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(new_data, call = call)
   new_data <- coerce_to_tibble(new_data)
 
   size_new_data <- vec_size(new_data)

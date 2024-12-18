@@ -7,7 +7,7 @@
 \usage{
 validate_prediction_size(pred, new_data)
 
-check_prediction_size(pred, new_data)
+check_prediction_size(pred, new_data, ..., call = caller_env())
 }
 \arguments{
 \item{pred}{A tibble. The predictions to return from any prediction
@@ -15,6 +15,10 @@ check_prediction_size(pred, new_data)
 \code{\link[=spruce_numeric]{spruce_numeric()}}.}
 
 \item{new_data}{A data frame of new predictors and possibly outcomes.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 \code{validate_prediction_size()} returns \code{pred} invisibly.
