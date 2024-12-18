@@ -352,6 +352,8 @@ is_binary <- function(x) {
 #' and the values are the classes of the matching column.
 #'
 #' @param predictors An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -398,8 +400,9 @@ validate_predictors_are_numeric <- function(predictors) {
 
 #' @rdname validate_predictors_are_numeric
 #' @export
-check_predictors_are_numeric <- function(predictors) {
-  check_data_frame_or_matrix(predictors)
+check_predictors_are_numeric <- function(predictors, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(predictors, call = call)
   predictors <- coerce_to_tibble(predictors)
 
   where_numeric <- map_lgl(predictors, is.numeric)
