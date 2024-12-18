@@ -249,6 +249,8 @@ check_outcomes_are_factors <- function(outcomes) {
 #' with problems.
 #'
 #' @param outcomes An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -298,8 +300,9 @@ validate_outcomes_are_binary <- function(outcomes) {
 
 #' @rdname validate_outcomes_are_binary
 #' @export
-check_outcomes_are_binary <- function(outcomes) {
-  check_data_frame_or_matrix(outcomes)
+check_outcomes_are_binary <- function(outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(outcomes, call = call)
   outcomes <- coerce_to_tibble(outcomes)
 
   outcomes_levels <- map(outcomes, levels)
