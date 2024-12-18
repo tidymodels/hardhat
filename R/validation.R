@@ -81,6 +81,8 @@ check_outcomes_are_univariate <- function(outcomes) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -134,8 +136,9 @@ style_bad_classes <- function(bad_classes){
 
 #' @rdname validate_outcomes_are_numeric
 #' @export
-check_outcomes_are_numeric <- function(outcomes) {
-  check_data_frame_or_matrix(outcomes)
+check_outcomes_are_numeric <- function(outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(outcomes, call = call)
   outcomes <- coerce_to_tibble(outcomes)
 
   where_numeric <- map_lgl(outcomes, is.numeric)
