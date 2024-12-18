@@ -169,6 +169,8 @@ check_outcomes_are_numeric <- function(outcomes) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -212,8 +214,9 @@ validate_outcomes_are_factors <- function(outcomes) {
 
 #' @rdname validate_outcomes_are_factors
 #' @export
-check_outcomes_are_factors <- function(outcomes) {
-  check_data_frame_or_matrix(outcomes)
+check_outcomes_are_factors <- function(outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(outcomes, call = call)
   outcomes <- coerce_to_tibble(outcomes)
 
   where_factor <- map_lgl(outcomes, is.factor)
@@ -221,7 +224,7 @@ check_outcomes_are_factors <- function(outcomes) {
   ok <- all(where_factor)
 
   if (!ok) {
-    bad_classes <- get_data_classes(outcomes[, !where_factor])
+    bad_classes <- get_data_classes(outcomes[, !where_factor], call = call)
   } else {
     bad_classes <- list()
   }
