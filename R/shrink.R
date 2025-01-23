@@ -60,7 +60,7 @@ shrink <- function(data, ptype, ..., call = current_env()) {
     return(NULL)
   }
 
-  check_data_frame_or_matrix(data)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   cols <- colnames(ptype)
