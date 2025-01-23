@@ -511,7 +511,7 @@ check_predictors_are_numeric <- function(predictors, ..., call = caller_env()) {
 validate_column_names <- function(data, original_names, ..., call = current_env()) {
   check_dots_empty()
 
-  check_data_frame_or_matrix(data)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   check <- check_column_names(data, original_names)
