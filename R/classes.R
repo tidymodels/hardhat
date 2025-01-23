@@ -5,6 +5,8 @@
 #' `get_data_classes()` extracts the classes from the original training data.
 #'
 #' @param data A data frame or matrix.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -24,8 +26,9 @@
 #'
 #' get_data_classes(data)
 #' @export
-get_data_classes <- function(data) {
-  data <- extract_ptype(data)
-  check_unique_column_names(data)
+get_data_classes <- function(data, ..., call = current_env()) {
+  check_dots_empty0(...)
+  data <- extract_ptype(data, call = call)
+  check_unique_column_names(data, call = call)
   lapply(data, class)
 }

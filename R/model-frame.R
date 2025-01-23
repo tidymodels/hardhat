@@ -9,6 +9,8 @@
 #' model frame.
 #'
 #' @param data A data frame or matrix containing the terms of `formula`.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -73,9 +75,10 @@
 #'
 #' nrow(framed2$data) == nrow(iris2)
 #' @export
-model_frame <- function(formula, data) {
-  check_formula(formula)
-  check_data_frame_or_matrix(data)
+model_frame <- function(formula, data, ..., call = current_env()) {
+  check_dots_empty0(...)
+  check_formula(formula, call = call)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   frame <- with_na_pass(

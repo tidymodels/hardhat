@@ -10,6 +10,8 @@
 #' @param data A tibble to construct the design matrix with. This is
 #' typically the tibble returned from the corresponding call to
 #' [model_frame()].
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @details
 #'
@@ -77,9 +79,10 @@
 #'   contrasts = global_override
 #' )
 #' @export
-model_matrix <- function(terms, data) {
-  check_terms(terms)
-  check_data_frame_or_matrix(data)
+model_matrix <- function(terms, data, ..., call = current_env()) {
+  check_dots_empty0(...)
+  check_terms(terms, call = call)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   # otherwise model.matrix() will try and run model.frame() for us on data
@@ -125,9 +128,10 @@ check_terms <- function(x,
 
 # ------------------------------------------------------------------------------
 
-model_matrix_one_hot <- function(terms, data) {
-  check_terms(terms)
-  check_data_frame_or_matrix(data)
+model_matrix_one_hot <- function(terms, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_terms(terms, call = call)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   n_cols <- length(data)
@@ -159,7 +163,7 @@ model_matrix_one_hot <- function(terms, data) {
     data[[name]] <- assign_contrasts(col, n, contrasts)
   }
 
-  model_matrix(terms, data)
+  model_matrix(terms, data, call = call)
 }
 
 #' Contrast function for one-hot encodings

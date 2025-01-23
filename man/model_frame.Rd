@@ -4,13 +4,17 @@
 \alias{model_frame}
 \title{Construct a model frame}
 \usage{
-model_frame(formula, data)
+model_frame(formula, data, ..., call = current_env())
 }
 \arguments{
 \item{formula}{A formula or terms object representing the terms of the
 model frame.}
 
 \item{data}{A data frame or matrix containing the terms of \code{formula}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 A named list with two elements:

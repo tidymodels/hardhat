@@ -7,10 +7,14 @@
 \usage{
 validate_outcomes_are_binary(outcomes)
 
-check_outcomes_are_binary(outcomes)
+check_outcomes_are_binary(outcomes, ..., call = caller_env())
 }
 \arguments{
 \item{outcomes}{An object to check.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 \code{validate_outcomes_are_binary()} returns \code{outcomes} invisibly.

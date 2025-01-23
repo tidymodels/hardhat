@@ -81,6 +81,8 @@ check_outcomes_are_univariate <- function(outcomes) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -134,8 +136,9 @@ style_bad_classes <- function(bad_classes){
 
 #' @rdname validate_outcomes_are_numeric
 #' @export
-check_outcomes_are_numeric <- function(outcomes) {
-  check_data_frame_or_matrix(outcomes)
+check_outcomes_are_numeric <- function(outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(outcomes, call = call)
   outcomes <- coerce_to_tibble(outcomes)
 
   where_numeric <- map_lgl(outcomes, is.numeric)
@@ -169,6 +172,8 @@ check_outcomes_are_numeric <- function(outcomes) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -212,8 +217,9 @@ validate_outcomes_are_factors <- function(outcomes) {
 
 #' @rdname validate_outcomes_are_factors
 #' @export
-check_outcomes_are_factors <- function(outcomes) {
-  check_data_frame_or_matrix(outcomes)
+check_outcomes_are_factors <- function(outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(outcomes, call = call)
   outcomes <- coerce_to_tibble(outcomes)
 
   where_factor <- map_lgl(outcomes, is.factor)
@@ -221,7 +227,7 @@ check_outcomes_are_factors <- function(outcomes) {
   ok <- all(where_factor)
 
   if (!ok) {
-    bad_classes <- get_data_classes(outcomes[, !where_factor])
+    bad_classes <- get_data_classes(outcomes[, !where_factor], call = call)
   } else {
     bad_classes <- list()
   }
@@ -249,6 +255,8 @@ check_outcomes_are_factors <- function(outcomes) {
 #' with problems.
 #'
 #' @param outcomes An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -298,8 +306,9 @@ validate_outcomes_are_binary <- function(outcomes) {
 
 #' @rdname validate_outcomes_are_binary
 #' @export
-check_outcomes_are_binary <- function(outcomes) {
-  check_data_frame_or_matrix(outcomes)
+check_outcomes_are_binary <- function(outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(outcomes, call = call)
   outcomes <- coerce_to_tibble(outcomes)
 
   outcomes_levels <- map(outcomes, levels)
@@ -343,6 +352,8 @@ is_binary <- function(x) {
 #' and the values are the classes of the matching column.
 #'
 #' @param predictors An object to check.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -389,8 +400,9 @@ validate_predictors_are_numeric <- function(predictors) {
 
 #' @rdname validate_predictors_are_numeric
 #' @export
-check_predictors_are_numeric <- function(predictors) {
-  check_data_frame_or_matrix(predictors)
+check_predictors_are_numeric <- function(predictors, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(predictors, call = call)
   predictors <- coerce_to_tibble(predictors)
 
   where_numeric <- map_lgl(predictors, is.numeric)
@@ -499,7 +511,7 @@ check_predictors_are_numeric <- function(predictors) {
 validate_column_names <- function(data, original_names, ..., call = current_env()) {
   check_dots_empty()
 
-  check_data_frame_or_matrix(data)
+  check_data_frame_or_matrix(data, call = call)
   data <- coerce_to_tibble(data)
 
   check <- check_column_names(data, original_names)
@@ -580,6 +592,8 @@ validate_missing_name_isnt_.outcome <- function(missing_names, ..., call = calle
 #' [spruce_numeric()].
 #'
 #' @param new_data A data frame of new predictors and possibly outcomes.
+#' 
+#' @inheritParams validate_column_names
 #'
 #' @return
 #'
@@ -637,8 +651,9 @@ validate_prediction_size <- function(pred, new_data) {
 
 #' @rdname validate_prediction_size
 #' @export
-check_prediction_size <- function(pred, new_data) {
-  check_data_frame_or_matrix(new_data)
+check_prediction_size <- function(pred, new_data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+  check_data_frame_or_matrix(new_data, call = call)
   new_data <- coerce_to_tibble(new_data)
 
   size_new_data <- vec_size(new_data)

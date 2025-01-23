@@ -4,13 +4,17 @@
 \alias{add_intercept_column}
 \title{Add an intercept column to \code{data}}
 \usage{
-add_intercept_column(data, name = "(Intercept)")
+add_intercept_column(data, name = "(Intercept)", ..., call = current_env())
 }
 \arguments{
 \item{data}{A data frame or matrix.}
 
 \item{name}{The name for the intercept column. Defaults to \code{"(Intercept)"},
 which is the same name that \code{\link[stats:lm]{stats::lm()}} uses.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 \code{data} with an intercept column.

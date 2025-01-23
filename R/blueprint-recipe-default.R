@@ -243,14 +243,14 @@ mold_recipe_default_process <- function(blueprint, data, ..., call = caller_env(
   predictors_ptype <- processed$ptype
   predictors_extras <- processed$extras
 
-  processed <- mold_recipe_default_process_outcomes(blueprint = blueprint, data = data)
+  processed <- mold_recipe_default_process_outcomes(blueprint = blueprint, data = data, call = call)
 
   blueprint <- processed$blueprint
   outcomes <- processed$data
   outcomes_ptype <- processed$ptype
   outcomes_extras <- processed$extras
 
-  processed <- mold_recipe_default_process_extras(blueprint, data)
+  processed <- mold_recipe_default_process_extras(blueprint, data, call = call)
 
   blueprint <- processed$blueprint
   extras <- processed$extras
@@ -277,11 +277,11 @@ mold_recipe_default_process_predictors <- function(blueprint, data, ..., call = 
 
   predictors <- recipes::juice(blueprint$recipe, all_predictors())
 
-  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept, call = call)
 
   predictors <- recompose(predictors, composition = blueprint$composition, call = call)
 
-  ptype <- get_original_predictor_ptype(blueprint$recipe, data)
+  ptype <- get_original_predictor_ptype(blueprint$recipe, data, call = call)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -290,12 +290,14 @@ mold_recipe_default_process_predictors <- function(blueprint, data, ..., call = 
   )
 }
 
-mold_recipe_default_process_outcomes <- function(blueprint, data) {
+mold_recipe_default_process_outcomes <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   all_outcomes <- recipes::all_outcomes
 
   outcomes <- recipes::juice(blueprint$recipe, all_outcomes())
 
-  ptype <- get_original_outcome_ptype(blueprint$recipe, data)
+  ptype <- get_original_outcome_ptype(blueprint$recipe, data, call = call)
 
   new_mold_process_terms(
     blueprint = blueprint,
@@ -304,7 +306,8 @@ mold_recipe_default_process_outcomes <- function(blueprint, data) {
   )
 }
 
-mold_recipe_default_process_extras <- function(blueprint, data) {
+mold_recipe_default_process_extras <- function(blueprint, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
 
   # Capture original non standard role columns that exist in `data` and are also
   # required by the `recipe$requirements$bake` requirement. These columns are
@@ -315,7 +318,7 @@ mold_recipe_default_process_extras <- function(blueprint, data) {
   )
 
   if (!is.null(original_extra_role_cols)) {
-    original_extra_role_ptypes <- lapply(original_extra_role_cols, extract_ptype)
+    original_extra_role_ptypes <- lapply(original_extra_role_cols, extract_ptype, call = call)
 
     blueprint <- update_blueprint0(
       blueprint,
@@ -376,7 +379,7 @@ run_forge.default_recipe_blueprint <- function(blueprint,
 
 forge_recipe_default_clean <- function(blueprint, new_data, outcomes, ..., call = caller_env()) {
   check_dots_empty0(...)
-  check_data_frame_or_matrix(new_data)
+  check_data_frame_or_matrix(new_data, call = call)
   new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
@@ -386,13 +389,14 @@ forge_recipe_default_clean <- function(blueprint, new_data, outcomes, ..., call 
   predictors <- scream(
     predictors,
     blueprint$ptypes$predictors,
-    allow_novel_levels = blueprint$allow_novel_levels
+    allow_novel_levels = blueprint$allow_novel_levels,
+    call = call
   )
 
   if (outcomes) {
     outcomes <- shrink(new_data, blueprint$ptypes$outcomes, call = call)
     # Never allow novel levels for outcomes
-    outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
+    outcomes <- scream(outcomes, blueprint$ptypes$outcomes, call = call)
   } else {
     outcomes <- NULL
   }
@@ -420,7 +424,8 @@ forge_recipe_default_clean_extras <- function(blueprint, new_data, ..., call = c
     extra_role_cols,
     blueprint$extra_role_ptypes,
     scream,
-    allow_novel_levels = blueprint$allow_novel_levels
+    allow_novel_levels = blueprint$allow_novel_levels,
+    call = call
   )
 
   extras <- list(roles = extra_role_cols)
@@ -500,7 +505,7 @@ forge_recipe_default_process <- function(blueprint, predictors, outcomes, extras
 forge_recipe_default_process_predictors <- function(blueprint, predictors, ..., call = caller_env()) {
   check_dots_empty0(...)
 
-  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept)
+  predictors <- maybe_add_intercept_column(predictors, blueprint$intercept, call = call)
 
   predictors <- recompose(predictors, composition = blueprint$composition, call = call)
 
@@ -553,7 +558,9 @@ forge_recipe_default_process_extras <- function(extras,
 
 # ------------------------------------------------------------------------------
 
-get_original_predictor_ptype <- function(rec, data) {
+get_original_predictor_ptype <- function(rec, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   roles <- rec$var_info$role
   roles <- chr_explicit_na(roles)
 
@@ -562,10 +569,12 @@ get_original_predictor_ptype <- function(rec, data) {
 
   data <- data[original_names]
 
-  extract_ptype(data)
+  extract_ptype(data, call = call)
 }
 
-get_original_outcome_ptype <- function(rec, data) {
+get_original_outcome_ptype <- function(rec, data, ..., call = caller_env()) {
+  check_dots_empty0(...)
+
   roles <- rec$var_info$role
   roles <- chr_explicit_na(roles)
 
@@ -573,7 +582,7 @@ get_original_outcome_ptype <- function(rec, data) {
 
   data <- data[original_names]
 
-  extract_ptype(data)
+  extract_ptype(data, call = call)
 }
 
 get_extra_role_columns_original <- function(rec, data) {

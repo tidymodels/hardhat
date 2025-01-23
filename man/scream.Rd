@@ -4,7 +4,7 @@
 \alias{scream}
 \title{Scream}
 \usage{
-scream(data, ptype, allow_novel_levels = FALSE)
+scream(data, ptype, allow_novel_levels = FALSE, ..., call = current_env())
 }
 \arguments{
 \item{data}{A data frame containing the new data to check the structure
@@ -19,6 +19,10 @@ are found, and coerces them to \code{NA} values. Setting this argument to \code{
 will ignore all novel levels. This argument does not apply to ordered
 factors. Novel levels are not allowed in ordered factors because the
 level ordering is a critical part of the type.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 A tibble containing the required columns after any required structural

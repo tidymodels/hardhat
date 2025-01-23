@@ -7,10 +7,14 @@
 \usage{
 validate_predictors_are_numeric(predictors)
 
-check_predictors_are_numeric(predictors)
+check_predictors_are_numeric(predictors, ..., call = caller_env())
 }
 \arguments{
 \item{predictors}{An object to check.}
+
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{call}{The call used for errors and warnings.}
 }
 \value{
 \code{validate_predictors_are_numeric()} returns \code{predictors} invisibly.

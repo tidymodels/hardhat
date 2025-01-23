@@ -537,7 +537,7 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
   original_names <- get_all_predictors(formula, data, call = call)
   data <- data[original_names]
 
-  ptype <- extract_ptype(data)
+  ptype <- extract_ptype(data, call = call)
 
   if (identical(blueprint$indicators, "traditional") ||
       identical(blueprint$indicators, "one_hot")) {
@@ -566,18 +566,20 @@ mold_formula_default_process_predictors <- function(blueprint, data, ..., call =
     data <- mask_factorish_in_data(data, factorish_names)
   }
 
-  framed <- model_frame(formula, data)
+  framed <- model_frame(formula, data, call = call)
   offset <- extract_offset(framed$terms, framed$data, call = call)
 
   if (identical(blueprint$indicators, "one_hot")) {
     predictors <- model_matrix_one_hot(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   } else {
     predictors <- model_matrix(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   }
 
@@ -609,14 +611,14 @@ mold_formula_default_process_outcomes <- function(blueprint, data, ..., call = c
   original_names <- get_all_outcomes(formula, data, call = call)
   data <- data[original_names]
 
-  ptype <- extract_ptype(data)
+  ptype <- extract_ptype(data, call = call)
 
   formula <- get_outcomes_formula(formula)
 
   # used on the `~ LHS` formula
   check_no_interactions(formula, error_call = call)
 
-  framed <- model_frame(formula, data)
+  framed <- model_frame(formula, data, call = call)
 
   outcomes <- flatten_embedded_columns(framed$data)
 
@@ -670,7 +672,7 @@ run_forge.default_formula_blueprint <- function(blueprint,
 
 forge_formula_default_clean <- function(blueprint, new_data, outcomes, ..., call = caller_env()) {
   check_dots_empty0(...)
-  check_data_frame_or_matrix(new_data)
+  check_data_frame_or_matrix(new_data, call = call)
   new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
@@ -691,13 +693,14 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes, ..., call
   predictors <- scream(
     predictors,
     predictors_ptype,
-    allow_novel_levels = blueprint$allow_novel_levels
+    allow_novel_levels = blueprint$allow_novel_levels,
+    call = call
   )
 
   if (outcomes) {
     outcomes <- shrink(new_data, blueprint$ptypes$outcomes, call = call)
     # Never allow novel levels for outcomes
-    outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
+    outcomes <- scream(outcomes, blueprint$ptypes$outcomes, call = call)
   } else {
     outcomes <- NULL
   }
@@ -722,7 +725,8 @@ forge_formula_default_process <- function(blueprint, predictors, outcomes, extra
 
   processed <- forge_formula_default_process_outcomes(
     blueprint = blueprint,
-    outcomes = outcomes
+    outcomes = outcomes,
+    call = call
   )
 
   blueprint <- processed$blueprint
@@ -749,17 +753,19 @@ forge_formula_default_process_predictors <- function(blueprint, predictors, ...,
     predictors <- mask_factorish_in_data(predictors, factorish_names)
   }
 
-  framed <- model_frame(terms, predictors)
+  framed <- model_frame(terms, predictors, call = call)
 
   if (identical(blueprint$indicators, "one_hot")) {
     data <- model_matrix_one_hot(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   } else {
     data <- model_matrix(
       terms = framed$terms,
-      data = framed$data
+      data = framed$data,
+      call = call
     )
   }
 
@@ -780,7 +786,8 @@ forge_formula_default_process_predictors <- function(blueprint, predictors, ...,
   )
 }
 
-forge_formula_default_process_outcomes <- function(blueprint, outcomes) {
+forge_formula_default_process_outcomes <- function(blueprint, outcomes, ..., call = caller_env()) {
+  check_dots_empty0(...)
 
   # no outcomes to process
   if (is.null(outcomes)) {
@@ -794,7 +801,7 @@ forge_formula_default_process_outcomes <- function(blueprint, outcomes) {
   terms <- blueprint$terms$outcomes
   terms <- alter_terms_environment(terms)
 
-  framed <- model_frame(terms, outcomes)
+  framed <- model_frame(terms, outcomes, call = call)
 
   # Because model.matrix() does this for the RHS and we want
   # to be consistent even though we are only going through
