@@ -672,7 +672,7 @@ run_forge.default_formula_blueprint <- function(blueprint,
 
 forge_formula_default_clean <- function(blueprint, new_data, outcomes, ..., call = caller_env()) {
   check_dots_empty0(...)
-  check_data_frame_or_matrix(new_data)
+  check_data_frame_or_matrix(new_data, call = call)
   new_data <- coerce_to_tibble(new_data)
   check_unique_column_names(new_data)
   check_bool(outcomes)
@@ -693,13 +693,14 @@ forge_formula_default_clean <- function(blueprint, new_data, outcomes, ..., call
   predictors <- scream(
     predictors,
     predictors_ptype,
-    allow_novel_levels = blueprint$allow_novel_levels
+    allow_novel_levels = blueprint$allow_novel_levels,
+    call = call
   )
 
   if (outcomes) {
     outcomes <- shrink(new_data, blueprint$ptypes$outcomes, call = call)
     # Never allow novel levels for outcomes
-    outcomes <- scream(outcomes, blueprint$ptypes$outcomes)
+    outcomes <- scream(outcomes, blueprint$ptypes$outcomes, call = call)
   } else {
     outcomes <- NULL
   }
