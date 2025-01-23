@@ -53,7 +53,7 @@ model_matrix() will never drop rows, and the result will be a tibble."><meta pro
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">model_matrix</span><span class="op">(</span><span class="va">terms</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">model_matrix</span><span class="op">(</span><span class="va">terms</span>, <span class="va">data</span>, <span class="va">...</span>, call <span class="op">=</span> <span class="fu">current_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,6 +70,14 @@ typically the terms object returned from the corresponding call to
 <dd><p>A tibble to construct the design matrix with. This is
 typically the tibble returned from the corresponding call to
 <code><a href="model_frame.html">model_frame()</a></code>.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>These dots are for future extensions and must be empty.</p></dd>
+
+
+<dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
+<dd><p>The call used for errors and warnings.</p></dd>
 
 </dl></div>
     <div class="section level2">

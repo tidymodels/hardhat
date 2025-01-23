@@ -73,7 +73,7 @@ size_pred A single numeric. The size of pred.
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">check_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">check_prediction_size</span><span class="op">(</span><span class="va">pred</span>, <span class="va">new_data</span>, <span class="va">...</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -88,6 +88,14 @@ size_pred A single numeric. The size of pred.
 
 <dt id="arg-new-data">new_data<a class="anchor" aria-label="anchor" href="#arg-new-data"></a></dt>
 <dd><p>A data frame of new predictors and possibly outcomes.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>These dots are for future extensions and must be empty.</p></dd>
+
+
+<dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
+<dd><p>The call used for errors and warnings.</p></dd>
 
 </dl></div>
     <div class="section level2">

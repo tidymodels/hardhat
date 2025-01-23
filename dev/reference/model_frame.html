@@ -59,7 +59,7 @@ two distinct objects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">model_frame</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">model_frame</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">...</span>, call <span class="op">=</span> <span class="fu">current_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,6 +73,14 @@ model frame.</p></dd>
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame or matrix containing the terms of <code>formula</code>.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>These dots are for future extensions and must be empty.</p></dd>
+
+
+<dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
+<dd><p>The call used for errors and warnings.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -147,7 +155,7 @@ If <code>model.matrix(&lt;terms&gt;, &lt;tibble&gt;)</code> is called directly, 
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"response")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,".Environment")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5585869bd560&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55760e0cd1c8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"predvars")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list(Species, Sepal.Width)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"dataClasses")</span>
