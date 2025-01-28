@@ -183,6 +183,7 @@ model_matrix_one_hot <- function(terms, data, ..., call = caller_env()) {
 #' @return A diagonal matrix that is `n`-by-`n`.
 #'
 #' @keywords internal
+#' @export
 contr_one_hot <- function(n, contrasts = TRUE, sparse = FALSE) {
   if (sparse) {
     cli::cli_warn("{.code sparse = TRUE} not implemented for {.fun contr_one_hot}.")
