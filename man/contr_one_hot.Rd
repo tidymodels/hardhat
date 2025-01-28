@@ -7,7 +7,8 @@
 contr_one_hot(n, contrasts = TRUE, sparse = FALSE)
 }
 \arguments{
-\item{n}{A vector of character factor levels or the number of unique levels.}
+\item{n}{A vector of character factor levels (of length >=1) or the number
+of unique levels (>= 1).}
 
 \item{contrasts}{This argument is for backwards compatibility and only the
 default of \code{TRUE} is supported.}
@@ -21,5 +22,73 @@ A diagonal matrix that is \code{n}-by-\code{n}.
 \description{
 This contrast function produces a model matrix that has indicator columns for
 each level of each factor.
+}
+\details{
+By default, \code{model.matrix()} generates binary indicator variables for
+factor predictors. When the formula does not remove an intercept, an
+incomplete set of indicators are created; no indicator is made for the
+first level of the factor.
+
+For example, \code{species} and \code{island} both have three levels but
+\code{model.matrix()} creates two indicator variables for each:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(dplyr)
+library(modeldata)
+data(penguins)
+
+levels(penguins$species)
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] "Adelie"    "Chinstrap" "Gentoo"
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{levels(penguins$island)
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] "Biscoe"    "Dream"     "Torgersen"
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{model.matrix(~ species + island, data = penguins) \%>\% 
+  colnames()
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] "(Intercept)"      "speciesChinstrap" "speciesGentoo"    "islandDream"     
+## [5] "islandTorgersen"
+}\if{html}{\out{</div>}}
+
+For a formula with no intercept, the first factor is expanded to
+indicators for \emph{all} factor levels but all other factors are expanded to
+all but one (as above):
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{model.matrix(~ 0 + species + island, data = penguins) \%>\% 
+  colnames()
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] "speciesAdelie"    "speciesChinstrap" "speciesGentoo"    "islandDream"     
+## [5] "islandTorgersen"
+}\if{html}{\out{</div>}}
+
+For inference, this hybrid encoding can be problematic.
+
+To generate all indicators, use this contrast:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Switch out the contrast method
+old_contr <- options("contrasts")$contrasts
+new_contr <- old_contr
+new_contr["unordered"] <- "contr_one_hot"
+options(contrasts = new_contr)
+
+model.matrix(~ species + island, data = penguins) \%>\% 
+  colnames()
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] "(Intercept)"      "speciesAdelie"    "speciesChinstrap" "speciesGentoo"   
+## [5] "islandBiscoe"     "islandDream"      "islandTorgersen"
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(contrasts = old_contr)
+}\if{html}{\out{</div>}}
+
+Removing the intercept here does not affect the factor encodings.
 }
 \keyword{internal}
