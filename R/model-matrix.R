@@ -178,6 +178,8 @@ model_matrix_one_hot <- function(terms, data, ..., call = caller_env()) {
 #' @param sparse This argument is for backwards compatibility and only the
 #'   default of `FALSE` is supported.
 #'
+#' @includeRmd man/rmd/one-hot.Rmd details
+#'
 #' @return A diagonal matrix that is `n`-by-`n`.
 #'
 #' @keywords internal
