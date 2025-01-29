@@ -21,7 +21,7 @@ the quantile levels.}
 
 \item{quantile_levels}{A vector of probabilities corresponding to \code{values}.}
 
-\item{x}{An object produced by \code{\link[=quantile_pred]{quantile_pred()}}.}
+\item{x}{An object produced by \code{quantile_pred()}.}
 
 \item{...}{Not currently used.}
 
@@ -30,17 +30,17 @@ original S3 method.}
 }
 \value{
 \itemize{
-\item \code{\link[=quantile_pred]{quantile_pred()}} returns a vector of values associated with the
+\item \code{quantile_pred()} returns a vector of values associated with the
 quantile levels.
-\item \code{\link[=extract_quantile_levels]{extract_quantile_levels()}} returns a numeric vector of levels.
-\item \code{\link[=as_tibble]{as_tibble()}} returns a tibble with rows \code{".pred_quantile"},
+\item \code{extract_quantile_levels()} returns a numeric vector of levels.
+\item \code{as_tibble()} returns a tibble with rows \code{".pred_quantile"},
 \code{".quantile_levels"}, and \code{".row"}.
-\item \code{\link[=as.matrix]{as.matrix()}} returns an unnamed matrix with rows as samples, columns as
+\item \code{as.matrix()} returns an unnamed matrix with rows as samples, columns as
 quantile levels, and entries are predictions.
 }
 }
 \description{
-\code{\link[=quantile_pred]{quantile_pred()}} is a special vector class used to efficiently store
+\code{quantile_pred()} is a special vector class used to efficiently store
 predictions from a quantile regression model. It requires the same quantile
 levels for each row being predicted.
 }
