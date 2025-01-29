@@ -25,7 +25,7 @@ Imports:
     cli (>= 3.6.0),
     glue (>= 1.6.2),
     rlang (>= 1.1.0),
-    sparsevctrs (>= 0.1.0.9000),
+    sparsevctrs (>= 0.2.0),
     tibble (>= 3.2.1),
     vctrs (>= 0.6.0)
 Suggests:
@@ -41,8 +41,6 @@ Suggests:
     testthat (>= 3.0.0),
     usethis (>= 2.1.5),
     withr (>= 3.0.0)
-Remotes:  
-    r-lib/sparsevctrs
 VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate
