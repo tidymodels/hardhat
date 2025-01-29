@@ -1,8 +1,10 @@
-# hardhat (development version)
+# hardhat 1.4.1
 
 * Added a new vector class called `quantile_pred()` to house predictions made from a quantile regression model (tidymodels/parsnip#1191, @dajmcdon). 
 
 * Several functions gained a `call` argument for passing the call used in errors and warnings (#275).
+
+* Errors and warnings are now generated with the cli package (#272).
 
 # hardhat 1.4.0
 
