@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="hardhat">
 <title>Molding data for modeling • hardhat</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -17,69 +16,56 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
-<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Molding data for modeling">
-<meta property="og:description" content="hardhat">
-<meta property="og:image" content="https://hardhat.tidymodels.org/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><script defer data-domain="hardhat.tidymodels.org,all.tidymodels.org" src="https://plausible.io/js/plausible.js"></script>
+<link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Molding data for modeling">
+<script defer data-domain="hardhat.tidymodels.org,all.tidymodels.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-none" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-none" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">hardhat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.1</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/forge.html">Forging data for predictions</a>
-    <a class="dropdown-item" href="../articles/mold.html">Molding data for modeling</a>
-    <a class="dropdown-item" href="../articles/package.html">Creating Modeling Packages With hardhat</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/forge.html">Forging data for predictions</a></li>
+    <li><a class="dropdown-item" href="../articles/mold.html">Molding data for modeling</a></li>
+    <li><a class="dropdown-item" href="../articles/package.html">Creating Modeling Packages With hardhat</a></li>
+  </ul>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-news">
-    <h6 class="dropdown-header" data-toc-skip>Releases</h6>
-    <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/">Version 0.1.0</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="../news/index.html">Changelog</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-news">
+<li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/12/hardhat-0-1-0/">Version 0.1.0</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../news/index.html">Changelog</a></li>
+  </ul>
 </li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/tidymodels/hardhat/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/tidymodels/hardhat/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article" id="container">
 
@@ -91,7 +77,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Molding data for modeling</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/hardhat/blob/HEAD/vignettes/mold.Rmd" class="external-link"><code>vignettes/mold.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/hardhat/blob/main/vignettes/mold.Rmd" class="external-link"><code>vignettes/mold.Rmd</code></a></small>
       <div class="d-none name"><code>mold.Rmd</code></div>
     </div>
 
@@ -295,12 +281,11 @@ controlled by the formula blueprint argument,
 <p>An error is thrown if an intercept removal term is specified:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">penguins</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mold_formula_default_clean()`:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `formula` must not contain the intercept removal term: `- 1`.</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mold()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `formula` must not contain the intercept removal term: `- 1`.</span></span>
+<span></span>
 <span><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="fl">0</span>, <span class="va">penguins</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mold_formula_default_clean()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mold()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `formula` must not contain the intercept removal term: `+ 0` or</span></span>
 <span><span class="co">#&gt;   `0 +`.</span></span></code></pre></div>
 </div>
@@ -314,7 +299,7 @@ forest, which can take factors directly, but still uses the formula
 notation. In this case, it would be great if the factor columns
 specified as predictors <em>weren’t</em> expanded. This is the job of
 the blueprint argument, <code>indicators</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">expanded_dummies</span><span class="op">$</span><span class="va">predictors</span></span>
@@ -332,7 +317,7 @@ the blueprint argument, <code>indicators</code>.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        <span style="text-decoration: underline;">3</span>800             1                0             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        <span style="text-decoration: underline;">4</span>400             1                0             0</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">non_expanded_dummies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span>, </span>
 <span>  blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_formula_blueprint.html">default_formula_blueprint</a></span><span class="op">(</span>indicators <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
@@ -360,7 +345,7 @@ that factor (also known as one-hot encoding). Subsequent columns are
 expanded into the more traditional <code>K - 1</code> columns. When an
 intercept is present, <code>K - 1</code> columns are generated for all
 factor predictors.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="op">~</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">k_minus_one_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span></span>
@@ -369,9 +354,8 @@ factor predictors.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">k_cols</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "speciesAdelie"    "speciesChinstrap" "speciesGentoo"</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] "speciesAdelie"    "speciesChinstrap" "speciesGentoo"</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">k_minus_one_cols</span><span class="op">$</span><span class="va">predictors</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "(Intercept)"      "speciesChinstrap" "speciesGentoo"</span></span></code></pre></div>
 </div>
@@ -380,7 +364,7 @@ factor predictors.</p>
 </h3>
 <p>One of the other frustrating things about working with the formula
 method is that multivariate outcomes are a bit clunky to specify.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">body_mass_g</span>, <span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span></span>
 <span></span>
 <span><span class="va">frame</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame</a></span><span class="op">(</span><span class="va">.f</span>, <span class="va">penguins</span><span class="op">)</span></span>
@@ -404,15 +388,13 @@ method is that multivariate outcomes are a bit clunky to specify.</p>
 column is named <code>cbind(body_mass_g, bill_length_mm)</code>, and it
 is actually a matrix with 2 columns, <code>body_mass_g</code> and
 <code>bill_length_mm</code> inside it.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">frame</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 2</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] 2</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">`cbind(body_mass_g, bill_length_mm)`</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "matrix" "array"</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] "matrix" "array"</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">`cbind(body_mass_g, bill_length_mm)`</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      body_mass_g bill_length_mm</span></span>
 <span><span class="co">#&gt; [1,]        3750           39.1</span></span>
@@ -426,7 +408,7 @@ you to specify multiple outcomes like you specify multiple predictors.
 You can even do inline transformations of each outcome, although if you
 are doing very much of that, I’d advise using a recipe instead.
 <code>outcomes</code> then holds the two outcomes columns.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">multivariate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">multivariate</span><span class="op">$</span><span class="va">outcomes</span></span>
@@ -451,7 +433,7 @@ are doing very much of that, I’d advise using a recipe instead.
 </h2>
 <p>The second interface is the XY interface, useful when the predictors
 and outcomes are specified separately.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">body_mass_g</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">penguins</span>, select <span class="op">=</span>  <span class="va">body_mass_g</span><span class="op">)</span></span>
 <span></span>
@@ -471,9 +453,8 @@ and outcomes are specified separately.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Adelie  Torgersen           41.1          17.6               182 female</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Adelie  Torgersen           38.6          21.2               191 male  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Adelie  Torgersen           34.6          21.1               198 male  </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span>
+<span></span>
 <span><span class="va">penguin_xy</span><span class="op">$</span><span class="va">outcomes</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span></span>
 <span><span class="co">#&gt;    body_mass_g</span></span>
@@ -494,7 +475,7 @@ it does let you specify an <code>intercept</code> in the blueprint
 specific arguments. Rather than
 <code><a href="../reference/default_formula_blueprint.html">default_formula_blueprint()</a></code>, this uses the
 <code><a href="../reference/default_xy_blueprint.html">default_xy_blueprint()</a></code>.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xy_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_xy_blueprint.html">default_xy_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">xy_with_intercept</span><span class="op">$</span><span class="va">predictors</span></span>
@@ -524,7 +505,7 @@ consistent with all of the other <code><a href="../reference/mold.html">mold()</
 <code>outcomes</code> slot of the return value should be a tibble. To
 achieve this when <code>y</code> is supplied as a vector, a default
 column name is created, <code>".outcome"</code>.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">$</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">$</span><span class="va">outcomes</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span></span>
 <span><span class="co">#&gt;    .outcome</span></span>
@@ -550,7 +531,7 @@ interface. The <code><a href="../reference/default_recipe_blueprint.html">defaul
 <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> your recipe, and <code><a href="https://recipes.tidymodels.org/reference/juice.html" class="external-link">juice()</a></code> it to extract
 the predictors and the outcomes. This is by far the most flexible way to
 preprocess your data.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">species</span> <span class="op">+</span> <span class="va">bill_depth_mm</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -573,9 +554,8 @@ preprocess your data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>          17.6                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>          21.2                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>          21.1                 0              0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span>
+<span></span>
 <span><span class="va">penguin_recipe</span><span class="op">$</span><span class="va">outcomes</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 333 × 1</span></span></span>
 <span><span class="co">#&gt;    bill_length_mm</span></span>
@@ -593,7 +573,7 @@ preprocess your data.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 <p>The only special thing you can tweak with the recipe blueprint is
 whether or not an intercept is added.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">recipe_with_intercept</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mold.html">mold</a></span><span class="op">(</span></span>
 <span>  <span class="va">rec</span>, <span class="va">penguins</span>, </span>
 <span>  blueprint <span class="op">=</span> <span class="fu"><a href="../reference/default_recipe_blueprint.html">default_recipe_blueprint</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -615,7 +595,7 @@ whether or not an intercept is added.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1          21.1                 0              0</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 323 more rows</span></span></span></code></pre></div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -628,7 +608,7 @@ whether or not an intercept is added.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
   </div></footer>
