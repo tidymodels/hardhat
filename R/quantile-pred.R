@@ -1,25 +1,25 @@
 #' Create a vector containing sets of quantiles
 #'
-#' [quantile_pred()] is a special vector class used to efficiently store
+#' `quantile_pred()` is a special vector class used to efficiently store
 #' predictions from a quantile regression model. It requires the same quantile
 #' levels for each row being predicted.
 #'
 #' @param values A matrix of values. Each column should correspond to one of
 #'   the quantile levels.
 #' @param quantile_levels A vector of probabilities corresponding to `values`.
-#' @param x An object produced by [quantile_pred()].
+#' @param x An object produced by `quantile_pred()`.
 #' @param .rows,.name_repair,rownames Arguments not used but required by the
 #' original S3 method.
 #' @param ... Not currently used.
 #'
 #' @export
 #' @return
-#'   * [quantile_pred()] returns a vector of values associated with the
+#'   * `quantile_pred()` returns a vector of values associated with the
 #' quantile levels.
-#'   * [extract_quantile_levels()] returns a numeric vector of levels.
-#'   * [as_tibble()] returns a tibble with rows `".pred_quantile"`,
+#'   * `extract_quantile_levels()` returns a numeric vector of levels.
+#'   * `as_tibble()` returns a tibble with rows `".pred_quantile"`,
 #'   `".quantile_levels"`, and `".row"`.
-#'   * [as.matrix()] returns an unnamed matrix with rows as samples, columns as
+#'   * `as.matrix()` returns an unnamed matrix with rows as samples, columns as
 #'   quantile levels, and entries are predictions.
 #' @examples
 #' .pred_quantile <- quantile_pred(matrix(rnorm(20), 5), c(.2, .4, .6, .8))
