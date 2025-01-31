@@ -1,3 +1,5 @@
+# hardhat (development version)
+
 # hardhat 1.4.1
 
 * Added a new vector class called `quantile_pred()` to house predictions made from a quantile regression model (tidymodels/parsnip#1191, @dajmcdon). 
