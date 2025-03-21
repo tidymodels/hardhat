@@ -42,13 +42,13 @@ quantile_pred <- function(values, quantile_levels = double()) {
 
   rownames(values) <- NULL
   colnames(values) <- NULL
-  values <- lapply(vctrs::vec_chop(values), drop)
+  values <- list(quantile_values = values)
   new_quantile_pred(values, quantile_levels)
 }
 
-new_quantile_pred <- function(values = list(), quantile_levels = double()) {
+new_quantile_pred <- function(values = list(quantile_values = matrix(double(), 0L, 0L)), quantile_levels = double()) {
   quantile_levels <- vctrs::vec_cast(quantile_levels, double())
-  vctrs::new_vctr(
+  vctrs::new_rcrd(
     values, quantile_levels = quantile_levels, class = "quantile_pred"
   )
 }
@@ -73,7 +73,7 @@ as_tibble.quantile_pred <-
     n_samp <- length(x)
     n_quant <- length(lvls)
     tibble::new_tibble(list(
-      .pred_quantile = unlist(x),
+      .pred_quantile = `dim<-`(t(vec_proxy(x)$quantile_values), NULL),
       .quantile_levels = rep(lvls, n_samp),
       .row = rep(1:n_samp, each = n_quant)
     ))
@@ -82,17 +82,16 @@ as_tibble.quantile_pred <-
 #' @export
 #' @rdname quantile_pred
 as.matrix.quantile_pred <- function(x, ...) {
-  num_samp <- length(x)
-  matrix(unlist(x), nrow = num_samp, byrow = TRUE)
+  vec_proxy(x)$quantile_values
 }
 
 #' @export
 format.quantile_pred <- function(x, digits = 3L, ...) {
   quantile_levels <- attr(x, "quantile_levels")
   if (length(quantile_levels) == 1L) {
-    x <- unlist(x)
+    x <- vec_proxy(x)$quantile_values
+    dim(x) <- NULL
     out <- signif(x, digits = digits)
-    out[is.na(x)] <- NA_real_
   } else {
     m <- median(x, na.rm = TRUE)
     out <- paste0("[", signif(m, digits = digits), "]")
@@ -103,14 +102,17 @@ format.quantile_pred <- function(x, digits = 3L, ...) {
 #' @export
 median.quantile_pred <- function(x, ...) {
   lvls <- attr(x, "quantile_levels")
+  vals <- vec_proxy(x)$quantile_values
   loc_median <- (abs(lvls - 0.5) < sqrt(.Machine$double.eps))
   if (any(loc_median)) {
-    return(map_dbl(x, ~ .x[min(which(loc_median))]))
+    return(vals[, min(which(loc_median))])
   }
   if (length(lvls) < 2 || min(lvls) > 0.5 || max(lvls) < 0.5) {
     return(rep(NA, vctrs::vec_size(x)))
   }
-  map_dbl(x, ~ stats::approx(lvls, .x, xout = 0.5)$y)
+  map_dbl(vec_seq_along(vals), function(row_i) {
+    stats::approx(lvls, vals[row_i, ], xout = 0.5)$y
+  })
 }
 
 #' @export
