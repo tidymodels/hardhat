@@ -140,7 +140,7 @@ vec_proxy_compare.quantile_pred <- function(x, ...) {
   cli::cli_abort("
     `vec_proxy_compare`, `<`, `<=`, `>`, and `>=` are not supported for
     `quantile_pred`s.
-  ")
+  ", class = "hardhat_error_comparing_quantile_preds")
 }
 
 #' @export

@@ -121,6 +121,17 @@ test_that("Various ways to introduce NAs in quantile_pred work", {
   }
 })
 
+test_that("Inequalities don't work on quantile_preds, but equality & sorting does:", {
+  v <- quantile_pred(matrix(c(6, 1, 2, 3, 5, 6), 2, 3, byrow = TRUE), 1:3/4)
+  expect_error(v < v, class = "hardhat_error_comparing_quantile_preds")
+  expect_error(v <= v, class = "hardhat_error_comparing_quantile_preds")
+  expect_error(v > v, class = "hardhat_error_comparing_quantile_preds")
+  expect_error(v >= v, class = "hardhat_error_comparing_quantile_preds")
+  expect_identical(v == v, c(TRUE, TRUE))
+  expect_identical(v != v, c(FALSE, FALSE))
+  expect_identical(sort(v), v[c(2, 1)])
+})
+
 test_that("quantile_pred typeof compatibility works", {
   dbl_mat <- matrix(c(1:3, c(4, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
   int_mat <- dbl_mat
