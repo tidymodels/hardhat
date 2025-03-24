@@ -96,7 +96,7 @@ test_that("as.matrix() for quantile_pred", {
   expect_identical(m, x)
 })
 
-test_that("Various ways to introduce NAs work", {
+test_that("Various ways to introduce NAs in quantile_pred work", {
   dbl_mat <- matrix(c(1:3, c(4, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
   int_mat <- dbl_mat
   storage.mode(int_mat) <- "integer"
@@ -118,8 +118,37 @@ test_that("Various ways to introduce NAs work", {
     )
     expect_identical(vec_detect_missing(v), c(FALSE, FALSE, TRUE))
     expect_identical(vec_detect_complete(v), c(TRUE, FALSE, FALSE))
-    expect_identical(vec_ptype(v), v[0])
   }
 })
 
-# TODO type compatibility tests
+test_that("quantile_pred typeof compatibility works", {
+  dbl_mat <- matrix(c(1:3, c(4, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
+  int_mat <- dbl_mat
+  storage.mode(int_mat) <- "integer"
+  levels <- 1:3 / 4
+  dbl_v <- quantile_pred(dbl_mat, levels)
+  int_v <- quantile_pred(int_mat, levels)
+  # ptype
+  expect_identical(vec_ptype(dbl_v), dbl_v[0])
+  expect_identical(vec_ptype(int_v), int_v[0])
+  # ptype2
+  expect_identical(vec_ptype2(dbl_v, int_v), dbl_v[0])
+  expect_identical(vec_ptype2(int_v, dbl_v), dbl_v[0])
+  # cast
+  expect_identical(vec_cast(int_v, dbl_v), dbl_v)
+  expect_identical(vec_cast(dbl_v, int_v), int_v)
+  dbl_v2 <- dbl_v
+  field(dbl_v2, "quantile_values") <- field(dbl_v2, "quantile_values") + 0.5
+  expect_error(vec_cast(dbl_v2, int_v), class = "vctrs_error_cast_lossy")
+})
+
+test_that("quantile_pred level (in)compatibility works", {
+  levels1 <- seq(0, 0.2, by = 0.05)
+  levels2 <- c(0, 0.05, 0.1, 0.15, 0.2)
+  expect_false(all(levels1 == levels2))
+  v1 <- quantile_pred(t(as.matrix(1:5)), levels1)
+  v2 <- quantile_pred(t(as.matrix(1:5)), levels2)
+  expect_error(vec_ptype2(v1, v2), class = "vctrs_error_incompatible_type")
+  expect_error(vec_cast(v1, v2), class = "vctrs_error_incompatible_type")
+  expect_error(vec_cast(v2, v1), class = "vctrs_error_incompatible_type")
+})
