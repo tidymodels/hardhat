@@ -53,8 +53,6 @@ new_quantile_pred <- function(values = list(quantile_values = matrix(double(), 0
   )
 }
 
-# TODO disable lexicographical comparison
-
 # TODO tests for NA behaviors
 
 #' @export
@@ -135,6 +133,25 @@ obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
   cat(footer, format(lvls, digits = digits), "\n", sep = " ")
 }
 
+#' @export
+vec_proxy_compare.quantile_pred <- function(x, ...) {
+  # Using a proxy-based lexicographical order doesn't make sense for binary
+  # comparison operators. (A partial order could be implemented by directly
+  # overriding the binary comparison operators, but would conflict with the
+  # lexicographical total order used for sorting.)
+  cli::cli_abort("
+    `vec_proxy_compare`, `<`, `<=`, `>`, and `>=` are not supported for
+    `quantile_pred`s.
+  ")
+}
+
+#' @export
+vec_proxy_order.quantile_pred <- function(x, ...) {
+  # Like {vctrs}' list treatment, allow for (lexicographical) ordering based on
+  # `quantile_pred`s, even though we disallow using this order for binary
+  # comparison operators.
+  vec_proxy(x)
+}
 
 # ------------------------------------------------------------------------------
 # Checking functions
