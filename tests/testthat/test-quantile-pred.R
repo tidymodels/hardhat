@@ -95,3 +95,31 @@ test_that("as.matrix() for quantile_pred", {
   expect_true(is.matrix(m))
   expect_identical(m, x)
 })
+
+test_that("Various ways to introduce NAs work", {
+  dbl_mat <- matrix(c(1:3, c(4, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
+  int_mat <- dbl_mat
+  storage.mode(int_mat) <- "integer"
+  levels <- 1:3 / 4
+  dbl_v <- quantile_pred(dbl_mat, levels)
+  int_v <- quantile_pred(int_mat, levels)
+  for (v in list(dbl_v, int_v)) {
+    sentinel <- v[3]
+    expect_identical(vec_init(v, 5), rep(sentinel, 5))
+    expect_identical(vec_c(v[1:2], NA), v)
+    expect_identical(vec_c(NA, v[1:2]), v[c(3, 1, 2)])
+    expect_identical(
+      dplyr::full_join(tibble(date = as.Date("2020-01-01") + 0:5),
+                       tibble(date = as.Date("2020-01-01") + 1:3,
+                              pred = v),
+                       by = "date"),
+      tibble(date = as.Date("2020-01-01") + 0:5,
+             pred = v[c(3, 1:3, 3, 3)])
+    )
+    expect_identical(vec_detect_missing(v), c(FALSE, FALSE, TRUE))
+    expect_identical(vec_detect_complete(v), c(TRUE, FALSE, FALSE))
+    expect_identical(vec_ptype(v), v[0])
+  }
+})
+
+# TODO type compatibility tests

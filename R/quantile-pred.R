@@ -53,8 +53,6 @@ new_quantile_pred <- function(values = list(quantile_values = matrix(double(), 0
   )
 }
 
-# TODO tests for NA behaviors
-
 #' @export
 #' @rdname quantile_pred
 extract_quantile_levels <- function(x) {
