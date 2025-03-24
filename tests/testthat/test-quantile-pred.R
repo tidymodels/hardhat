@@ -37,8 +37,8 @@ test_that("quantile_pred outputs", {
   expect_s3_class(v, "quantile_pred")
   expect_identical(attr(v, "quantile_levels"), 1:4 / 5)
   expect_identical(
-    vctrs::vec_data(v),
-    lapply(vctrs::vec_chop(matrix(1:20, 5)), drop)
+    vctrs::vec_data(v) %>% lapply(unname),
+    list(quantile_values = matrix(1:20, 5))
   )
 })
 
