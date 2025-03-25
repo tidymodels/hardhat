@@ -78,6 +78,7 @@ test_that("quantile_pred formatting", {
   v <- quantile_pred(matrix(exp(rnorm(20)), ncol = 4), 1:4 / 5)
   expect_snapshot(format(v))
   expect_snapshot(format(v, digits = 5))
+  expect_snapshot(data.frame(v = v))
 })
 
 test_that("as_tibble() for quantile_pred", {
@@ -109,12 +110,12 @@ test_that("Various ways to introduce NAs in quantile_pred work", {
     expect_identical(vec_c(v[1:2], NA), v)
     expect_identical(vec_c(NA, v[1:2]), v[c(3, 1, 2)])
     expect_identical(
-      dplyr::full_join(tibble(date = as.Date("2020-01-01") + 0:5),
-                       tibble(date = as.Date("2020-01-01") + 1:3,
-                              pred = v),
-                       by = "date"),
-      tibble(date = as.Date("2020-01-01") + 0:5,
-             pred = v[c(3, 1:3, 3, 3)])
+      merge(tibble(date = as.Date("2020-01-01") + 0:5),
+            tibble(date = as.Date("2020-01-01") + 1:3,
+                   pred = v),
+            by = "date", all = TRUE),
+      data.frame(date = as.Date("2020-01-01") + 0:5,
+                 pred = v[c(3, 1:3, 3, 3)])
     )
     expect_identical(vec_detect_missing(v), c(FALSE, FALSE, TRUE))
     expect_identical(vec_detect_complete(v), c(TRUE, FALSE, FALSE))

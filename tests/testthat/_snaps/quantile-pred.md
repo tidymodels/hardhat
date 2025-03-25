@@ -168,6 +168,18 @@
     Output
       [1] "[1.7154]"  "[0.56784]" "[1.2393]"  "[2.2062]"  "[0.76714]"
 
+---
+
+    Code
+      data.frame(v = v)
+    Output
+              v
+      1  [1.72]
+      2 [0.568]
+      3  [1.24]
+      4  [2.21]
+      5 [0.767]
+
 # quantile_pred level (in)compatibility works
 
     Code

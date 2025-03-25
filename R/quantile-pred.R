@@ -86,7 +86,10 @@ as.matrix.quantile_pred <- function(x, ...) {
 }
 
 #' @export
-format.quantile_pred <- function(x, digits = 3L, ...) {
+format.quantile_pred <- function(x, digits = NULL, ...) {
+  if (is.null(digits)) {
+    digits <- 3L
+  }
   quantile_levels <- attr(x, "quantile_levels")
   if (length(quantile_levels) == 1L) {
     x <- field(x, "quantile_values")
