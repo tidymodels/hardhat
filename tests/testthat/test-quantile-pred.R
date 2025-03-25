@@ -97,7 +97,7 @@ test_that("as.matrix() for quantile_pred", {
 })
 
 test_that("Various ways to introduce NAs in quantile_pred work", {
-  dbl_mat <- matrix(c(1:3, c(4, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
+  dbl_mat <- matrix(c(1:3, c(1, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
   int_mat <- dbl_mat
   storage.mode(int_mat) <- "integer"
   levels <- 1:3 / 4
@@ -119,6 +119,14 @@ test_that("Various ways to introduce NAs in quantile_pred work", {
     expect_identical(vec_detect_missing(v), c(FALSE, FALSE, TRUE))
     expect_identical(vec_detect_complete(v), c(TRUE, FALSE, FALSE))
   }
+})
+
+test_that("quantile_pred == logic outputs NAs when expected", {
+  single_pred <- function(values, levels) quantile_pred(t(as.matrix(values)), levels)
+  expect_identical(single_pred(1, 0.5) == single_pred(NA, 0.5), NA)
+  expect_identical(single_pred(NA, 0.5) == single_pred(NA, 0.5), NA)
+  expect_identical(single_pred(c(1, NA), 1:2/3) == single_pred(c(4, NA), 1:2/3), FALSE)
+  expect_identical(single_pred(c(1, NA), 1:2/3) == single_pred(c(4, 5), 1:2/3), FALSE)
 })
 
 test_that("Inequalities don't work on quantile_preds, but equality & sorting does:", {
