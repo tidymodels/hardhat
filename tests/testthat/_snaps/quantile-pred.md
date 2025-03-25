@@ -168,3 +168,14 @@
     Output
       [1] "[1.7154]"  "[0.56784]" "[1.2393]"  "[2.2062]"  "[0.76714]"
 
+# quantile_pred level (in)compatibility works
+
+    Code
+      vec_ptype2(v1, v2)
+    Condition <vctrs_error_ptype2>
+      Error:
+      ! Can't combine `v1` <quantiles> and `v2` <quantiles>.
+      They have different sets of quantile levels:
+      * 1st set of quantile levels: 0, 0.05, 0.1, 0.15000000000000002, and 0.2
+      * 2nd set of quantile levels: 0, 0.05, 0.1, 0.15, and 0.2
+

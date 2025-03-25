@@ -160,6 +160,7 @@ test_that("quantile_pred level (in)compatibility works", {
   v1 <- quantile_pred(t(as.matrix(1:5)), levels1)
   v2 <- quantile_pred(t(as.matrix(1:5)), levels2)
   expect_error(vec_ptype2(v1, v2), class = "vctrs_error_incompatible_type")
+  expect_snapshot(vec_ptype2(v1, v2), error = TRUE, cnd_class = TRUE)
   expect_error(vec_cast(v1, v2), class = "vctrs_error_incompatible_type")
   expect_error(vec_cast(v2, v1), class = "vctrs_error_incompatible_type")
 })

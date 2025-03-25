@@ -154,42 +154,52 @@ vec_proxy_order.quantile_pred <- function(x, ...) {
 # ------------------------------------------------------------------------------
 # ptype-related functions
 
+format_quantile_levels <- function(quantile_levels) {
+  # Make sure that we format levels with enough sig figs to detect minor
+  # differences. Specifically, format them with enough sig figs that we recover
+  # their precise values.
+  result <- formatC(quantile_levels, digits = 3)
+  for (digits in 4:17) { # 17 significant digits should be enough to disambiguate
+    imprecise <- as.numeric(result) != quantile_levels
+    if (!any(imprecise)) break
+    result[imprecise] <- formatC(quantile_levels[imprecise], digits = digits)
+  }
+  result <- trimws(result)
+  result
+}
+
+validate_preds_have_same_quantile_levels <- function(x, y, action, x_arg, y_arg, call) {
+  x_quantile_levels <- attr(x, "quantile_levels")
+  y_quantile_levels <- attr(y, "quantile_levels")
+  if (!identical(x_quantile_levels, y_quantile_levels)) {
+    x_formatted_levels <- format_quantile_levels(x_quantile_levels)
+    y_formatted_levels <- format_quantile_levels(y_quantile_levels)
+    stop_incompatible_type(
+      x, y,
+      action = action,
+      x_arg = x_arg, y_arg = y_arg,
+      details = cli::format_error(c(
+                       "They have different sets of quantile levels:",
+                       "*" = '1st set of quantile levels: {x_formatted_levels}',
+                       "*" = '2nd set of quantile levels: {y_formatted_levels}'
+                     )),
+      call = call
+    )
+  }
+}
+
 #' @export
 vec_ptype2.quantile_pred.quantile_pred <-
   function(x, y, ..., x_arg = caller_arg(x), y_arg = caller_arg(y), call = caller_env()) {
-    x_quantile_levels <- attr(x, "quantile_levels")
-    y_quantile_levels <- attr(y, "quantile_levels")
-    if (!identical(x_quantile_levels, y_quantile_levels)) {
-      stop_incompatible_type(
-        x, y, x_arg = x_arg, y_arg = y_arg,
-        details = c(
-          "They have different sets of quantile levels:",
-          "*" = '1st set of quantile levels: {attr(x, "quantile_levels")}',
-          "*" = '2nd set of quantile levels: {attr(y, "quantile_levels")}'
-        ),
-        call = caller_env()
-      )
-    }
+    validate_preds_have_same_quantile_levels(x, y, "combine", x_arg, y_arg, call)
     field(x, "quantile_values") <- vec_ptype2(field(x, "quantile_values"), field(y, "quantile_values"))
     x
   }
 
 #' @export
 vec_cast.quantile_pred.quantile_pred <-
-  function (x, to, ..., x_arg = caller_arg(x), to_arg = "", call = caller_env()) {
-    x_quantile_levels <- attr(x, "quantile_levels")
-    to_quantile_levels <- attr(to, "quantile_levels")
-    if (!identical(x_quantile_levels, to_quantile_levels)) {
-      stop_incompatible_cast(
-        x, to, x_arg = x_arg, to_arg = to_arg,
-        details = c(
-          "They have different sets of quantile levels:",
-          "*" = '1st set of quantile levels: {attr(x, "quantile_levels")}',
-          "*" = '2nd set of quantile levels: {attr(to, "quantile_levels")}'
-        ),
-        call = caller_env()
-      )
-    }
+  function(x, to, ..., x_arg = caller_arg(x), to_arg = "", call = caller_env()) {
+    validate_preds_have_same_quantile_levels(x, to, "convert", x_arg, to_arg, call)
     field(x, "quantile_values") <- vec_cast(field(x, "quantile_values"), field(to, "quantile_values"))
     x
   }
