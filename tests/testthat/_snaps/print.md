@@ -40,6 +40,10 @@
 
     Code
       mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)$blueprint
+    Condition
+      Warning:
+      The `strings_as_factors` argument of `prep.recipe()` is deprecated as of recipes 1.3.0.
+      i Please use the `strings_as_factors` argument of `recipe()` instead.
     Message
       Recipe blueprint:
       # Predictors: 1
