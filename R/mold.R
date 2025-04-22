@@ -152,7 +152,7 @@ mold.recipe <- function(x, data, ..., blueprint = NULL) {
 #' @param blueprint A preprocessing blueprint.
 #'
 #' @param ... Not used. Required for extensibility.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
@@ -177,5 +177,7 @@ run_mold <- function(blueprint, ...) {
 
 #' @export
 run_mold.default <- function(blueprint, ...) {
-  cli::cli_abort("No {.fn run_mold} method provided for {.obj_type_friendly {blueprint}}.")
+  cli::cli_abort(
+    "No {.fn run_mold} method provided for {.obj_type_friendly {blueprint}}."
+  )
 }

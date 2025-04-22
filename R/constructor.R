@@ -30,10 +30,18 @@
 #'   class = "custom_model"
 #' )
 #' @export
-new_model <- function(..., blueprint = default_xy_blueprint(), class = character()) {
+new_model <- function(
+  ...,
+  blueprint = default_xy_blueprint(),
+  class = character()
+) {
   check_blueprint(blueprint)
 
-  new_abstract_model(..., blueprint = blueprint, class = c(class, "hardhat_model"))
+  new_abstract_model(
+    ...,
+    blueprint = blueprint,
+    class = c(class, "hardhat_model")
+  )
 }
 
 # ------------------------------------------------------------------------------
@@ -67,7 +75,7 @@ new_scalar <- function(elems, ..., class = character()) {
 
 check_elems <- function(elems, ..., call = caller_env()) {
   check_dots_empty0(...)
-  
+
   if (!is.list(elems) || length(elems) == 0) {
     cli::cli_abort(
       "{.arg elems} must be a list of length 1 or greater.",

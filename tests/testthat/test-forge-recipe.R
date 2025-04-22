@@ -168,7 +168,11 @@ test_that("novel predictor levels are caught", {
   )
 
   x1 <- mold(recipes::recipe(y ~ f, dat), dat)
-  x2 <- mold(recipes::step_dummy(recipes::recipe(y ~ f, dat), f), dat, blueprint = sparse_bp)
+  x2 <- mold(
+    recipes::step_dummy(recipes::recipe(y ~ f, dat), f),
+    dat,
+    blueprint = sparse_bp
+  )
 
   expect_snapshot({
     xx1 <- forge(new, x1$blueprint)
@@ -203,7 +207,10 @@ test_that("novel predictor levels can be ignored and handled by recipes", {
   )
 
   bp1 <- default_recipe_blueprint(allow_novel_levels = TRUE)
-  bp2 <- default_recipe_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
+  bp2 <- default_recipe_blueprint(
+    allow_novel_levels = TRUE,
+    composition = "dgCMatrix"
+  )
 
   rec1 <- recipes::recipe(y ~ f, dat)
   rec2 <- recipes::step_novel(rec1, f)
@@ -403,7 +410,11 @@ test_that("new data classes are caught", {
   )
 
   x3 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)
-  x4 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris, blueprint = sparse_bp)
+  x4 <- mold(
+    recipes::recipe(Species ~ Sepal.Length, iris),
+    iris,
+    blueprint = sparse_bp
+  )
 
   expect_no_error(xx3 <- forge(iris2, x3$blueprint, outcomes = TRUE))
   expect_no_error(xx4 <- forge(iris2, x4$blueprint, outcomes = TRUE))
@@ -427,7 +438,11 @@ test_that("new data classes can interchange integer/numeric", {
   iris2$Sepal.Length <- as.integer(iris2$Sepal.Length)
 
   x1 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris)
-  x2 <- mold(recipes::recipe(Species ~ Sepal.Length, iris), iris, blueprint = sparse_bp)
+  x2 <- mold(
+    recipes::recipe(Species ~ Sepal.Length, iris),
+    iris,
+    blueprint = sparse_bp
+  )
 
   expect_no_error(forge(iris2, x1$blueprint))
   expect_no_error(forge(iris2, x2$blueprint))
@@ -725,7 +740,11 @@ test_that("`strings_as_factors` is used at `bake()` time", {
   expect_identical(out$outcomes$y, factor("a"))
   expect_identical(out$predictors$x, factor("b"))
 
-  x <- mold(rec, df, blueprint = default_recipe_blueprint(strings_as_factors = FALSE))
+  x <- mold(
+    rec,
+    df,
+    blueprint = default_recipe_blueprint(strings_as_factors = FALSE)
+  )
   out <- forge(df, x$blueprint, outcomes = TRUE)
   expect_identical(out$outcomes$y, "a")
   expect_identical(out$predictors$x, "b")
@@ -757,7 +776,10 @@ test_that("`forge()` is compatible with hardhat 0.2.0 molded blueprints with a b
 test_that("`forge()` is compatible with hardhat 0.2.0 molded blueprints with a recipe with a nonstandard role", {
   skip_if_not_installed("recipes")
 
-  path <- test_path("data", "hardhat-0.2.0-post-mold-recipe-nonstandard-role.rds")
+  path <- test_path(
+    "data",
+    "hardhat-0.2.0-post-mold-recipe-nonstandard-role.rds"
+  )
   object <- readRDS(path)
 
   new_data <- object$new_data

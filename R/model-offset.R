@@ -8,7 +8,7 @@
 #' call to `model_frame()`.
 #'
 #' @param data A data frame returned from a call to `model_frame()`.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return

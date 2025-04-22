@@ -5,7 +5,7 @@
 #' `get_data_classes()` extracts the classes from the original training data.
 #'
 #' @param data A data frame or matrix.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return

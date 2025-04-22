@@ -13,7 +13,7 @@
 #' @param data A data frame containing the data to subset.
 #'
 #' @param ptype A data frame prototype containing the required columns.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return

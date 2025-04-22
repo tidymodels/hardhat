@@ -68,7 +68,16 @@ test_that("no `path` aborts normally", {
 test_that("`model` can only be a single string", {
   skip_if_not_installed("recipes")
 
-  expect_snapshot(error = TRUE, create_modeling_package(path = "my/path", model = c("model1", "model2")))
-  expect_snapshot(error = TRUE, create_modeling_package(path = "my/path", model = 1))
-  expect_snapshot(error = TRUE, create_modeling_package(path = "my/path", model = "model with space"))
+  expect_snapshot(
+    error = TRUE,
+    create_modeling_package(path = "my/path", model = c("model1", "model2"))
+  )
+  expect_snapshot(
+    error = TRUE,
+    create_modeling_package(path = "my/path", model = 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    create_modeling_package(path = "my/path", model = "model with space")
+  )
 })

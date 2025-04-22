@@ -39,8 +39,16 @@ test_that("can forge multivariate formulas", {
   expect_equal(xx1$outcomes, xx3$outcomes)
 
   y1 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train)
-  y2 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = sparse_bp)
-  y3 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = matrix_bp)
+  y2 <- mold(
+    log(num_2) + poly(num_2, degree = 2) ~ fac_1,
+    example_train,
+    blueprint = sparse_bp
+  )
+  y3 <- mold(
+    log(num_2) + poly(num_2, degree = 2) ~ fac_1,
+    example_train,
+    blueprint = matrix_bp
+  )
   yy1 <- forge(example_train, y1$blueprint, outcomes = TRUE)
   yy2 <- forge(example_train, y2$blueprint, outcomes = TRUE)
   yy3 <- forge(example_train, y3$blueprint, outcomes = TRUE)
@@ -94,7 +102,10 @@ test_that("forging with `indicators = 'none'` works with numeric interactions", 
   x2 <- mold(
     fac_1 ~ num_2:num_1,
     example_train,
-    blueprint = default_formula_blueprint(indicators = "none", composition = "dgCMatrix")
+    blueprint = default_formula_blueprint(
+      indicators = "none",
+      composition = "dgCMatrix"
+    )
   )
 
   xx2 <- forge(example_train, x2$blueprint)
@@ -144,7 +155,11 @@ test_that("asking for the outcome when it isn't there fails", {
 test_that("can use special inline functions", {
   bp <- default_formula_blueprint(composition = "matrix")
   x1 <- mold(log(num_1) ~ poly(num_1, degree = 2), example_train)
-  x2 <- mold(log(num_1) ~ poly(num_1, degree = 2), example_train, blueprint = bp)
+  x2 <- mold(
+    log(num_1) ~ poly(num_1, degree = 2),
+    example_train,
+    blueprint = bp
+  )
   xx1 <- forge(example_train, x1$blueprint, outcomes = TRUE)
   xx2 <- forge(example_train, x2$blueprint, outcomes = TRUE)
 
@@ -247,7 +262,6 @@ test_that("novel predictor levels are caught", {
   x1 <- mold(y ~ f, dat)
   x2 <- mold(y ~ f, dat, blueprint = bp)
 
-
   expect_snapshot(xx1 <- forge(new, x1$blueprint))
   expect_snapshot(xx2 <- forge(new, x2$blueprint))
 
@@ -281,7 +295,10 @@ test_that("novel predictor levels can be ignored", {
   )
 
   bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
-  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
+  bp2 <- default_formula_blueprint(
+    allow_novel_levels = TRUE,
+    composition = "dgCMatrix"
+  )
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -351,7 +368,10 @@ test_that("novel predictor levels without any data are kept when novel levels ar
   new <- new[1:4, ]
 
   bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
-  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
+  bp2 <- default_formula_blueprint(
+    allow_novel_levels = TRUE,
+    composition = "dgCMatrix"
+  )
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -462,7 +482,10 @@ test_that("novel levels are ignored correctly when the new column is a character
   )
 
   bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
-  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "dgCMatrix")
+  bp2 <- default_formula_blueprint(
+    allow_novel_levels = TRUE,
+    composition = "dgCMatrix"
+  )
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -512,8 +535,14 @@ test_that("novel ordered factor predictor levels are never allowed", {
     f = ordered(letters[1:5])
   )
 
-  bp1 <- default_formula_blueprint(indicators = "none", allow_novel_levels = FALSE)
-  bp2 <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(
+    indicators = "none",
+    allow_novel_levels = FALSE
+  )
+  bp2 <- default_formula_blueprint(
+    indicators = "none",
+    allow_novel_levels = TRUE
+  )
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -539,8 +568,14 @@ test_that("ordered factor predictors with different level ordering is an error",
     f = ordered(letters[1:4], levels = letters[c(1:2, 4, 3)])
   )
 
-  bp1 <- default_formula_blueprint(indicators = "none", allow_novel_levels = FALSE)
-  bp2 <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(
+    indicators = "none",
+    allow_novel_levels = FALSE
+  )
+  bp2 <- default_formula_blueprint(
+    indicators = "none",
+    allow_novel_levels = TRUE
+  )
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -595,7 +630,10 @@ test_that("novel outcome levels are always caught, even if `allow_novel_levels =
   )
 
   bp1 <- default_formula_blueprint(allow_novel_levels = TRUE)
-  bp2 <- default_formula_blueprint(allow_novel_levels = TRUE, composition = "matrix")
+  bp2 <- default_formula_blueprint(
+    allow_novel_levels = TRUE,
+    composition = "matrix"
+  )
 
   x1 <- mold(f ~ y, dat, blueprint = bp1)
   x2 <- mold(f ~ y, dat, blueprint = bp2)
@@ -668,8 +706,14 @@ test_that("missing ordered factor levels are an error", {
     f = ordered(letters[1:4])
   )
 
-  bp1 <- default_formula_blueprint(indicators = "none", allow_novel_levels = FALSE)
-  bp2 <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
+  bp1 <- default_formula_blueprint(
+    indicators = "none",
+    allow_novel_levels = FALSE
+  )
+  bp2 <- default_formula_blueprint(
+    indicators = "none",
+    allow_novel_levels = TRUE
+  )
 
   x1 <- mold(y ~ f, dat, blueprint = bp1)
   x2 <- mold(y ~ f, dat, blueprint = bp2)
@@ -738,7 +782,10 @@ test_that("can be both missing levels and have new levels that get ignored", {
     f = factor(letters[c(1:3, 5)])
   )
 
-  blueprint <- default_formula_blueprint(indicators = "none", allow_novel_levels = TRUE)
+  blueprint <- default_formula_blueprint(
+    indicators = "none",
+    allow_novel_levels = TRUE
+  )
 
   x <- mold(y ~ f, dat, blueprint = blueprint)
 
@@ -779,7 +826,11 @@ test_that("new data classes are caught", {
   example_train2 <- example_train
   example_train2$fac_1 <- as.character(example_train2$fac_1)
 
-  x <- mold(num_1 ~ fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none"))
+  x <- mold(
+    num_1 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(indicators = "none")
+  )
 
   # Silently recover character -> factor
   expect_no_error(
@@ -826,7 +877,11 @@ test_that("new data classes can interchange integer/numeric", {
 })
 
 test_that("intercepts can still be forged on when not using indicators (i.e. model.matrix())", {
-  x <- mold(num_2 ~ fac_1, example_train, blueprint = default_formula_blueprint(intercept = TRUE, indicators = "none"))
+  x <- mold(
+    num_2 ~ fac_1,
+    example_train,
+    blueprint = default_formula_blueprint(intercept = TRUE, indicators = "none")
+  )
   xx <- forge(example_train, x$blueprint)
 
   expect_true(
@@ -873,8 +928,14 @@ test_that("character predictors are treated as factors when `indicators` is not 
 
   bp1 <- default_formula_blueprint(indicators = "traditional")
   bp2 <- default_formula_blueprint(indicators = "one_hot")
-  bp3 <- default_formula_blueprint(indicators = "traditional", composition = "matrix")
-  bp4 <- default_formula_blueprint(indicators = "one_hot", composition = "matrix")
+  bp3 <- default_formula_blueprint(
+    indicators = "traditional",
+    composition = "matrix"
+  )
+  bp4 <- default_formula_blueprint(
+    indicators = "one_hot",
+    composition = "matrix"
+  )
 
   res1 <- mold(y ~ x + z, df, blueprint = bp1)
   res2 <- mold(y ~ x + z, df, blueprint = bp2)
@@ -935,11 +996,11 @@ test_that("`new_data` uses the character predictor column's observed levels", {
   bp1 <- default_formula_blueprint(indicators = "traditional")
   bp2 <- default_formula_blueprint(indicators = "one_hot")
 
-  x <- mold(~ x, df1, blueprint = bp1)
+  x <- mold(~x, df1, blueprint = bp1)
   out <- forge(df2, x$blueprint)
   expect_named(out$predictors, c("xa", "xb", "xc"))
 
-  x <- mold(~ x, df1, blueprint = bp2)
+  x <- mold(~x, df1, blueprint = bp2)
   out <- forge(df2, x$blueprint)
   expect_named(out$predictors, c("xa", "xb", "xc"))
 })
@@ -949,21 +1010,24 @@ test_that("`allow_novel_levels` works right with character predictors", {
   df2 <- tibble(x = c("a", "d"))
 
   bp <- default_formula_blueprint(allow_novel_levels = FALSE)
-  x <- mold(~ x, df1, blueprint = bp)
+  x <- mold(~x, df1, blueprint = bp)
   expect_snapshot({
     # Novel level warning about `d`
     out <- forge(df2, x$blueprint)
   })
   expect_named(out$predictors, c("xa", "xb", "xc"))
 
-  bp <- default_formula_blueprint(allow_novel_levels = FALSE, indicators = "none")
-  x <- mold(~ x, df1, blueprint = bp)
+  bp <- default_formula_blueprint(
+    allow_novel_levels = FALSE,
+    indicators = "none"
+  )
+  x <- mold(~x, df1, blueprint = bp)
   out <- forge(df2, x$blueprint)
   expect_named(out$predictors, "x")
   expect_identical(out$predictors$x, c("a", "d"))
 
   bp <- default_formula_blueprint(allow_novel_levels = TRUE)
-  x <- mold(~ x, df1, blueprint = bp)
+  x <- mold(~x, df1, blueprint = bp)
   out <- forge(df2, x$blueprint)
   expect_named(out$predictors, c("xa", "xd", "xb", "xc"))
 })
@@ -973,14 +1037,14 @@ test_that("character vectors in `new_data` with 1 contrast level works properly 
   df2 <- tibble(x = "a")
 
   bp <- default_formula_blueprint(indicators = "traditional")
-  x <- mold(~ x, df1, blueprint = bp)
+  x <- mold(~x, df1, blueprint = bp)
   out <- forge(df2, x$blueprint)
   expect_named(out$predictors, c("xa", "xb"))
   expect_identical(out$predictors$xa, 1)
   expect_identical(out$predictors$xb, 0)
 
   bp <- default_formula_blueprint(indicators = "one_hot")
-  x <- mold(~ x, df1, blueprint = bp)
+  x <- mold(~x, df1, blueprint = bp)
   out <- forge(df2, x$blueprint)
   expect_named(out$predictors, c("xa", "xb"))
   expect_identical(out$predictors$xa, 1)
@@ -992,7 +1056,7 @@ test_that("character vectors in `new_data` with 1 contrast level works properly 
   df2 <- tibble(x = "a")
 
   bp <- default_formula_blueprint(indicators = "none")
-  x <- mold(~ x, df1, blueprint = bp)
+  x <- mold(~x, df1, blueprint = bp)
   out <- forge(df2, x$blueprint)
 
   expect_named(out$predictors, "x")
@@ -1013,8 +1077,14 @@ test_that("`new_data` can be converted losslessly from factor to character", {
   bp1 <- default_formula_blueprint(indicators = "none")
   bp2 <- default_formula_blueprint(indicators = "traditional")
   bp3 <- default_formula_blueprint(indicators = "one_hot")
-  bp4 <- default_formula_blueprint(indicators = "traditional", composition = "matrix")
-  bp5 <- default_formula_blueprint(indicators = "one_hot", composition = "matrix")
+  bp4 <- default_formula_blueprint(
+    indicators = "traditional",
+    composition = "matrix"
+  )
+  bp5 <- default_formula_blueprint(
+    indicators = "one_hot",
+    composition = "matrix"
+  )
 
   res1 <- mold(y ~ x + z, df, blueprint = bp1)
   res2 <- mold(y ~ x + z, df, blueprint = bp2)

@@ -36,8 +36,16 @@ test_that("can mold multivariate formulas", {
   expect_equal(x1$outcomes, x3$outcomes)
 
   y1 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train)
-  y2 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = sparse_bp)
-  y3 <- mold(log(num_2) + poly(num_2, degree = 2) ~ fac_1, example_train, blueprint = matrix_bp)
+  y2 <- mold(
+    log(num_2) + poly(num_2, degree = 2) ~ fac_1,
+    example_train,
+    blueprint = sparse_bp
+  )
+  y3 <- mold(
+    log(num_2) + poly(num_2, degree = 2) ~ fac_1,
+    example_train,
+    blueprint = matrix_bp
+  )
 
   expect_equal(
     colnames(y1$outcomes),
@@ -60,13 +68,19 @@ test_that("factor predictors with no intercept are fully expanded", {
   x2 <- mold(
     num_1 ~ fac_1,
     example_train,
-    blueprint = default_formula_blueprint(intercept = TRUE, composition = "matrix")
+    blueprint = default_formula_blueprint(
+      intercept = TRUE,
+      composition = "matrix"
+    )
   )
 
   y1 <- mold(
     num_1 ~ fac_1,
     example_train,
-    blueprint = default_formula_blueprint(intercept = FALSE, indicators = "one_hot")
+    blueprint = default_formula_blueprint(
+      intercept = FALSE,
+      indicators = "one_hot"
+    )
   )
   y2 <- mold(
     num_1 ~ fac_1,
@@ -111,7 +125,11 @@ test_that("can mold and not expand dummies", {
 
 test_that("errors are thrown if `indicator = 'none'` and factor interactions exist", {
   expect_no_error(
-    mold(~fac_1, example_train, blueprint = default_formula_blueprint(indicators = "none"))
+    mold(
+      ~fac_1,
+      example_train,
+      blueprint = default_formula_blueprint(indicators = "none")
+    )
   )
 
   expect_snapshot(error = TRUE, {
@@ -175,10 +193,18 @@ test_that("errors are thrown if `indicator = 'none'` and factors are used in inl
     mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators)
   })
   expect_snapshot(error = TRUE, {
-    mold(~ fac_1 %>% paste0(), example_train, blueprint = blueprint_no_indicators)
+    mold(
+      ~ fac_1 %>% paste0(),
+      example_train,
+      blueprint = blueprint_no_indicators
+    )
   })
   expect_snapshot(error = TRUE, {
-    mold(~ paste0(fac_1 + fac_1), example_train, blueprint = blueprint_no_indicators)
+    mold(
+      ~ paste0(fac_1 + fac_1),
+      example_train,
+      blueprint = blueprint_no_indicators
+    )
   })
   expect_snapshot(error = TRUE, {
     mold(~ (fac_1) & num_1, example_train, blueprint = blueprint_no_indicators)
@@ -191,7 +217,11 @@ test_that("errors are thrown if `indicator = 'none'` and factors are used in inl
   example_train2$fac_12 <- example_train2$fac_1
 
   expect_snapshot(error = TRUE, {
-    mold(~ paste0(fac_1) + paste0(fac_12), example_train2, blueprint = blueprint_no_indicators)
+    mold(
+      ~ paste0(fac_1) + paste0(fac_12),
+      example_train2,
+      blueprint = blueprint_no_indicators
+    )
   })
 })
 
@@ -241,7 +271,11 @@ test_that("`indicators = 'none'` doesn't error if an inline function regex-match
 
   blueprint_no_indicators <- default_formula_blueprint(indicators = "none")
 
-  out <- mold(y ~ identity + identity(x2), df, blueprint = blueprint_no_indicators)
+  out <- mold(
+    y ~ identity + identity(x2),
+    df,
+    blueprint = blueprint_no_indicators
+  )
 
   expect_identical(out$predictors$`identity(x2)`, df$x2)
   expect_identical(out$predictors$identity, df$identity)
@@ -269,7 +303,10 @@ test_that("formula intercepts can be added", {
   x2 <- mold(
     fac_1 ~ num_1,
     example_train,
-    blueprint = default_formula_blueprint(intercept = TRUE, composition = "dgCMatrix")
+    blueprint = default_formula_blueprint(
+      intercept = TRUE,
+      composition = "dgCMatrix"
+    )
   )
 
   expect_true("(Intercept)" %in% colnames(x1$predictors))
@@ -402,7 +439,11 @@ test_that("`NULL` can be used to represent empty RHS formulas", {
   expect_equal(nrow(x2$outcomes), 12)
 
   expect_no_error(
-    y <- mold(~NULL, example_train, blueprint = default_formula_blueprint(intercept = TRUE))
+    y <- mold(
+      ~NULL,
+      example_train,
+      blueprint = default_formula_blueprint(intercept = TRUE)
+    )
   )
 
   expect_equal(colnames(y$predictors), "(Intercept)")
@@ -462,7 +503,9 @@ test_that("full interaction syntax is supported", {
 })
 
 test_that("`indicators = 'none'` runs numeric interactions", {
-  x <- mold(~ num_1:num_2, example_train,
+  x <- mold(
+    ~ num_1:num_2,
+    example_train,
     blueprint = default_formula_blueprint(indicators = "none")
   )
 
@@ -634,7 +677,6 @@ test_that("`.` notation with no outcome works fine", {
 })
 
 test_that("`-var` still registers var as a predictor", {
-
   # This is expected, and is the same as base R
   x <- mold(num_2 ~ . - num_1, example_train)
 
@@ -698,8 +740,14 @@ test_that("character predictors are treated as factors when `indicators` is not 
 
   bp1 <- default_formula_blueprint(indicators = "traditional")
   bp2 <- default_formula_blueprint(indicators = "one_hot")
-  bp3 <- default_formula_blueprint(indicators = "traditional", composition = "matrix")
-  bp4 <- default_formula_blueprint(indicators = "one_hot", composition = "matrix")
+  bp3 <- default_formula_blueprint(
+    indicators = "traditional",
+    composition = "matrix"
+  )
+  bp4 <- default_formula_blueprint(
+    indicators = "one_hot",
+    composition = "matrix"
+  )
 
   x1 <- mold(y ~ x + z, df, blueprint = bp1)
   x2 <- mold(y ~ x + z, df, blueprint = bp2)
@@ -750,10 +798,14 @@ test_that("character predictors are left as characters when `indicators` is 'non
 })
 
 test_that("character vectors with `indicators = traditional/one_hot` store levels in `levels` (#213)", {
-  df <- tibble(x = c("a", "b", "c"), y = factor(c("d", "e", "e")), z = c("g", "f", "g"))
+  df <- tibble(
+    x = c("a", "b", "c"),
+    y = factor(c("d", "e", "e")),
+    z = c("g", "f", "g")
+  )
 
   bp <- default_formula_blueprint(indicators = "traditional")
-  x <- mold(~x + y + z, df, blueprint = bp)
+  x <- mold(~ x + y + z, df, blueprint = bp)
 
   # Only from character columns, and the levels get sorted
   # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
@@ -771,7 +823,7 @@ test_that("character vectors with `indicators = traditional/one_hot` store level
   expect_identical(x$blueprint$ptypes$predictors$z, character())
 
   bp <- default_formula_blueprint(indicators = "one_hot")
-  x <- mold(~x + y + z, df, blueprint = bp)
+  x <- mold(~ x + y + z, df, blueprint = bp)
 
   # Only from character columns, and the levels get sorted
   # (like in base R's `model.matrix()` and `prep(strings_as_factors = TRUE)`)
@@ -785,10 +837,14 @@ test_that("character vectors with `indicators = traditional/one_hot` store level
 })
 
 test_that("character vectors with `indicators = none` don't use `levels` (#213)", {
-  df <- tibble(x = c("a", "b", "c"), y = factor(c("d", "e", "e")), z = c("g", "f", "g"))
+  df <- tibble(
+    x = c("a", "b", "c"),
+    y = factor(c("d", "e", "e")),
+    z = c("g", "f", "g")
+  )
 
   bp <- default_formula_blueprint(indicators = "none")
-  x <- mold(~x + y + z, df, blueprint = bp)
+  x <- mold(~ x + y + z, df, blueprint = bp)
 
   expect_identical(x$blueprint$levels, list())
 
@@ -801,7 +857,7 @@ test_that("character vectors with `indicators = none` works with constant column
   df <- tibble(x = "a", y = factor("d"), z = "g")
 
   bp <- default_formula_blueprint(indicators = "none")
-  x <- mold(~x + y + z, df, blueprint = bp)
+  x <- mold(~ x + y + z, df, blueprint = bp)
 
   expect_identical(x$blueprint$ptypes$predictors$x, character())
   expect_identical(x$blueprint$ptypes$predictors$y, vec_ptype(df$y))

@@ -22,13 +22,16 @@ test_that("quantile levels are checked", {
     quantile_pred(matrix(1:20, 5), quantile_levels = NULL)
   })
   expect_snapshot(error = TRUE, {
-    quantile_pred(matrix(1:20, 5), quantile_levels = c(0.7, 0.7, 0.7))   
+    quantile_pred(matrix(1:20, 5), quantile_levels = c(0.7, 0.7, 0.7))
   })
   expect_snapshot(error = TRUE, {
-    quantile_pred(matrix(1:20, 5), quantile_levels = c(rep(0.7, 2), rep(0.8, 3)))    
+    quantile_pred(
+      matrix(1:20, 5),
+      quantile_levels = c(rep(0.7, 2), rep(0.8, 3))
+    )
   })
   expect_snapshot(error = TRUE, {
-    quantile_pred(matrix(1:20, 5), quantile_levels = c(0.8, 0.7))    
+    quantile_pred(matrix(1:20, 5), quantile_levels = c(0.8, 0.7))
   })
 })
 
@@ -56,7 +59,7 @@ test_that("quantile_pred formatting", {
   # multiple quantiles
   v <- quantile_pred(matrix(1:20, 5), 1:4 / 5)
   expect_snapshot(v)
-  expect_snapshot(quantile_pred(matrix(1:18, 9), c(1/3, 2/3)))
+  expect_snapshot(quantile_pred(matrix(1:18, 9), c(1 / 3, 2 / 3)))
   expect_snapshot(
     quantile_pred(matrix(seq(0.01, 1 - 0.01, length.out = 6), 3), c(.2, .8))
   )
@@ -68,11 +71,11 @@ test_that("quantile_pred formatting", {
 
   # single quantile
   m <- matrix(1:5)
-  one_quantile <- quantile_pred(m, 5/9)
+  one_quantile <- quantile_pred(m, 5 / 9)
   expect_snapshot(one_quantile)
   expect_snapshot(tibble(qntls = one_quantile))
   m[2] <- NA
-  expect_snapshot(quantile_pred(m, 5/9))
+  expect_snapshot(quantile_pred(m, 5 / 9))
 
   set.seed(393)
   v <- quantile_pred(matrix(exp(rnorm(20)), ncol = 4), 1:4 / 5)

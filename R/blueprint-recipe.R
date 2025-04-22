@@ -9,15 +9,17 @@
 #'
 #' @rdname new-blueprint
 #' @export
-new_recipe_blueprint <- function(intercept = FALSE,
-                                 allow_novel_levels = FALSE,
-                                 fresh = TRUE,
-                                 strings_as_factors = TRUE,
-                                 composition = "tibble",
-                                 ptypes = NULL,
-                                 recipe = NULL,
-                                 ...,
-                                 subclass = character()) {
+new_recipe_blueprint <- function(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  fresh = TRUE,
+  strings_as_factors = TRUE,
+  composition = "tibble",
+  ptypes = NULL,
+  recipe = NULL,
+  ...,
+  subclass = character()
+) {
   check_bool(fresh)
   check_bool(strings_as_factors)
   check_recipe(recipe, allow_null = TRUE)
@@ -40,10 +42,12 @@ refresh_blueprint.recipe_blueprint <- function(blueprint) {
   do.call(new_recipe_blueprint, as.list(blueprint))
 }
 
-check_recipe_blueprint <- function(x,
-                                   ...,
-                                   arg = caller_arg(x),
-                                   call = caller_env()) {
+check_recipe_blueprint <- function(
+  x,
+  ...,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   check_inherits(x, "recipe_blueprint", arg = arg, call = call)
 }
 
@@ -67,11 +71,13 @@ is_recipe <- function(x) {
   inherits(x, "recipe")
 }
 
-check_recipe <- function(x,
-                         ...,
-                         allow_null = FALSE,
-                         arg = caller_arg(x),
-                         call = caller_env()) {
+check_recipe <- function(
+  x,
+  ...,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (is_recipe(x)) {
       return(invisible(NULL))
