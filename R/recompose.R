@@ -19,7 +19,7 @@
 #'   - `"matrix"` to convert to a matrix. All columns must be numeric.
 #'   - `"dgCMatrix"` to convert to a sparse matrix. All columns must be numeric,
 #'     and the Matrix package must be installed.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @returns
@@ -37,11 +37,7 @@
 #' # All columns must be numeric to convert to a matrix
 #' df <- vctrs::data_frame(x = 1, y = "a")
 #' try(recompose(df, composition = "matrix"))
-recompose <- function(data,
-                      ...,
-                      composition = "tibble",
-                      call = caller_env()
-                    ) {
+recompose <- function(data, ..., composition = "tibble", call = caller_env()) {
   check_dots_empty0(...)
   check_data_frame(data, call = call)
 

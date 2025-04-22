@@ -1,7 +1,12 @@
 test_that("generates one-hot indicator matrix", {
   x <- factor(c("a", "b", "a", "a", "c"))
 
-  expect <- matrix(0L, nrow = 5, ncol = 3, dimnames = list(NULL, c("a", "b", "c")))
+  expect <- matrix(
+    0L,
+    nrow = 5,
+    ncol = 3,
+    dimnames = list(NULL, c("a", "b", "c"))
+  )
   expect[c(1, 3, 4, 7, 15)] <- 1L
 
   expect_identical(fct_encode_one_hot(x), expect)
@@ -19,7 +24,12 @@ test_that("works with factors with just 1 level", {
 test_that("works with levels that aren't in the data", {
   x <- factor(c("a", "c", "a"), levels = c("a", "b", "c", "d"))
 
-  expect <- matrix(0L, nrow = 3, ncol = 4, dimnames = list(NULL, c("a", "b", "c", "d")))
+  expect <- matrix(
+    0L,
+    nrow = 3,
+    ncol = 4,
+    dimnames = list(NULL, c("a", "b", "c", "d"))
+  )
   expect[c(1, 3, 8)] <- 1L
 
   expect_identical(fct_encode_one_hot(x), expect)
@@ -28,7 +38,12 @@ test_that("works with levels that aren't in the data", {
 test_that("works with factors with explicit `NA` level but no `NA` data", {
   expect_identical(
     fct_encode_one_hot(factor("a", levels = c("a", NA), exclude = NULL)),
-    matrix(data = c(1L, 0L), nrow = 1, ncol = 2, dimnames = list(NULL, c("a", NA)))
+    matrix(
+      data = c(1L, 0L),
+      nrow = 1,
+      ncol = 2,
+      dimnames = list(NULL, c("a", NA))
+    )
   )
 })
 
@@ -42,7 +57,12 @@ test_that("works with empty factors", {
 test_that("works with empty factors with levels", {
   expect_identical(
     fct_encode_one_hot(factor(levels = c("a", "b"))),
-    matrix(data = integer(), nrow = 0, ncol = 2, dimnames = list(NULL, c("a", "b")))
+    matrix(
+      data = integer(),
+      nrow = 0,
+      ncol = 2,
+      dimnames = list(NULL, c("a", "b"))
+    )
   )
 })
 
@@ -52,9 +72,18 @@ test_that("propagates names onto the row names", {
 })
 
 test_that("works with ordered factors", {
-  x <- factor(c("a", "b", "a", "a", "c"), levels = c("c", "b", "a"), ordered = TRUE)
+  x <- factor(
+    c("a", "b", "a", "a", "c"),
+    levels = c("c", "b", "a"),
+    ordered = TRUE
+  )
 
-  expect <- matrix(0L, nrow = 5, ncol = 3, dimnames = list(NULL, c("c", "b", "a")))
+  expect <- matrix(
+    0L,
+    nrow = 5,
+    ncol = 3,
+    dimnames = list(NULL, c("c", "b", "a"))
+  )
   expect[c(5, 7, 11, 13, 14)] <- 1L
 
   expect_identical(fct_encode_one_hot(x), expect)

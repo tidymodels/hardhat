@@ -9,7 +9,7 @@
 #'
 #' @param name The name for the intercept column. Defaults to `"(Intercept)"`,
 #' which is the same name that [stats::lm()] uses.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
@@ -23,7 +23,12 @@
 #'
 #' add_intercept_column(as.matrix(mtcars))
 #' @export
-add_intercept_column <- function(data, name = "(Intercept)", ..., call = current_env()) {
+add_intercept_column <- function(
+  data,
+  name = "(Intercept)",
+  ...,
+  call = current_env()
+) {
   check_dots_empty0(...)
   check_data_frame_or_matrix(data, call = call)
   check_name(name, call = call)
@@ -56,7 +61,12 @@ add_intercept_column <- function(data, name = "(Intercept)", ..., call = current
   }
 }
 
-maybe_add_intercept_column <- function(data, intercept = FALSE, ..., call = caller_env()) {
+maybe_add_intercept_column <- function(
+  data,
+  intercept = FALSE,
+  ...,
+  call = caller_env()
+) {
   check_dots_empty0(...)
   if (!intercept) {
     return(data)

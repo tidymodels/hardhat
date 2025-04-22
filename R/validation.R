@@ -81,7 +81,7 @@ check_outcomes_are_univariate <- function(outcomes) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
@@ -127,7 +127,7 @@ validate_outcomes_are_numeric <- function(outcomes) {
   invisible(outcomes)
 }
 
-style_bad_classes <- function(bad_classes){
+style_bad_classes <- function(bad_classes) {
   bad_col <- map(names(bad_classes), ~ cli::format_inline("{.val {.x}}"))
   bad_class <- map(bad_classes, ~ cli::format_inline("{.cls {.x}}"))
 
@@ -172,7 +172,7 @@ check_outcomes_are_numeric <- function(outcomes, ..., call = caller_env()) {
 #' and the values are the classes of the matching column.
 #'
 #' @param outcomes An object to check.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
@@ -255,7 +255,7 @@ check_outcomes_are_factors <- function(outcomes, ..., call = caller_env()) {
 #' with problems.
 #'
 #' @param outcomes An object to check.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
@@ -352,7 +352,7 @@ is_binary <- function(x) {
 #' and the values are the classes of the matching column.
 #'
 #' @param predictors An object to check.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
@@ -448,9 +448,9 @@ check_predictors_are_numeric <- function(predictors, ..., call = caller_env()) {
 #' @param data A data frame to check.
 #'
 #' @param original_names A character vector. The original column names.
-#' 
+#'
 #' @inheritParams rlang::args_dots_empty
-#' 
+#'
 #' @param call The call used for errors and warnings.
 #'
 #' @return
@@ -508,7 +508,12 @@ check_predictors_are_numeric <- function(predictors, ..., call = caller_env()) {
 #' forge(test, processed$blueprint, outcomes = TRUE)
 #' @family validation functions
 #' @export
-validate_column_names <- function(data, original_names, ..., call = current_env()) {
+validate_column_names <- function(
+  data,
+  original_names,
+  ...,
+  call = current_env()
+) {
   check_dots_empty()
 
   check_data_frame_or_matrix(data, call = call)
@@ -548,7 +553,11 @@ check_column_names <- function(data, original_names) {
   new_check_result(ok = ok, missing_names = missing_names)
 }
 
-validate_missing_name_isnt_.outcome <- function(missing_names, ..., call = caller_env()) {
+validate_missing_name_isnt_.outcome <- function(
+  missing_names,
+  ...,
+  call = caller_env()
+) {
   check_dots_empty0(...)
 
   not_ok <- ".outcome" %in% missing_names
@@ -592,7 +601,7 @@ validate_missing_name_isnt_.outcome <- function(missing_names, ..., call = calle
 #' [spruce_numeric()].
 #'
 #' @param new_data A data frame of new predictors and possibly outcomes.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
@@ -661,7 +670,11 @@ check_prediction_size <- function(pred, new_data, ..., call = caller_env()) {
 
   ok <- size_pred == size_new_data
 
-  new_check_result(ok = ok, size_new_data = size_new_data, size_pred = size_pred)
+  new_check_result(
+    ok = ok,
+    size_new_data = size_new_data,
+    size_pred = size_pred
+  )
 }
 
 # ------------------------------------------------------------------------------

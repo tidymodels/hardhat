@@ -1,5 +1,4 @@
 simplify_terms <- function(x) {
-
   # This is like stats:::terms.default
   # but doesn't look at x$terms.
 
@@ -95,10 +94,12 @@ remove_formula_intercept <- function(formula, intercept) {
   )
 }
 
-check_unique_names <- function(x,
-                               ...,
-                               arg = caller_arg(x),
-                               call = caller_env()) {
+check_unique_names <- function(
+  x,
+  ...,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (has_unique_names(x)) {
     return(invisible(NULL))
   }
@@ -109,10 +110,12 @@ check_unique_names <- function(x,
   )
 }
 
-check_unique_column_names <- function(x,
-                                      ...,
-                                      arg = caller_arg(x),
-                                      call = caller_env()) {
+check_unique_column_names <- function(
+  x,
+  ...,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (has_unique_column_names(x)) {
     return(invisible(NULL))
   }
@@ -153,10 +156,12 @@ has_unique_column_names <- function(x) {
 
 # ------------------------------------------------------------------------------
 
-check_data_frame_or_matrix <- function(x,
-                                       ...,
-                                       arg = caller_arg(x),
-                                       call = caller_env()) {
+check_data_frame_or_matrix <- function(
+  x,
+  ...,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (is.data.frame(x) || is.matrix(x)) {
       return(invisible(NULL))
@@ -186,7 +191,7 @@ coerce_to_tibble <- function(x) {
 
 # ------------------------------------------------------------------------------
 
-hardhat_new_tibble <- function (x, size) {
+hardhat_new_tibble <- function(x, size) {
   # Faster than `tibble::new_tibble()`, and it drops extra attributes
   new_data_frame(x = x, n = size, class = c("tbl_df", "tbl"))
 }
@@ -211,12 +216,14 @@ vec_paste0 <- function(...) {
 
 # ------------------------------------------------------------------------------
 
-check_inherits <- function(x,
-                           what,
-                           ...,
-                           allow_null = FALSE,
-                           arg = caller_arg(x),
-                           call = caller_env()) {
+check_inherits <- function(
+  x,
+  what,
+  ...,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (inherits(x, what)) {
       return(invisible(NULL))

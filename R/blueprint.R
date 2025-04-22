@@ -46,12 +46,14 @@
 #'
 #' @name new-blueprint
 #' @export
-new_blueprint <- function(intercept = FALSE,
-                          allow_novel_levels = FALSE,
-                          composition = "tibble",
-                          ptypes = NULL,
-                          ...,
-                          subclass = character()) {
+new_blueprint <- function(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  composition = "tibble",
+  ptypes = NULL,
+  ...,
+  subclass = character()
+) {
   check_bool(intercept)
   check_bool(allow_novel_levels)
   check_composition(composition)
@@ -217,20 +219,19 @@ is_blueprint <- function(x) {
   inherits(x, "hardhat_blueprint")
 }
 
-check_blueprint <- function(x,
-                            ...,
-                            arg = caller_arg(x),
-                            call = caller_env()) {
+check_blueprint <- function(x, ..., arg = caller_arg(x), call = caller_env()) {
   check_inherits(x, "hardhat_blueprint", arg = arg, call = call)
 }
 
 # ------------------------------------------------------------------------------
 
-check_ptype_list <- function(x,
-                             ...,
-                             allow_null = FALSE,
-                             arg = caller_arg(x),
-                             call = caller_env()) {
+check_ptype_list <- function(
+  x,
+  ...,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (allow_null && is_null(x)) {
     return(invisible(NULL))
   }
@@ -254,10 +255,12 @@ check_ptype_list <- function(x,
   invisible(NULL)
 }
 
-check_zero_row_tibble <- function(x,
-                                  ...,
-                                  arg = caller_arg(x),
-                                  call = caller_env()) {
+check_zero_row_tibble <- function(
+  x,
+  ...,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (tibble::is_tibble(x) && nrow(x) == 0L) {
       return(invisible(NULL))
@@ -278,11 +281,13 @@ check_zero_row_tibble <- function(x,
   cli::cli_abort("{.arg {arg}} must be size 0, not size {size}.", call = call)
 }
 
-check_has_name <- function(x,
-                           name,
-                           ...,
-                           arg = caller_arg(x),
-                           call = caller_env()) {
+check_has_name <- function(
+  x,
+  name,
+  ...,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (has_name(x, name)) {
       return(invisible(NULL))
@@ -290,17 +295,19 @@ check_has_name <- function(x,
   }
 
   cli::cli_abort(
-    "{.arg {arg}} must have an element named {.str {name}}.", 
+    "{.arg {arg}} must have an element named {.str {name}}.",
     call = call
   )
 }
 
 # https://github.com/r-lib/rlang/pull/1605
-check_list <- function(x,
-                       ...,
-                       allow_null = FALSE,
-                       arg = caller_arg(x),
-                       call = caller_env()) {
+check_list <- function(
+  x,
+  ...,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (is_list(x)) {
       return(invisible(NULL))

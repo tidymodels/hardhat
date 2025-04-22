@@ -39,7 +39,9 @@ standardize <- function(y) {
 
 #' @export
 standardize.default <- function(y) {
-  cli::cli_abort("No {.fn standardize} method provided for {.obj_type_friendly {y}}.")
+  cli::cli_abort(
+    "No {.fn standardize} method provided for {.obj_type_friendly {y}}."
+  )
 }
 
 #' @export

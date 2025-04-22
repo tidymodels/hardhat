@@ -10,7 +10,7 @@
 #' @param data A tibble to construct the design matrix with. This is
 #' typically the tibble returned from the corresponding call to
 #' [model_frame()].
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @details
@@ -112,11 +112,13 @@ strip_model_matrix <- function(x) {
   x
 }
 
-check_terms <- function(x,
-                        ...,
-                        allow_null = FALSE,
-                        arg = caller_arg(x),
-                        call = caller_env()) {
+check_terms <- function(
+  x,
+  ...,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   check_inherits(
     x = x,
     what = "terms",
@@ -186,7 +188,9 @@ model_matrix_one_hot <- function(terms, data, ..., call = caller_env()) {
 #' @export
 contr_one_hot <- function(n, contrasts = TRUE, sparse = FALSE) {
   if (sparse) {
-    cli::cli_warn("{.code sparse = TRUE} not implemented for {.fun contr_one_hot}.")
+    cli::cli_warn(
+      "{.code sparse = TRUE} not implemented for {.fun contr_one_hot}."
+    )
   }
 
   if (!contrasts) {

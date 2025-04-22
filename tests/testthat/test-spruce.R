@@ -40,7 +40,6 @@ test_that("spruce - prob", {
     error = TRUE,
     spruce_prob(c("a"), matrix(1, ncol = 2))
   )
-
 })
 
 test_that("`spruce_numeric_multiple()` generates the correct output", {
@@ -61,8 +60,14 @@ test_that("`spruce_class_multiple()` generates the correct output", {
 })
 
 test_that("`spruce_prob_multiple()` generates the correct output", {
-  x <- spruce_prob(c("a", "b"), matrix(c(.3, .7, .4, .6), nrow = 2, byrow = TRUE))
-  y <- spruce_prob(c("a", "b", "c"), matrix(c(.2, .7, .1, .2, .6, .2), nrow = 2, byrow = TRUE))
+  x <- spruce_prob(
+    c("a", "b"),
+    matrix(c(.3, .7, .4, .6), nrow = 2, byrow = TRUE)
+  )
+  y <- spruce_prob(
+    c("a", "b", "c"),
+    matrix(c(.2, .7, .1, .2, .6, .2), nrow = 2, byrow = TRUE)
+  )
 
   expect_identical(
     spruce_prob_multiple(x, y = y),

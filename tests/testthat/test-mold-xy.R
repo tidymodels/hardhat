@@ -9,8 +9,16 @@ test_that("can use x-y mold interface", {
   matrix_bp <- default_xy_blueprint(composition = "matrix")
 
   x1 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-  x2 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = sparse_bp)
-  x3 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = matrix_bp)
+  x2 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = sparse_bp
+  )
+  x3 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = matrix_bp
+  )
 
   expect_s3_class(x1$predictors, "tbl_df")
   expect_s4_class(x2$predictors, "dgCMatrix")

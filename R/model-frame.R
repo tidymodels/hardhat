@@ -9,7 +9,7 @@
 #' model frame.
 #'
 #' @param data A data frame or matrix containing the terms of `formula`.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return
