@@ -122,7 +122,7 @@ matrix, formula, and recipe inputs.</p></li>
 <p>I imagine that this comes together as a few internal pieces that
 power the user facing methods for your model.</p>
 <p><br></p>
-<p><img src="../reference/figures/Fitting.png" width="100%"></p>
+<p><img src="../reference/figures/Fitting.png" alt="A diagram for the functions of the model fitting stage. It shows a user  facing `model()` function connected to its methods for data.frame, matrix, recipe, and formula input. Those methods are all connected to the bridge function which in turn connects to the model implementation function and the model constructor." width="100%"></p>
 <p><br></p>
 <ul>
 <li>
@@ -140,7 +140,7 @@ the lower level prediction implementation functions.</p></li>
 multiple internal implementation functions that you’ll switch between,
 depending on the <code>"type"</code>.</p>
 <p><br></p>
-<p><img src="../reference/figures/Prediction.png" width="100%"></p>
+<p><img src="../reference/figures/Prediction.png" alt="A diagram for the functions of the model prediction stage. It shows a user  facing `predict()` function connected to its method. The method is connected to the bridge function which in turn connects to the implementation functions for the different prediction types, here class and probability predictions." width="100%"></p>
 <p><br></p>
 <p>The end result is a single high level modeling function that has
 methods for multiple different “interfaces”, and a corresponding predict
@@ -458,8 +458,8 @@ default method with a nice error message for unknown types.</p>
 <span><span class="co">#&gt; [4] "speciesGentoo"</span></span>
 <span></span>
 <span><span class="co"># Same, but with a recipe</span></span>
-<span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">bill_length_mm</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">bill_length_mm</span> <span class="op">+</span> <span class="va">species</span>, <span class="va">penguins</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="va">species</span>, one_hot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">simple_lm</span><span class="op">(</span><span class="va">rec</span>, <span class="va">penguins</span><span class="op">)</span></span>
