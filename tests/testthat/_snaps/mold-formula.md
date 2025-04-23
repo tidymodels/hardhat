@@ -79,11 +79,11 @@
 ---
 
     Code
-      mold(~ fac_1 %>% paste0(), example_train, blueprint = blueprint_no_indicators)
+      mold(~ paste0(fac_1), example_train, blueprint = blueprint_no_indicators)
     Condition
       Error in `mold()`:
       ! Functions involving factors or characters have been detected on the RHS of `formula`. These are not allowed when `indicators = "none"`.
-      i Functions involving factors were detected for "fac_1" in `fac_1 %>% paste0()`.
+      i Functions involving factors were detected for "fac_1" in `paste0(fac_1)`.
 
 ---
 

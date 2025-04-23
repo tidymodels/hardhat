@@ -171,7 +171,7 @@ Just like with the formula method, a recipe can be used as the preprocessor at f
 ```{r, error=FALSE, warning=FALSE, message = FALSE}
 library(recipes)
 
-rec <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) %>%
+rec <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
   step_dummy(species)
 
 penguin_recipe <- mold(rec, penguin_train)
@@ -198,8 +198,8 @@ forge(penguin_test, recipe_eng, outcomes = TRUE)
 One complication with `recipes` is that, in the `bake()` step, the processing happens to the predictors and the outcomes all together. This means that you might run into the situation where the outcomes seem to be required to `forge()`, even if you aren't requesting them.
 
 ```{r}
-rec2 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) %>%
-  step_dummy(species) %>%
+rec2 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
+  step_dummy(species) |>
   step_center(bill_length_mm) # Here we modify the outcome
 
 penguin_recipe2 <- mold(rec2, penguin_train)
@@ -218,8 +218,8 @@ forge(penguin_test_no_outcome, recipe_eng_log_outcome)
 The way around this is to use the built-in recipe argument, `skip`, on the step containing the outcome. This skips the processing of that step at `bake()` time.
 
 ```{r}
-rec3 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) %>%
-  step_dummy(species) %>%
+rec3 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
+  step_dummy(species) |>
   step_center(bill_length_mm, skip = TRUE)
 
 penguin_recipe3 <- mold(rec3, penguin_train)

@@ -60,7 +60,7 @@
 #' # Recipes example
 #'
 #' # Create a recipe that logs a predictor
-#' rec <- recipe(Species ~ Sepal.Length + Sepal.Width, train) %>%
+#' rec <- recipe(Species ~ Sepal.Length + Sepal.Width, train) |>
 #'   step_log(Sepal.Length)
 #'
 #' processed <- mold(rec, train)
@@ -109,10 +109,10 @@
 #' # `bake()` time when passing in `new_data`. This is an assumption that both
 #' # recipes and hardhat makes, meaning that those roles are required at
 #' # `forge()` time as well.
-#' rec_roles <- recipe(train) %>%
-#'   update_role(Sepal.Width, new_role = "predictor") %>%
-#'   update_role(Species, new_role = "outcome") %>%
-#'   update_role(Sepal.Length, new_role = "id") %>%
+#' rec_roles <- recipe(train) |>
+#'   update_role(Sepal.Width, new_role = "predictor") |>
+#'   update_role(Species, new_role = "outcome") |>
+#'   update_role(Sepal.Length, new_role = "id") |>
 #'   update_role(Petal.Length, new_role = "important")
 #'
 #' processed_roles <- mold(rec_roles, train)

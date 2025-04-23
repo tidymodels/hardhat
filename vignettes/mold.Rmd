@@ -221,8 +221,8 @@ The last of the three interfaces is the relatively new recipes interface. The `d
 ```{r, message=FALSE, warning=FALSE}
 library(recipes)
 
-rec <- recipe(bill_length_mm ~ species + bill_depth_mm, penguins) %>%
-  step_log(bill_length_mm) %>%
+rec <- recipe(bill_length_mm ~ species + bill_depth_mm, penguins) |>
+  step_log(bill_length_mm) |>
   step_dummy(species)
 
 penguin_recipe <- mold(rec, penguins)

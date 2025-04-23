@@ -14,14 +14,14 @@ data(penguins)
 levels(penguins$species)
 levels(penguins$island)
 
-model.matrix(~ species + island, data = penguins) %>% 
+model.matrix(~ species + island, data = penguins) |> 
   colnames()
 ```
 
 For a formula with no intercept, the first factor is expanded to indicators for _all_ factor levels but all other factors are expanded to all but one (as above):
 
 ```{r hybrid}
-model.matrix(~ 0 + species + island, data = penguins) %>% 
+model.matrix(~ 0 + species + island, data = penguins) |> 
   colnames()
 ```
 
@@ -36,7 +36,7 @@ new_contr <- old_contr
 new_contr["unordered"] <- "contr_one_hot"
 options(contrasts = new_contr)
 
-model.matrix(~ species + island, data = penguins) %>% 
+model.matrix(~ species + island, data = penguins) |> 
   colnames()
 
 options(contrasts = old_contr)

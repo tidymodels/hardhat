@@ -291,8 +291,8 @@ library(recipes)
 simple_lm(body_mass_g ~ log(bill_length_mm) + species, penguins)
 
 # Same, but with a recipe
-rec <- recipe(body_mass_g ~ bill_length_mm + species, penguins) %>%
-  step_log(bill_length_mm) %>%
+rec <- recipe(body_mass_g ~ bill_length_mm + species, penguins) |>
+  step_log(bill_length_mm) |>
   step_dummy(species, one_hot = TRUE)
 
 simple_lm(rec, penguins)
