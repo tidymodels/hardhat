@@ -34,7 +34,17 @@ For example, \code{species} and \code{island} both have three levels but
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(dplyr)
 library(modeldata)
-data(penguins)
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## 
+## Attaching package: 'modeldata'
+
+## The following object is masked from 'package:datasets':
+## 
+##     penguins
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data(penguins)
 
 levels(penguins$species)
 }\if{html}{\out{</div>}}
@@ -48,7 +58,7 @@ levels(penguins$species)
 \if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] "Biscoe"    "Dream"     "Torgersen"
 }\if{html}{\out{</div>}}
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{model.matrix(~ species + island, data = penguins) \%>\% 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{model.matrix(~ species + island, data = penguins) |> 
   colnames()
 }\if{html}{\out{</div>}}
 
@@ -60,7 +70,7 @@ For a formula with no intercept, the first factor is expanded to
 indicators for \emph{all} factor levels but all other factors are expanded to
 all but one (as above):
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{model.matrix(~ 0 + species + island, data = penguins) \%>\% 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{model.matrix(~ 0 + species + island, data = penguins) |> 
   colnames()
 }\if{html}{\out{</div>}}
 
@@ -78,7 +88,7 @@ new_contr <- old_contr
 new_contr["unordered"] <- "contr_one_hot"
 options(contrasts = new_contr)
 
-model.matrix(~ species + island, data = penguins) \%>\% 
+model.matrix(~ species + island, data = penguins) |> 
   colnames()
 }\if{html}{\out{</div>}}
 

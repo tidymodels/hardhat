@@ -9,7 +9,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 if (rlang::is_installed(c("modeldata", "recipes", "Matrix"))) {
   run <- TRUE
 } else {
@@ -25,7 +26,8 @@ knitr::opts_chunk$set(
 options(rlang_backtrace_on_error = "none")
 ```
 
-```{r setup}
+```{r}
+#| label: setup
 library(hardhat)
 library(modeldata)
 
@@ -106,7 +108,8 @@ Almost all of this validation is possible through the use of `vctrs::vec_cast()`
 
 The easiest example to demonstrate is missing columns in the testing data. `forge()` won't let you continue until all of the required predictors used at training are also present in the new data.
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 test_missing_column <- subset(penguin_test, select = -species)
 
 forge(test_missing_column, formula_eng)
@@ -116,7 +119,8 @@ forge(test_missing_column, formula_eng)
 
 After an initial scan for the column names is done, a deeper scan of each column is performed, checking the type of that column. For instance, what happens if the new `species` column was a double, not a factor?
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 test_species_double <- penguin_test
 test_species_double$species <- as.double(test_species_double$species)
 
@@ -146,7 +150,8 @@ Interesting, so in this case we can actually convert to a factor, and the class 
 
 An example of a conversion that would be lossy is if the character `species` column had a value that was _not_ a level in the training data.
 
-```{r, warning=TRUE}
+```{r}
+#| warning: true
 test_species_lossy <- penguin_test
 test_species_lossy$species <- as.character(test_species_lossy$species)
 test_species_lossy$species[2] <- "im new!"
@@ -168,10 +173,13 @@ In this case:
 
 Just like with the formula method, a recipe can be used as the preprocessor at fit and prediction time. `hardhat` handles calling `prep()`, `juice()`, and `bake()` for you at the right times. For instance, say we have a recipe that just creates dummy variables out of `species`.
 
-```{r, error=FALSE, warning=FALSE, message = FALSE}
+```{r}
+#| error: false
+#| warning: false
+#| message: false
 library(recipes)
 
-rec <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) %>%
+rec <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
   step_dummy(species)
 
 penguin_recipe <- mold(rec, penguin_train)
@@ -198,8 +206,8 @@ forge(penguin_test, recipe_eng, outcomes = TRUE)
 One complication with `recipes` is that, in the `bake()` step, the processing happens to the predictors and the outcomes all together. This means that you might run into the situation where the outcomes seem to be required to `forge()`, even if you aren't requesting them.
 
 ```{r}
-rec2 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) %>%
-  step_dummy(species) %>%
+rec2 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
+  step_dummy(species) |>
   step_center(bill_length_mm) # Here we modify the outcome
 
 penguin_recipe2 <- mold(rec2, penguin_train)
@@ -209,7 +217,8 @@ recipe_eng_log_outcome <- penguin_recipe2$blueprint
 
 If our `new_data` doesn't have the outcome, baking this recipe will fail even if we don't request that the outcomes are returned by `forge()`.
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 penguin_test_no_outcome <- subset(penguin_test, select = -bill_length_mm)
 
 forge(penguin_test_no_outcome, recipe_eng_log_outcome)
@@ -218,8 +227,8 @@ forge(penguin_test_no_outcome, recipe_eng_log_outcome)
 The way around this is to use the built-in recipe argument, `skip`, on the step containing the outcome. This skips the processing of that step at `bake()` time.
 
 ```{r}
-rec3 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) %>%
-  step_dummy(species) %>%
+rec3 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
+  step_dummy(species) |>
   step_center(bill_length_mm, skip = TRUE)
 
 penguin_recipe3 <- mold(rec3, penguin_train)

@@ -194,7 +194,7 @@ test_that("errors are thrown if `indicator = 'none'` and factors are used in inl
   })
   expect_snapshot(error = TRUE, {
     mold(
-      ~ fac_1 %>% paste0(),
+      ~ fac_1 |> paste0(),
       example_train,
       blueprint = blueprint_no_indicators
     )

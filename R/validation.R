@@ -128,8 +128,8 @@ validate_outcomes_are_numeric <- function(outcomes) {
 }
 
 style_bad_classes <- function(bad_classes) {
-  bad_col <- map(names(bad_classes), ~ cli::format_inline("{.val {.x}}"))
-  bad_class <- map(bad_classes, ~ cli::format_inline("{.cls {.x}}"))
+  bad_col <- map(names(bad_classes), \(.x) cli::format_inline("{.val {.x}}"))
+  bad_class <- map(bad_classes, \(.x) cli::format_inline("{.cls {.x}}"))
 
   glue::glue("{bad_col}: {bad_class}")
 }
@@ -287,7 +287,7 @@ validate_outcomes_are_binary <- function(outcomes) {
   check <- check_outcomes_are_binary(outcomes)
 
   if (!check$ok) {
-    bad_col <- map(check$bad_cols, ~ cli::format_inline("{.val {.x}}"))
+    bad_col <- map(check$bad_cols, \(.x) cli::format_inline("{.val {.x}}"))
 
     bad_msg <- glue::glue("{bad_col}: {check$num_levels}")
 

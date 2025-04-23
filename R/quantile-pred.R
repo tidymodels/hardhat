@@ -107,12 +107,12 @@ median.quantile_pred <- function(x, ...) {
   lvls <- attr(x, "quantile_levels")
   loc_median <- (abs(lvls - 0.5) < sqrt(.Machine$double.eps))
   if (any(loc_median)) {
-    return(map_dbl(x, ~ .x[min(which(loc_median))]))
+    return(map_dbl(x, \(.x) .x[min(which(loc_median))]))
   }
   if (length(lvls) < 2 || min(lvls) > 0.5 || max(lvls) < 0.5) {
     return(rep(NA, vctrs::vec_size(x)))
   }
-  map_dbl(x, ~ stats::approx(lvls, .x, xout = 0.5)$y)
+  map_dbl(x, \(.x) stats::approx(lvls, .x, xout = 0.5)$y)
 }
 
 #' @export

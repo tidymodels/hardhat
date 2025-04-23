@@ -9,7 +9,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 if (rlang::is_installed(c("modeldata", "recipes", "Matrix"))) {
   run <- TRUE
 } else {
@@ -25,7 +26,8 @@ knitr::opts_chunk$set(
 options(rlang_backtrace_on_error = "none")
 ```
 
-```{r setup}
+```{r}
+#| label: setup
 library(hardhat)
 library(modeldata)
 
@@ -113,7 +115,8 @@ with_intercept$predictors
 
 An error is thrown if an intercept removal term is specified:
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 mold(~ body_mass_g - 1, penguins)
 
 mold(~ body_mass_g + 0, penguins)
@@ -218,11 +221,13 @@ mold(x, y$body_mass_g)$outcomes
 
 The last of the three interfaces is the relatively new recipes interface. The `default_recipe_blueprint()` knows how to `prep()` your recipe, and `juice()` it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
+#| message: false
+#| warning: false
 library(recipes)
 
-rec <- recipe(bill_length_mm ~ species + bill_depth_mm, penguins) %>%
-  step_log(bill_length_mm) %>%
+rec <- recipe(bill_length_mm ~ species + bill_depth_mm, penguins) |>
+  step_log(bill_length_mm) |>
   step_dummy(species)
 
 penguin_recipe <- mold(rec, penguins)

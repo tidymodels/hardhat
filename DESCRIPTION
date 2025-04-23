@@ -6,7 +6,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-6049-5258")),
     person("Davis", "Vaughan", , "davis@posit.co", role = "aut"),
     person("Max", "Kuhn", , "max@posit.co", role = "aut"),
-    person("Posit Software, PBC", role = c("cph", "fnd"))
+    person("Posit Software, PBC", role = c("cph", "fnd"),
+           comment = c(ROR = "03wc8by49"))
   )
 Description: Building modeling packages is hard. A large amount of effort
     generally goes into providing an implementation for a new method that
@@ -20,7 +21,7 @@ License: MIT + file LICENSE
 URL: https://github.com/tidymodels/hardhat, https://hardhat.tidymodels.org
 BugReports: https://github.com/tidymodels/hardhat/issues
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1)
 Imports:
     cli (>= 3.6.0),
     glue (>= 1.6.2),
@@ -45,6 +46,7 @@ VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate
 Config/testthat/edition: 3
+Config/usethis/last-upkeep: 2025-04-23
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

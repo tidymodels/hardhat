@@ -21,8 +21,8 @@
 #' # specific arguments for tuning
 #' library(recipes)
 #'
-#' recipe(mpg ~ ., data = mtcars) %>%
-#'   step_normalize(all_numeric_predictors()) %>%
+#' recipe(mpg ~ ., data = mtcars) |>
+#'   step_normalize(all_numeric_predictors()) |>
 #'   step_pca(all_numeric_predictors, num_comp = tune())
 tune <- function(id = "") {
   check_string(id)
