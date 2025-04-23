@@ -57,6 +57,12 @@ I imagine that this comes together as a few internal pieces that power the user 
 ```{r}
 #| echo: false
 #| out-width: 100%
+#| fig.alt: > 
+#|   A diagram for the functions of the model fitting stage. It shows a user 
+#|   facing `model()` function connected to its methods for data.frame, matrix,
+#|   recipe, and formula input. Those methods are all connected to the bridge
+#|   function which in turn connects to the model implementation function and
+#|   the model constructor.
 knitr::include_graphics("../man/figures/Fitting.png")
 ```
 
@@ -77,6 +83,12 @@ In this case, there are 2 user facing methods. Many models have multiple interna
 ```{r}
 #| echo: false
 #| out-width: 100%
+#| fig.alt: > 
+#|   A diagram for the functions of the model prediction stage. It shows a user 
+#|   facing `predict()` function connected to its method. The method is
+#|   connected to the bridge function which in turn connects to the
+#|   implementation functions for the different prediction types, here class and
+#|   probability predictions.
 knitr::include_graphics("../man/figures/Prediction.png")
 ```
 
