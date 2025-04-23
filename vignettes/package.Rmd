@@ -9,7 +9,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 if (rlang::is_installed(c("modeldata", "recipes", "Matrix"))) {
   run <- TRUE
 } else {
@@ -25,7 +26,8 @@ knitr::opts_chunk$set(
 options(rlang_backtrace_on_error = "none")
 ```
 
-```{r setup}
+```{r}
+#| label: setup
 library(hardhat)
 library(tibble)
 library(modeldata)
@@ -52,7 +54,9 @@ I imagine that this comes together as a few internal pieces that power the user 
 
 <br></br>
 
-```{r out.width = '100%', echo = FALSE}
+```{r}
+#| echo: false
+#| out-width: 100%
 knitr::include_graphics("../man/figures/Fitting.png")
 ```
 
@@ -70,7 +74,9 @@ In this case, there are 2 user facing methods. Many models have multiple interna
 
 <br></br>
 
-```{r out.width = '100%', echo = FALSE}
+```{r}
+#| echo: false
+#| out-width: 100%
 knitr::include_graphics("../man/figures/Prediction.png")
 ```
 
@@ -215,7 +221,8 @@ simple_lm_bridge(processed_2)
 
 Multiple outcomes are an error:
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 multi_outcome <- mold(bill_length_mm + bill_depth_mm ~ body_mass_g + species, penguins)
 
 simple_lm_bridge(multi_outcome)
@@ -283,7 +290,9 @@ simple_lm(body_mass_g ~ bill_length_mm + bill_depth_mm, penguins)
 
 We can use preprocessing as well, and it is handled by `mold()`.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
+#| warning: false
+#| message: false
 library(recipes)
 
 # - Log a predictor
@@ -400,7 +409,8 @@ predict_simple_lm_bridge <- function(type, object, predictors) {
 
 Let's test:
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 model <- simple_lm(bill_length_mm ~ body_mass_g + species, penguins)
 
 # Pass in the data frame
@@ -448,7 +458,9 @@ predict(model, penguins)
 
 By using `forge()`, you automatically get powerful type checking to ensure that the `new_data` is in a form that you expect.
 
-```{r, warning=TRUE, error=TRUE}
+```{r}
+#| warning: true
+#| error: true
 # `new_data` isn't a data frame
 predict(model, penguins$species)
 
