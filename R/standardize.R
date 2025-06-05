@@ -94,7 +94,7 @@ standardize.data.frame <- function(y) {
 }
 
 is_known_output_type <- function(x) {
-  is.numeric(x) || is.factor(x)
+  is.numeric(x) || is.factor(x) || is.logical(x)
 }
 
 validate_has_known_outcome_types <- function(y, ..., call = caller_env()) {
