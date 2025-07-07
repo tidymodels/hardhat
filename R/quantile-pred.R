@@ -55,10 +55,26 @@ new_quantile_pred <- function(values = list(), quantile_levels = double()) {
   )
 }
 
+
+#' Test if an object is a `quantile_pred`
+#'
+#' @param x an object
+#'
+#' @returns A boolean.
+#' @export
+#'
+#' @examples
+#' qp <- quantile_pred(matrix(rnorm(10), nrow = 2), 1:5 / 6)
+#' is_quantile_pred(qp)
+#' is_quantile_pred(1:5)
+is_quantile_pred <- function(x) {
+  inherits(x, "quantile_pred")
+}
+
 #' @export
 #' @rdname quantile_pred
 extract_quantile_levels <- function(x) {
-  if (!inherits(x, "quantile_pred")) {
+  if (!is_quantile_pred(x)) {
     cli::cli_abort(
       "{.arg x} must be a {.cls quantile_pred} object, not
       {.obj_type_friendly {x}}."
