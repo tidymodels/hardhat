@@ -151,3 +151,26 @@ test_that("arithmetic works on quantiles", {
 
   expect_snapshot(error = TRUE, sum(dstn))
 })
+
+test_that("vec_ptype works", {
+  v1 <- quantile_pred(matrix(1:20, 5), 1:4 / 5)
+  v2 <- quantile_pred(matrix(1:15, 5), 2:4 / 5)
+  expect_identical(vec_ptype2(v1, v1), vec_ptype(v1))
+  expect_identical(vec_ptype2(v1, v2), vec_ptype(v1))
+  expect_identical(vec_ptype2(v2, v1), vec_ptype(v1))
+
+  ugly_levels <- quantile_pred(matrix(1:20, 5), 1:4 / 5 + .1)
+  expect_snapshot(error = TRUE, vec_ptype2(v1, ugly_levels))
+})
+
+test_that("vec_cast self-self works", {
+  qp <- quantile_pred(matrix(rnorm(20), 5), c(.2, .4, .6, .8))
+  qp2 <- quantile_pred(matrix(rnorm(7), nrow = 1), 2:8 / 10)
+  expect_identical(vec_cast(qp, qp), qp)
+  expect_identical(vec_cast(qp2, qp2), qp2)
+
+  qp_dat <- as.matrix(qp)
+  qp_big <- matrix(NA, nrow(qp_dat), length(2:8))
+  qp_big[, c(1, 3, 5, 7)] <- qp_dat
+  expect_identical(vec_cast(qp, qp2), quantile_pred(qp_big, 2:8 / 10))
+})
