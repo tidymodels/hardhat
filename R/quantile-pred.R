@@ -212,8 +212,6 @@ check_quantile_level_values <- function(levels, arg, call) {
 
 # vctrs behaviours --------------------------------------------------------
 
-#' @importFrom vctrs vec_ptype2 vec_cast
-#' @importFrom hardhat extract_quantile_levels
 #' @export
 #' @keywords internal
 vec_ptype2.quantile_pred.quantile_pred <- function(
@@ -245,8 +243,6 @@ vec_cast.quantile_pred.quantile_pred <- function(x, to, ..., x_arg = "", to_arg 
 }
 
 
-
-#' @importFrom vctrs vec_math
 #' @export
 #' @method vec_math quantile_pred
 vec_math.quantile_pred <- function(.fn, .x, ...) {
@@ -260,7 +256,6 @@ vec_math.quantile_pred <- function(.fn, .x, ...) {
   quantile_pred(.fn(.x), quantile_levels)
 }
 
-#' @importFrom vctrs vec_arith vec_arith.numeric
 #' @export
 #' @method vec_arith quantile_pred
 vec_arith.quantile_pred <- function(op, x, y, ...) {
