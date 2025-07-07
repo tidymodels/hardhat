@@ -208,3 +208,79 @@ check_quantile_level_values <- function(levels, arg, call) {
   }
   invisible(TRUE)
 }
+
+
+# vctrs behaviours --------------------------------------------------------
+
+#' @importFrom vctrs vec_ptype2 vec_cast
+#' @importFrom hardhat extract_quantile_levels
+#' @export
+#' @keywords internal
+vec_ptype2.quantile_pred.quantile_pred <- function(
+    x, y, ..., x_arg = "", y_arg = "", call = caller_env()
+) {
+  if (all(extract_quantile_levels(y) %in% extract_quantile_levels(x))) {
+    return(x)
+  }
+  if (all(extract_quantile_levels(x) %in% extract_quantile_levels(y))) {
+    return(y)
+  }
+  stop_incompatible_type(
+    x, y, x_arg = x_arg, y_arg = y_arg,
+    details = "`quantile_levels` must be compatible (a superset/subset relation)."
+  )
+}
+
+#' @export
+vec_cast.quantile_pred.quantile_pred <- function(x, to, ..., x_arg = "", to_arg = "") {
+  x_lvls <- extract_quantile_levels(x)
+  to_lvls <- extract_quantile_levels(to)
+  x_in_to <- x_lvls %in% to_lvls
+  to_in_x <- to_lvls %in% x_lvls
+
+  old_qdata <- as.matrix(x)[, x_in_to]
+  new_qdata <- matrix(NA, nrow = vec_size(x), ncol = length(to_lvls))
+  new_qdata[, to_in_x] <- old_qdata
+  quantile_pred(new_qdata, quantile_levels = to_lvls)
+}
+
+
+
+#' @importFrom vctrs vec_math
+#' @export
+#' @method vec_math quantile_pred
+vec_math.quantile_pred <- function(.fn, .x, ...) {
+  fn <- .fn
+  .fn <- getExportedValue("base", .fn)
+  if (fn %in% c("any", "all", "prod", "sum", "cumsum", "cummax", "cummin", "cumprod")) {
+    cli_abort("{.fn {fn}} is not a supported operation for {.cls quantile_pred}.")
+  }
+  quantile_levels <- .x %@% "quantile_levels"
+  .x <- as.matrix(.x)
+  quantile_pred(.fn(.x), quantile_levels)
+}
+
+#' @importFrom vctrs vec_arith vec_arith.numeric
+#' @export
+#' @method vec_arith quantile_pred
+vec_arith.quantile_pred <- function(op, x, y, ...) {
+  UseMethod("vec_arith.quantile_pred", y)
+}
+
+#' @export
+#' @method vec_arith.quantile_pred numeric
+vec_arith.quantile_pred.numeric <- function(op, x, y, ...) {
+  op_fn <- getExportedValue("base", op)
+  l <- vctrs::vec_recycle_common(x = x, y = y)
+  out <- op_fn(as.matrix(l$x), l$y)
+  quantile_pred(out, x %@% "quantile_levels")
+}
+
+#' @export
+#' @method vec_arith.numeric quantile_pred
+vec_arith.numeric.quantile_pred <- function(op, x, y, ...) {
+  op_fn <- getExportedValue("base", op)
+  l <- vctrs::vec_recycle_common(x = x, y = y)
+  out <- op_fn(l$x, as.matrix(l$y))
+  quantile_pred(out, y %@% "quantile_levels")
+}
