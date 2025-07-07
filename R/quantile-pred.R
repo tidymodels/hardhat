@@ -42,7 +42,7 @@ quantile_pred <- function(values, quantile_levels = double()) {
 
   rownames(values) <- NULL
   colnames(values) <- NULL
-  values <- lapply(vctrs::vec_chop(values), drop)
+  values <- map(vctrs::vec_chop(values), drop)
   new_quantile_pred(values, quantile_levels)
 }
 
@@ -249,7 +249,7 @@ vec_math.quantile_pred <- function(.fn, .x, ...) {
   fn <- .fn
   .fn <- getExportedValue("base", .fn)
   if (fn %in% c("any", "all", "prod", "sum", "cumsum", "cummax", "cummin", "cumprod")) {
-    cli_abort("{.fn {fn}} is not a supported operation for {.cls quantile_pred}.")
+    cli::cli_abort("{.fn {fn}} is not a supported operation for {.cls quantile_pred}.")
   }
   quantile_levels <- .x %@% "quantile_levels"
   .x <- as.matrix(.x)
