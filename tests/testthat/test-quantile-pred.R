@@ -55,6 +55,23 @@ test_that("extract_quantile_levels", {
   )
 })
 
+test_that("median for quantile_pred", {
+  v <- quantile_pred(matrix(1:25, 5), 3:7 / 10)
+  expect_identical(median(v), as.double(11:15)) # has explicit median, but dbl
+
+  v_above_med <- quantile_pred(matrix(1:10, 2), 11:15 / 20)
+  expect_equal(median(v_above_med), rep(NA, 2))
+
+  v_below_med <- quantile_pred(matrix(1:10, 2), 5:9 / 20)
+  expect_equal(median(v_above_med), rep(NA, 2))
+
+  v4 <- quantile_pred(matrix(1:10, ncol = 1), 0.4)
+  expect_equal(median(v4), rep(NA, 10))
+
+  v5 <- quantile_pred(matrix(1:10, ncol = 1), 0.5)
+  expect_equal(median(v5), as.double(1:10))
+})
+
 test_that("quantile_pred formatting", {
   # multiple quantiles
   v <- quantile_pred(matrix(1:20, 5), 1:4 / 5)
@@ -97,4 +114,40 @@ test_that("as.matrix() for quantile_pred", {
   m <- as.matrix(v)
   expect_true(is.matrix(m))
   expect_identical(m, x)
+})
+
+
+
+test_that("unary math works on quantiles", {
+  dstn <- quantile_pred(
+    matrix(c(1:4, 8:11), nrow = 2, byrow = TRUE),
+    1:4 / 5
+  )
+  dstn2 <- quantile_pred(
+    log(matrix(c(1:4, 8:11), nrow = 2, byrow = TRUE)),
+    1:4 / 5
+  )
+  expect_identical(log(dstn), dstn2)
+})
+
+test_that("arithmetic works on quantiles", {
+  dstn <- quantile_pred(
+    matrix(c(1:4, 8:11), nrow = 2, byrow = TRUE),
+    1:4 / 5
+  )
+  dstn2 <- quantile_pred(
+    matrix(c(1:4, 8:11), nrow = 2, byrow = TRUE) + 1,
+    1:4 / 5
+  )
+  expect_identical(dstn + 1, dstn2)
+  expect_identical(1 + dstn, dstn2)
+
+  dstn2 <- quantile_pred(
+    matrix(c(1:4, 8:11), nrow = 2, byrow = TRUE) / 4,
+    1:4 / 5
+  )
+  expect_identical(dstn / 4, dstn2)
+  expect_identical((1 / 4) * dstn, dstn2)
+
+  expect_snapshot(error = TRUE, sum(dstn))
 })
