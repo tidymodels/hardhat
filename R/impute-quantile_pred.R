@@ -24,6 +24,7 @@ snap.numeric <- function(x, lower, upper, ...) {
 
 #' @export
 snap.quantile_pred <- function(x, lower, upper, ...) {
+  if (vec_size(x) == 0) return(x)
   values <- as.matrix(x)
   quantile_levels <- extract_quantile_levels(x)
   values <- map(vctrs::vec_chop(values), ~ snap(.x, lower, upper))
@@ -111,7 +112,7 @@ impute_quantiles <- function(
     )
   }
   if (is.unsorted(probs)) probs <- sort(probs)
-  check_quantile_levels(probs)
+  check_quantile_level_values(probs, "probs", call = caller_env())
   check_number_decimal(lower)
   check_number_decimal(upper)
   if (lower > upper) {
