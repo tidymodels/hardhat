@@ -6,7 +6,7 @@
 #' @param ... unused
 #' @export
 #'
-#' @return An object ot the same type as `x`
+#' @return An object of the same type as `x`
 #'
 #' @keywords internal
 snap <- function(x, lower, upper, ...) {
@@ -33,18 +33,18 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 
 
 
-#' Compute quantiles from a `quantile_pred`
+#' Impute additional quantiles from a `quantile_pred`
 #'
 #' While a `hardhat::quantile_pred` describes evaluations for the inverse
 #' cummulative distribution function (CDF, sometimes called the "quantile
-#' function") at particular quantiles, this is not enough
+#' function") at particular quantile levels, this is not enough
 #' to fully describe the distribution. For example,
 #' ```r
 #' p <- c(.1, .5, .9)
 #' quantile_pred(matrix(qnorm(p), nrow = 1), p)
 #' ```
-#' encapsulates the 10%, 50%, and 90% quantiles of the standard normal distribution.
-#' But, what if we need, say, the 25% and 75% quantiles? This function imputes
+#' encapsulates the 10%, 50%, and 90% quantile levels of the standard normal distribution.
+#' But, what if we need, say, the 25% and 75% levels? This function imputes
 #' them if possible.
 #'
 #' @details
@@ -55,19 +55,20 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 #' For `probs` that do not exist in `x`, these will be interpolated or
 #' extrapolated as needed. The process has 3 steps.
 #'
-#' First, by default (`middle = "cubic"`), missing _internal_ quantiles are
-#' interpolated using a cubic spline fit to the observed quantiles with
+#' First, by default (`middle = "cubic"`), missing _internal_ quantile levels are
+#' interpolated using a cubic spline fit to the observed values + quantile levels with
 #' `stats::splinefun()`. Second, if cubic interpolation fails (or if
 #' `middle = "linear"`), linear interpolation is used via `stats::approx()`.
-#' Finally, missing _external_ quantiles (those outside the range of
+#' Finally, missing _external_ quantile levels (those outside the range of
 #' `quantile_levels`) are extrapolated. This is done using a linear fit on the
-#' logistic scale to the two closest tail probabilities.
+#' logistic scale to the two closest tail values.
 #'
 #' This procedure results in sorted quantiles that interpolate/extrapolate
-#' smoothly, while also enforcing heavy tails if none are provided.
+#' smoothly, while also enforcing heavy tails beyond the range.
 #'
-#' Optionally, the set of quantiles can be constrained to a compact interval
-#' using `lower` and/or `upper`.
+#' Optionally, the resulting quantiles can be constrained to a compact interval
+#' using `lower` and/or `upper`. This is done after extrapolation, so it may
+#' result in multiple quantile levels having the same value (a CDF with a spike).
 #'
 #'
 #' @param x an object of class `quantile_pred`

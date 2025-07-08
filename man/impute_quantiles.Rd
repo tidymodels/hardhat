@@ -2,7 +2,7 @@
 % Please edit documentation in R/interpolate-quantile_pred.R
 \name{impute_quantiles}
 \alias{impute_quantiles}
-\title{Compute quantiles from a \code{quantile_pred}}
+\title{Impute additional quantiles from a \code{quantile_pred}}
 \usage{
 impute_quantiles(
   x,
@@ -31,15 +31,15 @@ extrapolated/interpolated to \code{probs}.
 \description{
 While a \code{hardhat::quantile_pred} describes evaluations for the inverse
 cummulative distribution function (CDF, sometimes called the "quantile
-function") at particular quantiles, this is not enough
+function") at particular quantile levels, this is not enough
 to fully describe the distribution. For example,
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{p <- c(.1, .5, .9)
 quantile_pred(matrix(qnorm(p), nrow = 1), p)
 }\if{html}{\out{</div>}}
 
-encapsulates the 10\%, 50\%, and 90\% quantiles of the standard normal distribution.
-But, what if we need, say, the 25\% and 75\% quantiles? This function imputes
+encapsulates the 10\%, 50\%, and 90\% quantile levels of the standard normal distribution.
+But, what if we need, say, the 25\% and 75\% levels? This function imputes
 them if possible.
 }
 \details{
@@ -50,19 +50,20 @@ due to difficulties matching double vectors.
 For \code{probs} that do not exist in \code{x}, these will be interpolated or
 extrapolated as needed. The process has 3 steps.
 
-First, by default (\code{middle = "cubic"}), missing \emph{internal} quantiles are
-interpolated using a cubic spline fit to the observed quantiles with
+First, by default (\code{middle = "cubic"}), missing \emph{internal} quantile levels are
+interpolated using a cubic spline fit to the observed values + quantile levels with
 \code{stats::splinefun()}. Second, if cubic interpolation fails (or if
 \code{middle = "linear"}), linear interpolation is used via \code{stats::approx()}.
-Finally, missing \emph{external} quantiles (those outside the range of
+Finally, missing \emph{external} quantile levels (those outside the range of
 \code{quantile_levels}) are extrapolated. This is done using a linear fit on the
-logistic scale to the two closest tail probabilities.
+logistic scale to the two closest tail values.
 
 This procedure results in sorted quantiles that interpolate/extrapolate
-smoothly, while also enforcing heavy tails if none are provided.
+smoothly, while also enforcing heavy tails beyond the range.
 
-Optionally, the set of quantiles can be constrained to a compact interval
-using \code{lower} and/or \code{upper}.
+Optionally, the resulting quantiles can be constrained to a compact interval
+using \code{lower} and/or \code{upper}. This is done after extrapolation, so it may
+result in multiple quantile levels having the same value (a CDF with a spike).
 }
 \examples{
 p <- c(.1, .5, .9)

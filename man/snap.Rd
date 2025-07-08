@@ -16,7 +16,7 @@ snap(x, lower, upper, ...)
 \item{...}{unused}
 }
 \value{
-An object ot the same type as \code{x}
+An object of the same type as \code{x}
 }
 \description{
 Restrict numeric data to the interval [lower, upper]
