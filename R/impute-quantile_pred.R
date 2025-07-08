@@ -183,8 +183,8 @@ impute_quantiles_single <- function(qvals, tau, tau_out, middle) {
     qv <- data.frame(
       q = c(tau, tau_out[indm]),
       v = c(qvals, qvals_out[indm])
-    ) %>%
-      dplyr::distinct(q, .keep_all = TRUE) %>%
+    ) |>
+      dplyr::distinct(q, .keep_all = TRUE) |>
       dplyr::arrange(q)
   }
   if (any(indl)) {
