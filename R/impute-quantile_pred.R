@@ -36,7 +36,7 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 
 #' Impute additional quantiles from a `quantile_pred`
 #'
-#' While a `hardhat::quantile_pred` describes evaluations for the inverse
+#' While a [quantile_pred] describes evaluations for the inverse
 #' cummulative distribution function (CDF, sometimes called the "quantile
 #' function") at particular quantile levels, this is not enough
 #' to fully describe the distribution. For example,
@@ -58,8 +58,8 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 #'
 #' First, by default (`middle = "cubic"`), missing _internal_ quantile levels are
 #' interpolated using a cubic spline fit to the observed values + quantile levels with
-#' `stats::splinefun()`. Second, if cubic interpolation fails (or if
-#' `middle = "linear"`), linear interpolation is used via `stats::approx()`.
+#' [stats::splinefun]. Second, if cubic interpolation fails (or if
+#' `middle = "linear"`), linear interpolation is used via [stats::approx].
 #' Finally, missing _external_ quantile levels (those outside the range of
 #' `quantile_levels`) are extrapolated. This is done using a linear fit on the
 #' logistic scale to the two closest tail values.

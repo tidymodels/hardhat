@@ -29,7 +29,7 @@ row contains the inverse CDF (quantile function) given by \code{x},
 extrapolated/interpolated to \code{probs}.
 }
 \description{
-While a \code{hardhat::quantile_pred} describes evaluations for the inverse
+While a \link{quantile_pred} describes evaluations for the inverse
 cummulative distribution function (CDF, sometimes called the "quantile
 function") at particular quantile levels, this is not enough
 to fully describe the distribution. For example,
@@ -52,8 +52,8 @@ extrapolated as needed. The process has 3 steps.
 
 First, by default (\code{middle = "cubic"}), missing \emph{internal} quantile levels are
 interpolated using a cubic spline fit to the observed values + quantile levels with
-\code{stats::splinefun()}. Second, if cubic interpolation fails (or if
-\code{middle = "linear"}), linear interpolation is used via \code{stats::approx()}.
+\link[stats:splinefun]{stats::splinefun}. Second, if cubic interpolation fails (or if
+\code{middle = "linear"}), linear interpolation is used via \link[stats:approxfun]{stats::approx}.
 Finally, missing \emph{external} quantile levels (those outside the range of
 \code{quantile_levels}) are extrapolated. This is done using a linear fit on the
 logistic scale to the two closest tail values.
