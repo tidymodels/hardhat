@@ -26,7 +26,7 @@ reference:
 - title: Prediction
   contents:
   - contains("spruce")
-  - contains("quantile_pred")
+  - quantile_pred
 
 - title: Utility
   contents:

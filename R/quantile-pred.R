@@ -21,6 +21,7 @@
 #'   `".quantile_levels"`, and `".row"`.
 #'   * `as.matrix()` returns an unnamed matrix with rows as samples, columns as
 #'   quantile levels, and entries are predictions.
+#'   * `is_quantile_pred()` tests for the "quantile_pred" class
 #' @examples
 #' .pred_quantile <- quantile_pred(matrix(rnorm(20), 5), c(.2, .4, .6, .8))
 #'
@@ -56,17 +57,9 @@ new_quantile_pred <- function(values = list(), quantile_levels = double()) {
 }
 
 
-#' Test if an object is a `quantile_pred`
-#'
-#' @param x an object
-#'
-#' @returns A boolean.
+
 #' @export
-#'
-#' @examples
-#' qp <- quantile_pred(matrix(rnorm(10), nrow = 2), 1:5 / 6)
-#' is_quantile_pred(qp)
-#' is_quantile_pred(1:5)
+#' @rdname quantile_pred
 is_quantile_pred <- function(x) {
   inherits(x, "quantile_pred")
 }
