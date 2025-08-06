@@ -24,7 +24,6 @@ Depends:
     R (>= 4.1)
 Imports:
     cli (>= 3.6.0),
-    dplyr,
     glue (>= 1.6.2),
     rlang (>= 1.1.0),
     sparsevctrs (>= 0.2.0),

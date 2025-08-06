@@ -183,9 +183,9 @@ impute_quantiles_single <- function(qvals, tau, tau_out, middle) {
     qv <- data.frame(
       q = c(tau, tau_out[indm]),
       v = c(qvals, qvals_out[indm])
-    ) |>
-      dplyr::distinct(q, .keep_all = TRUE) |>
-      dplyr::arrange(q)
+    )
+    qv <- qv[vctrs::vec_unique_loc(qv$q), ]
+    qv <- qv[vctrs::vec_order(qv$q), ]
   }
   if (any(indl)) {
     qvals_out[indl] <- tail_extrapolate(tau_out[indl], utils::head(qv, 2))
