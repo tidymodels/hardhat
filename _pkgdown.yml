@@ -26,7 +26,7 @@ reference:
 - title: Prediction
   contents:
   - contains("spruce")
-  - quantile_pred
+  - contains("quantile_pred")
 
 - title: Utility
   contents:
@@ -37,6 +37,7 @@ reference:
   - add_intercept_column
   - weighted_table
   - fct_encode_one_hot
+  - impute_quantiles
 
 - title: Validation
   contents:
