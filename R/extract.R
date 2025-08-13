@@ -23,6 +23,8 @@
 #'
 #' - `extract_recipe()` returns a recipe, possibly estimated.
 #'
+#' - `extract_tailor()` returns a tailor, possibly fit.
+#'
 #' - `extract_workflow()` returns a workflow, possibly fit.
 #'
 #' - `extract_parameter_dials()` returns a single dials parameter object.
@@ -74,7 +76,6 @@ extract_fit_engine <- function(x, ...) {
   UseMethod("extract_fit_engine")
 }
 
-
 #' @rdname hardhat-extract
 #' @export
 extract_mold <- function(x, ...) {
@@ -91,6 +92,12 @@ extract_preprocessor <- function(x, ...) {
 #' @export
 extract_postprocessor <- function(x, ...) {
   UseMethod("extract_postprocessor")
+}
+
+#' @rdname hardhat-extract
+#' @export
+extract_tailor <- function(x, ...) {
+  UseMethod("extract_tailor")
 }
 
 #' @rdname hardhat-extract
