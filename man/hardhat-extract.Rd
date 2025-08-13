@@ -10,6 +10,7 @@
 \alias{extract_mold}
 \alias{extract_preprocessor}
 \alias{extract_postprocessor}
+\alias{extract_tailor}
 \alias{extract_parameter_dials}
 \alias{extract_parameter_set_dials}
 \alias{extract_fit_time}
@@ -30,6 +31,8 @@ extract_mold(x, ...)
 extract_preprocessor(x, ...)
 
 extract_postprocessor(x, ...)
+
+extract_tailor(x, ...)
 
 extract_parameter_dials(x, ...)
 
@@ -59,6 +62,7 @@ variable selectors.
 \item \code{extract_preprocessor()} returns the formula, recipe, or variable
 expressions used for preprocessing.
 \item \code{extract_recipe()} returns a recipe, possibly estimated.
+\item \code{extract_tailor()} returns a tailor, possibly fit.
 \item \code{extract_workflow()} returns a workflow, possibly fit.
 \item \code{extract_parameter_dials()} returns a single dials parameter object.
 \item \code{extract_parameter_set_dials()} returns a set of dials parameter objects.
