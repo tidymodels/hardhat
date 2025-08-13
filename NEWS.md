@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* Added `extract_tailor()` generic (#292).
+
 # hardhat 1.4.1
 
 * Added a new vector class called `quantile_pred()` to house predictions made from a quantile regression model (tidymodels/parsnip#1191, @dajmcdon). 
