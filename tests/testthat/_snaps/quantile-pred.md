@@ -168,3 +168,20 @@
     Output
       [1] "[1.7154]"  "[0.56784]" "[1.2393]"  "[2.2062]"  "[0.76714]"
 
+# arithmetic works on quantiles
+
+    Code
+      sum(dstn)
+    Condition
+      Error in `vec_math()`:
+      ! `sum()` is not a supported operation for <quantile_pred>.
+
+# vec_ptype works
+
+    Code
+      vec_ptype2(v1, ugly_levels)
+    Condition
+      Error in `vec_ptype2.quantile_pred.quantile_pred()`:
+      ! Can't combine `v1` <quantiles> and `ugly_levels` <quantiles>.
+      `quantile_levels` must be compatible (a superset/subset relation).
+
