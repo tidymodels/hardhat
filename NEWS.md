@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 1.4.2
 
 * Added `extract_tailor()` generic (#292).
 
