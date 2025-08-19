@@ -23,6 +23,8 @@
 #'
 #' - `extract_recipe()` returns a recipe, possibly estimated.
 #'
+#' - `extract_postprocessor()` returns the post-processor.
+#'
 #' - `extract_tailor()` returns a tailor, possibly fit.
 #'
 #' - `extract_workflow()` returns a workflow, possibly fit.

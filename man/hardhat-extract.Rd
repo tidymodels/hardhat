@@ -62,6 +62,7 @@ variable selectors.
 \item \code{extract_preprocessor()} returns the formula, recipe, or variable
 expressions used for preprocessing.
 \item \code{extract_recipe()} returns a recipe, possibly estimated.
+\item \code{extract_postprocessor()} returns the post-processor.
 \item \code{extract_tailor()} returns a tailor, possibly fit.
 \item \code{extract_workflow()} returns a workflow, possibly fit.
 \item \code{extract_parameter_dials()} returns a single dials parameter object.
