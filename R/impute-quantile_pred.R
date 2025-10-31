@@ -24,6 +24,7 @@ snap.numeric <- function(x, lower, upper, ...) {
 
 #' @export
 snap.quantile_pred <- function(x, lower, upper, ...) {
+  rlang::check_dots_empty()
   if (vec_size(x) == 0) return(x)
   values <- as.matrix(x)
   quantile_levels <- extract_quantile_levels(x)
@@ -72,7 +73,7 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 #' result in multiple quantile levels having the same value (a CDF with a spike).
 #'
 #'
-#' @param x an object of class `quantile_pred`
+#' @param x an object of class [quantile_pred]
 #' @param probs vector. probabilities at which to evaluate the inverse CDF
 #' @param lower number. lower bound for the resulting values
 #' @param upper number. upper bound for the resulting values
@@ -116,7 +117,7 @@ impute_quantiles <- function(
   check_number_decimal(lower)
   check_number_decimal(upper)
   if (lower > upper) {
-    cli::cli_abort("`lower` must be less than `upper`.")
+    cli::cli_abort("{.arg lower} ({lower}) must be less than {.arg upper} ({upper}).")
   }
   middle <- rlang::arg_match(middle)
   snap(impute_quantile_internal(x, probs, middle), lower, upper)

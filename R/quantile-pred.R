@@ -277,7 +277,7 @@ vec_arith.quantile_pred.numeric <- function(op, x, y, ...) {
   op_fn <- getExportedValue("base", op)
   l <- vctrs::vec_recycle_common(x = x, y = y)
   out <- op_fn(as.matrix(l$x), l$y)
-  quantile_pred(out, x %@% "quantile_levels")
+  quantile_pred(out, attr(x, "quantile_levels"))
 }
 
 #' @export
