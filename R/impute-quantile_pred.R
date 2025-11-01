@@ -14,6 +14,13 @@ snap <- function(x, lower, upper, ...) {
 }
 
 #' @export
+snap.default <- function(x, lower, upper, ...) {
+  cli::cli_abort(
+    "No {.fn snap} method provided for {.obj_type_friendly {x}}."
+  )
+}
+
+#' @export
 snap.numeric <- function(x, lower, upper, ...) {
   rlang::check_dots_empty()
   check_number_decimal(lower)
@@ -25,14 +32,14 @@ snap.numeric <- function(x, lower, upper, ...) {
 #' @export
 snap.quantile_pred <- function(x, lower, upper, ...) {
   rlang::check_dots_empty()
-  if (vec_size(x) == 0) return(x)
+  if (vec_size(x) == 0) {
+    return(x)
+  }
   values <- as.matrix(x)
   quantile_levels <- extract_quantile_levels(x)
   values <- map(vctrs::vec_chop(values), ~ snap(.x, lower, upper))
   quantile_pred(do.call(rbind, values), quantile_levels = quantile_levels)
 }
-
-
 
 
 #' Impute additional quantiles from a `quantile_pred`
@@ -58,7 +65,8 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 #' extrapolated as needed. The process has 3 steps.
 #'
 #' First, by default (`middle = "cubic"`), missing _internal_ quantile levels are
-#' interpolated using a cubic spline fit to the observed values + quantile levels with
+#' interpolated using a cubic spline fit to the observed values + quantile
+#' levels with
 #' [stats::splinefun]. Second, if cubic interpolation fails (or if
 #' `middle = "linear"`), linear interpolation is used via [stats::approx].
 #' Finally, missing _external_ quantile levels (those outside the range of
@@ -77,7 +85,9 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 #' @param probs vector. probabilities at which to evaluate the inverse CDF
 #' @param lower number. lower bound for the resulting values
 #' @param upper number. upper bound for the resulting values
-#' @param middle character.
+#' @param middle character. if `middle = 'cubic'` (the default), a cubic
+#' spline is used for interpolation where possible; `middle='linear'`
+#' interpolates linearly; see Details below.
 #'
 #' @returns A matrix with `length(probs)` columns and `length(x)` rows. Each
 #'   row contains the inverse CDF (quantile function) given by `x`,
@@ -94,11 +104,11 @@ snap.quantile_pred <- function(x, lower, upper, ...) {
 #' impute_quantiles(qp, p1)
 #' rbind(qnorm(p1), qexp(p1)) # exact values, for comparison
 impute_quantiles <- function(
-    x,
-    probs = seq(0, 1, 0.25),
-    lower = -Inf,
-    upper = Inf,
-    middle = c("cubic", "linear")
+  x,
+  probs,
+  lower = -Inf,
+  upper = Inf,
+  middle = c("cubic", "linear")
 ) {
   if (!is_quantile_pred(x)) {
     cli::cli_abort(
@@ -112,56 +122,60 @@ impute_quantiles <- function(
       are avaliable."
     )
   }
-  if (is.unsorted(probs)) probs <- sort(probs)
+  if (is.unsorted(probs)) {
+    probs <- sort(probs)
+  }
   check_quantile_level_values(probs, "probs", call = caller_env())
   check_number_decimal(lower)
   check_number_decimal(upper)
-  if (lower > upper) {
-    cli::cli_abort("{.arg lower} ({lower}) must be less than {.arg upper} ({upper}).")
+  if (lower >= upper) {
+    cli::cli_abort(
+      "{.arg lower} ({lower}) must be less than {.arg upper} ({upper})."
+    )
   }
   middle <- rlang::arg_match(middle)
   snap(impute_quantile_internal(x, probs, middle), lower, upper)
 }
 
-impute_quantile_internal <- function(x, tau_out, middle) {
-  tau <- extract_quantile_levels(x)
-  qvals <- as.matrix(x)
-  if (all(tau_out %in% tau) && !anyNA(qvals)) {
-    return(qvals[, match(tau_out, tau), drop = FALSE])
+impute_quantile_internal <- function(x, probs_out, middle) {
+  probs_in <- extract_quantile_levels(x)
+  vals_in <- as.matrix(x)
+  if (all(probs_out %in% probs_in) && !anyNA(vals_in)) {
+    return(vals_in[, match(probs_out, probs_in), drop = FALSE])
   }
-  qvals_out <- map(
-    vctrs::vec_chop(qvals),
-    ~ impute_quantiles_single(.x, tau, tau_out, middle)
+  vals_out <- map(
+    vctrs::vec_chop(vals_in),
+    ~ impute_quantiles_single(.x, probs_in, probs_out, middle)
   )
-  qvals_out <- do.call(rbind, qvals_out)
-  qvals_out
+  vals_out <- do.call(rbind, vals_out)
+  vals_out
 }
 
-impute_quantiles_single <- function(qvals, tau, tau_out, middle) {
-  qvals_out <- rep(NA, length(tau_out))
-  good <- !is.na(qvals)
+impute_quantiles_single <- function(vals_in, probs_in, probs_out, middle) {
+  vals_out <- rep(NA, length(probs_out))
+  good <- !is.na(vals_in)
   if (!any(good)) {
-    return(qvals_out)
+    return(vals_out)
   }
-  qvals <- qvals[good]
-  tau <- tau[good]
+  vals_in <- vals_in[good]
+  probs_in <- probs_in[good]
 
   # in case we only have one point, and it matches something we wanted
   if (length(good) < 2) {
-    matched_one <- tau_out %in% tau
-    qvals_out[matched_one] <- qvals[matched_one]
-    return(qvals_out)
+    matched_one <- probs_out %in% probs_in
+    vals_out[matched_one] <- vals_in[matched_one]
+    return(vals_out)
   }
 
-  indl <- tau_out < min(tau)
-  indr <- tau_out > max(tau)
-  indm <- !indl & !indr
+  below <- probs_out < min(probs_in)
+  above <- probs_out > max(probs_in)
+  interior <- !below & !above
 
   if (middle == "cubic") {
     method <- "cubic"
     result <- tryCatch(
       {
-        Q <- stats::splinefun(tau, qvals, method = "hyman")
+        Q <- stats::splinefun(probs_in, vals_in, method = "hyman")
         quartiles <- Q(c(.25, .5, .75))
       },
       error = function(e) {
@@ -171,30 +185,32 @@ impute_quantiles_single <- function(qvals, tau, tau_out, middle) {
   }
   if (middle == "linear" || any(is.na(result))) {
     method <- "linear"
-    quartiles <- stats::approx(tau, qvals, c(.25, .5, .75))$y
+    quartiles <- stats::approx(probs_in, vals_in, c(.25, .5, .75))$y
   }
-  if (any(indm)) {
-    qvals_out[indm] <- switch(
+  if (any(interior)) {
+    vals_out[interior] <- switch(
       method,
-      linear = stats::approx(tau, qvals, tau_out[indm])$y,
-      cubic = Q(tau_out[indm])
+      linear = stats::approx(probs_in, vals_in, probs_out[interior])$y,
+      cubic = Q(probs_out[interior])
     )
   }
-  if (any(indl) || any(indr)) {
-    qv <- data.frame(
-      q = c(tau, tau_out[indm]),
-      v = c(qvals, qvals_out[indm])
+  if (any(below) || any(above)) {
+    interior_data <- data.frame(
+      probs = c(probs_in, probs_out[interior]),
+      vals = c(vals_in, vals_out[interior])
     )
-    qv <- qv[vctrs::vec_unique_loc(qv$q), ]
-    qv <- qv[vctrs::vec_order(qv$q), ]
+    interior_data <- interior_data[vctrs::vec_unique_loc(interior_data$probs), ]
+    interior_data <- interior_data[vctrs::vec_order(interior_data$probs), ]
   }
-  if (any(indl)) {
-    qvals_out[indl] <- tail_extrapolate(tau_out[indl], utils::head(qv, 2))
+  if (any(below)) {
+    left_tail_data <- utils::head(interior_data, 2)
+    vals_out[below] <- tail_extrapolate(probs_out[below], left_tail_data)
   }
-  if (any(indr)) {
-    qvals_out[indr] <- tail_extrapolate(tau_out[indr], utils::tail(qv, 2))
+  if (any(above)) {
+    right_tail_data <- utils::tail(interior_data, 2)
+    vals_out[above] <- tail_extrapolate(probs_out[above], right_tail_data)
   }
-  qvals_out
+  vals_out
 }
 
 logit <- function(p) {
@@ -204,11 +220,13 @@ logit <- function(p) {
 
 # extrapolates linearly on the logistic scale using
 # the two points nearest the tail
-tail_extrapolate <- function(tau_out, qv) {
-  if (nrow(qv) == 1L) return(rep(qv$v[1], length(tau_out)))
-  x <- logit(qv$q)
-  x0 <- logit(tau_out)
-  y <- qv$v
+tail_extrapolate <- function(tail_probs, interior) {
+  if (nrow(interior) == 1L) {
+    return(rep(interior$vals[1], length(tail_probs)))
+  }
+  x <- logit(interior$probs)
+  x0 <- logit(tail_probs)
+  y <- interior$vals
   m <- diff(y) / diff(x)
   m * (x0 - x[1]) + y[1]
 }

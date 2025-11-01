@@ -57,7 +57,6 @@ new_quantile_pred <- function(values = list(), quantile_levels = double()) {
 }
 
 
-
 #' @export
 #' @rdname quantile_pred
 is_quantile_pred <- function(x) {
@@ -224,22 +223,38 @@ check_quantile_level_values <- function(levels, arg, call) {
 #' @export
 #' @keywords internal
 vec_ptype2.quantile_pred.quantile_pred <- function(
-    x, y, ..., x_arg = "", y_arg = "", call = caller_env()
+  x,
+  y,
+  ...,
+  x_arg = "",
+  y_arg = "",
+  call = caller_env()
 ) {
-  if (all(extract_quantile_levels(y) %in% extract_quantile_levels(x))) {
+  x_levels <- extract_quantile_levels(x)
+  y_levels <- extract_quantile_levels(y)
+  if (all(y_levels %in% x_levels)) {
     return(x)
   }
-  if (all(extract_quantile_levels(x) %in% extract_quantile_levels(y))) {
+  if (all(x_levels %in% y_levels)) {
     return(y)
   }
   stop_incompatible_type(
-    x, y, x_arg = x_arg, y_arg = y_arg,
+    x,
+    y,
+    x_arg = x_arg,
+    y_arg = y_arg,
     details = "`quantile_levels` must be compatible (a superset/subset relation)."
   )
 }
 
 #' @export
-vec_cast.quantile_pred.quantile_pred <- function(x, to, ..., x_arg = "", to_arg = "") {
+vec_cast.quantile_pred.quantile_pred <- function(
+  x,
+  to,
+  ...,
+  x_arg = "",
+  to_arg = ""
+) {
   x_lvls <- extract_quantile_levels(x)
   to_lvls <- extract_quantile_levels(to)
   x_in_to <- x_lvls %in% to_lvls
@@ -257,8 +272,13 @@ vec_cast.quantile_pred.quantile_pred <- function(x, to, ..., x_arg = "", to_arg 
 vec_math.quantile_pred <- function(.fn, .x, ...) {
   fn <- .fn
   .fn <- getExportedValue("base", .fn)
-  if (fn %in% c("any", "all", "prod", "sum", "cumsum", "cummax", "cummin", "cumprod")) {
-    cli::cli_abort("{.fn {fn}} is not a supported operation for {.cls quantile_pred}.")
+  if (
+    fn %in%
+      c("any", "all", "prod", "sum", "cumsum", "cummax", "cummin", "cumprod")
+  ) {
+    cli::cli_abort(
+      "{.fn {fn}} is not a supported operation for {.cls quantile_pred}."
+    )
   }
   quantile_levels <- .x %@% "quantile_levels"
   .x <- as.matrix(.x)
@@ -269,6 +289,12 @@ vec_math.quantile_pred <- function(.fn, .x, ...) {
 #' @method vec_arith quantile_pred
 vec_arith.quantile_pred <- function(op, x, y, ...) {
   UseMethod("vec_arith.quantile_pred", y)
+}
+
+#' @export
+#' @method vec_arith.quantile_pred default
+vec_arith.quantile_pred.default <- function(op, x, y, ...) {
+  stop_incompatible_op(op, x, y)
 }
 
 #' @export

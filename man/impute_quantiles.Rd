@@ -6,14 +6,14 @@
 \usage{
 impute_quantiles(
   x,
-  probs = seq(0, 1, 0.25),
+  probs,
   lower = -Inf,
   upper = Inf,
   middle = c("cubic", "linear")
 )
 }
 \arguments{
-\item{x}{an object of class \code{quantile_pred}}
+\item{x}{an object of class \link{quantile_pred}}
 
 \item{probs}{vector. probabilities at which to evaluate the inverse CDF}
 
@@ -21,7 +21,9 @@ impute_quantiles(
 
 \item{upper}{number. upper bound for the resulting values}
 
-\item{middle}{character.}
+\item{middle}{character. if \code{middle = 'cubic'} (the default), a cubic
+spline is used for interpolation where possible; \code{middle='linear'}
+interpolates linearly; see Details below.}
 }
 \value{
 A matrix with \code{length(probs)} columns and \code{length(x)} rows. Each
@@ -51,7 +53,8 @@ For \code{probs} that do not exist in \code{x}, these will be interpolated or
 extrapolated as needed. The process has 3 steps.
 
 First, by default (\code{middle = "cubic"}), missing \emph{internal} quantile levels are
-interpolated using a cubic spline fit to the observed values + quantile levels with
+interpolated using a cubic spline fit to the observed values + quantile
+levels with
 \link[stats:splinefun]{stats::splinefun}. Second, if cubic interpolation fails (or if
 \code{middle = "linear"}), linear interpolation is used via \link[stats:approxfun]{stats::approx}.
 Finally, missing \emph{external} quantile levels (those outside the range of

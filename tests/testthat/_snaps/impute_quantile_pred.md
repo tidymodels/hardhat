@@ -25,7 +25,15 @@
 ---
 
     Code
-      impute_quantiles(x, lower = "a")
+      impute_quantiles(x)
+    Condition
+      Error in `impute_quantiles()`:
+      ! argument "probs" is missing, with no default
+
+---
+
+    Code
+      impute_quantiles(x, probs, lower = "a")
     Condition
       Error in `impute_quantiles()`:
       ! `lower` must be a number, not the string "a".
@@ -33,7 +41,7 @@
 ---
 
     Code
-      impute_quantiles(x, upper = "b")
+      impute_quantiles(x, probs, upper = "b")
     Condition
       Error in `impute_quantiles()`:
       ! `upper` must be a number, not the string "b".
@@ -41,7 +49,7 @@
 ---
 
     Code
-      impute_quantiles(x, lower = NULL)
+      impute_quantiles(x, probs, lower = NULL)
     Condition
       Error in `impute_quantiles()`:
       ! `lower` must be a number, not `NULL`.
@@ -49,10 +57,10 @@
 ---
 
     Code
-      impute_quantiles(x, lower = 2, upper = -1)
+      impute_quantiles(x, probs, lower = 2, upper = -1)
     Condition
       Error in `impute_quantiles()`:
-      ! `lower` must be less than `upper`.
+      ! `lower` (2) must be less than `upper` (-1).
 
 ---
 
@@ -60,5 +68,5 @@
       impute_quantiles(x, middle = "middle")
     Condition
       Error in `impute_quantiles()`:
-      ! `middle` must be one of "cubic" or "linear", not "middle".
+      ! argument "probs" is missing, with no default
 
