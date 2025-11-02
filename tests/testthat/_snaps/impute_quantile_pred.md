@@ -65,8 +65,8 @@
 ---
 
     Code
-      impute_quantiles(x, middle = "middle")
+      impute_quantiles(x, probs, middle = "middle")
     Condition
       Error in `impute_quantiles()`:
-      ! argument "probs" is missing, with no default
+      ! `middle` must be one of "cubic" or "linear", not "middle".
 

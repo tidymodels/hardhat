@@ -51,7 +51,7 @@ test_that("impute_quantiles failure modes", {
     error = TRUE,
     impute_quantiles(x, probs, lower = 2, upper = -1)
   )
-  expect_snapshot(error = TRUE, impute_quantiles(x, middle = "middle"))
+  expect_snapshot(error = TRUE, impute_quantiles(x, probs, middle = "middle"))
 })
 
 test_that("impute_quantiles returns existing quantiles when matched", {
