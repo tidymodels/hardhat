@@ -171,28 +171,24 @@ impute_quantiles_single <- function(vals_in, probs_in, probs_out, middle) {
   above <- probs_out > max(probs_in)
   interior <- !below & !above
 
-  if (middle == "cubic") {
-    method <- "cubic"
-    result <- tryCatch(
-      {
-        Q <- stats::splinefun(probs_in, vals_in, method = "hyman")
-        quartiles <- Q(c(.25, .5, .75))
-      },
-      error = function(e) {
-        return(NA)
-      }
-    )
-  }
-  if (middle == "linear" || any(is.na(result))) {
-    method <- "linear"
-    quartiles <- stats::approx(probs_in, vals_in, c(.25, .5, .75))$y
-  }
   if (any(interior)) {
-    vals_out[interior] <- switch(
-      method,
-      linear = stats::approx(probs_in, vals_in, probs_out[interior])$y,
-      cubic = Q(probs_out[interior])
-    )
+    if (middle == "cubic") {
+      result <- tryCatch(
+        {
+          interp_fun <- stats::splinefun(probs_in, vals_in, method = "hyman")
+          quartiles <- interp_fun(c(.25, .5, .75))
+        },
+        error = function(e) {
+          return(NA)
+        }
+      )
+      if (any(is.na(result))) middle <- "linear"
+    }
+    if (middle == "linear") {
+      interp_fun <- function(probs) stats::approx(probs_in, vals_in, probs)$y
+      quartiles <- interp_fun(c(.25, .5, .75))
+    }
+    vals_out[interior] <- interp_fun(probs_out[interior])
   }
   if (any(below) || any(above)) {
     interior_data <- data.frame(
