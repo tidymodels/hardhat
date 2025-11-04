@@ -130,7 +130,7 @@ test_that("quantile_pred == logic outputs NAs when expected", {
   expect_identical(single_pred(c(1, NA), 1:2/3) == single_pred(c(4, 5), 1:2/3), FALSE)
 })
 
-test_that("Inequalities don't work on quantile_preds, but equality & sorting does:", {
+test_that("Inequalities don't work on quantile_preds, but equality & sorting does", {
   v <- quantile_pred(matrix(c(6, 1, 2, 3, 5, 6), 2, 3, byrow = TRUE), 1:3/4)
   expect_error(v < v, class = "hardhat_error_comparing_quantile_preds")
   expect_error(v <= v, class = "hardhat_error_comparing_quantile_preds")
