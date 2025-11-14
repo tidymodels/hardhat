@@ -1,0 +1,341 @@
+# hardhat
+
+## Introduction
+
+hardhat is a *developer focused* package designed to ease the creation
+of new modeling packages, while simultaneously promoting good R modeling
+package standards as laid out by the set of opinionated [Conventions for
+R Modeling
+Packages](https://tidymodels.github.io/model-implementation-principles/).
+
+hardhat has four main goals:
+
+- Easily, consistently, and robustly preprocess data at fit time and
+  prediction time with
+  [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md) and
+  [`forge()`](https://hardhat.tidymodels.org/dev/reference/forge.md).
+
+- Provide one source of truth for common input validation functions,
+  such as checking if new data at prediction time contains the same
+  required columns used at fit time.
+
+- Provide extra utility functions for additional common tasks, such as
+  adding intercept columns, standardizing
+  [`predict()`](https://rdrr.io/r/stats/predict.html) output, and
+  extracting valuable class and factor level information from the
+  predictors.
+
+- Reimagine the base R preprocessing infrastructure of
+  [`stats::model.matrix()`](https://rdrr.io/r/stats/model.matrix.html)
+  and [`stats::model.frame()`](https://rdrr.io/r/stats/model.frame.html)
+  using the stricter approaches found in
+  [`model_matrix()`](https://hardhat.tidymodels.org/dev/reference/model_matrix.md)
+  and
+  [`model_frame()`](https://hardhat.tidymodels.org/dev/reference/model_frame.md).
+
+The idea is to reduce the burden of creating a good modeling interface
+as much as possible, and instead let the package developer focus on
+writing the core implementation of their new model. This benefits not
+only the developer, but also the user of the modeling package, as the
+standardization allows users to build a set of “expectations” around
+what any modeling function should return, and how they should interact
+with it.
+
+## Installation
+
+You can install the released version of hardhat from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("hardhat")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("tidymodels/hardhat")
+```
+
+## Learning more
+
+To learn about how to use hardhat, check out the vignettes:
+
+- [`vignette("mold", "hardhat")`](https://hardhat.tidymodels.org/dev/articles/mold.md):
+  Learn how to preprocess data at fit time with
+  [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md).
+
+- [`vignette("forge", "hardhat")`](https://hardhat.tidymodels.org/dev/articles/forge.md):
+  Learn how to preprocess new data at prediction time with
+  [`forge()`](https://hardhat.tidymodels.org/dev/reference/forge.md).
+
+- [`vignette("package", "hardhat")`](https://hardhat.tidymodels.org/dev/articles/package.md):
+  Learn how to use
+  [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md) and
+  [`forge()`](https://hardhat.tidymodels.org/dev/reference/forge.md) to
+  help in creating a new modeling package.
+
+You can also watch [Max Kuhn](https://github.com/topepo) discuss how to
+use hardhat to build a new modeling package from scratch at the XI
+Jornadas de Usuarios de R conference
+[here](https://canal.uned.es/video/5dd25b9f5578f275e407dd88).
+
+[![](https://i.imgur.com/XKIZfWd.png)](https://canal.uned.es/video/5dd25b9f5578f275e407dd88)
+
+## Contributing
+
+This project is released with a [Contributor Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+- For questions and discussions about tidymodels packages, modeling, and
+  machine learning, please [post on RStudio
+  Community](https://forum.posit.co/new-topic?category_id=15&tags=tidymodels,question).
+
+- If you think you have encountered a bug, please [submit an
+  issue](https://github.com/tidymodels/hardhat/issues).
+
+- Either way, learn how to create and share a
+  [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+  (a minimal, reproducible example), to clearly communicate about your
+  code.
+
+- Check out further details on [contributing guidelines for tidymodels
+  packages](https://www.tidymodels.org/contribute/) and [how to get
+  help](https://www.tidymodels.org/help/).
+
+# Package index
+
+## Preprocessing
+
+- [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md) :
+  Mold data for modeling
+- [`forge()`](https://hardhat.tidymodels.org/dev/reference/forge.md) :
+  Forge prediction-ready data
+
+## Prediction
+
+- [`spruce_numeric_multiple()`](https://hardhat.tidymodels.org/dev/reference/spruce-multiple.md)
+  [`spruce_class_multiple()`](https://hardhat.tidymodels.org/dev/reference/spruce-multiple.md)
+  [`spruce_prob_multiple()`](https://hardhat.tidymodels.org/dev/reference/spruce-multiple.md)
+  : Spruce up multi-outcome predictions
+- [`spruce_numeric()`](https://hardhat.tidymodels.org/dev/reference/spruce.md)
+  [`spruce_class()`](https://hardhat.tidymodels.org/dev/reference/spruce.md)
+  [`spruce_prob()`](https://hardhat.tidymodels.org/dev/reference/spruce.md)
+  : Spruce up predictions
+- [`quantile_pred()`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
+  [`extract_quantile_levels()`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
+  [`as_tibble(`*`<quantile_pred>`*`)`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
+  [`as.matrix(`*`<quantile_pred>`*`)`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
+  : Create a vector containing sets of quantiles
+
+## Utility
+
+- [`model_frame()`](https://hardhat.tidymodels.org/dev/reference/model_frame.md)
+  : Construct a model frame
+
+- [`model_matrix()`](https://hardhat.tidymodels.org/dev/reference/model_matrix.md)
+  : Construct a design matrix
+
+- [`model_offset()`](https://hardhat.tidymodels.org/dev/reference/model_offset.md)
+  : Extract a model offset
+
+- [`delete_response()`](https://hardhat.tidymodels.org/dev/reference/delete_response.md)
+  : Delete the response from a terms object
+
+- [`standardize()`](https://hardhat.tidymodels.org/dev/reference/standardize.md)
+  : Standardize the outcome
+
+- [`new_model()`](https://hardhat.tidymodels.org/dev/reference/new_model.md)
+  : Constructor for a base model
+
+- [`add_intercept_column()`](https://hardhat.tidymodels.org/dev/reference/add_intercept_column.md)
+  :
+
+  Add an intercept column to `data`
+
+- [`weighted_table()`](https://hardhat.tidymodels.org/dev/reference/weighted_table.md)
+  : Weighted table
+
+- [`fct_encode_one_hot()`](https://hardhat.tidymodels.org/dev/reference/fct_encode_one_hot.md)
+  : Encode a factor as a one-hot indicator matrix
+
+## Validation
+
+- [`scream()`](https://hardhat.tidymodels.org/dev/reference/scream.md) :
+  Scream
+
+- [`shrink()`](https://hardhat.tidymodels.org/dev/reference/shrink.md) :
+  Subset only required columns
+
+- [`validate_column_names()`](https://hardhat.tidymodels.org/dev/reference/validate_column_names.md)
+  [`check_column_names()`](https://hardhat.tidymodels.org/dev/reference/validate_column_names.md)
+  :
+
+  Ensure that `data` contains required column names
+
+- [`validate_no_formula_duplication()`](https://hardhat.tidymodels.org/dev/reference/validate_no_formula_duplication.md)
+  [`check_no_formula_duplication()`](https://hardhat.tidymodels.org/dev/reference/validate_no_formula_duplication.md)
+  :
+
+  Ensure no duplicate terms appear in `formula`
+
+- [`validate_outcomes_are_binary()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_binary.md)
+  [`check_outcomes_are_binary()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_binary.md)
+  : Ensure that the outcome has binary factors
+
+- [`validate_outcomes_are_factors()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_factors.md)
+  [`check_outcomes_are_factors()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_factors.md)
+  : Ensure that the outcome has only factor columns
+
+- [`validate_outcomes_are_numeric()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_numeric.md)
+  [`check_outcomes_are_numeric()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_numeric.md)
+  : Ensure outcomes are all numeric
+
+- [`validate_outcomes_are_univariate()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_univariate.md)
+  [`check_outcomes_are_univariate()`](https://hardhat.tidymodels.org/dev/reference/validate_outcomes_are_univariate.md)
+  : Ensure that the outcome is univariate
+
+- [`validate_prediction_size()`](https://hardhat.tidymodels.org/dev/reference/validate_prediction_size.md)
+  [`check_prediction_size()`](https://hardhat.tidymodels.org/dev/reference/validate_prediction_size.md)
+  : Ensure that predictions have the correct number of rows
+
+- [`validate_predictors_are_numeric()`](https://hardhat.tidymodels.org/dev/reference/validate_predictors_are_numeric.md)
+  [`check_predictors_are_numeric()`](https://hardhat.tidymodels.org/dev/reference/validate_predictors_are_numeric.md)
+  : Ensure predictors are all numeric
+
+## Blueprint
+
+- [`default_formula_blueprint()`](https://hardhat.tidymodels.org/dev/reference/default_formula_blueprint.md)
+  [`mold(`*`<formula>`*`)`](https://hardhat.tidymodels.org/dev/reference/default_formula_blueprint.md)
+  : Default formula blueprint
+
+- [`default_recipe_blueprint()`](https://hardhat.tidymodels.org/dev/reference/default_recipe_blueprint.md)
+  [`mold(`*`<recipe>`*`)`](https://hardhat.tidymodels.org/dev/reference/default_recipe_blueprint.md)
+  : Default recipe blueprint
+
+- [`default_xy_blueprint()`](https://hardhat.tidymodels.org/dev/reference/default_xy_blueprint.md)
+  [`mold(`*`<data.frame>`*`)`](https://hardhat.tidymodels.org/dev/reference/default_xy_blueprint.md)
+  [`mold(`*`<matrix>`*`)`](https://hardhat.tidymodels.org/dev/reference/default_xy_blueprint.md)
+  : Default XY blueprint
+
+- [`is_blueprint()`](https://hardhat.tidymodels.org/dev/reference/is_blueprint.md)
+  :
+
+  Is `x` a preprocessing blueprint?
+
+- [`new_formula_blueprint()`](https://hardhat.tidymodels.org/dev/reference/new-blueprint.md)
+  [`new_recipe_blueprint()`](https://hardhat.tidymodels.org/dev/reference/new-blueprint.md)
+  [`new_xy_blueprint()`](https://hardhat.tidymodels.org/dev/reference/new-blueprint.md)
+  [`new_blueprint()`](https://hardhat.tidymodels.org/dev/reference/new-blueprint.md)
+  : Create a new preprocessing blueprint
+
+- [`new_default_formula_blueprint()`](https://hardhat.tidymodels.org/dev/reference/new-default-blueprint.md)
+  [`new_default_recipe_blueprint()`](https://hardhat.tidymodels.org/dev/reference/new-default-blueprint.md)
+  [`new_default_xy_blueprint()`](https://hardhat.tidymodels.org/dev/reference/new-default-blueprint.md)
+  : Create a new default blueprint
+
+- [`refresh_blueprint()`](https://hardhat.tidymodels.org/dev/reference/refresh_blueprint.md)
+  : Refresh a preprocessing blueprint
+
+- [`run_forge()`](https://hardhat.tidymodels.org/dev/reference/run-forge.md)
+  :
+
+  [`forge()`](https://hardhat.tidymodels.org/dev/reference/forge.md)
+  according to a blueprint
+
+- [`run_mold()`](https://hardhat.tidymodels.org/dev/reference/run-mold.md)
+  :
+
+  [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md)
+  according to a blueprint
+
+- [`update_blueprint()`](https://hardhat.tidymodels.org/dev/reference/update_blueprint.md)
+  : Update a preprocessing blueprint
+
+## Case Weights
+
+- [`new_case_weights()`](https://hardhat.tidymodels.org/dev/reference/new_case_weights.md)
+  **\[experimental\]** : Extend case weights
+
+- [`is_case_weights()`](https://hardhat.tidymodels.org/dev/reference/is_case_weights.md)
+  **\[experimental\]** :
+
+  Is `x` a case weights vector?
+
+### Importance Weights
+
+- [`importance_weights()`](https://hardhat.tidymodels.org/dev/reference/importance_weights.md)
+  **\[experimental\]** : Importance weights
+
+- [`new_importance_weights()`](https://hardhat.tidymodels.org/dev/reference/new_importance_weights.md)
+  **\[experimental\]** : Construct an importance weights vector
+
+- [`is_importance_weights()`](https://hardhat.tidymodels.org/dev/reference/is_importance_weights.md)
+  **\[experimental\]** :
+
+  Is `x` an importance weights vector?
+
+### Frequency Weights
+
+- [`frequency_weights()`](https://hardhat.tidymodels.org/dev/reference/frequency_weights.md)
+  **\[experimental\]** : Frequency weights
+
+- [`new_frequency_weights()`](https://hardhat.tidymodels.org/dev/reference/new_frequency_weights.md)
+  **\[experimental\]** : Construct a frequency weights vector
+
+- [`is_frequency_weights()`](https://hardhat.tidymodels.org/dev/reference/is_frequency_weights.md)
+  **\[experimental\]** :
+
+  Is `x` a frequency weights vector?
+
+## Setup
+
+- [`create_modeling_package()`](https://hardhat.tidymodels.org/dev/reference/modeling-usethis.md)
+  [`use_modeling_deps()`](https://hardhat.tidymodels.org/dev/reference/modeling-usethis.md)
+  [`use_modeling_files()`](https://hardhat.tidymodels.org/dev/reference/modeling-usethis.md)
+  : Create a modeling package
+
+## Information
+
+- [`get_data_classes()`](https://hardhat.tidymodels.org/dev/reference/get_data_classes.md)
+  : Extract data classes from a data frame or matrix
+- [`get_levels()`](https://hardhat.tidymodels.org/dev/reference/get_levels.md)
+  [`get_outcome_levels()`](https://hardhat.tidymodels.org/dev/reference/get_levels.md)
+  : Extract factor levels from a data frame
+
+## Development
+
+- [`tune()`](https://hardhat.tidymodels.org/dev/reference/tune.md) :
+  Mark arguments for tuning
+- [`extract_workflow()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_recipe()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_spec_parsnip()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_fit_parsnip()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_fit_engine()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_mold()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_preprocessor()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_postprocessor()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_tailor()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_parameter_dials()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_parameter_set_dials()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  [`extract_fit_time()`](https://hardhat.tidymodels.org/dev/reference/hardhat-extract.md)
+  : Generics for object extraction
+
+## Data
+
+- [`hardhat-example-data`](https://hardhat.tidymodels.org/dev/reference/hardhat-example-data.md)
+  [`example_train`](https://hardhat.tidymodels.org/dev/reference/hardhat-example-data.md)
+  [`example_test`](https://hardhat.tidymodels.org/dev/reference/hardhat-example-data.md)
+  : Example data for hardhat
+
+# Articles
+
+### All vignettes
+
+- [Forging data for
+  predictions](https://hardhat.tidymodels.org/dev/articles/forge.md):
+- [Molding data for
+  modeling](https://hardhat.tidymodels.org/dev/articles/mold.md):
+- [Creating Modeling Packages With
+  hardhat](https://hardhat.tidymodels.org/dev/articles/package.md):
