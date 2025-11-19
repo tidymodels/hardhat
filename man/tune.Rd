@@ -19,7 +19,7 @@ A call object that echos the user's input.
 tune packages. It marks recipes step and parsnip model arguments for tuning.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes"))) withAutoprint(\{ # examplesIf}
 tune()
 tune("your name here")
 
