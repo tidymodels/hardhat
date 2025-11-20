@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* `mold()` no longer throws warnings about `strings_as_factors` argument when used on recipe objects (#284).
+
 # hardhat 1.4.2
 
 * Added `extract_tailor()` generic (#292).

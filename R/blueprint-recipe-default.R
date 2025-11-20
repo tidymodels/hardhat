@@ -250,12 +250,13 @@ mold_recipe_default_process <- function(
     training <- NULL
   }
 
+  blueprint$recipe$strings_as_factors <- blueprint_strings_as_factors(blueprint)
+
   # Prep for predictors and outcomes
   recipe <- recipes::prep(
     blueprint$recipe,
     training = training,
-    fresh = blueprint$fresh,
-    strings_as_factors = blueprint_strings_as_factors(blueprint)
+    fresh = blueprint$fresh
   )
   blueprint <- update_blueprint0(blueprint, recipe = recipe)
 
