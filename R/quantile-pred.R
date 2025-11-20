@@ -365,24 +365,6 @@ check_quantile_level_values <- function(levels, arg, call) {
 
 # vctrs behaviours --------------------------------------------------------
 
-# #' @export
-# vec_cast.quantile_pred.quantile_pred <- function(
-#   x,
-#   to,
-#   ...,
-#   x_arg = "",
-#   to_arg = ""
-# ) {
-#   x_lvls <- extract_quantile_levels(x)
-#   to_lvls <- extract_quantile_levels(to)
-#   x_in_to <- x_lvls %in% to_lvls
-#   to_in_x <- to_lvls %in% x_lvls
-#   old_qdata <- as.matrix(x)[, x_in_to]
-#   new_qdata <- matrix(NA, nrow = vec_size(x), ncol = length(to_lvls))
-#   new_qdata[, to_in_x] <- old_qdata
-#   quantile_pred(new_qdata, quantile_levels = to_lvls)
-# }
-
 #' @export
 #' @method vec_math quantile_pred
 vec_math.quantile_pred <- function(.fn, .x, ...) {

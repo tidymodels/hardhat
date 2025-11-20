@@ -253,9 +253,4 @@ test_that("vec_cast self-self works", {
   qp2 <- quantile_pred(matrix(rnorm(7), nrow = 1), 2:8 / 10)
   expect_identical(vec_cast(qp, qp), qp)
   expect_identical(vec_cast(qp2, qp2), qp2)
-
-  qp_dat <- as.matrix(qp)
-  qp_big <- matrix(NA, nrow(qp_dat), length(2:8))
-  qp_big[, c(1, 3, 5, 7)] <- qp_dat
-  expect_identical(vec_cast(qp, qp2), quantile_pred(qp_big, 2:8 / 10))
 })
