@@ -57,7 +57,7 @@ test_that("extract_quantile_levels", {
 
 test_that("median for quantile_pred", {
   v <- quantile_pred(matrix(1:25, 5), 3:7 / 10)
-  expect_identical(median(v), as.double(11:15)) # has explicit median, but dbl
+  expect_identical(median(v), 11:15)
 
   v_above_med <- quantile_pred(matrix(1:10, 2), 11:15 / 20)
   expect_equal(median(v_above_med), rep(NA, 2))
