@@ -204,7 +204,9 @@
     Code
       vec_ptype2(v1, ugly_levels)
     Condition
-      Error in `vec_ptype2.quantile_pred.quantile_pred()`:
+      Error:
       ! Can't combine `v1` <quantiles> and `ugly_levels` <quantiles>.
-      `quantile_levels` must be compatible (a superset/subset relation).
+      They have different sets of quantile levels:
+      * 1st set of quantile levels: 0.2, 0.4, 0.6, and 0.8
+      * 2nd set of quantile levels: 0.30000000000000004, 0.5, 0.7, and 0.9
 

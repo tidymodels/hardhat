@@ -229,6 +229,25 @@ vec_ptype2.quantile_pred.quantile_pred <-
     y_arg = caller_arg(y),
     call = caller_env()
   ) {
+    x_levels <- extract_quantile_levels(x)
+    y_levels <- extract_quantile_levels(y)
+
+    x_values <- field(x, "quantile_values")
+    y_values <- field(y, "quantile_values")
+
+    if (is.double(x_values) || is.double(y_values)) {
+      storage.mode(x_values) <- "double"
+      storage.mode(y_values) <- "double"
+    }
+
+    if (all(y_levels %in% x_levels)) {
+      field(x, "quantile_values") <- x_values
+      return(x)
+    }
+    if (all(x_levels %in% y_levels)) {
+      field(y, "quantile_values") <- y_values
+      return(y)
+    }
     validate_preds_have_same_quantile_levels(
       x,
       y,
@@ -237,10 +256,7 @@ vec_ptype2.quantile_pred.quantile_pred <-
       y_arg,
       call
     )
-    field(x, "quantile_values") <- vec_ptype2(
-      field(x, "quantile_values"),
-      field(y, "quantile_values")
-    )
+    field(x, "quantile_values") <- vec_ptype2(x_values, y_values)
     x
   }
 
@@ -349,52 +365,23 @@ check_quantile_level_values <- function(levels, arg, call) {
 
 # vctrs behaviours --------------------------------------------------------
 
-#' @export
-#' @keywords internal
-vec_ptype2.quantile_pred.quantile_pred <- function(
-  x,
-  y,
-  ...,
-  x_arg = "",
-  y_arg = "",
-  call = caller_env()
-) {
-  x_levels <- extract_quantile_levels(x)
-  y_levels <- extract_quantile_levels(y)
-  if (all(y_levels %in% x_levels)) {
-    return(x)
-  }
-  if (all(x_levels %in% y_levels)) {
-    return(y)
-  }
-  stop_incompatible_type(
-    x,
-    y,
-    x_arg = x_arg,
-    y_arg = y_arg,
-    details = "`quantile_levels` must be compatible (a superset/subset relation)."
-  )
-}
-
-#' @export
-vec_cast.quantile_pred.quantile_pred <- function(
-  x,
-  to,
-  ...,
-  x_arg = "",
-  to_arg = ""
-) {
-  x_lvls <- extract_quantile_levels(x)
-  to_lvls <- extract_quantile_levels(to)
-  x_in_to <- x_lvls %in% to_lvls
-  to_in_x <- to_lvls %in% x_lvls
-
-  old_qdata <- as.matrix(x)[, x_in_to]
-  new_qdata <- matrix(NA, nrow = vec_size(x), ncol = length(to_lvls))
-  new_qdata[, to_in_x] <- old_qdata
-  quantile_pred(new_qdata, quantile_levels = to_lvls)
-}
-
+# #' @export
+# vec_cast.quantile_pred.quantile_pred <- function(
+#   x,
+#   to,
+#   ...,
+#   x_arg = "",
+#   to_arg = ""
+# ) {
+#   x_lvls <- extract_quantile_levels(x)
+#   to_lvls <- extract_quantile_levels(to)
+#   x_in_to <- x_lvls %in% to_lvls
+#   to_in_x <- to_lvls %in% x_lvls
+#   old_qdata <- as.matrix(x)[, x_in_to]
+#   new_qdata <- matrix(NA, nrow = vec_size(x), ncol = length(to_lvls))
+#   new_qdata[, to_in_x] <- old_qdata
+#   quantile_pred(new_qdata, quantile_levels = to_lvls)
+# }
 
 #' @export
 #' @method vec_math quantile_pred
