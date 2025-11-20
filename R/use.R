@@ -45,10 +45,12 @@
 #'
 #' @name modeling-usethis
 #' @export
-create_modeling_package <- function(path,
-                                    model,
-                                    fields = NULL,
-                                    open = interactive()) {
+create_modeling_package <- function(
+  path,
+  model,
+  fields = NULL,
+  open = interactive()
+) {
   check_required(path)
   check_required(model)
 

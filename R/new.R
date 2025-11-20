@@ -28,10 +28,7 @@ new_mold_process <- function(predictors, outcomes, blueprint, extras) {
   )
 }
 
-new_mold_process_terms <- function(blueprint,
-                                   data,
-                                   ptype,
-                                   extras = NULL) {
+new_mold_process_terms <- function(blueprint, data, ptype, extras = NULL) {
   list(
     blueprint = blueprint,
     data = data,
@@ -60,9 +57,7 @@ new_forge_process <- function(predictors, outcomes, extras) {
   )
 }
 
-new_forge_process_terms <- function(blueprint,
-                                    data,
-                                    extras = NULL) {
+new_forge_process_terms <- function(blueprint, data, extras = NULL) {
   list(
     blueprint = blueprint,
     data = data,

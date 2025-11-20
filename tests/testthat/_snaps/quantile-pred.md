@@ -191,3 +191,20 @@
       * 1st set of quantile levels: 0, 0.05, 0.1, 0.15000000000000002, and 0.2
       * 2nd set of quantile levels: 0, 0.05, 0.1, 0.15, and 0.2
 
+# arithmetic works on quantiles
+
+    Code
+      sum(dstn)
+    Condition
+      Error in `vec_math()`:
+      ! `sum()` is not a supported operation for <quantile_pred>.
+
+# vec_ptype works
+
+    Code
+      vec_ptype2(v1, ugly_levels)
+    Condition
+      Error in `vec_ptype2.quantile_pred.quantile_pred()`:
+      ! Can't combine `v1` <quantiles> and `ugly_levels` <quantiles>.
+      `quantile_levels` must be compatible (a superset/subset relation).
+

@@ -20,11 +20,15 @@ test_that("checks the ptype", {
     new_blueprint(ptypes = list(x = 1))
   })
   expect_snapshot(error = TRUE, {
-    new_blueprint(ptypes = list("predictors" = "not a tibble", outcomes = "not a tibble"))
+    new_blueprint(
+      ptypes = list("predictors" = "not a tibble", outcomes = "not a tibble")
+    )
   })
 
-  tibble_too_long <- tibble::tibble(x =1)
+  tibble_too_long <- tibble::tibble(x = 1)
   expect_snapshot(error = TRUE, {
-    new_blueprint(ptypes = list("predictors" = tibble_too_long, outcomes = tibble_too_long))
+    new_blueprint(
+      ptypes = list("predictors" = tibble_too_long, outcomes = tibble_too_long)
+    )
   })
 })

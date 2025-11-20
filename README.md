@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Codecov test
-coverage](https://codecov.io/gh/tidymodels/hardhat/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/hardhat?branch=main)
+coverage](https://codecov.io/gh/tidymodels/hardhat/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/hardhat)
 [![R-CMD-check](https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check.yaml)
 [![R-CMD-check-hard](https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check-hard.yaml/badge.svg)](https://github.com/tidymodels/hardhat/actions/workflows/R-CMD-check-hard.yaml)
 <!-- badges: end -->

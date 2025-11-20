@@ -2,12 +2,15 @@
 % Please edit documentation in R/quantile-pred.R
 \name{quantile_pred}
 \alias{quantile_pred}
+\alias{is_quantile_pred}
 \alias{extract_quantile_levels}
 \alias{as_tibble.quantile_pred}
 \alias{as.matrix.quantile_pred}
 \title{Create a vector containing sets of quantiles}
 \usage{
 quantile_pred(values, quantile_levels = double())
+
+is_quantile_pred(x)
 
 extract_quantile_levels(x)
 
@@ -37,6 +40,7 @@ quantile levels.
 \code{".quantile_levels"}, and \code{".row"}.
 \item \code{as.matrix()} returns an unnamed matrix with rows as samples, columns as
 quantile levels, and entries are predictions.
+\item \code{is_quantile_pred()} tests for the "quantile_pred" class
 }
 }
 \description{

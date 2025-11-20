@@ -90,12 +90,20 @@ is_importance_weights <- function(x) {
 }
 
 #' @export
-vec_ptype2.hardhat_importance_weights.hardhat_importance_weights <- function(x, y, ...) {
+vec_ptype2.hardhat_importance_weights.hardhat_importance_weights <- function(
+  x,
+  y,
+  ...
+) {
   x
 }
 
 #' @export
-vec_cast.hardhat_importance_weights.hardhat_importance_weights <- function(x, to, ...) {
+vec_cast.hardhat_importance_weights.hardhat_importance_weights <- function(
+  x,
+  to,
+  ...
+) {
   x
 }
 
@@ -212,12 +220,20 @@ is_frequency_weights <- function(x) {
 }
 
 #' @export
-vec_ptype2.hardhat_frequency_weights.hardhat_frequency_weights <- function(x, y, ...) {
+vec_ptype2.hardhat_frequency_weights.hardhat_frequency_weights <- function(
+  x,
+  y,
+  ...
+) {
   x
 }
 
 #' @export
-vec_cast.hardhat_frequency_weights.hardhat_frequency_weights <- function(x, to, ...) {
+vec_cast.hardhat_frequency_weights.hardhat_frequency_weights <- function(
+  x,
+  to,
+  ...
+) {
   x
 }
 

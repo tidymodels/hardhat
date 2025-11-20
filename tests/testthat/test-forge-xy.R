@@ -3,8 +3,16 @@ test_that("simple forge works", {
   matrix_bp <- default_xy_blueprint(composition = "matrix")
 
   x1 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-  x2 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = sparse_bp)
-  x3 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = matrix_bp)
+  x2 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = sparse_bp
+  )
+  x3 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = matrix_bp
+  )
   xx1 <- forge(iris, x1$blueprint)
   xx2 <- forge(iris, x2$blueprint)
   xx3 <- forge(iris, x3$blueprint)
@@ -133,8 +141,16 @@ test_that("new_data can only be a data frame / matrix", {
   matrix_bp <- default_xy_blueprint(composition = "matrix")
 
   x1 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species)
-  x2 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = sparse_bp)
-  x3 <- mold(iris[, "Sepal.Length", drop = FALSE], iris$Species, blueprint = matrix_bp)
+  x2 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = sparse_bp
+  )
+  x3 <- mold(
+    iris[, "Sepal.Length", drop = FALSE],
+    iris$Species,
+    blueprint = matrix_bp
+  )
 
   expect_snapshot(error = TRUE, forge("hi", x1$blueprint))
   expect_snapshot(error = TRUE, forge("hi", x2$blueprint))
@@ -143,7 +159,10 @@ test_that("new_data can only be a data frame / matrix", {
 
 test_that("missing predictor columns fail appropriately", {
   bp <- default_xy_blueprint(composition = "dgCMatrix")
-  x1 <- mold(iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE], iris$Species)
+  x1 <- mold(
+    iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE],
+    iris$Species
+  )
   x2 <- mold(
     iris[, c("Sepal.Length", "Sepal.Width"), drop = FALSE],
     iris$Species,

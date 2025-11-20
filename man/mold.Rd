@@ -41,7 +41,7 @@ how to use each one in conjunction with \code{mold()}.
 }
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes"))) withAutoprint(\{ # examplesIf}
 # See the method specific documentation linked in Description
 # for the details of each blueprint, and more examples.
 

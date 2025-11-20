@@ -70,7 +70,9 @@ forge <- function(new_data, blueprint, ..., outcomes = FALSE) {
 
 #' @export
 forge.default <- function(new_data, blueprint, ..., outcomes = FALSE) {
-  cli::cli_abort("No {.fn forge} method provided for {.obj_type_friendly {new_data}}.")
+  cli::cli_abort(
+    "No {.fn forge} method provided for {.obj_type_friendly {new_data}}."
+  )
 }
 
 #' @export
@@ -129,17 +131,13 @@ forge.matrix <- forge.data.frame
 #' mold <- run_mold(bp, x = predictors, y = outcomes)
 #'
 #' run_forge(mold$blueprint, new_data = predictors)
-run_forge <- function(blueprint,
-                      new_data,
-                      ...,
-                      outcomes = FALSE) {
+run_forge <- function(blueprint, new_data, ..., outcomes = FALSE) {
   UseMethod("run_forge")
 }
 
 #' @export
-run_forge.default <- function(blueprint,
-                              new_data,
-                              ...,
-                              outcomes = FALSE) {
-  cli::cli_abort("No {.fn run_forge} method provided for {.obj_type_friendly {blueprint}}.")
+run_forge.default <- function(blueprint, new_data, ..., outcomes = FALSE) {
+  cli::cli_abort(
+    "No {.fn run_forge} method provided for {.obj_type_friendly {blueprint}}."
+  )
 }

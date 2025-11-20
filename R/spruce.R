@@ -204,11 +204,13 @@ spruce_prob_multiple <- function(...) {
 
 # ------------------------------------------------------------------------------
 
-check_factor <- function(x,
-                         ...,
-                         allow_null = FALSE,
-                         arg = caller_arg(x),
-                         call = caller_env()) {
+check_factor <- function(
+  x,
+  ...,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   if (!missing(x)) {
     if (is.factor(x)) {
       return(invisible(NULL))

@@ -18,14 +18,16 @@
 #'
 #' @rdname new-blueprint
 #' @export
-new_formula_blueprint <- function(intercept = FALSE,
-                                  allow_novel_levels = FALSE,
-                                  ptypes = NULL,
-                                  formula = NULL,
-                                  indicators = "traditional",
-                                  composition = "tibble",
-                                  ...,
-                                  subclass = character()) {
+new_formula_blueprint <- function(
+  intercept = FALSE,
+  allow_novel_levels = FALSE,
+  ptypes = NULL,
+  formula = NULL,
+  indicators = "traditional",
+  composition = "tibble",
+  ...,
+  subclass = character()
+) {
   check_formula(formula, allow_null = TRUE)
   check_indicators(indicators)
 
@@ -46,10 +48,12 @@ refresh_blueprint.formula_blueprint <- function(blueprint) {
   do.call(new_formula_blueprint, as.list(blueprint))
 }
 
-check_formula_blueprint <- function(x,
-                                    ...,
-                                    arg = caller_arg(x),
-                                    call = caller_env()) {
+check_formula_blueprint <- function(
+  x,
+  ...,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
   check_inherits(x, "formula_blueprint", arg = arg, call = call)
 }
 

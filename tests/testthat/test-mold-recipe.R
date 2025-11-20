@@ -35,18 +35,21 @@ test_that("can mold recipes with intercepts", {
   rec <- recipes::recipe(Species ~ Sepal.Length, data = iris)
 
   x1 <- mold(
-    rec, iris,
+    rec,
+    iris,
     blueprint = default_recipe_blueprint(intercept = TRUE)
   )
   x2 <- mold(
-    rec, iris,
+    rec,
+    iris,
     blueprint = default_recipe_blueprint(
       intercept = TRUE,
       composition = "dgCMatrix"
     )
   )
   x3 <- mold(
-    rec, iris,
+    rec,
+    iris,
     blueprint = default_recipe_blueprint(
       intercept = TRUE,
       composition = "matrix"
@@ -73,14 +76,36 @@ test_that("can pass `fresh` through to `prep()`", {
   prepped_rec <- recipes::prep(rec, iris1)
   non_fresh_mean <- prepped_rec$steps[[1]]$means
 
-  x1 <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint(fresh = FALSE))
+  x1 <- mold(
+    prepped_rec,
+    iris2,
+    blueprint = default_recipe_blueprint(fresh = FALSE)
+  )
   mold_non_fresh_mean1 <- x1$blueprint$recipe$steps[[1]]$means
-  x2 <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint(fresh = FALSE, composition = "dgCMatrix"))
+  x2 <- mold(
+    prepped_rec,
+    iris2,
+    blueprint = default_recipe_blueprint(
+      fresh = FALSE,
+      composition = "dgCMatrix"
+    )
+  )
   mold_non_fresh_mean2 <- x2$blueprint$recipe$steps[[1]]$means
 
-  y1 <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint(fresh = TRUE))
+  y1 <- mold(
+    prepped_rec,
+    iris2,
+    blueprint = default_recipe_blueprint(fresh = TRUE)
+  )
   mold_fresh_mean1 <- y1$blueprint$recipe$steps[[1]]$means
-  y2 <- mold(prepped_rec, iris2, blueprint = default_recipe_blueprint(fresh = TRUE, composition = "dgCMatrix"))
+  y2 <- mold(
+    prepped_rec,
+    iris2,
+    blueprint = default_recipe_blueprint(
+      fresh = TRUE,
+      composition = "dgCMatrix"
+    )
+  )
   mold_fresh_mean2 <- y2$blueprint$recipe$steps[[1]]$means
 
   fresh_mean <- c(Sepal.Length = mean(iris2$Sepal.Length))
@@ -130,13 +155,17 @@ test_that("can pass `strings_as_factors` through to `prep()`", {
   x <- mold(rec, df)
   expect_identical(x$predictors$x, factor("a"))
 
-  x <- mold(rec, df, blueprint = default_recipe_blueprint(strings_as_factors = FALSE))
+  x <- mold(
+    rec,
+    df,
+    blueprint = default_recipe_blueprint(strings_as_factors = FALSE)
+  )
   expect_identical(x$predictors$x, "a")
 })
 
 test_that("`data` is validated", {
   skip_if_not_installed("recipes")
-  
+
   expect_snapshot(
     error = TRUE,
     mold(recipes::recipe(Species ~ Sepal.Length, data = iris), 1)

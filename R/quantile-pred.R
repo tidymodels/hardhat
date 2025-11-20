@@ -21,6 +21,7 @@
 #'   `".quantile_levels"`, and `".row"`.
 #'   * `as.matrix()` returns an unnamed matrix with rows as samples, columns as
 #'   quantile levels, and entries are predictions.
+#'   * `is_quantile_pred()` tests for the "quantile_pred" class
 #' @examples
 #' .pred_quantile <- quantile_pred(matrix(rnorm(20), 5), c(.2, .4, .6, .8))
 #'
@@ -46,17 +47,29 @@ quantile_pred <- function(values, quantile_levels = double()) {
   new_quantile_pred(values, quantile_levels)
 }
 
-new_quantile_pred <- function(values = list(quantile_values = matrix(double(), 0L, 0L)), quantile_levels = double()) {
+new_quantile_pred <- function(
+  values = list(quantile_values = matrix(double(), 0L, 0L)),
+  quantile_levels = double()
+) {
   quantile_levels <- vctrs::vec_cast(quantile_levels, double())
   vctrs::new_rcrd(
-    values, quantile_levels = quantile_levels, class = "quantile_pred"
+    values,
+    quantile_levels = quantile_levels,
+    class = "quantile_pred"
   )
+}
+
+
+#' @export
+#' @rdname quantile_pred
+is_quantile_pred <- function(x) {
+  inherits(x, "quantile_pred")
 }
 
 #' @export
 #' @rdname quantile_pred
 extract_quantile_levels <- function(x) {
-  if (!inherits(x, "quantile_pred")) {
+  if (!is_quantile_pred(x)) {
     cli::cli_abort(
       "{.arg x} must be a {.cls quantile_pred} object, not
       {.obj_type_friendly {x}}."
@@ -68,7 +81,7 @@ extract_quantile_levels <- function(x) {
 #' @export
 #' @rdname quantile_pred
 as_tibble.quantile_pred <-
-  function (x, ..., .rows = NULL, .name_repair = "minimal", rownames = NULL) {
+  function(x, ..., .rows = NULL, .name_repair = "minimal", rownames = NULL) {
     lvls <- attr(x, "quantile_levels")
     n_samp <- length(x)
     n_quant <- length(lvls)
@@ -140,10 +153,13 @@ vec_proxy_compare.quantile_pred <- function(x, ...) {
   # comparison operators. (A partial order could be implemented by directly
   # overriding the binary comparison operators, but would conflict with the
   # lexicographical total order used for sorting.)
-  cli::cli_abort("
+  cli::cli_abort(
+    "
     `vec_proxy_compare`, `<`, `<=`, `>`, and `>=` are not supported for
     `quantile_pred`s.
-  ", class = "hardhat_error_comparing_quantile_preds")
+  ",
+    class = "hardhat_error_comparing_quantile_preds"
+  )
 }
 
 #' @export
@@ -162,30 +178,42 @@ format_quantile_levels <- function(quantile_levels) {
   # differences. Specifically, format them with enough sig figs that we recover
   # their precise values.
   result <- formatC(quantile_levels, digits = 3)
-  for (digits in 4:17) { # 17 significant digits should be enough to disambiguate
+  for (digits in 4:17) {
+    # 17 significant digits should be enough to disambiguate
     imprecise <- as.numeric(result) != quantile_levels
-    if (!any(imprecise)) break
+    if (!any(imprecise)) {
+      break
+    }
     result[imprecise] <- formatC(quantile_levels[imprecise], digits = digits)
   }
   result <- trimws(result)
   result
 }
 
-validate_preds_have_same_quantile_levels <- function(x, y, action, x_arg, y_arg, call) {
+validate_preds_have_same_quantile_levels <- function(
+  x,
+  y,
+  action,
+  x_arg,
+  y_arg,
+  call
+) {
   x_quantile_levels <- attr(x, "quantile_levels")
   y_quantile_levels <- attr(y, "quantile_levels")
   if (!identical(x_quantile_levels, y_quantile_levels)) {
     x_formatted_levels <- format_quantile_levels(x_quantile_levels)
     y_formatted_levels <- format_quantile_levels(y_quantile_levels)
     stop_incompatible_type(
-      x, y,
+      x,
+      y,
       action = action,
-      x_arg = x_arg, y_arg = y_arg,
+      x_arg = x_arg,
+      y_arg = y_arg,
       details = cli::format_error(c(
-                       "They have different sets of quantile levels:",
-                       "*" = '1st set of quantile levels: {x_formatted_levels}',
-                       "*" = '2nd set of quantile levels: {y_formatted_levels}'
-                     )),
+        "They have different sets of quantile levels:",
+        "*" = '1st set of quantile levels: {x_formatted_levels}',
+        "*" = '2nd set of quantile levels: {y_formatted_levels}'
+      )),
       call = call
     )
   }
@@ -193,17 +221,51 @@ validate_preds_have_same_quantile_levels <- function(x, y, action, x_arg, y_arg,
 
 #' @export
 vec_ptype2.quantile_pred.quantile_pred <-
-  function(x, y, ..., x_arg = caller_arg(x), y_arg = caller_arg(y), call = caller_env()) {
-    validate_preds_have_same_quantile_levels(x, y, "combine", x_arg, y_arg, call)
-    field(x, "quantile_values") <- vec_ptype2(field(x, "quantile_values"), field(y, "quantile_values"))
+  function(
+    x,
+    y,
+    ...,
+    x_arg = caller_arg(x),
+    y_arg = caller_arg(y),
+    call = caller_env()
+  ) {
+    validate_preds_have_same_quantile_levels(
+      x,
+      y,
+      "combine",
+      x_arg,
+      y_arg,
+      call
+    )
+    field(x, "quantile_values") <- vec_ptype2(
+      field(x, "quantile_values"),
+      field(y, "quantile_values")
+    )
     x
   }
 
 #' @export
 vec_cast.quantile_pred.quantile_pred <-
-  function(x, to, ..., x_arg = caller_arg(x), to_arg = "", call = caller_env()) {
-    validate_preds_have_same_quantile_levels(x, to, "convert", x_arg, to_arg, call)
-    field(x, "quantile_values") <- vec_cast(field(x, "quantile_values"), field(to, "quantile_values"))
+  function(
+    x,
+    to,
+    ...,
+    x_arg = caller_arg(x),
+    to_arg = "",
+    call = caller_env()
+  ) {
+    validate_preds_have_same_quantile_levels(
+      x,
+      to,
+      "convert",
+      x_arg,
+      to_arg,
+      call
+    )
+    field(x, "quantile_values") <- vec_cast(
+      field(x, "quantile_values"),
+      field(to, "quantile_values")
+    )
     x
   }
 
@@ -218,7 +280,8 @@ check_quantile_pred_inputs <- function(values, levels, call = caller_env()) {
   if (ncol(values) != num_lvls) {
     cli::cli_abort(
       "The number of columns in {.arg values} must be equal to the length of
-        {.arg quantile_levels}.", call = call
+        {.arg quantile_levels}.",
+      call = call
     )
   }
 
@@ -281,4 +344,102 @@ check_quantile_level_values <- function(levels, arg, call) {
     )
   }
   invisible(TRUE)
+}
+
+
+# vctrs behaviours --------------------------------------------------------
+
+#' @export
+#' @keywords internal
+vec_ptype2.quantile_pred.quantile_pred <- function(
+  x,
+  y,
+  ...,
+  x_arg = "",
+  y_arg = "",
+  call = caller_env()
+) {
+  x_levels <- extract_quantile_levels(x)
+  y_levels <- extract_quantile_levels(y)
+  if (all(y_levels %in% x_levels)) {
+    return(x)
+  }
+  if (all(x_levels %in% y_levels)) {
+    return(y)
+  }
+  stop_incompatible_type(
+    x,
+    y,
+    x_arg = x_arg,
+    y_arg = y_arg,
+    details = "`quantile_levels` must be compatible (a superset/subset relation)."
+  )
+}
+
+#' @export
+vec_cast.quantile_pred.quantile_pred <- function(
+  x,
+  to,
+  ...,
+  x_arg = "",
+  to_arg = ""
+) {
+  x_lvls <- extract_quantile_levels(x)
+  to_lvls <- extract_quantile_levels(to)
+  x_in_to <- x_lvls %in% to_lvls
+  to_in_x <- to_lvls %in% x_lvls
+
+  old_qdata <- as.matrix(x)[, x_in_to]
+  new_qdata <- matrix(NA, nrow = vec_size(x), ncol = length(to_lvls))
+  new_qdata[, to_in_x] <- old_qdata
+  quantile_pred(new_qdata, quantile_levels = to_lvls)
+}
+
+
+#' @export
+#' @method vec_math quantile_pred
+vec_math.quantile_pred <- function(.fn, .x, ...) {
+  fn <- .fn
+  .fn <- getExportedValue("base", .fn)
+  if (
+    fn %in%
+      c("any", "all", "prod", "sum", "cumsum", "cummax", "cummin", "cumprod")
+  ) {
+    cli::cli_abort(
+      "{.fn {fn}} is not a supported operation for {.cls quantile_pred}."
+    )
+  }
+  quantile_levels <- .x %@% "quantile_levels"
+  .x <- as.matrix(.x)
+  quantile_pred(.fn(.x), quantile_levels)
+}
+
+#' @export
+#' @method vec_arith quantile_pred
+vec_arith.quantile_pred <- function(op, x, y, ...) {
+  UseMethod("vec_arith.quantile_pred", y)
+}
+
+#' @export
+#' @method vec_arith.quantile_pred default
+vec_arith.quantile_pred.default <- function(op, x, y, ...) {
+  stop_incompatible_op(op, x, y)
+}
+
+#' @export
+#' @method vec_arith.quantile_pred numeric
+vec_arith.quantile_pred.numeric <- function(op, x, y, ...) {
+  op_fn <- getExportedValue("base", op)
+  l <- vctrs::vec_recycle_common(x = x, y = y)
+  out <- op_fn(as.matrix(l$x), l$y)
+  quantile_pred(out, attr(x, "quantile_levels"))
+}
+
+#' @export
+#' @method vec_arith.numeric quantile_pred
+vec_arith.numeric.quantile_pred <- function(op, x, y, ...) {
+  op_fn <- getExportedValue("base", op)
+  l <- vctrs::vec_recycle_common(x = x, y = y)
+  out <- op_fn(l$x, as.matrix(l$y))
+  quantile_pred(out, y %@% "quantile_levels")
 }

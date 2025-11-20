@@ -73,7 +73,10 @@ test_that("as.integer() fails (too lenient, likely fractional weights)", {
 })
 
 test_that("vec_ptype_full() and vec_ptype_abbr() methods are right", {
-  expect_identical(vec_ptype_full(new_importance_weights()), "importance_weights")
+  expect_identical(
+    vec_ptype_full(new_importance_weights()),
+    "importance_weights"
+  )
   expect_identical(vec_ptype_abbr(new_importance_weights()), "imp_wts")
 })
 

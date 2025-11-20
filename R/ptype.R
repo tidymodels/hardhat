@@ -8,7 +8,7 @@
 #' time.
 #'
 #' @param data A data frame or matrix.
-#' 
+#'
 #' @inheritParams validate_column_names
 #'
 #' @return

@@ -63,7 +63,11 @@ test_that("a 0 col tibble is returned for predictors if only offsets are used", 
 })
 
 test_that("intercepts and offsets can be intermingled", {
-  x <- mold(Species ~ offset(Sepal.Length), iris, blueprint = default_formula_blueprint(intercept = TRUE))
+  x <- mold(
+    Species ~ offset(Sepal.Length),
+    iris,
+    blueprint = default_formula_blueprint(intercept = TRUE)
+  )
 
   expect_equal(
     colnames(x$predictors),
