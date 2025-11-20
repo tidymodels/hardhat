@@ -43,13 +43,16 @@ quantile_pred <- function(values, quantile_levels = double()) {
 
   rownames(values) <- NULL
   colnames(values) <- NULL
-  values <- map(vctrs::vec_chop(values), drop)
+  values <- list(quantile_values = values)
   new_quantile_pred(values, quantile_levels)
 }
 
-new_quantile_pred <- function(values = list(), quantile_levels = double()) {
+new_quantile_pred <- function(
+  values = list(quantile_values = matrix(double(), 0L, 0L)),
+  quantile_levels = double()
+) {
   quantile_levels <- vctrs::vec_cast(quantile_levels, double())
-  vctrs::new_vctr(
+  vctrs::new_rcrd(
     values,
     quantile_levels = quantile_levels,
     class = "quantile_pred"
@@ -83,7 +86,7 @@ as_tibble.quantile_pred <-
     n_samp <- length(x)
     n_quant <- length(lvls)
     tibble::new_tibble(list(
-      .pred_quantile = unlist(x),
+      .pred_quantile = `dim<-`(t(field(x, "quantile_values")), NULL),
       .quantile_levels = rep(lvls, n_samp),
       .row = rep(1:n_samp, each = n_quant)
     ))
@@ -92,17 +95,19 @@ as_tibble.quantile_pred <-
 #' @export
 #' @rdname quantile_pred
 as.matrix.quantile_pred <- function(x, ...) {
-  num_samp <- length(x)
-  matrix(unlist(x), nrow = num_samp, byrow = TRUE)
+  field(x, "quantile_values")
 }
 
 #' @export
-format.quantile_pred <- function(x, digits = 3L, ...) {
+format.quantile_pred <- function(x, digits = NULL, ...) {
+  if (is.null(digits)) {
+    digits <- 3L
+  }
   quantile_levels <- attr(x, "quantile_levels")
   if (length(quantile_levels) == 1L) {
-    x <- unlist(x)
+    x <- field(x, "quantile_values")
+    dim(x) <- NULL
     out <- signif(x, digits = digits)
-    out[is.na(x)] <- NA_real_
   } else {
     m <- median(x, na.rm = TRUE)
     out <- paste0("[", signif(m, digits = digits), "]")
@@ -113,14 +118,17 @@ format.quantile_pred <- function(x, digits = 3L, ...) {
 #' @export
 median.quantile_pred <- function(x, ...) {
   lvls <- attr(x, "quantile_levels")
+  vals <- field(x, "quantile_values")
   loc_median <- (abs(lvls - 0.5) < sqrt(.Machine$double.eps))
   if (any(loc_median)) {
-    return(map_dbl(x, \(.x) .x[min(which(loc_median))]))
+    return(vals[, min(which(loc_median))])
   }
   if (length(lvls) < 2 || min(lvls) > 0.5 || max(lvls) < 0.5) {
     return(rep(NA, vctrs::vec_size(x)))
   }
-  map_dbl(x, \(.x) stats::approx(lvls, .x, xout = 0.5)$y)
+  map_dbl(vec_seq_along(vals), function(row_i) {
+    stats::approx(lvls, vals[row_i, ], xout = 0.5)$y
+  })
 }
 
 #' @export
@@ -139,6 +147,77 @@ obj_print_footer.quantile_pred <- function(x, digits = 3, ...) {
   cat(footer, format(lvls, digits = digits), "\n", sep = " ")
 }
 
+#' @export
+vec_proxy_compare.quantile_pred <- function(x, ...) {
+  # Using a proxy-based lexicographical order doesn't make sense for binary
+  # comparison operators. (A partial order could be implemented by directly
+  # overriding the binary comparison operators, but would conflict with the
+  # lexicographical total order used for sorting.)
+  cli::cli_abort(
+    "
+    `vec_proxy_compare`, `<`, `<=`, `>`, and `>=` are not supported for
+    `quantile_pred`s.
+  ",
+    class = "hardhat_error_comparing_quantile_preds"
+  )
+}
+
+#' @export
+vec_proxy_order.quantile_pred <- function(x, ...) {
+  # Like {vctrs}' list treatment, allow for (lexicographical) ordering based on
+  # `quantile_pred`s, even though we disallow using this order for binary
+  # comparison operators.
+  vec_proxy(x)
+}
+
+# ------------------------------------------------------------------------------
+# ptype-related functions
+
+format_quantile_levels <- function(quantile_levels) {
+  # Make sure that we format levels with enough sig figs to detect minor
+  # differences. Specifically, format them with enough sig figs that we recover
+  # their precise values.
+  result <- formatC(quantile_levels, digits = 3)
+  for (digits in 4:17) {
+    # 17 significant digits should be enough to disambiguate
+    imprecise <- as.numeric(result) != quantile_levels
+    if (!any(imprecise)) {
+      break
+    }
+    result[imprecise] <- formatC(quantile_levels[imprecise], digits = digits)
+  }
+  result <- trimws(result)
+  result
+}
+
+validate_preds_have_same_quantile_levels <- function(
+  x,
+  y,
+  action,
+  x_arg,
+  y_arg,
+  call
+) {
+  x_quantile_levels <- attr(x, "quantile_levels")
+  y_quantile_levels <- attr(y, "quantile_levels")
+  if (!identical(x_quantile_levels, y_quantile_levels)) {
+    x_formatted_levels <- format_quantile_levels(x_quantile_levels)
+    y_formatted_levels <- format_quantile_levels(y_quantile_levels)
+    stop_incompatible_type(
+      x,
+      y,
+      action = action,
+      x_arg = x_arg,
+      y_arg = y_arg,
+      details = cli::format_error(c(
+        "They have different sets of quantile levels:",
+        "*" = '1st set of quantile levels: {x_formatted_levels}',
+        "*" = '2nd set of quantile levels: {y_formatted_levels}'
+      )),
+      call = call
+    )
+  }
+}
 
 # ------------------------------------------------------------------------------
 # Checking functions
@@ -221,30 +300,43 @@ check_quantile_level_values <- function(levels, arg, call) {
 # vctrs behaviours --------------------------------------------------------
 
 #' @export
-#' @keywords internal
 vec_ptype2.quantile_pred.quantile_pred <- function(
   x,
   y,
   ...,
-  x_arg = "",
-  y_arg = "",
+  x_arg = caller_arg(x),
+  y_arg = caller_arg(y),
   call = caller_env()
 ) {
   x_levels <- extract_quantile_levels(x)
   y_levels <- extract_quantile_levels(y)
+
+  x_values <- field(x, "quantile_values")
+  y_values <- field(y, "quantile_values")
+
+  if (is.double(x_values) || is.double(y_values)) {
+    storage.mode(x_values) <- "double"
+    storage.mode(y_values) <- "double"
+  }
+
   if (all(y_levels %in% x_levels)) {
+    field(x, "quantile_values") <- x_values
     return(x)
   }
   if (all(x_levels %in% y_levels)) {
+    field(y, "quantile_values") <- y_values
     return(y)
   }
-  stop_incompatible_type(
+  validate_preds_have_same_quantile_levels(
     x,
     y,
-    x_arg = x_arg,
-    y_arg = y_arg,
-    details = "`quantile_levels` must be compatible (a superset/subset relation)."
+    "combine",
+    x_arg,
+    y_arg,
+    call
   )
+  field(x, "quantile_values") <- vec_ptype2(x_values, y_values)
+  x
 }
 
 #' @export
@@ -252,18 +344,23 @@ vec_cast.quantile_pred.quantile_pred <- function(
   x,
   to,
   ...,
-  x_arg = "",
-  to_arg = ""
+  x_arg = caller_arg(x),
+  to_arg = "",
+  call = caller_env()
 ) {
-  x_lvls <- extract_quantile_levels(x)
-  to_lvls <- extract_quantile_levels(to)
-  x_in_to <- x_lvls %in% to_lvls
-  to_in_x <- to_lvls %in% x_lvls
-
-  old_qdata <- as.matrix(x)[, x_in_to]
-  new_qdata <- matrix(NA, nrow = vec_size(x), ncol = length(to_lvls))
-  new_qdata[, to_in_x] <- old_qdata
-  quantile_pred(new_qdata, quantile_levels = to_lvls)
+  validate_preds_have_same_quantile_levels(
+    x,
+    to,
+    "convert",
+    x_arg,
+    to_arg,
+    call
+  )
+  field(x, "quantile_values") <- vec_cast(
+    field(x, "quantile_values"),
+    field(to, "quantile_values")
+  )
+  x
 }
 
 

@@ -168,6 +168,29 @@
     Output
       [1] "[1.7154]"  "[0.56784]" "[1.2393]"  "[2.2062]"  "[0.76714]"
 
+---
+
+    Code
+      data.frame(v = v)
+    Output
+              v
+      1  [1.72]
+      2 [0.568]
+      3  [1.24]
+      4  [2.21]
+      5 [0.767]
+
+# quantile_pred level (in)compatibility works
+
+    Code
+      vec_ptype2(v1, v2)
+    Condition <vctrs_error_ptype2>
+      Error:
+      ! Can't combine `v1` <quantiles> and `v2` <quantiles>.
+      They have different sets of quantile levels:
+      * 1st set of quantile levels: 0, 0.05, 0.1, 0.15000000000000002, and 0.2
+      * 2nd set of quantile levels: 0, 0.05, 0.1, 0.15, and 0.2
+
 # arithmetic works on quantiles
 
     Code
@@ -181,7 +204,9 @@
     Code
       vec_ptype2(v1, ugly_levels)
     Condition
-      Error in `vec_ptype2.quantile_pred.quantile_pred()`:
+      Error:
       ! Can't combine `v1` <quantiles> and `ugly_levels` <quantiles>.
-      `quantile_levels` must be compatible (a superset/subset relation).
+      They have different sets of quantile levels:
+      * 1st set of quantile levels: 0.2, 0.4, 0.6, and 0.8
+      * 2nd set of quantile levels: 0.30000000000000004, 0.5, 0.7, and 0.9
 

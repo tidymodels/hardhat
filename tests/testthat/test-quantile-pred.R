@@ -40,8 +40,8 @@ test_that("quantile_pred outputs", {
   expect_s3_class(v, "quantile_pred")
   expect_identical(attr(v, "quantile_levels"), 1:4 / 5)
   expect_identical(
-    vctrs::vec_data(v),
-    lapply(vctrs::vec_chop(matrix(1:20, 5)), drop)
+    vctrs::vec_data(v) %>% lapply(unname),
+    list(quantile_values = matrix(1:20, 5))
   )
 })
 
@@ -57,7 +57,7 @@ test_that("extract_quantile_levels", {
 
 test_that("median for quantile_pred", {
   v <- quantile_pred(matrix(1:25, 5), 3:7 / 10)
-  expect_identical(median(v), as.double(11:15)) # has explicit median, but dbl
+  expect_identical(median(v), 11:15)
 
   v_above_med <- quantile_pred(matrix(1:10, 2), 11:15 / 20)
   expect_equal(median(v_above_med), rep(NA, 2))
@@ -98,6 +98,7 @@ test_that("quantile_pred formatting", {
   v <- quantile_pred(matrix(exp(rnorm(20)), ncol = 4), 1:4 / 5)
   expect_snapshot(format(v))
   expect_snapshot(format(v, digits = 5))
+  expect_snapshot(data.frame(v = v))
 })
 
 test_that("as_tibble() for quantile_pred", {
@@ -116,6 +117,91 @@ test_that("as.matrix() for quantile_pred", {
   expect_identical(m, x)
 })
 
+test_that("Various ways to introduce NAs in quantile_pred work", {
+  dbl_mat <- matrix(c(1:3, c(1, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
+  int_mat <- dbl_mat
+  storage.mode(int_mat) <- "integer"
+  levels <- 1:3 / 4
+  dbl_v <- quantile_pred(dbl_mat, levels)
+  int_v <- quantile_pred(int_mat, levels)
+  for (v in list(dbl_v, int_v)) {
+    sentinel <- v[3]
+    expect_identical(vec_init(v, 5), rep(sentinel, 5))
+    expect_identical(vec_c(v[1:2], NA), v)
+    expect_identical(vec_c(NA, v[1:2]), v[c(3, 1, 2)])
+    expect_identical(
+      merge(
+        tibble(date = as.Date("2020-01-01") + 0:5),
+        tibble(date = as.Date("2020-01-01") + 1:3, pred = v),
+        by = "date",
+        all = TRUE
+      ),
+      data.frame(date = as.Date("2020-01-01") + 0:5, pred = v[c(3, 1:3, 3, 3)])
+    )
+    expect_identical(vec_detect_missing(v), c(FALSE, FALSE, TRUE))
+    expect_identical(vec_detect_complete(v), c(TRUE, FALSE, FALSE))
+  }
+})
+
+test_that("quantile_pred == logic outputs NAs when expected", {
+  single_pred <- function(values, levels) {
+    quantile_pred(t(as.matrix(values)), levels)
+  }
+  expect_identical(single_pred(1, 0.5) == single_pred(NA, 0.5), NA)
+  expect_identical(single_pred(NA, 0.5) == single_pred(NA, 0.5), NA)
+  expect_identical(
+    single_pred(c(1, NA), 1:2 / 3) == single_pred(c(4, NA), 1:2 / 3),
+    FALSE
+  )
+  expect_identical(
+    single_pred(c(1, NA), 1:2 / 3) == single_pred(c(4, 5), 1:2 / 3),
+    FALSE
+  )
+})
+
+test_that("Inequalities don't work on quantile_preds, but equality & sorting does", {
+  v <- quantile_pred(matrix(c(6, 1, 2, 3, 5, 6), 2, 3, byrow = TRUE), 1:3 / 4)
+  expect_error(v < v, class = "hardhat_error_comparing_quantile_preds")
+  expect_error(v <= v, class = "hardhat_error_comparing_quantile_preds")
+  expect_error(v > v, class = "hardhat_error_comparing_quantile_preds")
+  expect_error(v >= v, class = "hardhat_error_comparing_quantile_preds")
+  expect_identical(v == v, c(TRUE, TRUE))
+  expect_identical(v != v, c(FALSE, FALSE))
+  expect_identical(sort(v), v[c(2, 1)])
+})
+
+test_that("quantile_pred typeof compatibility works", {
+  dbl_mat <- matrix(c(1:3, c(4, NA, NA), rep(NA, 3)), 3, 3, byrow = TRUE)
+  int_mat <- dbl_mat
+  storage.mode(int_mat) <- "integer"
+  levels <- 1:3 / 4
+  dbl_v <- quantile_pred(dbl_mat, levels)
+  int_v <- quantile_pred(int_mat, levels)
+  # ptype
+  expect_identical(vec_ptype(dbl_v), dbl_v[0])
+  expect_identical(vec_ptype(int_v), int_v[0])
+  # ptype2
+  expect_identical(vec_ptype2(dbl_v, int_v), dbl_v[0])
+  expect_identical(vec_ptype2(int_v, dbl_v), dbl_v[0])
+  # cast
+  expect_identical(vec_cast(int_v, dbl_v), dbl_v)
+  expect_identical(vec_cast(dbl_v, int_v), int_v)
+  dbl_v2 <- dbl_v
+  field(dbl_v2, "quantile_values") <- field(dbl_v2, "quantile_values") + 0.5
+  expect_error(vec_cast(dbl_v2, int_v), class = "vctrs_error_cast_lossy")
+})
+
+test_that("quantile_pred level (in)compatibility works", {
+  levels1 <- seq(0, 0.2, by = 0.05)
+  levels2 <- c(0, 0.05, 0.1, 0.15, 0.2)
+  expect_false(all(levels1 == levels2))
+  v1 <- quantile_pred(t(as.matrix(1:5)), levels1)
+  v2 <- quantile_pred(t(as.matrix(1:5)), levels2)
+  expect_error(vec_ptype2(v1, v2), class = "vctrs_error_incompatible_type")
+  expect_snapshot(vec_ptype2(v1, v2), error = TRUE, cnd_class = TRUE)
+  expect_error(vec_cast(v1, v2), class = "vctrs_error_incompatible_type")
+  expect_error(vec_cast(v2, v1), class = "vctrs_error_incompatible_type")
+})
 
 test_that("unary math works on quantiles", {
   dstn <- quantile_pred(
@@ -167,9 +253,4 @@ test_that("vec_cast self-self works", {
   qp2 <- quantile_pred(matrix(rnorm(7), nrow = 1), 2:8 / 10)
   expect_identical(vec_cast(qp, qp), qp)
   expect_identical(vec_cast(qp2, qp2), qp2)
-
-  qp_dat <- as.matrix(qp)
-  qp_big <- matrix(NA, nrow(qp_dat), length(2:8))
-  qp_big[, c(1, 3, 5, 7)] <- qp_dat
-  expect_identical(vec_cast(qp, qp2), quantile_pred(qp_big, 2:8 / 10))
 })
