@@ -2,6 +2,11 @@
 
 ## hardhat (development version)
 
+- [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md) no
+  longer throws warnings about `strings_as_factors` argument when used
+  on recipe objects
+  ([\#284](https://github.com/tidymodels/hardhat/issues/284)).
+
 ## hardhat 1.4.2
 
 CRAN release: 2025-08-20
