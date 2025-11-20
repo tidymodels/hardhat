@@ -38,6 +38,7 @@ reference:
   - add_intercept_column
   - weighted_table
   - fct_encode_one_hot
+  - impute_quantiles
 
 - title: Validation
   contents:

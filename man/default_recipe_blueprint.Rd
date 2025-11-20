@@ -79,7 +79,7 @@ used during training.
 }
 
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes"))) withAutoprint(\{ # examplesIf}
 # example code
 
 library(recipes)
