@@ -117,7 +117,6 @@ test_that("as.matrix() for quantile_pred", {
 })
 
 
-
 test_that("unary math works on quantiles", {
   dstn <- quantile_pred(
     matrix(c(1:4, 8:11), nrow = 2, byrow = TRUE),
