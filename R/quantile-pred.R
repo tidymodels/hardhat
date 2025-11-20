@@ -219,72 +219,6 @@ validate_preds_have_same_quantile_levels <- function(
   }
 }
 
-#' @export
-vec_ptype2.quantile_pred.quantile_pred <-
-  function(
-    x,
-    y,
-    ...,
-    x_arg = caller_arg(x),
-    y_arg = caller_arg(y),
-    call = caller_env()
-  ) {
-    x_levels <- extract_quantile_levels(x)
-    y_levels <- extract_quantile_levels(y)
-
-    x_values <- field(x, "quantile_values")
-    y_values <- field(y, "quantile_values")
-
-    if (is.double(x_values) || is.double(y_values)) {
-      storage.mode(x_values) <- "double"
-      storage.mode(y_values) <- "double"
-    }
-
-    if (all(y_levels %in% x_levels)) {
-      field(x, "quantile_values") <- x_values
-      return(x)
-    }
-    if (all(x_levels %in% y_levels)) {
-      field(y, "quantile_values") <- y_values
-      return(y)
-    }
-    validate_preds_have_same_quantile_levels(
-      x,
-      y,
-      "combine",
-      x_arg,
-      y_arg,
-      call
-    )
-    field(x, "quantile_values") <- vec_ptype2(x_values, y_values)
-    x
-  }
-
-#' @export
-vec_cast.quantile_pred.quantile_pred <-
-  function(
-    x,
-    to,
-    ...,
-    x_arg = caller_arg(x),
-    to_arg = "",
-    call = caller_env()
-  ) {
-    validate_preds_have_same_quantile_levels(
-      x,
-      to,
-      "convert",
-      x_arg,
-      to_arg,
-      call
-    )
-    field(x, "quantile_values") <- vec_cast(
-      field(x, "quantile_values"),
-      field(to, "quantile_values")
-    )
-    x
-  }
-
 # ------------------------------------------------------------------------------
 # Checking functions
 
@@ -364,6 +298,71 @@ check_quantile_level_values <- function(levels, arg, call) {
 
 
 # vctrs behaviours --------------------------------------------------------
+
+#' @export
+vec_ptype2.quantile_pred.quantile_pred <- function(
+  x,
+  y,
+  ...,
+  x_arg = caller_arg(x),
+  y_arg = caller_arg(y),
+  call = caller_env()
+) {
+  x_levels <- extract_quantile_levels(x)
+  y_levels <- extract_quantile_levels(y)
+
+  x_values <- field(x, "quantile_values")
+  y_values <- field(y, "quantile_values")
+
+  if (is.double(x_values) || is.double(y_values)) {
+    storage.mode(x_values) <- "double"
+    storage.mode(y_values) <- "double"
+  }
+
+  if (all(y_levels %in% x_levels)) {
+    field(x, "quantile_values") <- x_values
+    return(x)
+  }
+  if (all(x_levels %in% y_levels)) {
+    field(y, "quantile_values") <- y_values
+    return(y)
+  }
+  validate_preds_have_same_quantile_levels(
+    x,
+    y,
+    "combine",
+    x_arg,
+    y_arg,
+    call
+  )
+  field(x, "quantile_values") <- vec_ptype2(x_values, y_values)
+  x
+}
+
+#' @export
+vec_cast.quantile_pred.quantile_pred <- function(
+  x,
+  to,
+  ...,
+  x_arg = caller_arg(x),
+  to_arg = "",
+  call = caller_env()
+) {
+  validate_preds_have_same_quantile_levels(
+    x,
+    to,
+    "convert",
+    x_arg,
+    to_arg,
+    call
+  )
+  field(x, "quantile_values") <- vec_cast(
+    field(x, "quantile_values"),
+    field(to, "quantile_values")
+  )
+  x
+}
+
 
 #' @export
 #' @method vec_math quantile_pred
