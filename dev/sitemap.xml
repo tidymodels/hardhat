@@ -27,6 +27,7 @@
 <url><loc>https://hardhat.tidymodels.org/dev/reference/hardhat-extract.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/hardhat-package.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/importance_weights.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/impute_quantiles.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/index.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/is_blueprint.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/is_case_weights.html</loc></url>
@@ -50,6 +51,7 @@
 <url><loc>https://hardhat.tidymodels.org/dev/reference/run-mold.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/scream.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/shrink.html</loc></url>
+<url><loc>https://hardhat.tidymodels.org/dev/reference/snap.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/spruce-multiple.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/spruce.html</loc></url>
 <url><loc>https://hardhat.tidymodels.org/dev/reference/standardize.html</loc></url>

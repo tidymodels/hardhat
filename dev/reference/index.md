@@ -18,6 +18,7 @@
   [`spruce_prob()`](https://hardhat.tidymodels.org/dev/reference/spruce.md)
   : Spruce up predictions
 - [`quantile_pred()`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
+  [`is_quantile_pred()`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
   [`extract_quantile_levels()`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
   [`as_tibble(`*`<quantile_pred>`*`)`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
   [`as.matrix(`*`<quantile_pred>`*`)`](https://hardhat.tidymodels.org/dev/reference/quantile_pred.md)
@@ -53,6 +54,11 @@
 
 - [`fct_encode_one_hot()`](https://hardhat.tidymodels.org/dev/reference/fct_encode_one_hot.md)
   : Encode a factor as a one-hot indicator matrix
+
+- [`impute_quantiles()`](https://hardhat.tidymodels.org/dev/reference/impute_quantiles.md)
+  :
+
+  Impute additional quantiles from a `quantile_pred`
 
 ## Validation
 
