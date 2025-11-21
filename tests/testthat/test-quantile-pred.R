@@ -128,6 +128,9 @@ test_that("Various ways to introduce NAs in quantile_pred work", {
   int_sentinel <- quantile_pred(t(rep(NA_integer_, length(levels))), levels)
 
   expect_identical(vec_init(dbl_v, 5), rep(dbl_sentinel, 5))
+  expect_true(vec_equal(dbl_v[3], dbl_sentinel, na_equal = TRUE))
+  expect_true(vec_equal(dbl_v[3], NA, na_equal = TRUE))
+  expect_false(vec_equal(dbl_v[2], NA, na_equal = TRUE))
   expect_identical(vec_c(dbl_v[1:2], NA), dbl_v)
   expect_identical(vec_c(NA, dbl_v[1:2]), dbl_v[c(3, 1, 2)])
   expect_identical(
@@ -147,6 +150,9 @@ test_that("Various ways to introduce NAs in quantile_pred work", {
 
   # Same tests cases, for integer typeof backing
   expect_identical(vec_init(int_v, 5), rep(int_sentinel, 5))
+  expect_true(vec_equal(int_v[3], int_sentinel, na_equal = TRUE))
+  expect_true(vec_equal(int_v[3], NA, na_equal = TRUE))
+  expect_false(vec_equal(int_v[2], NA, na_equal = TRUE))
   expect_identical(vec_c(int_v[1:2], NA), int_v)
   expect_identical(vec_c(NA, int_v[1:2]), int_v[c(3, 1, 2)])
   expect_identical(
