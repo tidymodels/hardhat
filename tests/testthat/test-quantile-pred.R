@@ -124,23 +124,45 @@ test_that("Various ways to introduce NAs in quantile_pred work", {
   levels <- 1:3 / 4
   dbl_v <- quantile_pred(dbl_mat, levels)
   int_v <- quantile_pred(int_mat, levels)
-  for (v in list(dbl_v, int_v)) {
-    sentinel <- v[3]
-    expect_identical(vec_init(v, 5), rep(sentinel, 5))
-    expect_identical(vec_c(v[1:2], NA), v)
-    expect_identical(vec_c(NA, v[1:2]), v[c(3, 1, 2)])
-    expect_identical(
-      merge(
-        tibble(date = as.Date("2020-01-01") + 0:5),
-        tibble(date = as.Date("2020-01-01") + 1:3, pred = v),
-        by = "date",
-        all = TRUE
-      ),
-      data.frame(date = as.Date("2020-01-01") + 0:5, pred = v[c(3, 1:3, 3, 3)])
+  dbl_sentinel <- quantile_pred(t(rep(NA_real_, length(levels))), levels)
+  int_sentinel <- quantile_pred(t(rep(NA_integer_, length(levels))), levels)
+
+  expect_identical(vec_init(dbl_v, 5), rep(dbl_sentinel, 5))
+  expect_identical(vec_c(dbl_v[1:2], NA), dbl_v)
+  expect_identical(vec_c(NA, dbl_v[1:2]), dbl_v[c(3, 1, 2)])
+  expect_identical(
+    merge(
+      tibble(date = as.Date("2020-01-01") + 0:5),
+      tibble(date = as.Date("2020-01-01") + 1:3, pred = dbl_v),
+      by = "date",
+      all = TRUE
+    ),
+    data.frame(
+      date = as.Date("2020-01-01") + 0:5,
+      pred = dbl_v[c(3, 1:3, 3, 3)]
     )
-    expect_identical(vec_detect_missing(v), c(FALSE, FALSE, TRUE))
-    expect_identical(vec_detect_complete(v), c(TRUE, FALSE, FALSE))
-  }
+  )
+  expect_identical(vec_detect_missing(dbl_v), c(FALSE, FALSE, TRUE))
+  expect_identical(vec_detect_complete(dbl_v), c(TRUE, FALSE, FALSE))
+
+  # Same tests cases, for integer typeof backing
+  expect_identical(vec_init(int_v, 5), rep(int_sentinel, 5))
+  expect_identical(vec_c(int_v[1:2], NA), int_v)
+  expect_identical(vec_c(NA, int_v[1:2]), int_v[c(3, 1, 2)])
+  expect_identical(
+    merge(
+      tibble(date = as.Date("2020-01-01") + 0:5),
+      tibble(date = as.Date("2020-01-01") + 1:3, pred = int_v),
+      by = "date",
+      all = TRUE
+    ),
+    data.frame(
+      date = as.Date("2020-01-01") + 0:5,
+      pred = int_v[c(3, 1:3, 3, 3)]
+    )
+  )
+  expect_identical(vec_detect_missing(int_v), c(FALSE, FALSE, TRUE))
+  expect_identical(vec_detect_complete(int_v), c(TRUE, FALSE, FALSE))
 })
 
 test_that("quantile_pred == logic outputs NAs when expected", {
