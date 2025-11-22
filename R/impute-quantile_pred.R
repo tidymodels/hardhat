@@ -122,6 +122,7 @@ impute_quantiles <- function(
       are avaliable."
     )
   }
+  probs # better error when missing, in older R versions
   if (is.unsorted(probs)) {
     probs <- sort(probs)
   }
