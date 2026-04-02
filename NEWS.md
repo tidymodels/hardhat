@@ -1,6 +1,8 @@
-# hardhat (development version)
+# hardhat 1.4.3
 
 * `mold()` no longer throws warnings about `strings_as_factors` argument when used on recipe objects (#284).
+
+* Improved handling of missings in quantile predictions (#301, @brookslogan).
 
 # hardhat 1.4.2
 
