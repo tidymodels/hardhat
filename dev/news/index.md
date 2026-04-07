@@ -2,10 +2,18 @@
 
 ## hardhat (development version)
 
+## hardhat 1.4.3
+
+CRAN release: 2026-04-04
+
 - [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md) no
   longer throws warnings about `strings_as_factors` argument when used
   on recipe objects
   ([\#284](https://github.com/tidymodels/hardhat/issues/284)).
+
+- Improved handling of missings in quantile predictions
+  ([\#301](https://github.com/tidymodels/hardhat/issues/301),
+  [@brookslogan](https://github.com/brookslogan)).
 
 ## hardhat 1.4.2
 
