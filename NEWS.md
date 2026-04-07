@@ -1,3 +1,5 @@
+# hardhat (development version)
+
 # hardhat 1.4.3
 
 * `mold()` no longer throws warnings about `strings_as_factors` argument when used on recipe objects (#284).
