@@ -3,18 +3,38 @@
 \name{factor_key}
 \alias{factor_key}
 \alias{factor_key.terms}
+\alias{factor_key.default_formula_blueprint}
+\alias{factor_key.formula_blueprint}
+\alias{factor_key.default_recipe_blueprint}
+\alias{factor_key.recipe_blueprint}
+\alias{factor_key.default_xy_blueprint}
+\alias{factor_key.xy_blueprint}
 \title{Map factor variables to their numeric features}
 \usage{
 factor_key(x, ...)
 
 \method{factor_key}{terms}(x, data, ..., call = current_env())
+
+\method{factor_key}{default_formula_blueprint}(x, data, ..., call = current_env())
+
+\method{factor_key}{formula_blueprint}(x, data, ..., call = current_env())
+
+\method{factor_key}{default_recipe_blueprint}(x, data = NULL, ..., call = current_env())
+
+\method{factor_key}{recipe_blueprint}(x, data = NULL, ..., call = current_env())
+
+\method{factor_key}{default_xy_blueprint}(x, data = NULL, ..., call = current_env())
+
+\method{factor_key}{xy_blueprint}(x, data = NULL, ..., call = current_env())
 }
 \arguments{
 \item{x}{An object. For the default method, a terms object.}
 
 \item{...}{Arguments passed to methods.}
 
-\item{data}{A data frame or tibble containing the variables in \code{x}.}
+\item{data}{A data frame or tibble containing the variables used during
+model fitting. Required for blueprint methods since blueprints don't
+store the original data.}
 
 \item{call}{The call used for errors and warnings.}
 }
@@ -54,54 +74,76 @@ The function uses the same model matrix generation as \code{\link[=model_matrix]
 ensuring consistency with how your models will actually be fit.
 }
 \examples{
-# ---------------------------------------------------------------------------
-# Simple factor with treatment contrasts (default)
+if (rlang::is_installed("modeldata")) {
+  library(modeldata)
 
-framed <- model_frame(Sepal.Width ~ Species, iris)
-factor_key(framed$terms, framed$data)
+  # ---------------------------------------------------------------------------
+  # Simple factor with treatment contrasts (default)
+
+  data(penguins)
+  framed <- model_frame(bill_length_mm ~ species, penguins)
+  factor_key(framed$terms, framed$data)
+
+  # ---------------------------------------------------------------------------
+  # Multiple factors
+
+  data(credit_data)
+  framed <- model_frame(Income ~ Home + Job, credit_data)
+  factor_key(framed$terms, framed$data)
+
+  # ---------------------------------------------------------------------------
+  # Interaction between two factors
+
+  framed <- model_frame(bill_length_mm ~ species * island, penguins)
+  factor_key(framed$terms, framed$data)
+
+  # ---------------------------------------------------------------------------
+  # Nested effects (Job nested within Home)
+
+  framed <- model_frame(Income ~ Home / Job, credit_data)
+  # This expands to: Income ~ Home + Home:Job
+  factor_key(framed$terms, framed$data)
+
+  # ---------------------------------------------------------------------------
+  # No factors returns empty tibble
+
+  data(concrete)
+  framed <- model_frame(compressive_strength ~ cement + water, concrete)
+  factor_key(framed$terms, framed$data)
+
+  # ---------------------------------------------------------------------------
+  # Custom contrasts
+
+  penguins2 <- penguins
+  species_sum <- penguins2$species
+  contrasts(species_sum) <- contr.sum(3)
+  penguins2$species <- species_sum
+
+  framed <- model_frame(bill_length_mm ~ species, penguins2)
+  factor_key(framed$terms, framed$data)
+
+  # ---------------------------------------------------------------------------
+  # Using with blueprints from mold()
+
+  # Formula blueprint
+  molded <- mold(bill_length_mm ~ species + island, penguins)
+  factor_key(molded$blueprint, penguins)
+
+  # XY blueprint (returns empty tibble since no terms/factors)
+  bp_xy <- default_xy_blueprint()
+  molded_xy <- mold(penguins[c("species", "island")],
+                    penguins["bill_length_mm"],
+                    blueprint = bp_xy)
+  factor_key(molded_xy$blueprint)
+}
 
 # ---------------------------------------------------------------------------
 # Ordered factor with polynomial contrasts
 
+data(mtcars)
 mtcars2 <- mtcars
 mtcars2$gear_ord <- ordered(mtcars2$gear)
 framed <- model_frame(mpg ~ gear_ord, mtcars2)
-factor_key(framed$terms, framed$data)
-
-# ---------------------------------------------------------------------------
-# Interaction between two factors
-
-mtcars2 <- mtcars
-mtcars2$cyl_fct <- factor(mtcars2$cyl)
-mtcars2$am_fct <- factor(mtcars2$am)
-framed <- model_frame(mpg ~ cyl_fct * am_fct, mtcars2)
-factor_key(framed$terms, framed$data)
-
-# ---------------------------------------------------------------------------
-# Nested effects (gear nested within cyl)
-
-mtcars2 <- mtcars
-mtcars2$cyl_fct <- factor(mtcars2$cyl)
-mtcars2$gear_fct <- factor(mtcars2$gear)
-framed <- model_frame(mpg ~ cyl_fct / gear_fct, mtcars2)
-# This expands to: mpg ~ cyl_fct + cyl_fct:gear_fct
-factor_key(framed$terms, framed$data)
-
-# ---------------------------------------------------------------------------
-# No factors returns empty tibble
-
-framed <- model_frame(Sepal.Width ~ Sepal.Length + Petal.Width, iris)
-factor_key(framed$terms, framed$data)
-
-# ---------------------------------------------------------------------------
-# Custom contrasts
-
-species_sum <- iris$Species
-contrasts(species_sum) <- contr.sum(3)
-iris2 <- iris
-iris2$Species <- species_sum
-
-framed <- model_frame(Sepal.Width ~ Species, iris2)
 factor_key(framed$terms, framed$data)
 
 }

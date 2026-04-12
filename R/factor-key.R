@@ -39,54 +39,76 @@
 #' ensuring consistency with how your models will actually be fit.
 #'
 #' @examples
-#' # ---------------------------------------------------------------------------
-#' # Simple factor with treatment contrasts (default)
+#' if (rlang::is_installed("modeldata")) {
+#'   library(modeldata)
 #'
-#' framed <- model_frame(Sepal.Width ~ Species, iris)
-#' factor_key(framed$terms, framed$data)
+#'   # ---------------------------------------------------------------------------
+#'   # Simple factor with treatment contrasts (default)
+#'
+#'   data(penguins)
+#'   framed <- model_frame(bill_length_mm ~ species, penguins)
+#'   factor_key(framed$terms, framed$data)
+#'
+#'   # ---------------------------------------------------------------------------
+#'   # Multiple factors
+#'
+#'   data(credit_data)
+#'   framed <- model_frame(Income ~ Home + Job, credit_data)
+#'   factor_key(framed$terms, framed$data)
+#'
+#'   # ---------------------------------------------------------------------------
+#'   # Interaction between two factors
+#'
+#'   framed <- model_frame(bill_length_mm ~ species * island, penguins)
+#'   factor_key(framed$terms, framed$data)
+#'
+#'   # ---------------------------------------------------------------------------
+#'   # Nested effects (Job nested within Home)
+#'
+#'   framed <- model_frame(Income ~ Home / Job, credit_data)
+#'   # This expands to: Income ~ Home + Home:Job
+#'   factor_key(framed$terms, framed$data)
+#'
+#'   # ---------------------------------------------------------------------------
+#'   # No factors returns empty tibble
+#'
+#'   data(concrete)
+#'   framed <- model_frame(compressive_strength ~ cement + water, concrete)
+#'   factor_key(framed$terms, framed$data)
+#'
+#'   # ---------------------------------------------------------------------------
+#'   # Custom contrasts
+#'
+#'   penguins2 <- penguins
+#'   species_sum <- penguins2$species
+#'   contrasts(species_sum) <- contr.sum(3)
+#'   penguins2$species <- species_sum
+#'
+#'   framed <- model_frame(bill_length_mm ~ species, penguins2)
+#'   factor_key(framed$terms, framed$data)
+#'
+#'   # ---------------------------------------------------------------------------
+#'   # Using with blueprints from mold()
+#'
+#'   # Formula blueprint
+#'   molded <- mold(bill_length_mm ~ species + island, penguins)
+#'   factor_key(molded$blueprint, penguins)
+#'
+#'   # XY blueprint (returns empty tibble since no terms/factors)
+#'   bp_xy <- default_xy_blueprint()
+#'   molded_xy <- mold(penguins[c("species", "island")],
+#'                     penguins["bill_length_mm"],
+#'                     blueprint = bp_xy)
+#'   factor_key(molded_xy$blueprint)
+#' }
 #'
 #' # ---------------------------------------------------------------------------
 #' # Ordered factor with polynomial contrasts
 #'
+#' data(mtcars)
 #' mtcars2 <- mtcars
 #' mtcars2$gear_ord <- ordered(mtcars2$gear)
 #' framed <- model_frame(mpg ~ gear_ord, mtcars2)
-#' factor_key(framed$terms, framed$data)
-#'
-#' # ---------------------------------------------------------------------------
-#' # Interaction between two factors
-#'
-#' mtcars2 <- mtcars
-#' mtcars2$cyl_fct <- factor(mtcars2$cyl)
-#' mtcars2$am_fct <- factor(mtcars2$am)
-#' framed <- model_frame(mpg ~ cyl_fct * am_fct, mtcars2)
-#' factor_key(framed$terms, framed$data)
-#'
-#' # ---------------------------------------------------------------------------
-#' # Nested effects (gear nested within cyl)
-#'
-#' mtcars2 <- mtcars
-#' mtcars2$cyl_fct <- factor(mtcars2$cyl)
-#' mtcars2$gear_fct <- factor(mtcars2$gear)
-#' framed <- model_frame(mpg ~ cyl_fct / gear_fct, mtcars2)
-#' # This expands to: mpg ~ cyl_fct + cyl_fct:gear_fct
-#' factor_key(framed$terms, framed$data)
-#'
-#' # ---------------------------------------------------------------------------
-#' # No factors returns empty tibble
-#'
-#' framed <- model_frame(Sepal.Width ~ Sepal.Length + Petal.Width, iris)
-#' factor_key(framed$terms, framed$data)
-#'
-#' # ---------------------------------------------------------------------------
-#' # Custom contrasts
-#'
-#' species_sum <- iris$Species
-#' contrasts(species_sum) <- contr.sum(3)
-#' iris2 <- iris
-#' iris2$Species <- species_sum
-#'
-#' framed <- model_frame(Sepal.Width ~ Species, iris2)
 #' factor_key(framed$terms, framed$data)
 #'
 #' @seealso
@@ -224,4 +246,85 @@ get_first_class <- function(var, data) {
   } else {
     return("unknown")
   }
+}
+
+# ------------------------------------------------------------------------------
+# Blueprint methods
+
+#' @param data A data frame or tibble containing the variables used during
+#'   model fitting. Required for blueprint methods since blueprints don't
+#'   store the original data.
+#'
+#' @rdname factor_key
+#' @export
+factor_key.default_formula_blueprint <- function(x, data, ..., call = current_env()) {
+  check_dots_empty0(...)
+
+  # Extract the predictors terms from the blueprint
+  terms_obj <- x$terms$predictors
+
+  if (is.null(terms_obj)) {
+    cli::cli_abort("Blueprint does not contain terms for predictors.", call = call)
+  }
+
+  # Call the terms method
+  factor_key.terms(terms_obj, data, call = call)
+}
+
+#' @rdname factor_key
+#' @export
+factor_key.formula_blueprint <- function(x, data, ..., call = current_env()) {
+  # Fallback for non-default formula blueprints
+  # Try to extract terms if available, otherwise error
+  check_dots_empty0(...)
+
+  if (!is.null(x$terms) && !is.null(x$terms$predictors)) {
+    factor_key.terms(x$terms$predictors, data, call = call)
+  } else {
+    cli::cli_abort(
+      "Cannot extract factor mappings from this formula blueprint type.",
+      call = call
+    )
+  }
+}
+
+#' @rdname factor_key
+#' @export
+factor_key.default_recipe_blueprint <- function(x, data = NULL, ..., call = current_env()) {
+  check_dots_empty0(...)
+
+  # Recipes handle factors differently - they may encode them during prep
+  # For now, return a message indicating this isn't directly supported
+  cli::cli_abort(
+    c(
+      "factor_key() is not yet implemented for recipe blueprints.",
+      "i" = "Recipes handle factor encoding during the prep step.",
+      "i" = "Consider using a formula blueprint if you need factor mappings."
+    ),
+    call = call
+  )
+}
+
+#' @rdname factor_key
+#' @export
+factor_key.recipe_blueprint <- function(x, data = NULL, ..., call = current_env()) {
+  # Fallback for non-default recipe blueprints
+  factor_key.default_recipe_blueprint(x, data, ..., call = call)
+}
+
+#' @rdname factor_key
+#' @export
+factor_key.default_xy_blueprint <- function(x, data = NULL, ..., call = current_env()) {
+  check_dots_empty0(...)
+
+  # XY blueprints don't use terms or formulas, so there's no factor encoding to map
+  # Return empty tibble to be consistent with no-factors case
+  tibble::tibble(source = character(), derived = character())
+}
+
+#' @rdname factor_key
+#' @export
+factor_key.xy_blueprint <- function(x, data = NULL, ..., call = current_env()) {
+  # Fallback for non-default XY blueprints
+  factor_key.default_xy_blueprint(x, data, ..., call = call)
 }
