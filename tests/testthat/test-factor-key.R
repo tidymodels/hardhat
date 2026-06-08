@@ -348,7 +348,9 @@ test_that("factor_key handles complex nested structures", {
 
   # Check we have mappings for all terms
   # Main effect A
-  main_a <- result[result$derived %in% result$derived[!grepl(":", result$derived)], ]
+  main_a <- result[
+    result$derived %in% result$derived[!grepl(":", result$derived)],
+  ]
   expect_true(nrow(main_a) > 0)
 
   # A:B interaction
