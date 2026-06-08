@@ -109,13 +109,13 @@ test$.outcome <- test$Species
 forge(test, processed$blueprint, outcomes = TRUE)
 }
 \seealso{
-Other validation functions: 
-\code{\link{validate_no_formula_duplication}()},
-\code{\link{validate_outcomes_are_binary}()},
-\code{\link{validate_outcomes_are_factors}()},
-\code{\link{validate_outcomes_are_numeric}()},
-\code{\link{validate_outcomes_are_univariate}()},
-\code{\link{validate_prediction_size}()},
-\code{\link{validate_predictors_are_numeric}()}
+Other validation functions:
+\code{\link[=validate_no_formula_duplication]{validate_no_formula_duplication()}},
+\code{\link[=validate_outcomes_are_binary]{validate_outcomes_are_binary()}},
+\code{\link[=validate_outcomes_are_factors]{validate_outcomes_are_factors()}},
+\code{\link[=validate_outcomes_are_numeric]{validate_outcomes_are_numeric()}},
+\code{\link[=validate_outcomes_are_univariate]{validate_outcomes_are_univariate()}},
+\code{\link[=validate_prediction_size]{validate_prediction_size()}},
+\code{\link[=validate_predictors_are_numeric]{validate_predictors_are_numeric()}}
 }
 \concept{validation functions}

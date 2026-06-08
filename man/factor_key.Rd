@@ -80,41 +80,38 @@ if (rlang::is_installed("modeldata")) {
   # ---------------------------------------------------------------------------
   # Simple factor with treatment contrasts (default)
 
-  data(penguins)
-  framed <- model_frame(bill_length_mm ~ species, penguins)
+  framed <- model_frame(bill_length_mm ~ species, modeldata::penguins)
   factor_key(framed$terms, framed$data)
 
   # ---------------------------------------------------------------------------
   # Multiple factors
 
-  data(credit_data)
-  framed <- model_frame(Income ~ Home + Job, credit_data)
+  framed <- model_frame(Income ~ Home + Job, modeldata::credit_data)
   factor_key(framed$terms, framed$data)
 
   # ---------------------------------------------------------------------------
   # Interaction between two factors
 
-  framed <- model_frame(bill_length_mm ~ species * island, penguins)
+  framed <- model_frame(bill_length_mm ~ species * island, modeldata::penguins)
   factor_key(framed$terms, framed$data)
 
   # ---------------------------------------------------------------------------
   # Nested effects (Job nested within Home)
 
-  framed <- model_frame(Income ~ Home / Job, credit_data)
+  framed <- model_frame(Income ~ Home / Job, modeldata::credit_data)
   # This expands to: Income ~ Home + Home:Job
   factor_key(framed$terms, framed$data)
 
   # ---------------------------------------------------------------------------
   # No factors returns empty tibble
 
-  data(concrete)
-  framed <- model_frame(compressive_strength ~ cement + water, concrete)
+  framed <- model_frame(compressive_strength ~ cement + water, modeldata::concrete)
   factor_key(framed$terms, framed$data)
 
   # ---------------------------------------------------------------------------
   # Custom contrasts
 
-  penguins2 <- penguins
+  penguins2 <- modeldata::penguins
   species_sum <- penguins2$species
   contrasts(species_sum) <- contr.sum(3)
   penguins2$species <- species_sum
@@ -131,8 +128,8 @@ if (rlang::is_installed("modeldata")) {
 
   # XY blueprint (returns empty tibble since no terms/factors)
   bp_xy <- default_xy_blueprint()
-  molded_xy <- mold(penguins[c("species", "island")],
-                    penguins["bill_length_mm"],
+  molded_xy <- mold(modeldata::penguins[c("species", "island")],
+                    modeldata::penguins["bill_length_mm"],
                     blueprint = bp_xy)
   factor_key(molded_xy$blueprint)
 }
