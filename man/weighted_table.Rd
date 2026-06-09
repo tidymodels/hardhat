@@ -33,7 +33,7 @@ properties:
 \itemize{
 \item Missing values found in the factors are never included in the table unless
 there is an explicit \code{NA} factor level. If needed, this can be added to a
-factor with \code{\link[base:factor]{base::addNA()}} or \code{forcats::fct_expand(x, NA)}.
+factor with \code{\link[base:addNA]{base::addNA()}} or \code{forcats::fct_expand(x, NA)}.
 \item Levels found in the factors that aren't actually used in the underlying
 data are included in the table with a value of \code{0}. If needed, you can
 drop unused factor levels by re-running your factor through \code{\link[=factor]{factor()}},

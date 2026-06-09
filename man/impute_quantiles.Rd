@@ -56,7 +56,7 @@ First, by default (\code{middle = "cubic"}), missing \emph{internal} quantile le
 interpolated using a cubic spline fit to the observed values + quantile
 levels with
 \link[stats:splinefun]{stats::splinefun}. Second, if cubic interpolation fails (or if
-\code{middle = "linear"}), linear interpolation is used via \link[stats:approxfun]{stats::approx}.
+\code{middle = "linear"}), linear interpolation is used via \link[stats:approx]{stats::approx}.
 Finally, missing \emph{external} quantile levels (those outside the range of
 \code{quantile_levels}) are extrapolated. This is done using a linear fit on the
 logistic scale to the two closest tail values.
