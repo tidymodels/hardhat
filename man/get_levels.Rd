@@ -50,5 +50,5 @@ get_levels(mtcars)
 get_outcome_levels(y = factor(letters[1:5]))
 }
 \seealso{
-\code{\link[stats:checkMFClasses]{stats::.getXlevels()}}
+\code{\link[stats:.getXlevels]{stats::.getXlevels()}}
 }
