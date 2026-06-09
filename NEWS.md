@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* Added `factor_key()` to create mappings between original factor variables and their binary indicator columns in model matrices. This function helps understand how factors are encoded with different contrast methods, including support for interactions and nested effects.
+
 # hardhat 1.4.3
 
 * `mold()` no longer throws warnings about `strings_as_factors` argument when used on recipe objects (#284).
