@@ -1,6 +1,7 @@
 # Creating Modeling Packages With hardhat
 
 ``` r
+
 library(hardhat)
 library(tibble)
 library(modeldata)
@@ -139,6 +140,7 @@ S3 classes, take a look at the S3 section in [Advanced
 R](https://adv-r.hadley.nz/s3.html#s3-constructor).
 
 ``` r
+
 new_simple_lm <- function(coefs, coef_names, blueprint) {
   
   if (!is.numeric(coefs)) {
@@ -173,6 +175,7 @@ Specifically, it prints the name of the class at the top, and only
 prints out the custom elements (i.e. not the `blueprint`).
 
 ``` r
+
 manual_model <- new_simple_lm(1, "my_coef", default_xy_blueprint())
 
 manual_model
@@ -206,6 +209,7 @@ model constructor. You might also have arguments for extra options that
 can be used to tweak the internal algorithm.
 
 ``` r
+
 simple_lm_impl <- function(predictors, outcomes) {
   lm_fit <- lm.fit(predictors, outcomes)
   
@@ -228,6 +232,7 @@ expects a matrix of predictors and a vector of outcomes (at least for
 univariate regression). In a moment we will discuss how to create those.
 
 ``` r
+
 predictors <- as.matrix(subset(penguins, select = bill_length_mm))
 outcomes <- penguins$body_mass_g
 
@@ -265,6 +270,7 @@ this is a univariate model, so we can use
 `validate_outcomes_is_univariate()` to enforce that.
 
 ``` r
+
 simple_lm_bridge <- function(processed) {
   
   validate_outcomes_are_univariate(processed$outcomes)
@@ -286,6 +292,7 @@ At this point, we can simulate user input and pass it on to our bridge
 to run a model.
 
 ``` r
+
 # Simulate formula interface
 processed_1 <- mold(bill_length_mm ~ body_mass_g + species, penguins)
 
@@ -313,6 +320,7 @@ simple_lm_bridge(processed_2)
 Multiple outcomes are an error:
 
 ``` r
+
 multi_outcome <- mold(bill_length_mm + bill_depth_mm ~ body_mass_g + species, penguins)
 
 simple_lm_bridge(multi_outcome)
@@ -332,6 +340,7 @@ to the bridge function to run the actual model. It is also good practice
 to provide a default method with a nice error message for unknown types.
 
 ``` r
+
 # Generic
 simple_lm <- function(x, ...) {
   UseMethod("simple_lm")
@@ -373,6 +382,7 @@ simple_lm.recipe <- function(x, data, ...) {
 Let’s give it a try:
 
 ``` r
+
 predictors <- penguins[c("bill_length_mm", "bill_depth_mm")]
 outcomes_vec <- penguins$body_mass_g
 outcomes_df <- penguins["body_mass_g"]
@@ -409,6 +419,7 @@ We can use preprocessing as well, and it is handled by
 [`mold()`](https://hardhat.tidymodels.org/dev/reference/mold.md).
 
 ``` r
+
 library(recipes)
 
 # - Log a predictor
@@ -447,6 +458,7 @@ tweak the blueprint that would otherwise be created for you
 automatically.
 
 ``` r
+
 simple_lm <- function(x, ...) {
   UseMethod("simple_lm")
 }
@@ -477,6 +489,7 @@ simple_lm.recipe <- function(x, data, intercept = TRUE, ...) {
 ```
 
 ``` r
+
 # By default an intercept is included
 simple_lm(predictors, outcomes_df)
 #> <simple_lm>
@@ -532,6 +545,7 @@ The output is always a tibble, and for the `"numeric"` type it has 1
 column, `.pred`.
 
 ``` r
+
 predict_simple_lm_numeric <- function(object, predictors) {
   
   coefs <- object$coefs
@@ -550,6 +564,7 @@ the output manually. The higher level user facing function will do this
 automatically.
 
 ``` r
+
 model <- simple_lm(bill_length_mm ~ body_mass_g + species, penguins)
 
 predictors <- forge(penguins, model$blueprint)$predictors
@@ -595,6 +610,7 @@ has an advantage over
 matches are not allowed, and the error messages are a bit nicer.
 
 ``` r
+
 predict_simple_lm_bridge <- function(type, object, predictors) {
   
   type <- rlang::arg_match(type, "numeric")
@@ -611,6 +627,7 @@ predict_simple_lm_bridge <- function(type, object, predictors) {
 Let’s test:
 
 ``` r
+
 model <- simple_lm(bill_length_mm ~ body_mass_g + species, penguins)
 
 # Pass in the data frame
@@ -674,6 +691,7 @@ is a check on the model developer to ensure that you always return
 output with a sane length.
 
 ``` r
+
 predict.simple_lm <- function(object, new_data, type = "numeric", ...) {
   
   # Enforces column order, type, column names, etc
@@ -694,6 +712,7 @@ corresponding [`predict()`](https://rdrr.io/r/stats/predict.html)
 method.
 
 ``` r
+
 model <- simple_lm(bill_length_mm ~ log(body_mass_g) + species, penguins)
 
 predict(model, penguins)
@@ -719,6 +738,7 @@ automatically get powerful type checking to ensure that the `new_data`
 is in a form that you expect.
 
 ``` r
+
 # `new_data` isn't a data frame
 predict(model, penguins$species)
 #> Error in `forge()`:

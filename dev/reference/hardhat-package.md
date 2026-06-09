@@ -26,6 +26,9 @@ Useful links:
 
 Authors:
 
+- Hannah Frick <hannah@posit.co>
+  ([ORCID](https://orcid.org/0000-0002-6049-5258))
+
 - Davis Vaughan <davis@posit.co>
 
 - Max Kuhn <max@posit.co>

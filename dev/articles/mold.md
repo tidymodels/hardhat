@@ -1,6 +1,7 @@
 # Molding data for modeling
 
 ``` r
+
 library(hardhat)
 library(modeldata)
 #> 
@@ -58,6 +59,7 @@ result to coerce it into the right format for ingestion into your model.
 all of that for you.
 
 ``` r
+
 penguin_form <- mold(body_mass_g ~ log(bill_length_mm), penguins)
 
 names(penguin_form)
@@ -72,6 +74,7 @@ has been done for you, so you just have to focus on the modeling
 implementation.
 
 ``` r
+
 penguin_form$predictors
 #> # A tibble: 333 × 1
 #>    `log(bill_length_mm)`
@@ -94,6 +97,7 @@ here, any processing on the outcome that was specified in the formula
 would also be done here.
 
 ``` r
+
 penguin_form$outcomes
 #> # A tibble: 333 × 1
 #>    body_mass_g
@@ -119,6 +123,7 @@ example, an [`offset()`](https://rdrr.io/r/stats/offset.html) can be
 specified directly in the formula, but isn’t technically a predictor.
 
 ``` r
+
 mold(body_mass_g ~ log(bill_length_mm) + offset(bill_depth_mm), penguins)$extras
 #> $offset
 #> # A tibble: 333 × 1
@@ -156,6 +161,7 @@ selected automatically for you. The following two calls generate the
 same result, using the default formula blueprint.
 
 ``` r
+
 identical(
   mold(~ body_mass_g, penguins), 
   mold(~ body_mass_g, penguins, blueprint = default_formula_blueprint())
@@ -189,6 +195,7 @@ never add an intercept by default. Instead, the addition of an intercept
 is completely controlled by the formula blueprint argument, `intercept`.
 
 ``` r
+
 no_intercept <- mold(~ body_mass_g, penguins)
 
 no_intercept$predictors
@@ -209,6 +216,7 @@ no_intercept$predictors
 ```
 
 ``` r
+
 with_intercept <- mold(
   ~ body_mass_g, penguins, 
   blueprint = default_formula_blueprint(intercept = TRUE)
@@ -234,6 +242,7 @@ with_intercept$predictors
 An error is thrown if an intercept removal term is specified:
 
 ``` r
+
 mold(~ body_mass_g - 1, penguins)
 #> Error in `mold()`:
 #> ! `formula` must not contain the intercept removal term: `- 1`.
@@ -255,6 +264,7 @@ case, it would be great if the factor columns specified as predictors
 `indicators`.
 
 ``` r
+
 expanded_dummies <- mold(~ body_mass_g + species, penguins)
 
 expanded_dummies$predictors
@@ -275,6 +285,7 @@ expanded_dummies$predictors
 ```
 
 ``` r
+
 non_expanded_dummies <- mold(
   ~ body_mass_g + species, penguins, 
   blueprint = default_formula_blueprint(indicators = "none")
@@ -305,6 +316,7 @@ traditional `K - 1` columns. When an intercept is present, `K - 1`
 columns are generated for all factor predictors.
 
 ``` r
+
 k_cols <- mold(~ species, penguins)
 
 k_minus_one_cols <- mold(
@@ -325,6 +337,7 @@ One of the other frustrating things about working with the formula
 method is that multivariate outcomes are a bit clunky to specify.
 
 ``` r
+
 .f <- cbind(body_mass_g, bill_length_mm) ~ bill_depth_mm
 
 frame <- model.frame(.f, penguins)
@@ -351,6 +364,7 @@ column is named `cbind(body_mass_g, bill_length_mm)`, and it is actually
 a matrix with 2 columns, `body_mass_g` and `bill_length_mm` inside it.
 
 ``` r
+
 ncol(frame)
 #> [1] 2
 
@@ -375,6 +389,7 @@ are doing very much of that, I’d advise using a recipe instead.
 `outcomes` then holds the two outcomes columns.
 
 ``` r
+
 multivariate <- mold(body_mass_g + log(bill_length_mm) ~ bill_depth_mm, penguins)
 
 multivariate$outcomes
@@ -400,6 +415,7 @@ The second interface is the XY interface, useful when the predictors and
 outcomes are specified separately.
 
 ``` r
+
 x <- subset(penguins, select = -body_mass_g)
 y <- subset(penguins, select =  body_mass_g)
 
@@ -446,6 +462,7 @@ this uses the
 [`default_xy_blueprint()`](https://hardhat.tidymodels.org/dev/reference/default_xy_blueprint.md).
 
 ``` r
+
 xy_with_intercept <- mold(x, y, blueprint = default_xy_blueprint(intercept = TRUE))
 
 xy_with_intercept$predictors
@@ -480,6 +497,7 @@ To achieve this when `y` is supplied as a vector, a default column name
 is created, `".outcome"`.
 
 ``` r
+
 mold(x, y$body_mass_g)$outcomes
 #> # A tibble: 333 × 1
 #>    .outcome
@@ -510,6 +528,7 @@ extract the predictors and the outcomes. This is by far the most
 flexible way to preprocess your data.
 
 ``` r
+
 library(recipes)
 
 rec <- recipe(bill_length_mm ~ species + bill_depth_mm, penguins) |>
@@ -555,6 +574,7 @@ The only special thing you can tweak with the recipe blueprint is
 whether or not an intercept is added.
 
 ``` r
+
 recipe_with_intercept <- mold(
   rec, penguins, 
   blueprint = default_recipe_blueprint(intercept = TRUE)

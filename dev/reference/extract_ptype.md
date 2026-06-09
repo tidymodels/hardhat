@@ -38,6 +38,7 @@ the validation checks at prediction time.
 ## Examples
 
 ``` r
+
 hardhat:::extract_ptype(iris)
 #> # A tibble: 0 × 5
 #> # ℹ 5 variables: Sepal.Length <dbl>, Sepal.Width <dbl>,

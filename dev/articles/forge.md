@@ -1,6 +1,7 @@
 # Forging data for predictions
 
 ``` r
+
 library(hardhat)
 library(modeldata)
 #> 
@@ -49,11 +50,13 @@ instance, assume you’ve called
 so:
 
 ``` r
+
 penguin_train <- penguins[1:300,]
 penguin_test  <- penguins[-(1:300),]
 ```
 
 ``` r
+
 penguin_form <- mold(
   log(body_mass_g) ~ species + bill_length_mm, 
   penguin_train, 
@@ -84,6 +87,7 @@ on new data, that data is passed on to
 with the `blueprint` we just created.
 
 ``` r
+
 forge(penguin_test, formula_eng)
 #> $predictors
 #> # A tibble: 33 × 2
@@ -144,6 +148,7 @@ like with the predictors, these get processed using the same steps as
 done to the outcomes at fit time.
 
 ``` r
+
 forge(penguin_test, formula_eng, outcomes = TRUE)
 #> $predictors
 #> # A tibble: 33 × 2
@@ -218,6 +223,7 @@ won’t let you continue until all of the required predictors used at
 training are also present in the new data.
 
 ``` r
+
 test_missing_column <- subset(penguin_test, select = -species)
 
 forge(test_missing_column, formula_eng)
@@ -233,6 +239,7 @@ instance, what happens if the new `species` column was a double, not a
 factor?
 
 ``` r
+
 test_species_double <- penguin_test
 test_species_double$species <- as.double(test_species_double$species)
 
@@ -250,6 +257,7 @@ automatically cast from one type to another, and in fact that is true!
 Rather than being a double, what if `species` was just a character?
 
 ``` r
+
 test_species_character <- penguin_test
 test_species_character$species <- as.character(test_species_character$species)
 
@@ -289,6 +297,7 @@ An example of a conversion that would be lossy is if the character
 data.
 
 ``` r
+
 test_species_lossy <- penguin_test
 test_species_lossy$species <- as.character(test_species_lossy$species)
 test_species_lossy$species[2] <- "im new!"
@@ -334,6 +343,7 @@ at the right times. For instance, say we have a recipe that just creates
 dummy variables out of `species`.
 
 ``` r
+
 library(recipes)
 
 rec <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
@@ -361,6 +371,7 @@ penguin_recipe$predictors
 The blueprint is a `recipe` blueprint.
 
 ``` r
+
 recipe_eng <- penguin_recipe$blueprint
 
 recipe_eng
@@ -379,6 +390,7 @@ can request `outcomes` to have the predictors and outcomes separated
 like with the formula method.
 
 ``` r
+
 forge(penguin_test, recipe_eng, outcomes = TRUE)
 #> $predictors
 #> # A tibble: 33 × 3
@@ -428,6 +440,7 @@ be required to
 if you aren’t requesting them.
 
 ``` r
+
 rec2 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
   step_dummy(species) |>
   step_center(bill_length_mm) # Here we modify the outcome
@@ -442,6 +455,7 @@ even if we don’t request that the outcomes are returned by
 [`forge()`](https://hardhat.tidymodels.org/dev/reference/forge.md).
 
 ``` r
+
 penguin_test_no_outcome <- subset(penguin_test, select = -bill_length_mm)
 
 forge(penguin_test_no_outcome, recipe_eng_log_outcome)
@@ -455,6 +469,7 @@ the step containing the outcome. This skips the processing of that step
 at [`bake()`](https://recipes.tidymodels.org/reference/bake.html) time.
 
 ``` r
+
 rec3 <- recipe(bill_length_mm ~ body_mass_g + species, penguin_train) |>
   step_dummy(species) |>
   step_center(bill_length_mm, skip = TRUE)
@@ -508,6 +523,7 @@ called. But we probably would not have skipped that step if we knew that
 our test data would have the outcome.
 
 ``` r
+
 forge(penguin_test, recipe_eng_skip_outcome, outcomes = TRUE)$outcomes
 #> # A tibble: 33 × 1
 #>    bill_length_mm
