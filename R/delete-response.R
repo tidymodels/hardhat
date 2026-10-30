@@ -33,10 +33,13 @@ delete_response <- function(terms) {
   response_exists <- !(is.null(resp) || (resp == 0L))
   data_class_exists <- !is.null(data_class)
 
+  terms <- delete.response(terms)
+
   # Remove dataClass corresponding to y if it exists
+  # Necessary for R < 4.7
   if (response_exists & data_class_exists) {
     attr(terms, "dataClasses") <- data_class[-resp]
   }
 
-  delete.response(terms)
+  terms
 }
