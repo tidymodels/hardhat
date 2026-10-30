@@ -803,5 +803,5 @@ penguins_dbl_species <- transform(penguins, species = 1)
 
 predict(model, penguins_dbl_species)
 #> Error in `scream()`:
-#> ! Can't convert `data$species` <double> to match type of `species` <factor<b22a0>>.
+#> ! Can't convert `data$species` <double> to match type of `species` <factor<17c9a>>.
 ```

@@ -245,7 +245,7 @@ test_species_double$species <- as.double(test_species_double$species)
 
 forge(test_species_double, formula_eng)
 #> Error in `scream()`:
-#> ! Can't convert `data$species` <double> to match type of `species` <factor<b22a0>>.
+#> ! Can't convert `data$species` <double> to match type of `species` <factor<17c9a>>.
 ```
 
 An error is thrown, indicating that a double can’t be cast to a factor.
