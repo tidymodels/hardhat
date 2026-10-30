@@ -14,11 +14,24 @@ test_that("doesn't return dataClasses for y", {
     attr(delete_response(framed$terms), "dataClasses"),
     c(Species = "factor")
   )
+})
 
-  # expected base R behavior
+test_that("works if delete.response() also removes dataClasses for y (#306)", {
+  # mimics `stats::delete.response()` in R >= 4.7
+  local_mocked_bindings(
+    delete.response = function(termobj) {
+      ans <- stats::delete.response(termobj)
+      resp <- attr(termobj, "response")
+      attr(ans, "dataClasses") <- attr(termobj, "dataClasses")[-resp]
+      ans
+    }
+  )
+
+  framed <- model_frame(Sepal.Width ~ Species + Petal.Width, iris)
+
   expect_equal(
-    attr(delete.response(framed$terms), "dataClasses"),
-    c(Sepal.Width = "numeric", Species = "factor")
+    attr(delete_response(framed$terms), "dataClasses"),
+    c(Species = "factor", Petal.Width = "numeric")
   )
 })
 

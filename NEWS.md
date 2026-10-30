@@ -1,5 +1,7 @@
 # hardhat (development version)
 
+* `delete_response()` now will also work with R >= 4.7, where `stats::delete.response()` removes the `"dataClasses"` entry of the response itself (#306).
+
 # hardhat 1.4.3
 
 * `mold()` no longer throws warnings about `strings_as_factors` argument when used on recipe objects (#284).
