@@ -1,4 +1,4 @@
-# hardhat (development version)
+# hardhat 1.4.4
 
 * `delete_response()` now will also work with R >= 4.7, where `stats::delete.response()` removes the `"dataClasses"` entry of the response itself (#306).
 
