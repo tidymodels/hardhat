@@ -53,6 +53,7 @@ If there are no factor columns, `NULL` is returned.
 ## Examples
 
 ``` r
+
 # Factor columns are returned with their levels
 get_levels(iris)
 #> $Species

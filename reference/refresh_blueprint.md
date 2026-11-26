@@ -34,6 +34,7 @@ constructor.
 ## Examples
 
 ``` r
+
 blueprint <- default_xy_blueprint()
 
 # This should never be done manually, but is essentially

@@ -1,5 +1,15 @@
 # Changelog
 
+## hardhat 1.4.4
+
+CRAN release: 2026-11-26
+
+- [`delete_response()`](https://hardhat.tidymodels.org/reference/delete_response.md)
+  now will also work with R \>= 4.7, where
+  [`stats::delete.response()`](https://rdrr.io/r/stats/delete.response.html)
+  removes the `"dataClasses"` entry of the response itself
+  ([\#306](https://github.com/tidymodels/hardhat/issues/306)).
+
 ## hardhat 1.4.3
 
 CRAN release: 2026-04-04

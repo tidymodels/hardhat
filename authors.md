@@ -19,13 +19,13 @@ Source:
 [`DESCRIPTION`](https://github.com/tidymodels/hardhat/blob/main/DESCRIPTION)
 
 Frick H, Vaughan D, Kuhn M (2026). *hardhat: Construct Modeling
-Packages*. R package version 1.4.3,
+Packages*. R package version 1.4.4,
 <https://github.com/tidymodels/hardhat>.
 
     @Manual{,
       title = {hardhat: Construct Modeling Packages},
       author = {Hannah Frick and Davis Vaughan and Max Kuhn},
       year = {2026},
-      note = {R package version 1.4.3},
+      note = {R package version 1.4.4},
       url = {https://github.com/tidymodels/hardhat},
     }

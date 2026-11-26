@@ -32,6 +32,7 @@ update_blueprint(blueprint, ...)
 ## Examples
 
 ``` r
+
 blueprint <- default_xy_blueprint()
 
 # `intercept` defaults to FALSE

@@ -53,6 +53,7 @@ are *not* treated specially by `model_offset()`.
 ## Examples
 
 ``` r
+
 x <- model.frame(Species ~ offset(Sepal.Width), iris)
 
 model_offset(terms(x), x)
