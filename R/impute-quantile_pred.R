@@ -153,7 +153,7 @@ impute_quantile_internal <- function(x, probs_out, middle) {
 }
 
 impute_quantiles_single <- function(vals_in, probs_in, probs_out, middle) {
-  vals_out <- rep(NA, length(probs_out))
+  vals_out <- rep(NA_real_, length(probs_out))
   good <- !is.na(vals_in)
   if (!any(good)) {
     return(vals_out)
@@ -162,9 +162,9 @@ impute_quantiles_single <- function(vals_in, probs_in, probs_out, middle) {
   probs_in <- probs_in[good]
 
   # in case we only have one point, and it matches something we wanted
-  if (length(good) < 2) {
+  if (length(vals_in) < 2) {
     matched_one <- probs_out %in% probs_in
-    vals_out[matched_one] <- vals_in[matched_one]
+    vals_out[matched_one] <- vals_in
     return(vals_out)
   }
 
