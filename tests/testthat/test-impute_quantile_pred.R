@@ -88,3 +88,42 @@ test_that("impute_quantiles applies lower/upper bounds", {
   out <- impute_quantiles(x, c(0.01, 0.5, 0.99), lower = -1, upper = 1)
   expect_true(all(out >= -1 & out <= 1))
 })
+
+test_that("impute_quantiles handles all-NA rows", {
+  probs <- c(0.1, 0.5, 0.9)
+  all_na <- quantile_pred(matrix(NA_real_, nrow = 1, ncol = 3), probs)
+  expect_identical(
+    impute_quantiles(all_na, c(0.1, 0.5, 0.9)),
+    matrix(NA_real_, nrow = 1, ncol = 3)
+  )
+})
+
+test_that("impute_quantiles handles rows with a single non-NA quantile", {
+  probs <- c(0.1, 0.5, 0.9)
+  one_val <- quantile_pred(matrix(c(NA_real_, 5, NA_real_), nrow = 1), probs)
+  expect_identical(
+    impute_quantiles(one_val, c(0.1, 0.5, 0.9)),
+    matrix(c(NA_real_, 5, NA_real_), nrow = 1)
+  )
+  expect_identical(
+    impute_quantiles(one_val, c(0.1, 0.5, 0.9), lower = 0, upper = 3),
+    matrix(c(NA_real_, 3, NA_real_), nrow = 1)
+  )
+  expect_identical(
+    impute_quantiles(one_val, c(0.25, 0.75)),
+    matrix(NA_real_, nrow = 1, ncol = 2)
+  )
+
+  mixed <- quantile_pred(
+    matrix(
+      c(1, 2, 3, NA_real_, 5, NA_real_, NA_real_, NA_real_, NA_real_),
+      nrow = 3,
+      byrow = TRUE
+    ),
+    probs
+  )
+  out <- impute_quantiles(mixed, c(0.1, 0.5, 0.9))
+  expect_identical(out[1, ], c(1, 2, 3))
+  expect_identical(out[2, ], c(NA_real_, 5, NA_real_))
+  expect_identical(out[3, ], c(NA_real_, NA_real_, NA_real_))
+})
